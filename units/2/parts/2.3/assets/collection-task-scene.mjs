@@ -1,12 +1,13 @@
-import {taskHosePoints} from './collection-task-model.mjs?v=transfer-1';
-import {liquidGeometry} from './co2-model.mjs?v=transfer-1';
+import {createThistleFunnel,createDoubleStopper} from './thistle-apparatus.mjs?v=thistle-1';
+import {taskHosePoints} from './collection-task-model.mjs?v=thistle-1';
+import {liquidGeometry,co2BenchFrame} from './co2-model.mjs?v=thistle-1';
 const NS='http://www.w3.org/2000/svg';
 const n=(tag,attrs={})=>{const el=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))el.setAttribute(k,v);return el;};
 const image=(file,box)=>{const el=n('image',{href:'assets/'+file,preserveAspectRatio:'none'});['x','y','width','height'].forEach((key,i)=>el.setAttribute(key,box[i]));return el;};
 function sprite(file,crop,box,size){const el=n('svg',{viewBox:crop.join(' '),preserveAspectRatio:'none',overflow:'hidden'});['x','y','width','height'].forEach((key,i)=>el.setAttribute(key,box[i]));el.append(image(file,[0,0,...size]));return el;}
 export function createCollectionScene(svg){
  const title=svg.querySelector('title');svg.replaceChildren(...(title?[title]:[]));
- const defs=n('defs'),art=n('g');svg.append(defs,art);art.append(image('oxygen-setup-table.png',[0,0,1100,650]));
+ const defs=n('defs'),art=n('g');svg.append(defs,art);art.append(image('oxygen-setup-table.png',[0,-100,1100,750]));
  const flaskClip=n('clipPath',{id:'task-flask-inside'});flaskClip.append(n('path',{d:liquidGeometry(212.96).d}));defs.append(flaskClip);
  art.append(image('co2-flask.webp',[70,145,460,460]));
  const contents=n('g',{'clip-path':'url(#task-flask-inside)'}),liquid=n('path',{fill:'#b8dce2','fill-opacity':.32}),stones=n('g');contents.append(liquid,stones);art.append(contents);
@@ -14,7 +15,13 @@ export function createCollectionScene(svg){
  const positions=[[235,545],[280,553],[326,551],[369,543],[303,525]];
  crops.forEach((crop,i)=>stones.append(sprite('co2-marble-atlas.png',crop,[positions[i][0]-25,positions[i][1]-22,50,45],[1536,1024])));
  const reflection=image('co2-flask.webp',[70,145,460,460]);reflection.setAttribute('opacity','.22');art.append(reflection);
- const first=n('g');first.append(sprite('co2-tube.webp',[85,45,172,350],[280.8,115,137.6,280],[440,440]),sprite('co2-tube.webp',[44,137,120,110],[248,179,104,78],[440,440]));art.append(first);
+ const firstClip=n('clipPath',{id:'task-first-glass'});firstClip.append(n('path',{d:'M315 395V160Q315 124 351 124H451V146H351Q337 146 337 160V395Z'}));defs.append(firstClip);
+ const first=n('g');const firstGlass=n('g',{'clip-path':'url(#task-first-glass)'});firstGlass.append(sprite('co2-tube.webp',[85,45,172,350],[306.8,115,137.6,280],[440,440]));first.append(firstGlass);const stopper=createDoubleStopper();stopper.setAttribute('transform','translate(300 205)');first.append(stopper);art.append(first);
+ const funnel=createThistleFunnel('task',{top:-140,tip:350,port:-26});art.append(funnel.group);
+ const reagent=n('g',{'data-task-reagent':''});const reagentImage=image('oxygen-peroxide-open.webp',[455,240,150,170]);reagent.append(reagentImage);art.append(reagent);
+ const feed=n('path',{d:'M274 42Q274 58 274 78',fill:'none',stroke:'#b9e1e4','stroke-width':4});art.append(feed);
+ const reference=n('path',{d:'M200 500H410',fill:'none',stroke:'#80968b','stroke-width':2,'stroke-dasharray':'6 8','clip-path':'url(#task-flask-inside)'});art.append(reference);
+
  const tankClip=n('clipPath',{id:'task-tank-inside'});tankClip.append(n('path',{d:'M597 377L655 336L1050 356L1043 517L1006 548L607 524Z'}));defs.append(tankClip);
  const tankWater=n('g',{'clip-path':'url(#task-tank-inside)'});tankWater.append(n('path',{d:'M597 405L655 367L1050 387L1043 517L1006 548L607 524Z',fill:'#9bd5df','fill-opacity':.4}),n('path',{d:'M597 405L655 367L1050 387L1010 425Z',fill:'#def7f6','fill-opacity':.5,stroke:'#91bac0','stroke-width':1}));art.append(tankWater);
  const jarPath='M799 228Q870 208 941 228V439Q870 459 799 439Z';
@@ -38,13 +45,17 @@ export function createCollectionScene(svg){
  let hoseKey='';
  return {render(f,plan,elapsed=0){
   svg.dataset.angle=String(f.angle);svg.dataset.immersion=String(f.immersion);svg.dataset.tubeX=String(f.tubeX);svg.dataset.tubeY=String(f.tubeY);svg.dataset.water=f.water.toFixed(4);svg.dataset.collected=f.collected.toFixed(4);svg.dataset.step=f.step;svg.dataset.sealed=f.sealed.toFixed(4);
-  const hasReactants=plan.materials?.includes('marble')&&plan.materials?.includes('acid');stones.setAttribute('opacity',hasReactants?Math.min(1,f.reaction*4):0);liquid.setAttribute('d',liquidGeometry(580-80*Math.max(0,(f.reaction-.25)/.75)).d);liquid.setAttribute('opacity',hasReactants?f.reaction:0);first.setAttribute('opacity',f.idle?'.45':Math.max(0,(f.reaction-.7)/.3));
+  const hasReactants=plan.materials?.includes('marble')&&plan.materials?.includes('acid');stones.setAttribute('opacity',hasReactants?f.solid:0);liquid.setAttribute('d',liquidGeometry(580-80*f.charge).d);liquid.setAttribute('opacity',hasReactants?f.charge:0);first.setAttribute('opacity',f.idle?'.45':f.assembly);
+  const assembly=f.idle?1:f.assembly,restY=plan.funnel==='unsealed'?100:205;
+  funnel.render({x:300,y:restY,angle:0},!f.idle&&f.reaction>.57&&f.reaction<.82);funnel.group.setAttribute('opacity',f.idle?'.55':assembly);reference.setAttribute('opacity',f.idle?'1':'0');
+  const source=co2BenchFrame(3,Math.max(0,(f.reaction-.5)/.5)*5000).bodies.acid;
+  ['x','y','width','height'].forEach((attr,i)=>reagentImage.setAttribute(attr,source.box[i]));reagent.setAttribute('transform',`rotate(${source.angle} ${source.cx} ${source.cy})`);reagent.setAttribute('opacity',!f.idle&&f.reaction>.5&&source.visible?'1':'0');feed.setAttribute('opacity',!f.idle&&f.reaction>.57&&f.reaction<.82?'1':'0');
   const dy=(1-f.immersion)*-85-f.lift*100,angle=f.angle,transform=`translate(0 ${dy}) rotate(${angle} 870 330)`;
   jar.setAttribute('transform',transform);jarFront.setAttribute('transform',transform);clipShape.setAttribute('transform',transform);
   const top=angle>90?201:228,bottom=angle>90?438:449,level=top+(bottom-top)*(1-f.water)+dy;
   jarWater.setAttribute('y',level);jarWater.setAttribute('height',Math.max(0,500+dy-level));jarWater.setAttribute('opacity',f.water>0?'1':'0');
   collector.setAttribute('transform',`translate(${f.tubeX} ${f.tubeY})`);
-  const key=`${f.tubeX}/${f.tubeY}`;if(hoseKey!==key){hoseKey=key;const points=taskHosePoints({x:420,y:135},{x:f.tubeX,y:f.tubeY-140});rubberSegments.forEach(({g,piece},i)=>{const a=points[i],b=points[i+1];g.setAttribute('transform',`translate(${a.x} ${a.y}) rotate(${Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI-90})`);piece.setAttribute('height',Math.hypot(b.x-a.x,b.y-a.y)+1);});}
+  const key=`${f.tubeX}/${f.tubeY}`;if(hoseKey!==key){hoseKey=key;const points=taskHosePoints({x:446,y:135},{x:f.tubeX,y:f.tubeY-140});rubberSegments.forEach(({g,piece},i)=>{const a=points[i],b=points[i+1];g.setAttribute('transform',`translate(${a.x} ${a.y}) rotate(${Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI-90})`);piece.setAttribute('height',Math.hypot(b.x-a.x,b.y-a.y)+1);});}
   collector.setAttribute('opacity',f.idle?'.65':Math.max(.2,f.reaction));rubber.setAttribute('opacity',f.idle?'.65':Math.max(.2,f.reaction));
   bubbles.setAttribute('opacity',f.collecting&&plan.outlet==='jar'?'1':'0');[...bubbles.children].forEach((b,i)=>b.setAttribute('cy',415-((elapsed/900+i*.16)%1)*Math.max(0,415-level)));
   purge.setAttribute('opacity',f.purging?'1':'0');[...purge.children].forEach((b,i)=>b.setAttribute('cy',415-((elapsed/750+i*.2)%1)*25));

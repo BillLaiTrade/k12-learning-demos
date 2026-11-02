@@ -1,4 +1,4 @@
-import { SETUP_DURATION } from './oxygen-setup.mjs?v=oxygen-wall-fit-2';
+import { SETUP_DURATION } from './oxygen-setup.mjs?v=thistle-1';
 export const PREPARATION_DURATION = 12600;
 export const COMPARISON_DURATION = 6200;
 export const PREPARATION_STAGES = [0, 2000, 4800, 10000];
@@ -26,20 +26,14 @@ export const STEP_DURATIONS = [1800, ASSEMBLY_DURATION, 2800, 5200, 2600];
 export function assemblyFrame(elapsed) {
   const time = Math.max(0, Math.min(ASSEMBLY_DURATION, elapsed));
   const phase = time < 2800 ? 0 : time < 5800 ? 1 : time < 8800 ? 2 : 3;
-  const peroxide = smooth((time-3300)/1900);
-  const catalyst = smooth((time-6300)/1400);
-  const sealed = smooth((time-9000)/1600);
-  const reaction = clamp((time-6800)/500);
-  const placement = smooth((time-100)/1500);
-  const outletPlacement = smooth((time-1700)/900);
-  return { time, phase, peroxide, catalyst, sealed, reaction, placement, outletPlacement,
-    bottleTilt: smooth((time-2800)/500),
-    bottle: smooth((time-2800)/200)*(1-smooth((time-5200)/500)),
-    liquidFlow: smooth((time-3300)/180)*(1-smooth((time-5020)/180)),
-    spoon: smooth((time-5800)/200)*(1-smooth((time-7800)/500)),
-    powderFlow: smooth((time-6300)/180)*(1-smooth((time-7520)/180)),
-    mixed: smooth((time-10700)/500),
-    gasThroughTube: sealed === 1 && reaction > 0 };
+  const catalyst=smooth((time-3300)/1400),sealed=smooth((time-6300)/1800),peroxide=smooth((time-9300)/1900);
+  const level=790-165*peroxide,liquidSeal=sealed===1&&level<735;
+  const reaction=peroxide>0&&catalyst===1?1:0,placement=smooth((time-100)/1500),outletPlacement=smooth((time-1700)/900);
+  return {time,phase,peroxide,catalyst,sealed,reaction,placement,outletPlacement,liquidSeal,
+    bottleTilt:smooth((time-8800)/500),bottle:smooth((time-8800)/200)*(1-smooth((time-11300)/500)),
+    liquidFlow:smooth((time-9300)/180)*(1-smooth((time-11020)/180)),
+    spoon:smooth((time-2800)/200)*(1-smooth((time-5200)/500)),powderFlow:smooth((time-3300)/180)*(1-smooth((time-4520)/180)),
+    mixed:peroxide*catalyst,gasThroughTube:liquidSeal&&reaction>0};
 }
 export function preparationStepFrame(stage, elapsed) {
   const index = Math.max(0, Math.min(STEP_DURATIONS.length-1, Math.trunc(stage)));
@@ -59,9 +53,9 @@ export function preparationStepFrame(stage, elapsed) {
 export const OXYGEN_OPERATIONS = [
   {label:'認識材料',scene:0,offset:0,duration:0},
   {label:'擺好集氣位置',scene:1,offset:0,duration:SETUP_DURATION},
-  {label:'倒入雙氧水',scene:1,offset:2800,duration:3000},
-  {label:'加入二氧化錳',scene:1,offset:5800,duration:3000},
-  {label:'塞緊塞子與導管',scene:1,offset:8800,duration:3000},
+  {label:'加入二氧化錳',scene:1,offset:2800,duration:3000},
+  {label:'裝好漏斗與導管',scene:1,offset:5800,duration:3000},
+  {label:'由漏斗加入雙氧水',scene:1,offset:8800,duration:3000},
   {label:'先排出空氣',scene:2,offset:0,duration:2800},
   {label:'排水收集氧氣',scene:3,offset:0,duration:5200},
   {label:'封存氧氣',scene:4,offset:0,duration:7800},

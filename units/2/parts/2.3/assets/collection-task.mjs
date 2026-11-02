@@ -1,10 +1,10 @@
-import {TASK_STEPS,INITIAL_ORDER,evaluateCollectionPlan,collectionFrame,firstPlanIssue} from './collection-task-model.mjs?v=transfer-1';
-import {createCollectionScene} from './collection-task-scene.mjs?v=transfer-1';
+import {TASK_STEPS,INITIAL_ORDER,evaluateCollectionPlan,collectionFrame,firstPlanIssue} from './collection-task-model.mjs?v=thistle-1';
+import {createCollectionScene} from './collection-task-scene.mjs?v=thistle-1';
 const form=document.querySelector('#gas-report-form'),section=form.closest('section'),svg=form.querySelector('.task-scene');
 const scene=createCollectionScene(svg),caption=form.querySelector('[data-task-caption]'),play=form.querySelector('[data-task-play]'),feedback=form.querySelector('#gas-report-feedback');
 const tabs=[...form.querySelectorAll('[data-task-tab]')],panels=[...form.querySelectorAll('[data-task-panel]')],orderList=form.querySelector('.task-order'),announcement=form.querySelector('[data-task-announcement]');
 let pane=0,state='ready',raf=0,index=-1,elapsed=0,started=0,plan=null,result=null,blocked=null;
-const readPlan=()=>({materials:[...form.querySelectorAll('[name=materials]:checked')].map(n=>n.value),fill:form.elements.fill.value,position:form.elements.position.value,outlet:form.elements.outlet.value,order:[...orderList.children].map(n=>n.dataset.taskStep)});
+const readPlan=()=>({materials:[...form.querySelectorAll('[name=materials]:checked')].map(n=>n.value),fill:form.elements.fill.value,position:form.elements.position.value,outlet:form.elements.outlet.value,funnel:form.elements.funnel.value,order:[...orderList.children].map(n=>n.dataset.taskStep)});
 const step=()=>TASK_STEPS.find(s=>s.id===plan?.order[index]);
 function cancel(){cancelAnimationFrame(raf);raf=0;}
 function hideFeedback(){feedback.hidden=true;feedback.replaceChildren();feedback.removeAttribute('data-result');}
@@ -13,10 +13,10 @@ function syncOrder(){[...orderList.children].forEach((li,i)=>{li.querySelector('
 function paint(){
  const current=plan||readPlan(),f=collectionFrame(current,index,elapsed);scene.render(f,current,elapsed);
  form.dataset.state=state;form.dataset.step=f.step;form.dataset.elapsed=elapsed.toFixed(2);form.dataset.order=current.order.join(',');
- const labels={prepare:'先把集氣瓶裝滿水，遮口倒置，瓶口移入水面下。',react:'大理石先加入，再加稀鹽酸，塞緊已接好導管的塞子。',purge:'導管出口先留在瓶外，排除裝置原有的空氣。',collect:'將出口由瓶口下方移入，氣體進入瓶中，水逐漸排出。',withdraw:'先讓出口退出瓶口，再移到水面上方，保持管路暢通。',cover:'在水下蓋好玻璃片，再連同集氣瓶一起取出。'};
+ const labels={prepare:'先把集氣瓶裝滿水，遮口倒置，瓶口移入水面下。',react:'先放大理石，裝好薊頭漏斗與導管，再從漏斗加入稀鹽酸。',purge:'導管出口先留在瓶外，排除裝置原有的空氣。',collect:'將出口由瓶口下方移入，氣體進入瓶中，水逐漸排出。',withdraw:'先讓出口退出瓶口，再移到水面上方，保持管路暢通。',cover:'在水下蓋好玻璃片，再連同集氣瓶一起取出。'};
  caption.textContent=index<0?'先選材料，再安排集氣裝置。':state==='revise'?blocked.message:state==='complete'?'你已用排水集氣法完成二氧化碳的收集與封存。':(state==='paused'?'已暫停：':'')+labels[f.step];
  play.textContent=state==='playing'?'暫停':state==='paused'?'繼續':state==='complete'?'重新播放我的流程':'播放並檢查';
- const p=readPlan();tabs[0].dataset.done=String(p.materials.length>0);tabs[1].dataset.done=String(!!(p.fill&&p.position&&p.outlet));
+ const p=readPlan();tabs[0].dataset.done=String(p.materials.length>0);tabs[1].dataset.done=String(!!(p.fill&&p.position&&p.outlet&&p.funnel));
  [...orderList.children].forEach(li=>{li.classList.toggle('is-playing',li.dataset.taskStep===f.step&&index>=0);li.classList.toggle('is-error',state==='revise'&&li.dataset.taskStep===blocked?.step);});
 }
 function showFeedback(evaluation){

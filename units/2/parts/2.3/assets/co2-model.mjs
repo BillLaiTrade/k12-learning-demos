@@ -3,8 +3,8 @@ export const CO2_SETUP_DURATION=4000;
 export const CO2_OPERATIONS=Object.freeze([
  {label:'認識材料',duration:0},
  {label:'加入大理石',duration:21000},
- {label:'倒入稀鹽酸',duration:5000},
- {label:'塞緊塞子與導管',duration:4200},
+ {label:'裝好漏斗與導管',duration:4800},
+ {label:'由漏斗加入稀鹽酸',duration:5000},
  {label:'先排出空氣',duration:2800},
  {label:'向上排空氣集氣',duration:6500},
  {label:'封存二氧化碳',duration:6500},
@@ -22,9 +22,9 @@ export function co2SetupFrame(elapsed){const time=Math.max(0,Math.min(CO2_SETUP_
 export function co2GlassFrame(index,time,seal=0,placement=1){
  const rest=pose(mix(600,620,placement),mix(450,440,placement),90);
  let first=rest,rod=pose(mix(1040,1040,placement),mix(635,635,placement),0);
- if(index>=3){
-  const p=index===3?seal:1,lift=ease(p/.4),across=ease((p-.4)/.4),lower=ease((p-.8)/.2);
-  first=pose(mix(620,300,across),mix(mix(440,80,lift),205,lower),90*(1-lift));
+ if(index>=2){
+  const p=index===2?seal:1,lift=ease(p/.4),across=ease((p-.4)/.4),lower=ease((p-.8)/.2);
+  first=pose(mix(620,300,across),mix(mix(440,-40,lift),205,lower),90*(1-lift));
   const shift=ease(p/.15),turn=ease((p-.15)/.25);
   rod=pose(mix(1040,600,shift),mix(635,520,turn),0);
  }
@@ -36,7 +36,7 @@ export function co2GlassFrame(index,time,seal=0,placement=1){
   const lift=ease(time/1600),across=ease((time-1600)/1400),lower=ease((time-3000)/1300);
   rod=pose(mix(870,600,across),mix(mix(520,270,lift),520,lower));
  }
- const firstConnector=transformPoint({x:120,y:-70},first);
+ const firstConnector=transformPoint({x:146,y:-70},first);
  const rodConnector=transformPoint({x:0,y:-CO2_GLASS_ROD_LENGTH},rod);
  return {first,rod,firstConnector,rodConnector,rodTip:{x:rod.x,y:rod.y},bendAngle:90};
 }
@@ -47,8 +47,8 @@ export function co2OperationFrame(index,elapsed){
  index=Math.max(0,Math.min(CO2_OPERATIONS.length-1,Math.trunc(index)));
  const duration=CO2_OPERATIONS[index].duration,localTime=Math.max(0,Math.min(duration,Number(elapsed)||0));
  const placement=index===0?0:index===1?co2SetupFrame(localTime).arrangement:1;
- const acid=index<2?0:index===2?unit((localTime-700)/2500):1;
- const seal=index<3?0:index===3?ease(localTime/duration):1;
+ const acid=index<3?0:index===3?unit((localTime-700)/2500):1;
+ const seal=index<2?0:index===2?ease(localTime/duration):1;
  const cover=index===6?ease((localTime-4300)/1700):0;
  const dishCount=index===0?5:index===1?releases.filter(t=>localTime<t).length:0;
  const fallingCount=index===1?releases.filter(t=>localTime>=t&&localTime<t+STONE_TRANSFER).length:0;
@@ -57,7 +57,7 @@ export function co2OperationFrame(index,elapsed){
  const insert=index<5?0:index===5?ease((localTime-3000)/1500):1-ease(localTime/4300);
  return {operation:index,localTime,duration,placement,acid,seal,cover,insert,marble:flaskCount/5,
   dishCount,fallingCount,flaskCount,tipX:glass.rod.x,tipY:glass.rod.y,
-  reacting:acid>0,flow:acid>0&&seal===1,collecting:index===5&&insert===1,labeled:index===6&&cover===1};
+  liquidSeal:seal===1&&580-80*acid<555,reacting:acid>0,flow:seal===1&&580-80*acid<555,collecting:index===5&&insert===1,labeled:index===6&&cover===1};
 }
 const initial={flask:[140,100,340,340],jar:[715,155,350,350],acid:[30,420,170,170]};
 export const CO2_WORKING={flask:[70,145,460,460],jar:[705,250,330,330],acid:[455,240,150,170]};
@@ -67,15 +67,15 @@ export function co2BenchFrame(index,elapsed,f=co2OperationFrame(index,elapsed)){
   let box=initial[key].map((v,j)=>mix(v,CO2_WORKING[key][j],progress)),angle=0;
   let cx=box[0]+box[2]/2,cy=key==='flask'?box[1]+box[3]*.945:box[1]+box[3]/2;
   if(key==='flask'&&index===1)angle=-28*ease((f.localTime-3900)/800)*(1-ease((f.localTime-18600)/1000));
-  if(key==='acid'&&index===2){
+  if(key==='acid'&&index===3){
    const pickup=ease(f.localTime/700),exit=ease((f.localTime-3400)/1400);
    // Use the lower pouring edge of the actual 500×810 source image.
    const u=CO2_ACID_IMAGE.lip.x/CO2_ACID_IMAGE.width,v=CO2_ACID_IMAGE.lip.y/CO2_ACID_IMAGE.height;
    angle=-65*pickup*(1-exit);const r=angle*Math.PI/180,dx=(u-.5)*150,dy=(v-.5)*170;
-   const mouth=point({x:455+u*150,y:240+v*170},{x:302,y:176},pickup);
+   const mouth=point({x:455+u*150,y:240+v*170},{x:274,y:42},pickup);
    cx=mouth.x-(Math.cos(r)*dx-Math.sin(r)*dy);cy=mouth.y-(Math.sin(r)*dx+Math.cos(r)*dy);
    cx=mix(cx,-165,exit);cy=mix(cy,435,exit);box=[cx-75,cy-85,150,170];
-  }else if(key==='acid'&&index>2){box=[-240,350,150,170];cx=-165;cy=435;}
+  }else if(key==='acid'&&index>3){box=[-240,350,150,170];cx=-165;cy=435;}
   bodies[key]={box,angle:angle||0,cx,cy,visible:box[0]+box[2]>0};
  }
  let bowl=pose(mix(390,520,progress),mix(520,500,progress));
@@ -87,7 +87,10 @@ export function co2BenchFrame(index,elapsed,f=co2OperationFrame(index,elapsed)){
  const plate=pose(mix(910,930,progress),mix(520,560,progress));
  if(index===6){plate.x=mix(930,870,f.cover);plate.y=mix(560,315,f.cover)-150*Math.sin(Math.PI*f.cover);}
  const glass=co2GlassFrame(index,f.localTime,f.seal,progress);
- const dishOffsets=[[-48,-12],[0,-22],[48,-10],[-27,17],[27,19]],settled=[[235,545],[280,553],[326,551],[369,543],[303,525]];
+ let funnel=pose(755,185);
+ if(index===2){const p=f.seal,lift=ease(p/.4),across=ease((p-.4)/.4),lower=ease((p-.8)/.2);funnel=pose(mix(755,300,across),mix(mix(185,-190,lift),205,lower));}
+ else if(index>2)funnel=pose(300,205);
+ const dishOffsets=[[-48,-12],[0,-22],[48,-10],[-27,17],[27,19]],settled=[[220,555],[320,555],[367,548],[315,525],[367,520]];
  const slidePoints=[{x:300,y:235},{x:300,y:300},{x:347,y:350},{x:382,y:430},{x:389,y:500}];
  const track=(ps,t)=>{const u=unit(t)*(ps.length-1),i=Math.min(ps.length-2,Math.floor(u));return point(ps[i],ps[i+1],u-i);};
  const above=inFlask({x:300,y:105}),release=inFlask(slidePoints[0]);
@@ -125,7 +128,7 @@ export function co2BenchFrame(index,elapsed,f=co2OperationFrame(index,elapsed)){
  const acidMouth=transformPoint({x:(ab[0]+ab[2]*CO2_ACID_IMAGE.lip.x/CO2_ACID_IMAGE.width)-acidBody.cx,y:(ab[1]+ab[3]*CO2_ACID_IMAGE.lip.y/CO2_ACID_IMAGE.height)-acidBody.cy},{x:acidBody.cx,y:acidBody.cy,angle:acidBody.angle});
 
  bowl.angle=bowl.angle||0;
- return {progress,bodies,bowl,plate,glass,stones,tool,acidMouth};
+ return {progress,bodies,bowl,plate,glass,stones,tool,acidMouth,funnel};
 }
 // Trace the photographed flask's INNER surface. Coordinates originate in its 440px image.
 const innerSource=[[181,65],[261,65],[261,152],[271,160],[286,200],[300,240],[316,280],[323,300],[330,320],[337,340],[344,360],[344,380],[339,390],[329,400],[310,410],[282,416],[220,418],[158,416],[131,410],[112,400],[103,390],[98,380],[98,360],[105,340],[112,320],[119,300],[127,280],[141,240],[156,200],[171,160],[181,152]];

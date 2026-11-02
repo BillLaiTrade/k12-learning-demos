@@ -1,8 +1,8 @@
 const{test}=require('node:test'),assert=require('node:assert/strict');
-const correct={materials:['marble','acid'],fill:'full',position:'submerged',outlet:'jar',order:['prepare','react','purge','collect','withdraw','cover']};
+const correct={materials:['marble','acid'],fill:'full',position:'submerged',outlet:'jar',funnel:'sealed',order:['prepare','react','purge','collect','withdraw','cover']};
 test('collection task evaluates physical prerequisites and previews the student plan',async t=>{
  const{evaluateCollectionPlan:evaluate,collectionFrame:frame,TASK_STEPS,INITIAL_ORDER,taskHosePoints}=await import('../units/2/parts/2.3/assets/collection-task-model.mjs');
- await t.test('missing work is reported without claiming completion',()=>{const r=evaluate({});assert.equal(r.correct,false);assert.equal(r.complete,false);assert.equal(r.missing.length,5);});
+ await t.test('missing work is reported without claiming completion',()=>{const r=evaluate({});assert.equal(r.correct,false);assert.equal(r.complete,false);assert.equal(r.missing.length,6);});
  await t.test('the CO2 reactants and full water collector are accepted',()=>assert.equal(evaluate(correct).correct,true));
  await t.test('independent preparation and reaction steps can change order',()=>{for(const order of[['react','prepare','purge','collect','withdraw','cover'],['react','purge','prepare','collect','withdraw','cover']])assert.equal(evaluate({...correct,order}).correct,true);});
  await t.test('oxygen reagents get a targeted explanation',()=>{const r=evaluate({...correct,materials:['peroxide','catalyst']});assert.match(r.issues[0].message,/氧氣/);assert.equal(r.issues[0].target,'s4');});

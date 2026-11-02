@@ -30,7 +30,7 @@ test('selected step stays bounded at both ends without leaking into the next ste
 test('assembly adds reagents in order, starts reaction after catalyst, and seals before gas enters the tube',async()=>{
  const {assemblyFrame,ASSEMBLY_DURATION}=await import('../units/2/parts/2.3/assets/oxygen-model.mjs');
  assert.equal(assemblyFrame(-100).peroxide,0);assert.equal(assemblyFrame(2000).phase,0);assert.equal(assemblyFrame(4100).phase,1);assert.equal(assemblyFrame(6900).phase,2);assert.equal(assemblyFrame(9600).phase,3);
- for(let time=0;time<=ASSEMBLY_DURATION;time+=20){const f=assemblyFrame(time);if(f.catalyst>0)assert.equal(f.peroxide,1);if(f.reaction>0)assert.ok(f.catalyst>0);if(f.sealed>0){assert.equal(f.peroxide,1);assert.equal(f.catalyst,1);}if(f.gasThroughTube){assert.equal(f.sealed,1);assert.ok(f.reaction>0);}if(f.liquidFlow>0)assert.equal(f.sealed,0);if(f.powderFlow>0)assert.equal(f.sealed,0);}
+ for(let time=0;time<=ASSEMBLY_DURATION;time+=20){const f=assemblyFrame(time);if(f.peroxide>0){assert.equal(f.catalyst,1);assert.equal(f.sealed,1);}if(f.reaction>0)assert.ok(f.catalyst>0);if(f.sealed>0)assert.equal(f.catalyst,1);if(f.gasThroughTube){assert.equal(f.sealed,1);assert.ok(f.reaction>0);}if(f.liquidFlow>0)assert.equal(f.sealed,1);if(f.powderFlow>0){assert.equal(f.sealed,0);assert.equal(f.peroxide,0);}}
  const end=assemblyFrame(99999);assert.equal(end.time,ASSEMBLY_DURATION);assert.equal(end.sealed,1);assert.equal(end.catalyst,1);assert.equal(end.peroxide,1);assert.equal(end.gasThroughTube,true);
 });
 
@@ -39,7 +39,7 @@ test('operation windows stop at purposeful boundaries, with prerequisites and wi
  assert.equal(OXYGEN_OPERATIONS.length,8);
  for(let i=0;i<8;i++){const a=oxygenOperationFrame(i,-10),b=oxygenOperationFrame(i,99999);assert.equal(a.localTime,0);assert.equal(b.localTime,OXYGEN_OPERATIONS[i].duration);assert.equal(b.operation,i);}
  const assembled=i=>assemblyFrame(oxygenOperationFrame(i,99999).sceneTime);
- assert.equal(assembled(1).peroxide,0);assert.equal(assembled(2).peroxide,1);assert.equal(assembled(2).catalyst,0);assert.equal(assembled(3).catalyst,1);assert.equal(assembled(3).sealed,0);assert.equal(assembled(4).gasThroughTube,true);
+ assert.equal(assembled(1).peroxide,0);assert.equal(assembled(2).peroxide,0);assert.equal(assembled(2).catalyst,1);assert.equal(assembled(3).catalyst,1);assert.equal(assembled(3).sealed,1);assert.equal(assembled(3).peroxide,0);assert.equal(assembled(4).gasThroughTube,true);
  assert.equal(oxygenOperationFrame(5,99999).collected,0);for(let time=0;time<700;time+=50){const f=oxygenOperationFrame(6,time);assert.equal(f.collected,0);assert.equal(f.collecting,false);}
  assert.equal(oxygenOperationFrame(6,99999).collected,1);for(let time=0;time<=2600;time+=20){const f=oxygenOperationFrame(7,time);if(f.cover>0)assert.equal(f.tube,0);assert.equal(f.collected,1);}assert.equal(oxygenOperationFrame(7,99999).covered,true);
 });
@@ -75,4 +75,17 @@ test('storage covers underwater before lifting, turns upright only above water, 
  }
  const end=oxygenOperationFrame(7,99999);
  assert.equal(end.lift,1);assert.equal(end.upright,1);assert.equal(end.setDown,1);
+});
+
+test('thistle apparatus is assembled before addition; gas reaches the tube only after the liquid covers the tip',async()=>{
+ const{assemblyFrame}=await import('../units/2/parts/2.3/assets/oxygen-model.mjs');
+ let beforeSeal=false,afterSeal=false;
+ for(let time=8800;time<=11800;time+=10){const f=assemblyFrame(time),level=790-165*f.peroxide;
+  assert.equal(f.sealed,1);assert.equal(f.catalyst,1);
+  assert.equal(f.liquidSeal,level<735);
+  assert.equal(f.gasThroughTube,f.liquidSeal&&f.reaction>0);
+  if(f.reaction>0&&!f.liquidSeal)beforeSeal=true;
+  if(f.liquidSeal){afterSeal=true;assert.ok(level>430,'gas inlet stays above the liquid');}
+ }
+ assert.ok(beforeSeal&&afterSeal);
 });

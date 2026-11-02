@@ -34,7 +34,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     const text = await page.locator('main').innerText();
     assert.doesNotMatch(text, /鋼絲絨|AQI|150 mL|100\.0|濕度計算/);
     assert.doesNotMatch(await page.locator('#s3').innerText(), /保存效果仍與密封/);
-    assert.match(await page.locator('#oxygen-step-0 [data-material-info=catalyst]').textContent(), /不是氧氣來源/);
+    assert.match(await page.locator('#oxygen-step-0 [data-material-info=catalyst]').textContent(), /不是.*氧氣來源/);
     assert.match(await page.locator('#air-profile-nitrogen').innerText(), /相對不易反應/);
     assert.match(await page.locator('#s4').textContent(), /不能說它絕對不能用排水法/);
   });
@@ -80,7 +80,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     const form=page.locator('#gas-report-form'),feedback=form.locator('#gas-report-feedback');
     await form.locator('[data-task-play]').click();assert.match(await feedback.innerText(),/未完成/);
     for(const v of ['marble','acid'])await form.locator(`[name=materials][value=${v}]`).check();
-    await form.locator('#task-tab-1').click();for(const[name,value]of Object.entries({fill:'full',position:'submerged',outlet:'jar'}))await form.locator(`[name=${name}]`).selectOption(value);
+    await form.locator('#task-tab-1').click();for(const[name,value]of Object.entries({fill:'full',position:'submerged',outlet:'jar',funnel:'sealed'}))await form.locator(`[name=${name}]`).selectOption(value);
     await form.locator('#task-tab-2').click();const {TASK_STEPS}=await import('../units/2/parts/2.3/assets/collection-task-model.mjs');
     for(let i=0;i<TASK_STEPS.length;i++){const id=TASK_STEPS[i].id;while(await form.locator('.task-order li').evaluateAll((ns,id)=>ns.findIndex(n=>n.dataset.taskStep===id),id)>i)await form.locator(`[data-task-step=${id}] [data-move="-1"]`).click();}
     await form.locator('[data-task-play]').click();for(const step of TASK_STEPS)await page.clock.fastForward(step.duration+50);
@@ -117,7 +117,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     const staticPage = await context.newPage(); await staticPage.goto(url, {waitUntil:'networkidle'});
     for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#air-profile-nitrogen .gas-profile-properties','#air-profile-oxygen .gas-profile-properties','#air-profile-argon .gas-profile-properties','#s3 .sequence-grid','#s3 .properties-collected-note','#s4 .co2-step','#s5 .oxygen-comparison','#s5 .properties-limewater','#s6 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
     assert.equal(await staticPage.locator('#s4 .co2-step:visible').count(),7);
-    assert.equal(await staticPage.locator('#s4 [data-co2-info]:visible').count(),6);
+    assert.equal(await staticPage.locator('#s4 [data-co2-info]:visible').count(),7);
     await context.close();
   });
   await t.test('touch, reduced motion, keyboard selects and last-section anchor work', async () => {

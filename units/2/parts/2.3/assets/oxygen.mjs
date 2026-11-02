@@ -1,8 +1,8 @@
 import { createExperimentPlayerFooter } from './experiment-player.mjs?v=player-1';
 import { createSceneCaptions } from './oxygen-captions.mjs?v=player-1';
-import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=background-tap-1';
-import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=oxygen-wall-fit-2';
-import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=oxygen-wall-fit-2';
+import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=thistle-1';
+import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=thistle-1';
+import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=thistle-1';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];
@@ -115,8 +115,8 @@ function renderAssembly(elapsed, state, view, phase) {
   const f=assemblyFrame(elapsed), $=part=>view.querySelector(`[data-part="${part}"]`);
   const opacity=(part,value)=>$(part).setAttribute('opacity',String(value));
   panel.dataset.assemblyPhase=String(phase);
-  panel.dataset.peroxide=f.peroxide.toFixed(4);panel.dataset.catalyst=f.catalyst.toFixed(4);panel.dataset.sealed=f.sealed.toFixed(4);
-  $('assembly-flask-label').textContent=f.peroxide===0?'錐形瓶（空）':f.catalyst===0?'雙氧水（無色溶液）':'雙氧水＋二氧化錳';
+  panel.dataset.peroxide=f.peroxide.toFixed(4);panel.dataset.catalyst=f.catalyst.toFixed(4);panel.dataset.sealed=f.sealed.toFixed(4);panel.dataset.liquidSeal=String(f.liquidSeal);
+  $('assembly-flask-label').textContent=f.peroxide===0?(f.catalyst>0?'二氧化錳':'錐形瓶（空）'):'雙氧水＋二氧化錳';
   const liquidY=790-165*f.peroxide;
   $('peroxide-liquid').setAttribute('y',liquidY);$('peroxide-liquid').setAttribute('height',805-liquidY);
   $('peroxide-meniscus').setAttribute('cy',liquidY);opacity('peroxide-meniscus',f.peroxide>0?1:0);
@@ -124,8 +124,11 @@ function renderAssembly(elapsed, state, view, phase) {
   $('settled-catalyst').setAttribute('transform',`translate(310 790) scale(${.3+.7*f.catalyst} ${f.catalyst}) translate(-310 -790)`);
   opacity('settled-catalyst',f.catalyst);opacity('mixed-flask',f.mixed);
   opacity('reagent-bottle',f.bottle);
-  $('reagent-bottle').setAttribute('transform',`translate(${530-215*f.bottleTilt} ${150+75*f.bottleTilt}) rotate(${-125*f.bottleTilt})`);
-  const stream=`M315 225Q310 245 315 265V${liquidY}`;
+  const angle=-65*f.bottleTilt,r=angle*Math.PI/180,lip={x:-52+116/500*104,y:83/810*210};
+  const desired={x:502.128+(289-502.128)*f.bottleTilt,y:171.5185185185+(160-171.5185185185)*f.bottleTilt};
+  const bx=desired.x-(lip.x*Math.cos(r)-lip.y*Math.sin(r)),by=desired.y-(lip.x*Math.sin(r)+lip.y*Math.cos(r));
+  $('reagent-bottle').setAttribute('transform',`translate(${bx} ${by}) rotate(${angle})`);
+  const stream=`M${desired.x} ${desired.y}Q289 175 289 190`;
   for(const part of ['peroxide-stream','peroxide-highlight']){$(part).setAttribute('d',stream);opacity(part,f.liquidFlow);}
   opacity('catalyst-spoon',f.spoon);$('catalyst-spoon').setAttribute('transform',`translate(315 225) rotate(${-18*f.catalyst})`);
   opacity('falling-catalyst',f.powderFlow);
@@ -148,8 +151,8 @@ function renderAssembly(elapsed, state, view, phase) {
   $('purge-bubbles').querySelectorAll('circle').forEach((b,i)=>{const phase=(f.time/1150+i*.33)%1;b.setAttribute('cx',800+Math.sin(phase*5+i)*8);b.setAttribute('cy',657-phase*90);});
   $('flow').style.strokeDashoffset=String(-f.time/35);
   opacity('assembly-jar-focus',phase===0?1:0);
-  const notes=['把裝滿水的倒置集氣瓶移到定位，再將導管出口放在瓶外水中','把雙氧水倒入錐形瓶','用藥匙加入少量二氧化錳，讓雙氧水更快分解','塞緊已連接導管的塞子，氣體從瓶外水中的出口送出'];
-  const finished=['集氣位置已備好；導管出口先留在瓶外水中','雙氧水已倒入，接著加入少量二氧化錳','加入二氧化錳後開始產氣，接著塞好連接導管的塞子','裝置已接好，接著先排空氣，暫不收集'];
+  const notes=['把裝滿水的倒置集氣瓶移到定位，再將導管出口放在瓶外水中','先把少量二氧化錳加入空錐形瓶，現在還沒有雙氧水','裝好薊頭漏斗與導管，將雙孔塞對準瓶口塞緊','由薊頭漏斗加入雙氧水；液面淹過漏斗下端後形成液封'];
+  const finished=['集氣位置已備好；導管出口先留在瓶外水中','二氧化錳已加入，接著裝好薊頭漏斗與雙孔塞','漏斗與導管已裝妥，接著從漏斗加入雙氧水','液面已淹過漏斗下端，接著先排除原有空氣，暫不收集'];
   const note=state==='complete'?finished[phase]:notes[phase];
   view.dataset.captionMessage=note;view.dataset.loopCaption=notes[phase];view.querySelector('title').textContent=note;
   view.querySelector('.oxygen-mobile-zoom svg').setAttribute('viewBox',phase===0?'740 120 690 635':'100 30 550 805');

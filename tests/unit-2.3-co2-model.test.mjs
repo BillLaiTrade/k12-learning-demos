@@ -21,7 +21,7 @@ test('five individual textured stones transfer once, through the neck, and never
   }
  }
  assert.deepEqual(bench(1,21000).stones.map(s=>s.location),Array(5).fill('flask'));
- assert.ok(bench(1,21000).bowl.x+110<0);assert.equal(bench(2,5000).bodies.acid.visible,false);
+ assert.ok(bench(1,21000).bowl.x+110<0);assert.equal(bench(3,5000).bodies.acid.visible,false);
 });
 test('every operation meets the next without a position, angle, liquid or quantity jump',()=>{
  for(let i=1;i<6;i++){
@@ -60,7 +60,7 @@ test('marble is placed with forceps in a tilted flask while the dish remains lev
  const moving=p.stones.find(s=>s.location==='falling');close(p.tool.x,moving.x);close(p.tool.y,moving.y);assert.equal(bench(1,21000).bodies.flask.angle,0);
 });
 test('acid stream starts at the real transformed open-bottle lip and the neck stays outside the flask',()=>{
- for(let t=700;t<3200;t+=25){const p=bench(2,t),b=p.bodies.acid;close(p.acidMouth.x,302);close(p.acidMouth.y,176);assert.equal(b.angle,-65);assert.ok(p.acidMouth.y<200);assert.ok(b.cx>330);}
+ for(let t=700;t<3200;t+=25){const p=bench(3,t),b=p.bodies.acid;close(p.acidMouth.x,274);close(p.acidMouth.y,42);assert.equal(b.angle,-65);assert.ok(p.acidMouth.y<200);assert.ok(b.cx>330);}
 });
 
 test('forceps enter and leave through the top without popping in over the bench',()=>{
@@ -78,4 +78,18 @@ test('every incoming and outgoing stone/forceps trajectory crosses the opening, 
   }
  }
  assert.ok(crossings>=15);
+});
+
+test('thistle liquid seal follows assembly and addition; the fixed stem enters only from above',()=>{
+ assert.equal(frame(2,4800).acid,0);assert.equal(frame(2,4800).seal,1);assert.equal(frame(2,4800).liquidSeal,false);
+ let crossed=false;
+ for(let time=0;time<=4800;time+=8){const p=bench(2,time).funnel,tip=transformPoint({x:-26,y:350},p);
+  if(tip.y>205&&p.x<700){assert.ok(Math.abs(tip.x-274)<.01,'stem must align with the mouth before lowering');crossed=true;}
+ }
+ assert.ok(crossed);
+ for(let time=0;time<=5000;time+=10){const f=frame(3,time),level=580-80*f.acid;
+  assert.equal(f.seal,1);assert.equal(f.liquidSeal,level<555);assert.equal(f.flow,f.liquidSeal);
+  if(f.liquidSeal)assert.ok(level>391,'gas inlet stays above the liquid');
+ }
+ for(let i=1;i<6;i++)assert.deepEqual(bench(i,ops[i].duration).funnel,bench(i+1,0).funnel);
 });

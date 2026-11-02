@@ -1,18 +1,19 @@
-import {CO2_SETUP_DURATION,co2SetupFrame,CO2_OPERATIONS,co2BenchFrame,CO2_LIQUID_PROFILE,liquidGeometry,rubberGeometry,transformPoint} from './co2-model.mjs?v=transfer-1';
+import {createThistleFunnel,createDoubleStopper} from './thistle-apparatus.mjs?v=thistle-1';
+import {CO2_SETUP_DURATION,co2SetupFrame,CO2_OPERATIONS,co2BenchFrame,CO2_LIQUID_PROFILE,liquidGeometry,rubberGeometry,transformPoint} from './co2-model.mjs?v=thistle-1';
 export {CO2_SETUP_DURATION,co2SetupFrame,co2BenchFrame};
 const NS='http://www.w3.org/2000/svg';
 const atlas='assets/co2-marble-atlas.png';
 // Equal atlas cells, cropped to the generated object's transparent silhouette.
 const crops=[[40,152,473,324],[606,159,339,325],[1122,175,336,289],[114,635,345,298],[618,636,345,288],[1121,623,330,329]];
-const keys=['marble','acid','flask','jar','tube','plate'];
+const keys=['marble','acid','flask','jar','tube','plate','funnel'];
 function node(tag,attrs={}){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));return n;}
 function photo(key,box){const n=node('image',{href:`assets/${key}`,preserveAspectRatio:'none'});setBox(n,box);return n;}
 function setBox(n,p){for(const [i,a] of ['x','y','width','height'].entries())n.setAttribute(a,p[i]);}
 function sprite(cell,box){const n=node('svg',{viewBox:crops[cell].join(' '),preserveAspectRatio:'none',overflow:'hidden'});setBox(n,box);n.append(node('image',{href:atlas,width:1536,height:1024}));return n;}
 const matrix=p=>`translate(${p.x} ${p.y}) rotate(${p.angle||0})`;
 const polygon=ps=>ps.map((p,i)=>`${i?'L':'M'}${p.x} ${p.y}`).join('')+'Z';
-const firstLocal=[{x:0,y:186},{x:0,y:-45},{x:0,y:-70},{x:25,y:-70},{x:120,y:-70}];
-const firstPath='M0 186V-45Q0 -70 25 -70H120';
+const firstLocal=[{x:26,y:186},{x:26,y:-45},{x:26,y:-70},{x:51,y:-70},{x:146,y:-70}];
+const firstPath='M26 186V-45Q26 -70 51 -70H146';
 const plateBox=p=>[p.x-222/440*340,p.y-237/440*80,340,80];
 const plateCorners=p=>[[145,136],[405,177],[340,349],[44,291]].map(([x,y])=>({x:plateBox(p)[0]+x*340/440,y:plateBox(p)[1]+y*80/440}));
 const stopperOutline='M-50 -15Q0 -33 50 -15L40 45Q0 58 -40 45Z';
@@ -23,9 +24,9 @@ export function createCO2Bench(panel,panels){
  const art=node('g',{id:'co2-shared-bench','data-shared-bench':''});defs.append(art);
  const flaskClip=node('clipPath',{id:'co2-live-flask-inside',clipPathUnits:'userSpaceOnUse'});flaskClip.append(node('path',{d:polygon(CO2_LIQUID_PROFILE)}));defs.append(flaskClip);
  const stopperClip=node('clipPath',{id:'co2-live-stopper-shape'});stopperClip.append(node('path',{d:stopperOutline}));defs.append(stopperClip);
- const glassClip=node('clipPath',{id:'co2-photo-glass-clip'});glassClip.append(node('path',{d:'M-11 190V-45Q-11 -81 25 -81H125V-59H25Q11 -59 11 -45V190Z'}));defs.append(glassClip);
+ const glassClip=node('clipPath',{id:'co2-photo-glass-clip'});glassClip.append(node('path',{d:'M15 190V-45Q15 -81 51 -81H151V-59H51Q37 -59 37 -45V190Z'}));defs.append(glassClip);
  const bowlFrontClip=node('clipPath',{id:'co2-live-dish-front'});bowlFrontClip.append(node('rect',{x:-115,y:33,width:230,height:50}));defs.append(bowlFrontClip);
- art.append(photo('oxygen-setup-table.png',[0,0,1100,650]));art.lastChild.dataset.benchBackground='';
+ art.append(photo('oxygen-setup-table.png',[0,-100,1100,750]));art.lastChild.dataset.benchBackground='';
  const bodies={};
  const flask=node('g',{'data-bench-body':'flask'}),flaskImage=photo('co2-flask.webp',[70,145,460,460]);flask.append(flaskImage);art.append(flask);bodies.flask={group:flask,image:flaskImage};
  const jar=node('g',{'data-bench-body':'jar'}),jarImage=photo('co2-jar.webp',[705,250,330,330]);jar.append(jarImage);art.append(jar);bodies.jar={group:jar,image:jarImage};
@@ -44,9 +45,9 @@ export function createCO2Bench(panel,panels){
  const stream=node('path',{fill:'none',stroke:'#bfdde0','stroke-width':6,'stroke-linecap':'round','data-bench-stream':''});art.append(stream);
  const rig=node('g',{'data-bench-body':'tube','data-rigid-glass':'first'});
  rig.append(node('path',{d:firstPath,fill:'none',stroke:'none','data-glass-centerline':''}));
- const glassPhoto=node('svg',{viewBox:'85 45 172 350',x:-19.2,y:-90,width:137.6,height:280,preserveAspectRatio:'none',overflow:'hidden'});glassPhoto.append(node('image',{href:'assets/co2-tube.webp',width:440,height:440}));const clippedGlass=node('g',{'clip-path':'url(#co2-photo-glass-clip)'});clippedGlass.append(glassPhoto);rig.append(clippedGlass);
- const stopper=node('g',{'clip-path':'url(#co2-live-stopper-shape)','data-bench-stopper':''});
- const cork=node('svg',{viewBox:'44 137 120 110',x:-52,y:-26,width:104,height:78,preserveAspectRatio:'none',overflow:'hidden'});cork.append(node('image',{href:'assets/co2-tube.webp',width:440,height:440}));stopper.append(cork);rig.append(stopper);art.append(rig);
+ const glassPhoto=node('svg',{viewBox:'85 45 172 350',x:6.8,y:-90,width:137.6,height:280,preserveAspectRatio:'none',overflow:'hidden'});glassPhoto.append(node('image',{href:'assets/co2-tube.webp',width:440,height:440}));const clippedGlass=node('g',{'clip-path':'url(#co2-photo-glass-clip)'});clippedGlass.append(glassPhoto);rig.append(clippedGlass);
+ const stopper=createDoubleStopper();stopper.dataset.benchStopper='';rig.append(stopper);art.append(rig);
+ const funnel=createThistleFunnel('co2',{top:-140,tip:350,port:-26});art.append(funnel.group);
  const hose=node('path',{fill:'none',stroke:'#735c38','stroke-opacity':.15,'stroke-width':15,'stroke-linecap':'round','data-rubber-tube':''}),hoseTexture=node('g',{'data-rubber-texture':''});art.append(hose,hoseTexture);const rubberSegments=[];
  for(let i=0;i<64;i++){const g=node('g'),strip=node('svg',{x:-7,y:-.5,width:14,height:10,viewBox:`338 ${100+i*980/64} 90 24`,preserveAspectRatio:'none',overflow:'hidden'});strip.append(node('image',{href:'assets/co2-tools-atlas.png',width:1268,height:1241}));g.append(strip);hoseTexture.append(g);rubberSegments.push({g,strip});}
  const rod=node('g',{'data-rigid-glass':'collector'});rod.append(node('path',{d:'M0 -260V0',fill:'none',stroke:'none','data-bench-pipe':''}));const rodPhoto=node('svg',{viewBox:'98 250 22 142',x:-8,y:-260,width:16,height:260,preserveAspectRatio:'none',overflow:'hidden'});rodPhoto.append(node('image',{href:'assets/co2-tube.webp',width:440,height:440}));rod.append(rodPhoto);art.append(rod);
@@ -59,13 +60,13 @@ export function createCO2Bench(panel,panels){
  const sample=node('g',{'data-bench-sample':''});sample.append(node('rect',{x:808,y:384,width:124,height:45,rx:7,fill:'#fffdf5',stroke:'#c6d2b9'}));const sampleText=node('text',{x:870,y:413,'text-anchor':'middle','font-size':21});sampleText.textContent='二氧化碳';sample.append(sampleText);art.append(sample);
  const labels={};for(const [key,x,y]of[['flask',300,623],['jar',870,608]]){const label=node('text',{x,y,'text-anchor':'middle','font-size':19,'data-bench-label':key});art.append(label);labels[key]=label;}
  const material=panels[0].querySelector('.co2-material-scene');
- const source=node('svg',{'data-shared-materials':'',viewBox:'0 0 1100 650','aria-hidden':'true',preserveAspectRatio:'none'});source.append(node('use',{href:'#co2-shared-bench'}));material.prepend(source);material.querySelectorAll('img').forEach(image=>image.style.opacity='0');
- const extraTube=document.createElement('button');extraTube.type='button';extraTube.dataset.co2MaterialAlt='tube';extraTube.tabIndex=-1;extraTube.setAttribute('aria-label','玻璃導管與橡皮管');extraTube.setAttribute('aria-haspopup','dialog');extraTube.style.cssText='position:absolute;left:92.5%;top:56%;width:4%;height:42%;min-width:0;min-height:0;background:transparent;border:0;padding:0';material.append(extraTube);
+ const source=node('svg',{'data-shared-materials':'',viewBox:'0 -100 1100 750','aria-hidden':'true',preserveAspectRatio:'none'});source.append(node('use',{href:'#co2-shared-bench'}));material.prepend(source);material.querySelectorAll('img').forEach(image=>image.style.opacity='0');
+ const extraTube=document.createElement('button');extraTube.type='button';extraTube.dataset.co2MaterialAlt='tube';extraTube.tabIndex=-1;extraTube.setAttribute('aria-label','玻璃導管與橡皮管');extraTube.setAttribute('aria-haspopup','dialog');extraTube.style.cssText='position:absolute;left:92.5%;top:62%;width:4%;height:36%;min-width:0;min-height:0;background:transparent;border:0;padding:0';material.append(extraTube);
  for(const [index,view]of panels.entries())if(index){
   view.querySelector(`#co2-scene-${index}`).style.display='none';
   for(const canvas of view.querySelectorAll('.co2-main-scene,.co2-closeup svg'))canvas.append(node('use',{href:'#co2-shared-bench','data-shared-bench-use':'','aria-hidden':'true'}));
  }
- const materialBoxes={flask:[140,100,340,340],jar:[715,155,350,350],acid:[30,420,170,170],marble:[280,446,220,148],tube:[490,390,240,250],plate:[738,500,270,110]};
+ const materialBoxes={flask:[140,100,340,340],jar:[715,155,350,350],acid:[30,420,170,170],marble:[280,446,220,148],tube:[490,390,240,250],plate:[738,500,270,110],funnel:[690,35,100,520]};
  let current,frame,stage=0,lastHoseKey='',hoseShape=null;
  function render(index,elapsed,f){
   stage=index;frame=f;current=co2BenchFrame(index,elapsed,f);const {bodies:state,bowl:bp,glass,plate:pp}=current;
@@ -75,12 +76,13 @@ export function createCO2Bench(panel,panels){
   }
   setBox(flaskFront.firstChild,state.flask.box);const flaskRotation=`rotate(${state.flask.angle} ${state.flask.cx} ${state.flask.cy})`;flaskFront.setAttribute('transform',flaskRotation);flaskClip.firstChild.setAttribute('transform',flaskRotation);lip.setAttribute('opacity',f.seal===1?'.75':'0');
   forceps.setAttribute('transform',matrix(current.tool));forceps.setAttribute('opacity',current.tool.visible?'1':'0');forceps.dataset.gripping=String(current.tool.gripping);
+  funnel.render(current.funnel,index===3&&f.localTime>=700&&f.acid<1);
   const dishVisible=bp.x+110>0;bowl.setAttribute('transform',matrix(bp));bowlFront.setAttribute('transform',matrix(bp));bowl.setAttribute('opacity',dishVisible?'1':'0');bowlFront.setAttribute('opacity',dishVisible?'1':'0');
   for(const p of current.stones){const {wrapper,body}=stones[p.id];wrapper.dataset.stoneLocation=p.location;wrapper.setAttribute('clip-path',p.inside?'url(#co2-live-flask-inside)':'none');body.setAttribute('transform',matrix(p));}
   const level=580-80*f.acid,water=liquidGeometry(level);liquid.setAttribute('d',f.acid?water.d:'');surface.setAttribute('cx',(water.left+water.right)/2);surface.setAttribute('cy',level);surface.setAttribute('rx',(water.right-water.left)/2);surface.setAttribute('ry','5');surface.setAttribute('opacity',f.acid?'1':'0');
   const prior=CO2_OPERATIONS.slice(1,index).reduce((s,op)=>s+op.duration+700,0),time=prior+elapsed;
   bubbleLayer.setAttribute('opacity',f.reacting?'1':'0');[...bubbleLayer.children].forEach((b,i)=>b.setAttribute('cy',552-((time/1000+i*.17)%1)*Math.max(0,552-level-8)));
-  stream.setAttribute('d',`M${current.acidMouth.x} ${current.acidMouth.y}Q301 195 300 215Q293 300 300 ${level}`);stream.dataset.originX=String(current.acidMouth.x);stream.dataset.originY=String(current.acidMouth.y);stream.setAttribute('opacity',index===2&&f.localTime>=700&&f.acid<1?'1':'0');
+  stream.setAttribute('d',`M${current.acidMouth.x} ${current.acidMouth.y}Q274 58 274 78`);stream.dataset.originX=String(current.acidMouth.x);stream.dataset.originY=String(current.acidMouth.y);stream.setAttribute('opacity',index===3&&f.localTime>=700&&f.acid<1?'1':'0');
   rig.setAttribute('transform',matrix(glass.first));rod.setAttribute('transform',matrix(glass.rod));
   const hoseKey=JSON.stringify([glass.firstConnector,glass.rodConnector,glass.bendAngle]);if(hoseKey!==lastHoseKey){hoseShape=rubberGeometry(glass.firstConnector,glass.rodConnector,glass.bendAngle);lastHoseKey=hoseKey;
    const {a,b,c,d}=hoseShape,at=t=>{const u=1-t;return {x:u*u*u*a.x+3*u*u*t*c.x+3*u*t*t*d.x+t*t*t*b.x,y:u*u*u*a.y+3*u*u*t*c.y+3*u*t*t*d.y+t*t*t*b.y};};
@@ -90,17 +92,18 @@ export function createCO2Bench(panel,panels){
   for(const path of flowPaths){path.setAttribute('opacity',f.flow?'1':'0');path.style.strokeDashoffset=String(-time/35);}
   setBox(plateImage,plateBox(pp));plate.dataset.cover=String(f.cover);air.setAttribute('opacity',f.collecting?'1':'0');air.setAttribute('transform',`translate(0 ${-6*((time%1000)/1000)})`);sample.setAttribute('opacity',f.labeled?'1':'0');
   labels.flask.textContent=f.flaskCount===0&&f.dishCount===5?'錐形瓶（空）':f.acid===0?'錐形瓶：大理石':'錐形瓶：大理石＋稀鹽酸';labels.jar.textContent='集氣瓶：瓶口朝上';for(const label of Object.values(labels))label.setAttribute('opacity',index===0?'0':String(f.placement));
-  for(const key of keys){const [x,y,w,h]=materialBoxes[key],button=material.querySelector(`[data-co2-material="${key}"]`);button.style.cssText=`left:${x/11}%;top:${y/6.5}%;width:${w/11}%;height:${h/6.5}%`;}
-  if(index){panels[index].querySelector('.co2-main-scene').setAttribute('viewBox','0 0 1100 650');panels[index].querySelector('.co2-closeup svg').setAttribute('viewBox',index<=3?'120 100 440 530':'555 195 520 420');}
-  if(index===1)return f.localTime<4000?'把錐形瓶與直立集氣瓶移到工作位置，接著加入大理石':f.flaskCount<5?'錐形瓶略微傾斜，用鑷子逐塊輕放，讓大理石沿內壁滑入':dishVisible?'大理石已加入，將不再使用的空碟移開':'大理石已加入，接著倒入稀鹽酸';
-  if(index===2)return f.acid<1?'將試藥瓶瓶口靠近錐形瓶口，讓稀鹽酸由瓶口緩緩流入':state.acid.visible?'加入完成，將不再使用的試藥瓶移開':'稀鹽酸已加入，接著塞緊連接導管的塞子';
-  if(index===3)return f.seal<1?'將固定形狀的玻璃管與塞子整組移到瓶口並塞緊；中間橡皮管可彎曲':'塞子已貼合瓶口；玻璃管長度不變，氣體由瓶外出口送出';
+  for(const key of keys){const [x,y,w,h]=materialBoxes[key],button=material.querySelector(`[data-co2-material="${key}"]`);button.style.cssText=`left:${x/11}%;top:${(y+100)/7.5}%;width:${w/11}%;height:${h/7.5}%`;}
+  if(index){panels[index].querySelector('.co2-main-scene').setAttribute('viewBox','0 -100 1100 750');panels[index].querySelector('.co2-closeup svg').setAttribute('viewBox',index<=3?'100 -80 500 700':'555 195 520 420');}
+  if(index===1)return f.localTime<4000?'把錐形瓶與直立集氣瓶移到工作位置，接著加入大理石':f.flaskCount<5?'錐形瓶略微傾斜，用鑷子逐塊輕放，讓大理石沿內壁滑入':dishVisible?'大理石已加入，將不再使用的空碟移開':'大理石已加入，接著裝好薊頭漏斗與雙孔塞';
+  if(index===2)return f.seal<1?'把薊頭漏斗與導管穿過雙孔塞，對準瓶口裝好':'雙孔塞已塞緊；接著由薊頭漏斗加入稀鹽酸';
+  if(index===3)return f.acid<1?'由薊頭漏斗加入稀鹽酸；液面淹過漏斗下端後形成液封':state.acid.visible?'液封已形成，移開試藥瓶；先不收集起始氣體':'液封已形成，接著先排除原有空氣';
   if(index===4)return '先在集氣瓶外排出裝置原有空氣與起始混合氣';
   if(index===5)return f.collecting?'二氧化碳由瓶底附近進入，原有空氣由瓶口向上離開':'先抬起固定長度的集氣玻璃管，越過瓶口，再放到瓶底附近';
   if(index===6)return f.localTime<4300?'將玻璃管整根抬起移出瓶口，保持出口暢通':f.cover<1?'導管已移出，將玻璃片平放並完整蓋住瓶口':'玻璃片已貼合並完整覆蓋瓶口，標示二氧化碳，保持直立';
   return null;
  }
  function target(key){
+  if(key==='funnel')return {visible:true,...funnel.geometry()};
   if(stage===0&&key!=='tube')return null;
   if(key==='forceps')return {visible:current.tool.visible,bounds:[-20,-314,40,300],d:'M-20 -314H20V-14H-20Z',transform:matrix(current.tool),stroke:false};
   if(key==='tube'){
@@ -118,7 +121,7 @@ export function createCO2Bench(panel,panels){
  }
  function materialTubeAt(clientX,clientY){
   if(stage!==0)return false;const r=material.getBoundingClientRect();if(!r.width||!r.height)return false;
-  materialTubeShape.setAttribute('d',target('tube').d);return materialTubeShape.isPointInStroke(new DOMPoint((clientX-r.left)*1100/r.width,(clientY-r.top)*650/r.height));
+  materialTubeShape.setAttribute('d',target('tube').d);return materialTubeShape.isPointInStroke(new DOMPoint((clientX-r.left)*1100/r.width,-100+(clientY-r.top)*750/r.height));
  }
  return {render,target,materialTubeAt};
 }

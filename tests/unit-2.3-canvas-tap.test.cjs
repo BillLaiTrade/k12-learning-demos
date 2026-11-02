@@ -30,7 +30,7 @@ test('2.3 oxygen: blank experiment taps pause and resume without swallowing equi
  await t.test('tabletop and room background clicks reach the canvas and toggle during the actual setup phases',async()=>{
   for(const elapsed of [7300,13800,17000]){
    await select(1,true);await page.clock.fastForward(elapsed);
-   for(const [x,y] of [[100,100],[600,200],[1000,200],[600,800]]){
+   for(const [x,y] of [[100,100],[600,200],[1000,200],[600,700]]){
     const q=await coords(active().locator('.oxygen-main-scene'),x,y);
     assert.equal(await page.evaluate(({x,y})=>document.elementFromPoint(x,y)?.getAttribute('class'),q),'oxygen-background-hit','the explicit background surface must receive the click');
     await page.mouse.click(q.x,q.y);assert.equal(await root.getAttribute('data-state'),'paused');assert.equal(await dialog.isVisible(),false);

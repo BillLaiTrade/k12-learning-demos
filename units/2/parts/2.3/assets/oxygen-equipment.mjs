@@ -1,5 +1,6 @@
 const NS='http://www.w3.org/2000/svg';
 const shapes={
+  funnel:{d:'',bounds:[0,0,100,555],crop:[338,7,154,1005]},
   tank:{d:'M590 490L680 445H1480V760L1405 825H590Z',bounds:[590,445,890,380],crop:[590,90,680,340]},
   flask:{d:'M250 290H380V390L458 710Q490 810 315 820Q140 810 155 710L250 390Z',bounds:[140,290,350,530],crop:[330,20,285,470]},
   jar:{d:'M924 275Q1035 230 1147 275V675Q1035 715 924 675Z',bounds:[924,250,223,465],transform:'placement-jar',crop:[1260,20,270,470]},
@@ -20,12 +21,13 @@ export function createEquipmentExplorer({panel,panels,getStage,onOpen,onBackgrou
   const dialog=panel.closest('.oxygen-lesson').querySelector('#oxygen-equipment-dialog'),layers=new Map();
   const materialsCatalog=Object.fromEntries([...panels[0].querySelectorAll('[data-material-info]')].map(info=>[info.dataset.materialInfo,{name:info.querySelector('h4').textContent,identity:info.querySelectorAll('dd')[0].textContent,role:info.querySelectorAll('dd')[1].textContent}]));
   const catalog={...materialsCatalog};
-  catalog.source={name:'雙氧水試藥瓶',identity:'盛裝雙氧水的玻璃試藥瓶；瓶內的雙氧水是過氧化氫的水溶液。',role:'在這一步把雙氧水倒入錐形瓶，作為製備氧氣的來源。'};
+  catalog.source={name:'雙氧水試藥瓶',identity:'盛裝雙氧水的玻璃試藥瓶；瓶內的雙氧水是過氧化氫的水溶液。',role:'先裝好薊頭漏斗與雙孔塞，再由漏斗加入雙氧水，作為氧氣來源。'};
   catalog.tube={name:'玻璃導管',identity:'讓氣體沿固定路徑通過的中空玻璃管。',role:'將錐形瓶產生的氣體送到出口，再導入集氣瓶收集。'};
-  catalog.stopper={name:'塞子',identity:'用來封住反應容器瓶口，並固定穿過它的玻璃導管。',role:'塞緊錐形瓶口，讓產生的氣體沿導管送出。'};
-  catalog.spoon={name:'藥匙',identity:'用來取用與加入少量固體藥品的工具。',role:'把少量二氧化錳加入錐形瓶中的雙氧水。'};
+  catalog.stopper={name:'雙孔塞',identity:'具有兩個孔，分別固定薊頭漏斗與導管的塞子。',role:'塞緊錐形瓶口，讓產生的氣體沿導管送出。'};
+  catalog.spoon={name:'藥匙',identity:'用來取用與加入少量固體藥品的工具。',role:'先把少量二氧化錳加入空錐形瓶，之後才組裝並從漏斗加入雙氧水。'};
   let trigger=null;
   function currentRole(key,stage){
+    if(key==='funnel')return '從上方開口加入雙氧水；長管下端須浸在反應液面下形成液封，不能把它當成有閥門的滴液漏斗。';
     const tube=Number(panel.dataset.tipX),cover=Number(panel.dataset.cover);
     if(stage===1&&panels[1].setupScene){
       const view=panels[1];
@@ -35,11 +37,11 @@ export function createEquipmentExplorer({panel,panels,getStage,onOpen,onBackgrou
       if(key==='plate')return '先遮住已裝滿水的瓶口，隨瓶倒置；瓶口移入水下後才移開。';
       if(key==='tube'||key==='stopper')return '集氣位置準備完成後，將導管出口放進瓶外的水中；此時尚未塞緊反應容器。';
     }
-    if(key==='flask')return stage===1?'目前尚未加入材料，接下來會用它盛裝雙氧水並進行反應。':stage===2?'接住倒入的雙氧水；這一步還沒有加入二氧化錳。':stage===3?'盛裝雙氧水與加入的二氧化錳，氧氣在這個反應容器中產生。':stage===4?'接上附有導管的塞子，讓瓶內產生的氣體沿導管送出。':stage===5?'作為產生氧氣的反應容器；裝置起初排出的混合氣先不收集。':stage===6?'持續提供氧氣，經導管送到另一側的集氣瓶。':'反應在這裡進行；已收集的氧氣保存在另一側的集氣瓶。';
+    if(key==='flask')return stage===2?'先盛放少量二氧化錳，此時還沒有雙氧水。':stage===3?'放好固體後，將薊頭漏斗與導管用雙孔塞裝妥。':stage===4?'從薊頭漏斗加入雙氧水，接觸二氧化錳後開始產氣。':stage>=5?'反應容器持續提供氧氣，氣體由液面上方進入導管。':'目前先準備集氣位置；錐形瓶尚未加入反應材料。';
     if(key==='tank')return stage===1?'盛水並放置裝滿水、倒置的集氣瓶，讓瓶口留在水下。':stage===6?'接住集氣瓶排出的水；瓶內空間逐漸由進入的氧氣占據。':stage===7?'讓集氣瓶口在撤管與蓋片時保持在水下，減少混入外界空氣。':'讓集氣瓶的瓶口保持在水下；目前先將導管出口留在瓶外的水中。';
     if(key==='jar')return stage<=5?'目前先裝滿水、倒置在水中，尚未收集氣體；瓶口保持在水下。':stage===6?'氧氣從瓶口進入，把瓶內的水排回水槽；雙氧水足量時可收集滿瓶。':Number(panels[7].dataset.storageSetDown)===1?'已收集氧氣，集氣瓶已取出水槽並轉正放到桌面，玻璃片仍緊貼瓶口。':Number(panels[7].dataset.storageLift)>0?'已收集氧氣，正連瓶帶片取出水槽並轉正；持續壓緊玻璃片。':cover===1?'已收集氧氣，現在用玻璃片在水下蓋好瓶口，接著連瓶帶片取出。':'已收集氧氣，瓶口保持在水下，接著用玻璃片蓋住。';
     if(key==='tube')return stage<=5?'出口先留在集氣瓶外的水中，讓裝置起初的混合氣排出，暫不收集。':stage===6?(tube<1035?'出口正移向集氣瓶口下方；到位後才開始排水收集。':'出口在集氣瓶口下方，把氧氣送進瓶內並排出水。'):(tube>800?'正從集氣瓶口撤開，讓玻璃片能接著滑入。':'已移到集氣瓶外，接著在水下蓋好瓶口。');
-    if(key==='stopper')return stage<4?'目前還沒有塞緊，瓶口留作加入雙氧水或二氧化錳。':stage===4?'將連接玻璃導管的塞子塞緊；封好後，氣體才沿導管送出。':'封住錐形瓶口，讓產生的氣體沿玻璃導管送出。';
+    if(key==='stopper')return stage<3?'目前先留出瓶口加入二氧化錳；之後再裝上雙孔塞及薊頭漏斗。':'兩孔分別固定薊頭漏斗與導管；液面淹過漏斗下端後，液封可減少氣體從漏斗逸出。';
     if(key==='plate'&&stage<7)return '玻璃片已移開並暫放在桌面；收集完成後，再於水下蓋住集氣瓶口。';
     if(key==='plate')return cover===1?'已蓋緊集氣瓶口；連瓶帶片移出、轉正及放到桌面時都持續貼合，減少氧氣與外界空氣混合。':'先撤開導管，再讓玻璃片在水下滑入並蓋緊瓶口。';
     return catalog[key].role;
@@ -54,8 +56,9 @@ export function createEquipmentExplorer({panel,panels,getStage,onOpen,onBackgrou
     dialog.querySelector('[data-equipment-identity]').textContent=info.identity;
     dialog.querySelector('[data-equipment-role]').textContent=stage===0?info.role:currentRole(key,stage);
     dialog.querySelector('.oxygen-equipment-paused').textContent=stage===0?'關閉介紹後，可繼續點選其他材料或前往下一個操作。':'關閉介紹後，可自行播放或重播這一步。';
-    dialog.querySelector('[data-equipment-portrait]').setAttribute('viewBox',(stage===0&&key==='tube'?[410,500,700,250]:shapes[key].crop).join(' '));
-    const image=dialog.querySelector('[data-equipment-portrait] image');image.setAttribute('href',key==='spoon'?'assets/oxygen-catalyst-spoon.webp':'assets/oxygen-materials-layout.webp');image.setAttribute('width',key==='spoon'?'245':'1536');image.setAttribute('height',key==='spoon'?'55':'850');
+    const portrait=dialog.querySelector('[data-equipment-portrait]');
+    const atlas=key==='funnel'||key==='stopper';portrait.setAttribute('viewBox',(key==='funnel'?[338,7,154,1005]:key==='stopper'?[842,344,430,416]:stage===0&&key==='tube'?[410,500,700,250]:shapes[key].crop).join(' '));
+    const image=portrait.querySelector('image');image.setAttribute('href',atlas?'assets/thistle-apparatus-atlas.png':key==='spoon'?'assets/oxygen-catalyst-spoon.webp':'assets/oxygen-materials-layout.webp');image.setAttribute('width',atlas?'1536':key==='spoon'?'245':'1536');image.setAttribute('height',atlas?'1024':key==='spoon'?'55':'850');
     node.setAttribute('aria-expanded','true');dialog.showModal();
   }
   function build(view){

@@ -1,0 +1,7 @@
+.oxygen-materials-photo .thistle-material-fallback{width:100%;height:100%;pointer-events:none}.oxygen-preparation[data-ready=true] .thistle-material-fallback,.co2-preparation[data-ready=true] .thistle-material-fallback{opacity:0;pointer-events:none}#s4 .co2-material-scene .thistle-material-fallback{width:100%;height:175px}#s4 .co2-preparation[data-ready=true] .thistle-material-fallback{position:absolute;inset:0;width:100%;height:85%}
+
+.oxygen-preparation[data-ready=true] .oxygen-material-hit[data-material=funnel]{clip-path:polygon(5% 58%,63% 58%,63% 38%,98% 38%,98% 100%,38% 100%,38% 80%,5% 80%)}
+/* The taller fixed camera includes the funnel opening in every operation. */
+#s4 .co2-preparation[data-ready=true] .co2-material-scene,
+#s4 .co2-preparation[data-ready=true] .co2-scene-viewport{aspect-ratio:1100 / 750}
+#s4 .co2-preparation[data-ready=true] .co2-main-scene{position:absolute;inset:0;width:100%;height:100%}
