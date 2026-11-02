@@ -7,7 +7,7 @@ export const REQUIRED_MATERIALS=DESK_MATERIALS.filter(m=>m.required).map(m=>m.id
 export const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 export const ease=v=>{const t=clamp(v);return t*t*(3-2*t);};
 export const mix=(a,b,p)=>a+(b-a)*p;
-export function createDesk(){return{positions:{},dragging:null,phase:'operate',selected:[],tool:null,focus:null,tankWater:0,jarWater:0,jarAngle:0,jarPlace:0,jarCovered:false,sealedUnderwater:false,flaskMarbles:0,heldMarble:false,acid:0,flaskWater:0,rig:false,funnel:false,outlet:'air',airRemaining:1,co2Volume:0,airVolume:0,sampleStarted:false,reactionAge:0,time:0,motion:null,feedback:'從材料區點選要用的物品，放到桌上直接操作。',feedbackKind:'hint',result:null,spilling:false};}
+export function createDesk(){return{positions:{},dragging:null,phase:'operate',selected:[],tool:null,focus:null,tankWater:0,jarWater:0,jarAngle:0,jarPlace:0,jarCovered:false,sealedUnderwater:false,flaskMarbles:0,flaskStoneIds:[],heldStoneId:null,heldMarble:false,acid:0,flaskWater:0,rig:false,funnel:false,outlet:'air',airRemaining:1,co2Volume:0,airVolume:0,sampleStarted:false,reactionAge:0,time:0,motion:null,feedback:'從材料區點選要用的物品，放到桌上直接操作。',feedbackKind:'hint',result:null,spilling:false};}
 export const flaskSurface=s=>580-80*Math.min(2,s.acid+s.flaskWater);
 export const waterSurface=s=>524-119*s.tankWater;
 export function jarPose(s){
@@ -34,14 +34,14 @@ export function reacting(s){
  if(s.flaskMarbles>0&&surface<575)return true;
  if(s.motion?.kind!=='place-stone')return false;
  const p=s.motion.elapsed/s.motion.duration;if(p<.6)return false;
- const heights=[238,300,350,430,500,[555,555,548,525,520][s.motion.index]],k=clamp((p-.6)/.23)*5,i=Math.min(4,Math.floor(k)),y=mix(heights[i],heights[i+1],ease(k-i));
+ const heights=[238,300,350,430,500,[555,555,548,525,520][s.flaskMarbles]],k=clamp((p-.6)/.23)*5,i=Math.min(4,Math.floor(k)),y=mix(heights[i],heights[i+1],ease(k-i));
  return y+18>surface;
 }
 export const liquidSeal=s=>s.rig&&s.funnel&&s.motion?.kind!=='remove-rig'&&flaskSurface(s)<555;
 const poses={air:{x:430,y:260},tank:{x:430,y:405},jar:{x:610,y:405}};
 function tubePose(m,p){
  const from=m.startOutlet||poses[m.from],to=poses[m.to];
- if(m.from==='jar'||m.to==='jar'){
+ if(m.from==='jar'||m.to==='jar'||from.x>535||to.x>535){
   // 先降到瓶口下方，再橫移，最後升入；玻璃不得穿過瓶壁。
   if(p<.3)return{x:from.x,y:mix(from.y,450,ease(p/.3))};
   if(p<.7)return{x:mix(from.x,to.x,ease((p-.3)/.4)),y:450};
@@ -67,11 +67,11 @@ function returnMaterial(s,id){
  if(withJar){removed.add('jar');if(s.jarCovered)removed.add('plate');s.jarWater=0;s.jarAngle=0;s.jarPlace=0;s.jarCovered=false;s.sealedUnderwater=false;s.co2Volume=0;s.airVolume=0;s.sampleStarted=false;}
  if(id==='tank')s.tankWater=0;
  if(id==='flask'){
-  if(s.rig)removed.add('rig');if(s.funnel)removed.add('funnel');s.acid=0;s.flaskWater=0;s.flaskMarbles=0;s.reactionAge=0;
+  if(s.rig)removed.add('rig');if(s.funnel)removed.add('funnel');s.acid=0;s.flaskWater=0;s.flaskMarbles=0;s.flaskStoneIds=[];s.reactionAge=0;
  }
  if(removed.has('rig')){if(s.funnel)removed.add('funnel');s.rig=false;s.outlet='air';s.airRemaining=1;}
  if(removed.has('funnel')){s.funnel=false;s.airRemaining=1;}
- if(removed.has('forceps'))s.heldMarble=false;
+ if(removed.has('forceps')){s.heldMarble=false;s.heldStoneId=null;}
  if(removed.has('plate')){s.jarCovered=false;s.sealedUnderwater=false;}
  s.selected=s.selected.filter(x=>!removed.has(x));for(const x of removed)delete s.positions[x];
  if(removed.has(s.tool))s.tool=null;if(removed.has(s.focus))s.focus=null;s.result=null;
@@ -84,7 +84,7 @@ function beginReturn(s,id){
   move(s,'outlet',1450,{from:s.outlet,to,startOutlet:outletPose(s),returnAfter:id});tell(s,'先將導管從瓶口下方撤出，再收回器材。');return;
  }
  if(id==='plate'&&s.jarCovered){move(s,'uncover',650,{tool:'plate',toolStart:jarMouth(s),returnAfter:id});tell(s,'先移開瓶口的玻璃片，再收回材料區。');return;}
- if(id==='forceps'&&s.heldMarble&&s.selected.includes('marble')){move(s,'return-stone',700,{tool:'forceps',toolStart:s.positions.forceps&&{...s.positions.forceps},returnAfter:id});tell(s,'先將夾著的大理石放回盤中，再收回鑷子。');return;}
+ if(id==='forceps'&&s.heldMarble&&s.selected.includes('marble')){move(s,'return-stone',700,{tool:'forceps',toolStart:s.positions.forceps&&{...s.positions.forceps},index:s.heldStoneId??s.flaskMarbles,returnAfter:id});tell(s,'先將夾著的大理石放回盤中，再收回鑷子。');return;}
  returnMaterial(s,id);
 }
 export function actDesk(s,action,value){
@@ -133,14 +133,14 @@ export function actDesk(s,action,value){
   }
   if(tool==='forceps'){
    if(value==='marble'){
-    if(s.heldMarble){move(s,'return-stone',700);tell(s,'將大理石放回盤中。');}
-    else if(s.flaskMarbles<5){move(s,'pick-stone',650,{index:s.flaskMarbles});tell(s,'鑷子夾住一塊大理石，從盤中提起。');}
+    if(s.heldMarble){move(s,'return-stone',700,{index:s.heldStoneId??s.flaskMarbles});tell(s,'將大理石放回盤中。');}
+    else if(s.flaskMarbles<5){move(s,'pick-stone',650,{index:[0,1,2,3,4].find(i=>!s.flaskStoneIds.includes(i))});tell(s,'鑷子夾住一塊大理石，從盤中提起。');}
     else tell(s,'盤中的大理石已用完。');return s;
    }
    if(value==='flask'){
     if(!s.heldMarble){tell(s,'先用鑷子夾取盤中的一塊大理石。');return s;}
     if(s.rig){tell(s,'瓶口已被塞子擋住，先移開塞子與導管。','revise');return s;}
-    move(s,'place-stone',1350,{index:s.flaskMarbles,tilt:s.acid+s.flaskWater<.01});tell(s,'鑷子從瓶口進入，讓大理石沿瓶內側滑下。');return s;
+    move(s,'place-stone',1350,{index:s.heldStoneId??s.flaskMarbles,tilt:s.acid+s.flaskWater<.01});tell(s,'鑷子從瓶口進入，讓大理石沿瓶內側滑下。');return s;
    }
   }
   if(tool==='rig'&&value==='flask'){
@@ -198,9 +198,9 @@ function applyMotion(s,m){
  if(m.kind==='rotate')s.jarAngle=mix(m.from,m.to,ease(p));
  if(m.kind==='relocate')s.jarPlace=mix(m.from,m.to,ease(p));
  if(p<1)return;
- if(m.kind==='pick-stone')s.heldMarble=true;
- if(m.kind==='return-stone')s.heldMarble=false;
- if(m.kind==='place-stone'){s.heldMarble=false;s.flaskMarbles++;}
+ if(m.kind==='pick-stone'){s.heldMarble=true;s.heldStoneId=m.index;}
+ if(m.kind==='return-stone'){s.heldMarble=false;s.heldStoneId=null;}
+ if(m.kind==='place-stone'){s.heldMarble=false;s.flaskStoneIds.push(m.index);s.heldStoneId=null;s.flaskMarbles++;}
  if(m.kind==='rig'){s.rig=true;s.outlet='air';s.airRemaining=1;}
  if(m.kind==='funnel')s.funnel=true;
  if(m.kind==='remove-rig'){s.rig=false;s.funnel=false;s.airRemaining=1;}
