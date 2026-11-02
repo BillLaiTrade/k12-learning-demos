@@ -28,6 +28,8 @@
   <script type="module" src="assets/light-speed-lab.mjs?v=20261101-controls2"></script>
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
   <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-compact1"></script>
+  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261102-oblique1">
+  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261102-oblique1"></script>
   <script type="module" src="assets/lesson.mjs?v=20261101-normal1">
 </script>
 </head>
@@ -189,51 +191,52 @@
   </div>
 </section>
 <section class="lesson-card" id="s3" aria-labelledby="heading-3">
-<header class="lesson-head">
-<span class="lesson-number">03</span>
-<div>
-<h2 id="heading-3">光由空氣斜射入水或玻璃，會往哪裡偏？</h2>
-<p>折射方向：進入較慢的介質，偏向法線</p>
-</div>
-</header>
-<div class="lesson-body card-main">
-<div class="dialogue-sequence">
-<div class="dialogue dialogue--xiaokui">
-<span class="speaker">
-<span class="visually-hidden">小葵</span>
-</span>
-<p>如果把光斜斜地照進水裡呢？</p>
-</div>
-<div class="dialogue">
-<span class="speaker">
-<span class="visually-hidden">阿公</span>
-</span>
-<p>移動光源，留意折射光和法線之間的夾角。</p>
-</div>
-</div>
-<div class="lab" data-ray-lab="enter">
-<div class="controls" role="group" aria-label="光由空氣斜射入水或玻璃，會往哪裡偏？的介質">
-<span>下方介質</span>
-<button data-medium="water" aria-pressed="true">水</button>
-<button data-medium="glass" aria-pressed="false">玻璃</button>
-</div>
-<svg class="scene ray-scene" viewBox="0 0 640 400" role="group" aria-label="空氣與下方介質的光路">
-</svg>
-<label class="control">入射角（與法線的夾角）：<output class="angle-output">30°</output>
-<input type="range" class="angle-input" min="0" max="60" value="30" step="1" aria-label="由空氣射入下方的入射角">
-</label>
-<div class="readout">
-<span>入射角：<b class="incident-readout">30°</b>
-</span>
-<span>折射角：<b class="refracted-readout">
-</b>
-</span>
-</div>
-<p class="note">拖曳橘色光源或調整滑桿。選取光源後，也可用方向鍵調整；角度都從法線量起。</p>
-</div>
-<p class="finding">
-<strong>觀察重點</strong>　光從空氣斜射入水或玻璃，進入傳播速度較慢的介質時，會偏向法線。</p>
-</div>
+  <header class="lesson-head"><span class="lesson-number">03</span><div><h2 id="heading-3">光斜著進入，會往哪裡偏？</h2><p>相同入射角，比較水與玻璃的折射方向</p></div></header>
+  <div class="lesson-body card-main">
+    <div class="dialogue-sequence">
+      <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>同樣斜著照進去，水和玻璃會讓光偏得一樣嗎？</p></div>
+      <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>一起轉動兩個光源，用相同入射角比一比。</p></div>
+    </div>
+    <div class="lab" id="oblique-lab" data-state="loading" aria-label="空氣射入水與玻璃的同步調角度實驗">
+      <p class="oblique-hint">拖曳任一光源，兩組同步轉動；角度都從法線量起。</p>
+      <p class="oblique-pan-hint">↔ 左右滑動實驗桌，對照水與玻璃的光路。</p>
+      <div class="oblique-viewport" id="oblique-viewport" role="region" tabindex="0" aria-label="雙槽折射實驗桌，窄螢幕可左右滑動">
+        <div class="oblique-table">
+          <img id="oblique-background" src="assets/oblique-incidence-bench.png" width="1536" height="1024" alt="寫實木桌上的兩組透明光路剖面示意：左側空氣進入水，右側空氣進入實心玻璃，介面同高。">
+          <svg id="oblique-scene" viewBox="0 100 1536 760" role="group" aria-label="水與玻璃並排，按同時發射觀察折射。"></svg>
+          <span class="oblique-state" id="oblique-state">準備實驗桌</span>
+        </div>
+      </div>
+      <div class="oblique-console">
+        <label class="oblique-angle-control" for="oblique-angle"><span>共同入射角<output id="oblique-angle-value" for="oblique-angle">45°</output></span><span class="oblique-slider"><input id="oblique-angle" type="range" min="0" max="60" value="45" step="1" aria-label="兩組共同入射角，從法線量起" disabled><span>0°</span><span>60°</span></span></label>
+        <div class="oblique-actions" role="group" aria-label="兩束光的發射與暫停控制">
+          <button id="oblique-start" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>同時發射</span></button>
+          <button id="oblique-pause" type="button" data-action="pause" disabled><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zm8 0h4v16h-4z" fill="currentColor"/></svg><svg class="resume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>暫停觀察</span></button>
+        </div>
+        <p class="oblique-status" id="oblique-status" role="status">正在準備實驗桌……</p>
+      </div>
+      <button id="oblique-retry" type="button" hidden>重新載入實驗桌</button>
+      <noscript><p>入射角45°時，水與代表玻璃的折射角分別約32.0°、28.1°，皆從法線量起；斜射時偏向法線，垂直入射時方向不偏折。啟用JavaScript後可同步調整並發射光束。</p></noscript>
+    </div>
+    <p class="finding oblique-finding"><strong>觀察結果：</strong><span id="oblique-finding-text">光由空氣斜射入水或玻璃，會偏向法線。</span></p>
+    <details class="oblique-explanation" id="oblique-explanation">
+      <summary>為什麼斜著進入，就會轉向？</summary>
+      <div class="oblique-explanation-body">
+        <p class="oblique-cart-pan-hint">↔ 左右滑動，查看小車的三個階段。</p>
+        <div class="oblique-cart-viewport" role="region" tabindex="0" aria-label="小車轉向類比，窄螢幕可左右滑動">
+        <svg class="oblique-cart-sequence" viewBox="0 0 780 190" role="img" aria-label="小車斜著前進，一側輪子先進入較難前進的地面而變慢，另一側稍後進入，整體轉向法線。">
+          <defs><linearGradient id="oblique-cart-tire" x1="0" x2="1"><stop stop-color="#172125"/><stop offset=".4" stop-color="#65706e"/><stop offset="1" stop-color="#142023"/></linearGradient><g id="oblique-cart-body"><rect x="-30" y="-5" width="60" height="10" rx="4" fill="#bb8c53" stroke="#85633d"/><rect x="-34" y="-19" width="14" height="38" rx="5" fill="url(#oblique-cart-tire)"/><rect x="20" y="-19" width="14" height="38" rx="5" fill="url(#oblique-cart-tire)"/></g></defs>
+          <path d="M0 80H780V160H0Z" fill="#dac29e"/><path d="M0 80H780" stroke="#ab916c" stroke-width="2"/><path d="M260 0V190M520 0V190" stroke="#fffdf5" stroke-width="4"/><path d="M130 8V150M390 8V150M650 8V150" stroke="#568568" stroke-width="1.8" stroke-dasharray="5 6"/>
+          <use href="#oblique-cart-body" transform="translate(85 35) rotate(-45)"/><use href="#oblique-cart-body" transform="translate(390 80) rotate(-30)"/><use href="#oblique-cart-body" transform="translate(666 125) rotate(-20)"/>
+          <g fill="#3e5947" font-size="18" text-anchor="middle"><text x="130" y="180">斜著前進</text><text x="390" y="180">一側先進入、先變慢</text><text x="650" y="180">一起變慢，方向已改變</text></g>
+        </svg>
+        </div>
+        <p><strong>斜著進入時，波前各處先後進入另一種介質，行進速度改變的時間不同，因此傳播方向改變。</strong>就像小車的一側輪子先變慢，整體會轉向。</p>
+        <p>光從空氣進入水或玻璃，傳播速度降低；斜向入射時，折射角比入射角小，光路偏向法線。調到0°，就會重現上一區的筆直光路。</p>
+        <p class="oblique-model-note">小車為類比，不代表光受到摩擦。光路與角度由代表模型計算，水與玻璃的代表折射率分別為4/3與1.5；不要求計算公式。器材及光跡非實際比例，穿越動畫採共同慢動作、非實際秒數，只畫穿透光束。</p>
+      </div>
+    </details>
+  </div>
 </section>
 <section class="lesson-card" id="s4" aria-labelledby="heading-4">
 <header class="lesson-head">

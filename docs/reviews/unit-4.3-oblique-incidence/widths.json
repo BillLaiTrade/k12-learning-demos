@@ -1,0 +1,51 @@
+[
+  {
+    "width": 1440,
+    "overflow": false,
+    "clipped": false,
+    "sceneWidth": 818,
+    "viewportWidth": 818
+  },
+  {
+    "width": 1366,
+    "overflow": false,
+    "clipped": false,
+    "sceneWidth": 818,
+    "viewportWidth": 818
+  },
+  {
+    "width": 1024,
+    "overflow": false,
+    "clipped": false,
+    "sceneWidth": 800,
+    "viewportWidth": 646
+  },
+  {
+    "width": 820,
+    "overflow": false,
+    "clipped": false,
+    "sceneWidth": 800,
+    "viewportWidth": 456
+  },
+  {
+    "width": 760,
+    "overflow": false,
+    "clipped": false,
+    "sceneWidth": 800,
+    "viewportWidth": 576
+  },
+  {
+    "width": 390,
+    "overflow": false,
+    "clipped": false,
+    "sceneWidth": 800,
+    "viewportWidth": 328
+  },
+  {
+    "width": 320,
+    "overflow": false,
+    "clipped": false,
+    "sceneWidth": 800,
+    "viewportWidth": 258
+  }
+]
