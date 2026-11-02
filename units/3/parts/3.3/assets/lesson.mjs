@@ -200,7 +200,7 @@ initialize('card-02',async()=>{
  const experiment=view.createPitchExperiment($('card-02'));experiment.render(state.frequency);pitchView=experiment;
 });
 initialize('card-03',async()=>{
- const [audio,view]=await Promise.all([import('./guitar-model.mjs?v=1'),import('./guitar-experiment.mjs?v=2')]);
+ const [audio,view]=await Promise.all([import('./guitar-model.mjs?v=1'),import('./guitar-experiment.mjs?v=3')]);
  ({guitarSamples}=audio);
  guitarView=view.createGuitarExperiment($('card-03'),{onChange:()=>{stop();$('card-03').querySelector('.play-state').classList.add('visually-hidden');},onPluck:key=>$('card-03').querySelector(`.guitar-play[data-play="${key}"]`).click()});
 });

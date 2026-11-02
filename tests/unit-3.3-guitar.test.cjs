@@ -29,6 +29,27 @@ test('guitar lesson: real instrument, one variable at a time, synchronized pluck
   assert.equal(await page.evaluate(()=>window.guitarRuns.length),0);assert.equal(await right.locator('svg').getAttribute('data-displacement'),'0');
   assert.equal(await root.locator('.guitar-tension-tools').isHidden(),true);assert.equal(await handle.getAttribute('aria-valuenow'),'12');
  });
+ await t.test('opening question and guidance persist through changing modes, values and reset',async()=>{
+  const question='那演奏樂器的時候，要怎麼調整振動的頻率，奏出不同高低的音呢？';
+  const guidance='我們先用吉他試試看。改變按弦的位置，或調整琴弦的鬆緊，一次只改一個條件，看看頻率會怎麼變。';
+  const check=async()=>{
+   assert.equal(await root.locator('.guitar-question').innerText(),question);
+   assert.equal(await root.locator('.dialogue--xiaokui + .dialogue > p').innerText(),guidance);
+   assert.equal(await root.locator('.dialogue--xiaokui + .dialogue + .guitar-lab').count(),1);
+  };
+  await check();
+  for(const value of ['length','tension','length']){
+   await mode(value);await check();
+   if(value==='length'){
+    await handle.focus();await page.keyboard.press('Home');await check();
+    assert.match(await root.locator('.guitar-conclusion').innerText(),/弦段越短/);
+   }else{
+    await root.locator('[data-guitar-tension=".25"]').click();await check();
+    assert.match(await root.locator('.guitar-conclusion').innerText(),/弦拉得越緊/);
+   }
+   await reset();await check();
+  }
+ });
  await t.test('effective-length brackets touch the actual bridge and selected fret, with a half-length octave',async()=>{
   const values=await root.locator('.guitar-scene').evaluateAll(nodes=>nodes.map(svg=>{
    const wire=svg.querySelector('.guitar-active-wire'),measure=svg.querySelector('.guitar-length-line'),ends=svg.querySelector('.guitar-length-ends');
