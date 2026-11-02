@@ -7,12 +7,12 @@
 .oblique-toolbar button { min-width:68px; min-height:42px; padding:7px 16px; }
 .oblique-hint { margin:0 0 12px; color:#607366; font-size:.8rem; }
 .oblique-experiment { position:relative; }
-.oblique-settings { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px 22px; align-items:center; margin-top:8px; }
-.oblique-overview { min-width:0; width:100%; max-width:760px; margin:0 auto; display:flex; flex-direction:column; }
-.oblique-overview figcaption { display:flex; align-items:center; height:34px; margin:0 0 8px; color:#28523e; font-size:1rem; font-weight:750; }
-.oblique-table { position:relative; width:100%; aspect-ratio:1; overflow:visible; border-radius:12px; background:#fffdf7; }
-#oblique-background { display:block; width:100%; height:auto; }
-#oblique-scene { position:absolute; inset:0; width:100%; height:100%; }
+.oblique-settings { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:6px 18px; align-items:center; margin-top:4px; }
+.oblique-overview { min-width:0; width:min(100%,560px,calc((100svh - 285px) * 1.16111)); margin:0 auto; display:flex; flex-direction:column; }
+.oblique-overview figcaption { display:flex; align-items:center; height:28px; margin:0 0 4px; color:#28523e; font-size:1rem; font-weight:750; }
+.oblique-table { position:relative; width:100%; aspect-ratio:1254 / 1080; overflow:hidden; border-radius:12px; background:#fffdf7; }
+#oblique-background { display:block; }
+#oblique-background, #oblique-scene { position:absolute; left:0; top:-6.944444%; width:100%; height:116.111111%; }
 #oblique-scene text, #oblique-zoom text { font-family:ui-sans-serif,system-ui,"Noto Sans TC",sans-serif; fill:#233d35; font-weight:650; }
 .oblique-normal { fill:none; stroke:#737e76; stroke-width:3; stroke-dasharray:12 9; }
 .oblique-angle-sector { stroke:none; }
@@ -67,7 +67,7 @@
 #oblique-zoom text { font-size:calc(11px * var(--zoom-font-scale,1)); }
 #oblique-zoom .oblique-normal-name { fill:#45534b; }
 .oblique-zoom-labels rect { fill:#fffef5; fill-opacity:.9; stroke:#d7e2d6; stroke-width:.6; }
-.oblique-angle-readouts { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:0; min-width:0; min-height:58px; align-items:center; }
+.oblique-angle-readouts { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:0; min-width:0; min-height:46px; align-items:center; }
 .oblique-angle-reading { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:center; gap:3px 7px; padding:5px 2px; }
 .oblique-angle-reading > span { display:inline-flex; align-items:center; gap:4px; font-size:.86rem; font-weight:700; white-space:nowrap; }
 .oblique-angle-reading svg { width:17px; height:17px; flex:none; fill:currentColor; }
@@ -79,8 +79,8 @@
 #oblique-relation { display:inline; margin:0; color:#254e37; font-size:.88rem; font-weight:650; }
 .oblique-rule-divider { color:#9ca99e; font-size:.8rem; }
 #oblique-zoom-note { display:inline; margin:0; font-size:.78rem; color:#637568; }
-.oblique-console { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:center; gap:8px 22px; margin:16px 0 0; padding-top:18px; border-top:1px solid #dce6db; }
-.oblique-angle-control { display:flex; min-width:0; align-items:center; gap:12px; margin:0; color:var(--oblique-in); font-size:.86rem; font-weight:650; min-height:58px; }
+.oblique-console { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:center; gap:6px 18px; margin:8px 0 0; padding-top:10px; border-top:1px solid #dce6db; }
+.oblique-angle-control { display:flex; min-width:0; align-items:center; gap:12px; margin:0; color:var(--oblique-in); font-size:.86rem; font-weight:650; min-height:46px; }
 .oblique-angle-control > span:first-child { white-space:nowrap; }
 .oblique-slider { display:grid; flex:1; min-width:100px; grid-template-columns:1fr 1fr; color:#66786a; font-size:.7rem; font-weight:500; }
 .oblique-slider input { grid-column:1 / -1; width:100%; min-height:30px; margin:0; accent-color:var(--oblique-in); }
@@ -91,7 +91,7 @@
 .oblique-actions button:disabled { opacity:.45; cursor:default; }
 #oblique-pause[data-action=pause] .resume-icon, #oblique-pause[data-action=resume] .pause-icon { display:none; }
 .oblique-status { grid-column:1 / -1; margin:0; color:#64736d; font-size:.8rem; line-height:1.6; }
-.oblique-explanation { margin-top:18px; border:1px solid #d9e4d9; border-radius:13px; background:linear-gradient(130deg,#fcfdf9,#f6f9f1); }
+.oblique-explanation { margin-top:12px; border:1px solid #d9e4d9; border-radius:13px; background:linear-gradient(130deg,#fcfdf9,#f6f9f1); }
 .oblique-explanation summary { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:17px 20px; list-style:none; cursor:pointer; color:#284d3d; font-size:1.06rem; font-weight:750; }
 .oblique-explanation summary::-webkit-details-marker { display:none; }
 .oblique-explanation summary::after { content:'＋'; display:grid; place-items:center; width:27px; height:27px; flex:none; border-radius:50%; background:#e5eee0; }
@@ -105,7 +105,8 @@
 .oblique-model-note { padding-top:12px; border-top:1px solid #e1e9dc; color:#64736d; font-size:.76rem; }
 #oblique-retry[hidden] { display:none; }
 @container oblique-card (max-width:680px) {
- .oblique-console { grid-template-columns:1fr; gap:12px; margin-top:12px; padding-top:14px; }
+ .oblique-overview { width:min(100%,520px,calc((100svh - 340px) * 1.16111)); }
+ .oblique-console { grid-template-columns:1fr; gap:8px; margin-top:8px; padding-top:10px; }
  .oblique-actions { display:grid; grid-template-columns:1fr 1fr; }
  .oblique-status { grid-column:1; }
  .oblique-cart-pan-hint { display:block; }
@@ -118,6 +119,9 @@
  .oblique-explanation-body { padding:14px 13px; }
 }
 @container oblique-card (max-width:520px) {
+ .oblique-overview { width:100%; max-width:420px; }
+ .oblique-table { aspect-ratio:1; }
+ #oblique-background, #oblique-scene { top:0; height:100%; }
  .oblique-settings { grid-template-columns:1fr; gap:0; }
  .oblique-angle-reading { flex-direction:column; align-items:center; gap:3px; }
  .oblique-angle-readouts { padding-top:6px; }
