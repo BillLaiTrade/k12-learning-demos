@@ -926,6 +926,15 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.1-
 
 ## 4.4 十區透鏡成像基本版
 
+2026-11-02第一區立體改版後，另執行：
+
+```sh
+node tests/unit-4.4-pinhole-optics.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4-pinhole-3d.test.cjs
+```
+
+針孔模型7項、立體瀏覽器9項（含主項），加下方既有模型8與整課23，共47項。新專項讀取實際Three.js場景及投影像素，驗證直線穿孔／孔板遮擋、倒立與連續大小、接收面位置、滑鼠／原生觸控拖曳、旋轉／滾輪／雙指縮放、取消手勢、鍵盤界限與獨立重設、同屏幕正面觀察、七寬度及深連結。`PINHOLE_URL`指定公開頁，`PINHOLE_CAPTURE_DIR`保存scene.json、layout.json與畫面。正式程式沒有測試API；測試以模組攔截注入唯讀觀察介面。公開需另跑新9與整課23，共32項瀏覽器檢查。
+
 ```sh
 node tests/unit-4.4-optics.test.mjs
 CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4.test.cjs

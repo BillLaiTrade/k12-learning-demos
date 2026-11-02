@@ -1,4 +1,4 @@
-import {imageFor,rayAt,pinhole,eyeModel,microscope} from './optics.mjs';
+import {imageFor,rayAt,eyeModel,microscope} from './optics.mjs';
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const RED='#c46548',BLUE='#387fa6',GOLD='#aa7c3e';
 const fmt=n=>Math.abs(n-Math.round(n))<.05?Math.round(n).toString():n.toFixed(1);
@@ -40,15 +40,6 @@ $$('[data-lab]').forEach(root=>{
  function drawBench(){
   const X=370,Y=180,k=.85,u=s.object,f=s.lens==='concave'?-100:100,g=imageFor(f,u),show=s.rays;let out=defs(id)+background(id);
   const objectX=X-u*k,screenX=X+s.screen*k,hasScreen=[1,3,4].includes(i)||(i===5&&s.view==='screen');
-  if(i===1){
-   const holeX=390,objectX=holeX-180*.85,sc=holeX+s.screen*.85,m=-s.screen/180;
-   out+=text(38,38,'同一個發光圖案','device-label')+text(390,38,'小孔板','device-label','middle')+text(730,38,'移動白色屏幕','device-label','middle');
-   out+=stand(objectX,id)+`<rect x="${objectX-16}" y="125" width="32" height="111" rx="5" fill="#faf6e9" stroke="#9ba991"/>`+symbol(objectX,Y)+stand(holeX,id)+`<rect x="${holeX-5}" y="83" width="10" height="93" rx="2" fill="#5d6c61"/><rect x="${holeX-5}" y="184" width="10" height="85" rx="2" fill="#5d6c61"/>`;
-   if(show)for(const [y,color,point] of [[-35,RED,'top'],[35,BLUE,'bottom']])if(s.point==='both'||s.point===point)out+=line([objectX,Y+y],[holeX,Y],color,false,id)+line([holeX,Y],[sc,Y+pinhole(180,s.screen,y)],color,false,id);
-   out+=screen(sc,id)+symbol(sc,Y,m)+text(390,377,`固定物體與小孔，只改屏幕距離：${s.screen} 公分`,'dim-label','middle');
-   $('[data-result]',root).textContent=`上端的光落在屏幕下方，下端的光落在上方；屏幕距離 ${s.screen} 公分，形成倒立${Math.abs(m)<.99?'縮小':Math.abs(m)>1.01?'放大':'等大'}像。`;
-   projection(root,m);svg.innerHTML=out;svg.setAttribute('aria-label',`小孔成像：屏幕距離${s.screen}公分，直進光線形成倒立像。`);return;
-  }
   out+=text(38,38,i===2?'同一組平行光':'同一個發光圖案','device-label')+text(370,38,s.lens==='concave'?'凹透鏡':'凸透鏡','device-label','middle')+text(740,38,hasScreen?'白色屏幕':g.type==='virtual'?'透過鏡片觀察':'觀察光束的會聚','device-label','middle');
   out+=lens(X,id,s.lens==='convex');
   for(const v of [-100,100])out+=`<path d="M${X+v*k} 262v8" stroke="#79927a"/>`+text(X+v*k,285,'F','f-label','middle');
