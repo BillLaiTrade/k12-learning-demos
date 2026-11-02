@@ -1,5 +1,14 @@
 # 5.1 瀏覽器操作檢查
 
+## 4.5 第一區內嵌白幕預覽與較小側偏（2026-11-02）
+
+```sh
+node --test tests/unit-4.5-prism-optics.test.mjs tests/unit-4.5-color-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+模型11項、整頁27項（含外層）。依30°等腰N-BK7更新解析偏向、有限狹縫光譜、真實3D／白幕尺寸與像素，保留401波長的兩介面及守恆檢查；新增右上內嵌預覽／放大共用接收區、Escape焦點回復、手機原生放大、七寬度不遮擋器材及無浮動標籤。以實際3D把手投影抓取，測試才注入唯讀觀察；正式程式沒有測試API。`COLOR_URL`、`COLOR_CAPTURE_DIR`沿用。
+
 ## 4.5 第一區科學條件與橫向滑軌（2026-11-02）
 
 ```sh

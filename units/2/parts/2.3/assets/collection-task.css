@@ -48,3 +48,8 @@
 
 #s6 .desk-material[data-desk-material=forceps] > svg{filter:drop-shadow(0 1px 1px #31584f66)}
 #s6 .desk-material{touch-action:manipulation}
+
+/* 小測說明依文字高度呈現，避免段落預設外距撐高區塊。 */
+#s6 .task-brief{padding:12px 19px}
+#s6 .task-brief p{margin:0}
+@media(max-width:760px){#s6 .task-brief{padding:12px 14px}}
