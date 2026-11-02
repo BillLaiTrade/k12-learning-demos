@@ -84,3 +84,19 @@ h1 { margin: 6px 0 12px; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.2;
 .precision-notes{margin-top:12px}.precision-notes dl{display:grid;grid-template-columns:95px minmax(0,1fr);gap:7px 12px;margin:12px 0}.precision-notes dt{font-weight:700}.precision-notes dd{margin:0}
 @media(max-width:650px){[data-precision] .stage{--prism-preview-width:100px;aspect-ratio:1.15}[data-precision] .prism-preview{top:8px;right:8px;padding:5px}[data-precision] .prism-preview .receiver-heading{font-size:.62rem}[data-precision] .scene-tools{right:calc(var(--prism-preview-width) + 16px)}[data-precision] [data-receiver-label]{display:none}.precision-notes dl{grid-template-columns:1fr;gap:2px}.precision-notes dd{margin-bottom:8px}}
 @media(max-width:650px){[data-precision] .stage{aspect-ratio:1;min-height:340px}[data-precision] .stage>[data-studio],[data-precision] .scene-fallback{top:110px;bottom:26px;height:calc(100% - 136px)}[data-precision] .scene-fallback svg{width:100%}}
+
+/* Third section: one front-facing screen; separate, directly draggable torches. */
+.mix-scene{border:1px solid #b8c7b0;border-radius:17px;background:linear-gradient(#dfe7d8,#edf0e2);padding:14px 14px 0;overflow:hidden}
+.mix-screen{border:7px solid #c4ceb8;border-top-color:#e0e6d7;border-bottom-color:#aab89c;border-radius:11px;overflow:hidden;background:#343434;box-shadow:0 3px 12px #263d2c25}
+.mix-screen canvas{display:block;width:100%;height:auto;aspect-ratio:25/14;pointer-events:none}
+.mix-torch-deck{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 -14px;padding:0 25px 10px;background:linear-gradient(#e5dac5,#e9d9bb 28%,#dfc8a2);border-top:1px solid #c1b39a}
+.mix-torch-deck:before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.28;background:repeating-linear-gradient(2deg,transparent 0 7px,#aa88621c 8px 9px,transparent 10px 16px)}
+.mix-torch{position:relative;display:flex;flex-direction:column;align-items:center;min-width:0;padding:0 3px 7px;border:2px solid transparent;border-radius:12px;background:transparent;color:#36553b;touch-action:none;cursor:grab;box-shadow:none;user-select:none;-webkit-user-select:none}
+.mix-torch .torch-drawing{display:block;width:min(100%,210px);pointer-events:none}
+.mix-torch svg{display:block;width:100%;height:auto}
+.mix-torch .torch-name{display:block;padding:3px 7px;border:1px solid #b6b69d;border-radius:7px;background:#fffdf0d9;font-size:.78rem;line-height:1.5;pointer-events:none;white-space:nowrap}
+.mix-torch:hover{background:#f7faec38;filter:none}
+.mix-torch:focus-visible,.mix-torch[data-dragging=true]{outline:2px solid #548060;outline-offset:-3px;background:#f3f9df55}
+.mix-torch[data-dragging=true]{cursor:grabbing}
+.mix-torch[data-on=false] .torch-drawing{filter:saturate(.3);opacity:.74}
+@media(max-width:650px){.mix-scene{padding:8px 8px 0;border-radius:13px}.mix-screen{border-width:5px;border-radius:7px}.mix-torch-deck{margin:0 -8px;padding:0 7px 7px;gap:3px}.mix-torch{padding:0 0 5px;border-radius:9px}.mix-torch .torch-name{font-size:.64rem;padding:3px 5px}.mix-torch .torch-drawing{max-width:105px}}

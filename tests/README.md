@@ -1,5 +1,14 @@
 # 5.1 瀏覽器操作檢查
 
+## 4.5 第三區正面手電筒（2026-11-03）
+
+```sh
+node --test tests/unit-4.5-mix-optics.test.mjs tests/unit-4.5-prism-optics.test.mjs tests/unit-4.5-color-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+新混光模型驗證三個已知波長的正功率D65配比、先加總再裁切、固定圓形足跡、七個交集區、分開確實不混色、排列保留開關及各手電筒單位瞄準向量。整頁檢查改用直接抓取下方原生手電筒，驗證完全重疊後三支各自可移開、開關／取消／方向鍵、正式角色素材完整檔案與CSS位置、正面畫布同倍率、七寬度不遮色區、原生觸控與WebGL不可用時混色仍可操作；其他區回歸保持。COLOR_URL、COLOR_CAPTURE_DIR沿用。
+
 ## 4.5 第二區固定三稜鏡與單色比較（2026-11-02）
 
 ```sh

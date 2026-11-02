@@ -1,6 +1,7 @@
+import {initialiseFrontMix} from './mix-lab.mjs?v=mix-front-20261102';
 import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-source-comparison-20261102';
-import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays,DEFAULT_SPOTS,mixPreset,mixAt,QUIZ,clamp} from './color-model.mjs';
-import {prismDiagram,materialDiagram,drawScreen,drawObservation,drawMix} from './rendering.mjs';
+import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays,QUIZ} from './color-model.mjs';
+import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs';
 let studioModule=null;
 const text=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};
 const pressed=(root,selector,key)=>root.querySelectorAll(selector).forEach(b=>b.setAttribute('aria-pressed',String(b.getAttribute(selector.slice(1,-1))===key)));
@@ -12,7 +13,7 @@ function channels(root,groups){
 }
 
 function initialiseLab(root,index){
- const kind=root.dataset.lab;if(kind==='prism'&&root.dataset.precision==='true'){initialisePrecisionPrism(root);return;}if(kind==='mix'){initialiseMix(root);return;}
+ const kind=root.dataset.lab;if(kind==='prism'&&root.dataset.precision==='true'){initialisePrecisionPrism(root);return;}if(kind==='mix'){initialiseFrontMix(root);return;}
  const state={kind,inserted:root.dataset.inserted==='true',light:'white',material:kind==='eye'?'green':'red',filter:kind==='eye'?'green':'clear',step:'filter',mode:'reflection',blocked:false,rays:true,view:false};
  const $=s=>root.querySelector(s),diagram=$('[data-diagram]'),canvas=$('[data-studio]');let studio=null,loading=false,signal=null;
  function update(){
@@ -76,23 +77,6 @@ function initialiseLab(root,index){
  }
  ready(root);update();root.dataset.renderer='diagram';
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){observer.disconnect();loadStudio();}},{rootMargin:'180px'});observer.observe(root);
-}
-
-function initialiseMix(root){
- let spots=DEFAULT_SPOTS.map(s=>({...s})),preset='apart',drag=null;
- const canvas=root.querySelector('[data-mix]'),handles=root.querySelector('[data-handles]');const keys=['red','green','blue'];
- const buttons=spots.map((s,i)=>{const b=document.createElement('button');b.type='button';b.className='mix-handle';b.dataset.spot=keys[i];b.style.setProperty('--swatch',['#ed6655','#53bd7d','#639cff'][i]);b.setAttribute('aria-label',`移動${['紅','綠','藍'][i]}光的照射位置`);b.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();b.setPointerCapture(e.pointerId);drag={i,id:e.pointerId};});b.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const r=canvas.getBoundingClientRect();spots[i].x=clamp(((e.clientX-r.left)/r.width*1000-330)/610,.05,.95);spots[i].y=clamp(((e.clientY-r.top)/r.height*480-35)/360,.07,.93);preset='custom';update(false);});for(const type of['pointerup','pointercancel','lostpointercapture'])b.addEventListener(type,()=>{drag=null;update();});b.addEventListener('keydown',e=>{const move={ArrowLeft:[-.025,0],ArrowRight:[.025,0],ArrowUp:[0,-.025],ArrowDown:[0,.025]}[e.key];if(!move)return;e.preventDefault();spots[i].x=clamp(spots[i].x+move[0],.05,.95);spots[i].y=clamp(spots[i].y+move[1],.07,.93);preset='custom';update();});handles.append(b);return b;});
- function update(announce=true){
-  drawMix(canvas,spots);root.dataset.spots=JSON.stringify(spots);root.dataset.preset=preset;root.dataset.center=JSON.stringify(mixAt(.5,.5,spots));
-  buttons.forEach((b,i)=>{b.style.left=(330+spots[i].x*610)/10+'%';b.style.top=(35+spots[i].y*360)/4.8+'%';b.hidden=!spots[i].on;b.setAttribute('aria-label',`移動${['紅','綠','藍'][i]}光的照射位置，橫向${Math.round(spots[i].x*100)}%、縱向${Math.round(spots[i].y*100)}%`);});
-  root.querySelectorAll('[data-lamp]').forEach((b,i)=>{b.setAttribute('aria-pressed',String(spots[i].on));});
-  // Keep the accessible lamp labels intact when the on/off state changes.
-  root.querySelectorAll('[data-lamp]').forEach((b,i)=>{for(const n of [...b.childNodes])if(n.nodeType===Node.TEXT_NODE)n.textContent=['紅光','綠光','藍光'][i]+(spots[i].on?' 開':' 關');});
-  pressed(root,'[data-preset]',preset);condition(root,[['紅光',spots[0].on?'開':'關'],['綠光',spots[1].on?'開':'關'],['藍光',spots[2].on?'開':'關'],['比較','同一白幕上的光斑']]);
-  if(announce)text(root.querySelector('[data-result]'),spots.every(s=>!s.on)?'三盞燈都關閉了，白幕沒有收到這三盞燈的照明。':preset==='together'?'三種色光照到同一個地方，這組強度搭配讓重疊區呈白色。可以關掉其中一盞，再比較結果。':preset==='apart'?'三個光斑目前分開，能看見紅、綠、藍各自的顏色。拖動圓點，讓兩個光斑靠近。':'留意沒有重疊、兩色重疊與三色重疊的區域：紅綠可呈黃、綠藍可呈青、紅藍可呈洋紅。');
- }
- root.addEventListener('click',event=>{const b=event.target.closest('button');if(!b||b.disabled)return;if(b.hasAttribute('data-preset')){preset=b.dataset.preset;spots=mixPreset(preset);}else if(b.hasAttribute('data-lamp')){const i=keys.indexOf(b.dataset.lamp);spots[i].on=!spots[i].on;}else return;update();});
- ready(root);update();
 }
 
 function initialiseQuiz(){

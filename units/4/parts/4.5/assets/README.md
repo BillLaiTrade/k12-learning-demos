@@ -9,3 +9,5 @@
 模型限制及測試指令見上層README；主專案保存規劃、課綱對照與檢視紀錄。
 
 第一區修訂新增`prism-optics.mjs`（mm單位光學）、`precision-prism.mjs`（操作）、`prism-studio.mjs`（同尺寸Three.js器材）、`spectral-data.mjs`（CIE／D65表）與`colour-LICENSE.txt`。`prism-scientific-layout.svg`及PNG由模型資料以Matplotlib繪製，未使用生成式圖片決定科學幾何；來源、條件、色域與幾何光學限制見[spectral-sources.md](spectral-sources.md)。原首頁情境插畫仍為情境用途。
+
+第三區依2026-11-03核可的正面示意改用mix-optics.mjs與mix-lab.mjs：正面Canvas2D白幕、程式生成SVG手電筒、原生按鈕與拖曳。人物仍是上述共用正式頭像，概念圖不作網頁背景或角色素材。CIE1931表與授權沿用；資料與模型界線見spectral-sources.md。
