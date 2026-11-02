@@ -53,7 +53,7 @@ test('pan flute: free pipes, interior observation and synchronized closed-end ai
    while(!held)await tab.waitForTimeout(10);
    assert.equal(await loading.isVisible(),true);assert.equal(await card.locator('.pan-pipe[data-sounding=true]').count(),0);
    if(action==='cancel'){
-    await card.screenshot({path:path.join(capture,'loading-desktop.png')});await card.locator('[data-pan-cancel]').click();
+    await loading.screenshot({path:path.join(capture,'loading-desktop.png')});assert.equal(await loading.isVisible(),true);await card.locator('[data-pan-cancel]').click();
     assert.equal(await card.locator('[data-play=pan-0]').evaluate(n=>n===document.activeElement),true);
    }else if(action==='reset')await card.locator('[data-pan-reset]').click();
    else if(action==='leave')await tab.locator('.route a[href="#card-05"]').click();
