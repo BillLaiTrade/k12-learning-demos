@@ -2,7 +2,7 @@
 export const CO2_SETUP_DURATION=4000;
 export const CO2_OPERATIONS=Object.freeze([
  {label:'認識材料',duration:0},
- {label:'加入大理石',duration:21000},
+ {label:'加入大理石',duration:12850},
  {label:'裝好漏斗與導管',duration:4800},
  {label:'由漏斗加入稀鹽酸',duration:5000},
  {label:'先排出空氣',duration:2800},
@@ -40,33 +40,36 @@ export function co2GlassFrame(index,time,seal=0,placement=1){
  const rodConnector=transformPoint({x:0,y:-CO2_GLASS_ROD_LENGTH},rod);
  return {first,rod,firstConnector,rodConnector,rodTip:{x:rod.x,y:rod.y},bendAngle:90};
 }
+// Keep apparatus positioning unchanged; run the later forceps motion at 2×.
+const marbleMotionTime=time=>time<=4700?time:4700+(time-4700)*2;
 const releases=[5500,8100,10700,13300,15900];
 const STONE_TRANSFER=2200;
 export const CO2_ACID_IMAGE=Object.freeze({width:500,height:810,lip:{x:116,y:83}});
 export function co2OperationFrame(index,elapsed){
  index=Math.max(0,Math.min(CO2_OPERATIONS.length-1,Math.trunc(index)));
  const duration=CO2_OPERATIONS[index].duration,localTime=Math.max(0,Math.min(duration,Number(elapsed)||0));
- const placement=index===0?0:index===1?co2SetupFrame(localTime).arrangement:1;
+ const motionTime=index===1?marbleMotionTime(localTime):localTime;
+ const placement=index===0?0:index===1?co2SetupFrame(motionTime).arrangement:1;
  const acid=index<3?0:index===3?unit((localTime-700)/2500):1;
  const seal=index<2?0:index===2?ease(localTime/duration):1;
  const cover=index===6?ease((localTime-4300)/1700):0;
- const dishCount=index===0?5:index===1?releases.filter(t=>localTime<t).length:0;
- const fallingCount=index===1?releases.filter(t=>localTime>=t&&localTime<t+STONE_TRANSFER).length:0;
+ const dishCount=index===0?5:index===1?releases.filter(t=>motionTime<t).length:0;
+ const fallingCount=index===1?releases.filter(t=>motionTime>=t&&motionTime<t+STONE_TRANSFER).length:0;
  const flaskCount=CO2_STONE_COUNT-dishCount-fallingCount;
  const glass=co2GlassFrame(index,localTime,seal,placement);
  const insert=index<5?0:index===5?ease((localTime-3000)/1500):1-ease(localTime/4300);
- return {operation:index,localTime,duration,placement,acid,seal,cover,insert,marble:flaskCount/5,
+ return {operation:index,localTime,motionTime,duration,placement,acid,seal,cover,insert,marble:flaskCount/5,
   dishCount,fallingCount,flaskCount,tipX:glass.rod.x,tipY:glass.rod.y,
   liquidSeal:seal===1&&580-80*acid<555,reacting:acid>0,flow:seal===1&&580-80*acid<555,collecting:index===5&&insert===1,labeled:index===6&&cover===1};
 }
 const initial={flask:[140,100,340,340],jar:[715,155,350,350],acid:[30,420,170,170]};
 export const CO2_WORKING={flask:[70,145,460,460],jar:[705,250,330,330],acid:[455,240,150,170]};
 export function co2BenchFrame(index,elapsed,f=co2OperationFrame(index,elapsed)){
- const progress=f.placement,bodies={};
+ const motionTime=f.motionTime??f.localTime,progress=f.placement,bodies={};
  for(const key of ['flask','jar','acid']){
   let box=initial[key].map((v,j)=>mix(v,CO2_WORKING[key][j],progress)),angle=0;
   let cx=box[0]+box[2]/2,cy=key==='flask'?box[1]+box[3]*.945:box[1]+box[3]/2;
-  if(key==='flask'&&index===1)angle=-28*ease((f.localTime-3900)/800)*(1-ease((f.localTime-18600)/1000));
+  if(key==='flask'&&index===1)angle=-28*ease((motionTime-3900)/800)*(1-ease((motionTime-18600)/1000));
   if(key==='acid'&&index===3){
    const pickup=ease(f.localTime/700),exit=ease((f.localTime-3400)/1400);
    // Use the lower pouring edge of the actual 500×810 source image.
@@ -79,7 +82,7 @@ export function co2BenchFrame(index,elapsed,f=co2OperationFrame(index,elapsed)){
   bodies[key]={box,angle:angle||0,cx,cy,visible:box[0]+box[2]>0};
  }
  let bowl=pose(mix(390,520,progress),mix(520,500,progress));
- if(index===1){const exit=ease((f.localTime-19600)/1400);bowl.x=mix(bowl.x,-240,exit);bowl.y=mix(bowl.y,350,exit);}
+ if(index===1){const exit=ease((motionTime-19600)/1400);bowl.x=mix(bowl.x,-240,exit);bowl.y=mix(bowl.y,350,exit);}
  else if(index>1)bowl=pose(-240,350);
  const flaskPose={x:bodies.flask.cx,y:bodies.flask.cy,angle:bodies.flask.angle};
  const inFlask=p=>{const q=transformPoint({x:p.x-flaskPose.x,y:p.y-flaskPose.y},flaskPose);return q;};
@@ -96,8 +99,8 @@ export function co2BenchFrame(index,elapsed,f=co2OperationFrame(index,elapsed)){
  const above=inFlask({x:300,y:105}),release=inFlask(slidePoints[0]);
  const safeAir=(from,to,t)=>t<.5?point(from,{x:from.x,y:80},ease(t*2)):point({x:from.x,y:80},to,ease((t-.5)*2));
  const stones=dishOffsets.map(([x,y],id)=>{
-  const dish=transformPoint({x,y},bowl),end={x:settled[id][0],y:settled[id][1]},fall=index===1?unit((f.localTime-releases[id])/STONE_TRANSFER):index>1?1:0;
-  const location=index===0||index===1&&f.localTime<releases[id]?'dish':fall<1?'falling':'flask';
+  const dish=transformPoint({x,y},bowl),end={x:settled[id][0],y:settled[id][1]},fall=index===1?unit((motionTime-releases[id])/STONE_TRANSFER):index>1?1:0;
+  const location=index===0||index===1&&motionTime<releases[id]?'dish':fall<1?'falling':'flask';
   let p=dish,angle=0,inside=false;
   if(location==='falling'){
    const departure=transformPoint({x,y},pose(520,500));
@@ -108,10 +111,10 @@ export function co2BenchFrame(index,elapsed,f=co2OperationFrame(index,elapsed)){
   }else if(location==='flask'){p=inFlask(end);angle=bodies.flask.angle+(id-2)*10;inside=true;}
   return {id,...p,angle:angle||0,location,inside};
  });
- let tool={x:570,y:-60,angle:0,visible:index===1&&f.localTime>=4700&&f.localTime<19600,gripping:false};
+ let tool={x:570,y:-60,angle:0,visible:index===1&&motionTime>=4700&&motionTime<19600,gripping:false};
  if(index===1){
-  const moving=stones.find(v=>v.location==='falling'),last=releases.findLastIndex(t=>f.localTime>=t);
-  if(moving){const fall=(f.localTime-releases[moving.id])/STONE_TRANSFER;
+  const moving=stones.find(v=>v.location==='falling'),last=releases.findLastIndex(t=>motionTime>=t);
+  if(moving){const fall=(motionTime-releases[moving.id])/STONE_TRANSFER;
    if(fall<.62)tool={...tool,x:moving.x,y:moving.y,angle:bodies.flask.angle*ease(fall/.38),gripping:true};
    else {
     const next=last<4?transformPoint({x:dishOffsets[last+1][0],y:dishOffsets[last+1][1]},bowl):{x:570,y:390};
@@ -119,9 +122,9 @@ export function co2BenchFrame(index,elapsed,f=co2OperationFrame(index,elapsed)){
     else if(fall<.90)tool={...tool,...point(above,{x:next.x,y:80},ease((fall-.78)/.12)),angle:bodies.flask.angle*(1-ease((fall-.78)/.12))};
     else tool={...tool,...point({x:next.x,y:80},next,ease((fall-.90)/.10))};
    }
-  }else if(last<0){const t=ease((f.localTime-4700)/800);tool={...tool,...point(tool,transformPoint({x:dishOffsets[0][0],y:dishOffsets[0][1]},bowl),t)};}
+  }else if(last<0){const t=ease((motionTime-4700)/800);tool={...tool,...point(tool,transformPoint({x:dishOffsets[0][0],y:dishOffsets[0][1]},bowl),t)};}
   else if(last<4)tool={...tool,...transformPoint({x:dishOffsets[last+1][0],y:dishOffsets[last+1][1]},bowl)};
-  else tool={...tool,x:570,y:mix(390,-60,ease((f.localTime-18100)/1500))};
+  else tool={...tool,x:570,y:mix(390,-60,ease((motionTime-18100)/1500))};
  }
 
  const acidBody=bodies.acid,ab=acidBody.box;

@@ -1,0 +1,31 @@
+{
+  "arrivals": [
+    {
+      "count": 0,
+      "ms": 92
+    },
+    {
+      "count": 1,
+      "ms": 6118
+    },
+    {
+      "count": 2,
+      "ms": 7401
+    },
+    {
+      "count": 3,
+      "ms": 8649
+    },
+    {
+      "count": 4,
+      "ms": 10221
+    },
+    {
+      "count": 5,
+      "ms": 11355
+    }
+  ],
+  "nextStage": "2",
+  "elapsedMs": 13907,
+  "errors": []
+}

@@ -1,0 +1,55 @@
+✔ seven operations merge real apparatus positioning into adding marble (6.137963ms)
+✔ five individual textured stones transfer once, through the neck, and never duplicate (30.519901ms)
+✔ every operation meets the next without a position, angle, liquid or quantity jump (0.67122ms)
+✔ rigid glass moves by translation and rotation; rubber keeps its own fixed arc length (24.251752ms)
+✔ the full collecting rod clears the jar rim before crossing; purge remains outside (1.179635ms)
+✔ acid uses the photographed inner curved bottom, with sloping walls and a level surface (0.574925ms)
+✔ marble is placed with forceps in a tilted flask while the dish remains level on the bench (0.176645ms)
+✔ acid stream starts at the real transformed open-bottle lip and the neck stays outside the flask (0.816929ms)
+✔ forceps enter and leave through the top without popping in over the bench (6.226747ms)
+✔ every incoming and outgoing stone/forceps trajectory crosses the opening, never the bottle wall (9.437877ms)
+✔ thistle liquid seal follows assembly and addition; the fixed stem enters only from above (2.861184ms)
+✔ forceps movement is twice as fast after positioning and still transfers only one stone at a time (0.785322ms)
+▶ CO2 seven-operation apparatus and continuous player
+  ✔ seven real operations, initial caption, one persistent control and five concise points (371.849116ms)
+  ✔ all six material bodies and labels open the correct dialog; keyboard restores focus (2169.031153ms)
+  ✔ the material picture and first playback frame use exactly the same apparatus (735.734393ms)
+  ✔ the new forceps open an introduction and keep the placing scene paused (425.043952ms)
+  ✔ five photo-textured stones move into the flask and the empty dish and used acid bottle leave (661.138988ms)
+  ✔ liquid follows a curved inner-wall path and clips resolve outside hidden panels (591.996839ms)
+  ✔ the fitted stopper and fixed glass move rigidly; the rubber retains a 500-unit arc length (2451.587025ms)
+  ✔ the rod clears the mouth before covering, then the full-size plate contacts and spans the rim (663.244978ms)
+  ✔ continuous play visits every operation exactly once, stops at storage and replay restores the full dish (746.053261ms)
+  ✔ blank background pauses and resumes; apparatus dialogs take priority and keep playback paused (1512.378489ms)
+  ✔ seven viewport widths preserve player layout, material labels and synchronized closeups (3408.169773ms)
+  ✔ real touch uses background toggles and material dialogs (1502.469015ms)
+  ✔ no-JavaScript fallback retains seven readable operations and realistic stone snapshots (977.508605ms)
+✔ CO2 seven-operation apparatus and continuous player (18516.955755ms)
+▶ CO2 water-displacement transfer task: plan, operate, inspect and retry
+  ✔ only one quiz, three editable stages and no initial autoplay (349.794042ms)
+  ✔ missing choices give a focused prompt without starting a clock (105.043301ms)
+  ✔ student assembly choices actually alter the pictured jar and outlet (664.638097ms)
+  ✔ oxygen reactants stop at their actual step with a link to CO2 teaching (811.04475ms)
+  ✔ partial water and reversed order get targeted feedback and remain editable (1161.165874ms)
+  ✔ arrow controls and keyboard reorder the real plan, rather than checking one memorised order (510.506109ms)
+  ✔ correct plan traverses all six operations, displaces water and seals only after withdrawal (708.562928ms)
+  ✔ pause freezes time and pixels; resume continues, editing cancels stale playback (470.535146ms)
+  ✔ starting another experiment pauses the task and reset stays local (152.980104ms)
+  ✔ seven widths retain readable controls with no overflow (2804.933018ms)
+  ✔ real touch can choose, configure and move a step (1390.951424ms)
+  ✔ without JavaScript the choices, operations and scientific caveat remain readable (1109.20192ms)
+✔ CO2 water-displacement transfer task: plan, operate, inspect and retry (12563.795711ms)
+▶ thistle funnels: actual material selection, liquid seal and transfer-task feedback
+  ✔ oxygen: material body and name, assembled dry stage, pouring and submerged tip (1743.551271ms)
+  ✔ co2: material body and name, assembled dry stage, pouring and submerged tip (820.439991ms)
+  ✔ unsealed funnel is a specific editable mistake in the water-displacement task (807.964329ms)
+  ✔ no-script snapshots contain the new funnel and five summary rows (1175.022215ms)
+✔ thistle funnels: actual material selection, liquid seal and transfer-task feedback (6729.751882ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18860.149836
