@@ -18,10 +18,11 @@
 .imaging-badge { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); margin:0; max-width:94%; padding:5px 13px; border:1px solid #9cb795; border-radius:20px; color:#fffbea; background:#314e3eec; font-size:.8rem; white-space:nowrap; }
 .imaging-hint { margin:9px 0; color:#63796a; font-size:.76rem; }
 .imaging-devices { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.imaging-lab[data-focus-step=focus] .imaging-devices { grid-template-columns:1fr; }
 .imaging-device { display:flex; align-items:center; flex-wrap:wrap; justify-content:space-between; gap:5px; padding:10px; border:1px solid #d5dfcf; border-radius:12px; background:#f5f8ef; min-width:0; }
 .imaging-device>button { padding:6px 9px; font-size:.8rem; }
 .imaging-device output { font-size:.76rem; color:#526d59; }
-.imaging-device>div { display:flex; gap:5px; }
+.imaging-device>div { display:flex; flex-wrap:wrap; gap:5px; }
 .imaging-device>div button { padding:4px 9px; min-height:34px; font-size:.75rem; }
 .imaging-lab button:disabled { cursor:default; opacity:.48; }
 .imaging-result { margin:12px 0; padding:12px 14px; border-left:4px solid #87a77c; background:#eef4e8; border-radius:0 10px 10px 0; font-size:.87rem; }
@@ -62,3 +63,16 @@
  .imaging-anchor { font-size:.65rem; padding:2px 4px; }
  .imaging-badge { font-size:.73rem; }
 }
+
+.imaging-ruler { margin:10px 0; padding:10px 12px 7px; border:1px solid #d5dfcf; border-radius:12px; background:#f5f8ef; }
+.imaging-ruler-track { position:relative; height:102px; margin-inline:25px; }
+.imaging-ruler-track::before { content:""; position:absolute; left:0; right:0; top:45px; height:3px; border-radius:2px; background:#819777; }
+.imaging-ruler-tick { position:absolute; top:40px; height:8px; border-left:1px solid #819777; pointer-events:none; }
+.imaging-ruler-major { top:35px; height:14px; border-color:#345b43; }
+.imaging-ruler-major>span,.imaging-ruler-major>small { position:absolute; left:0; transform:translateX(-50%); white-space:nowrap; color:#345b43; }
+.imaging-ruler-major>span { top:-35px; font-size:.72rem; font-weight:700; }
+.imaging-ruler-major>small { top:-18px; font-size:.68rem; }
+.imaging-ruler-handle { position:absolute; top:58px; transform:translateX(-50%); display:flex; gap:5px; align-items:center; min-height:36px; padding:5px 8px; border-color:#246d55; background:#196c54; color:#fff; font-size:.75rem; cursor:ew-resize; touch-action:none; user-select:none; }
+.imaging-ruler-handle::before { content:""; position:absolute; top:-13px; left:50%; height:12px; border-left:2px solid #196c54; }
+.imaging-ruler-handle:focus-visible { outline:3px solid #bf952c; outline-offset:3px; }
+.imaging-ruler-help { margin:0; font-size:.72rem; color:#63796a; }
