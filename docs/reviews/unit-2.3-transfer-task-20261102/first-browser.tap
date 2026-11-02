@@ -1,0 +1,199 @@
+TAP version 13
+# Subtest: CO2 seven-operation apparatus and continuous player
+    # Subtest: seven real operations, initial caption, one persistent control and five concise points
+    ok 1 - seven real operations, initial caption, one persistent control and five concise points
+      ---
+      duration_ms: 388.040465
+      type: 'test'
+      ...
+    # Subtest: all six material bodies and labels open the correct dialog; keyboard restores focus
+    ok 2 - all six material bodies and labels open the correct dialog; keyboard restores focus
+      ---
+      duration_ms: 2086.553787
+      type: 'test'
+      ...
+    # Subtest: the material picture and first playback frame use exactly the same apparatus
+    ok 3 - the material picture and first playback frame use exactly the same apparatus
+      ---
+      duration_ms: 651.292717
+      type: 'test'
+      ...
+    # Subtest: the new forceps open an introduction and keep the placing scene paused
+    ok 4 - the new forceps open an introduction and keep the placing scene paused
+      ---
+      duration_ms: 251.653297
+      type: 'test'
+      ...
+    # Subtest: five photo-textured stones move into the flask and the empty dish and used acid bottle leave
+    ok 5 - five photo-textured stones move into the flask and the empty dish and used acid bottle leave
+      ---
+      duration_ms: 666.390361
+      type: 'test'
+      ...
+    # Subtest: liquid follows a curved inner-wall path and clips resolve outside hidden panels
+    not ok 6 - liquid follows a curved inner-wall path and clips resolve outside hidden panels
+      ---
+      duration_ms: 176.938478
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-2.3-co2.test.cjs:30:10'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        + actual - expected
+
+        + 302.00000000000006
+        - 302
+             ^
+
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 302
+      actual: 302.00000000000006
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-2.3-co2.test.cjs:31:163)
+        async Test.run (node:internal/test_runner/test:1389:7)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-2.3-co2.test.cjs:30:2)
+        async Test.run (node:internal/test_runner/test:1389:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      ...
+    # Subtest: the fitted stopper and fixed glass move rigidly; the rubber retains a 500-unit arc length
+    ok 7 - the fitted stopper and fixed glass move rigidly; the rubber retains a 500-unit arc length
+      ---
+      duration_ms: 2486.780452
+      type: 'test'
+      ...
+    # Subtest: the rod clears the mouth before covering, then the full-size plate contacts and spans the rim
+    ok 8 - the rod clears the mouth before covering, then the full-size plate contacts and spans the rim
+      ---
+      duration_ms: 591.310494
+      type: 'test'
+      ...
+    # Subtest: continuous play visits every operation exactly once, stops at storage and replay restores the full dish
+    ok 9 - continuous play visits every operation exactly once, stops at storage and replay restores the full dish
+      ---
+      duration_ms: 726.178992
+      type: 'test'
+      ...
+    # Subtest: blank background pauses and resumes; apparatus dialogs take priority and keep playback paused
+    ok 10 - blank background pauses and resumes; apparatus dialogs take priority and keep playback paused
+      ---
+      duration_ms: 1606.740255
+      type: 'test'
+      ...
+    # Subtest: seven viewport widths preserve player layout, material labels and synchronized closeups
+    ok 11 - seven viewport widths preserve player layout, material labels and synchronized closeups
+      ---
+      duration_ms: 3300.526951
+      type: 'test'
+      ...
+    # Subtest: real touch uses background toggles and material dialogs
+    ok 12 - real touch uses background toggles and material dialogs
+      ---
+      duration_ms: 1506.874379
+      type: 'test'
+      ...
+    # Subtest: no-JavaScript fallback retains seven readable operations and realistic stone snapshots
+    ok 13 - no-JavaScript fallback retains seven readable operations and realistic stone snapshots
+      ---
+      duration_ms: 971.524307
+      type: 'test'
+      ...
+    1..13
+not ok 1 - CO2 seven-operation apparatus and continuous player
+  ---
+  duration_ms: 17549.985058
+  type: 'test'
+  location: '/workspace/k12-learning-demos/tests/unit-2.3-co2.test.cjs:2:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: CO2 water-displacement transfer task: plan, operate, inspect and retry
+    # Subtest: only one quiz, three editable stages and no initial autoplay
+    ok 1 - only one quiz, three editable stages and no initial autoplay
+      ---
+      duration_ms: 366.460226
+      type: 'test'
+      ...
+    # Subtest: missing choices give a focused prompt without starting a clock
+    ok 2 - missing choices give a focused prompt without starting a clock
+      ---
+      duration_ms: 87.67315
+      type: 'test'
+      ...
+    # Subtest: student assembly choices actually alter the pictured jar and outlet
+    ok 3 - student assembly choices actually alter the pictured jar and outlet
+      ---
+      duration_ms: 439.866306
+      type: 'test'
+      ...
+    # Subtest: oxygen reactants stop at their actual step with a link to CO2 teaching
+    ok 4 - oxygen reactants stop at their actual step with a link to CO2 teaching
+      ---
+      duration_ms: 651.297173
+      type: 'test'
+      ...
+    # Subtest: partial water and reversed order get targeted feedback and remain editable
+    ok 5 - partial water and reversed order get targeted feedback and remain editable
+      ---
+      duration_ms: 1007.601833
+      type: 'test'
+      ...
+    # Subtest: arrow controls and keyboard reorder the real plan, rather than checking one memorised order
+    ok 6 - arrow controls and keyboard reorder the real plan, rather than checking one memorised order
+      ---
+      duration_ms: 411.634954
+      type: 'test'
+      ...
+    # Subtest: correct plan traverses all six operations, displaces water and seals only after withdrawal
+    ok 7 - correct plan traverses all six operations, displaces water and seals only after withdrawal
+      ---
+      duration_ms: 489.471232
+      type: 'test'
+      ...
+    # Subtest: pause freezes time and pixels; resume continues, editing cancels stale playback
+    ok 8 - pause freezes time and pixels; resume continues, editing cancels stale playback
+      ---
+      duration_ms: 463.945057
+      type: 'test'
+      ...
+    # Subtest: starting another experiment pauses the task and reset stays local
+    ok 9 - starting another experiment pauses the task and reset stays local
+      ---
+      duration_ms: 172.388278
+      type: 'test'
+      ...
+    # Subtest: seven widths retain readable controls with no overflow
+    ok 10 - seven widths retain readable controls with no overflow
+      ---
+      duration_ms: 2894.278763
+      type: 'test'
+      ...
+    # Subtest: real touch can choose, configure and move a step
+    ok 11 - real touch can choose, configure and move a step
+      ---
+      duration_ms: 1725.519519
+      type: 'test'
+      ...
+    # Subtest: without JavaScript the choices, operations and scientific caveat remain readable
+    ok 12 - without JavaScript the choices, operations and scientific caveat remain readable
+      ---
+      duration_ms: 1198.991266
+      type: 'test'
+      ...
+    1..12
+ok 2 - CO2 water-displacement transfer task: plan, operate, inspect and retry
+  ---
+  duration_ms: 11985.867297
+  type: 'test'
+  ...
+1..2
+# tests 27
+# suites 0
+# pass 25
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 17846.975199

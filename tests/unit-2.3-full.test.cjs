@@ -23,12 +23,6 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
   page.on('response', r => { if (r.status() >= 400) errors.push(r.url()); });
   await page.clock.install(); await page.goto(url, { waitUntil: 'networkidle' });await page.waitForFunction(()=>document.querySelector('.oxygen-preparation').dataset.ready==='true');await page.clock.pauseAt(await page.evaluate(()=>Date.now()+100));
   const artifacts = path.resolve(process.env.AIR_FULL_ARTIFACT_DIR || 'docs/reviews/unit-2.3-complete'); mkdirSync(artifacts, { recursive: true });
-  const fields = { composition: 'mixture', sample_a: 'oxygen', sample_b: 'co2', fuel: 'wood', evidence: 'limewater', uses: 'stable' };
-  const answer = async (name, value) => {
-    const control = page.locator(`#gas-report-form [name="${name}"]`).first();
-    if (await control.evaluate(el => el.tagName === 'SELECT')) await control.selectOption(value);
-    else await page.locator(`#gas-report-form [name="${name}"][value="${value}"]`).check();
-  };
   await t.test('all six sections and routes exist, with gas profiles and no retired experiment', async () => {
     assert.deepEqual(await page.locator('section.lesson').evaluateAll(nodes => nodes.map(n => n.id)), ['s1','s2','s3','s4','s5','s6']);
     assert.equal(await page.locator('form').count(), 1);
@@ -82,24 +76,15 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     assert.equal(await panel.getAttribute('data-stage'), stage);
     await panel.locator('[data-stage="0"]').click();
   });
-  await t.test('single quiz gives missing, misconception, revised and correct feedback; reset is local', async () => {
-    const feedback = page.locator('#gas-report-feedback');
-    await page.locator('#gas-report-form button[type="submit"]').click();
-    assert.match(await feedback.innerText(), /尚未完成/);
-    for (const [name, value] of Object.entries(fields)) await answer(name, value);
-    await answer('fuel', 'oxygen');
-    assert.equal(await feedback.isVisible(), false);
-    await page.locator('#gas-report-form button[type="submit"]').click();
-    assert.match(await feedback.innerText(), /氧氣助燃/);
-    assert.equal(await feedback.locator('a').getAttribute('href'), '#s5');
-    await answer('fuel', 'wood'); assert.equal(await feedback.isVisible(), false);
-    await page.locator('#gas-report-form button[type="submit"]').click();
-    assert.equal(await feedback.getAttribute('data-result'), 'correct');
-    await page.locator('#gas-report-form button[type="reset"]').click();
-    assert.equal(await feedback.isVisible(), false);
-    assert.equal(await page.locator('#gas-report-form input:checked').count(), 0);
-    assert.equal(await page.locator('#gas-report-form select[name="sample_a"]').inputValue(), '');
-    assert.equal(await page.locator('#cup-comparison').isVisible(), true);
+  await t.test('the single transfer quiz combines CO2 reactants and water displacement, then resets locally',async()=>{
+    const form=page.locator('#gas-report-form'),feedback=form.locator('#gas-report-feedback');
+    await form.locator('[data-task-play]').click();assert.match(await feedback.innerText(),/未完成/);
+    for(const v of ['marble','acid'])await form.locator(`[name=materials][value=${v}]`).check();
+    await form.locator('#task-tab-1').click();for(const[name,value]of Object.entries({fill:'full',position:'submerged',outlet:'jar'}))await form.locator(`[name=${name}]`).selectOption(value);
+    await form.locator('#task-tab-2').click();const {TASK_STEPS}=await import('../units/2/parts/2.3/assets/collection-task-model.mjs');
+    for(let i=0;i<TASK_STEPS.length;i++){const id=TASK_STEPS[i].id;while(await form.locator('.task-order li').evaluateAll((ns,id)=>ns.findIndex(n=>n.dataset.taskStep===id),id)>i)await form.locator(`[data-task-step=${id}] [data-move="-1"]`).click();}
+    await form.locator('[data-task-play]').click();for(const step of TASK_STEPS)await page.clock.fastForward(step.duration+50);
+    assert.equal(await feedback.getAttribute('data-result'),'correct');await form.locator('[type=reset]').click();assert.equal(await feedback.isVisible(),false);assert.equal(await form.locator('[name=materials]:checked').count(),0);assert.equal(await page.locator('#cup-comparison').isVisible(),true);
   });
   await t.test('seven widths keep full-width teaching bodies below their headers without overflow', async () => {
     for (const width of [1440,1280,1024,800,768,390,320]) {
@@ -144,9 +129,9 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     assert.equal(await touch.locator('[data-replay="oxygen"] [data-step-menu]').getAttribute('aria-expanded'),'false');await touch.locator('[data-replay="oxygen"] [data-step-menu]').tap();assert.equal(await touch.locator('[data-replay="oxygen"] .sequence-step:visible').count(),8);
     await touch.locator('.route a[href="#s6"]').tap();
     await touch.waitForFunction(() => document.querySelector('.route a[aria-current]')?.getAttribute('href') === '#s6');
-    await touch.locator('#gas-report-form select[name="sample_a"]').focus();
-    await touch.keyboard.press('o'); await touch.locator('#gas-report-form select[name="sample_a"]').selectOption('oxygen');
-    assert.equal(await touch.locator('#gas-report-form select[name="sample_a"]').inputValue(),'oxygen');
+    await touch.locator('#task-tab-1').tap();await touch.locator('#gas-report-form select[name="fill"]').focus();
+    await touch.locator('#gas-report-form select[name="fill"]').selectOption('full');
+    assert.equal(await touch.locator('#gas-report-form select[name="fill"]').inputValue(),'full');
     await touch.close();
   });
   assert.deepEqual(errors,[],'no page errors or broken resources');
