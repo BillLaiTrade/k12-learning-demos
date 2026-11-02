@@ -1,0 +1,19 @@
+{
+  "unchanged": true,
+  "sha256": {
+    "section1": "9570289907c51c1a69ebf4eb39f629451b66e2d31b81a56961c066d5cf308fd5",
+    "section3": "8cbf6da25a170b10c3c24a10080b780ff590f6f93141e922c2c6b6fa6aec2d0d",
+    "section4": "6b746a348a915975d07b37a633d1021aee5167f0c8e6250eb897d71a86b695c5",
+    "section5": "4a1a20b911c7d27c29b752b652e465b067118ede63308ef2700544c5ec4be1cd",
+    "section6": "87debe43832a2f6b7e0978143b6cc97e545dcfc3491fdd32db72fffe5f6035a4",
+    "section7": "297aeae7d89c926dea5eefa698d4c50acec46ec960eae3e78bff46163e2ef535",
+    "section8": "eb24be17cf23ac2b1c3ead61a5d9b023b7e86966e6ac9894bad34468afc2c827",
+    "section9": "103bdb32f6bcc70ac53605770c96cfc212bff071488f1154b155244e4a04e95e",
+    "section10": "a4e27bcd7dd21646356d3c78ed2d4dcbfc0a97452600e14849bc558688169cad",
+    "parallel-lab.mjs": "31850ad8c71fdd006e5e2ad6edb34b41d67e68f5c28828cc8b8e7f8b4eb10319",
+    "parallel-lab.css": "686eafedd406cac82a10e1b57b4064040ac46cbb3cee1682b4c8fb84cce66d64",
+    "parallel-optics.mjs": "bd1fbb37cfb2a0ca54c398a430117ef650bdf3016a52953d52bcbb10af3b5dca",
+    "lesson.mjs": "d61f572380cb133d16573c61a4f704f667a04840b027b09390b68aeaa1f9e65c",
+    "lesson.css": "0b4859a8d3dfe06b932b733a64586805d0933daa996c3752f958eb400db52d57"
+  }
+}

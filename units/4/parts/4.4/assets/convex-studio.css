@@ -1,0 +1,35 @@
+.convex-lab { margin:18px 0; min-width:0; }
+.convex-stage { position:relative; overflow:hidden; border:1px solid #8a9e8c; border-radius:16px; background:#849386; }
+#convex-canvas { display:block; width:100%; height:440px; cursor:grab; touch-action:none; }
+#convex-canvas:active { cursor:grabbing; }
+#convex-canvas:focus-visible { outline:3px solid #f4dc99; outline-offset:-4px; }
+.convex-tools { position:absolute; z-index:2; top:12px; left:12px; right:12px; display:flex; flex-wrap:wrap; gap:8px; pointer-events:none; }
+.convex-tools button { pointer-events:auto; min-height:40px; padding:8px 12px; font-size:.82rem; background:#fffef4; color:#304e3d; box-shadow:0 3px 10px #17281d22; }
+.convex-tools [data-parallel-rays], .convex-tools [data-parallel-rays][aria-pressed=true] { background:#f5d88d; border-color:#e4ca83; color:#42351a; font-weight:750; }
+.convex-tools [data-parallel-close][aria-pressed=true] { background:#dce9d0; color:#244a32; border-color:#8eac7d; }
+.convex-anchor { position:absolute; padding:4px 8px; border:1px solid #e0e7d9; border-radius:6px; background:#344a3ce8; color:#fffdf1; font-size:.76rem; white-space:nowrap; pointer-events:none; transform:translate(-50%,-100%); }
+.convex-anchor::after { content:''; position:absolute; top:100%; left:50%; height:12px; border-left:1px solid #e9eedf; }
+.convex-anchor[data-convex-label=focus] { border-color:#efd99a; color:#fff0ba; font-weight:750; }
+.convex-caption { margin:0; padding:9px 12px; color:#eaf0e3; background:#344a3cbf; font-size:.76rem; }
+.convex-hint { margin:8px 1px 12px; font-size:.8rem; color:#64796a; }
+.convex-detail { display:grid; grid-template-columns:minmax(180px,.38fr) minmax(0,.62fr); gap:16px; padding:16px; border:1px solid #d5dfcf; border-radius:15px; background:#f7faf2; }
+.convex-detail h3 { margin:0 0 12px; font-size:1rem; }
+.convex-step-buttons { display:flex; flex-wrap:wrap; gap:7px; margin:0 0 12px; }
+.convex-step-buttons button { min-height:40px; padding:7px 9px; font-size:.8rem; }
+.convex-step-buttons button[aria-pressed=true] { background:#f9e9b7; color:#4b3c1c; border-color:#d6b45f; }
+.convex-step-copy { margin:0; padding:12px; border-radius:10px; background:#eaf1e5; color:#34543e; font-size:.88rem; }
+.convex-detail-scene { overflow:hidden; min-width:0; align-self:stretch; border:1px solid #dbe5d5; border-radius:11px; background:#eff5eb; }
+.convex-detail-scene svg { display:block; width:100%; height:260px; }
+.convex-detail-note { margin:8px 0 0; color:#64796a; font-size:.75rem; }
+.convex-result { margin:12px 0 0; padding:12px 15px; border-left:4px solid #86a777; border-radius:0 10px 10px 0; background:#eff5e9; color:#35533e; font-size:.9rem; }
+.convex-result p { margin:0; }
+.convex-fallback { min-height:220px; padding:70px 20px 20px; background:#e8f0e0; color:#34543e; }
+@media(max-width:760px) {
+ #convex-canvas { height:300px; }
+ .convex-tools { top:9px; left:9px; right:9px; gap:7px; }
+ .convex-tools button { padding:7px 9px; font-size:.76rem; }
+ .convex-anchor { font-size:.7rem; padding:3px 6px; }
+ .convex-detail { grid-template-columns:minmax(0,1fr); gap:12px; padding:12px; }
+ .convex-detail-scene svg { height:240px; }
+ .convex-caption { font-size:.72rem; }
+}
