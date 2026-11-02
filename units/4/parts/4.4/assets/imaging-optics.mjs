@@ -1,5 +1,5 @@
 import {imageFor,rayAt} from './optics.mjs';
-export const IMAGING=Object.freeze({f:100,scale:.014,axis:2,aperture:.55,cardWidth:.7,cardHeight:1.2,screenWidth:1.9,screenHeight:3,objectMin:100,objectMax:350,screenMin:105,screenMax:500});
+export const IMAGING=Object.freeze({f:100,scale:.014,axis:2,aperture:.55,cardWidth:.7,cardHeight:1.2,screenWidth:1.9,screenHeight:3,objectMin:100,objectMax:350,screenMin:50,screenMax:500});
 export function moveImaging(state,key,value){
  if(!['object','screen'].includes(key)||!Number.isFinite(value)||key==='object'&&state.stage==='focus')return state;
  const min=IMAGING[key+'Min'],max=IMAGING[key+'Max'];return {...state,[key]:Math.round(Math.max(min,Math.min(max,value))*10)/10};

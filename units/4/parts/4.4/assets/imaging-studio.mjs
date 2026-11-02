@@ -1,5 +1,5 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {IMAGING as G,moveImaging,imagingState,imagingRays} from './imaging-optics.mjs?v=20261102-imaging1';
+import {IMAGING as G,moveImaging,imagingState,imagingRays} from './imaging-optics.mjs?v=20261102-imaging-paired1';
 const root=document.querySelector('[data-imaging-lab]');
 if(root) initialise(root);
 function initialise(root){
@@ -40,9 +40,11 @@ function initialise(root){
   $$('[data-imaging-preset]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.imagingPreset)===state.object)));
   $('[data-imaging-object-controls]').hidden=focus;$('[data-imaging-presets]').hidden=focus;$('[data-imaging-comparison]').hidden=focus;
   $('[data-imaging-prompt]').textContent=focus?'固定圖卡與透鏡，拖曳屏幕底座，找清楚的倒立像。':'先移動圖卡，再移動屏幕重新對焦；比較清楚像的位置和大小。';
-  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.disabled=key==='object'&&focus;b.textContent=key==='object'?`發光圖卡・${focus?'固定':'可拖曳'}`:'屏幕・可拖曳';b.setAttribute('aria-pressed',String(key===selected));b.setAttribute('aria-label',`${key==='object'?'發光圖卡':'屏幕'}，${state[key]}公分，可用方向鍵移動`);});
+  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.disabled=key==='object'&&focus;b.textContent=key==='object'?'圖卡 ↔':'屏幕 ↔';b.setAttribute('aria-pressed',String(key===selected));b.setAttribute('aria-label',`${key==='object'?'發光圖卡':'屏幕'}，${state[key]}公分，可用方向鍵移動`);});
   $$('[data-imaging-nudge]').forEach(b=>{const key=b.dataset.imagingNudge;b.disabled=key==='object'&&focus||state[key]<=G[key+'Min']&&Number(b.dataset.direction)<0||state[key]>=G[key+'Max']&&Number(b.dataset.direction)>0;});
-  const handle=$('[data-imaging-ruler-handle]');handle.style.left=`${state.screen/G.screenMax*100}%`;handle.setAttribute('aria-valuenow',String(state.screen));handle.setAttribute('aria-valuetext',`屏幕距離透鏡${state.screen}公分`);
+  for(const handle of $$('[data-imaging-ruler-handle]')){const key=handle.dataset.imagingRulerHandle,max=G[key+'Max'];handle.style.left=`${(key==='object'?1-state[key]/max:state[key]/max)*100}%`;handle.setAttribute('aria-valuenow',String(state[key]));handle.setAttribute('aria-valuetext',`${key==='object'?'圖卡':'屏幕'}距離透鏡${state[key]}公分`);}
+  const target=$('[data-imaging-target]');target.hidden=!g.finite||g.unreachable;target.dataset.distance=g.finite?String(g.v):'';target.style.setProperty('--target-position',`${g.finite?g.v/G.screenMax*100:0}%`);
+  $('[data-imaging-target-status]').textContent=!g.finite?'圖卡位於焦點，沒有有限距離的清楚像。':g.unreachable?`清楚像在 ${Math.round(g.v*10)/10} 公分，已超出軌道。`:`清楚像位置：${Math.round(g.v*10)/10} 公分`;
   $('[data-imaging-distance=object]').textContent=`物距 ${state.object} 公分`;$('[data-imaging-distance=screen]').textContent=`屏幕距離 ${state.screen} 公分`;
   $('[data-imaging-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-imaging-rays]').setAttribute('aria-pressed',String(showRays));$('[data-imaging-trace]').hidden=!showRays;
   $$('[data-imaging-point]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingPoint===point)));
@@ -62,11 +64,12 @@ function initialise(root){
  function move(key,value){state=moveImaging(state,key,value);selected=key;update();}
  $$('[data-imaging-step]').forEach(b=>b.addEventListener('click',()=>{state={...state,stage:b.dataset.imagingStep};if(state.stage==='focus')selected='screen';update();}));
  $$('[data-imaging-preset]').forEach(b=>b.addEventListener('click',()=>move('object',Number(b.dataset.imagingPreset))));
- const rulerHandle=$('[data-imaging-ruler-handle]'),rulerTrack=$('[data-imaging-ruler-track]');let rulerDrag=null;
- rulerHandle.addEventListener('pointerdown',e=>{if(e.button!==0||rulerDrag)return;e.preventDefault();rulerHandle.focus({preventScroll:true});rulerHandle.setPointerCapture(e.pointerId);rulerDrag={id:e.pointerId,x:e.clientX,value:state.screen,width:rulerTrack.getBoundingClientRect().width};});
- rulerHandle.addEventListener('pointermove',e=>{if(!rulerDrag||e.pointerId!==rulerDrag.id||!rulerDrag.width)return;move('screen',rulerDrag.value+(e.clientX-rulerDrag.x)/rulerDrag.width*G.screenMax);});
- for(const event of ['pointerup','pointercancel','lostpointercapture'])rulerHandle.addEventListener(event,e=>{if(e.pointerId===rulerDrag?.id)rulerDrag=null;});
- rulerHandle.addEventListener('keydown',e=>{const steps={ArrowLeft:-1,ArrowDown:-1,ArrowRight:1,ArrowUp:1};let value;if(e.key==='Home')value=G.screenMin;else if(e.key==='End')value=G.screenMax;else if(steps[e.key])value=state.screen+steps[e.key]*(e.shiftKey?.2:1);else return;e.preventDefault();move('screen',value);});
+ for(const handle of $$('[data-imaging-ruler-handle]')){
+  const key=handle.dataset.imagingRulerHandle,track=$(`[data-imaging-ruler-track=${key}]`);let drag=null;
+  handle.addEventListener('pointerdown',e=>{if(e.button!==0||drag||handle.disabled)return;e.preventDefault();handle.focus({preventScroll:true});handle.setPointerCapture(e.pointerId);drag={id:e.pointerId,x:e.clientX,value:state[key],width:track.getBoundingClientRect().width};});
+  handle.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id||!drag.width)return;move(key,drag.value+(e.clientX-drag.x)/drag.width*G[key+'Max']*(key==='object'?-1:1));});
+  for(const event of ['pointerup','pointercancel','lostpointercapture'])handle.addEventListener(event,e=>{if(e.pointerId===drag?.id)drag=null;});
+ }
  $('[data-imaging-autofocus]').addEventListener('click',()=>{const g=imagingState(state);if(g.finite&&!g.unreachable)move('screen',g.v);});
  $('[data-imaging-rays]').addEventListener('click',()=>{showRays=!showRays;update();});$('[data-imaging-view]').addEventListener('click',()=>{front=!front;update();});
  $$('[data-imaging-point]').forEach(b=>b.addEventListener('click',()=>{point=b.dataset.imagingPoint;update();}));
@@ -78,7 +81,7 @@ function initialise(root){
  function createStudio(){
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   const scene=new THREE.Scene();scene.background=new THREE.Color('#566b5b');scene.fog=new THREE.Fog('#566b5b',35,80);
-  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3(1.05,1.5,0);let orbit={azimuth:-.90,polar:1.38,zoom:1},pending=0;
+  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3(1.05,1.5,0);let orbit={azimuth:-.90,polar:1.38,zoom:1},fitRadius=9,pending=0;
   scene.add(new THREE.HemisphereLight('#f2f3df','#3a503e',2.1));const light=new THREE.DirectionalLight('#fff0cf',3.1);light.position.set(-3,8,6);light.castShadow=true;light.shadow.mapSize.set(1024,1024);Object.assign(light.shadow.camera,{left:-8,right:10,top:7,bottom:-5});light.shadow.bias=-.0004;scene.add(light);const rim=new THREE.DirectionalLight('#d3e9e0',1.6);rim.position.set(5,4,-4);scene.add(rim);
   const mat=(color,options={})=>new THREE.MeshStandardMaterial({color,roughness:.5,metalness:.15,...options}),dark=mat('#283e30',{metalness:.5,roughness:.36}),steel=mat('#a2b4a4',{metalness:.7,roughness:.27}),brass=mat('#bba267',{metalness:.7,roughness:.3});
   function box(parent,size,pos,material){const mesh=new THREE.Mesh(new THREE.BoxGeometry(...size),material);mesh.position.set(...pos);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;}
@@ -104,13 +107,17 @@ function initialise(root){
   for(const n of [-200,-100,100,200])box(scene,[.025,.10,.12],[n*G.scale,.3,.87],brass);
   const rays=new THREE.Group();scene.add(rays);const highlight=new THREE.BoxHelper(screen,'#d8eaa0');highlight.visible=false;scene.add(highlight);
   function updateRays(){for(const m of [...rays.children]){m.geometry.dispose();m.material.dispose();rays.remove(m);}rays.visible=showRays&&!front;if(!showRays)return;for(const r of imagingRays(state,point)){const color=r.name==='top'?'#f4a17e':'#88c7ee';for(const [from,to]of [[r.from,r.lens],[r.lens,r.end]]){const A=new THREE.Vector3(...from),B=new THREE.Vector3(...to),tube=new THREE.Mesh(new THREE.TubeGeometry(new THREE.LineCurve3(A,B),1,.009,6,false),new THREE.MeshBasicMaterial({color,toneMapped:false}));tube.userData={name:r.name,from,to};rays.add(tube);const arrow=new THREE.Mesh(new THREE.ConeGeometry(.036,.13,10),new THREE.MeshBasicMaterial({color,toneMapped:false}));arrow.position.copy(A).lerp(B,.64);arrow.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),B.clone().sub(A).normalize());rays.add(arrow);}}}
+  function directionFor(azimuth,polar){return new THREE.Vector3(Math.sin(polar)*Math.sin(azimuth),Math.cos(polar),Math.sin(polar)*Math.cos(azimuth));}
+  function fitToViewport(){
+   camera.fov=39;camera.updateProjectionMatrix();let radius=9;
+   const bounds=[];for(const [xs,ys,zs]of [[[-4.9,-1.4],[.3,2.7],[-.9,.9]],[[G.screenMin*G.scale-.3,7.4],[.3,3.6],[-1,1]],[[-5.4,7.4],[-.25,.25],[-1,1]]])for(const x of xs)for(const y of ys)for(const z of zs)bounds.push(new THREE.Vector3(x,y,z));
+   const directions=[directionFor(-.9,1.38)];
+   for(let i=0;i<40;i++){const fits=directions.every(direction=>{camera.position.copy(target).addScaledVector(direction,radius);camera.lookAt(target);camera.updateMatrixWorld();return bounds.every(p=>{const q=p.clone().project(camera);return Math.abs(q.x)<.9&&Math.abs(q.y)<.8;});});if(fits)break;radius*=1.06;}
+   fitRadius=radius;
+  }
   function updateCamera(){
-   if(front){const d=1.1;camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(Math.max(G.screenHeight+.65,(G.screenWidth+.6)/camera.aspect)/(2*d)));camera.position.set(state.screen*G.scale-d,G.axis,0);camera.lookAt(state.screen*G.scale,G.axis,0);}
-   else{
-    camera.fov=39;let radius=9;const direction=new THREE.Vector3(Math.sin(orbit.polar)*Math.sin(orbit.azimuth),Math.cos(orbit.polar),Math.sin(orbit.polar)*Math.cos(orbit.azimuth));
-    for(let i=0;i<40;i++){camera.position.copy(target).addScaledVector(direction,radius);camera.lookAt(target);camera.updateProjectionMatrix();camera.updateMatrixWorld();const bounds=[];for(const [xs,ys,zs]of [[[-4.9,-1.4],[.3,2.7],[-.9,.9]],[[1.47,7],[.3,3.6],[-1,1]],[[-5.4,7.4],[-.25,.25],[-1,1]]])for(const x of xs)for(const y of ys)for(const z of zs)bounds.push([x,y,z]);if(bounds.every(p=>{const q=new THREE.Vector3(...p).project(camera);return Math.abs(q.x)<.9&&Math.abs(q.y)<.8;}))break;radius*=1.06;}
-    camera.position.copy(target).addScaledVector(direction,radius*orbit.zoom);camera.lookAt(target);
-   }
+   if(front){const d=Math.min(1.1,state.screen*G.scale-.2);camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(Math.max(G.screenHeight+.65,(G.screenWidth+.6)/camera.aspect)/(2*d)));camera.position.set(state.screen*G.scale-d,G.axis,0);camera.lookAt(state.screen*G.scale,G.axis,0);}
+   else{camera.fov=39;camera.position.copy(target).addScaledVector(directionFor(orbit.azimuth,orbit.polar),fitRadius*orbit.zoom);camera.lookAt(target);}
    camera.updateProjectionMatrix();camera.updateMatrixWorld();
   }
   function labels(){const rect=canvas.getBoundingClientRect();const positions={object:[source.position.x,G.axis+.8,0],lens:[0,G.axis+1.1,0],screen:[screen.position.x,G.axis+1.7,0]};
@@ -142,7 +149,7 @@ function initialise(root){
   for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,stop);
   canvas.addEventListener('wheel',e=>{e.preventDefault();if(front)return;orbit.zoom=THREE.MathUtils.clamp(orbit.zoom+e.deltaY*.001,.65,1.6);update();},{passive:false});
   canvas.addEventListener('keydown',e=>{const steps={ArrowLeft:[.06,0],ArrowRight:[-.06,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!steps[e.key])return;e.preventDefault();front=false;orbit.azimuth=THREE.MathUtils.clamp(orbit.azimuth+steps[e.key][0],-1.2,-.15);orbit.polar=THREE.MathUtils.clamp(orbit.polar+steps[e.key][1],.9,1.48);update();});
-  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;updateCamera();requestDraw();}new ResizeObserver(resize).observe(canvas);resize();
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;fitToViewport();updateCamera();requestDraw();}new ResizeObserver(resize).observe(canvas);resize();
   return {update:syncScene,scene,camera,renderer,source,lens,screen,screenPlane,rays,devices};
  }
 }
