@@ -54,11 +54,15 @@ zoom.innerHTML=`<defs>
  </g>
  <path class="oblique-normal-underlay" d="M650 450V690"/>
  <path class="oblique-normal" d="M650 450V690"/>
- <g class="oblique-angle-marks" visibility="hidden"><path class="oblique-angle-arc oblique-in-arc"/><path class="oblique-angle-arc oblique-out-arc"/></g>
+ <g class="oblique-angle-marks" visibility="hidden">
+  <path class="oblique-angle-arc oblique-in-arc"/><path class="oblique-angle-arc oblique-out-arc"/>
+  <g class="oblique-angle-label oblique-in-label"><path class="oblique-angle-leader"/><text x="667" y="528"><tspan x="667">入射角</tspan><tspan id="oblique-zoom-in-value" x="667" dy="21">45°</tspan></text></g>
+  <g class="oblique-angle-label oblique-out-label"><path class="oblique-angle-leader"/><text x="633" y="601" text-anchor="end"><tspan x="633">折射角</tspan><tspan id="oblique-zoom-out-value" x="633" dy="21">32.0°</tspan></text></g>
+ </g>
  ${beam()}
  <g class="oblique-zoom-labels">
-  <g><rect x="657" y="458" width="43" height="24" rx="4"/><text class="oblique-normal-name" x="662" y="506">法線</text></g>
-  <g transform="translate(0 50)"><rect x="719" y="458" width="43" height="24" rx="4"/><text x="740" y="506" text-anchor="middle">空氣</text></g>
+  <g><rect x="657" y="458" width="43" height="24" rx="4"/><text class="oblique-normal-name" x="662" y="500">法線</text></g>
+  <g><rect x="539" y="508" width="43" height="24" rx="4"/><text x="558" y="542" text-anchor="middle">空氣</text></g>
   <g><rect x="539" y="645" width="48" height="25" rx="4"/><text id="oblique-zoom-medium" x="546" y="648">水</text></g>
   <g><rect x="534" y="552" width="48" height="25" rx="4"/><text x="558" y="570" text-anchor="middle">介面</text></g>
  </g>`;
@@ -76,6 +80,13 @@ function arc(degrees,up){
 function sector(degrees,up){
  const edge=arc(degrees,up);return edge?`M${layout.axis} ${layout.boundary}L${edge.slice(1)}Z`:'';
 }
+// Point at the middle of the measured arc, even when the wedge is too narrow
+// for a number. Labels stay clear of both rays and the vertical normal.
+function labelAngle(kind,degrees,up){
+ const a=degrees*Math.PI/360,sign=up?-1:1,x=layout.axis+sign*76*Math.sin(a),y=layout.boundary+sign*76*Math.cos(a);
+ zoom.querySelector(`.oblique-${kind}-label .oblique-angle-leader`).setAttribute('d',`M${x} ${y}L${up?'655 522L661 522':'643 598L639 598'}`);
+ zoom.querySelector(`#oblique-zoom-${kind}-value`).textContent=`${up?degrees:degrees.toFixed(1)}°`;
+}
 function drawGeometry(){
  const g=geometry(medium,angle),ratio=Math.max(.1,scene.getBoundingClientRect().width/layout.width),sourceScale=Math.max(.9,22/(70*ratio)),fontScale=Math.max(.8,13/(30*ratio));
  input.value=angle;output.value=`${angle}°`;root.dataset.angle=String(angle);root.dataset.medium=medium;root.dataset.outgoing=String(g.outgoing);
@@ -85,6 +96,7 @@ function drawGeometry(){
  scene.querySelector('#oblique-case-label').setAttribute('transform',`translate(650 155) scale(${fontScale})`);scene.querySelector('#oblique-case-name').textContent=`空氣 → ${name()}`;
  scene.querySelector('#oblique-air-label').setAttribute('transform',`translate(${1030-110*fontScale} 440) scale(${fontScale})`);scene.querySelector('#oblique-material-label').setAttribute('transform',`translate(230 740) scale(${fontScale})`);scene.querySelector('#oblique-material-label text').textContent=name();
  for(const kind of ['sector','base']){zoom.querySelector(`.oblique-in-${kind}`).setAttribute('d',sector(angle,true));zoom.querySelector(`.oblique-out-${kind}`).setAttribute('d',sector(g.outgoing,false));}zoom.querySelector('.oblique-in-arc').setAttribute('d',arc(angle,true));zoom.querySelector('.oblique-out-arc').setAttribute('d',arc(g.outgoing,false));$('#oblique-in-value').value=`${angle}°`;$('#oblique-out-value').value=`${g.outgoing.toFixed(1)}°`;zoom.querySelector('#oblique-zoom-medium').textContent=name();
+ labelAngle('in',angle,true);labelAngle('out',g.outgoing,false);
  zoom.style.setProperty('--zoom-font-scale',String(Math.max(1,14*240/(11*Math.max(80,zoom.getBoundingClientRect().width||200)))));
  for(const group of detail.hidden?[]:zoom.querySelectorAll('.oblique-zoom-labels > g')){const box=group.querySelector('text').getBBox(),plate=group.querySelector('rect');for(const [key,value] of Object.entries({x:box.x-4,y:box.y-3,width:box.width+8,height:box.height+6}))plate.setAttribute(key,String(value));}
  const description=`空氣射入${name()}，入射角${angle}度，折射角${g.outgoing.toFixed(1)}度。法線通過入射點；角度皆從法線量起。`;

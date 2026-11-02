@@ -55,7 +55,7 @@
 #oblique-lab[data-detail-open=true] #oblique-magnify, #oblique-lab[data-detail-open=true] .oblique-magnify-label { opacity:0; pointer-events:none; }
 .oblique-magnify-label { position:absolute; z-index:2; left:var(--oblique-entry-x); top:var(--oblique-entry-y); transform:translate(32px,-28px); pointer-events:none; display:inline-flex; align-items:center; gap:4px; padding:4px 7px; border:1px solid #e5f9ed80; border-radius:999px; background:#164e426b; color:#f2fff8; font-size:.72rem; font-weight:650; white-space:nowrap; box-shadow:0 1px 4px #144b3c18; backdrop-filter:blur(4px); text-shadow:0 1px 2px #193f3440; }
 .oblique-magnify-label svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2; }
-.oblique-detail { position:absolute; z-index:3; width:clamp(180px,40%,320px); max-width:calc(100% - 24px); min-width:0; padding:6px; border:1px solid #8dac96; border-radius:12px; background:#fffef8; box-shadow:0 8px 28px #1d302735,0 2px 5px #1d30271a; }
+.oblique-detail { position:absolute; z-index:3; width:min(76%,520px); max-width:calc(100% - 24px); min-width:0; padding:6px; border:1px solid #8dac96; border-radius:12px; background:#fffef8; box-shadow:0 8px 28px #1d302735,0 2px 5px #1d30271a; }
 .oblique-detail[hidden] { display:none; }
 #oblique-close { position:absolute; top:4px; right:4px; z-index:1; display:grid; place-items:center; flex:none; width:32px; height:32px; min-width:32px; min-height:32px; padding:0; border:0; border-radius:50%; background:#e9f1e4; color:#2d5744; font-size:1.35rem; line-height:1; }
 #oblique-close:hover, #oblique-close:focus-visible { background:#d9e9d3; outline:2px solid #5b8869; outline-offset:1px; }
@@ -72,6 +72,12 @@
 #oblique-zoom .oblique-core { stroke-width:.65; }
 #oblique-zoom text { font-size:calc(11px * var(--zoom-font-scale,1)); }
 #oblique-zoom .oblique-normal-name { fill:#45534b; }
+#oblique-zoom .oblique-in-label text { fill:var(--oblique-in); }
+#oblique-zoom .oblique-out-label text { fill:var(--oblique-out); }
+#oblique-zoom .oblique-angle-label text { stroke:#fffef3; stroke-width:1.2; stroke-opacity:.9; paint-order:stroke; font-weight:650; font-variant-numeric:tabular-nums; }
+.oblique-angle-leader { fill:none; stroke-width:.8; stroke-linecap:round; stroke-linejoin:round; }
+.oblique-in-label .oblique-angle-leader { stroke:var(--oblique-in); }
+.oblique-out-label .oblique-angle-leader { stroke:var(--oblique-out); }
 .oblique-zoom-labels rect { fill:#f1f9f2; fill-opacity:.15; stroke:none; }
 #oblique-air-label rect, #oblique-material-label rect { display:none; }
 #oblique-air-label text { fill:#294c3f; stroke:#fff8e2; stroke-width:1.6; stroke-opacity:.5; paint-order:stroke; letter-spacing:1px; }
