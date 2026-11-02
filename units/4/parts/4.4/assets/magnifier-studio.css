@@ -1,0 +1,76 @@
+.magnifier-lab { margin:18px 0; min-width:0; }
+.magnifier-layout { display:grid; grid-template-columns:minmax(0,1.75fr) minmax(220px,.85fr); gap:10px; align-items:stretch; }
+.magnifier-stage { position:relative; min-width:0; overflow:hidden; border:1px solid #849a85; border-radius:16px; background:#566b5b; }
+.magnifier-stage-title { position:absolute; z-index:2; left:0; right:0; top:0; margin:0; padding:12px 14px; color:#fffbea; background:#233e2dd4; font-size:1rem; }
+#magnifier-canvas { display:block; width:100%; height:560px; touch-action:none; cursor:grab; }
+#magnifier-canvas:focus-visible { outline:3px solid #f0d485; outline-offset:-4px; }
+.magnifier-tools { position:absolute; z-index:3; top:60px; left:10px; right:10px; display:flex; flex-wrap:wrap; gap:7px; pointer-events:none; }
+.magnifier-tools button { pointer-events:auto; padding:7px 10px; min-height:38px; font-size:.74rem; background:#fffdf2; color:#31513e; box-shadow:0 2px 8px #15271b22; }
+.magnifier-tools [data-mag-rays],.magnifier-tools [data-mag-rays][aria-pressed=true] { color:#42351a; background:#f5d88d; border-color:#e4ca83; font-weight:750; }
+.magnifier-tools [data-mag-extensions][aria-pressed=true],.magnifier-tools [data-mag-screen][aria-pressed=true] { background:#dbe8cd; color:#294d32; border-color:#91ad7f; }
+.magnifier-trace { flex-basis:100%; display:flex; gap:6px; }
+.magnifier-trace button { min-height:32px; padding:4px 8px; }
+.magnifier-trace button[aria-pressed=true] { background:#d8e8ca; color:#294d32; }
+.magnifier-anchor,.magnifier-focus { position:absolute; transform:translate(-50%,-50%); pointer-events:none; white-space:nowrap; padding:3px 6px; background:#faf8ecee; color:#2b5038; border:1px solid #e5eadb; border-radius:5px; font-size:.67rem; }
+.magnifier-focus { padding:1px 5px; background:#34543f; color:#fff8dc; border:0; font-size:.72rem; }
+.magnifier-virtual { border-style:dashed; background:#fff7dbea; color:#715d30; }
+.magnifier-badge { position:absolute; left:50%; bottom:47px; transform:translateX(-50%); max-width:94%; margin:0; padding:4px 11px; border:1px solid #a5bd99; border-radius:18px; background:#31503fe8; color:#fffbea; font-size:.75rem; white-space:nowrap; }
+.magnifier-orbit { position:absolute; left:8px; right:8px; bottom:8px; margin:0; padding:5px 9px; border-radius:8px; background:#233d30bf; color:#f9f5e6; font-size:.68rem; text-align:center; }
+.magnifier-observer { min-width:0; padding:14px 12px; border:1px solid #ccdcc0; border-radius:16px; background:linear-gradient(140deg,#f1f6e9,#e5eddc); display:flex; flex-direction:column; align-items:stretch; }
+.magnifier-eye-head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:4px; }
+.magnifier-eye-head h3 { margin:0; font-size:1.2rem; }
+.magnifier-live { font-size:.65rem; color:#437849; white-space:nowrap; }
+.magnifier-eye-subtitle { font-size:.76rem; color:#5b735f; margin:5px 0 8px; }
+[data-mag-eye] { display:block; width:100%; max-width:260px; height:auto; margin:auto; }
+.magnifier-eye-badge { margin:5px auto 7px; padding:3px 20px; border:1px solid #80a66b; border-radius:20px; background:#285338; color:#fffbea; font-size:.86rem; }
+.magnifier-eye-note { margin:0 0 8px; text-align:center; font-size:.69rem; color:#5b735f; }
+.magnifier-reference { margin-top:auto; padding:10px 0 0; border-radius:10px; background:#fffcf0b3; text-align:center; }
+.magnifier-reference h4 { margin:0; font-size:.84rem; }
+.magnifier-reference p { margin:2px 0 0; font-size:.65rem; color:#647961; }
+[data-mag-reference] { display:block; width:100%; max-width:260px; height:auto; margin:auto; }
+.magnifier-instruction { margin:10px 0; padding:10px 12px; background:#edf3e5; border-radius:9px; color:#3e6048; font-size:.8rem; }
+.magnifier-controls { display:flex; flex-wrap:wrap; gap:10px; }
+.magnifier-control { flex:1; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:7px; min-width:0; padding:10px; border:1px solid #d6e1ce; border-radius:11px; background:#f7f9f2; }
+.magnifier-control button { min-height:36px; padding:5px 9px; font-size:.76rem; }
+.magnifier-control output { font-size:.74rem; color:#54715b; }
+.magnifier-control>div { display:flex; gap:5px; }
+.magnifier-lab button:disabled { opacity:.45; cursor:default; }
+.magnifier-result { margin:12px 0; padding:12px 14px; border-left:4px solid #89a97c; border-radius:0 10px 10px 0; background:#edf4e7; font-size:.86rem; }
+.magnifier-guides { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.magnifier-guides>div { padding:12px; border:1px solid #d7e3cd; border-radius:11px; background:#f8faf3; }
+.magnifier-guides strong { font-size:.86rem; color:#31543c; }
+.magnifier-guides p { margin:4px 0 0; font-size:.76rem; color:#5f745f; }
+.magnifier-paper-detail { display:flex; gap:18px; align-items:center; justify-content:center; padding:14px; margin-bottom:12px; border:1px solid #d3dfc9; border-radius:12px; background:#f6f8ef; }
+.magnifier-paper-detail h3 { font-size:1rem; margin:0 0 8px; }
+.magnifier-paper-detail p { max-width:340px; margin:0; font-size:.82rem; }
+[data-mag-paper] { display:block; width:110px; height:auto; border:5px solid #3b4f3f; border-radius:5px; }
+.magnifier-legend { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:12px; font-size:.7rem; color:#687d66; }
+.magnifier-fallback { padding:165px 18px 90px; color:#fff7df; font-size:.87rem; }
+.magnifier-lab [hidden] { display:none!important; }
+@media(max-width:1000px) and (min-width:761px) {
+ .magnifier-layout { grid-template-columns:minmax(0,1.5fr) minmax(185px,1fr); }
+ .magnifier-tools { gap:5px; left:7px; right:7px; }
+ .magnifier-tools button { font-size:.7rem; padding:6px 8px; }
+}
+@media(max-width:760px) {
+ .magnifier-layout { grid-template-columns:minmax(0,1fr); }
+ #magnifier-canvas { height:360px; }
+ .magnifier-stage-title { padding:9px 12px; font-size:.94rem; }
+ .magnifier-tools { top:48px; left:8px; right:8px; gap:6px; }
+ .magnifier-tools button { padding:6px 8px; font-size:.7rem; min-height:36px; }
+ .magnifier-trace button { min-height:30px; }
+ .magnifier-observer { padding:12px; }
+ .magnifier-observer [data-mag-eye] { max-width:240px; }
+ .magnifier-observer [data-mag-reference] { max-width:240px; }
+ .magnifier-reference { margin:8px auto 0; width:100%; max-width:260px; }
+ .magnifier-control { padding:8px; }
+ .magnifier-guides { gap:7px; }
+ .magnifier-guides>div { padding:10px; }
+ .magnifier-guides strong { font-size:.8rem; }
+ .magnifier-guides p { font-size:.72rem; }
+ .magnifier-anchor { font-size:.61rem; padding:2px 4px; }
+ .magnifier-badge { font-size:.7rem; }
+ .magnifier-orbit { font-size:.62rem; }
+ .magnifier-paper-detail { gap:12px; padding:10px; }
+ [data-mag-paper] { width:90px; }
+}
