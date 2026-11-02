@@ -273,8 +273,8 @@ function rebuild() {
   const temperatureMode = state.mode === 'temperature';
   text($('#lesson-title'), temperatureMode ? '空氣溫度不同，聲音傳得一樣快嗎？' : '聲音在不同介質中，傳得多快？');
   text($('#lesson-intro'), temperatureMode ? '同時敲擊，比較 0°C 與 80°C 空氣中的傳播進度。' : '觀察相鄰粒子如何逐段受振，再比較終點的到達時間。');
-  text($('#girl-line'), temperatureMode ? '同樣都是空氣，如果溫度不同，聲音傳得會一樣快嗎？' : '阿公，除了空氣，還有其他介質能傳聲音嗎？');
-  text($('#grandpa-line'), temperatureMode ? '我們來試試看，讓聲音在冷一點和熱一點的空氣裡傳一樣遠，看看哪邊先到。' : '有，水和鋼也能傳聲音。我們可以讓聲音傳過相同的距離，看看在不同介質裡，到達的時間有什麼不同。');
+  text($('#girl-line'), temperatureMode ? '剛剛聲音在不同介質裡，傳播的速度不一樣。那如果是同一種介質，聲音傳播的速度也可能不同嗎？' : '阿公，除了空氣，還有其他介質能傳聲音嗎？');
+  text($('#grandpa-line'), temperatureMode ? '會，溫度也會影響聲音的傳播速度。以空氣為例，低溫和高溫時的聲速就不同。' : '有，水和鋼也能傳聲音。我們可以讓聲音傳過相同的距離，看看在不同介質裡，到達的時間有什麼不同。');
   $('#takeaway').innerHTML = temperatureMode
     ? '原來同樣是空氣，溫度較高時，聲音傳得比較快。'
     : '聲音在鋼裡傳得最快，水其次，空氣最慢。鋼是固體、水是液體、空氣是氣體，那其他材料也會有這樣的情況嗎？';
