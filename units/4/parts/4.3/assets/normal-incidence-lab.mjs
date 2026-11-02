@@ -42,14 +42,14 @@ function controls(){
 }
 function explainStage(){
  if(state==='paused'){
-  status.textContent=pauseReason==='comparison'?`共同計時 ${(comparisonMs/1000).toFixed(2)} 秒，空氣組先到達，水與玻璃中的光走得較短。按「繼續觀察」比較到達時間。`:'三束光已定格在同一瞬間。按「繼續觀察」接著看。';return;
+  status.textContent=pauseReason==='comparison'?'空氣先到，另外兩組尚未到達。':'已暫停，三束光停在同一瞬間。';return;
  }
- if(state==='complete'){status.textContent=`同樣 ${distanceKm/10000} 萬公里，全程空氣約 ${(arrivalMs('air')/1000).toFixed(2)} 秒、空氣接水約 ${(arrivalMs('water')/1000).toFixed(2)} 秒、空氣接玻璃約 ${(arrivalMs('glass')/1000).toFixed(2)} 秒。三組光路都保持筆直。`;return;}
+ if(state==='complete'){status.textContent='三組皆已到達，可重新發射。';return;}
  status.textContent=[
-  `按「同時發射」，比較三束光走完 ${distanceKm/10000} 萬公里的時間。`,
-  '三束光由同一高度同時出發，在空氣中的前進速度相同。',
-  '進入水與玻璃後，光束前緣變慢，仍沿法線前進；空氣組繼續直行。',
-  '空氣組已先到達，繼續觀察水與玻璃中的光，方向仍保持不變。'
+  '準備好，一起比較三束光。',
+  '三束光在空氣中同步前進。',
+  '水與玻璃中的光開始變慢。',
+  '空氣先到，另外兩組繼續前進。'
  ][stage()];
 }
 function render(){

@@ -29,16 +29,16 @@
 .normal-actions svg { width:19px; height:19px; flex:none; }
 .normal-actions button:disabled { opacity:.45; cursor:default; }
 #normal-pause[data-action="pause"] .resume-icon, #normal-pause[data-action="resume"] .pause-icon { display:none; }
-.normal-time-note { flex:1 1 220px; margin:0; color:#64736d; font-size:.76rem; }
+.normal-time-note { margin:12px 0 0; padding-top:12px; border-top:1px solid #e1e9dc; color:#64736d; font-size:.76rem; }
 .normal-steps { display:flex; justify-content:center; gap:12px; margin:12px 0; padding:9px 13px; border-radius:999px; background:#f2f4ef; color:#7a857d; list-style:none; font-size:.85rem; }
 .normal-steps li { display:flex; align-items:center; gap:8px; padding:3px 10px; border-radius:999px; }
 .normal-steps li:not(:last-child)::after { content:'→'; margin-left:8px; color:#759787; }
 .normal-steps b { display:inline-grid; place-items:center; width:25px; height:25px; border-radius:50%; background:#dce2dc; font-size:.8rem; }
 .normal-steps [aria-current="step"] { background:#e2eee0; color:#1d664b; font-weight:700; }
 .normal-steps [aria-current="step"] b { background:#257656; color:white; }
-.normal-status { min-height:1.7em; margin:10px 0; color:#296b50; font-size:.86rem; }
-.normal-takeaway { margin:17px 0 22px; text-align:center; color:#1b634c; font-size:clamp(1rem,1.65vw,1.3rem); font-weight:750; }
-.normal-takeaway span { display:block; margin:8px 0; }
+.normal-status { flex:1 1 170px; min-width:0; margin:0; color:#64736d; font-size:.8rem; line-height:1.6; }
+.normal-takeaway { margin:10px 0 14px; text-align:left; color:#3e5b4f; font-size:.9rem; line-height:1.7; }
+.normal-takeaway strong { color:#285a43; font-weight:700; }
 .normal-pan-hint { display:none; margin:0 0 7px; font-size:.76rem; color:#64736d; }
 #normal-retry[hidden] { display:none; }
 .normal-explanation { margin-top:18px; border:1px solid #d9e4d9; border-radius:13px; background:linear-gradient(130deg,#fcfdf9,#f6f9f1); }
@@ -70,7 +70,8 @@
  .normal-state { font-size:.67rem; }
  .normal-actions { width:100%; display:grid; grid-template-columns:1fr 1fr; gap:8px; }
  .normal-actions button { font-size:.86rem; padding-inline:8px; }
- .normal-console { gap:8px; }
+ .normal-console { gap:8px 12px; }
+ .normal-status { flex:1 1 0; }
  .normal-steps { flex-wrap:wrap; border-radius:12px; gap:1px; font-size:.73rem; }
  .normal-steps b { width:21px; height:21px; }
  .normal-steps li { gap:4px; padding-inline:3px; }
@@ -95,6 +96,5 @@
 .normal-clock { display:flex; align-items:center; gap:10px; margin-left:auto; padding-left:16px; border-left:1px solid #d5dfd4; color:#596e60; font-size:.8rem; }
 .normal-clock strong { color:#216449; font:700 1.5rem/1.3 ui-monospace,SFMono-Regular,Consolas,monospace; font-variant-numeric:tabular-nums; }
 .normal-clock small { margin-left:5px; font:500 .8rem system-ui,sans-serif; }
-.normal-console .normal-time-note { flex-basis:100%; }
 .normal-arrival-time { font-variant-numeric:tabular-nums; }
 @media(max-width:700px) { .normal-clock { border:0; padding-left:0; } }

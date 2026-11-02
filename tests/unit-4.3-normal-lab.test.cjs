@@ -33,7 +33,7 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
   await page.clock.runFor(600);assert.deepEqual(await fronts(),[240,240,240]);
   await page.locator('#normal-background').evaluate(el=>el.decode());
   assert.equal(await page.locator('#normal-background').evaluate(el=>el.naturalWidth),1536);
-  assert.match(await lab.innerText(),/未放慢播放/);assert.equal(await page.locator('#normal-time').innerText(),'0.00');assert.equal(await page.locator('#normal-distance').innerText(),'150 萬公里');assert.match(await page.locator('#normal-route-split').innerText(),/75.*75/);assert.doesNotMatch(await lab.innerText(),/間距/);
+  assert.match(await details.textContent(),/未放慢播放/);assert.equal(await page.locator('#normal-time').innerText(),'0.00');assert.equal(await page.locator('#normal-distance').innerText(),'150 萬公里');assert.match(await page.locator('#normal-route-split').innerText(),/75.*75/);assert.doesNotMatch(await lab.innerText(),/間距/);
   assert.equal(await page.locator('#s2 .normal-next').count(),0);assert.equal(await page.locator('.normal-name').count(),3);assert.equal(await page.locator('[data-medium=air] .normal-interface').count(),0);assert.equal(await page.locator('[data-medium=air] .normal-reference').count(),0);
   assert.ok(await page.locator('.normal-steps').evaluate(el=>el.getBoundingClientRect().bottom<=document.querySelector('#normal-viewport').getBoundingClientRect().top));
   if(captures)await page.locator('#s2').screenshot({path:path.join(captures,'1440-idle-collapsed.png')});

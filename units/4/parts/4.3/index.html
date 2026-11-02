@@ -26,8 +26,8 @@
   <link rel="stylesheet" href="assets/lesson.css?v=20261101-controls2">
   <link rel="stylesheet" href="assets/light-speed-lab.css?v=20261101-controls2">
   <script type="module" src="assets/light-speed-lab.mjs?v=20261101-controls2"></script>
-  <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-1500000-v1">
-  <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-1500000-v1"></script>
+  <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-compact1">
+  <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-compact1"></script>
   <script type="module" src="assets/lesson.mjs?v=20261101-normal1">
 </script>
 </head>
@@ -145,14 +145,13 @@
           <button id="normal-start" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>同時發射</span></button>
           <button id="normal-pause" type="button" disabled data-action="pause"><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zm8 0h4v16h-4z" fill="currentColor"/></svg><svg class="resume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>暫停觀察</span></button>
         </div>
+        <p class="normal-status" id="normal-status" role="status">正在準備實驗桌……</p>
         <div class="normal-clock" aria-label="三束光的共同計時"><span>共同計時</span><strong><output id="normal-time" aria-live="off">0.00</output><small>秒</small></strong></div>
-        <p class="normal-time-note">代表光速：空氣約 30 萬、水約 22.5 萬、玻璃約 20 萬公里／秒。依設定路程計時，未放慢播放；器材與光跡非實際比例，假設介質均勻、忽略衰減。</p>
       </div>
-      <p class="normal-status" id="normal-status" role="status">正在準備實驗桌……</p>
       <button id="normal-retry" type="button" hidden>重新載入實驗桌</button>
       <noscript><p>總路程150萬公里，全程空氣約需5秒；前半空氣、後半水約需5.83秒；前半空氣、後半玻璃約需6.25秒。垂直入射時方向不偏折。啟用JavaScript後可發射與暫停比較。</p></noscript>
     </div>
-    <p class="normal-takeaway"><span>同樣時間，走得較短 → 速度較慢</span><span>光路保持筆直 → 方向不偏折</span></p>
+    <p class="normal-takeaway"><strong>觀察結果：</strong>光進入水或玻璃後變慢，方向仍保持筆直。</p>
     <details class="normal-explanation" id="normal-explanation">
       <summary>為什麼變慢，卻沒有轉向？</summary>
       <div class="normal-explanation-body">
@@ -184,6 +183,7 @@
           <div class="normal-cart-copy"><p><strong>兩輪同時進入較慢的區域，一起變慢，仍直直前進。</strong></p><p>垂直入射時，波前各處同時進入另一種介質，方向保持不變。</p><p class="normal-analogy-note">小車為類比，不代表光受到摩擦。</p></div>
         </div>
         <p class="note">法線是垂直介面的參考線；本次光沿法線入射，因此法線與光路重合。</p>
+        <p class="normal-time-note"><strong>模型說明：</strong>代表光速：空氣約 30 萬、水約 22.5 萬、玻璃約 20 萬公里／秒。依設定路程計時，未放慢播放；器材與光跡非實際比例，假設介質均勻、忽略衰減。</p>
       </div>
     </details>
   </div>
