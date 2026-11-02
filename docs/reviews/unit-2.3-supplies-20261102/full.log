@@ -1,0 +1,18 @@
+▶ 2.3 complete page: five teaching sections and one evidence-based quiz
+  ✔ all six sections and routes exist, with gas profiles and no retired experiment (86.973197ms)
+  ✔ default cup comparisons remain after preview and reset (158.446364ms)
+  ✔ both preparation lessons navigate independent steps and keep properties in section five (1507.491854ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (353.491561ms)
+  ✔ the single transfer quiz combines CO2 reactants and water displacement, then resets locally (14315.496204ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (4107.867191ms)
+  ✔ all teaching evidence is available without JavaScript (1254.439314ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (2865.98609ms)
+✔ 2.3 complete page: five teaching sections and one evidence-based quiz (26454.470598ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 26458.246814

@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createDesk,actDesk,advanceDesk,REQUIRED_MATERIALS,jarPose,jarMouth,gasEntersJar,taskHosePoints} from '../units/2/parts/2.3/assets/collection-task-model.mjs';
 import {approach,limitPosition,directPosition,parkPosition} from '../units/2/parts/2.3/assets/collection-task-direct.mjs';
-const ready=()=>{const s=createDesk();s.selected=[...REQUIRED_MATERIALS];actDesk(s,'begin');return s;};
+const ready=()=>{const s=createDesk();s.selected=[...REQUIRED_MATERIALS];return s;};
 const done=s=>advanceDesk(s,s.motion?.duration||0);
 test('covered composite inversion enters from above and extraction rights the same jar',()=>{const s=ready();s.jarWater=s.tankWater=1;s.jarCovered=true;s.dragging={id:'jar',position:{x:850,y:340}};actDesk(s,'immerse');assert.deepEqual(jarPose(s),{x:-20,y:10});s.dragging=null;let min=Infinity;for(let i=0;i<18;i++){advanceDesk(s,100);min=Math.min(min,jarPose(s).y);assert.equal(s.jarWater,1);}assert.ok(min< -220);assert.equal(s.jarAngle,180);assert.equal(s.jarPlace,1);assert.equal(jarMouth(s).y,432);s.sealedUnderwater=true;s.co2Volume=1;actDesk(s,'extract');done(s);assert.equal(s.jarAngle,0);assert.equal(s.jarPlace,0);assert.equal(s.co2Volume,1);assert.equal(s.sealedUnderwater,true);});
 test('uncovered inversion and extraction still lose water or CO2',()=>{const s=ready();s.jarWater=1;actDesk(s,'immerse');done(s);assert.ok(s.jarWater<1);s.co2Volume=1;s.jarWater=0;actDesk(s,'extract');done(s);assert.ok(s.co2Volume<.8);});

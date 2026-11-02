@@ -3,7 +3,7 @@
 #s6 .desk-materials{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;padding:24px 18px;background:#e9d5bc url('oxygen-setup-table.png') center/cover}
 #s6 .desk-material,#s6 .desk-tool{position:relative;min-width:0;border:1px solid transparent;background:transparent;color:#31584f;border-radius:12px;cursor:pointer;padding:5px;display:flex;align-items:center;flex-direction:column;justify-content:space-between;font:inherit;font-weight:700}
 #s6 .desk-material svg{display:block;width:100%;height:auto;aspect-ratio:180/145;pointer-events:none}#s6 .desk-material span,#s6 .desk-tool span{background:#fffef6;border-radius:5px;padding:4px 7px;line-height:1.45;font-size:.82rem;pointer-events:none;max-width:100%}
-#s6 .desk-material[aria-pressed=true]{border-color:#367252;background:#f5f7eabb;box-shadow:inset 0 0 0 1px #367252}#s6 .desk-material[aria-pressed=true]:after{content:'✓';position:absolute;right:4px;top:4px;background:#22634e;color:white;border-radius:50%;width:24px;height:24px;font-size:16px}
+#s6 .desk-material[data-present=true]{border-color:#367252;background:#f5f7eabb;box-shadow:inset 0 0 0 1px #367252}#s6 .desk-material[data-present=true]:after{content:'✓';position:absolute;right:4px;top:4px;background:#22634e;color:white;border-radius:50%;width:24px;height:24px;font-size:16px}
 #s6 .desk-select-bottom{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:18px 20px}#s6 .desk-select-bottom p{font-size:.88rem;margin:0}
 #s6 button.primary{background:#20634f;color:#fff;border:1px solid #20634f;border-radius:10px;padding:12px 20px;font:inherit;font-weight:700;min-height:48px;cursor:pointer}#s6 button.quiet,#s6 .desk-actions button,#s6 .desk-object-buttons button{border:1px solid #9ab295;color:#31584f;background:#fffef8;border-radius:8px;min-height:44px;padding:9px 13px;cursor:pointer;font:inherit;font-size:.86rem}
 #s6 button:focus-visible,#s6 .desk-scroll:focus-visible{outline:3px solid #bd880f;outline-offset:3px}#s6 button:disabled{opacity:.5;cursor:wait}
@@ -37,3 +37,11 @@
 #s6 .task-scene [data-desk-drag]{pointer-events:all}
 #s6 .task-scene{touch-action:none}
 #s6 .desk-approach{width:max-content;max-width:min(250px,calc(100% - 16px))}
+
+#s6 .desk-supply-heading{padding:12px 18px 0;background:#f1f3e8;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+#s6 .desk-supply-heading h3{font-size:1rem;margin:0}#s6 .desk-supply-heading p{font-size:.8rem;margin:0;color:#61755e}
+#s6 .desk-materials{padding:10px 14px;gap:5px;background:#f1f3e8;border-bottom:1px solid #d3dec8}
+#s6 .desk-material svg{height:64px;aspect-ratio:auto}#s6 .desk-material span{font-size:.76rem;padding:3px 5px}
+#s6 .desk-material[data-present=true]:after{width:18px;height:18px;font-size:12px}
+#s6 .desk-material[data-active=true]{border-color:#ac7b15;background:#fff3cf}
+@media(max-width:600px){#s6 .desk-materials{grid-template-columns:repeat(4,minmax(0,1fr));padding:8px;gap:4px}#s6 .desk-material svg{height:48px}#s6 .desk-material span{font-size:.7rem;padding:2px;line-height:1.4}#s6 .desk-supply-heading{padding:10px 12px 0;gap:4px}}

@@ -1,5 +1,5 @@
-import {jarPose,jarMouth,outletPose,clamp} from './collection-task-model.mjs?v=direct-1';
-export const TOOL_HOME={forceps:{x:485,y:305},water:{x:660,y:130},acid:{x:440,y:65},rig:{x:500,y:50},funnel:{x:535,y:100},plate:{x:605,y:-20}};
+import {jarPose,jarMouth,outletPose,clamp} from './collection-task-model.mjs?v=supplies-1';
+export const TOOL_HOME={forceps:{x:485,y:305},water:{x:660,y:130},acid:{x:440,y:65},rig:{x:500,y:50},funnel:{x:535,y:100},plate:{x:605,y:-20},peroxide:{x:680,y:65},catalyst:{x:490,y:450}};
 export function directPosition(s,id){
  if(s.dragging?.id===id)return s.dragging.position;
  if(id==='jar'){const p=jarPose(s);return{x:870+p.x,y:330+p.y};}
@@ -21,31 +21,32 @@ export function limitPosition(s,id,p){
 }
 const intent=(action,value,label,target)=>({action,value,label,target});
 export function approach(s,id,p,origin){
- const near=(x,y,r=75)=>Math.hypot(p.x-x,p.y-y)<r,mouth=jarMouth(s);
+ const has=id=>s.selected.includes(id),near=(x,y,r=75)=>Math.hypot(p.x-x,p.y-y)<r,mouth=jarMouth(s);
  if(id==='jar'){
   if(s.jarPlace>.5&&p.y<(origin?.y??330)-60)return intent('extract',null,'向上取出，保持封口並扶正','jar');
-  if(s.jarPlace<.5&&near(870,350,125))return intent('immerse',null,'保持蓋片，倒置後由上方放入水中','tank');
+  if(s.jarPlace<.5&&has('tank')&&near(870,350,125))return intent('immerse',null,'保持蓋片，倒置後由上方放入水中','tank');
   return null;
  }
  if(id==='outlet'){
-  if(near(870,465,65)&&s.outlet!=='jar')return intent('outlet','jar','從瓶口下方移入集氣瓶','jar');
-  if(p.x<790&&p.y>355&&s.outlet!=='tank')return intent('outlet','tank',s.outlet==='jar'?'先向下撤出，再移到瓶外水中':'放到瓶外水中排氣','outlet');
+  if(has('jar')&&has('tank')&&near(870,465,65)&&s.outlet!=='jar')return intent('outlet','jar','從瓶口下方移入集氣瓶','jar');
+  if(has('tank')&&p.x<790&&p.y>355&&s.outlet!=='tank')return intent('outlet','tank',s.outlet==='jar'?'先向下撤出，再移到瓶外水中':'放到瓶外水中排氣','outlet');
   if(p.y<335&&s.outlet!=='air')return intent('outlet','air','出口移到水面上方排氣','outlet');
   return null;
  }
  if(id==='forceps'){
-  if(near(520,555,90))return intent('target','marble',s.heldMarble?'將大理石放回盤中':'夾起一塊大理石','marble');
-  if(near(300,205,95))return intent('target','flask','從瓶口放入大理石','flask');
+  if(has('marble')&&near(520,555,90))return intent('target','marble',s.heldMarble?'將大理石放回盤中':'夾起一塊大理石','marble');
+  if(has('flask')&&near(300,205,95))return intent('target','flask','從瓶口放入大理石','flask');
  }
  if(id==='water'){
-  if(near(mouth.x,mouth.y,100))return intent('target','jar','由集氣瓶口裝水','jar');
-  if(near(1000,355,110))return intent('target','tank','向水槽加水','tank');
+  if(has('jar')&&near(mouth.x,mouth.y,100))return intent('target','jar','由集氣瓶口裝水','jar');
+  if(has('tank')&&near(1000,355,110))return intent('target','tank','向水槽加水','tank');
  }
  if(id==='plate'&&s.jarCovered){if(Math.hypot(p.x-mouth.x,p.y-mouth.y)>65)return intent('uncover',null,'移開玻璃片','jar');return null;}
- if(id==='plate'&&near(mouth.x,mouth.y,95))return intent('target','jar','將玻璃片貼合瓶口','jar');
- if(id==='rig'&&near(300,205,100))return intent('target','flask','由瓶口上方裝入雙孔塞與導管','flask');
- if(id==='funnel'&&near(300,100,100))return intent('target','flask','由上方插入薊頭漏斗','flask');
- if(id==='acid'&&(near(274,65,90)||(!s.rig&&near(300,205,100))))return intent('target',s.funnel?'funnel':'flask',s.funnel?'從試藥瓶口倒入薊頭漏斗':'由開口錐形瓶加入稀鹽酸','flask');
+ if(id==='plate'&&has('jar')&&near(mouth.x,mouth.y,95))return intent('target','jar','將玻璃片貼合瓶口','jar');
+ if(id==='rig'&&has('flask')&&near(300,205,100))return intent('target','flask','由瓶口上方裝入雙孔塞與導管','flask');
+ if(id==='funnel'&&has('flask')&&near(300,100,100))return intent('target','flask','由上方插入薊頭漏斗','flask');
+ if(id==='acid'&&has('flask')&&(near(274,65,90)||(!s.rig&&near(300,205,100))))return intent('target',s.funnel?'funnel':'flask',s.funnel?'從試藥瓶口倒入薊頭漏斗':'由開口錐形瓶加入稀鹽酸','flask');
+ if(['peroxide','catalyst'].includes(id)&&has('flask')&&near(300,205,110))return intent('target','flask','試著將材料用於反應瓶','flask');
  return null;
 }
 export function parkPosition(s,id,target){
