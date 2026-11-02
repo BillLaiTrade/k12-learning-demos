@@ -28,8 +28,8 @@
   <script type="module" src="assets/light-speed-lab.mjs?v=20261101-controls2"></script>
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
   <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-compact1"></script>
-  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261102-oblique1">
-  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261102-solo1"></script>
+  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261102-entry1">
+  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261102-entry1"></script>
   <script type="module" src="assets/lesson.mjs?v=20261101-normal1">
 </script>
 </head>
@@ -191,34 +191,45 @@
   </div>
 </section>
 <section class="lesson-card" id="s3" aria-labelledby="heading-3">
-  <header class="lesson-head"><span class="lesson-number">03</span><div><h2 id="heading-3">光斜著進入，會往哪裡偏？</h2><p>相同入射角，比較水與玻璃的折射方向</p></div></header>
+  <header class="lesson-head"><span class="lesson-number">03</span><div><h2 id="heading-3">光斜著進入，會往哪裡偏？</h2><p>放大入射點，看清楚光在介面的變化</p></div></header>
   <div class="lesson-body card-main">
     <div class="dialogue-sequence">
-      <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>同樣斜著照進去，水和玻璃會讓光偏得一樣嗎？</p></div>
-      <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>一起轉動兩個光源，用相同入射角比一比。</p></div>
+      <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光斜著進入水時，是在哪裡轉向的？</p></div>
+      <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>把入射點放大，看看光線和法線之間的角度。</p></div>
     </div>
-    <div class="lab" id="oblique-lab" data-state="loading" aria-label="空氣射入水與玻璃的同步調角度實驗">
-      <p class="oblique-hint">點燈單獨發射；拖曳同步調角度，角度從法線量起。</p>
-      <p class="oblique-pan-hint">↔ 左右滑動實驗桌，對照水與玻璃的光路。</p>
-      <div class="oblique-viewport" id="oblique-viewport" role="region" tabindex="0" aria-label="雙槽折射實驗桌，窄螢幕可左右滑動">
-        <div class="oblique-table">
-          <img id="oblique-background" src="assets/oblique-incidence-bench.png" width="1536" height="1024" alt="寫實木桌上的兩組透明光路剖面示意：左側空氣進入水，右側空氣進入實心玻璃，介面同高。">
-          <svg id="oblique-scene" viewBox="0 100 1536 760" role="group" aria-label="水與玻璃並排，按同時發射觀察折射。"></svg>
-          <span class="oblique-state" id="oblique-state">準備實驗桌</span>
-        </div>
+    <div class="lab" id="oblique-lab" data-state="loading" aria-label="單一折射實驗與同步入射點放大畫面">
+      <div class="oblique-topline"><p class="oblique-hint">點燈發射，拖曳調角度；放大畫面與全景同步。</p><div class="oblique-toolbar" role="group" aria-label="選擇射入的介質"><span>射入介質</span><button type="button" data-oblique-medium="water" aria-pressed="true">水</button><button type="button" data-oblique-medium="glass" aria-pressed="false">玻璃</button></div></div>
+      <div class="oblique-experiment">
+        <svg id="oblique-link" aria-hidden="true"><path/></svg>
+        <figure class="oblique-overview">
+          <figcaption>實驗全景</figcaption>
+          <div class="oblique-table" id="oblique-viewport">
+            <img id="oblique-background" src="assets/oblique-entry-water.png" width="1254" height="1254" alt="寫實木桌上的單槽光路剖面：上方空氣，下方為水。">
+            <svg id="oblique-scene" viewBox="0 0 1254 1254" role="group" aria-label="點燈發射，拖曳光源調整入射角。"></svg>
+            <span class="oblique-state" id="oblique-state">準備場景</span>
+          </div>
+        </figure>
+        <aside class="oblique-detail" aria-labelledby="oblique-detail-title">
+          <div class="oblique-detail-heading"><h3 id="oblique-detail-title"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg>入射點放大</h3><span>與全景同步</span></div>
+          <svg id="oblique-zoom" viewBox="490 450 320 240" role="img" aria-label="同一入射點的放大光路，角度從法線量起。"></svg>
+          <div class="finding oblique-finding">
+            <div class="oblique-rule-head"><span class="oblique-rule-check" aria-hidden="true">✓</span><strong id="oblique-finding-text">斜射入水 → 折射光偏向法線</strong></div>
+            <output id="oblique-relation">折射角 32.0° &lt; 入射角 45°</output>
+            <p id="oblique-zoom-note">兩個角度都從法線量起。</p>
+          </div>
+        </aside>
       </div>
       <div class="oblique-console">
-        <label class="oblique-angle-control" for="oblique-angle"><span>共同入射角<output id="oblique-angle-value" for="oblique-angle">45°</output></span><span class="oblique-slider"><input id="oblique-angle" type="range" min="0" max="60" value="45" step="1" aria-label="兩組共同入射角，從法線量起" disabled><span>0°</span><span>60°</span></span></label>
-        <div class="oblique-actions" role="group" aria-label="兩束光的發射與暫停控制">
-          <button id="oblique-start" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>同時發射</span></button>
+        <label class="oblique-angle-control" for="oblique-angle"><span>入射角<output id="oblique-angle-value" for="oblique-angle">45°</output></span><span class="oblique-slider"><input id="oblique-angle" type="range" min="0" max="60" value="45" step="1" aria-label="入射角，從法線量起" disabled><span>0°</span><span>60°</span></span></label>
+        <div class="oblique-actions" role="group" aria-label="發射與暫停光束">
+          <button id="oblique-start" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>發射光束</span></button>
           <button id="oblique-pause" type="button" data-action="pause" disabled><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zm8 0h4v16h-4z" fill="currentColor"/></svg><svg class="resume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>暫停觀察</span></button>
         </div>
-        <p class="oblique-status" id="oblique-status" role="status">正在準備實驗桌……</p>
+        <p class="oblique-status" id="oblique-status" role="status">正在準備實驗場景……</p>
       </div>
-      <button id="oblique-retry" type="button" hidden>重新載入實驗桌</button>
-      <noscript><p>入射角45°時，水與代表玻璃的折射角分別約32.0°、28.1°，皆從法線量起；斜射時偏向法線，垂直入射時方向不偏折。啟用JavaScript後可同步調整並發射光束。</p></noscript>
+      <button id="oblique-retry" type="button" hidden>重新載入場景</button>
+      <noscript><p>光由空氣斜射入水或代表玻璃時偏向法線；入射角45°時，折射角分別約32.0°、28.1°。角度皆從法線量起，垂直入射時方向不偏折。啟用JavaScript後可切換介質、發射及同步觀察入射點放大畫面。</p></noscript>
     </div>
-    <p class="finding oblique-finding"><strong>觀察結果：</strong><span id="oblique-finding-text">光由空氣斜射入水或玻璃，會偏向法線。</span></p>
     <details class="oblique-explanation" id="oblique-explanation">
       <summary>為什麼斜著進入，就會轉向？</summary>
       <div class="oblique-explanation-body">

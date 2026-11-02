@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "s1": true,
+    "s2": true,
+    "s4": true,
+    "s5": true,
+    "s6": true,
+    "s7": true
+  },
+  "assets": {
+    "optics.mjs": true,
+    "lesson.mjs": true,
+    "lesson.css": true,
+    "normal-incidence-model.mjs": true,
+    "normal-incidence-lab.mjs": true,
+    "normal-incidence-lab.css": true,
+    "light-speed-model.mjs": true,
+    "light-speed-lab.mjs": true,
+    "light-speed-lab.css": true
+  }
+}

@@ -33,10 +33,10 @@ test('4.3 complete basic lesson works on desktop and mobile',{timeout:90000},asy
   const out=Number((await lab.locator('.refracted-readout').textContent()).replace('°',''));assert.ok(id==='enter'?out<35:out>35);
   await lab.locator('.source').focus();await page.keyboard.press('ArrowLeft');assert.equal(await input.inputValue(),'34');await page.keyboard.press('Home');assert.equal(await input.inputValue(),'0');assert.equal(await lab.locator('.refracted-readout').textContent(),'0.0°');
  }
- // The shared angle control now drives two fixed, correctly refracted lanes.
+ // The overview and entry-point detail share a single selectable optical case.
  await page.waitForFunction(()=>document.querySelector('#oblique-lab')?.dataset.state==='idle');
  const shared=page.locator('#oblique-angle');await shared.fill('35');
- const outgoing=await page.locator('.oblique-lane').evaluateAll(es=>es.map(e=>Number(e.dataset.outgoing)));assert.ok(outgoing[1]<outgoing[0]&&outgoing[0]<35);
+ assert.ok(Number(await page.locator('#oblique-lab').getAttribute('data-outgoing'))<35);await page.locator('[data-oblique-medium=glass]').click();await page.waitForFunction(()=>document.querySelector('#oblique-lab').dataset.medium==='glass'&&document.querySelector('#oblique-lab').dataset.state==='idle');assert.ok(Number(await page.locator('#oblique-lab').getAttribute('data-outgoing'))<35);
  const source=page.locator('.oblique-source').first();await source.focus();await page.keyboard.press('Home');assert.equal(await shared.inputValue(),'0');
  await source.scrollIntoViewIfNeeded();const box=await source.boundingBox();await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x-65,box.y+20,{steps:5});await page.mouse.up();assert.ok(Number(await shared.inputValue())>0);
  const original=await page.locator('#refract-scene .ray').first().getAttribute('d');await page.locator('#reverse-path').click();assert.match(await page.locator('#reverse-label').textContent(),/B 前往 A/);assert.notEqual(await page.locator('#refract-scene .ray').first().getAttribute('d'),original);await page.locator('#reverse-path').click();assert.equal(await page.locator('#refract-scene .ray').first().getAttribute('d'),original);

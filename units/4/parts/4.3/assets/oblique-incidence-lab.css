@@ -1,17 +1,20 @@
-/* Third learning block: fixed water/glass, shared incident angle. */
+/* A single experiment and a magnified view of the same entry point. */
 #s3 .lesson-body { container-type:inline-size; container-name:oblique-card; }
 #oblique-lab { padding:0; border:0; background:transparent; }
-.oblique-hint { margin:0 0 5px; color:#607366; font-size:.83rem; }
-.oblique-pan-hint { display:none; margin:0 0 6px; color:#64736d; font-size:.76rem; }
-.oblique-viewport { overflow-x:auto; border-radius:14px; overscroll-behavior-x:contain; scrollbar-width:thin; }
-.oblique-table { position:relative; min-width:800px; aspect-ratio:1536 / 760; overflow:hidden; isolation:isolate; }
-#oblique-background { position:absolute; top:-13.157895%; left:0; display:block; width:100%; height:auto; }
+.oblique-topline { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 14px; margin:0 0 12px; }
+.oblique-topline .oblique-hint { flex:1 1 280px; margin:0; }
+.oblique-toolbar { display:flex; justify-content:flex-end; align-items:center; gap:9px; margin:0; color:#315340; font-size:.87rem; font-weight:650; }
+.oblique-toolbar button { min-width:68px; min-height:42px; padding:7px 16px; }
+.oblique-hint { margin:0 0 12px; color:#607366; font-size:.8rem; }
+.oblique-experiment { position:relative; display:grid; grid-template-columns:minmax(0,1.04fr) minmax(0,1fr); gap:14px; align-items:stretch; }
+.oblique-overview { min-width:0; margin:0; display:flex; flex-direction:column; }
+.oblique-overview figcaption { min-height:30px; color:#28523e; font-size:.85rem; font-weight:750; }
+.oblique-table { position:relative; width:100%; aspect-ratio:1; overflow:hidden; border-radius:12px; background:#fffdf7; }
+#oblique-background { display:block; width:100%; height:auto; }
 #oblique-scene { position:absolute; inset:0; width:100%; height:100%; }
-#oblique-scene text { font-family:ui-sans-serif,system-ui,"Noto Sans TC",sans-serif; fill:#233d35; font-weight:650; }
+#oblique-scene text, #oblique-zoom text { font-family:ui-sans-serif,system-ui,"Noto Sans TC",sans-serif; fill:#233d35; font-weight:650; }
 .oblique-normal { fill:none; stroke:#396d52; stroke-width:3; stroke-dasharray:12 9; }
-.oblique-angle-arc { fill:none; stroke:#a95426; stroke-width:3.5; }
-#oblique-scene .oblique-angle-value { fill:#8a421f; font-size:32px; font-variant-numeric:tabular-nums; }
-#oblique-scene .oblique-out-value { fill:#164b36; }
+.oblique-angle-arc { fill:none; stroke:#a95426; stroke-width:2.3; }
 .oblique-halo { fill:none; stroke:#ffb52e; stroke-width:17; opacity:.8; filter:url(#oblique-glow); }
 .oblique-ray { fill:none; stroke:#ffc741; stroke-width:7; }
 .oblique-core { fill:none; stroke:#fff9d5; stroke-width:2.8; }
@@ -23,12 +26,38 @@
 .oblique-source:focus-visible { outline:none; }
 .oblique-source:focus-visible .oblique-focus, .oblique-source:hover .oblique-focus { opacity:1; }
 .oblique-source[data-lit=true] .oblique-lens { fill:url(#oblique-lit-lens); }
-.oblique-state { position:absolute; right:3%; top:2%; padding:4px 9px; border:1px solid #b6cab3; border-radius:7px; background:#f2f8eaf5; color:#28654f; font-size:.75rem; font-weight:700; pointer-events:none; }
-.oblique-console { display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; margin:10px 0 12px; }
-.oblique-angle-control { display:flex; flex:1 1 340px; align-items:center; gap:14px; margin:0; color:#274f3b; font-size:.95rem; font-weight:650; }
+.oblique-state { position:absolute; right:3%; top:1%; padding:3px 7px; border:1px solid #b6cab3; border-radius:7px; background:#f2f8eaf5; color:#28654f; font-size:.66rem; font-weight:700; pointer-events:none; }
+.oblique-connector { display:none; }
+#oblique-link { position:absolute; inset:0; width:100%; height:100%; z-index:2; pointer-events:none; }
+#oblique-link path { fill:none; stroke:#327654; stroke-width:1.5; }
+.oblique-target-underlay { fill:none; stroke:#fffdeb; stroke-width:10; }
+.oblique-target { fill:none; stroke:#2a7350; stroke-width:4; }
+.oblique-detail { min-width:0; display:flex; flex-direction:column; position:relative; padding:11px; border:1.5px solid #88ab8b; border-radius:14px; background:#fffdf7; }
+
+.oblique-detail-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:5px 10px; min-height:28px; margin-bottom:8px; }
+.oblique-detail-heading h3 { display:flex; align-items:center; gap:6px; margin:0; color:#25573f; font-size:1rem; font-weight:750; }
+.oblique-detail-heading svg { width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:2; }
+.oblique-detail-heading > span { color:#68796c; font-size:.72rem; }
+#oblique-zoom { display:block; width:100%; height:auto; aspect-ratio:4 / 3; overflow:hidden; border:1px solid #dfe5d7; border-radius:10px; background:#fffdf6; }
+#oblique-zoom .oblique-normal { stroke-width:1.7; stroke-dasharray:6 5; }
+.oblique-zoom-interface { fill:none; stroke:#4b9b9a; stroke-width:1.8; }
+#oblique-zoom .oblique-halo { stroke-width:6; filter:drop-shadow(0 0 3px #ffd270); }
+#oblique-zoom .oblique-ray { stroke-width:2.7; }
+#oblique-zoom .oblique-core { stroke-width:1; }
+#oblique-zoom text { font-size:calc(14px * var(--zoom-font-scale,1)); }
+#oblique-zoom .oblique-angle-value { fill:#99491f; font-size:calc(21px * var(--zoom-font-scale,1)); font-variant-numeric:tabular-nums; font-weight:750; }
+#oblique-zoom .oblique-normal-name { fill:#285d41; }
+#s3 .oblique-finding { flex:1; margin:9px 0 0; padding:10px 9px; border:1px solid #d9e6d3; border-radius:9px; background:#edf5e8; color:#205b43; }
+.oblique-rule-head { display:flex; align-items:flex-start; justify-content:center; gap:7px; }
+.oblique-rule-head strong { font-size:1.0625rem; line-height:1.5; font-weight:750; }
+.oblique-rule-check { display:inline-grid; place-items:center; flex:none; width:21px; height:21px; margin-top:2px; border-radius:50%; background:#216344; color:white; font-size:.85rem; }
+#oblique-relation { display:block; margin:7px 0 0; text-align:center; color:#254e37; font-size:.93rem; font-weight:650; font-variant-numeric:tabular-nums; }
+#oblique-zoom-note { margin:5px 0 0; text-align:center; font-size:.77rem; color:#637568; }
+.oblique-console { display:flex; flex-wrap:wrap; align-items:center; gap:9px 18px; margin:13px 0 0; }
+.oblique-angle-control { display:flex; flex:1 1 300px; align-items:center; gap:14px; margin:0; color:#274f3b; font-size:.95rem; font-weight:650; }
 .oblique-angle-control > span { white-space:nowrap; }
 #oblique-angle-value { margin-left:6px; font-size:1.2rem; font-weight:750; font-variant-numeric:tabular-nums; }
-.oblique-slider { display:grid; flex:1; min-width:100px; grid-template-columns:1fr 1fr; gap:0; color:#66786a; font-size:.7rem; font-weight:500; }
+.oblique-slider { display:grid; flex:1; min-width:100px; grid-template-columns:1fr 1fr; color:#66786a; font-size:.7rem; font-weight:500; }
 .oblique-slider input { grid-column:1 / -1; width:100%; min-height:30px; margin:0; accent-color:#267451; }
 .oblique-slider span:last-child { text-align:right; }
 .oblique-actions { display:flex; gap:10px; }
@@ -37,7 +66,6 @@
 .oblique-actions button:disabled { opacity:.45; cursor:default; }
 #oblique-pause[data-action=pause] .resume-icon, #oblique-pause[data-action=resume] .pause-icon { display:none; }
 .oblique-status { flex:1 1 100%; margin:0; color:#64736d; font-size:.8rem; line-height:1.6; }
-#s3 .oblique-finding { margin:12px 0 14px; padding:10px 14px; border:0; border-left:3px solid #6b9d76; border-radius:0 8px 8px 0; background:#edf5ed; color:#205b43; font-size:1.0625rem; font-weight:600; line-height:1.6; }
 .oblique-explanation { margin-top:18px; border:1px solid #d9e4d9; border-radius:13px; background:linear-gradient(130deg,#fcfdf9,#f6f9f1); }
 .oblique-explanation summary { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:17px 20px; list-style:none; cursor:pointer; color:#284d3d; font-size:1.06rem; font-weight:750; }
 .oblique-explanation summary::-webkit-details-marker { display:none; }
@@ -49,16 +77,21 @@
 .oblique-cart-sequence { display:block; width:100%; min-width:640px; height:auto; margin:0; border:1px solid #e1dacb; border-radius:10px; background:#f3efe4; }
 .oblique-cart-viewport { overflow-x:auto; overscroll-behavior-x:contain; margin:0 0 14px; border-radius:10px; }
 .oblique-cart-pan-hint { display:none; margin:0 0 6px; color:#64736d; font-size:.76rem; }
-@container oblique-card (max-width:680px) { .oblique-cart-pan-hint { display:block; } }
 .oblique-model-note { padding-top:12px; border-top:1px solid #e1e9dc; color:#64736d; font-size:.76rem; }
 #oblique-retry[hidden] { display:none; }
-@container oblique-card (max-width:799px) { .oblique-pan-hint { display:block; } }
+@container oblique-card (max-width:680px) {
+ .oblique-experiment { grid-template-columns:1fr; gap:14px; }
+ .oblique-overview { max-width:500px; width:100%; justify-self:center; }
+ .oblique-detail { max-width:500px; width:100%; justify-self:center; }
+ #oblique-link { display:none; }
+ .oblique-cart-pan-hint { display:block; }
+}
 @container oblique-card (max-width:650px) {
  .oblique-angle-control { flex-basis:100%; }
  .oblique-actions { flex:1 1 100%; display:grid; grid-template-columns:1fr 1fr; }
- .oblique-status { flex-basis:100%; }
 }
 @media(max-width:700px) {
+ .oblique-toolbar { justify-content:flex-start; }
  .oblique-console { gap:8px 12px; }
  .oblique-actions button { font-size:.86rem; padding-inline:8px; }
  .oblique-angle-control { gap:10px; font-size:.86rem; }

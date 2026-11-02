@@ -1,0 +1,344 @@
+TAP version 13
+# Subtest: 4.3 shared lesson format keeps navigation and content usable
+    # Subtest: six numbered teaching sections and a separate quiz keep all existing anchors
+    ok 1 - six numbered teaching sections and a separate quiz keep all existing anchors
+      ---
+      duration_ms: 327.011044
+      type: 'test'
+      ...
+    # Subtest: desktop sidebar follows each section and keeps the quiz out of the six-section count
+    ok 2 - desktop sidebar follows each section and keeps the quiz out of the six-section count
+      ---
+      duration_ms: 585.633589
+      type: 'test'
+      ...
+    # Subtest: desktop, laptop and narrow screens retain unclipped headings and controls
+    ok 3 - desktop, laptop and narrow screens retain unclipped headings and controls
+      ---
+      duration_ms: 9750.287204
+      type: 'test'
+      ...
+    # Subtest: quiz alias and original deep links arrive below the mobile route
+    ok 4 - quiz alias and original deep links arrive below the mobile route
+      ---
+      duration_ms: 299.869097
+      type: 'test'
+      ...
+    1..4
+ok 1 - 4.3 shared lesson format keeps navigation and content usable
+  ---
+  duration_ms: 12736.870026
+  type: 'test'
+  ...
+# Subtest: 4.3 normal incidence desk and folding explanation work as approved
+    # Subtest: idle scene has no emitted light, dotted particles, autoplay or open explanation
+    ok 1 - idle scene has no emitted light, dotted particles, autoplay or open explanation
+      ---
+      duration_ms: 774.183089
+      type: 'test'
+      ...
+    # Subtest: continuous beams launch together and stay on the same axis across the interface
+    ok 2 - continuous beams launch together and stay on the same axis across the interface
+      ---
+      duration_ms: 966.514343
+      type: 'test'
+      ...
+    # Subtest: pause freezes both fronts and resume continues the saved progress
+    ok 3 - pause freezes both fronts and resume continues the saved progress
+      ---
+      duration_ms: 629.898843
+      type: 'test'
+      ...
+    # Subtest: air arrival pauses exactly once at one common instant, even across many frames
+    ok 4 - air arrival pauses exactly once at one common instant, even across many frames
+      ---
+      duration_ms: 1491.300277
+      type: 'test'
+      ...
+    # Subtest: continuing the comparison finishes all three rays without a second automatic stop
+    ok 5 - continuing the comparison finishes all three rays without a second automatic stop
+      ---
+      duration_ms: 523.520335
+      type: 'test'
+      ...
+    # Subtest: same launch button starts a fresh run and offscreen or hidden pages preserve progress
+    ok 6 - same launch button starts a fresh run and offscreen or hidden pages preserve progress
+      ---
+      duration_ms: 2665.400897
+      type: 'test'
+      ...
+    # Subtest: native folding control works by keyboard and the cart moves straight, slows and stops when folded
+    ok 7 - native folding control works by keyboard and the cart moves straight, slows and stops when folded
+      ---
+      duration_ms: 2306.729178
+      type: 'test'
+      ...
+    # Subtest: seven widths keep controls readable, with only the apparatus scrolling on phones
+    ok 8 - seven widths keep controls readable, with only the apparatus scrolling on phones
+      ---
+      duration_ms: 6979.318196
+      type: 'test'
+      ...
+    # Subtest: failed artwork disables firing, retry recovers, and other sections remain usable
+    ok 9 - failed artwork disables firing, retry recovers, and other sections remain usable
+      ---
+      duration_ms: 3815.751782
+      type: 'test'
+      ...
+    # Subtest: opening the explanation starts the analogy with normal motion preferences
+    ok 10 - opening the explanation starts the analogy with normal motion preferences
+      ---
+      duration_ms: 1408.962408
+      type: 'test'
+      ...
+    # Subtest: phone touch can fire, pause and expand the explanation
+    ok 11 - phone touch can fire, pause and expand the explanation
+      ---
+      duration_ms: 1520.404027
+      type: 'test'
+      ...
+    1..11
+ok 2 - 4.3 normal incidence desk and folding explanation work as approved
+  ---
+  duration_ms: 24726.14576
+  type: 'test'
+  ...
+# Subtest: three normal rays share a distance scale and common air speed before the real interfaces
+ok 3 - three normal rays share a distance scale and common air speed before the real interfaces
+  ---
+  duration_ms: 2.775082
+  type: 'test'
+  ...
+# Subtest: the air reference continues unchanged while water and glass slow without bending
+ok 4 - the air reference continues unchanged while water and glass slow without bending
+  ---
+  duration_ms: 0.744833
+  type: 'test'
+  ...
+# Subtest: the shared air-arrival instant gives a visible, physically proportionate comparison
+ok 5 - the shared air-arrival instant gives a visible, physically proportionate comparison
+  ---
+  duration_ms: 1.560243
+  type: 'test'
+  ...
+# Subtest: 1500000 km mixed paths use the time of each segment, not a full route of water or glass
+ok 6 - 1500000 km mixed paths use the time of each segment, not a full route of water or glass
+  ---
+  duration_ms: 0.370541
+  type: 'test'
+  ...
+# Subtest: one second and the shared air-arrival instant represent physical kilometres at normal speed
+ok 7 - one second and the shared air-arrival instant represent physical kilometres at normal speed
+  ---
+  duration_ms: 0.478576
+  type: 'test'
+  ...
+# Subtest: 4.3 single refraction experiment and entry-point detail stay synchronized
+    # Subtest: water is the only default experiment, with one lamp and an initially closed explanation
+    ok 1 - water is the only default experiment, with one lamp and an initially closed explanation
+      ---
+      duration_ms: 716.213033
+      type: 'test'
+      ...
+    # Subtest: 0–60 degrees update the source, magnified arcs and rules without stretched angles
+    ok 2 - 0–60 degrees update the source, magnified arcs and rules without stretched angles
+      ---
+      duration_ms: 364.035663
+      type: 'test'
+      ...
+    # Subtest: switching the single case preserves the angle and changes the scene, detail and rule together
+    ok 3 - switching the single case preserves the angle and changes the scene, detail and rule together
+      ---
+      duration_ms: 195.368086
+      type: 'test'
+      ...
+    # Subtest: keyboard and pointer dragging adjust the one lamp without inadvertently firing
+    ok 4 - keyboard and pointer dragging adjust the one lamp without inadvertently firing
+      ---
+      duration_ms: 275.291746
+      type: 'test'
+      ...
+    # Subtest: lamp activation sends the same continuous front through both views, with pause and resume
+    ok 5 - lamp activation sends the same continuous front through both views, with pause and resume
+      ---
+      duration_ms: 2152.38701
+      type: 'test'
+      ...
+    # Subtest: angle and material changes preview both views together, and replay or keyboard activation resets progress
+    ok 6 - angle and material changes preview both views together, and replay or keyboard activation resets progress
+      ---
+      duration_ms: 2765.403697
+      type: 'test'
+      ...
+    # Subtest: offscreen and hidden-page pauses preserve progress for the same detail view
+    ok 7 - offscreen and hidden-page pauses preserve progress for the same detail view
+      ---
+      duration_ms: 1872.263556
+      type: 'test'
+      ...
+    # Subtest: the optional explanation opens by keyboard and keeps analogy and model limitations clear
+    ok 8 - the optional explanation opens by keyboard and keeps analogy and model limitations clear
+      ---
+      duration_ms: 611.569455
+      type: 'test'
+      ...
+    # Subtest: seven widths keep labels legible, the crop aligned and mobile views stacked without overflow
+    ok 9 - seven widths keep labels legible, the crop aligned and mobile views stacked without overflow
+      ---
+      duration_ms: 2514.988793
+      type: 'test'
+      ...
+    # Subtest: a late material response cannot undo a newer selection
+    ok 10 - a late material response cannot undo a newer selection
+      ---
+      duration_ms: 1344.576231
+      type: 'test'
+      ...
+    # Subtest: failed artwork can recover by selecting the other material or retrying, without breaking earlier blocks
+    ok 11 - failed artwork can recover by selecting the other material or retrying, without breaking earlier blocks
+      ---
+      duration_ms: 1496.983305
+      type: 'test'
+      ...
+    # Subtest: native phone touch can drag and tap the lamp, pause from the detail view, and switch material
+    ok 12 - native phone touch can drag and tap the lamp, pause from the detail view, and switch material
+      ---
+      duration_ms: 3117.247876
+      type: 'test'
+      ...
+    1..12
+ok 8 - 4.3 single refraction experiment and entry-point detail stay synchronized
+  ---
+  duration_ms: 19466.82343
+  type: 'test'
+  ...
+# Subtest: one optical plane obeys refraction from the actual normal for every selectable angle
+ok 9 - one optical plane obeys refraction from the actual normal for every selectable angle
+  ---
+  duration_ms: 3.765731
+  type: 'test'
+  ...
+# Subtest: the magnified crop centers exactly on the same entry point and omits the source
+ok 10 - the magnified crop centers exactly on the same entry point and omits the source
+  ---
+  duration_ms: 0.933234
+  type: 'test'
+  ...
+# Subtest: water and glass share the incident geometry, retain correct 45-degree readings and the zero exception
+ok 11 - water and glass share the incident geometry, retain correct 45-degree readings and the zero exception
+  ---
+  duration_ms: 22.043239
+  type: 'test'
+  ...
+# Subtest: continuous fronts reach the interface, then follow the refracted segment and stop at the selected endpoint
+ok 12 - continuous fronts reach the interface, then follow the refracted segment and stop at the selected endpoint
+  ---
+  duration_ms: 16.120945
+  type: 'test'
+  ...
+# Subtest: transmitted rays conserve tangential optical direction and reverse exactly
+ok 13 - transmitted rays conserve tangential optical direction and reverse exactly
+  ---
+  duration_ms: 2.134659
+  type: 'test'
+  ...
+# Subtest: apparent coin is the backward intersection of independently refracted pupil rays
+ok 14 - apparent coin is the backward intersection of independently refracted pupil rays
+  ---
+  duration_ms: 13.374527
+  type: 'test'
+  ...
+# Subtest: 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork
+    # Subtest: artwork loads, media are fixed, and geometry has equal routes
+    ok 1 - artwork loads, media are fixed, and geometry has equal routes
+      ---
+      duration_ms: 177.83303
+      type: 'test'
+      ...
+    # Subtest: one second of play is one second of model time with physical distance ratios
+    ok 2 - one second of play is one second of model time with physical distance ratios
+      ---
+      duration_ms: 1059.434166
+      type: 'test'
+      ...
+    # Subtest: three arrivals follow 3.33, 4.44 and 5 seconds, with receivers and no stationary light dots
+    ok 3 - three arrivals follow 3.33, 4.44 and 5 seconds, with receivers and no stationary light dots
+      ---
+      duration_ms: 2689.500933
+      type: 'test'
+      ...
+    # Subtest: starting again after completion clears old arrivals, and keyboard pause/resume keeps one clock
+    ok 4 - starting again after completion clears old arrivals, and keyboard pause/resume keeps one clock
+      ---
+      duration_ms: 1853.718626
+      type: 'test'
+      ...
+    # Subtest: a page-hidden event pauses the shared clock without clearing progress
+    ok 5 - a page-hidden event pauses the shared clock without clearing progress
+      ---
+      duration_ms: 2011.664978
+      type: 'test'
+      ...
+    # Subtest: leaving the section pauses and keeps progress for an explicit resume
+    ok 6 - leaving the section pauses and keeps progress for an explicit resume
+      ---
+      duration_ms: 1797.392782
+      type: 'test'
+      ...
+    # Subtest: seven screen widths retain artwork, readable controls and unclipped times
+    ok 7 - seven screen widths retain artwork, readable controls and unclipped times
+      ---
+      duration_ms: 14507.215618
+      type: 'test'
+      ...
+    # Subtest: image failure disables the desk, leaves the rest of the lesson working, and can retry
+    ok 8 - image failure disables the desk, leaves the rest of the lesson working, and can retry
+      ---
+      duration_ms: 1419.513136
+      type: 'test'
+      ...
+    # Subtest: touch start, pause and continue work with horizontal desk panning
+    ok 9 - touch start, pause and continue work with horizontal desk panning
+      ---
+      duration_ms: 1641.957633
+      type: 'test'
+      ...
+    # Subtest: a real-time run finishes in five seconds without a browser test clock
+    ok 10 - a real-time run finishes in five seconds without a browser test clock
+      ---
+      duration_ms: 5956.943612
+      type: 'test'
+      ...
+    1..10
+ok 15 - 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork
+  ---
+  duration_ms: 35796.063894
+  type: 'test'
+  ...
+# Subtest: million-kilometre model uses the agreed representative speeds and travel times
+ok 16 - million-kilometre model uses the agreed representative speeds and travel times
+  ---
+  duration_ms: 3.020372
+  type: 'test'
+  ...
+# Subtest: a shared physical time gives independent distances and the same endpoint
+ok 17 - a shared physical time gives independent distances and the same endpoint
+  ---
+  duration_ms: 1.554935
+  type: 'test'
+  ...
+# Subtest: 4.3 complete basic lesson works on desktop and mobile
+ok 18 - 4.3 complete basic lesson works on desktop and mobile
+  ---
+  duration_ms: 10038.759708
+  type: 'test'
+  ...
+1..18
+# tests 55
+# suites 0
+# pass 55
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 107164.842938
