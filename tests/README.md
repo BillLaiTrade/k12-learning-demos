@@ -1,5 +1,14 @@
 # 5.1 瀏覽器操作檢查
 
+## 4.5 第一區科學條件與橫向滑軌（2026-11-02）
+
+```sh
+node --test tests/unit-4.5-prism-optics.test.mjs tests/unit-4.5-color-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+新模型6＋既有模型5項；整頁更新為26項（含外層）。核對N-BK7公開折射率、最小偏向解析式、401波長及有限狹縫的兩介面、守恆、固定白幕、14.47／18.05×5mm包絡；瀏覽器檢查實際3D頂點／紙幕尺寸、主圖與近看像素、兩軸同倍率、抓取偏移／移動暫停／定位、鍵盤、觸控取消與中途雙指、七寬度標籤避讓、資料圖與備援。`COLOR_URL`、`COLOR_CAPTURE_DIR`沿用；正式程式不含測試API，測試才攔截兩個立體模組讀取實際器材。前七區及唯一小測的其餘回歸保留。
+
 ## 4.5 光的色散與顏色完整初版（2026-11-02）
 
 ```sh
