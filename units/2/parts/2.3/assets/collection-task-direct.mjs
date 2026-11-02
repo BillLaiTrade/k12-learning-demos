@@ -1,4 +1,4 @@
-import {jarPose,jarMouth,outletPose,clamp} from './collection-task-model.mjs?v=return-water-1';
+import {jarPose,jarMouth,outletPose,clamp} from './collection-task-model.mjs?v=return-water-2';
 export const TOOL_HOME={forceps:{x:485,y:305},water:{x:660,y:130},acid:{x:440,y:65},rig:{x:500,y:50},funnel:{x:535,y:100},plate:{x:605,y:-20},peroxide:{x:680,y:65},catalyst:{x:490,y:450}};
 export function directPosition(s,id){
  if(s.dragging?.id===id)return s.dragging.position;

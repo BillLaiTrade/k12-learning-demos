@@ -1,20 +1,20 @@
 ▶ hands-on collection model: actions, physical consequences and recoverable mistakes
-  ✔ the desk operates immediately and materials can be taken in any order (3.164574ms)
-  ✔ no reaction or water appears before the student uses the actual tools (4.097184ms)
-  ✔ one picked stone leaves the bowl and one placement enters through an open mouth (0.363766ms)
-  ✔ adding a stone to existing acid reacts only once it touches the liquid (0.983235ms)
-  ✔ uncovered inversion loses water, while covered preparation preserves it until underwater (1.983323ms)
-  ✔ a shallow tank cannot preserve water at an uncovered inverted mouth (1.392362ms)
-  ✔ liquid seal depends on actual acid level; low charge leaks through the thistle funnel (0.836553ms)
-  ✔ purging works in air as well as in water; collection waits for the physical tip (4.548209ms)
-  ✔ lifting the stopper opens the source immediately, rather than feeding a detached tube (0.738869ms)
-  ✔ early collection contains original apparatus air and cannot pass (2.637993ms)
-  ✔ partial jar water traps air even when the apparatus was already purged (1.697262ms)
-  ✔ covering waits for withdrawal and completion requires underwater seal, removal and upright bottle (2.278638ms)
-  ✔ uncovered CO2 falls out of a downward mouth; an upright sample mixes much more slowly (1.604575ms)
-  ✔ failed collection can be corrected without restarting the source (3.374043ms)
-  ✔ rigid glass shape never stretches and rubber keeps a fixed arc length (3.439549ms)
-✔ hands-on collection model: actions, physical consequences and recoverable mistakes (40.331313ms)
+  ✔ the desk operates immediately and materials can be taken in any order (2.931733ms)
+  ✔ no reaction or water appears before the student uses the actual tools (0.730097ms)
+  ✔ one picked stone leaves the bowl and one placement enters through an open mouth (0.353521ms)
+  ✔ adding a stone to existing acid reacts only once it touches the liquid (0.728484ms)
+  ✔ uncovered inversion loses water, while covered preparation preserves it until underwater (7.941259ms)
+  ✔ a shallow tank cannot preserve water at an uncovered inverted mouth (0.713372ms)
+  ✔ liquid seal depends on actual acid level; low charge leaks through the thistle funnel (0.77278ms)
+  ✔ purging works in air as well as in water; collection waits for the physical tip (4.003924ms)
+  ✔ lifting the stopper opens the source immediately, rather than feeding a detached tube (0.808061ms)
+  ✔ early collection contains original apparatus air and cannot pass (0.997781ms)
+  ✔ partial jar water traps air even when the apparatus was already purged (0.917363ms)
+  ✔ covering waits for withdrawal and completion requires underwater seal, removal and upright bottle (0.785068ms)
+  ✔ uncovered CO2 falls out of a downward mouth; an upright sample mixes much more slowly (1.930957ms)
+  ✔ failed collection can be corrected without restarting the source (1.610605ms)
+  ✔ rigid glass shape never stretches and rubber keeps a fixed arc length (6.333719ms)
+✔ hands-on collection model: actions, physical consequences and recoverable mistakes (37.706017ms)
 ℹ tests 16
 ℹ suites 0
 ℹ pass 16
@@ -22,4 +22,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 48.398723
+ℹ duration_ms 44.627773

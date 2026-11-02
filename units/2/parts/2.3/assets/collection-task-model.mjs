@@ -140,7 +140,7 @@ export function actDesk(s,action,value){
    if(value==='flask'){
     if(!s.heldMarble){tell(s,'先用鑷子夾取盤中的一塊大理石。');return s;}
     if(s.rig){tell(s,'瓶口已被塞子擋住，先移開塞子與導管。','revise');return s;}
-    move(s,'place-stone',1350,{index:s.flaskMarbles,tilt:s.acid<.01});tell(s,'鑷子從瓶口進入，讓大理石沿瓶內側滑下。');return s;
+    move(s,'place-stone',1350,{index:s.flaskMarbles,tilt:s.acid+s.flaskWater<.01});tell(s,'鑷子從瓶口進入，讓大理石沿瓶內側滑下。');return s;
    }
   }
   if(tool==='rig'&&value==='flask'){

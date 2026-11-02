@@ -1,12 +1,12 @@
 ▶ 2.3 returns, visible forceps and water in the reaction flask
-  ✔ taking or focusing an apparatus leaves no permanent green frame (569.110125ms)
-  ✔ the forceps photograph paints visible pixels before and after selection, and its body stays on the desk (661.355247ms)
-  ✔ each of the twelve shelf items toggles off and on with a single click (1524.303689ms)
-  ✔ water physically pours through the reaction mouth, changes the liquid level, and produces no gas by itself (5564.227796ms)
-  ✔ returning forceps while holding a stone puts the stone back before hiding the tool (1398.949761ms)
-  ✔ returning a collector withdraws the tube before deleting the bottle and clears only that sample (17789.534236ms)
-  ✔ native mobile taps return a covered plate, preserve poured water, and leave the forceps visible (9113.492703ms)
-✔ 2.3 returns, visible forceps and water in the reaction flask (38557.27273ms)
+  ✔ taking or focusing an apparatus leaves no permanent green frame (1489.145968ms)
+  ✔ the forceps photograph paints visible pixels before and after selection, and its body stays on the desk (1188.88679ms)
+  ✔ each of the twelve shelf items toggles off and on with a single click (1979.575491ms)
+  ✔ water physically pours through the reaction mouth, changes the liquid level, and produces no gas by itself (5468.252374ms)
+  ✔ returning forceps while holding a stone puts the stone back before hiding the tool (1054.760208ms)
+  ✔ returning a collector withdraws the tube before deleting the bottle and clears only that sample (15756.68882ms)
+  ✔ native mobile taps return a covered plate, preserve poured water, and leave the forceps visible (9733.803598ms)
+✔ 2.3 returns, visible forceps and water in the reaction flask (40164.040345ms)
 ℹ tests 8
 ℹ suites 0
 ℹ pass 8
@@ -14,4 +14,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 38560.994763
+ℹ duration_ms 40168.186539
