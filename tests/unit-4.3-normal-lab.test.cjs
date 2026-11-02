@@ -117,7 +117,7 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
   let block=true;await failed.route('**/normal-incidence-half-air-bench.png*',route=>block?route.abort():route.continue());
   await failed.goto(base);await failed.waitForFunction(()=>document.querySelector('#normal-lab').dataset.state==='error');
   assert.equal(await failed.locator('#normal-start').isDisabled(),true);assert.equal(await failed.locator('#normal-retry').isVisible(),true);
-  await failed.locator('[data-ray-lab="enter"] .angle-input').fill('45');await failed.locator('[data-ray-lab="enter"] .angle-input').dispatchEvent('input');assert.match(await failed.locator('[data-ray-lab="enter"] .angle-output').innerText(),/45/);
+  await failed.waitForFunction(()=>document.querySelector('#oblique-lab').dataset.state==='idle');await failed.locator('#oblique-angle').fill('45');assert.match(await failed.locator('#oblique-angle-value').innerText(),/45/);
   block=false;await failed.locator('#normal-retry').click();await failed.waitForFunction(()=>document.querySelector('#normal-lab').dataset.state==='idle');assert.equal(await failed.locator('#normal-start').isEnabled(),true);await failed.close();
  });
  await t.test('opening the explanation starts the analogy with normal motion preferences',async()=>{

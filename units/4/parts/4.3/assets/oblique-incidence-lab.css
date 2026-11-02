@@ -1,0 +1,67 @@
+/* Third learning block: fixed water/glass, shared incident angle. */
+#s3 .lesson-body { container-type:inline-size; container-name:oblique-card; }
+#oblique-lab { padding:0; border:0; background:transparent; }
+.oblique-hint { margin:0 0 5px; color:#607366; font-size:.83rem; }
+.oblique-pan-hint { display:none; margin:0 0 6px; color:#64736d; font-size:.76rem; }
+.oblique-viewport { overflow-x:auto; border-radius:14px; overscroll-behavior-x:contain; scrollbar-width:thin; }
+.oblique-table { position:relative; min-width:800px; aspect-ratio:1536 / 760; overflow:hidden; isolation:isolate; }
+#oblique-background { position:absolute; top:-13.157895%; left:0; display:block; width:100%; height:auto; }
+#oblique-scene { position:absolute; inset:0; width:100%; height:100%; }
+#oblique-scene text { font-family:ui-sans-serif,system-ui,"Noto Sans TC",sans-serif; fill:#233d35; font-weight:650; }
+.oblique-normal { fill:none; stroke:#396d52; stroke-width:3; stroke-dasharray:12 9; }
+.oblique-angle-arc { fill:none; stroke:#a95426; stroke-width:3.5; }
+#oblique-scene .oblique-angle-value { fill:#8a421f; font-size:32px; font-variant-numeric:tabular-nums; }
+#oblique-scene .oblique-out-value { fill:#164b36; }
+.oblique-halo { fill:none; stroke:#ffb52e; stroke-width:17; opacity:.8; filter:url(#oblique-glow); }
+.oblique-ray { fill:none; stroke:#ffc741; stroke-width:7; }
+.oblique-core { fill:none; stroke:#fff9d5; stroke-width:2.8; }
+.oblique-beam path { stroke-linecap:butt; stroke-linejoin:miter; }
+.oblique-source { cursor:grab; }
+.oblique-source, .oblique-source * { touch-action:none; }
+.oblique-source:active { cursor:grabbing; }
+.oblique-focus { fill:none; stroke:#347358; stroke-width:4; opacity:0; }
+.oblique-source:focus-visible { outline:none; }
+.oblique-source:focus-visible .oblique-focus, .oblique-source:hover .oblique-focus { opacity:1; }
+.oblique-source[data-lit=true] .oblique-lens { fill:url(#oblique-lit-lens); }
+.oblique-state { position:absolute; right:3%; top:2%; padding:4px 9px; border:1px solid #b6cab3; border-radius:7px; background:#f2f8eaf5; color:#28654f; font-size:.75rem; font-weight:700; pointer-events:none; }
+.oblique-console { display:flex; flex-wrap:wrap; align-items:center; gap:12px 20px; margin:10px 0 12px; }
+.oblique-angle-control { display:flex; flex:1 1 340px; align-items:center; gap:14px; margin:0; color:#274f3b; font-size:.95rem; font-weight:650; }
+.oblique-angle-control > span { white-space:nowrap; }
+#oblique-angle-value { margin-left:6px; font-size:1.2rem; font-weight:750; font-variant-numeric:tabular-nums; }
+.oblique-slider { display:grid; flex:1; min-width:100px; grid-template-columns:1fr 1fr; gap:0; color:#66786a; font-size:.7rem; font-weight:500; }
+.oblique-slider input { grid-column:1 / -1; width:100%; min-height:30px; margin:0; accent-color:#267451; }
+.oblique-slider span:last-child { text-align:right; }
+.oblique-actions { display:flex; gap:10px; }
+.oblique-actions button { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:46px; padding:9px 15px; font-weight:700; }
+.oblique-actions svg { width:18px; height:18px; flex:none; }
+.oblique-actions button:disabled { opacity:.45; cursor:default; }
+#oblique-pause[data-action=pause] .resume-icon, #oblique-pause[data-action=resume] .pause-icon { display:none; }
+.oblique-status { flex:1 1 100%; margin:0; color:#64736d; font-size:.8rem; line-height:1.6; }
+#s3 .oblique-finding { margin:12px 0 14px; padding:10px 14px; border:0; border-left:3px solid #6b9d76; border-radius:0 8px 8px 0; background:#edf5ed; color:#205b43; font-size:1.0625rem; font-weight:600; line-height:1.6; }
+.oblique-explanation { margin-top:18px; border:1px solid #d9e4d9; border-radius:13px; background:linear-gradient(130deg,#fcfdf9,#f6f9f1); }
+.oblique-explanation summary { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:17px 20px; list-style:none; cursor:pointer; color:#284d3d; font-size:1.06rem; font-weight:750; }
+.oblique-explanation summary::-webkit-details-marker { display:none; }
+.oblique-explanation summary::after { content:'＋'; display:grid; place-items:center; width:27px; height:27px; flex:none; border-radius:50%; background:#e5eee0; }
+.oblique-explanation[open] summary { border-bottom:1px solid #e1e9dc; }
+.oblique-explanation[open] summary::after { content:'−'; }
+.oblique-explanation-body { padding:18px 20px; }
+.oblique-explanation-body p:last-child { margin-bottom:0; }
+.oblique-cart-sequence { display:block; width:100%; min-width:640px; height:auto; margin:0; border:1px solid #e1dacb; border-radius:10px; background:#f3efe4; }
+.oblique-cart-viewport { overflow-x:auto; overscroll-behavior-x:contain; margin:0 0 14px; border-radius:10px; }
+.oblique-cart-pan-hint { display:none; margin:0 0 6px; color:#64736d; font-size:.76rem; }
+@container oblique-card (max-width:680px) { .oblique-cart-pan-hint { display:block; } }
+.oblique-model-note { padding-top:12px; border-top:1px solid #e1e9dc; color:#64736d; font-size:.76rem; }
+#oblique-retry[hidden] { display:none; }
+@container oblique-card (max-width:799px) { .oblique-pan-hint { display:block; } }
+@container oblique-card (max-width:650px) {
+ .oblique-angle-control { flex-basis:100%; }
+ .oblique-actions { flex:1 1 100%; display:grid; grid-template-columns:1fr 1fr; }
+ .oblique-status { flex-basis:100%; }
+}
+@media(max-width:700px) {
+ .oblique-console { gap:8px 12px; }
+ .oblique-actions button { font-size:.86rem; padding-inline:8px; }
+ .oblique-angle-control { gap:10px; font-size:.86rem; }
+ .oblique-explanation summary { padding:15px 13px; font-size:.95rem; }
+ .oblique-explanation-body { padding:14px 13px; }
+}

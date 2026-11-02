@@ -27,14 +27,18 @@ test('4.3 complete basic lesson works on desktop and mobile',{timeout:90000},asy
  await page.waitForFunction(()=>document.querySelector('#normal-lab')?.dataset.state==='idle');
  await page.locator('#normal-start').click();await page.clock.runFor(350);const normal=page.locator('#normal-lab');const y=Number(await normal.locator('.normal-lane').first().getAttribute('data-front-y'));assert.ok(y>240&&y<484);await page.locator('#normal-pause').click();const pausedY=Number(await normal.locator('.normal-lane').first().getAttribute('data-front-y'));await page.clock.runFor(1000);assert.equal(Number(await normal.locator('.normal-lane').first().getAttribute('data-front-y')),pausedY);
 
- for(const id of ['enter','leave']){
+ for(const id of ['leave']){
   const lab=page.locator(`[data-ray-lab=${id}]`);await lab.locator('[data-medium=glass]').click();
   const input=lab.locator('.angle-input');await input.fill('35');await input.dispatchEvent('input');
   const out=Number((await lab.locator('.refracted-readout').textContent()).replace('°',''));assert.ok(id==='enter'?out<35:out>35);
   await lab.locator('.source').focus();await page.keyboard.press('ArrowLeft');assert.equal(await input.inputValue(),'34');await page.keyboard.press('Home');assert.equal(await input.inputValue(),'0');assert.equal(await lab.locator('.refracted-readout').textContent(),'0.0°');
  }
- // Pointer movement uses SVG coordinates and changes the real angle control.
- const source=page.locator('[data-ray-lab=enter] .source');await source.scrollIntoViewIfNeeded();const box=await source.boundingBox();await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x-65,box.y+20,{steps:5});await page.mouse.up();assert.ok(Number(await page.locator('[data-ray-lab=enter] .angle-input').inputValue())>0);
+ // The shared angle control now drives two fixed, correctly refracted lanes.
+ await page.waitForFunction(()=>document.querySelector('#oblique-lab')?.dataset.state==='idle');
+ const shared=page.locator('#oblique-angle');await shared.fill('35');
+ const outgoing=await page.locator('.oblique-lane').evaluateAll(es=>es.map(e=>Number(e.dataset.outgoing)));assert.ok(outgoing[1]<outgoing[0]&&outgoing[0]<35);
+ const source=page.locator('.oblique-source').first();await source.focus();await page.keyboard.press('Home');assert.equal(await shared.inputValue(),'0');
+ await source.scrollIntoViewIfNeeded();const box=await source.boundingBox();await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x-65,box.y+20,{steps:5});await page.mouse.up();assert.ok(Number(await shared.inputValue())>0);
  const original=await page.locator('#refract-scene .ray').first().getAttribute('d');await page.locator('#reverse-path').click();assert.match(await page.locator('#reverse-label').textContent(),/B 前往 A/);assert.notEqual(await page.locator('#refract-scene .ray').first().getAttribute('d'),original);await page.locator('#reverse-path').click();assert.equal(await page.locator('#refract-scene .ray').first().getAttribute('d'),original);
  const position=()=>page.locator('#depth-scene circle').evaluateAll(es=>es.slice(0,2).map(e=>[e.getAttribute('cx'),e.getAttribute('cy')]));const initial=await position();await page.locator('#depth-input').fill('100');await page.locator('#depth-input').dispatchEvent('input');const deep=await position();assert.deepEqual(initial[0],deep[0]);assert.notDeepEqual(initial[1],deep[1]);await page.locator('#show-rays').uncheck();assert.equal(await page.locator('#depth-scene .extension').count(),0);await page.locator('#show-rays').check();assert.equal(await page.locator('#depth-scene .extension').count(),2);
  await page.locator('#quiz button[type=submit]').click();assert.match(await page.locator('#quiz-result').textContent(),/未作答/);
