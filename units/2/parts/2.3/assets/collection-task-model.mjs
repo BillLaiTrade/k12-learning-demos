@@ -116,12 +116,12 @@ export function actDesk(s,action,value){
  }
  if(action==='rotate'){
   if(s.outlet==='jar'){tell(s,'先撤出導管，再轉動集氣瓶。','revise');return s;}
-  move(s,'rotate',1100,{from:s.jarAngle,to:s.jarAngle>90?0:180});tell(s,s.jarCovered?'保持玻璃片貼合瓶口，連同集氣瓶一起轉動。':'轉動集氣瓶；注意未遮口的水可能流失。');return s;
+  move(s,'rotate',1100,{from:s.jarAngle,to:s.jarAngle>90?0:180});tell(s,s.jarCovered?'保持玻璃片貼合瓶口，連同集氣瓶一起轉動。':s.co2Volume>0?'未蓋片時轉動集氣瓶，氣體可能流失。':'轉動集氣瓶；注意未遮口的水可能流失。');return s;
  }
  if(action==='relocate'){
   if(s.outlet==='jar'){tell(s,'先撤出導管，再移動集氣瓶。','revise');return s;}
   if(s.jarPlace<.5&&s.jarAngle<179){tell(s,'先倒置集氣瓶，再將瓶口移入水槽。','revise');return s;}
-  move(s,'relocate',1200,{from:s.jarPlace,to:s.jarPlace>.5?0:1});tell(s,s.jarPlace>.5?'將集氣瓶移到桌面，保持玻璃片貼合。':'將倒置的集氣瓶移入水槽。');return s;
+  move(s,'relocate',1200,{from:s.jarPlace,to:s.jarPlace>.5?0:1});tell(s,s.jarPlace>.5?(s.jarCovered?'將集氣瓶移到桌面，保持玻璃片貼合。':'未蓋片取出，瓶口離水後水與氣體會流失。'):'將倒置的集氣瓶移入水槽。');return s;
  }
  if(action==='outlet'){
   if(!s.rig){tell(s,'先把雙孔塞與導管裝在錐形瓶上。');return s;}
@@ -159,7 +159,10 @@ export function advanceDesk(s,ms){
   if(s.motion){s.motion.elapsed=Math.min(s.motion.duration,s.motion.elapsed+dt);applyMotion(s,s.motion);}
   s.spilling=false;
   if(!s.jarCovered&&s.jarAngle>95&&!mouthUnderwater(s)&&s.jarWater>0){s.jarWater=Math.max(0,s.jarWater-dt/850);s.spilling=true;}
-  if(!s.jarCovered&&s.jarAngle<90&&s.co2Volume>0){s.co2Volume=Math.max(0,s.co2Volume-dt/950);s.airVolume=0;s.sampleStarted=false;}
+  if(!s.jarCovered&&!mouthUnderwater(s)&&s.co2Volume>0){
+   // CO2 比空氣密：開口朝下會流失，朝上則保留在下方、較慢與空氣混合。
+   const loss=Math.min(s.co2Volume,dt/(s.jarAngle>95?1000:60000));s.co2Volume-=loss;s.airVolume=clamp(s.airVolume+loss);
+  }
   if(!reacting(s))continue;s.reactionAge+=dt;
   if(!liquidSeal(s))continue;
   const air=s.airRemaining>0;s.airRemaining=Math.max(0,s.airRemaining-dt/2400);
