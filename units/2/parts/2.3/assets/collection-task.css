@@ -15,9 +15,25 @@
 #s6 .desk-context{padding:10px 16px 0}#s6 .desk-focus-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:.85rem}#s6 .desk-object-buttons{display:flex;gap:6px;flex-wrap:wrap}#s6 .desk-object-buttons button{padding:6px 10px}#s6 .desk-object-buttons button[aria-pressed=true]{background:#edf2e5;border-color:#28664d}#s6 .desk-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}#s6 .desk-actions:empty{margin:0}#s6 .desk-actions p{margin:0;font-size:.86rem}
 #s6 .desk-controls{display:flex;flex-wrap:wrap;gap:10px;padding:14px 16px}#s6 .desk-feedback{margin:0;padding:13px 18px;background:#fff2c5;border-top:1px solid #d8bf76;line-height:1.6;font-size:.92rem;min-height:50px}#s6 .desk-feedback[data-kind=correct]{background:#e9f3df;border-color:#699766}#s6 .desk-feedback[data-kind=revise]{background:#fff0d5}
 #s6 .desk-bottom{display:flex;align-items:center;gap:16px;padding:12px 18px}#s6 .desk-bottom p{font-size:.75rem;color:#647b69;margin:0;flex:1;line-height:1.7}#s6 .desk-bottom button{flex-shrink:0}#s6 .desk-mobile-hint{display:none;font-size:.76rem;color:#647b69;margin:5px 14px}
-.desk-drag-ghost{position:fixed;width:110px;height:100px;pointer-events:none;z-index:10000;opacity:.8;filter:drop-shadow(0 3px 5px #283d3733);transform:translate(-50%,-65%)}.desk-drag-ghost svg{width:100%;height:100%}
 @media(max-width:900px){#s6 .desk-materials{grid-template-columns:repeat(4,minmax(0,1fr));padding:16px 12px}#s6 .desk-tools{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:600px){#s6 .desk-heading{padding:12px;gap:8px;font-size:.9rem}#s6 .desk-materials{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding:14px 7px}#s6 .desk-material{padding:3px}#s6 .desk-material span{font-size:.72rem;padding:4px}#s6 .desk-select-bottom{flex-direction:column;align-items:stretch;padding:14px}#s6 .desk-instruction{padding:10px 12px;font-size:.8rem}#s6 .desk-mobile-hint{display:block}#s6 .desk-tool span{font-size:.75rem}#s6 .desk-tools{padding:8px;gap:5px}#s6 .desk-context{padding:10px 12px 0}#s6 .desk-controls{padding:12px;gap:8px}#s6 .desk-feedback{padding:12px;font-size:.85rem}#s6 .desk-bottom{align-items:flex-start;padding:12px;flex-direction:column;gap:10px}}
 @media(prefers-reduced-motion:reduce){#s6 *{scroll-behavior:auto}}
 
 #s6 .desk-observation{font-size:.82rem;line-height:1.6;color:#4f6d60;padding:8px 16px;margin:0;border-top:1px solid #d3dec8;background:#fffdf3}
+/* 桌上器材本身就是拖曳入口；透明命中區隨同一件器材移動。 */
+#s6 .desk-scroll{position:relative}
+#s6 .task-scene [data-desk-drag]{touch-action:none;cursor:grab;outline:none}
+#s6 .task-scene [data-desk-drag]:focus-visible{filter:drop-shadow(0 0 4px #a97710)}
+#s6 .task-scene [data-desk-drag][data-installed=true]{cursor:default}
+#s6 .desk-targets,#s6 .desk-target{pointer-events:none}
+#s6 .desk-target{min-width:0;min-height:0}
+#s6 .desk-target[data-available=true]{background:transparent;border-color:transparent}
+#s6 .desk-target[data-drop=true]{border:3px solid #a97710;background:#ffedc04a}
+#s6 .desk-approach{position:absolute;z-index:3;max-width:250px;margin:0;padding:8px 12px;border:1px solid #a97710;border-radius:8px;background:#fff5d4;color:#4b471f;font-size:.8rem;line-height:1.5;pointer-events:none;box-shadow:0 3px 10px #40381622}
+#s6 .desk-assistance{padding:12px 16px;border-bottom:1px solid #d3dec8;font-size:.86rem}
+#s6 .desk-assistance summary{cursor:pointer;min-height:44px;display:flex;align-items:center}
+#s6 .desk-assistance .desk-context{padding:0}
+#s6 .task-scene{pointer-events:none}
+#s6 .task-scene [data-desk-drag]{pointer-events:all}
+#s6 .task-scene{touch-action:none}
+#s6 .desk-approach{width:max-content;max-width:min(250px,calc(100% - 16px))}

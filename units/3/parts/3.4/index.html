@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="從回聲理解聲波反射、往返測距與聲納，再比較室內反射與吸音處理。"><title>聲波反射與回聲｜波動與聲音</title><link rel="stylesheet" href="assets/lesson-base.css"><link rel="stylesheet" href="assets/echo.css?v=20261031-wide-route"><link rel="stylesheet" href="assets/calculation.css?v=20261101-compact"><link rel="stylesheet" href="assets/sonar.css?v=20261101-dialogue-order"><script type="module" src="assets/echo.mjs?v=cecdc11b68be"></script><link rel="stylesheet" href="assets/room-wave.css?v=037fdc3fb048"><link rel="stylesheet" href="assets/well-quiz.css?v=a4b0acb5d933"></head>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="從回聲理解聲波反射、往返測距與聲納，再比較室內反射與吸音處理。"><title>聲波反射與回聲｜波動與聲音</title><link rel="stylesheet" href="assets/lesson-base.css"><link rel="stylesheet" href="assets/echo.css?v=20261031-wide-route"><link rel="stylesheet" href="assets/calculation.css?v=20261101-compact"><link rel="stylesheet" href="assets/sonar.css?v=20261101-dialogue-order"><script type="module" src="assets/echo.mjs?v=93b1a7cf54a0"></script><link rel="stylesheet" href="assets/room-wave.css?v=037fdc3fb048"><link rel="stylesheet" href="assets/well-quiz.css?v=a4b0acb5d933"></head>
 <body><header class="shell masthead"><div class="brand-row"><a class="brand" href="../../index.html">← 波動與聲音</a><span class="crumb">國二上・理化</span></div><div class="hero"><div><div class="eyebrow">學習內容 3.4｜波動與聲音｜聲波反射與回聲</div><h1>聲音反射後，<br>可以告訴我們什麼？</h1><p>小葵和阿公在實驗桌旁準備好喇叭與反射板。聲音發出後，為什麼會再傳回來？聲音返回的時間能告訴我們什麼資訊？從反射板、海底到房間裡，一起追蹤聲音反射留下的線索。</p></div><figure class="hero-art"><img src="assets/echo-story-opening.webp" width="1672" height="941" fetchpriority="high" alt="小葵與阿公在實驗桌旁聆聽聲音；桌上有喇叭、接收器、計時器、捲尺與反射板，旁邊的水槽船模及吸音材料呼應後續探索。"><figcaption class="hero-caption">從反射板、測距器材到水槽船模，展開聲音的探索。</figcaption></figure></div></header><main class="shell lesson"><div class="lesson-layout"><nav class="route" aria-label="學習路線"><p class="route-label">探索路線</p><div class="route-inner"><a href="#s1"><b>01</b><span>聲音碰到反射板，會怎麼走？</span></a><a href="#s2"><b>02</b><span>牆越遠，返回的聲音就越晚嗎？</span></a><a href="#s3"><b>03</b><span>知道回來的時間，怎麼算牆有多遠？</span></a><a href="#s4"><b>04</b><span>海底看不見，怎麼知道有多深？</span></a><a href="#s5"><b>05</b><span>找找生活中聲音反射的蹤影</span></a><a class="quiz-nav" href="#quiz"><b>✓</b><span>單元小測</span></a></div></nav><div class="cards"><section class="lesson-card" id="s1" aria-labelledby="title-1">
 
   <header class="lesson-head"><div class="lesson-number">01</div><div><h2 id="title-1">聲音碰到反射板，會怎麼走？</h2><p>聲波反射：觀察一次發聲的返回</p></div></header>
   <div class="lesson-body"><div class="card-main">
 
     <p>讓喇叭只發聲一次，觀察聲音遇到反射板後的變化。</p>
-    <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>這塊板子，也會把聲音送回來嗎？</p></div>
-    <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>我們先讓喇叭發出一次短音，留意板子那邊有沒有聲音返回。</p></div>
+    <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>阿公，為什麼有時候只喊一聲，卻又聽到自己的聲音？</p></div>
+    <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>我們可以用喇叭和一塊板子，來說明聲音為什麼會再傳回來。</p></div>
     <div class="reflection-lab" id="reflection" data-phase="ready" data-progress="0" data-stage="ready" data-emissions="0">
       <div class="reflection-scene" id="reflection-scene">
         <img class="reflection-apparatus" src="assets/reflection-apparatus.webp" width="1672" height="941" alt="實驗桌左側的喇叭與接收器朝向右側木製反射板，中間留有聲音傳播的空間。" draggable="false">
@@ -18,7 +18,7 @@
       </div>
       <p class="reflection-reading" id="reflection-reading" role="status">點喇叭，觀察一次發聲如何返回。</p>
       <ol class="reflection-stages" aria-label="聲音傳播的三個階段"><li data-reflection-step="1"><span>1</span>發出短音</li><li data-reflection-step="2"><span>2</span>到達板面</li><li data-reflection-step="3"><span>3</span>反射傳回</li></ol>
-      <div class="reflection-controls"><button class="action" type="button" data-play="reflection"><span aria-hidden="true">▶</span> 發出一次短音</button><button class="secondary" type="button" data-pause="reflection" disabled>暫停</button></div>
+      <div class="reflection-controls"><button class="action" type="button" data-play="reflection"><span aria-hidden="true">▶</span> 發出一次短音</button></div>
       <p class="reflection-error" id="reflection-error" role="alert" hidden></p>
       <p id="reflection-status" class="sr-only" role="status">準備好，點喇叭或按鈕開始。</p>
       <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>喇叭只發聲一次。聲音碰到板面後，一部分反射回來，被接收器收到。</p></div>
@@ -177,7 +177,7 @@
     <p class="model-note">這是多種海底地形的組合示意，並非特定海域；船與探頭放大、橫向距離壓縮。深度約150–2,250公尺，往返約0.2–3秒；垂直深度與時間使用同一比例。深海實際沒有陽光，剖面以可視化方式呈現。固定地形、垂直聲路，距離從船底探頭起算。1,500 m/s 是題給近似值；可聽短音僅提示發射與接收，並非真實水下聲納錄音。</p>
     </details>
   </div></div></section><section class="lesson-card" id="s5" aria-labelledby="title-5">
-<header class="lesson-head"><div class="lesson-number">05</div><div><h2 id="title-5">找找生活中聲音反射的蹤影</h2><p>聲音反射不只用來探測海底，房間裡也會發生。</p></div></header>
+<header class="lesson-head"><div class="lesson-number">05</div><div><h2 id="title-5">找找生活中聲音反射的蹤影</h2><p>室內反射與吸音：比較加入材料前後的變化</p></div></header>
 <div class="lesson-body"><div class="card-main">
 <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>發出的聲音，會怎麼從四周返回呢？</p></div>
 <div class="room-wave-lab room-wave-lab--compact" id="room" role="group" aria-label="先發聲觀察，再試著改變房間" data-phase="ready" data-treated="false" data-emissions="0">
