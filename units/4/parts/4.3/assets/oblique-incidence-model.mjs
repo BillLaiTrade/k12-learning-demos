@@ -1,7 +1,7 @@
 import { materials, refractedAngle } from './optics.mjs';
 
 // One optical plane; the detail view is a crop of these same coordinates.
-export const layout = Object.freeze({width:1254,height:1254,axis:650,boundary:570,end:850,radius:220,zoomX:160,zoomY:120});
+export const layout = Object.freeze({width:1254,height:1254,axis:650,boundary:570,end:850,radius:220,zoomX:120,zoomY:120});
 export const media = Object.freeze(['water','glass']);
 export const airRate = .13; // illustrative units/ms, not a physical clock
 export const boundaryMs = layout.radius/airRate;

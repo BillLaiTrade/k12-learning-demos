@@ -1,4 +1,4 @@
-import { layout, media, clampAngle, geometry, durationMs, snapshot, zoomViewBox } from './oblique-incidence-model.mjs?v=20261102-entry1';
+import { layout, media, clampAngle, geometry, durationMs, snapshot, zoomViewBox } from './oblique-incidence-model.mjs?v=20261102-closeup1';
 
 const root=document.querySelector('#oblique-lab'),$=selector=>root.querySelector(selector);
 const scene=$('#oblique-scene'),zoom=$('#oblique-zoom'),picture=$('#oblique-background');
@@ -34,17 +34,26 @@ scene.innerHTML=`<defs>
    </g>
  </g>`;
 zoom.setAttribute('viewBox',zoomViewBox);
-zoom.innerHTML=`<defs><linearGradient id="oblique-zoom-water" x2="0" y2="1"><stop stop-color="#dcf4ef"/><stop offset="1" stop-color="#c4e9e6"/></linearGradient><linearGradient id="oblique-zoom-glass" x2="1" y2="1"><stop stop-color="#edf3f6"/><stop offset=".5" stop-color="#dbe7ef"/><stop offset=".54" stop-color="#eef5f7"/><stop offset="1" stop-color="#d8e6ec"/></linearGradient></defs>
- <rect x="490" y="450" width="320" height="240" fill="#fffdf6"/>
- <rect id="oblique-zoom-medium-fill" x="490" y="570" width="320" height="120" fill="url(#oblique-zoom-water)"/>
- <path class="oblique-zoom-interface" d="M490 570H810"/>
- <path class="oblique-angle-sector oblique-in-sector"/><path class="oblique-angle-sector oblique-out-sector"/>
+zoom.innerHTML=`<defs>
+ <linearGradient id="oblique-glass-edge"><stop stop-color="#effcf9" stop-opacity=".65"/><stop offset=".04" stop-color="#ffffff" stop-opacity="0"/><stop offset=".96" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#dff5ef" stop-opacity=".65"/></linearGradient>
+ </defs>
+ <image id="oblique-detail-background" x="0" y="0" width="1254" height="1254" href="${picture.src}"/>
+ <rect class="oblique-detail-wash" x="530" y="450" width="240" height="240" fill="#fffdf6" fill-opacity=".08"/>
+ <rect x="530.5" y="450.5" width="239" height="239" rx="2" fill="url(#oblique-glass-edge)" stroke="#e8f7ef" stroke-opacity=".6" stroke-width="1"/>
+ <path class="oblique-zoom-interface" d="M530 570H770"/>
+ <g class="oblique-angle-marks" visibility="hidden">
+  <path class="oblique-sector-base oblique-in-base"/><path class="oblique-sector-base oblique-out-base"/>
+  <path class="oblique-angle-sector oblique-in-sector"/><path class="oblique-angle-sector oblique-out-sector"/>
+ </g>
+ <path class="oblique-normal-underlay" d="M650 450V690"/>
  <path class="oblique-normal" d="M650 450V690"/>
- <path class="oblique-angle-arc oblique-in-arc"/><path class="oblique-angle-arc oblique-out-arc"/>
+ <g class="oblique-angle-marks" visibility="hidden"><path class="oblique-angle-arc oblique-in-arc"/><path class="oblique-angle-arc oblique-out-arc"/></g>
  ${beam()}
  <g class="oblique-zoom-labels">
-  <text class="oblique-normal-name" x="662" y="476">法線</text><text x="755" y="476" text-anchor="middle">空氣</text><text id="oblique-zoom-medium" x="507" y="665">水</text>
-  <g><rect x="498" y="552" width="52" height="26" rx="5" fill="#fffdf6" stroke="#b8cfc5"/><text x="524" y="570" text-anchor="middle">介面</text></g>
+  <g><rect x="657" y="458" width="43" height="24" rx="4"/><text class="oblique-normal-name" x="662" y="475">法線</text></g>
+  <g><rect x="719" y="458" width="43" height="24" rx="4"/><text x="740" y="475" text-anchor="middle">空氣</text></g>
+  <g><rect x="539" y="645" width="48" height="25" rx="4"/><text id="oblique-zoom-medium" x="546" y="663">水</text></g>
+  <g><rect x="534" y="552" width="48" height="25" rx="4"/><text x="558" y="570" text-anchor="middle">介面</text></g>
  </g>`;
 const source=scene.querySelector('.oblique-source'),views=[scene,zoom].map(svg=>({svg,beam:svg.querySelector('.oblique-beam'),paths:[...svg.querySelectorAll('.oblique-beam path')]}));
 const photos=new Map();
@@ -68,18 +77,19 @@ function drawGeometry(){
  const hit=source.querySelector('rect');const hitWidth=Math.max(96,44/(ratio*sourceScale));hit.setAttribute('x',String(-hitWidth/2));hit.setAttribute('width',String(hitWidth));
  scene.querySelector('#oblique-case-label').setAttribute('transform',`translate(650 155) scale(${fontScale})`);scene.querySelector('#oblique-case-name').textContent=`空氣 → ${name()}`;
  scene.querySelector('#oblique-air-label').setAttribute('transform',`translate(${1030-110*fontScale} 440) scale(${fontScale})`);scene.querySelector('#oblique-material-label').setAttribute('transform',`translate(230 740) scale(${fontScale})`);scene.querySelector('#oblique-material-label text').textContent=name();
- zoom.querySelector('.oblique-in-sector').setAttribute('d',sector(angle,true));zoom.querySelector('.oblique-out-sector').setAttribute('d',sector(g.outgoing,false));zoom.querySelector('.oblique-in-arc').setAttribute('d',arc(angle,true));zoom.querySelector('.oblique-out-arc').setAttribute('d',arc(g.outgoing,false));$('#oblique-in-value').value=`${angle}°`;$('#oblique-out-value').value=`${g.outgoing.toFixed(1)}°`;zoom.querySelector('#oblique-zoom-medium').textContent=name();zoom.querySelector('#oblique-zoom-medium-fill').setAttribute('fill',`url(#oblique-zoom-${medium})`);
- zoom.style.setProperty('--zoom-font-scale',String(Math.max(1,320/Math.max(200,zoom.getBoundingClientRect().width))));
+ for(const kind of ['sector','base']){zoom.querySelector(`.oblique-in-${kind}`).setAttribute('d',sector(angle,true));zoom.querySelector(`.oblique-out-${kind}`).setAttribute('d',sector(g.outgoing,false));}zoom.querySelector('.oblique-in-arc').setAttribute('d',arc(angle,true));zoom.querySelector('.oblique-out-arc').setAttribute('d',arc(g.outgoing,false));$('#oblique-in-value').value=`${angle}°`;$('#oblique-out-value').value=`${g.outgoing.toFixed(1)}°`;zoom.querySelector('#oblique-zoom-medium').textContent=name();
+ zoom.style.setProperty('--zoom-font-scale',String(Math.max(1,240/Math.max(200,zoom.getBoundingClientRect().width))));
  const description=`空氣射入${name()}，入射角${angle}度，折射角${g.outgoing.toFixed(1)}度。法線通過入射點；角度皆從法線量起。`;
  scene.setAttribute('aria-label',`${description}點燈發射，拖曳可調角度。`);zoom.setAttribute('aria-label',`同一入射點的放大畫面。${description}`);
  $('#oblique-finding-text').textContent=angle===0?'垂直入射 → 方向不偏折':`斜射入${name()} → 折射光偏向法線`;
  $('#oblique-angle-comparison').textContent=angle===0?' = ':' < ';
- $('#oblique-zoom-note').textContent=angle===0?'光路與法線重合，兩個角度都是0°。':'有色扇形表示光線與法線之間的角度。';
+ $('#oblique-zoom-note').textContent=angle===0?'光路與法線重合，兩個角度都是0°。':'角度皆從法線量起';
  const hero=$('.oblique-experiment').getBoundingClientRect(),from=new DOMPoint(layout.axis+38,layout.boundary).matrixTransform(scene.getScreenCTM()),to=new DOMPoint(layout.axis-layout.zoomX,layout.boundary).matrixTransform(zoom.getScreenCTM());
  $('#oblique-link').setAttribute('viewBox',`0 0 ${hero.width} ${hero.height}`);$('#oblique-link path').setAttribute('d',`M${from.x-hero.x} ${from.y-hero.y}L${to.x-hero.x} ${to.y-hero.y}`);
 }
 function render(){
  const g=snapshot(medium,angle,elapsed),lit=elapsed>0,path=`M${g.source.join(' ')} ${g.entered?`L${g.hit.join(' ')} `:''}L${g.front.join(' ')}`;
+ zoom.querySelectorAll('.oblique-angle-marks').forEach(group=>group.setAttribute('visibility',g.entered?'visible':'hidden'));
  root.dataset.elapsedMs=String(elapsed);root.dataset.entered=String(g.entered);root.dataset.arrived=String(g.arrived);source.dataset.lit=String(lit);
  views.forEach(view=>{view.paths.forEach(p=>p.setAttribute('d',path));view.beam.setAttribute('visibility',lit?'visible':'hidden');view.svg.dataset.frontX=String(g.front[0]);view.svg.dataset.frontY=String(g.front[1]);view.svg.dataset.hitX=String(g.hit[0]);view.svg.dataset.hitY=String(g.hit[1]);});
 }
@@ -133,7 +143,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){freeze();d
 if('IntersectionObserver' in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting){freeze();drag=null;}},{threshold:0}).observe($('.oblique-experiment'));
 async function prepare(target,reload=false){
  const id=++loadId;restoreLight=state==='loading'?restoreLight:elapsed>0;requestedMedium=target;stop();drag=null;elapsed=0;state='loading';render();controls();retry.hidden=true;
- try{const img=photo(target,reload);await img.decode();if(id!==loadId)return;medium=target;picture.src=img.src;picture.alt=`寫實木桌上的單槽光路剖面：上方空氣，下方為${name()}。`;elapsed=restoreLight?durationMs(medium,angle):0;state=restoreLight?'preview':'idle';drawGeometry();render();controls();}
+ try{const img=photo(target,reload);await img.decode();if(id!==loadId)return;medium=target;picture.src=img.src;zoom.querySelector('#oblique-detail-background').setAttribute('href',img.src);picture.alt=`寫實木桌上的單槽光路剖面：上方空氣，下方為${name()}。`;elapsed=restoreLight?durationMs(medium,angle):0;state=restoreLight?'preview':'idle';drawGeometry();render();controls();}
  catch{if(id!==loadId)return;state='error';controls();retry.hidden=false;}
 }
 buttons.forEach(button=>button.onclick=()=>{if(button.dataset.obliqueMedium!==requestedMedium||state==='error')prepare(button.dataset.obliqueMedium);});
