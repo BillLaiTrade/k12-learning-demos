@@ -1,7 +1,8 @@
-import { layout, media, clampAngle, geometry, durationMs, snapshot, zoomViewBox } from './oblique-incidence-model.mjs?v=20261102-closeup1';
+import { layout, media, clampAngle, geometry, durationMs, snapshot, zoomViewBox } from './oblique-incidence-model.mjs?v=20261102-center1';
 
 const root=document.querySelector('#oblique-lab'),$=selector=>root.querySelector(selector);
 const scene=$('#oblique-scene'),zoom=$('#oblique-zoom'),picture=$('#oblique-background');
+const detail=$('#oblique-detail'),magnify=$('#oblique-magnify'),closeDetail=$('#oblique-close'),viewport=$('#oblique-viewport');
 const input=$('#oblique-angle'),output=$('#oblique-angle-value'),start=$('#oblique-start'),pause=$('#oblique-pause'),retry=$('#oblique-retry');
 const status=$('#oblique-status'),badge=$('#oblique-state'),buttons=[...root.querySelectorAll('[data-oblique-medium]')];
 let medium='water',requestedMedium='water',angle=45,elapsed=0,state='loading',frame=0,startTime=0,drag=null,loadId=0,restoreLight=false;
@@ -23,9 +24,6 @@ scene.innerHTML=`<defs>
   <path class="oblique-normal" d="M${layout.axis} 270V885"/>
   ${label('oblique-air-label',920,450,'空氣')}${label('oblique-material-label',230,740,'水')}
   ${beam()}
-  <path class="oblique-connector" d="M${layout.axis+38} ${layout.boundary}L1254 450"/>
-  <rect class="oblique-target-underlay" x="${layout.axis-38}" y="${layout.boundary-38}" width="76" height="76" rx="5"/>
-  <rect class="oblique-target" x="${layout.axis-38}" y="${layout.boundary-38}" width="76" height="76" rx="5"/>
    <g class="oblique-source" tabindex="0" role="slider" aria-label="${medium==='water'?'水':'玻璃'}組光源，點擊或按Enter發射，拖曳或方向鍵調角度" aria-keyshortcuts="Enter Space" aria-valuemin="0" aria-valuemax="60" aria-valuenow="45" aria-valuetext="45度" data-lit="false">
     <title>點燈發射；拖曳調角度</title>
     <rect x="-48" y="-100" width="96" height="140" fill="transparent"/>
@@ -59,9 +57,9 @@ zoom.innerHTML=`<defs>
  <g class="oblique-angle-marks" visibility="hidden"><path class="oblique-angle-arc oblique-in-arc"/><path class="oblique-angle-arc oblique-out-arc"/></g>
  ${beam()}
  <g class="oblique-zoom-labels">
-  <g><rect x="657" y="458" width="43" height="24" rx="4"/><text class="oblique-normal-name" x="662" y="475">法線</text></g>
-  <g><rect x="719" y="458" width="43" height="24" rx="4"/><text x="740" y="475" text-anchor="middle">空氣</text></g>
-  <g><rect x="539" y="645" width="48" height="25" rx="4"/><text id="oblique-zoom-medium" x="546" y="663">水</text></g>
+  <g><rect x="657" y="458" width="43" height="24" rx="4"/><text class="oblique-normal-name" x="662" y="500">法線</text></g>
+  <g><rect x="719" y="458" width="43" height="24" rx="4"/><text x="740" y="500" text-anchor="middle">空氣</text></g>
+  <g><rect x="539" y="645" width="48" height="25" rx="4"/><text id="oblique-zoom-medium" x="546" y="648">水</text></g>
   <g><rect x="534" y="552" width="48" height="25" rx="4"/><text x="558" y="570" text-anchor="middle">介面</text></g>
  </g>`;
 const source=scene.querySelector('.oblique-source'),views=[scene,zoom].map(svg=>({svg,beam:svg.querySelector('.oblique-beam'),paths:[...svg.querySelectorAll('.oblique-beam path')]}));
@@ -86,17 +84,33 @@ function drawGeometry(){
  const hit=source.querySelector('rect');const hitWidth=Math.max(96,44/(ratio*sourceScale));hit.setAttribute('x',String(-hitWidth/2));hit.setAttribute('width',String(hitWidth));
  scene.querySelector('#oblique-case-label').setAttribute('transform',`translate(650 155) scale(${fontScale})`);scene.querySelector('#oblique-case-name').textContent=`空氣 → ${name()}`;
  scene.querySelector('#oblique-air-label').setAttribute('transform',`translate(${1030-110*fontScale} 440) scale(${fontScale})`);scene.querySelector('#oblique-material-label').setAttribute('transform',`translate(230 740) scale(${fontScale})`);scene.querySelector('#oblique-material-label text').textContent=name();
- for(const kind of ['sector','base']){zoom.querySelector(`.oblique-in-${kind}`).setAttribute('d',sector(angle,true));zoom.querySelector(`.oblique-out-${kind}`).setAttribute('d',sector(g.outgoing,false));}zoom.querySelector('.oblique-in-arc').setAttribute('d',arc(angle,true));zoom.querySelector('.oblique-out-arc').setAttribute('d',arc(g.outgoing,false));$('#oblique-in-value').value=`${angle}°`;$('#oblique-out-value').value=`${g.outgoing.toFixed(1)}°`;zoom.querySelector('#oblique-zoom-medium').textContent=name();
- zoom.style.setProperty('--zoom-font-scale',String(Math.max(1,14*240/(11*Math.max(200,zoom.getBoundingClientRect().width)))));
- for(const group of zoom.querySelectorAll('.oblique-zoom-labels > g')){const box=group.querySelector('text').getBBox(),plate=group.querySelector('rect');for(const [key,value] of Object.entries({x:box.x-4,y:box.y-3,width:box.width+8,height:box.height+6}))plate.setAttribute(key,String(value));}
+ for(const kind of ['sector','base']){zoom.querySelector(`.oblique-in-${kind}`).setAttribute('d',sector(angle,true));zoom.querySelector(`.oblique-out-${kind}`).setAttribute('d',sector(g.outgoing,false));}zoom.querySelector('.oblique-in-arc').setAttribute('d',arc(angle,true));zoom.querySelector('.oblique-out-arc').setAttribute('d',arc(g.outgoing,false));$('#oblique-in-value').value=$('#oblique-detail-in-value').value=`${angle}°`;$('#oblique-out-value').value=$('#oblique-detail-out-value').value=`${g.outgoing.toFixed(1)}°`;zoom.querySelector('#oblique-zoom-medium').textContent=name();
+ zoom.style.setProperty('--zoom-font-scale',String(Math.max(1,14*240/(11*Math.max(80,zoom.getBoundingClientRect().width||200)))));
+ for(const group of detail.hidden?[]:zoom.querySelectorAll('.oblique-zoom-labels > g')){const box=group.querySelector('text').getBBox(),plate=group.querySelector('rect');for(const [key,value] of Object.entries({x:box.x-4,y:box.y-3,width:box.width+8,height:box.height+6}))plate.setAttribute(key,String(value));}
  const description=`空氣射入${name()}，入射角${angle}度，折射角${g.outgoing.toFixed(1)}度。法線通過入射點；角度皆從法線量起。`;
  scene.setAttribute('aria-label',`${description}點燈發射，拖曳可調角度。`);zoom.setAttribute('aria-label',`同一入射點的放大畫面。${description}`);
  $('#oblique-finding-text').textContent=angle===0?'垂直入射 → 方向不偏折':`斜射入${name()} → 折射光偏向法線`;
  $('#oblique-angle-comparison').textContent=angle===0?' = ':' < ';
  $('#oblique-zoom-note').textContent=angle===0?'光路與法線重合，兩個角度都是0°。':'角度皆從法線量起';
- const hero=$('.oblique-experiment').getBoundingClientRect(),from=new DOMPoint(layout.axis+38,layout.boundary).matrixTransform(scene.getScreenCTM()),to=new DOMPoint(layout.axis-layout.zoomX,layout.boundary).matrixTransform(zoom.getScreenCTM());
- $('#oblique-link').setAttribute('viewBox',`0 0 ${hero.width} ${hero.height}`);$('#oblique-link path').setAttribute('d',`M${from.x-hero.x} ${from.y-hero.y}L${to.x-hero.x} ${to.y-hero.y}`);
+ positionDetail();
 }
+// Align the optical entry point itself, including the panel header/readouts.
+function positionDetail(){
+ const table=viewport.getBoundingClientRect(),hit=new DOMPoint(layout.axis,layout.boundary).matrixTransform(scene.getScreenCTM()),x=hit.x-table.x,y=hit.y-table.y;
+ magnify.style.left=`${x}px`;magnify.style.top=`${y}px`;viewport.style.setProperty('--oblique-entry-x',`${x}px`);viewport.style.setProperty('--oblique-entry-y',`${y}px`);
+ if(detail.hidden)return;
+ detail.style.left=`${x-detail.offsetWidth/2}px`;
+ const panel=detail.getBoundingClientRect(),crop=zoom.getBoundingClientRect();
+ detail.style.top=`${y-(crop.top-panel.top)-crop.height/2}px`;
+}
+function setDetailOpen(open){
+ if(open&&magnify.disabled)return;
+ detail.hidden=!open;root.dataset.detailOpen=String(open);magnify.setAttribute('aria-expanded',String(open));magnify.tabIndex=open?-1:0;magnify.setAttribute('aria-hidden',String(open));
+ drawGeometry();render();
+ (open?closeDetail:magnify.disabled?buttons.find(button=>button.dataset.obliqueMedium===requestedMedium):magnify).focus({preventScroll:true});
+}
+magnify.onclick=()=>setDetailOpen(true);closeDetail.onclick=()=>setDetailOpen(false);
+root.addEventListener('keydown',event=>{if(event.key==='Escape'&&!detail.hidden){event.preventDefault();setDetailOpen(false);}});
 function render(){
  const g=snapshot(medium,angle,elapsed),lit=elapsed>0,path=`M${g.source.join(' ')} ${g.entered?`L${g.hit.join(' ')} `:''}L${g.front.join(' ')}`;
  zoom.querySelectorAll('.oblique-angle-marks').forEach(group=>group.setAttribute('visibility',g.entered?'visible':'hidden'));
@@ -104,7 +118,7 @@ function render(){
  views.forEach(view=>{view.paths.forEach(p=>p.setAttribute('d',path));view.beam.setAttribute('visibility',lit?'visible':'hidden');view.svg.dataset.frontX=String(g.front[0]);view.svg.dataset.frontY=String(g.front[1]);view.svg.dataset.hitX=String(g.hit[0]);view.svg.dataset.hitY=String(g.hit[1]);});
 }
 function controls(){
- root.dataset.state=state;start.disabled=['loading','error'].includes(state);pause.disabled=!['running','paused'].includes(state);input.disabled=start.disabled;
+ root.dataset.state=state;root.setAttribute('aria-busy',String(state==='loading'));start.disabled=['loading','error'].includes(state);pause.disabled=!['running','paused'].includes(state);input.disabled=start.disabled;magnify.disabled=start.disabled;
  buttons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.obliqueMedium===requestedMedium)));
  source.setAttribute('aria-disabled',String(start.disabled));source.setAttribute('tabindex',start.disabled?'-1':'0');start.classList.toggle('primary',!start.disabled&&state!=='running');pause.classList.toggle('primary',['running','paused'].includes(state));pause.dataset.action=state==='paused'?'resume':'pause';pause.querySelector('span').textContent=state==='paused'?'繼續觀察':'暫停觀察';
  badge.textContent={loading:'準備場景',error:'場景未就緒',idle:'準備發射',running:'光束穿越中',paused:'已暫停觀察',preview:'光路預覽',complete:'光路已展開'}[state];
@@ -158,5 +172,5 @@ async function prepare(target,reload=false){
 }
 buttons.forEach(button=>button.onclick=()=>{if(button.dataset.obliqueMedium!==requestedMedium||state==='error')prepare(button.dataset.obliqueMedium);});
 retry.onclick=()=>prepare(requestedMedium,true);
-new ResizeObserver(()=>{drawGeometry();render();}).observe($('.oblique-experiment'));
+const resize=new ResizeObserver(()=>{drawGeometry();render();});resize.observe(viewport);resize.observe(zoom);
 drawGeometry();render();controls();prepare('water');

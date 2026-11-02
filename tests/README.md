@@ -1,5 +1,14 @@
 # 5.1 瀏覽器操作檢查
 
+## 4.5 光的色散與顏色完整初版（2026-11-02）
+
+```sh
+node --test tests/unit-4.5-color-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+純模型檢查連續可見光的兩介面折射、白幕落點、單色比較、線性RGB疊加、所有照明／材料組合守恆及遮擋只改入眼光。瀏覽器檢查七區與唯一小測、實際3D抓取、畫面像素／參照一致、單變因、狀態獨立、鍵盤、手機觸控、七種寬度、備援及靜態閱讀。`COLOR_URL`指定公開頁，`COLOR_CAPTURE_DIR`另存畫面與layout.json，避免覆寫本機證據。正式程式無測試API，測試才攔截模組觀察真實器材投影座標。
+
 ## 3.3 單元小測三區操作
 
 ```sh
@@ -1031,3 +1040,7 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4.test.cjs
 執行 `node tests/unit-2.3-direct-model.test.mjs` 與 `node tests/unit-2.3-direct.test.cjs`：新增模型8、瀏覽器12項（含主項）。瀏覽器使用畫面內實際器材，完整桌機與原生手機觸控集氣／封存，另核對持續使用、220ms停靠、空白／路過／取消、錯誤恢復、手機工具可見、邊緣捲動與接近提示、七寬度及鍵盤輔助。`COLLECTION_TASK_URL`指定公開頁，`DIRECT_ARTIFACT_DIR`保存畫面及版面資料。
 
 回歸沿用 `unit-2.3-report.test.cjs`（16模型）、`unit-2.3-collection-task.test.cjs`（15）、`unit-2.3-full.test.cjs`（9）、`unit-2.3-properties.test.cjs`（14）、`unit-2.3-thistle.test.cjs`（5）；本輪本機合計79項。直接用 `node` 執行各檔以保留巢狀項目輸出；公開另跑五組瀏覽器55項。整頁截圖請以 `AIR_FULL_ARTIFACT_DIR`指定輸出目錄，避免更新歷史檢視素材。第1至5區HTML雜湊及實際畫面見 `docs/reviews/unit-2.3-direct-20261102/`。
+
+### 3.4 第一區移除暫停按鈕（2026-11-02）
+
+第一區保留圖上喇叭與「發出一次短音」兩入口，皆從頭發聲；移除獨立暫停按鈕。第一區14項與導覽13項改驗跨區／背景自動中斷、凍結、舊回聲取消及明確重新發聲；其餘區仍測既有暫停／續播。整課10項的手機案例改驗跨區停止。`REFLECTION_URL`可指定公開頁重跑第一區，`NAVIGATION_URL`指定公開導覽；不將按鈕移除誤當成取消背景／跨區音訊互斥。
