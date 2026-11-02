@@ -6,7 +6,7 @@
 CHROMIUM_PATH=/usr/bin/chromium GUITAR_CAPTURE_DIR=/tmp/unit33-guitar-dialogue node --test --test-concurrency=1 tests/unit-3.3-guitar.test.cjs tests/unit-3.3.test.cjs
 ```
 
-吉他12項、整頁11項，共23項（含外層）。補驗核可的兩段開場對話與先後位置，在切換長短／鬆緊、修改數值及重設後都保持，模式結語仍正確更新；原撥弦、幾何、音高、播放取消、七種寬度與手機觸控檢查維持。`SOUND33_BASE_URL`可指定公開頁，另設`GUITAR_CAPTURE_DIR`保存公開畫面，避免覆寫既有證據。
+吉他12項、整頁11項，共23項（含外層）。補驗核可的兩段開場對話與先後位置，以及下方由小葵整理的共同發現，在切換長短／鬆緊、修改數值及重設後都保持，發現的角色名稱與樣式為小葵；原撥弦、幾何、音高、播放取消、七種寬度與手機觸控檢查維持。`SOUND33_BASE_URL`可指定公開頁，另設`GUITAR_CAPTURE_DIR`保存公開畫面，避免覆寫既有證據。
 
 ## 3.3 第一區緊湊比較紀錄
 
