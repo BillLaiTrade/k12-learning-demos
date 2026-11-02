@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 3.3 單元小測三區操作
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium MATCH_CAPTURE_DIR=/tmp/unit33-three-steps DECIBEL_CAPTURE_DIR=/tmp/unit33-three-steps-page node --test --test-concurrency=1 tests/unit-3.3-sound-match.test.cjs tests/unit-3.3.test.cjs
+```
+
+小測專項與整頁檢查：三區順序與間距、完成按鈕位於說明下方且與試聽靠左對齊、提交仍屬原表單，答對／答錯回饋在第三區，八種寬度無溢出。取代舊的單一視窗高度限制，保留原聲音／波形一致、配對、結果保留、重試、換題、鍵盤及手機觸控檢查。`SOUND33_BASE_URL`可指定公開頁，截圖請存至獨立目錄。
+
 ## 3.3 第四區操作精簡
 
 ```sh
