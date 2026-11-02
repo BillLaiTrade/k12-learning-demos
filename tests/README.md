@@ -14,7 +14,7 @@ CHROMIUM_PATH=/usr/bin/chromium FORK_CAPTURE_DIR=/tmp/unit33-compact-records nod
 CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.2.test.cjs
 ```
 
-既有6項（含外層）增加場景等比例放大、背景／互動SVG對齊及裁切框核對；原有實際畫面點擊、自由端形變、按住停止、鍵盤、自然衰減、手機觸控與離開停止檢查維持。可搭配tests/unit-3.2-playback.test.cjs共14項檢查跨區互停。
+既有6項（含外層）增加場景等比例放大、背景／互動SVG對齊及裁切框核對；桌夾修訂另掃描透明素材的可見邊界，確認完整夾具留在框內、點夾具不發聲、靠近固定端的尺面不受透明邊界阻擋。原有實際畫面點擊、自由端形變、按住停止、鍵盤、自然衰減、手機觸控與離開停止檢查維持。可搭配tests/unit-3.2-playback.test.cjs共14項檢查跨區互停。
 
 ## 3.2 第16項：比較區未載入備援
 

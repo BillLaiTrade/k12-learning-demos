@@ -1,0 +1,184 @@
+[
+  {
+    "width": 1440,
+    "labels": [
+      {
+        "medium": "water",
+        "x": 707,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      },
+      {
+        "medium": "glass",
+        "x": 1123,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      }
+    ],
+    "overflow": false
+  },
+  {
+    "width": 1366,
+    "labels": [
+      {
+        "medium": "water",
+        "x": 707,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      },
+      {
+        "medium": "glass",
+        "x": 1123,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      }
+    ],
+    "overflow": false
+  },
+  {
+    "width": 1024,
+    "labels": [
+      {
+        "medium": "water",
+        "x": 707,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      },
+      {
+        "medium": "glass",
+        "x": 1123,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      }
+    ],
+    "overflow": false
+  },
+  {
+    "width": 820,
+    "labels": [
+      {
+        "medium": "water",
+        "x": 707,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      },
+      {
+        "medium": "glass",
+        "x": 1123,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      }
+    ],
+    "overflow": false
+  },
+  {
+    "width": 760,
+    "labels": [
+      {
+        "medium": "water",
+        "x": 707,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      },
+      {
+        "medium": "glass",
+        "x": 1123,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      }
+    ],
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "labels": [
+      {
+        "medium": "water",
+        "x": 707,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      },
+      {
+        "medium": "glass",
+        "x": 1123,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      }
+    ],
+    "overflow": false
+  },
+  {
+    "width": 320,
+    "labels": [
+      {
+        "medium": "water",
+        "x": 707,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      },
+      {
+        "medium": "glass",
+        "x": 1123,
+        "y": 934,
+        "bottom": 988,
+        "axisAligned": true,
+        "belowTable": true,
+        "belowArrival": true,
+        "inside": true
+      }
+    ],
+    "overflow": false
+  }
+]

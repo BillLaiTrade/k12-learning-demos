@@ -12,7 +12,7 @@ scene.innerHTML=`<defs><filter id="normal-glow" filterUnits="userSpaceOnUse" x="
 ${media.map((medium,i)=>{
  const x=layout.axes[i], inAir=medium==='air';
  return `<g class="normal-lane" data-medium="${medium}">
- ${inAir?'':`<path class="normal-interface" d="M${x-151} ${layout.boundary}H${x+151}"/>${tag(x-226,layout.boundary+10,'介面',90)}<path class="normal-reference" d="M${x} 266V815"/><text x="${x}" y="847" text-anchor="middle" font-size="27">法線</text>`}
+ ${inAir?'':`<path class="normal-interface" d="M${x-151} ${layout.boundary}H${x+151}"/>${tag(x-226,layout.boundary+10,'介面',90)}<path class="normal-reference" d="M${x} 266V925"/><g class="normal-reference-label"><rect x="${x-61}" y="934" width="122" height="54" rx="12" fill="#fffef7" stroke="#aac2a9" stroke-width="2"/><text x="${x}" y="971" text-anchor="middle" font-size="30">法線</text></g>`}
  ${tag(x-137,inAir?424:380,'空氣',100)}
  ${inAir?'':tag(x-137,590,medium==='water'?'水':'玻璃',medium==='water'?80:100)}
  <g class="normal-beam" visibility="hidden">${['normal-halo','normal-ray','normal-core'].map(cls=>`<line class="${cls}" x1="${x}" y1="${layout.source}" x2="${x}" y2="${layout.source}"/>`).join('')}</g>
