@@ -40,7 +40,7 @@ zoom.innerHTML=`<defs>
  <mask id="oblique-medium-reflection-mask" maskUnits="userSpaceOnUse" x="530" y="570" width="240" height="38"><rect x="530" y="570" width="240" height="38" fill="url(#oblique-surface-medium)"/></mask>
  </defs>
  <image id="oblique-detail-background" x="0" y="0" width="1254" height="1254" href="${picture.src}"/>
- <rect class="oblique-detail-wash" x="530" y="450" width="240" height="240" fill="#fffdf6" fill-opacity=".08"/>
+ <rect class="oblique-detail-wash" x="530" y="450" width="240" height="240" fill="#fffdf6" fill-opacity=".16"/>
  <rect x="530.5" y="450.5" width="239" height="239" rx="2" fill="url(#oblique-glass-edge)" stroke="#e8f7ef" stroke-opacity=".6" stroke-width="1"/>
  <g class="oblique-surface-softening" aria-hidden="true">
   <g mask="url(#oblique-air-reflection-mask)"><svg x="530" y="546" width="240" height="24" viewBox="530 520 240 24"><use href="#oblique-detail-background"/></svg></g>
