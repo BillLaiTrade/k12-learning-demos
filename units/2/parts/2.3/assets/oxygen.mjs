@@ -1,8 +1,8 @@
 import { createExperimentPlayerFooter } from './experiment-player.mjs?v=player-1';
 import { createSceneCaptions } from './oxygen-captions.mjs?v=player-1';
 import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=thistle-1';
-import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=thistle-1';
-import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=thistle-1';
+import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=thistle-2';
+import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=thistle-2';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];

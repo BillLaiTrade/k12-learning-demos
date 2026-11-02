@@ -181,10 +181,11 @@ export function createSetupScene(view,panels) {
       const [left,right]=liquidSpan(level);
       flaskSurface.setAttribute('cx',(left+right)/2);flaskSurface.setAttribute('rx',(right-left)/2);flaskSurface.setAttribute('cy',level);flaskSurface.setAttribute('opacity',chemical.peroxide?1:0);
       powder.setAttribute('opacity',chemical.catalyst);powder.setAttribute('transform',`translate(310 790) scale(1 ${chemical.catalyst}) translate(-310 -790)`);
-      const capX=250+91*chemical.sealed,capY=350-15*chemical.sealed-75*Math.sin(Math.PI*chemical.sealed);
+      const seal=chemical.sealed,lift=ease(seal/.4),across=ease((seal-.4)/.4),lower=ease((seal-.8)/.2);
+      // The inlet clears the mouth before crossing above it, then lowers vertically.
+      const capX=mix(250,341,across),capY=mix(mix(350,100,lift),335,lower);
       const tipX=stage<5?800:800+235*frame.tube;
       positionPipe(capX,capY,tipX);
-      const seal=chemical.sealed;const lift=ease(seal/.4),across=ease((seal-.4)/.4),lower=ease((seal-.8)/.2);
       const fp={x:mix(800,315,across),y:mix(mix(825,-170,lift),335,lower),angle:90*(1-lift)};
       funnel.render(fp,!!chemical.liquidFlow);operationView.closest('.oxygen-preparation').dataset.liquidSeal=String(!!chemical.liquidSeal);
       jarWater.setAttribute('opacity','1');jarWater.setAttribute('y','30');jarWater.setAttribute('height',360*(1-frame.collected));jarSurface.setAttribute('cy',30+360*(1-frame.collected));jarSurface.setAttribute('opacity',frame.collected<1?1:0);

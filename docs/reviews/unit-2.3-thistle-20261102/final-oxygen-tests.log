@@ -1,0 +1,77 @@
+▶ 2.3 oxygen: blank experiment taps pause and resume without swallowing equipment or reading gestures
+  ✔ one blank click pauses time, pixels and caption animation; the next resumes the same progress (1071.152824ms)
+  ✔ the setup scene table and background pause and resume during placement and immersion (931.355618ms)
+  ✔ tabletop and room background clicks reach the canvas and toggle during the actual setup phases (1456.062026ms)
+  ✔ equipment keeps priority, opens its introduction and never bubbles into an immediate resume (627.160239ms)
+  ✔ material bodies and nested labels still open introductions; material background remains a preview (461.03067ms)
+  ✔ a paused selected step resumes on blank click while materials and completed storage remain stopped (455.411842ms)
+  ✔ selecting or clearing text, dragging and right clicks do not toggle playback (346.252974ms)
+  ✔ real touch works in the main scene and close-up; a native scrolling gesture leaves playback alone (2507.884108ms)
+  ✔ ordinary caption, heading, helper and note clicks toggle within the left experiment card (767.066414ms)
+  ✔ the shortcut remains active after an automatic step change and retains a paused completed-frame hold (383.96738ms)
+  ✔ the right-side controls and the gap outside the experiment are not a second blank-tap surface (467.00991ms)
+✔ 2.3 oxygen: blank experiment taps pause and resume without swallowing equipment or reading gestures (12003.972255ms)
+▶ 2.3 oxygen: readable captions fade, survive automatic steps and pause with the experiment
+  ✔ every sentence has a reading hold; short intermediate targets coalesce before the old words fade out (567.749111ms)
+  ✔ automatic operation changes reuse the visible card after the longer water preparation (484.405735ms)
+  ✔ pausing during fade-out or fade-in freezes native opacity and text; both resume from the same point (925.994303ms)
+  ✔ apparatus introductions pause the caption; closing does not resume its reading or fade (773.171982ms)
+  ✔ manual choices cancel an abandoned fade; returning to materials leaves no caption animation (567.039647ms)
+  ✔ the last result can finish its caption after the physical animation; replay cancels the old result (360.199075ms)
+  ✔ background, another experiment and Escape freeze reading time without automatic resume (356.542115ms)
+  ✔ desktop and narrow subtitles sit below every picture, preserve focus and add no duplicate controls (2512.798645ms)
+  ✔ reduced motion retains reading time with instant swaps; no-JS retains all seven original captions (1585.654159ms)
+✔ 2.3 oxygen: readable captions fade, survive automatic steps and pause with the experiment (10504.199281ms)
+▶ 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role
+  ✔ the first materials step shares the dialog and has no inline information or SVG apparatus controls (339.960981ms)
+  ✔ actual flask, jar, trough, stopper and tube bodies open correct descriptions in all seven later operations (7813.45064ms)
+  ✔ pouring bottle, moving spoon, introduced catalyst and sliding glass plate remain correctly clickable (1409.185628ms)
+  ✔ intro pauses the exact scene, closing keeps it paused and explicit play continues from that state (346.988546ms)
+  ✔ current role distinguishes waiting, collecting and storage; invisible equipment and empty picture space do not open (1275.981547ms)
+  ✔ returning from an operation restores material purpose without operation wording (507.256718ms)
+  ✔ Enter, Space, Escape and modal focus work; step changes clear the dialog without hiding focus (482.753136ms)
+  ✔ seven widths keep the modal readable and in-screen; mobile close-up objects also open the same introduction (3411.971926ms)
+  ✔ real touch and reduced motion select the close-up body; no-JS retains the full materials reference (2980.46801ms)
+✔ 2.3 oxygen: apparatus in every operation and mobile close-up explain identity and current role (20918.551886ms)
+✔ tube entry precedes displacement; withdrawal precedes glass cover (2.101731ms)
+✔ shared insertion completes before oxygen ignition; results remain at duration (0.641365ms)
+✔ selected step stays bounded at both ends without leaking into the next step (0.374333ms)
+✔ assembly adds reagents in order, starts reaction after catalyst, and seals before gas enters the tube (2.9114ms)
+✔ operation windows stop at purposeful boundaries, with prerequisites and withdrawal before covering (0.505971ms)
+✔ placement settles the submerged full jar before lowering the outlet; later chemistry keeps its existing timing (0.709578ms)
+✔ clear water fills both empty vessels before a covered inversion and underwater uncovering (10.896351ms)
+✔ storage covers underwater before lifting, turns upright only above water, then sets the sealed jar down (1.007515ms)
+✔ thistle apparatus is assembled before addition; gas reaches the tube only after the liquid covers the tip (0.647604ms)
+▶ 2.3 oxygen: direct step playback, one main player and purposeful operation scenes
+  ✔ one eight-operation list and one player below the picture, with no image player, bottom action or material autoplay (151.934686ms)
+  ✔ selecting each operation immediately plays its action and preserves physical prerequisites (1415.739322ms)
+  ✔ direct playback reconstructs contents and returning to materials preserves a chosen introduction (473.583723ms)
+  ✔ the main key pauses pixels, resumes and restarts after completion; quick choices cancel old advancement (1187.212823ms)
+  ✔ vertical arrows and native activation start actions; main key and Escape retain visible focus (218.601104ms)
+  ✔ background, leaving and another experiment pause without resuming automatically (290.764792ms)
+  ✔ storage stops with a whole-experiment restart; no bottom cross-lesson action returns (299.654605ms)
+  ✔ all eight scenes fit seven widths; compact navigation expands vertically and the only player stays directly below the picture (10910.91909ms)
+  ✔ touch immediately plays a selected step and uses the same key to pause and continue (1630.143614ms)
+  ✔ without JavaScript the eight representatives and material introductions remain readable (1168.251466ms)
+✔ 2.3 oxygen: direct step playback, one main player and purposeful operation scenes (19436.754257ms)
+▶ experiments share a persistent video-style footer and concise summaries
+  ✔ persistent footer and compact summary at 1440px (6038.819158ms)
+  ✔ persistent footer and compact summary at 1024px (5331.894489ms)
+  ✔ persistent footer and compact summary at 768px (5255.131346ms)
+  ✔ persistent footer and compact summary at 390px (4971.108711ms)
+  ✔ persistent footer and compact summary at 320px (4011.602339ms)
+✔ experiments share a persistent video-style footer and concise summaries (26046.164648ms)
+▶ thistle funnels: actual material selection, liquid seal and transfer-task feedback
+  ✔ oxygen: material body and name, assembled dry stage, pouring and submerged tip (1656.913125ms)
+  ✔ co2: material body and name, assembled dry stage, pouring and submerged tip (777.943476ms)
+  ✔ unsealed funnel is a specific editable mistake in the water-displacement task (740.575242ms)
+  ✔ no-script snapshots contain the new funnel and five summary rows (1121.217053ms)
+✔ thistle funnels: actual material selection, liquid seal and transfer-task feedback (5992.005892ms)
+ℹ tests 63
+ℹ suites 0
+ℹ pass 63
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 38711.286719
