@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 3.3 第四區操作精簡
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium PAN_CAPTURE_DIR=/tmp/unit33-pan-controls node --test --test-concurrency=1 tests/unit-3.3-pan.test.cjs tests/unit-3.3.test.cjs
+```
+
+共24項（含外層）。核對排笛不再有重設按鈕，提示「點選任一根管子，就能吹奏。」位於視角切換下方、圖外上方，七種寬度與兩視角皆置中且不溢出。專項以重新載入初始化測試情境，整頁以實際點選長短管比較；原六管音高、動畫、鍵盤／手機點奏、下載取消與失敗重試維持。`SOUND33_BASE_URL`可指定公開頁，`PAN_CAPTURE_DIR`指定截圖位置。
+
 ## 3.3 第三區固定開場問答
 
 ```sh

@@ -61,7 +61,7 @@ test('3.3 seven learning blocks, sound, instruments and one final assessment',{t
   await guitar.locator('[data-guitar-reset]').click();assert.equal(await guitar.locator('[data-guitar-side=right] .guitar-scene').getAttribute('data-displacement'),'0');
   await guitar.locator('[data-guitar-mode=tension]').click();await guitar.locator('[data-guitar-tension=".25"]').click();assert.equal(await guitar.locator('[data-guitar-side=right] .guitar-scene').getAttribute('data-fret'),'0');
   await guitar.locator('[data-guitar-reset]').click();assert.equal(await guitar.locator('[data-guitar-side=right] .guitar-frequency').innerText(),'110 Hz');
-  await play('pan-0');assert.equal(await page.locator('#pan-frequency').innerText(),'214.4 Hz');await page.locator('#card-04 [data-pan-reset]').click();assert.equal(await page.locator('#pan-frequency').innerText(),'428.8 Hz');assert.equal(await guitar.locator('[data-guitar-side=right] .guitar-scene').getAttribute('data-tension'),'1');
+  await play('pan-0');assert.equal(await page.locator('#pan-frequency').innerText(),'214.4 Hz');await play('pan-5');assert.equal(await page.locator('#pan-frequency').innerText(),'428.8 Hz');assert.equal(await guitar.locator('[data-guitar-side=right] .guitar-scene').getAttribute('data-tension'),'1');
   await guitar.locator('[data-guitar-mode=length]').click();
  });
  await t.test('timbre changes waveform at the same fundamental; navigating or hiding stops audio',async()=>{

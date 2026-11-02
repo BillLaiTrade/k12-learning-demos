@@ -61,7 +61,6 @@ export function createPanExperiment(root){
   settings(index){selected=index;render();return {frequency:panFrequency(PAN_LENGTHS[index]),amplitude:.55,tone:'pipe'};},
   start(){pending(false);sounding=true;render();position(0);},
   update:position,
-  stop(){pending(false);sounding=false;render();position(0);},
-  reset(){pending(false);selected=5;setView('outside');sounding=false;render();position(0);}
+  stop(){pending(false);sounding=false;render();position(0);}
  };
 }

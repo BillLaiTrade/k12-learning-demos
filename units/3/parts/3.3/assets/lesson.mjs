@@ -205,14 +205,13 @@ initialize('card-03',async()=>{
  guitarView=view.createGuitarExperiment($('card-03'),{onChange:()=>{stop();$('card-03').querySelector('.play-state').classList.add('visually-hidden');},onPluck:key=>$('card-03').querySelector(`.guitar-play[data-play="${key}"]`).click()});
 });
 initialize('card-04',async()=>{
- const [audio,view]=await Promise.all([import('./pan-recordings.mjs?v=1'),import('./pan-experiment.mjs?v=3')]);
+ const [audio,view]=await Promise.all([import('./pan-recordings.mjs?v=1'),import('./pan-experiment.mjs?v=4')]);
  ({loadPanRecording,recordingLevel}=audio);
  panView=view.createPanExperiment($('card-04'));
  $('card-04').querySelector('[data-pan-cancel]').addEventListener('click',()=>{
   const root=$('card-04');stop(root);
   root.querySelector(`[data-play="pan-${root.dataset.panSelected}"]`).focus({preventScroll:true});
  });
- $('card-04').querySelector('[data-pan-reset]').addEventListener('click',()=>{stop();panView.reset();$('card-04').querySelector('.play-state').classList.add('visually-hidden');});
 });
 initialize('card-05',async()=>{
  const [audio,view]=await Promise.all([import('./timbre-model.mjs?v=1'),import('./timbre-experiment.mjs?v=3')]);
