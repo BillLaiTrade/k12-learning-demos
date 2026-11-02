@@ -48,7 +48,7 @@ function initialise(root){
   $('[data-imaging-distance=object]').textContent=`物距 ${state.object} 公分`;$('[data-imaging-distance=screen]').textContent=`屏幕距離 ${state.screen} 公分`;
   $('[data-imaging-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-imaging-rays]').setAttribute('aria-pressed',String(showRays));$('[data-imaging-trace]').hidden=!showRays;
   $$('[data-imaging-point]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingPoint===point)));
-  $('[data-imaging-view]').textContent=front?'返回實驗台':'正面看屏幕';$('[data-imaging-view]').setAttribute('aria-pressed',String(front));
+  $('[data-imaging-view]').textContent=front?'返回實驗台':'放大查看';$('[data-imaging-view]').setAttribute('aria-pressed',String(front));
   $('[data-imaging-hint]').textContent=front?'正面觀察同一片屏幕；下方移近、移遠可細調。輔助光路在整體視角顯示。':`拖曳${focus?'屏幕':'圖卡或屏幕'}底座移動；空白處可轉動視角，滾輪或雙指縮放。`;
   let message=g.clear?`屏幕已對焦：倒立${g.sizeLabel}的實像。`:'屏幕尚未對焦。移動屏幕，找清楚的倒立像。';
   if(!g.finite)message='物體在焦點上，無法在有限距離的屏幕上找到清楚像。將圖卡移遠一些再試。';
