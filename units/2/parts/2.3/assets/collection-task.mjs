@@ -1,5 +1,5 @@
 import {TASK_STEPS,INITIAL_ORDER,evaluateCollectionPlan,collectionFrame,firstPlanIssue} from './collection-task-model.mjs?v=thistle-1';
-import {createCollectionScene} from './collection-task-scene.mjs?v=thistle-1';
+import {createCollectionScene} from './collection-task-scene.mjs?v=nine-details-1';
 const form=document.querySelector('#gas-report-form'),section=form.closest('section'),svg=form.querySelector('.task-scene');
 const scene=createCollectionScene(svg),caption=form.querySelector('[data-task-caption]'),play=form.querySelector('[data-task-play]'),feedback=form.querySelector('#gas-report-feedback');
 const tabs=[...form.querySelectorAll('[data-task-tab]')],panels=[...form.querySelectorAll('[data-task-panel]')],orderList=form.querySelector('.task-order'),announcement=form.querySelector('[data-task-announcement]');

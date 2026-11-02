@@ -29,7 +29,7 @@ function sprite(key,x,y,w,h) {
 }
 export function createSetupScene(view,panels) {
   const main=view.querySelector('.oxygen-main-scene'),zoom=view.querySelector('.oxygen-mobile-zoom svg');
-  view.closest('.oxygen-preparation').querySelectorAll('[data-static-thistle]').forEach(n=>n.remove());
+  view.closest('.oxygen-preparation').querySelectorAll('[data-static-thistle],[data-static-material]').forEach(n=>n.remove());
   // Clip definitions must remain outside hidden step panels. Chromium drops
   // clips referenced by another SVG when their defining panel is display:none.
   const art=svg('g',{id:'oxygen-setup-art'}),defs=view.closest('.oxygen-preparation').querySelector('.oxygen-paint-resources defs');defs.append(art);
@@ -81,9 +81,13 @@ export function createSetupScene(view,panels) {
   const frontTint=svg('g',{'clip-path':'url(#setup-tank-inside)'});frontTint.append(svg('path',{d:'M933 587L1137 596V685H933Z',fill:'#bbdce0','fill-opacity':'.14'}));art.insertBefore(frontTint,lid);
   const tube=svg('g',{'data-setup-body':'tube'}),pipeOuter=svg('path',{fill:'none',stroke:'#759aa2','stroke-width':19,'stroke-linecap':'round','stroke-linejoin':'round','data-shared-tube-path':''}),pipeInner=svg('path',{fill:'none',stroke:'#d4ecee','stroke-width':12,'stroke-linecap':'round','stroke-linejoin':'round'}),pipeShine=svg('path',{fill:'none',stroke:'#fff','stroke-opacity':'.9','stroke-width':3,'stroke-linecap':'round'});
   tube.append(pipeOuter,pipeInner,pipeShine);art.append(tube);
-  const restingTube=svg('g',{'data-photographic-equipment':'tube'});restingTube.append(sprite('tube',-27.3,-105.3,612.3,152.1));art.append(restingTube);
+  const restingTube=svg('g',{'data-photographic-equipment':'tube'});
+  const restClip=svg('clipPath',{id:'oxygen-rest-glass'});restClip.append(svg('rect',{x:90,y:-110,width:530,height:170}));defs.append(restClip);
+  const restGlass=svg('g',{'clip-path':'url(#oxygen-rest-glass)'});restGlass.append(sprite('tube',-27.3,-105.3,612.3,152.1));restingTube.append(restGlass);
+  for(const[stroke,width]of[['#759aa2',15],['#d4ecee',10],['#fff',2]])restingTube.append(svg('path',{d:'M20 -11H96',fill:'none',stroke,'stroke-width':width}));
+  const restStopper=createDoubleStopper();restStopper.setAttribute('transform','translate(20 15) rotate(-90)');restingTube.append(restStopper);art.append(restingTube);
   const stopper=svg('g',{'data-setup-body':'stopper'}),corkPhoto=createDoubleStopper();corkPhoto.setAttribute('transform','translate(-26 0)');corkPhoto.setAttribute('data-photographic-equipment','stopper');stopper.append(corkPhoto);art.append(stopper);
-  const funnel=createThistleFunnel('oxygen',{top:-155,tip:400,port:-26});art.append(funnel.group);
+  const funnel=createThistleFunnel('oxygen',{top:-155,tip:400,port:-26});art.insertBefore(funnel.group,stopper);
 
   const stream=svg('path',{fill:'none',stroke:'#a8e4ee','stroke-width':12,'stroke-linecap':'round','data-setup-stream':''});
   const highlight=svg('path',{fill:'none',stroke:'#fff','stroke-opacity':'.85','stroke-width':3});art.append(stream,highlight);
@@ -111,6 +115,19 @@ export function createSetupScene(view,panels) {
       const node=drawing.querySelector(`[data-part="${name}"]`);if(node)node.style.display='none';
     }
     drawing.querySelectorAll('.oxygen-scene-labels,[data-part=water-out]').forEach(n=>n.style.display='none');
+    // Render only the animated additions and bubbles, independently of the hidden
+    // legacy composite. A visible chemical quantity must have a visible source.
+    const overlayParts=['reagent-bottle','peroxide-stream','peroxide-highlight','catalyst-spoon','falling-catalyst','reaction-bubbles','purge-bubbles','collection-bubbles','flow'];
+    for(const canvas of operation.querySelectorAll('.oxygen-main-scene,.oxygen-mobile-zoom svg')){
+      const layer=svg('g',{'data-visible-overlays':''});
+      for(const name of overlayParts){const source=drawing.querySelector(`[data-part="${name}"]`);if(!source)continue;
+        source.id=`oxygen-live-${index}-${name}`;
+        const use=svg('use',{href:'#'+source.id,'data-visible-part':name,'aria-hidden':'true',fill:'none'});
+        if(name==='reaction-bubbles'){const clipped=svg('g',{'clip-path':'url(#shared-flask-inside)'});clipped.append(use);layer.append(clipped);}else layer.append(use);
+      }
+      canvas.append(layer);
+    }
+
     const bubbles=drawing.querySelector('[data-part=reaction-bubbles]');
     if(bubbles){const inside=svg('g',{'clip-path':'url(#shared-flask-inside)','data-flask-bubble-clip':''});bubbles.before(inside);inside.append(bubbles);}
     const liquid=drawing.querySelector('[data-part="jar-water"]');
@@ -180,6 +197,10 @@ export function createSetupScene(view,panels) {
       flaskLiquid.setAttribute('y',level);flaskLiquid.setAttribute('height',chemical.peroxide?805-level:0);
       const [left,right]=liquidSpan(level);
       flaskSurface.setAttribute('cx',(left+right)/2);flaskSurface.setAttribute('rx',(right-left)/2);flaskSurface.setAttribute('cy',level);flaskSurface.setAttribute('opacity',chemical.peroxide?1:0);
+      if(stage===2){const time=frame.localTime,enter=between(time,0,250),exit=between(time,2300,3000);
+        const x=mix(mix(-400,-35,enter),-400,exit),y=mix(mix(180,500,enter),180,exit),scale=mix(mix(.65,.5,enter),.65,exit);
+        catalyst.setAttribute('transform',`translate(${x} ${y}) scale(${scale})`);
+      }
       powder.setAttribute('opacity',chemical.catalyst);powder.setAttribute('transform',`translate(310 790) scale(1 ${chemical.catalyst}) translate(-310 -790)`);
       const seal=chemical.sealed,lift=ease(seal/.4),across=ease((seal-.4)/.4),lower=ease((seal-.8)/.2);
       // The inlet clears the mouth before crossing above it, then lowers vertically.

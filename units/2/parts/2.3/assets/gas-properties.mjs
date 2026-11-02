@@ -1,4 +1,4 @@
-import { COMPARISON_DURATION, comparisonFrame } from './oxygen-model.mjs?v=assembly-6';
+import { COMPARISON_DURATION, comparisonFrame } from './oxygen-model.mjs?v=nine-details-1';
 const section=document.querySelector('.gas-properties-lesson');
 const comparison=section.querySelector('.oxygen-comparison');
 const players=[];

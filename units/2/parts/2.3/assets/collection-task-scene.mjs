@@ -17,7 +17,7 @@ export function createCollectionScene(svg){
  const reflection=image('co2-flask.webp',[70,145,460,460]);reflection.setAttribute('opacity','.22');art.append(reflection);
  const firstClip=n('clipPath',{id:'task-first-glass'});firstClip.append(n('path',{d:'M315 395V160Q315 124 351 124H451V146H351Q337 146 337 160V395Z'}));defs.append(firstClip);
  const first=n('g');const firstGlass=n('g',{'clip-path':'url(#task-first-glass)'});firstGlass.append(sprite('co2-tube.webp',[85,45,172,350],[306.8,115,137.6,280],[440,440]));first.append(firstGlass);const stopper=createDoubleStopper();stopper.setAttribute('transform','translate(300 205)');first.append(stopper);art.append(first);
- const funnel=createThistleFunnel('task',{top:-140,tip:350,port:-26});art.append(funnel.group);
+ const funnel=createThistleFunnel('task',{top:-140,tip:350,port:-26});art.insertBefore(funnel.group,first);
  const reagent=n('g',{'data-task-reagent':''});const reagentImage=image('oxygen-peroxide-open.webp',[455,240,150,170]);reagent.append(reagentImage);art.append(reagent);
  const feed=n('path',{d:'M274 42Q274 58 274 78',fill:'none',stroke:'#b9e1e4','stroke-width':4});art.append(feed);
  const reference=n('path',{d:'M200 500H410',fill:'none',stroke:'#80968b','stroke-width':2,'stroke-dasharray':'6 8','clip-path':'url(#task-flask-inside)'});art.append(reference);

@@ -38,7 +38,7 @@ test('experiments share a persistent video-style footer and concise summaries', 
     const controls=await footer.locator('.experiment-playback-controls').boundingBox(),note=await footer.locator('.oxygen-caption').boundingBox();
     const picture=await root.locator(gas==='oxygen'?'.oxygen-step-panel:visible .oxygen-main-scene':'.co2-step:visible .co2-main-scene').boundingBox();
     assert.ok(controls.y>=picture.y+picture.height-1);assert.ok(note.y>=controls.y+controls.height-1);
-    const current=await footer.boundingBox();assert.ok(Math.abs(current.height-baseline.height)<2,'footer height remains stable');
+    const current=await footer.boundingBox();const contentBottom=await footer.locator('.oxygen-scene-note,.co2-scene-note,.oxygen-caption-label').evaluateAll(ns=>Math.max(...ns.map(n=>n.getBoundingClientRect().bottom)));const captionBox=await footer.locator('.oxygen-caption').boundingBox();assert.ok(captionBox.y+captionBox.height-contentBottom<=10,'description has no reserved empty lines');
     assert.ok(Math.abs(current.y-(await root.locator(`.${gas}-stage-area`).boundingBox()).y-baselineY)<2,`${gas}/${i}: footer does not jump within its player frame`);
     assert.equal(await hint.innerText(),'點畫面空白處，也可暫停／繼續。');
     await play.click();assert.equal(await root.getAttribute('data-state'),'paused');assert.match(await play.innerText(),/繼續/);

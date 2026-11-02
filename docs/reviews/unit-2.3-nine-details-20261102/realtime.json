@@ -1,0 +1,29 @@
+{
+  "oxygen": {
+    "visited": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "state": "complete",
+    "elapsed": 50225,
+    "errors": []
+  },
+  "co2": {
+    "visited": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "state": "complete",
+    "elapsed": 50612,
+    "errors": []
+  }
+}

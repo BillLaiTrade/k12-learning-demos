@@ -1,8 +1,8 @@
 import { createExperimentPlayerFooter } from './experiment-player.mjs?v=player-1';
 import { createSceneCaptions } from './oxygen-captions.mjs?v=player-1';
 import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=thistle-1';
-import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=thistle-2';
-import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=thistle-2';
+import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=nine-details-1';
+import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=nine-details-1';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];
@@ -125,16 +125,24 @@ function renderAssembly(elapsed, state, view, phase) {
   opacity('settled-catalyst',f.catalyst);opacity('mixed-flask',f.mixed);
   opacity('reagent-bottle',f.bottle);
   const angle=-65*f.bottleTilt,r=angle*Math.PI/180,lip={x:-52+116/500*104,y:83/810*210};
-  const desired={x:502.128+(289-502.128)*f.bottleTilt,y:171.5185185185+(160-171.5185185185)*f.bottleTilt};
+  const exit=Math.max(0,Math.min(1,(f.time-11300)/500)),travel=f.bottleTilt*(1-exit*exit*(3-2*exit));
+  const desired={x:620+(289-620)*travel,y:-220+(160+220)*travel};
   const bx=desired.x-(lip.x*Math.cos(r)-lip.y*Math.sin(r)),by=desired.y-(lip.x*Math.sin(r)+lip.y*Math.cos(r));
   $('reagent-bottle').setAttribute('transform',`translate(${bx} ${by}) rotate(${angle})`);
   const stream=`M${desired.x} ${desired.y}Q289 175 289 190`;
   for(const part of ['peroxide-stream','peroxide-highlight']){$(part).setAttribute('d',stream);opacity(part,f.liquidFlow);}
-  opacity('catalyst-spoon',f.spoon);$('catalyst-spoon').setAttribute('transform',`translate(315 225) rotate(${-18*f.catalyst})`);
+  opacity('catalyst-spoon',f.spoon);
+  const spoonTime=f.time-2800,ease=n=>{const u=Math.max(0,Math.min(1,n));return u*u*(3-2*u);};
+  let spoonX,spoonY;
+  if(spoonTime<200){spoonX=-220+300*ease(spoonTime/200);spoonY=790;}
+  else if(spoonTime<350){spoonX=80;spoonY=790-565*ease((spoonTime-200)/150);}
+  else if(spoonTime<500){spoonX=80+235*ease((spoonTime-350)/150);spoonY=225;}
+  else{const leave=ease((spoonTime-1950)/650);spoonX=315-555*leave;spoonY=225-70*leave;}
+  $('catalyst-spoon').setAttribute('transform',`translate(${spoonX} ${spoonY}) rotate(${-18*f.catalyst*(1-ease((spoonTime-1950)/650))})`);
   opacity('falling-catalyst',f.powderFlow);
   $('falling-catalyst').querySelectorAll('[data-grain]').forEach((grain,i)=>{
     const phase=(f.time/1100+i*.11)%1;
-    grain.setAttribute('transform',`translate(${315+Math.sin(i*2+phase*3)*9} ${230+phase*390}) rotate(${i*37+phase*90})`);
+    grain.setAttribute('transform',`translate(${315+Math.sin(i*2+phase*3)*9} ${230+phase*550}) rotate(${i*37+phase*90})`);
   });
   const capX=130+185*f.sealed;
   $('stopper').setAttribute('transform',`translate(${capX-315} ${-25*(1-f.sealed)})`);
