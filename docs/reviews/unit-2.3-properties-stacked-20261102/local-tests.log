@@ -1,0 +1,51 @@
+▶ CO2 water-displacement transfer task: plan, operate, inspect and retry
+  ✔ only one quiz, three editable stages and no initial autoplay (320.537679ms)
+  ✔ missing choices give a focused prompt without starting a clock (100.869673ms)
+  ✔ student assembly choices actually alter the pictured jar and outlet (747.584877ms)
+  ✔ oxygen reactants stop at their actual step with a link to CO2 teaching (872.319417ms)
+  ✔ partial water and reversed order get targeted feedback and remain editable (1155.286623ms)
+  ✔ arrow controls and keyboard reorder the real plan, rather than checking one memorised order (514.318521ms)
+  ✔ correct plan traverses all six operations, displaces water and seals only after withdrawal (555.532099ms)
+  ✔ pause freezes time and pixels; resume continues, editing cancels stale playback (492.570819ms)
+  ✔ starting another experiment pauses the task and reset stays local (210.875866ms)
+  ✔ seven widths retain readable controls with no overflow (3437.850414ms)
+  ✔ real touch can choose, configure and move a step (1864.883796ms)
+  ✔ without JavaScript the choices, operations and scientific caveat remain readable (1667.480302ms)
+✔ CO2 water-displacement transfer task: plan, operate, inspect and retry (14284.999574ms)
+▶ 2.3 complete page: five teaching sections and one evidence-based quiz
+  ✔ all six sections and routes exist, with gas profiles and no retired experiment (93.392366ms)
+  ✔ default cup comparisons remain after preview and reset (189.810453ms)
+  ✔ both preparation lessons navigate independent steps and keep properties in section five (1526.551798ms)
+  ✔ leaving a replay pauses it and returning does not autoplay (401.25043ms)
+  ✔ the single transfer quiz combines CO2 reactants and water displacement, then resets locally (917.892972ms)
+  ✔ seven widths keep full-width teaching bodies below their headers without overflow (4359.422167ms)
+  ✔ all teaching evidence is available without JavaScript (1444.71235ms)
+  ✔ touch, reduced motion, keyboard selects and last-section anchor work (3297.066156ms)
+✔ 2.3 complete page: five teaching sections and one evidence-based quiz (14493.553861ms)
+✔ initial splints share a glowing start without a flame; limewater starts clear without bubbles (1.411244ms)
+✔ splints finish their identical insertion before oxygen relights; CO2 progressively loses its glow (0.747134ms)
+✔ CO2 is supplied before bubbles, and bubbles precede gradual clouding (1.278283ms)
+✔ both experiments are bounded and retain a readable end state (0.727475ms)
+▶ section five: stacked splint comparison and CO2 limewater experiment
+  ✔ two stacked experiments, one control each and one shared three-point summary (76.835068ms)
+  ✔ both start ready, with glowing wood above both mouths and clear, still limewater (677.575883ms)
+  ✔ wood inserts synchronously, then oxygen relights while CO2 loses its glow (577.648446ms)
+  ✔ CO2 source precedes submerged bubbles and progressive clouding; both effects paint real pixels (1221.434902ms)
+  ✔ inlet tip stays underwater and above the curved bottom; bubbles remain in the liquid (107.18858ms)
+  ✔ button and background pause actual frames and resume the same progress in both experiments (1505.970437ms)
+  ✔ complete frames remain still; one-key replay returns to the initial scientific state (588.110455ms)
+  ✔ starting another property or preparation experiment pauses the previous one (782.185386ms)
+  ✔ keyboard, hidden pages and scrolling away pause without implicit resume; text selection does not toggle (1547.069903ms)
+  ✔ source links and one concise shared summary retain the scientific distinctions (73.943719ms)
+  ✔ seven widths preserve stacked experiments, legible labels, control positions and compact descriptions (3560.611302ms)
+  ✔ touch and reduced motion preserve manual playback and background taps (2828.905587ms)
+  ✔ without JavaScript both prepared scenes and the summary remain readable with disabled play buttons (1045.802239ms)
+✔ section five: stacked splint comparison and CO2 limewater experiment (17110.367608ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17479.964218
