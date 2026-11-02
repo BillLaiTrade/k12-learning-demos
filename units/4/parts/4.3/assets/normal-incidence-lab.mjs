@@ -1,4 +1,4 @@
-import { layout, media, boundaryMs, durationMs, snapshot } from './normal-incidence-model.mjs';
+import { layout, media, boundaryMs, comparisonMs, durationMs, snapshot } from './normal-incidence-model.mjs?v=20261102-air-control1';
 
 const root=document.querySelector('#normal-lab');
 const $=selector=>root.querySelector(selector);
@@ -6,87 +6,101 @@ const scene=$('#normal-scene'), picture=$('#normal-background');
 const start=$('#normal-start'), pause=$('#normal-pause'), retry=$('#normal-retry');
 const status=$('#normal-status'), badge=$('#normal-state');
 let state='loading', elapsed=0, startTime=0, frame=0, previousStage=-1;
-const tag=(x,y,text,width=112)=>`<g><rect x="${x}" y="${y-35}" width="${width}" height="54" rx="10" fill="#fffef4" fill-opacity=".94"/><text x="${x+width/2}" y="${y}" text-anchor="middle" font-size="31">${text}</text></g>`;
-scene.innerHTML=`<defs><filter id="normal-glow" filterUnits="userSpaceOnUse" x="510" y="120" width="700" height="650"><feGaussianBlur stdDeviation="7"/></filter></defs>
-<path class="normal-interface" d="M175 ${layout.boundary}H1510"/>
-${tag(147,layout.boundary+8,'介面',95)}
+let comparisonPending=true, pauseReason='';
+const tag=(x,y,text,width=104)=>`<g><rect x="${x}" y="${y-35}" width="${width}" height="54" rx="10" fill="#fffef4" fill-opacity=".94"/><text x="${x+width/2}" y="${y}" text-anchor="middle" font-size="30">${text}</text></g>`;
+scene.innerHTML=`<defs><filter id="normal-glow" filterUnits="userSpaceOnUse" x="310" y="200" width="920" height="560"><feGaussianBlur stdDeviation="6"/></filter></defs>
 ${media.map((medium,i)=>{
- const x=layout.axes[i], left=i?971:376;
+ const x=layout.axes[i], inAir=medium==='air';
  return `<g class="normal-lane" data-medium="${medium}">
- <path class="normal-reference" d="M${x} 195V765"/>
- <text x="${x}" y="795" text-anchor="middle" font-size="28">法線</text>
- ${tag(left-45,338,'空氣')}${tag(left-45,650,i?'玻璃':'水')}
- <g class="normal-medium-note" visibility="hidden"><rect x="${x+60}" y="548" width="170" height="107" rx="12" fill="#fffef5" fill-opacity=".93"/><text x="${x+145}" y="590" font-size="30" text-anchor="middle">速度降低<tspan x="${x+145}" dy="43">方向不變</tspan></text></g>
+ ${inAir?'':`<path class="normal-interface" d="M${x-151} ${layout.boundary}H${x+151}"/>${tag(x-226,layout.boundary+10,'介面',90)}<path class="normal-reference" d="M${x} 266V815"/><text x="${x}" y="847" text-anchor="middle" font-size="27">法線</text>`}
+ ${tag(x-137,inAir?424:300,'空氣',100)}
+ ${inAir?'':tag(x-137,525,medium==='water'?'水':'玻璃',medium==='water'?80:100)}
  <g class="normal-beam" visibility="hidden">${['normal-halo','normal-ray','normal-core'].map(cls=>`<line class="${cls}" x1="${x}" y1="${layout.source}" x2="${x}" y2="${layout.source}"/>`).join('')}</g>
- <ellipse class="normal-source-light" cx="${x}" cy="${layout.source}" rx="15" ry="15" visibility="hidden"/>
+ <ellipse class="normal-source-light" cx="${x}" cy="${layout.source}" rx="14" ry="14" visibility="hidden"/>
  <path class="normal-direction" d="M0 0V28m-9-10 9 10 9-10" visibility="hidden"/>
+ <g class="normal-arrival" visibility="hidden" data-arrived="false"><rect x="${x-78}" y="755" width="156" height="53" rx="15"/><text x="${x}" y="790" text-anchor="middle" font-size="29">尚未到達</text></g>
  </g>`;
 }).join('')}`;
 const lanes=media.map(medium=>{
  const group=$(`[data-medium="${medium}"]`);
- return {group,beam:group.querySelector('.normal-beam'),lines:[...group.querySelectorAll('.normal-beam line')],note:group.querySelector('.normal-medium-note'),light:group.querySelector('.normal-source-light'),arrow:group.querySelector('.normal-direction')};
+ return {group,beam:group.querySelector('.normal-beam'),lines:[...group.querySelectorAll('.normal-beam line')],light:group.querySelector('.normal-source-light'),arrow:group.querySelector('.normal-direction'),arrival:group.querySelector('.normal-arrival')};
 });
-function stage(){return elapsed>=durationMs?3:elapsed>=boundaryMs?2:elapsed>0?1:0;}
+function stage(){return !comparisonPending?3:elapsed>=boundaryMs?2:elapsed>0?1:0;}
 function controls(){
- root.dataset.state=state;
+ root.dataset.state=state;root.dataset.pauseReason=pauseReason;
  start.disabled=['loading','error','running','paused'].includes(state);
  pause.disabled=!['running','paused'].includes(state);
  pause.dataset.action=state==='paused'?'resume':'pause';
  pause.querySelector('span').textContent=state==='paused'?'繼續觀察':'暫停觀察';
- pause.setAttribute('aria-label',state==='paused'?'繼續兩束光的前進':'暫停兩束光，觀察同一瞬間的光路');
+ pause.setAttribute('aria-label',state==='paused'?'繼續三束光的共同前進':'暫停三束光，觀察同一瞬間的光路');
  start.classList.toggle('primary',state==='idle'||state==='complete');
  pause.classList.toggle('primary',state==='paused'||state==='running');
- badge.textContent={loading:'準備實驗桌',error:'場景未就緒',idle:'準備發射',running:'光束穿越中',paused:'已暫停觀察',complete:'直線通過'}[state];
+ badge.textContent=state==='paused'&&pauseReason==='comparison'?'同一瞬間・已暫停':{loading:'準備實驗桌',error:'場景未就緒',idle:'準備發射',running:'光束穿越中',paused:'已暫停觀察',complete:'三束光皆已到達'}[state];
 }
 function explainStage(){
- status.textContent=state==='paused'?'光路已定格。按「繼續觀察」接著看。':[
-  '按「同時發射」，觀察兩束光如何垂直穿過介面。',
-  '兩束光由上方空氣垂直向下前進。',
-  '進入水與玻璃後，光束前緣變慢，仍沿法線直直前進。',
-  '兩束光都直線通過，方向沒有偏折。再按「同時發射」可重新觀察。'
+ if(state==='paused'){
+  status.textContent=pauseReason==='comparison'?'同一段時間，空氣組先到達，水與玻璃中的光走得較短。按「繼續觀察」再看其餘兩組。':'三束光已定格在同一瞬間。按「繼續觀察」接著看。';return;
+ }
+ if(state==='complete'){status.textContent='三組光路都保持筆直。再按「同時發射」可重新比較。';return;}
+ status.textContent=[
+  '按「同時發射」，比較全程空氣與進入水、玻璃的三束光。',
+  '三束光由同一高度同時出發，在空氣中的前進速度相同。',
+  '進入水與玻璃後，光束前緣變慢，仍沿法線前進；空氣組繼續直行。',
+  '空氣組已先到達，繼續觀察水與玻璃中的光，方向仍保持不變。'
  ][stage()];
 }
 function render(){
- root.dataset.elapsedMs=String(elapsed);
+ root.dataset.elapsedMs=String(elapsed);root.dataset.comparisonPassed=String(!comparisonPending);
  snapshot(elapsed).forEach((s,i)=>{
   const lane=lanes[i];lane.group.dataset.frontY=String(s.y);lane.group.dataset.entered=String(s.entered);lane.group.dataset.arrived=String(s.arrived);
   lane.lines.forEach(line=>line.setAttribute('y2',String(s.y)));
   lane.beam.setAttribute('visibility',elapsed>0?'visible':'hidden');
   lane.light.setAttribute('visibility',elapsed>0?'visible':'hidden');
-  lane.note.setAttribute('visibility',s.entered?'visible':'hidden');
-  lane.arrow.setAttribute('transform',`translate(${s.x+37} ${s.y-12})`);
-  lane.arrow.setAttribute('visibility',elapsed>0&&!s.arrived?'visible':'hidden');
+  lane.arrow.setAttribute('transform',`translate(${s.x+32} ${s.y-12})`);
+  lane.arrow.setAttribute('visibility',state==='running'&&elapsed>0&&!s.arrived?'visible':'hidden');
+  lane.arrival.setAttribute('visibility',elapsed>0?'visible':'hidden');lane.arrival.dataset.arrived=String(s.arrived);
+  lane.arrival.querySelector('text').textContent=s.arrived?(s.medium==='air'?'先到達':'已到達'):'尚未到達';
  });
  const current=stage();
  root.querySelectorAll('[data-normal-stage]').forEach(el=>current===Number(el.dataset.normalStage)?el.setAttribute('aria-current','step'):el.removeAttribute('aria-current'));
- scene.setAttribute('aria-label',`垂直入射光路剖面示意：空氣在上，左側為水，右側為玻璃；法線與光路重合。${current>=2?'光進入另一種介質後速度降低，方向沒有偏折。':'按同時發射觀察光路。'}`);
+ scene.setAttribute('aria-label',`三組共同時間的光路剖面示意：左側全程空氣，中間由空氣進入水，右側由空氣進入玻璃。${current>=2?'水與玻璃中的前緣較慢，光路仍沿法線筆直前進。':'按同時發射觀察。'}${!comparisonPending?'空氣組已先到達；可比較同一段時間走過的距離。':''}`);
  if(previousStage!==current){previousStage=current;if(!['loading','error'].includes(state))explainStage();}
 }
 function stop(){cancelAnimationFrame(frame);frame=0;}
+// Clamp exactly to the comparison instant even if the next rendered frame is late.
+// Resuming consumes this one-time stop; it cannot stop again at the same instant.
+function advance(now){
+ const requested=Math.min(durationMs,Math.max(0,now-startTime));
+ if(comparisonPending&&requested>=comparisonMs){elapsed=comparisonMs;comparisonPending=false;return true;}
+ elapsed=requested;return false;
+}
 function tick(now){
  if(state!=='running')return;
- elapsed=Math.min(durationMs,Math.max(0,now-startTime));render();
- if(elapsed>=durationMs){state='complete';frame=0;controls();explainStage();}
+ const compare=advance(now);
+ if(compare){state='paused';pauseReason='comparison';frame=0;}
+ else if(elapsed>=durationMs){state='complete';pauseReason='';frame=0;}
+ render();
+ if(state!=='running'){controls();explainStage();}
  else frame=requestAnimationFrame(tick);
 }
 function play(fromBeginning=false){
  if(['loading','error'].includes(state))return;
- stop();if(fromBeginning)elapsed=0;
- state='running';startTime=performance.now()-elapsed;render();controls();explainStage();frame=requestAnimationFrame(tick);
+ stop();if(fromBeginning){elapsed=0;comparisonPending=true;}
+ state='running';pauseReason='';startTime=performance.now()-elapsed;render();controls();explainStage();frame=requestAnimationFrame(tick);
 }
 function freeze(){
  if(state!=='running')return;
- stop();elapsed=Math.min(durationMs,Math.max(0,performance.now()-startTime));state=elapsed>=durationMs?'complete':'paused';render();controls();explainStage();
+ stop();const compare=advance(performance.now());state=elapsed>=durationMs?'complete':'paused';pauseReason=compare?'comparison':state==='paused'?'manual':'';render();controls();explainStage();
 }
 start.onclick=()=>play(true);pause.onclick=()=>state==='paused'?play():freeze();
 document.addEventListener('visibilitychange',()=>{if(document.hidden)freeze();});
 if('IntersectionObserver' in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)freeze();},{threshold:0}).observe($('#normal-viewport'));
 async function prepare(){
- stop();state='loading';elapsed=0;render();controls();retry.hidden=true;
+ stop();state='loading';elapsed=0;comparisonPending=true;pauseReason='';render();controls();retry.hidden=true;
  try{await picture.decode();state='idle';controls();explainStage();}
  catch{state='error';controls();retry.hidden=false;status.textContent='實驗桌圖片暫時無法載入，請重新載入後再發射。';}
 }
-retry.onclick=()=>{picture.src=new URL(`normal-incidence-bench.png?retry=${Date.now()}`,import.meta.url).href;prepare();};
+retry.onclick=()=>{picture.src=new URL(`normal-incidence-three-bench.png?retry=${Date.now()}`,import.meta.url).href;prepare();};
 prepare();
 
 // A single rigid axle moves straight across a horizontal boundary. Both wheels

@@ -1,21 +1,19 @@
-const { test } = require('node:test');
-const assert = require('node:assert/strict');
-const { pathToFileURL } = require('node:url');
-const path = require('node:path');
-test('2.3 integrated report checks evidence, completeness and misconceptions', async t => {
-  const { reportRules, evaluateGasReport } = await import(pathToFileURL(path.resolve(__dirname, '../units/2/parts/2.3/assets/air-report.mjs')));
-  const valid = Object.fromEntries(reportRules.map(rule => [rule.name, rule.expected]));
-  await t.test('unanswered form names every missing item without claiming completion', () => {
-    const result = evaluateGasReport({}); assert.equal(result.correct, false); assert.equal(result.complete, false); assert.equal(result.missing.length, 6); assert.deepEqual(result.corrections, []);
-  });
-  await t.test('fully supported report is accepted', () => {
-    const result = evaluateGasReport(valid); assert.equal(result.correct, true); assert.equal(result.complete, true); assert.deepEqual(result.corrections, []);
-  });
-  await t.test('each misconception identifies the relevant observation and destination', () => {
-    for (const rule of reportRules) {
-      const result = evaluateGasReport({ ...valid, [rule.name]: 'unsupported' });
-      assert.equal(result.correct, false); assert.equal(result.complete, true); assert.equal(result.corrections.length, 1);
-      assert.equal(result.corrections[0].name, rule.name); assert.ok(result.corrections[0].hint); assert.equal(result.corrections[0].target, {composition:'s2',sample_a:'s3',sample_b:'s4',fuel:'s5',evidence:'s5',uses:'s2'}[rule.name]);
-    }
-  });
+const{test}=require('node:test'),assert=require('node:assert/strict');
+const correct={materials:['marble','acid'],fill:'full',position:'submerged',outlet:'jar',order:['prepare','react','purge','collect','withdraw','cover']};
+test('collection task evaluates physical prerequisites and previews the student plan',async t=>{
+ const{evaluateCollectionPlan:evaluate,collectionFrame:frame,TASK_STEPS,INITIAL_ORDER,taskHosePoints}=await import('../units/2/parts/2.3/assets/collection-task-model.mjs');
+ await t.test('missing work is reported without claiming completion',()=>{const r=evaluate({});assert.equal(r.correct,false);assert.equal(r.complete,false);assert.equal(r.missing.length,5);});
+ await t.test('the CO2 reactants and full water collector are accepted',()=>assert.equal(evaluate(correct).correct,true));
+ await t.test('independent preparation and reaction steps can change order',()=>{for(const order of[['react','prepare','purge','collect','withdraw','cover'],['react','purge','prepare','collect','withdraw','cover']])assert.equal(evaluate({...correct,order}).correct,true);});
+ await t.test('oxygen reagents get a targeted explanation',()=>{const r=evaluate({...correct,materials:['peroxide','catalyst']});assert.match(r.issues[0].message,/氧氣/);assert.equal(r.issues[0].target,'s4');});
+ await t.test('each assembly misconception identifies its own field and teaching section',()=>{for(const[field,value]of[['fill','half'],['fill','empty'],['position','upright'],['position','above'],['outlet','tank'],['outlet','air']]){const r=evaluate({...correct,[field]:value});assert.equal(r.complete,true);assert.equal(r.correct,false);assert.equal(r.issues[0].field,field);assert.equal(r.issues[0].target,'s3');}});
+ await t.test('collecting before purging, or covering before withdrawal, is rejected',()=>{for(const order of[INITIAL_ORDER,['prepare','react','collect','purge','withdraw','cover'],['prepare','react','purge','collect','cover','withdraw']])assert.equal(evaluate({...correct,order}).correct,false);});
+ await t.test('missing, repeated and unknown operations cannot pass',()=>{for(const order of[[],['react','react','purge','collect','withdraw','cover'],['other','react','purge','collect','withdraw','cover']])assert.equal(evaluate({...correct,order}).complete,false);});
+ await t.test('the fixed glass outlet enters and leaves through the inverted mouth from below',()=>{for(const i of[3,4]){const duration=TASK_STEPS.find(s=>s.id===correct.order[i]).duration;for(let t=0;t<=duration;t+=10){const f=frame(correct,i,t),tip={x:f.tubeX+260,y:f.tubeY+10};if(tip.x>690&&tip.x<870)assert.ok(tip.y>=460,`${i}/${t}: tip crossed a sidewall`);if(i===3&&f.collected>0){assert.equal(tip.x,870);assert.equal(tip.y,415);}}}});
+ await t.test('water decreases after entering and only cover lifts the sealed jar',()=>{let water=1;for(let t=0;t<=6500;t+=20){const f=frame(correct,3,t);assert.ok(f.water<=water);water=f.water;if(t<3500)assert.equal(f.collected,0);}assert.equal(water,0);for(let t=0;t<=3000;t+=20){const f=frame(correct,5,t);if(f.lift>0)assert.equal(f.sealed,1);assert.equal(f.tubeX,430);assert.equal(f.tubeY,260);}assert.equal(frame(correct,5,3000).cover,1);});
+ await t.test('preview actually reflects incomplete and alternative assembly choices',()=>{const f=frame({...correct,fill:'half',position:'upright',outlet:'tank'});assert.equal(f.water,.5);assert.equal(f.angle,0);assert.equal(f.tubeX,430);assert.equal(frame(correct).angle,180);});
+ await t.test('the flexible connection retains arc length and a rounded loop for nearby ends',()=>{for(const b of[{x:430,y:120},{x:610,y:265},{x:610,y:315}]){const ps=taskHosePoints({x:420,y:135},b);const length=ps.slice(1).reduce((sum,p,i)=>sum+Math.hypot(p.x-ps[i].x,p.y-ps[i].y),0);assert.ok(Math.abs(length-420)<.01);assert.deepEqual(ps[0],{x:420,y:135});assert.deepEqual(ps.at(-1),b);assert.ok(ps.every(p=>p.x<780&&p.x>=420&&p.y<405));}});
+
+ await t.test('preparation keeps the full jar covered until its mouth is submerged',()=>{for(let time=0;time<=3000;time+=10){const f=frame(correct,0,time);if(f.angle>0){assert.equal(f.water,1);if(f.immersion<1){assert.equal(f.preparationCover,1);assert.equal(f.uncover,0);}}if(f.uncover>0)assert.equal(f.immersion,1);}assert.equal(frame(correct,0,3000).uncover,1);});
+
 });

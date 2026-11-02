@@ -77,6 +77,14 @@ test('2.2 ruler can be plucked directly', { timeout: 30000 }, async t => {
   });
 
   await t.test('ruler long edges are parallel with no rest deformation at the clamp', async () => {
+    const framing = await page.evaluate(() => {
+      const box = selector => { const r = document.querySelector(selector).getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; };
+      const matrix = document.querySelector('.ruler-model').getScreenCTM();
+      return { stage: box('#ruler-demo'), photo: box('.ruler-photo-background'), model: box('.ruler-model'), scaleX: matrix.a, scaleY: matrix.d };
+    });
+    assert.ok(framing.model.width > framing.stage.width && framing.model.height > framing.stage.height, 'the enlarged scene extends beyond its cropped viewport');
+    assert.ok(Math.abs(framing.scaleX - framing.scaleY) < 1e-6, 'the scene is enlarged uniformly');
+    for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(framing.photo[key] - framing.model[key]) < .1, 'background and interactive ruler remain aligned: ' + key);
     const edges = await page.evaluate(async () => {
       const image = new Image();
       image.src = document.querySelector('#ruler-photo').getAttribute('href');

@@ -39,11 +39,9 @@ test('2.3 collected gases: preparation, property comparison and final quiz are s
  await t.test('sample source links, collection-next links and revised quiz feedback point to the right sections',async()=>{
   assert.equal(await page.locator('.route a[href="#s5"]').getAttribute('href'),'#s5');assert.equal(await fifth.locator('.properties-next').getAttribute('href'),'#s6');
   await page.locator('.route a[href="#s4"]').click();assert.equal(new URL(page.url()).hash,'#s4');
-  const answers={composition:'mixture',sample_a:'oxygen',sample_b:'co2',fuel:'wood',evidence:'limewater',uses:'stable'};
-  for(const[name,value]of Object.entries(answers)){if(name.startsWith('sample_'))await page.locator(`#gas-report-form [name=${name}]`).selectOption(value);else await page.locator(`#gas-report-form [name=${name}][value=${value}]`).check();}
-  await page.locator('#gas-report-form [name=fuel][value=oxygen]').check();await page.locator('#gas-report-form [type=submit]').click();assert.equal(await page.locator('#gas-report-feedback a').getAttribute('href'),'#s5');
-  await page.locator('#gas-report-form [name=fuel][value=wood]').check();await page.locator('#gas-report-form [name=evidence][value=extinguish]').check();await page.locator('#gas-report-form [type=submit]').click();assert.equal(await page.locator('#gas-report-feedback a').getAttribute('href'),'#s5');assert.match(await page.locator('#gas-report-feedback').innerText(),/未復燃/);
-  await page.locator('#gas-report-form [name=evidence][value=limewater]').check();await page.locator('#gas-report-form [type=submit]').click();assert.equal(await page.locator('#gas-report-feedback').getAttribute('data-result'),'correct');
+  const task=page.locator('#gas-report-form');assert.match(await page.locator('#s6').innerText(),/排水集氣/);
+  assert.equal(await task.locator('[name=materials]').count(),4);assert.equal(await task.locator('.task-order li').count(),6);assert.deepEqual(await page.locator('#s6 .task-brief a').evaluateAll(ns=>ns.map(n=>n.getAttribute('href'))),['#s3','#s4']);
+
  });
  await t.test('matched samples stay beside each other and all revised lessons fit seven desktop and mobile widths',async()=>{
   for(const width of[1440,1280,1024,800,768,390,320]){await page.setViewportSize({width,height:1100});await fifth.scrollIntoViewIfNeeded();assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${width} overflow`);const shapes=await comparison.locator('.oxygen-splint-group').evaluateAll(ns=>ns.map(n=>{const b=n.querySelector('svg').getBoundingClientRect(),f=n.getBoundingClientRect();return{x:f.x,y:f.y,svgY:b.y,h:b.height,w:b.width};}));assert.ok(Math.abs(shapes[0].y-shapes[1].y)<1&&shapes[1].x>shapes[0].x);assert.ok(Math.abs(shapes[0].svgY-shapes[1].svgY)<1&&Math.abs(shapes[0].h-shapes[1].h)<1);assert.ok(Math.abs(shapes[0].w-shapes[1].w)<1);

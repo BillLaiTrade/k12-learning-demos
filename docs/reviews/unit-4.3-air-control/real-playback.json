@@ -1,0 +1,21 @@
+{
+  "base": "http://127.0.0.1:46881/units/4/parts/4.3/",
+  "paused": {
+    "state": "paused",
+    "elapsed": 3485.7142857142853,
+    "fronts": [
+      728,
+      631,
+      598.6666666666667
+    ],
+    "labels": [
+      "先到達",
+      "尚未到達",
+      "尚未到達"
+    ]
+  },
+  "wallTimeToPauseMs": 3602,
+  "wallTimeAfterContinueMs": 1475,
+  "completed": true,
+  "errors": []
+}

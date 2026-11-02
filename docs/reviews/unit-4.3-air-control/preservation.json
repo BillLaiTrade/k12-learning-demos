@@ -1,0 +1,21 @@
+{
+  "baseline": "292d521a",
+  "unchangedSections": {
+    "s1": true,
+    "s3": true,
+    "s4": true,
+    "s5": true,
+    "s6": true,
+    "s7": true
+  },
+  "unchangedFiles": [
+    "assets/optics.mjs",
+    "assets/lesson.mjs",
+    "assets/lesson.css",
+    "assets/light-speed-model.mjs",
+    "assets/light-speed-lab.mjs",
+    "assets/light-speed-lab.css",
+    "assets/light-speed-bench.png"
+  ],
+  "unchangedCartController": true
+}

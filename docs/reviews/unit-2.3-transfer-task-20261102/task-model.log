@@ -1,0 +1,22 @@
+▶ collection task evaluates physical prerequisites and previews the student plan
+  ✔ missing work is reported without claiming completion (0.71829ms)
+  ✔ the CO2 reactants and full water collector are accepted (0.174783ms)
+  ✔ independent preparation and reaction steps can change order (0.314864ms)
+  ✔ oxygen reagents get a targeted explanation (0.244778ms)
+  ✔ each assembly misconception identifies its own field and teaching section (1.12388ms)
+  ✔ collecting before purging, or covering before withdrawal, is rejected (0.313552ms)
+  ✔ missing, repeated and unknown operations cannot pass (0.238619ms)
+  ✔ the fixed glass outlet enters and leaves through the inverted mouth from below (3.737633ms)
+  ✔ water decreases after entering and only cover lifts the sealed jar (2.104967ms)
+  ✔ preview actually reflects incomplete and alternative assembly choices (0.415525ms)
+  ✔ the flexible connection retains arc length and a rounded loop for nearby ends (4.788583ms)
+  ✔ preparation keeps the full jar covered until its mouth is submerged (0.703258ms)
+✔ collection task evaluates physical prerequisites and previews the student plan (18.369144ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 24.315498

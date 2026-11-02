@@ -26,8 +26,8 @@
   <link rel="stylesheet" href="assets/lesson.css?v=20261101-controls2">
   <link rel="stylesheet" href="assets/light-speed-lab.css?v=20261101-controls2">
   <script type="module" src="assets/light-speed-lab.mjs?v=20261101-controls2"></script>
-  <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261101-normal1">
-  <script type="module" src="assets/normal-incidence-lab.mjs?v=20261101-normal1"></script>
+  <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-air-control1">
+  <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-air-control1"></script>
   <script type="module" src="assets/lesson.mjs?v=20261101-normal1">
 </script>
 </head>
@@ -122,35 +122,35 @@
   </div>
 </section>
 <section class="lesson-card" id="s2" aria-labelledby="heading-2">
-  <header class="lesson-head"><span class="lesson-number">02</span><div><h2 id="heading-2">光變慢了，為什麼沒有轉彎？</h2><p>垂直入射：速度改變，方向不偏折</p></div></header>
+  <header class="lesson-head"><span class="lesson-number">02</span><div><h2 id="heading-2">光變慢了，為什麼沒有轉彎？</h2><p>加入空氣對照，觀察速度與方向</p></div></header>
   <div class="lesson-body card-main">
     <div class="dialogue-sequence">
-      <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>換了介質，光就一定會轉彎嗎？</p></div>
-      <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>按下發射，觀察光束如何直直穿過介面。</p></div>
+      <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光路沒有轉彎，可是怎麼看出光變慢了？</p></div>
+      <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>讓一束光全程走在空氣中，同時發射、同時比較。</p></div>
     </div>
-    <div class="lab" id="normal-lab" data-state="loading" aria-label="空氣垂直射入水與玻璃的雙槽光路示意">
-      <ol class="normal-steps" aria-label="光束穿越的觀察步驟"><li data-normal-stage="1"><b>1</b>發射光束</li><li data-normal-stage="2"><b>2</b>跨越介面</li><li data-normal-stage="3"><b>3</b>直線通過</li></ol>
-      <p class="normal-pan-hint">↔ 左右滑動，對照水與玻璃的光路。</p>
+    <div class="lab" id="normal-lab" data-state="loading" aria-label="全程空氣對照與垂直射入水、玻璃的三組光路示意">
+      <ol class="normal-steps" aria-label="光束穿越的觀察步驟"><li data-normal-stage="1"><b>1</b>發射光束</li><li data-normal-stage="2"><b>2</b>跨越介面</li><li data-normal-stage="3"><b>3</b>比較同一瞬間</li></ol>
+      <p class="normal-pan-hint">↔ 左右滑動，對照空氣、水與玻璃的光路。</p>
       <div class="normal-viewport" id="normal-viewport" role="region" tabindex="0" aria-label="垂直入射實驗桌，窄螢幕可左右滑動">
         <div class="normal-table">
-          <img id="normal-background" src="assets/normal-incidence-bench.png" width="1717" height="916" alt="寫實木桌上的兩組光路剖面示意：上方皆為空氣，左側下方為水，右側下方為實心透明玻璃，光源固定在正上方。">
-          <h3 class="normal-name water">空氣 → 水</h3><h3 class="normal-name glass">空氣 → 玻璃</h3>
+          <img id="normal-background" src="assets/normal-incidence-three-bench.png" width="1536" height="1024" alt="寫實木桌上的三組等長光路剖面示意：左側全程為空氣，中間由空氣進入水，右側由空氣進入實心透明玻璃，三個光源位於同一高度。">
+          <h3 class="normal-name air">全程空氣<small>對照組</small></h3><h3 class="normal-name water">空氣 → 水</h3><h3 class="normal-name glass">空氣 → 玻璃</h3>
           <span class="normal-state" id="normal-state">準備實驗桌</span>
-          <svg id="normal-scene" viewBox="0 0 1717 916" role="img" aria-label="垂直入射的光路剖面示意，按同時發射觀察。"></svg>
+          <svg id="normal-scene" viewBox="0 0 1536 1024" role="img" aria-label="垂直入射的光路剖面示意，按同時發射觀察。"></svg>
         </div>
       </div>
       <div class="normal-console">
-        <div class="normal-actions" role="group" aria-label="兩束光的共同發射與暫停控制">
+        <div class="normal-actions" role="group" aria-label="三束光的共同發射與暫停控制">
           <button id="normal-start" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>同時發射</span></button>
           <button id="normal-pause" type="button" disabled data-action="pause"><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zm8 0h4v16h-4z" fill="currentColor"/></svg><svg class="resume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>暫停觀察</span></button>
         </div>
-        <p class="normal-time-note">光束前緣為共同慢動作示意，非實際光速。圖中只畫穿透光路。</p>
+        <p class="normal-time-note">三束光使用相同距離與時間比例；前緣為共同慢動作示意，非實際光速。</p>
       </div>
       <p class="normal-status" id="normal-status" role="status">正在準備實驗桌……</p>
       <button id="normal-retry" type="button" hidden>重新載入實驗桌</button>
-      <noscript><p>光由空氣垂直進入水或玻璃時，速度降低，方向不偏折。啟用 JavaScript 後可發射與暫停觀察光路。</p></noscript>
+      <noscript><p>同一段時間，全程空氣的光走得較遠；光垂直進入水或玻璃後速度降低，方向不偏折。啟用 JavaScript 後可發射與暫停比較。</p></noscript>
     </div>
-    <p class="normal-takeaway">進入水或玻璃後，速度改變；垂直入射，方向不偏折。</p>
+    <p class="normal-takeaway"><span>同樣時間，走得較短 → 速度較慢</span><span>光路保持筆直 → 方向不偏折</span></p>
     <details class="normal-explanation" id="normal-explanation">
       <summary>為什麼變慢，卻沒有轉向？</summary>
       <div class="normal-explanation-body">
@@ -184,7 +184,6 @@
         <p class="note">法線是垂直介面的參考線；本次光沿法線入射，因此法線與光路重合。</p>
       </div>
     </details>
-    <a class="normal-next" href="#s3">下一區：如果斜著進入，又會怎樣？ →</a>
   </div>
 </section>
 <section class="lesson-card" id="s3" aria-labelledby="heading-3">

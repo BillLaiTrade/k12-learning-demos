@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 3.2 鋼尺場景放大裁切
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-2.2.test.cjs
+```
+
+既有6項（含外層）增加場景等比例放大、背景／互動SVG對齊及裁切框核對；原有實際畫面點擊、自由端形變、按住停止、鍵盤、自然衰減、手機觸控與離開停止檢查維持。可搭配tests/unit-3.2-playback.test.cjs共14項檢查跨區互停。
+
 ## 3.2 第16項：比較區未載入備援
 
 ```sh

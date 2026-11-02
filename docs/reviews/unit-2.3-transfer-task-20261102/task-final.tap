@@ -1,0 +1,89 @@
+TAP version 13
+# Subtest: CO2 water-displacement transfer task: plan, operate, inspect and retry
+    # Subtest: only one quiz, three editable stages and no initial autoplay
+    ok 1 - only one quiz, three editable stages and no initial autoplay
+      ---
+      duration_ms: 272.832836
+      type: 'test'
+      ...
+    # Subtest: missing choices give a focused prompt without starting a clock
+    ok 2 - missing choices give a focused prompt without starting a clock
+      ---
+      duration_ms: 74.611907
+      type: 'test'
+      ...
+    # Subtest: student assembly choices actually alter the pictured jar and outlet
+    ok 3 - student assembly choices actually alter the pictured jar and outlet
+      ---
+      duration_ms: 351.318006
+      type: 'test'
+      ...
+    # Subtest: oxygen reactants stop at their actual step with a link to CO2 teaching
+    ok 4 - oxygen reactants stop at their actual step with a link to CO2 teaching
+      ---
+      duration_ms: 543.210985
+      type: 'test'
+      ...
+    # Subtest: partial water and reversed order get targeted feedback and remain editable
+    ok 5 - partial water and reversed order get targeted feedback and remain editable
+      ---
+      duration_ms: 857.488693
+      type: 'test'
+      ...
+    # Subtest: arrow controls and keyboard reorder the real plan, rather than checking one memorised order
+    ok 6 - arrow controls and keyboard reorder the real plan, rather than checking one memorised order
+      ---
+      duration_ms: 393.512611
+      type: 'test'
+      ...
+    # Subtest: correct plan traverses all six operations, displaces water and seals only after withdrawal
+    ok 7 - correct plan traverses all six operations, displaces water and seals only after withdrawal
+      ---
+      duration_ms: 448.534298
+      type: 'test'
+      ...
+    # Subtest: pause freezes time and pixels; resume continues, editing cancels stale playback
+    ok 8 - pause freezes time and pixels; resume continues, editing cancels stale playback
+      ---
+      duration_ms: 436.719849
+      type: 'test'
+      ...
+    # Subtest: starting another experiment pauses the task and reset stays local
+    ok 9 - starting another experiment pauses the task and reset stays local
+      ---
+      duration_ms: 153.803449
+      type: 'test'
+      ...
+    # Subtest: seven widths retain readable controls with no overflow
+    ok 10 - seven widths retain readable controls with no overflow
+      ---
+      duration_ms: 2195.651824
+      type: 'test'
+      ...
+    # Subtest: real touch can choose, configure and move a step
+    ok 11 - real touch can choose, configure and move a step
+      ---
+      duration_ms: 1363.657032
+      type: 'test'
+      ...
+    # Subtest: without JavaScript the choices, operations and scientific caveat remain readable
+    ok 12 - without JavaScript the choices, operations and scientific caveat remain readable
+      ---
+      duration_ms: 944.114218
+      type: 'test'
+      ...
+    1..12
+ok 1 - CO2 water-displacement transfer task: plan, operate, inspect and retry
+  ---
+  duration_ms: 9487.389241
+  type: 'test'
+  ...
+1..1
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9809.229777

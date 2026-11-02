@@ -1,4 +1,4 @@
-import {CO2_SETUP_DURATION,co2SetupFrame,CO2_OPERATIONS,co2BenchFrame,CO2_LIQUID_PROFILE,liquidGeometry,rubberGeometry,transformPoint} from './co2-model.mjs?v=five-detail-3';
+import {CO2_SETUP_DURATION,co2SetupFrame,CO2_OPERATIONS,co2BenchFrame,CO2_LIQUID_PROFILE,liquidGeometry,rubberGeometry,transformPoint} from './co2-model.mjs?v=transfer-1';
 export {CO2_SETUP_DURATION,co2SetupFrame,co2BenchFrame};
 const NS='http://www.w3.org/2000/svg';
 const atlas='assets/co2-marble-atlas.png';

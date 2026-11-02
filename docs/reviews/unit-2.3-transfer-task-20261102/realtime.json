@@ -1,0 +1,22 @@
+{
+  "co2Stages": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+  ],
+  "taskStages": [
+    "prepare",
+    "react",
+    "purge",
+    "collect",
+    "withdraw",
+    "cover"
+  ],
+  "co2State": "complete",
+  "taskState": "complete",
+  "taskResult": "correct",
+  "errors": []
+}
