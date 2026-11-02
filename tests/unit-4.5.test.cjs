@@ -1,0 +1,82 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),http=require('node:http'),path=require('node:path'),fs=require('node:fs/promises');
+const {chromium}=require('playwright');
+test('4.5 初版七區與小測：實際操作、畫面一致與手機備援',{timeout:360000},async t=>{
+ let base=process.env.COLOR_URL;
+ if(!base){const root=path.resolve(__dirname,'..'),server=http.createServer(async(req,res)=>{try{let file=path.join(root,decodeURI(req.url.split('?')[0]));if((await fs.stat(file)).isDirectory())file+='/index.html';res.setHeader('Content-Type',({'.mjs':'text/javascript','.js':'text/javascript','.css':'text/css','.png':'image/png'})[path.extname(file)]||'text/html');res.end(await fs.readFile(file));}catch{res.statusCode=404;res.end('missing')}});await new Promise(r=>server.listen(0,'127.0.0.1',r));t.after(()=>server.close());base=`http://127.0.0.1:${server.address().port}/units/4/parts/4.5/`;}
+ const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader'],...(process.env.COLOR_URL?{proxy:{server:process.env.HTTPS_PROXY||process.env.HTTP_PROXY}}:{})});t.after(()=>browser.close());
+ const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});context.setDefaultNavigationTimeout(90000);
+ // Test-only observation of the real camera/mesh; production exports no test API.
+ await context.route('**/4.5/assets/studio.mjs',async route=>{const response=await route.fetch();let body=await response.text();body=body.replace('resize();\n return{update',`resize();\n window.__colorStudios ||= {}; window.__colorStudios[root.closest('section').id]={raysVisible(){return rays.visible;},project(z){const p=new THREE.Vector3(0,AXIS,z).project(camera),r=canvas.getBoundingClientRect();return{x:r.x+(p.x+1)*r.width/2,y:r.y+(1-p.y)*r.height/2};}};\n return{update`);await route.fulfill({response,body});});
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`)});
+ const capture=process.env.COLOR_CAPTURE_DIR||'/tmp/unit45-check';await fs.mkdir(capture,{recursive:true});
+ await page.goto(base,{waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelectorAll('[data-lab][data-ready=true]').length===7);
+ const lab=i=>page.locator(`#s${i} [data-lab]`),state=async i=>JSON.parse(await lab(i).getAttribute('data-state')),values=async(i,key)=>JSON.parse(await lab(i).getAttribute('data-'+key));
+ async function show(i){await lab(i).scrollIntoViewIfNeeded();if(i!==3)await page.waitForFunction(i=>document.querySelector(`#s${i} [data-lab]`).dataset.renderer==='three',i);}
+ async function image(i,name){await show(i);if(page.viewportSize().width<650){await page.locator(`.route a[href="#s${i}"]`).click();await page.screenshot({path:path.join(capture,name+'.png')});}else await page.locator('#s'+i).screenshot({path:path.join(capture,name+'.png')});}
+ const pixels=async locator=>locator.evaluate(c=>Array.from(c.getContext('2d').getImageData(0,0,c.width,c.height).data).reduce((s,n,i)=>i%4===3?s:(s+n*(i%17+1))%1000000007,0));
+ await t.test('七區對話、獨立小測、封面與分享縮圖及唯一ID完整',async()=>{
+  assert.equal(await page.locator('.lesson-card').count(),7);assert.equal(await page.locator('form').count(),1);assert.equal(await page.locator('.unit-quiz fieldset').count(),4);
+  for(let i=1;i<=7;i++){assert.equal(await page.locator(`#s${i} .dialogue`).count(),3);assert.equal(await page.locator(`.route a[href="#s${i}"] span`).innerText(),await page.locator(`#s${i} h2`).innerText());}
+  const ids=await page.locator('[id]').evaluateAll(es=>es.map(e=>e.id));assert.equal(ids.length,new Set(ids).size);assert.equal(await page.locator('.hero-cover img').evaluate(e=>e.complete&&e.naturalWidth===1672),true);
+  assert.match(await page.locator('[property="og:image"]').getAttribute('content'),/4\.5\/assets\/color-story-opening.png$/);await page.locator('.hero').screenshot({path:path.join(capture,'hero.png')});
+ });
+ await t.test('三稜鏡放入形成連續色帶；旋轉、俯視及光路顯示不改白幕結果',async()=>{
+  await show(1);const canvas=lab(1).locator('[data-receiver]'),before=await pixels(canvas);await lab(1).locator('[data-prism=in]').click();assert.equal((await state(1)).inserted,true);const land=await values(1,'landing');assert.equal(new Set(land).size,73);assert.notEqual(await pixels(canvas),before);const after=await pixels(canvas);
+  const orbit=JSON.parse(await lab(1).getAttribute('data-orbit'));await lab(1).locator('[data-studio]').focus();await page.keyboard.press('ArrowLeft');await page.waitForFunction(a=>JSON.parse(document.querySelector('#s1 [data-lab]').dataset.orbit).azimuth!==a,orbit.azimuth);const rotated=JSON.parse(await lab(1).getAttribute('data-orbit'));assert.equal(orbit.radius,rotated.radius);assert.notEqual(orbit.azimuth,rotated.azimuth);
+  await lab(1).locator('[data-view]').click();await lab(1).locator('[data-rays]').click();assert.equal(await pixels(canvas),after);assert.deepEqual(await values(1,'landing'),land);await lab(1).locator('[data-rays]').click();await lab(1).locator('[data-view]').click();await image(1,'prism-spectrum');
+ });
+ await t.test('實際抓取立體三稜鏡移出與移入，按鈕與近看同步',async()=>{
+  await show(1);await page.waitForTimeout(60);for(const [from,to,inserted]of [[0,2.05,false],[2.05,0,true]]){
+   const a=await page.evaluate(z=>window.__colorStudios.s1.project(z),from),b=await page.evaluate(z=>window.__colorStudios.s1.project(z),to);await page.mouse.move(a.x,a.y);await page.mouse.down();await page.mouse.move(b.x,b.y,{steps:15});await page.mouse.up();assert.equal((await state(1)).inserted,inserted);assert.equal(await lab(1).locator(`[data-prism=${inserted?'in':'out'}]`).getAttribute('aria-pressed'),'true');
+  }
+ });
+ await t.test('單色比較沿用相同器材，各區狀態獨立',async()=>{
+  await show(2);await lab(2).locator('[data-light=red]').click();assert.equal(await lab(2).getAttribute('data-spectrum'),'1');assert.match(await lab(2).locator('[data-result]').innerText(),/沒有變成一整條彩色帶/);assert.equal((await state(1)).light,'white');await lab(2).locator('[data-light=white]').click();assert.equal(await lab(2).getAttribute('data-spectrum'),'73');
+ });
+ await t.test('RGB重疊像素為白、兩色為黃；燈具關閉、直接拖曳與鍵盤移動有效',async()=>{
+  await show(3);await lab(3).locator('[data-preset=together]').click();assert.deepEqual(await values(3,'center'),[1,1,1]);await lab(3).locator('[data-lamp=blue]').click();assert.deepEqual(await values(3,'center'),[1,1,0]);
+  const rgb=await lab(3).locator('canvas').evaluate(c=>[...c.getContext('2d').getImageData(635,215,1,1).data]);assert.ok(rgb[0]>245&&rgb[1]>245&&rgb[2]<40);
+  const handle=lab(3).locator('[data-spot=red]'),a=await handle.boundingBox();await page.mouse.move(a.x+a.width/2,a.y+a.height/2);await page.mouse.down();await page.mouse.move(a.x-70,a.y-30,{steps:8});await page.mouse.up();assert.equal(await lab(3).getAttribute('data-preset'),'custom');const before=(await values(3,'spots'))[0].x;await handle.focus();await page.keyboard.press('ArrowRight');assert.ok((await values(3,'spots'))[0].x>before);await lab(3).locator('[data-preset=pairs]').click();await image(3,'rgb-pairs');
+ });
+ await t.test('白光換材料與同片色卡換照明，白光參照維持同一像素',async()=>{
+  await show(4);for(const material of ['green','blue','white','black','red']){await lab(4).locator(`[data-material=${material}]`).click();assert.equal((await state(4)).light,'white');}
+  await show(5);const canvas=lab(5).locator('[data-receiver]'),baseline=()=>canvas.evaluate(c=>[...c.getContext('2d').getImageData(70,100,1,1).data]);const before=await baseline();await lab(5).locator('[data-light=green]').click();assert.deepEqual(await baseline(),before);assert.equal((await state(5)).material,'red');assert.match(await lab(5).locator('[data-result]').innerText(),/很暗/);assert.ok(Math.max(...await values(5,'outgoing'))<.045);await image(5,'same-card-green-light');
+ });
+ await t.test('透明色片一次只改一項，換光源保留色片並顯示透光變暗',async()=>{
+  await show(6);assert.equal(await lab(6).locator('[data-light=red]').isDisabled(),true);await lab(6).locator('[data-filter=green]').click();const green=await values(6,'outgoing');assert.ok(green[1]>.8&&green[0]<.02);await lab(6).locator('[data-filter-step=light]').click();assert.equal(await lab(6).locator('[data-filter=red]').isDisabled(),true);await lab(6).locator('[data-light=red]').click();assert.equal((await state(6)).filter,'green');assert.ok(Math.max(...await values(6,'outgoing'))<.045);await image(6,'filter-blocks-red');await lab(6).locator('[data-filter-step=filter]').click();assert.equal((await state(6)).light,'white');assert.equal((await state(6)).filter,'green');await image(6,'filter-passes-green');
+ });
+ await t.test('反射與透射情境遮光只改入眼光，器材與出射光保持',async()=>{
+  await show(7);for(const mode of ['reflection','transmission']){await lab(7).locator(`[data-eye-mode=${mode}]`).click();const outgoing=await values(7,'outgoing');await lab(7).locator('[data-blocker]').click();assert.deepEqual(await values(7,'outgoing'),outgoing);assert.deepEqual(await values(7,'received'),[0,0,0]);assert.match(await lab(7).locator('[data-result]').innerText(),/光源與物體沒有改變/);await lab(7).locator('[data-blocker]').click();assert.deepEqual(await values(7,'received'),outgoing);}await image(7,'eye-transmission');
+ });
+ await t.test('唯一小測漏答、錯答回看、改答清除舊成績、全對與重填',async()=>{
+  const quiz=page.locator('[data-quiz]'),summary=quiz.locator('[data-quiz-summary]');assert.equal(await quiz.locator('.quiz-feedback:visible').count(),0);await quiz.locator('[data-submit]').click();assert.match(await summary.innerText(),/尚未作答/);
+  for(const name of ['prism','mix','surface','filter'])await quiz.locator(`[name=${name}][value="0"]`).check();await quiz.locator('[data-submit]').click();assert.equal(await summary.getAttribute('data-score'),'1');assert.equal(await quiz.locator('.quiz-feedback a').count(),4);
+  for(const [name,value]of [['prism',1],['mix',0],['surface',2],['filter',1]])await quiz.locator(`[name=${name}][value="${value}"]`).check();assert.equal(await summary.getAttribute('data-score'),null);await quiz.locator('[data-submit]').click();assert.equal(await summary.getAttribute('data-score'),'4');await page.locator('#unit-quiz').screenshot({path:path.join(capture,'quiz-correct.png')});await quiz.locator('[data-quiz-reset]').click();assert.equal(await quiz.locator('input:checked').count(),0);assert.equal(await quiz.locator('.quiz-feedback:visible').count(),0);
+ });
+ const layouts=[];
+ for(const width of [1440,1366,1024,820,768,390,320])await t.test(`${width}px所有區塊、導覽與控制項不溢出`,async()=>{
+  await page.setViewportSize({width,height:1000});for(let i=1;i<=7;i++){await page.locator(`.route a[href="#s${i}"]`).click();const result=await lab(i).evaluate(e=>({overflow:document.documentElement.scrollWidth>innerWidth,clipped:[...e.querySelectorAll('button,p')].filter(n=>n.scrollWidth>n.clientWidth+2).map(n=>n.textContent),stage:e.querySelector('canvas').getBoundingClientRect().width,body:e.getBoundingClientRect().width,heading:e.closest('section').querySelector('h2').getBoundingClientRect().top,navBottom:document.querySelector('.route').getBoundingClientRect().bottom}));layouts.push({width,i,...result});assert.equal(result.overflow,false);assert.deepEqual(result.clipped,[]);assert.ok(result.stage<=result.body+1);if(width<=900){assert.ok(result.heading>=result.navBottom-1);assert.ok(result.heading<result.navBottom+100);}}
+  if([1440,390,320].includes(width)){await image(1,'prism-'+width);await image(3,'rgb-'+width);}
+ });
+ await fs.writeFile(path.join(capture,'layout.json'),JSON.stringify(layouts,null,2));
+ await t.test('手機原生觸控混光與按鈕、深連結可用',async()=>{
+  const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'}),p=await mobile.newPage();await p.goto(base+'#s3');await p.waitForFunction(()=>document.querySelector('.route a[aria-current=step]')?.hash==='#s3');await p.locator('#s3 [data-preset=together]').tap();const handle=p.locator('#s3 [data-spot=red]');await handle.scrollIntoViewIfNeeded();const box=await handle.boundingBox(),client=await mobile.newCDPSession(p),x=box.x+box.width/2,y=box.y+box.height/2;await client.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});await client.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x-45,y:y-10}]});await client.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});assert.equal(await p.locator('#s3 [data-lab]').getAttribute('data-preset'),'custom');await p.locator('#s1 [data-prism=in]').tap();assert.equal(JSON.parse(await p.locator('#s1 [data-lab]').getAttribute('data-state')).inserted,true);await p.screenshot({path:path.join(capture,'touch.png')});await mobile.close();
+ });
+ await t.test('手機三稜鏡觸控取消保留條件，中途加入雙指不留下隱藏光路',async()=>{
+  const p=await context.newPage();await p.setViewportSize({width:390,height:844});await p.goto(base+'#s1');await p.locator('#s1 [data-lab]').scrollIntoViewIfNeeded();await p.waitForFunction(()=>window.__colorStudios?.s1);await p.locator('#s1 [data-prism=in]').click();await p.waitForTimeout(150);const c=await context.newCDPSession(p);await c.send('Emulation.setTouchEmulationEnabled',{enabled:true});
+  const point=async z=>p.evaluate(z=>window.__colorStudios.s1.project(z),z);let a=await point(0),b=await point(2.05);await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[a]});await c.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[b]});await c.send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});assert.equal(JSON.parse(await p.locator('#s1 [data-lab]').getAttribute('data-state')).inserted,true);
+  a=await point(0);b={x:a.x+30,y:a.y+5};await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[a]});await c.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[b]});await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...b,id:0},{x:b.x+40,y:b.y+30,id:1}]});await c.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:b.x-10,y:b.y,id:0},{x:b.x+55,y:b.y+40,id:1}]});await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});assert.notEqual(await p.locator('#s1 [data-lab]').getAttribute('data-dragging'),'true');assert.equal(await p.evaluate(()=>window.__colorStudios.s1.raysVisible()),true);await p.close();
+ });
+ await t.test('立體載入失敗仍有平面示意、近看與可操作按鈕',async()=>{
+  const p=await context.newPage();await p.route('**/4.5/assets/studio.mjs',r=>r.abort());await p.goto(base+'#s1');await p.waitForSelector('#s1 .is-fallback');await p.locator('#s1 [data-prism=in]').click();assert.match(await p.locator('#s1 [data-result]').innerText(),/連續的色帶/);assert.equal(await p.locator('#s1 [data-view]').isVisible(),false);await p.locator('#s1 [data-prism-hit]').focus();await p.keyboard.press('Enter');assert.equal(JSON.parse(await p.locator('#s1 [data-lab]').getAttribute('data-state')).inserted,false);await p.screenshot({path:path.join(capture,'fallback.png')});await p.close();
+ });
+ await t.test('WebGL本身不可用時平面備援仍會更新材料與透射結果',async()=>{
+  const c=await browser.newContext(),p=await c.newPage();await p.addInitScript(()=>{const original=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(kind,...args){return /webgl/i.test(kind)?null:original.call(this,kind,...args)}});await p.goto(base+'#s6');await p.locator('#s6 [data-lab]').scrollIntoViewIfNeeded();await p.waitForSelector('#s6 .is-fallback');await p.locator('#s6 [data-filter=green]').click();assert.match(await p.locator('#s6 [data-receiver-label]').innerText(),/綠/);await p.locator('#s5 [data-light=green]').click();assert.match(await p.locator('#s5 [data-result]').innerText(),/很暗/);await c.close();
+ });
+ await t.test('停用JavaScript保留敘事與未就緒提示，無可誤按的操作',async()=>{
+  const c=await browser.newContext({javaScriptEnabled:false}),p=await c.newPage();await p.goto(base);assert.equal(await p.locator('.lesson-card').count(),7);assert.equal(await p.locator('.no-js').isVisible(),true);assert.equal(await p.locator('[data-submit]').isDisabled(),true);assert.equal(await p.locator('#s1 [data-prism=in]').isDisabled(),true);await c.close();
+ });
+ await t.test('入口、錨點、靜態素材與正常頁沒有錯誤',async()=>{
+  assert.equal(await page.locator('a[href^="#"]').evaluateAll(as=>as.filter(a=>!document.getElementById(a.hash.slice(1))).length),0);const entry=await context.request.get(new URL('../../',base).href);assert.equal(entry.status(),200);assert.match(await entry.text(),/parts\/4\.5\//);assert.deepEqual(errors,[]);
+ });
+});

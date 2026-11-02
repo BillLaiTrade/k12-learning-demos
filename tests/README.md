@@ -1,5 +1,14 @@
 # 5.1 瀏覽器操作檢查
 
+## 4.5 光的色散與顏色完整初版（2026-11-02）
+
+```sh
+node --test tests/unit-4.5-color-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+純模型檢查連續可見光的兩介面折射、白幕落點、單色比較、線性RGB疊加、所有照明／材料組合守恆及遮擋只改入眼光。瀏覽器檢查七區與唯一小測、實際3D抓取、畫面像素／參照一致、單變因、狀態獨立、鍵盤、手機觸控、七種寬度、備援及靜態閱讀。`COLOR_URL`指定公開頁，`COLOR_CAPTURE_DIR`另存畫面與layout.json，避免覆寫本機證據。正式程式無測試API，測試才攔截模組觀察真實器材投影座標。
+
 ## 3.3 單元小測三區操作
 
 ```sh
