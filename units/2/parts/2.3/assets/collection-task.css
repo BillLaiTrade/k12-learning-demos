@@ -83,3 +83,8 @@
  #s6 .desk-heading{padding:6px 14px}
  #s6 .desk-bottom{padding:4px 14px}
 }
+
+/* 可操作開口由 SVG 輪廓提示，不再顯示獨立方框。細器材保留沿軸的觸控容錯。 */
+#s6 .desk-target{display:none}
+#s6 .task-scene [data-desk-drag],#s6 .task-scene [data-desk-drag] *{pointer-events:none}
+#s6 .task-scene [data-desk-grip]{pointer-events:visible}
