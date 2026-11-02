@@ -1,0 +1,22 @@
+{
+  "s1": true,
+  "s2": true,
+  "s4": true,
+  "s5": true,
+  "s6": true,
+  "s7": true,
+  "s8": true,
+  "s9": true,
+  "s10": true,
+  "lesson.mjs": true,
+  "lesson.css": true,
+  "pinhole-3d.mjs": true,
+  "pinhole-3d.css": true,
+  "pinhole-optics.mjs": true,
+  "convex-studio.mjs": true,
+  "convex-studio.css": true,
+  "parallel-lab.mjs": true,
+  "parallel-lab.css": true,
+  "parallel-optics.mjs": true,
+  "optics.mjs": true
+}

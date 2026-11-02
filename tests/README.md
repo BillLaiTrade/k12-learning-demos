@@ -995,3 +995,13 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4.test.cjs
 ```
 
 新專項8（含主項）＋整課23共31項。直接對實際Three.js鏡片求交，確認入射／出射點在曲面、主軸光不偏折、其餘光穿過焦點後繼續行進；檢查主圖與剖面共同開關、兩步驟選取與實際3D法線、器材不隨視角變動、滑鼠／鍵盤／原生觸控旋轉縮放及取消、七寬度完整取景／標籤／剖面文字，以及模擬渲染失敗仍可操作剖面。測試才攔截模組加入唯讀觀察介面，正式程式沒有測試API。`CONVEX_URL`指定公開頁（不帶hash），`CONVEX_CAPTURE_DIR`保存畫面、layout.json與scene.json；公開另跑8＋23項。純模型未改，不重跑；六檔完整套件66項不可當作本輪執行數。
+
+## 4.4 第三區立體成像與物距比較（2026-11-02）
+
+```sh
+node tests/unit-4.4-imaging-optics.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4-imaging-studio.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4.test.cjs
+```
+
+新增模型4、立體專項10（含主項）與更新整課23，共37項。模型核對不同物距的像距、倍率、分物點會聚、實際屏幕平面的散開包絡、焦點／軌道／屏幕邊界及單一器材移動。立體專項使用實際屏幕像素檢查大小比例，驗證相同器材與正面視角、拖曳抓取偏移、階段狀態保留、四筆紀錄不覆蓋、明確刪除、失焦與清楚狀態、手機原生拖曳／取消／雙指縮放、七寬度取景與標籤避讓、WebGL失敗仍可操作。測試才攔截模組加入觀察與條件設定，正式程式無測試API。`IMAGING_URL`指定公開頁，`IMAGING_CAPTURE_DIR`保存畫面與量測；公開另跑專項10＋整課23。既有第一／第二區、其他光學模型未改，不重跑其專項。
