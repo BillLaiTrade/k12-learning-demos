@@ -1,4 +1,4 @@
-import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-default-dispersion-20261102';
+import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-source-comparison-20261102';
 import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays,DEFAULT_SPOTS,mixPreset,mixAt,QUIZ,clamp} from './color-model.mjs';
 import {prismDiagram,materialDiagram,drawScreen,drawObservation,drawMix} from './rendering.mjs';
 let studioModule=null;
@@ -12,7 +12,7 @@ function channels(root,groups){
 }
 
 function initialiseLab(root,index){
- const kind=root.dataset.lab;if(kind==='prism'&&root.dataset.section==='1'){initialisePrecisionPrism(root);return;}if(kind==='mix'){initialiseMix(root);return;}
+ const kind=root.dataset.lab;if(kind==='prism'&&root.dataset.precision==='true'){initialisePrecisionPrism(root);return;}if(kind==='mix'){initialiseMix(root);return;}
  const state={kind,inserted:root.dataset.inserted==='true',light:'white',material:kind==='eye'?'green':'red',filter:kind==='eye'?'green':'clear',step:'filter',mode:'reflection',blocked:false,rays:true,view:false};
  const $=s=>root.querySelector(s),diagram=$('[data-diagram]'),canvas=$('[data-studio]');let studio=null,loading=false,signal=null;
  function update(){
