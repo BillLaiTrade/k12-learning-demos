@@ -16,8 +16,9 @@
 .oblique-normal { fill:none; stroke:#737e76; stroke-width:3; stroke-dasharray:12 9; }
 .oblique-angle-sector { stroke:none; }
 .oblique-in-sector { fill:var(--oblique-in); fill-opacity:.3; }
-.oblique-out-sector { fill:var(--oblique-out); fill-opacity:.33; }
+.oblique-out-sector { fill:var(--oblique-out); fill-opacity:.52; }
 .oblique-sector-base { fill:#fffff5; fill-opacity:.67; stroke:none; }
+.oblique-out-base { fill-opacity:.84; }
 .oblique-angle-arc { fill:none; stroke-width:2.3; }
 .oblique-in-arc { stroke:var(--oblique-in); }
 .oblique-out-arc { stroke:var(--oblique-out); }
@@ -49,13 +50,14 @@
 #oblique-zoom { display:block; width:100%; height:auto; aspect-ratio:1; overflow:hidden; border:1px solid #dfe5d7; border-radius:10px; background:#fffdf6; }
 #oblique-zoom .oblique-normal { stroke:#526559; stroke-width:1.3; stroke-dasharray:5 4; }
 .oblique-normal-underlay { fill:none; stroke:#fffef5; stroke-opacity:.85; stroke-width:2.5; stroke-dasharray:5 4; }
-.oblique-zoom-interface { fill:none; stroke:#eefef8; stroke-opacity:.7; stroke-width:.8; }
-#oblique-zoom .oblique-halo { stroke-width:6; filter:drop-shadow(0 0 3px #ffd270); }
-#oblique-zoom .oblique-ray { stroke-width:2.7; }
-#oblique-zoom .oblique-core { stroke-width:1; }
-#oblique-zoom text { font-size:calc(14px * var(--zoom-font-scale,1)); }
+.oblique-interface-underlay { fill:none; stroke:#f4fffa; stroke-opacity:.86; stroke-width:1.8; }
+.oblique-zoom-interface { fill:none; stroke:#347c81; stroke-width:.8; }
+#oblique-zoom .oblique-halo { stroke-width:3; opacity:.38; filter:drop-shadow(0 0 .7px #ffd270); }
+#oblique-zoom .oblique-ray { stroke-width:1.5; }
+#oblique-zoom .oblique-core { stroke-width:.65; }
+#oblique-zoom text { font-size:calc(11px * var(--zoom-font-scale,1)); }
 #oblique-zoom .oblique-normal-name { fill:#45534b; }
-.oblique-zoom-labels rect { fill:#fffef5; fill-opacity:.94; stroke:#d7e2d6; stroke-width:.6; }
+.oblique-zoom-labels rect { fill:#fffef5; fill-opacity:.9; stroke:#d7e2d6; stroke-width:.6; }
 .oblique-angle-readouts { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:0; min-width:0; min-height:58px; align-items:center; }
 .oblique-angle-reading { display:flex; flex-wrap:wrap; align-items:baseline; justify-content:center; gap:3px 7px; padding:5px 2px; }
 .oblique-angle-reading > span { display:inline-flex; align-items:center; gap:4px; font-size:.86rem; font-weight:700; white-space:nowrap; }

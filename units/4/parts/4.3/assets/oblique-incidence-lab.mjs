@@ -36,10 +36,19 @@ scene.innerHTML=`<defs>
 zoom.setAttribute('viewBox',zoomViewBox);
 zoom.innerHTML=`<defs>
  <linearGradient id="oblique-glass-edge"><stop stop-color="#effcf9" stop-opacity=".65"/><stop offset=".04" stop-color="#ffffff" stop-opacity="0"/><stop offset=".96" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#dff5ef" stop-opacity=".65"/></linearGradient>
+ <linearGradient id="oblique-surface-air" x1="0" y1="0" x2="0" y2="1"><stop stop-color="white" stop-opacity="0"/><stop offset=".2" stop-color="white"/><stop offset="1" stop-color="white"/></linearGradient>
+ <linearGradient id="oblique-surface-medium" x1="0" y1="0" x2="0" y2="1"><stop stop-color="white"/><stop offset=".5" stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
+ <mask id="oblique-air-reflection-mask" maskUnits="userSpaceOnUse" x="530" y="546" width="240" height="24"><rect x="530" y="546" width="240" height="24" fill="url(#oblique-surface-air)"/></mask>
+ <mask id="oblique-medium-reflection-mask" maskUnits="userSpaceOnUse" x="530" y="570" width="240" height="38"><rect x="530" y="570" width="240" height="38" fill="url(#oblique-surface-medium)"/></mask>
  </defs>
  <image id="oblique-detail-background" x="0" y="0" width="1254" height="1254" href="${picture.src}"/>
  <rect class="oblique-detail-wash" x="530" y="450" width="240" height="240" fill="#fffdf6" fill-opacity=".08"/>
  <rect x="530.5" y="450.5" width="239" height="239" rx="2" fill="url(#oblique-glass-edge)" stroke="#e8f7ef" stroke-opacity=".6" stroke-width="1"/>
+ <g class="oblique-surface-softening" aria-hidden="true">
+  <g mask="url(#oblique-air-reflection-mask)"><svg x="530" y="546" width="240" height="24" viewBox="530 520 240 24"><use href="#oblique-detail-background"/></svg></g>
+  <g mask="url(#oblique-medium-reflection-mask)"><svg x="530" y="570" width="240" height="38" viewBox="530 610 240 38"><use href="#oblique-detail-background"/></svg></g>
+ </g>
+ <path class="oblique-interface-underlay" d="M530 570H770"/>
  <path class="oblique-zoom-interface" d="M530 570H770"/>
  <g class="oblique-angle-marks" visibility="hidden">
   <path class="oblique-sector-base oblique-in-base"/><path class="oblique-sector-base oblique-out-base"/>
@@ -78,7 +87,8 @@ function drawGeometry(){
  scene.querySelector('#oblique-case-label').setAttribute('transform',`translate(650 155) scale(${fontScale})`);scene.querySelector('#oblique-case-name').textContent=`空氣 → ${name()}`;
  scene.querySelector('#oblique-air-label').setAttribute('transform',`translate(${1030-110*fontScale} 440) scale(${fontScale})`);scene.querySelector('#oblique-material-label').setAttribute('transform',`translate(230 740) scale(${fontScale})`);scene.querySelector('#oblique-material-label text').textContent=name();
  for(const kind of ['sector','base']){zoom.querySelector(`.oblique-in-${kind}`).setAttribute('d',sector(angle,true));zoom.querySelector(`.oblique-out-${kind}`).setAttribute('d',sector(g.outgoing,false));}zoom.querySelector('.oblique-in-arc').setAttribute('d',arc(angle,true));zoom.querySelector('.oblique-out-arc').setAttribute('d',arc(g.outgoing,false));$('#oblique-in-value').value=`${angle}°`;$('#oblique-out-value').value=`${g.outgoing.toFixed(1)}°`;zoom.querySelector('#oblique-zoom-medium').textContent=name();
- zoom.style.setProperty('--zoom-font-scale',String(Math.max(1,240/Math.max(200,zoom.getBoundingClientRect().width))));
+ zoom.style.setProperty('--zoom-font-scale',String(Math.max(1,14*240/(11*Math.max(200,zoom.getBoundingClientRect().width)))));
+ for(const group of zoom.querySelectorAll('.oblique-zoom-labels > g')){const box=group.querySelector('text').getBBox(),plate=group.querySelector('rect');for(const [key,value] of Object.entries({x:box.x-4,y:box.y-3,width:box.width+8,height:box.height+6}))plate.setAttribute(key,String(value));}
  const description=`空氣射入${name()}，入射角${angle}度，折射角${g.outgoing.toFixed(1)}度。法線通過入射點；角度皆從法線量起。`;
  scene.setAttribute('aria-label',`${description}點燈發射，拖曳可調角度。`);zoom.setAttribute('aria-label',`同一入射點的放大畫面。${description}`);
  $('#oblique-finding-text').textContent=angle===0?'垂直入射 → 方向不偏折':`斜射入${name()} → 折射光偏向法線`;
