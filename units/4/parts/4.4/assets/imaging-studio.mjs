@@ -38,10 +38,11 @@ function initialise(root){
   const g=paintProjection(),focus=state.stage==='focus';
   $$('[data-imaging-step]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingStep===state.stage)));
   $$('[data-imaging-preset]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.imagingPreset)===state.object)));
-  $('[data-imaging-presets]').hidden=focus;$('[data-imaging-comparison]').hidden=focus;
+  $('[data-imaging-object-controls]').hidden=focus;$('[data-imaging-presets]').hidden=focus;$('[data-imaging-comparison]').hidden=focus;
   $('[data-imaging-prompt]').textContent=focus?'固定圖卡與透鏡，拖曳屏幕底座，找清楚的倒立像。':'先移動圖卡，再移動屏幕重新對焦；比較清楚像的位置和大小。';
   $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.disabled=key==='object'&&focus;b.textContent=key==='object'?`發光圖卡・${focus?'固定':'可拖曳'}`:'屏幕・可拖曳';b.setAttribute('aria-pressed',String(key===selected));b.setAttribute('aria-label',`${key==='object'?'發光圖卡':'屏幕'}，${state[key]}公分，可用方向鍵移動`);});
   $$('[data-imaging-nudge]').forEach(b=>{const key=b.dataset.imagingNudge;b.disabled=key==='object'&&focus||state[key]<=G[key+'Min']&&Number(b.dataset.direction)<0||state[key]>=G[key+'Max']&&Number(b.dataset.direction)>0;});
+  const handle=$('[data-imaging-ruler-handle]');handle.style.left=`${state.screen/G.screenMax*100}%`;handle.setAttribute('aria-valuenow',String(state.screen));handle.setAttribute('aria-valuetext',`屏幕距離透鏡${state.screen}公分`);
   $('[data-imaging-distance=object]').textContent=`物距 ${state.object} 公分`;$('[data-imaging-distance=screen]').textContent=`屏幕距離 ${state.screen} 公分`;
   $('[data-imaging-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-imaging-rays]').setAttribute('aria-pressed',String(showRays));$('[data-imaging-trace]').hidden=!showRays;
   $$('[data-imaging-point]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingPoint===point)));
@@ -53,7 +54,7 @@ function initialise(root){
   if(g.clipped)message+=' 部分投影超出屏幕；保留實際比例，不縮小圖案填入。';
   if(showRays)message+=point==='top'?' 紅線追蹤圖卡上端，在清楚像的下方會聚。':point==='bottom'?' 藍線追蹤圖卡下端，在清楚像的上方會聚。':' 紅、藍線來自不同物點，分別形成對應的像點。';
   $('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=!g.finite?'物體位於焦點':g.unreachable?'清楚像超出軌道':g.clear?`已對焦・倒立${g.sizeLabel}${g.clipped?'・部分超出屏幕':''}`:'屏幕尚未對焦';
-  $('[data-imaging-record]').disabled=!g.clear||g.unreachable;updateRecordHint();
+  $('[data-imaging-autofocus]').disabled=!g.finite||g.unreachable;$('[data-imaging-record]').disabled=!g.clear||g.unreachable;updateRecordHint();
   root.dataset.focusStep=state.stage;root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.clear=String(g.clear);root.dataset.magnification=g.finite?String(g.m):'';root.dataset.projectionScale=g.projectionScale;root.dataset.spread=g.spread;root.dataset.rays=showRays;root.dataset.view=front?'screen':'orbit';root.dataset.point=point;
   canvas.setAttribute('aria-label',`立體凸透鏡成像台，物距${state.object}公分，屏幕距離${state.screen}公分，${$('[data-imaging-badge]').textContent}`);
   studio?.update();$$('.imaging-record[data-current]').forEach(c=>c.dataset.current=String(c.querySelector('img')?.alt.startsWith(`物距${state.object}公分，`)));
@@ -61,6 +62,12 @@ function initialise(root){
  function move(key,value){state=moveImaging(state,key,value);selected=key;update();}
  $$('[data-imaging-step]').forEach(b=>b.addEventListener('click',()=>{state={...state,stage:b.dataset.imagingStep};if(state.stage==='focus')selected='screen';update();}));
  $$('[data-imaging-preset]').forEach(b=>b.addEventListener('click',()=>move('object',Number(b.dataset.imagingPreset))));
+ const rulerHandle=$('[data-imaging-ruler-handle]'),rulerTrack=$('[data-imaging-ruler-track]');let rulerDrag=null;
+ rulerHandle.addEventListener('pointerdown',e=>{if(e.button!==0||rulerDrag)return;e.preventDefault();rulerHandle.focus({preventScroll:true});rulerHandle.setPointerCapture(e.pointerId);rulerDrag={id:e.pointerId,x:e.clientX,value:state.screen,width:rulerTrack.getBoundingClientRect().width};});
+ rulerHandle.addEventListener('pointermove',e=>{if(!rulerDrag||e.pointerId!==rulerDrag.id||!rulerDrag.width)return;move('screen',rulerDrag.value+(e.clientX-rulerDrag.x)/rulerDrag.width*G.screenMax);});
+ for(const event of ['pointerup','pointercancel','lostpointercapture'])rulerHandle.addEventListener(event,e=>{if(e.pointerId===rulerDrag?.id)rulerDrag=null;});
+ rulerHandle.addEventListener('keydown',e=>{const steps={ArrowLeft:-1,ArrowDown:-1,ArrowRight:1,ArrowUp:1};let value;if(e.key==='Home')value=G.screenMin;else if(e.key==='End')value=G.screenMax;else if(steps[e.key])value=state.screen+steps[e.key]*(e.shiftKey?.2:1);else return;e.preventDefault();move('screen',value);});
+ $('[data-imaging-autofocus]').addEventListener('click',()=>{const g=imagingState(state);if(g.finite&&!g.unreachable)move('screen',g.v);});
  $('[data-imaging-rays]').addEventListener('click',()=>{showRays=!showRays;update();});$('[data-imaging-view]').addEventListener('click',()=>{front=!front;update();});
  $$('[data-imaging-point]').forEach(b=>b.addEventListener('click',()=>{point=b.dataset.imagingPoint;update();}));
  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.addEventListener('click',()=>{selected=key;update();});b.addEventListener('keydown',e=>{let value=state[key];if(e.key==='Home')value=G[key+'Min'];else if(e.key==='End')value=G[key+'Max'];else if(['ArrowLeft','ArrowRight','ArrowDown','ArrowUp'].includes(e.key)){const direction=['ArrowLeft','ArrowDown'].includes(e.key)?-1:1;value+=(key==='object'?-direction:direction)*(e.shiftKey?.2:1);}else return;e.preventDefault();move(key,value);});});
