@@ -143,8 +143,8 @@
   <header class="lesson-head"><div class="lesson-number">04</div><div><h2 id="title-4">海底看不見，怎麼知道有多深？</h2><p>主動聲納：從回波時間描出海底的起伏</p></div></header>
   <div class="lesson-body"><div class="card-main">
     <div class="sonar-intro">
-    <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>海底看不見，也能靠回來的聲音知道它有多深嗎？</p></div>
-    <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>船底的探頭會發聲，也會接收回波。換個位置再測，看看聲音回來的時間有什麼不同。</p></div>
+    <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>阿公，那用聲音回來的時間算距離，可以拿來做什麼呢？</p></div>
+    <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>像船隻探測海底有多深，就會用到這個方法。船底的探頭先發聲，接收海底反射回來的聲音後，就能利用往返時間推算深度。</p></div>
     </div>
     <div class="sonar-lab" id="sonar" data-phase="ready" data-progress="0" data-emissions="0">
       <div class="sonar-toolbar">
@@ -173,14 +173,14 @@
       <p class="sonar-hint">點船發聲；拖船或點箭頭移動。探測中（含暫停）船位固定。</p>
       <p id="sonar-error" class="sonar-error" role="alert" hidden></p><p id="sonar-status" class="sr-only" role="status"></p>
     </div>
-    <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>和剛才一樣，聲速乘往返時間再除以二，才是探頭到海底的距離。每次只量到一個位置；累積不同位置的探測點，才能逐漸看出海底的高低起伏。</p></div>
     <details class="sonar-explanation"><summary>模型說明</summary>
     <p class="model-note">這是多種海底地形的組合示意，並非特定海域；船與探頭放大、橫向距離壓縮。深度約150–2,250公尺，往返約0.2–3秒；垂直深度與時間使用同一比例。深海實際沒有陽光，剖面以可視化方式呈現。固定地形、垂直聲路，距離從船底探頭起算。1,500 m/s 是題給近似值；可聽短音僅提示發射與接收，並非真實水下聲納錄音。</p>
     </details>
   </div></div></section><section class="lesson-card" id="s5" aria-labelledby="title-5">
 <header class="lesson-head"><div class="lesson-number">05</div><div><h2 id="title-5">找找生活中聲音反射的蹤影</h2><p>室內反射與吸音：比較加入材料前後的變化</p></div></header>
 <div class="lesson-body"><div class="card-main">
-<div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>發出的聲音，會怎麼從四周返回呢？</p></div>
+<div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>阿公，那我們平常待的房間裡，聲音碰到四周的牆，也會反射回來嗎？</p></div>
+<div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>會，聲音可能從不同的牆面反射回來。我們可以加入吸音材料，讓部分反射回來的聲音減弱。</p></div>
 <div class="room-wave-lab room-wave-lab--compact" id="room" role="group" aria-label="先發聲觀察，再試著改變房間" data-phase="ready" data-treated="false" data-emissions="0">
 <div class="room-toolbar"><div class="room-wave-controls"><button type="button" class="action" data-room-source="clap" aria-pressed="false">拍一下手</button><button type="button" class="secondary" data-room-source="speech" aria-pressed="false">說一句話</button><button type="button" class="secondary" id="room-pause" disabled>暫停</button><button type="button" class="secondary room-material" id="room-material" aria-pressed="false" aria-controls="room-view">＋ 加入吸音材料</button></div><span id="room-condition" class="room-condition">尚未加入吸音材料</span></div>
 <p id="room-observation" class="room-wave-question">觀察從四周牆面反射回來的波，哪一面牆的反射波先回到小葵身旁？</p>

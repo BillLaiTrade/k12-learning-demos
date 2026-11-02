@@ -1,4 +1,4 @@
-import {jarPose,jarMouth,outletPose,clamp} from './collection-task-model.mjs?v=supplies-1';
+import {jarPose,jarMouth,outletPose,clamp} from './collection-task-model.mjs?v=return-water-2';
 export const TOOL_HOME={forceps:{x:485,y:305},water:{x:660,y:130},acid:{x:440,y:65},rig:{x:500,y:50},funnel:{x:535,y:100},plate:{x:605,y:-20},peroxide:{x:680,y:65},catalyst:{x:490,y:450}};
 export function directPosition(s,id){
  if(s.dragging?.id===id)return s.dragging.position;
@@ -38,6 +38,7 @@ export function approach(s,id,p,origin){
   if(has('flask')&&near(300,205,95))return intent('target','flask','從瓶口放入大理石','flask');
  }
  if(id==='water'){
+  if(has('flask')&&(near(300,205,100)||s.funnel&&near(274,65,90)))return intent('target','flask',s.funnel?'清水經漏斗倒入反應瓶':'將清水倒入反應瓶','flask');
   if(has('jar')&&near(mouth.x,mouth.y,100))return intent('target','jar','由集氣瓶口裝水','jar');
   if(has('tank')&&near(1000,355,110))return intent('target','tank','向水槽加水','tank');
  }
