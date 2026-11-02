@@ -5,7 +5,7 @@ const line = (a,b,cls='ray',extra='') => `<path class="${cls}" d="M${a} L${b}" $
 const label = (x,y,s,extra='') => `<text x="${x}" y="${y}" ${extra}>${s}</text>`;
 function defs(id){return `<defs><marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#246e9c"/></marker></defs>`;}
 function arrow(a,b,id){return line(a,b,'ray',`marker-end="url(#${id})"`);}
-$$('[data-ray-lab]').forEach(root=>{
+$$('[data-ray-lab]:not([data-return-lab])').forEach(root=>{
   const type=root.dataset.rayLab, reverse=type==='leave', svg=$('svg',root);
   let medium='water', angle=30, dragging=false;
   function reset(){render();}
