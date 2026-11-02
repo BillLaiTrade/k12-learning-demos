@@ -126,7 +126,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     await touch.locator('.route a[href="#s6"]').tap();
     await touch.waitForFunction(() => document.querySelector('.route a[aria-current]')?.getAttribute('href') === '#s6');
     await touch.locator('[data-desk-material=water]').tap();assert.equal(await touch.locator('[data-desk-material=water]').getAttribute('data-present'),'true');
-    await touch.locator('[data-desk-material=water]').focus();await touch.keyboard.press('Enter');assert.equal(await touch.locator('[data-desk-material=water]').getAttribute('data-present'),'true');
+    await touch.locator('[data-desk-material=water]').focus();await touch.keyboard.press('Enter');assert.equal(await touch.locator('[data-desk-material=water]').getAttribute('data-present'),'false');
     await touch.close();
   });
   assert.deepEqual(errors,[],'no page errors or broken resources');

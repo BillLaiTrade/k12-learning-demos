@@ -7,7 +7,8 @@ export const REQUIRED_MATERIALS=DESK_MATERIALS.filter(m=>m.required).map(m=>m.id
 export const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 export const ease=v=>{const t=clamp(v);return t*t*(3-2*t);};
 export const mix=(a,b,p)=>a+(b-a)*p;
-export function createDesk(){return{positions:{},dragging:null,phase:'operate',selected:[],tool:null,focus:null,tankWater:0,jarWater:0,jarAngle:0,jarPlace:0,jarCovered:false,sealedUnderwater:false,flaskMarbles:0,heldMarble:false,acid:0,rig:false,funnel:false,outlet:'air',airRemaining:1,co2Volume:0,airVolume:0,sampleStarted:false,reactionAge:0,time:0,motion:null,feedback:'從材料區點選要用的物品，放到桌上直接操作。',feedbackKind:'hint',result:null,spilling:false};}
+export function createDesk(){return{positions:{},dragging:null,phase:'operate',selected:[],tool:null,focus:null,tankWater:0,jarWater:0,jarAngle:0,jarPlace:0,jarCovered:false,sealedUnderwater:false,flaskMarbles:0,heldMarble:false,acid:0,flaskWater:0,rig:false,funnel:false,outlet:'air',airRemaining:1,co2Volume:0,airVolume:0,sampleStarted:false,reactionAge:0,time:0,motion:null,feedback:'從材料區點選要用的物品，放到桌上直接操作。',feedbackKind:'hint',result:null,spilling:false};}
+export const flaskSurface=s=>580-80*Math.min(2,s.acid+s.flaskWater);
 export const waterSurface=s=>524-119*s.tankWater;
 export function jarPose(s){
  const m=s.motion;
@@ -29,14 +30,14 @@ export function jarPose(s){
 export function jarMouth(s){const a=s.jarAngle*Math.PI/180,p=jarPose(s);return{x:870+p.x+102*Math.sin(a),y:330+p.y-102*Math.cos(a)};}
 export const mouthUnderwater=s=>s.jarPlace>.99&&jarMouth(s).y>waterSurface(s)+3;
 export function reacting(s){
- const surface=580-80*s.acid;if(s.acid<=0)return false;
+ const surface=flaskSurface(s);if(s.acid<=0)return false;
  if(s.flaskMarbles>0&&surface<575)return true;
  if(s.motion?.kind!=='place-stone')return false;
  const p=s.motion.elapsed/s.motion.duration;if(p<.6)return false;
  const heights=[238,300,350,430,500,[555,555,548,525,520][s.motion.index]],k=clamp((p-.6)/.23)*5,i=Math.min(4,Math.floor(k)),y=mix(heights[i],heights[i+1],ease(k-i));
  return y+18>surface;
 }
-export const liquidSeal=s=>s.rig&&s.funnel&&s.motion?.kind!=='remove-rig'&&580-80*s.acid<555;
+export const liquidSeal=s=>s.rig&&s.funnel&&s.motion?.kind!=='remove-rig'&&flaskSurface(s)<555;
 const poses={air:{x:430,y:260},tank:{x:430,y:405},jar:{x:610,y:405}};
 function tubePose(m,p){
  const from=m.startOutlet||poses[m.from],to=poses[m.to];
@@ -60,19 +61,47 @@ export function inspectDesk(s){
  if(s.jarPlace>.01||s.jarAngle>.01)return{correct:false,message:'保持蓋片，將集氣瓶取出並扶正放在桌上。'};
  return{correct:true,message:'完成！你利用排水集氣法收集二氧化碳，先撤管、在水下蓋片，再取出扶正。'};
 }
+// 收回容器時清空其內容；安裝在它上面的器材一併回材料區。
+function returnMaterial(s,id){
+ const removed=new Set([id]),withJar=id==='jar'||id==='tank'&&s.jarPlace>.01;
+ if(withJar){removed.add('jar');if(s.jarCovered)removed.add('plate');s.jarWater=0;s.jarAngle=0;s.jarPlace=0;s.jarCovered=false;s.sealedUnderwater=false;s.co2Volume=0;s.airVolume=0;s.sampleStarted=false;}
+ if(id==='tank')s.tankWater=0;
+ if(id==='flask'){
+  if(s.rig)removed.add('rig');if(s.funnel)removed.add('funnel');s.acid=0;s.flaskWater=0;s.flaskMarbles=0;s.reactionAge=0;
+ }
+ if(removed.has('rig')){if(s.funnel)removed.add('funnel');s.rig=false;s.outlet='air';s.airRemaining=1;}
+ if(removed.has('funnel')){s.funnel=false;s.airRemaining=1;}
+ if(removed.has('forceps'))s.heldMarble=false;
+ if(removed.has('plate')){s.jarCovered=false;s.sealedUnderwater=false;}
+ s.selected=s.selected.filter(x=>!removed.has(x));for(const x of removed)delete s.positions[x];
+ if(removed.has(s.tool))s.tool=null;if(removed.has(s.focus))s.focus=null;s.result=null;
+ const names=[...removed].map(x=>DESK_MATERIALS.find(m=>m.id===x).name).join('、');
+ tell(s,`已收回${names}。${['jar','flask','tank'].includes(id)?'容器內的物質與收集紀錄已清空。':'已加入容器的液體與材料會保留。'}`);
+}
+function beginReturn(s,id){
+ if((id==='jar'&&s.outlet==='jar')||(['tank','flask','rig'].includes(id)&&s.rig&&s.outlet!=='air')){
+  const to=id==='jar'&&s.selected.includes('tank')?'tank':'air';
+  move(s,'outlet',1450,{from:s.outlet,to,startOutlet:outletPose(s),returnAfter:id});tell(s,'先將導管從瓶口下方撤出，再收回器材。');return;
+ }
+ if(id==='plate'&&s.jarCovered){move(s,'uncover',650,{tool:'plate',toolStart:jarMouth(s),returnAfter:id});tell(s,'先移開瓶口的玻璃片，再收回材料區。');return;}
+ if(id==='forceps'&&s.heldMarble&&s.selected.includes('marble')){move(s,'return-stone',700,{tool:'forceps',toolStart:s.positions.forceps&&{...s.positions.forceps},returnAfter:id});tell(s,'先將夾著的大理石放回盤中，再收回鑷子。');return;}
+ returnMaterial(s,id);
+}
 export function actDesk(s,action,value){
  if(action==='reset')return createDesk();
+ if(action==='take'&&s.phase==='complete'){s.phase='operate';s.result=null;}
  if(s.phase!=='operate')return s;
  if(action==='inspect'){const r=inspectDesk(s);s.result=r.correct?'correct':'revise';s.feedback=r.message;s.feedbackKind=s.result;if(r.correct)s.phase='complete';return s;}
  if(action==='stop'&&['water','acid'].includes(s.motion?.kind)){const m=s.motion;move(s,'put-away',450,{pourKind:m.kind,target:m.target,viaFunnel:m.viaFunnel,stopAt:m.elapsed/m.duration});tell(s,'收起倒液工具，已倒入的液體會保留。');return s;}
  if(s.motion){tell(s,'請等手上的動作完成。');return s;}
  if(action==='take'){
   const item=DESK_MATERIALS.find(m=>m.id===value);if(!item)return s;
+  if(s.selected.includes(value)){beginReturn(s,value);return s;}
   const isTool=!['flask','jar','tank','marble'].includes(value);
   if(s.heldMarble&&isTool&&value!=='forceps'){tell(s,'鑷子還夾著一塊大理石，先放進瓶口或放回盤中。');return s;}
-  const present=s.selected.includes(value);if(!present)s.selected.push(value);
+  s.selected.push(value);
   s.tool=isTool?value:null;s.focus=isTool?null:value;
-  tell(s,present?`${item.name}已在桌上，接著操作同一件器材。`:`已將${item.name}放到操作桌上。`);return s;
+  tell(s,`已將${item.name}放到操作桌上。`);return s;
  }
  if(['immerse','extract','rotate','relocate','uncover'].includes(action)&&!s.selected.includes('jar')){tell(s,'先從材料區取用集氣瓶。');return s;}
  if((action==='immerse'||action==='relocate'&&s.jarPlace<.5)&&!s.selected.includes('tank')){tell(s,'先從材料區取用水槽。');return s;}
@@ -96,10 +125,11 @@ export function actDesk(s,action,value){
   if(!tool){s.focus=s.focus===value?null:value;tell(s,value==='marble'?'用鑷子夾取大理石，再從瓶口放入。':value==='outlet'?'可直接拖動出口，也可使用下方的位置按鈕。':'選擇器材下方的操作。');return s;}
   if(tool==='water'){
    if(value==='jar'&&(s.jarAngle>.01||s.jarPlace>.01||s.jarCovered)){tell(s,'先將集氣瓶移到桌面、扶正並移開玻璃片，再裝水。','revise');return s;}
-   if(!['jar','tank'].includes(value)){tell(s,'這壺清水用來準備水槽與集氣瓶。','revise');return s;}
+   if(!['jar','tank','flask','funnel'].includes(value)){tell(s,'這壺清水可以倒入桌上的容器。','revise');return s;}
+   if(['flask','funnel'].includes(value)&&s.rig&&!s.funnel){tell(s,'瓶口已被塞子擋住；先插入漏斗或移開塞子，再加水。','revise');return s;}
    if(value==='jar'&&s.outlet==='jar'){tell(s,'先將導管撤出集氣瓶。','revise');return s;}
    if(value==='jar'){s.co2Volume=0;s.airVolume=0;s.sampleStarted=false;s.sealedUnderwater=false;}
-   move(s,'water',1600,{target:value,from:s[value==='jar'?'jarWater':'tankWater']});tell(s,'清水由壺嘴流入容器；可在倒滿前放下工具。');return s;
+   const target=value==='funnel'?'flask':value;move(s,'water',1600,{target,from:s[target==='jar'?'jarWater':target==='flask'?'flaskWater':'tankWater'],viaFunnel:target==='flask'&&s.funnel});tell(s,target==='flask'?'清水由瓶口加入反應瓶；單加清水不會產生二氧化碳。':'清水由壺嘴流入容器；可在倒滿前放下工具。');return s;
   }
   if(tool==='forceps'){
    if(value==='marble'){
@@ -159,7 +189,7 @@ export function actDesk(s,action,value){
 }
 function applyMotion(s,m){
  const p=clamp(m.elapsed/m.duration);
- if(m.kind==='water'){const field=m.target==='jar'?'jarWater':'tankWater';s[field]=mix(m.from,1,clamp((p-.25)/.55));}
+ if(m.kind==='water'){const field=m.target==='jar'?'jarWater':m.target==='flask'?'flaskWater':'tankWater';s[field]=mix(m.from,1,clamp((p-.25)/.55));}
  if(m.kind==='acid')s.acid=mix(m.from,1,clamp((p-.25)/.55));
  if(m.kind==='immerse'||m.kind==='extract'){
   const q=ease((p-.25)/.43);s.jarAngle=mix(m.startAngle,m.kind==='immerse'?180:0,q);
@@ -179,6 +209,7 @@ function applyMotion(s,m){
  if(m.kind==='uncover'){s.jarCovered=false;s.sealedUnderwater=false;}
  if(m.tool&&m.endTool)s.positions[m.tool]={...m.endTool};
  s.motion=null;
+ if(m.returnAfter)returnMaterial(s,m.returnAfter);
 }
 export function advanceDesk(s,ms){
  if(s.phase!=='operate')return s;

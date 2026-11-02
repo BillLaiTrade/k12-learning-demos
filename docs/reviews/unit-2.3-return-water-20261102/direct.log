@@ -1,0 +1,22 @@
+▶ 2.3 actual apparatus dragging: complete mouse and native touch experiments
+  ✔ the supplies shelf and empty desk are available immediately; repeated shelf clicks remove and restore one real object (1750.767428ms)
+  ✔ tools appear as actual apparatus; auxiliary menu starts closed (519.37033ms)
+  ✔ one forceps picks up, remains reachable and deposits via the mouth without re-selection (1492.942275ms)
+  ✔ same water bottle fills tank then jar; cover and compound immersion preserve water (3901.449426ms)
+  ✔ dragging rig, funnel and acid establishes a liquid seal and reaction (3088.621699ms)
+  ✔ actual outlet purges outside then enters below mouth and fills only the remaining water (6302.698667ms)
+  ✔ cannot cover or lift across the tube; correction through dragging seals and extracts upright (4333.578925ms)
+  ✔ blank drops, pointer cancellation and Escape leave no sticky tools or delayed action (4405.224022ms)
+  ✔ seven widths fit the document and keep tools accessible (1262.969487ms)
+  ✔ native mobile touch completes water, cover, inversion, uncover, chemistry, outlet and extraction (17781.825039ms)
+  ✔ native touch cancel restores the covered plate and proximity halts edge scrolling (7442.025845ms)
+  ✔ keyboard alternatives remain operable inside collapsed assistance (1259.567263ms)
+✔ 2.3 actual apparatus dragging: complete mouse and native touch experiments (55405.818818ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 55414.387886

@@ -1,0 +1,21 @@
+✔ all twelve shelf items can be added, removed and added without duplicate objects (7.318743ms)
+✔ returning a water or acid source keeps all previously poured liquid (1.31615ms)
+✔ forceps return the held marble before leaving the table (1.328919ms)
+✔ a covered plate is uncovered before being returned, preserving submerged water (0.944792ms)
+✔ returning a collector first withdraws the rigid outlet below its mouth (5.258131ms)
+✔ returning a tank also returns its submerged bottle and attached plate without orphaning the tube (0.651601ms)
+✔ returning the reaction flask withdraws the tube and returns installed attachments (0.435342ms)
+✔ returning a stopper keeps reactants but returns its installed funnel (0.371478ms)
+✔ returning a funnel opens the seal without deleting the stopper or reactants (0.252712ms)
+✔ water can enter the reaction flask but marble and water alone never produce CO2 (0.408062ms)
+✔ adding acid after water starts reaction and the combined liquid makes the seal (0.395313ms)
+✔ water follows the funnel when installed and cannot pass through a closed stopper (0.286853ms)
+✔ the material toggle remains available after completion, clearing stale success (0.178634ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 28.682462

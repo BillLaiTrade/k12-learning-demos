@@ -1,0 +1,14 @@
+▶ thistle funnels: actual material selection, liquid seal and transfer-task feedback
+  ✔ oxygen: material body and name, assembled dry stage, pouring and submerged tip (1856.734049ms)
+  ✔ co2: material body and name, assembled dry stage, pouring and submerged tip (965.026226ms)
+  ✔ the hands-on task uses the same occluded thistle stem and a real liquid seal (4333.673279ms)
+  ✔ no-script snapshots contain the new funnel and five summary rows (1473.467317ms)
+✔ thistle funnels: actual material selection, liquid seal and transfer-task feedback (10716.915042ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10720.67133
