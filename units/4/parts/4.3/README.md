@@ -63,3 +63,5 @@ node --test --test-concurrency=1 --test-reporter=tap tests/unit-4.3-normal-model
 ```
 
 `NORMAL_CAPTURE_DIR` 可保存收合／展開、暫停光路與七種寬度資料。瀏覽器沿用前述 Playwright、公開網址與代理設定。範圍與教學來源見 `docs/decisions/unit-4.3-normal-incidence.md`，素材來源、保留比對與檢查證據見 `docs/reviews/unit-4.3-normal-incidence/`。目前為製作修訂結果，待使用者檢視。
+
+2026-11-02：依使用者指示，將第二區「發射光束 → 跨越介面 → 直線通過」步驟列由控制列下方移至實驗圖上方。僅調整 HTML 順序，場景、樣式、步驟同步與播放程式保留。
