@@ -18,7 +18,7 @@ test('4.4 十區基本版：真實操作、參考格式與跨尺寸導覽',{time
   assert.equal(await page.locator('.hero-cover img').evaluate(e=>e.complete&&e.naturalWidth===1672),true);
  });
  await t.test('立體小孔沒有拉霸，屏幕位置與光路可操作',async()=>{
-  assert.equal(await lab(1).locator('input[type=range]').count(),0);await lab(1).locator('[data-pinhole-screen]').focus();await page.keyboard.press('End');assert.ok(Number(await lab(1).getAttribute('data-magnification'))>1);await lab(1).locator('[data-pinhole-rays]').click();await lab(1).locator('[data-pinhole-point=top]').click();assert.match(await lab(1).locator('[data-pinhole-status]').innerText(),/上端.*下方/);await lab(1).locator('[data-pinhole-reset]').click();assert.equal(await lab(1).getAttribute('data-screen-x'),'2.6000');await lab(1).locator('[data-pinhole-rays]').click();
+  assert.equal(await lab(1).locator('input[type=range]').count(),0);await lab(1).locator('[data-pinhole-screen]').focus();await page.keyboard.press('End');assert.ok(Number(await lab(1).getAttribute('data-magnification'))>1);await lab(1).locator('[data-pinhole-rays]').click();await lab(1).locator('[data-pinhole-point=top]').click();assert.match(await lab(1).locator('[data-pinhole-status]').innerText(),/上端.*下方/);assert.equal(await lab(1).locator('[data-pinhole-reset],[data-pinhole-home]').count(),0);await lab(1).locator('[data-pinhole-rays]').click();
  });
  await t.test('平行光會聚／發散及兩表面詳圖連動',async()=>{
   await lab(2).locator('[data-value=concave]').click();assert.match(await result(2).innerText(),/發散/);assert.equal(await lab(2).locator('.extension').count(),2);
@@ -79,7 +79,7 @@ test('4.4 十區基本版：真實操作、參考格式與跨尺寸導覽',{time
  await t.test('十個導覽、屏幕鍵盤操作與虛像入眼光束',async()=>{
   await page.setViewportSize({width:1440,height:1000});await page.bringToFront();
   for(let i=1;i<=10;i++){await page.locator(`.route a[href="#s${i}"]`).click();await page.waitForFunction(i=>document.querySelector('.route a[aria-current=step]')?.hash==='#s'+i,i);}
-  await page.locator('.route a[href="#s1"]').click();await lab(1).locator('[data-pinhole-reset]').click();await lab(1).locator('[data-pinhole-screen]').focus();await page.keyboard.press('ArrowRight');assert.ok(Number(await lab(1).getAttribute('data-screen-x'))>2.6);
+  await page.locator('.route a[href="#s1"]').click();await lab(1).locator('[data-pinhole-screen]').focus();await page.keyboard.press('Home');await page.keyboard.press('ArrowRight');assert.ok(Number(await lab(1).getAttribute('data-screen-x'))>1.4);
   await lab(5).locator('[data-action=reset]').click();const ends=await lab(5).locator('.light-ray').evaluateAll(es=>es.filter((_,i)=>i%2===1).map(e=>e.getAttribute('d').match(/L([\d.-]+) ([\d.-]+)/).slice(1).map(Number)));assert.equal(ends.length,6);for(const[x,y]of ends){assert.equal(x,580);assert.ok(Math.abs(y-180)<=6.01);}
  });
  await t.test('素材、有效入口、內部連結及瀏覽器錯誤',async()=>{

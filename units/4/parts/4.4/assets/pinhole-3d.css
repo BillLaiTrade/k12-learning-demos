@@ -7,7 +7,6 @@
 .pinhole-actions > div { display:flex; flex-wrap:wrap; gap:7px; }
 .pinhole-actions button { pointer-events:auto; min-height:39px; padding:7px 12px; border-color:#ced9cd; font-size:.82rem; background:#fcfdf6f2; color:#304e3d; box-shadow:0 2px 8px #0002; }
 .pinhole-actions button[aria-pressed=true] { background:#e4efdc; border-color:#b1d19c; color:#254631; }
-.pinhole-actions .pinhole-light-actions { flex-basis:100%; }
 .pinhole-actions [data-pinhole-rays] { background:#f5d88d; border-color:#fbe3a9; color:#3e3217; font-weight:750; box-shadow:0 2px 9px #0005; }
 .pinhole-actions [data-pinhole-rays][aria-pressed=true] { background:#ffe9a5; border-color:#ffefbc; color:#3e3217; }
 .pinhole-hole-label { position:absolute; transform:translate(-50%,-100%); padding:3px 7px; border:1px solid #cbb87c; border-radius:5px; background:#18251fe8; color:#f6e4ad; font-size:.72rem; pointer-events:none; }

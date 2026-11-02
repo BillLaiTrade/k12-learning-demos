@@ -127,11 +127,8 @@ async function initialise(){
   root.dataset.sourceX=positions.source.toFixed(4);root.dataset.holeX=positions.hole.toFixed(4);root.dataset.selected=selectedDevice||'';root.dataset.view=closeHole?'hole':front?'screen':'orbit';root.dataset.screenX=screenX.toFixed(4);root.dataset.magnification=g.magnification.toFixed(4);root.dataset.rays=String(showRays);root.dataset.point=tracked;
   requestDraw();
  }
- function resetPosition(){positions={...INITIAL_POSITIONS};selectedDevice=null;highlight.visible=false;update();}
  function resetView(){front=false;closeHole=false;orbit={...HOME};}
  function move(name,x){positions=moveDevice(name,x,positions);selectedDevice=name;update();}
- $('[data-pinhole-reset]').addEventListener('click',resetPosition);
- $('[data-pinhole-home]').addEventListener('click',()=>{resetView();update();});
  $('[data-pinhole-view]').addEventListener('click',()=>{front=!front;closeHole=false;update();});
  $('[data-pinhole-close]').addEventListener('click',()=>{closeHole=!closeHole;front=false;if(closeHole)showRays=true;update();});
  $('[data-pinhole-rays]').addEventListener('click',()=>{showRays=!showRays;update();});
