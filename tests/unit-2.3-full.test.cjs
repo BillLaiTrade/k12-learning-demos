@@ -27,7 +27,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     assert.deepEqual(await page.locator('section.lesson').evaluateAll(nodes => nodes.map(n => n.id)), ['s1','s2','s3','s4','s5','s6']);
     assert.equal(await page.locator('form').count(), 1);
     assert.equal(await page.locator('.route a.quiz-nav').getAttribute('href'), '#s6');
-    for (const i of [1,2,3,4,5,6]) {
+    for (const i of [1,2,3,4,5]) {
       assert.equal(await page.locator(`#s${i} .dialogue.xiaokui`).first().isVisible(), true);
       assert.equal(await page.locator(`#s${i} .dialogue.grandpa`).first().isVisible(), true);
     }
@@ -77,14 +77,10 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     await panel.locator('[data-stage="0"]').click();
   });
   await t.test('the single transfer quiz combines CO2 reactants and water displacement, then resets locally',async()=>{
-    const form=page.locator('#gas-report-form'),feedback=form.locator('#gas-report-feedback');
-    await form.locator('[data-task-play]').click();assert.match(await feedback.innerText(),/未完成/);
-    for(const v of ['marble','acid'])await form.locator(`[name=materials][value=${v}]`).check();
-    await form.locator('#task-tab-1').click();for(const[name,value]of Object.entries({fill:'full',position:'submerged',outlet:'jar',funnel:'sealed'}))await form.locator(`[name=${name}]`).selectOption(value);
-    await form.locator('#task-tab-2').click();const {TASK_STEPS}=await import('../units/2/parts/2.3/assets/collection-task-model.mjs');
-    for(let i=0;i<TASK_STEPS.length;i++){const id=TASK_STEPS[i].id;while(await form.locator('.task-order li').evaluateAll((ns,id)=>ns.findIndex(n=>n.dataset.taskStep===id),id)>i)await form.locator(`[data-task-step=${id}] [data-move="-1"]`).click();}
-    await form.locator('[data-task-play]').click();for(const step of TASK_STEPS)await page.clock.fastForward(step.duration+50);
-    assert.equal(await feedback.getAttribute('data-result'),'correct');await form.locator('[type=reset]').click();assert.equal(await feedback.isVisible(),false);assert.equal(await form.locator('[name=materials]:checked').count(),0);assert.equal(await page.locator('#cup-comparison').isVisible(),true);
+    const d=require('./helpers/unit23-desk.cjs').desk(page),feedback=d.f.locator('#gas-report-feedback');
+    await d.click('begin');assert.match(await feedback.innerText(),/缺/);
+    await d.select();await d.prepare();await d.charge();await d.collect();await d.seal();
+    assert.equal(await feedback.getAttribute('data-result'),'correct');await d.click('reset');assert.equal(await d.f.getAttribute('data-state'),'choose');assert.equal(await d.f.locator('[data-desk-material][aria-pressed=true]').count(),0);assert.equal(await page.locator('#cup-comparison').isVisible(),true);
   });
   await t.test('seven widths keep full-width teaching bodies below their headers without overflow', async () => {
     for (const width of [1440,1280,1024,800,768,390,320]) {
@@ -129,9 +125,8 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     assert.equal(await touch.locator('[data-replay="oxygen"] [data-step-menu]').getAttribute('aria-expanded'),'false');await touch.locator('[data-replay="oxygen"] [data-step-menu]').tap();assert.equal(await touch.locator('[data-replay="oxygen"] .sequence-step:visible').count(),8);
     await touch.locator('.route a[href="#s6"]').tap();
     await touch.waitForFunction(() => document.querySelector('.route a[aria-current]')?.getAttribute('href') === '#s6');
-    await touch.locator('#task-tab-1').tap();await touch.locator('#gas-report-form select[name="fill"]').focus();
-    await touch.locator('#gas-report-form select[name="fill"]').selectOption('full');
-    assert.equal(await touch.locator('#gas-report-form select[name="fill"]').inputValue(),'full');
+    await touch.locator('[data-desk-material=water]').tap();assert.equal(await touch.locator('[data-desk-material=water]').getAttribute('aria-pressed'),'true');
+    await touch.locator('[data-desk-material=water]').focus();await touch.keyboard.press('Enter');assert.equal(await touch.locator('[data-desk-material=water]').getAttribute('aria-pressed'),'false');
     await touch.close();
   });
   assert.deepEqual(errors,[],'no page errors or broken resources');

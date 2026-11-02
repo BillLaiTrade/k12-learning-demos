@@ -1,0 +1,24 @@
+▶ hands-on collection model: actions, physical consequences and recoverable mistakes
+  ✔ selection accepts needed apparatus and explains the distractors (0.840284ms)
+  ✔ no reaction or water appears before the student uses the actual tools (0.601795ms)
+  ✔ one picked stone leaves the bowl and one placement enters through an open mouth (0.220161ms)
+  ✔ adding a stone to existing acid reacts only once it touches the liquid (0.906263ms)
+  ✔ uncovered inversion loses water, while covered preparation preserves it until underwater (0.64455ms)
+  ✔ a shallow tank cannot preserve water at an uncovered inverted mouth (0.336467ms)
+  ✔ liquid seal depends on actual acid level; low charge leaks through the thistle funnel (0.353472ms)
+  ✔ purging works in air as well as in water; collection waits for the physical tip (2.277105ms)
+  ✔ lifting the stopper opens the source immediately, rather than feeding a detached tube (0.282315ms)
+  ✔ early collection contains original apparatus air and cannot pass (0.648595ms)
+  ✔ partial jar water traps air even when the apparatus was already purged (0.355315ms)
+  ✔ covering waits for withdrawal and completion requires underwater seal, removal and upright bottle (0.710609ms)
+  ✔ failed collection can be corrected without restarting the source (1.527878ms)
+  ✔ rigid glass shape never stretches and rubber keeps a fixed arc length (2.534072ms)
+✔ hands-on collection model: actions, physical consequences and recoverable mistakes (15.73451ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 67.536065
