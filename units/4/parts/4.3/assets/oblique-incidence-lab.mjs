@@ -1,10 +1,10 @@
-import {geometry,snapshot,durationMs,clampAngle} from './single-refraction-model.mjs?v=20261103-integrated1';
+import {geometry,snapshot,durationMs,clampAngle} from './single-refraction-model.mjs?v=20261103-fit1';
 import {mediumSelector} from './medium-selector.mjs?v=20261103-concept1';
-import {mountScene} from './integrated-refraction-scene.mjs?v=20261103-integrated1';
+import {mountScene} from './integrated-refraction-scene.mjs?v=20261103-fit1';
 function mountSingleLab(prefix,reverse){
  const root=document.querySelector(`#${prefix}-lab`),$=s=>root.querySelector(s),scene=$(`#${prefix}-scene`),stage=$('.integrated-stage'),input=$(`#${prefix}-angle`),start=$(`#${prefix}-start`),reset=$(`#${prefix}-reset`),retry=$(`#${prefix}-retry`),status=$(`#${prefix}-status`);
  const view=mountScene(scene,prefix),source=view.source,photos=new Map(),model=()=>geometry(medium,angle,reverse),duration=()=>durationMs(medium,angle,reverse);
- let medium='water',requested='water',angle=30,elapsed=0,state='loading',frame=0,startTime=0,loadId=0,restoreLight=false,drag=null,intersecting=true,lastWidth=0;
+ let medium='water',requested='water',angle=30,elapsed=0,state='loading',frame=0,startTime=0,loadId=0,restoreLight=false,drag=null,intersecting=true,lastSize='';
  const selector=mediumSelector($(`#${prefix}-medium-toggle`),key=>{if(key!==requested||state==='error')prepare(key);});
  root.dataset.mediumOrder=reverse?'slow-fast':'fast-slow';root.style.setProperty('--beam-glow',`url(#${prefix}-glow)`);root.style.setProperty('--single-lit-lens',`url(#${prefix}-lit-lens)`);
  const name=()=>medium==='water'?'水':'玻璃';
@@ -41,6 +41,12 @@ function mountSingleLab(prefix,reverse){
   const id=++loadId;restoreLight=state==='loading'?restoreLight:elapsed>0||state==='running';requested=target;stop();drag=null;elapsed=0;state='loading';render();controls();retry.hidden=true;
   try{if(reload){const img=new Image();img.src=new URL(`oblique-entry-${target}.png?retry=${Date.now()}`,import.meta.url).href;photos.set(target,img);}const img=picture(target);await img.decode();if(id!==loadId)return;medium=target;elapsed=restoreLight?duration():0;state=restoreLight?'preview':'idle';configure();render();controls();}catch{if(id!==loadId)return;state='error';controls();retry.hidden=false;}
  }
- retry.onclick=()=>prepare(requested,true);new ResizeObserver(()=>{const width=stage.getBoundingClientRect().width;if(width===lastWidth)return;lastWidth=width;configure();render();}).observe(stage);configure();render();controls();prepare('water');
+ function fitViewport(){
+  const width=stage.getBoundingClientRect().width,mode=getComputedStyle(root).getPropertyValue('--scene-mode').trim();root.dataset.layout=mode;
+  const route=document.querySelector('.route'),routeHeight=innerWidth<=760?route.getBoundingClientRect().height:0,controlHeight=$('.integrated-controls').getBoundingClientRect().height,viewportHeight=Math.min(innerHeight,window.visualViewport?.height||innerHeight);
+  const height=Math.min(width*(mode==='tall'?1400/900:820/1200),Math.max(160,viewportHeight-routeHeight-controlHeight-16)),key=`${width}/${height}/${mode}`;
+  if(key===lastSize)return;lastSize=key;stage.style.height=`${height}px`;configure();render();
+ }
+ retry.onclick=()=>prepare(requested,true);const resize=new ResizeObserver(fitViewport);resize.observe(stage);resize.observe($('.integrated-controls'));resize.observe(document.querySelector('.route'));window.addEventListener('resize',fitViewport);window.visualViewport?.addEventListener('resize',fitViewport);controls();fitViewport();prepare('water');
 }
 mountSingleLab('oblique',false);mountSingleLab('exit',true);
