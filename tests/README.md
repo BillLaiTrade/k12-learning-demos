@@ -1,5 +1,13 @@
 # 5.1 瀏覽器操作檢查
 
+## 4.5 第三區手電筒金屬材質（2026-11-03）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+整頁擴充立體手電筒載入、實際朝向更新、初次載入前後白幕光斑剖面不變、無SVG替代、同模型PNG備援仍可瞄準及既有滑鼠／手機／七寬度回歸。純光學模型、mix-optics及功率配比未改，本輪不重跑。COLOR_URL及COLOR_CAPTURE_DIR沿用。
+
 ## 4.5 第三區正面手電筒（2026-11-03）
 
 ```sh
