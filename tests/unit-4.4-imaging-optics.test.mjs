@@ -16,7 +16,7 @@ test('焦點邊界、軌道外與超出屏幕皆有有限且可判定的狀態',
  assert.equal(imagingState({object:110,screen:500}).unreachable,true);const large=imagingState({object:125,screen:500});assert.equal(large.clear,true);assert.equal(large.clipped,true);assert.equal(large.m,-4);
 });
 test('圖卡與屏幕皆可移動，單一器材保留另一器材及範圍',()=>{
- const s={object:320,screen:240};assert.deepEqual(moveImaging(s,'object',150),{...s,object:150});assert.equal(moveImaging(s,'screen',1000).screen,500);assert.equal(moveImaging(s,'object',-20).object,100);assert.deepEqual(moveImaging(s,'screen',NaN),s);
+ const s={object:320,screen:240};assert.deepEqual(moveImaging(s,'object',150),{...s,object:150});assert.equal(moveImaging(s,'screen',1000).screen,500);assert.equal(moveImaging(s,'object',-20).object,50);assert.deepEqual(moveImaging(s,'screen',NaN),s);
 });
 
 test('屏幕可在焦距內移動，幾何投影及光路仍使用同一接收面',()=>{
@@ -33,4 +33,15 @@ test('圖卡與代表物點放大兩倍，像距與倍率保持，放大像按�
 test('四個觀察重點同步定位，F沒有有限清楚像，不改原物理規則',()=>{
  for(const [key,object,screen]of [['beyond',320,145.5],['double',200,200],['between',175,233.3],['focus',100,500]]){const s=imagingKeypointState(key);assert.deepEqual(s,{object,screen});const g=imagingState(s);assert.equal(g.clear,key!=='focus');assert.equal(g.finite,key!=='focus');if(key==='beyond')assert.ok(g.v>G.f&&g.v<G.f*2);if(key==='double')assert.equal(g.v,G.f*2);if(key==='between')assert.ok(g.v>G.f*2);}
  assert.equal(imagingKeypointState('missing'),null);
+});
+
+test('無窮遠軸上物點以平行光在另一側F形成點像，移動屏幕及回有限物距一致',()=>{
+ const s=imagingKeypointState('infinity'),g=imagingState(s);assert.equal(s.atInfinity,true);assert.equal(s.screen,G.f);assert.equal(g.clear,true);assert.equal(g.v,G.f);assert.equal(g.m,0);assert.equal(g.projectionScale,0);assert.equal(g.spread,0);
+ for(const r of imagingRays(s)){assert.equal(r.from[1],r.lens[1]);assert.equal(r.end[1],G.axis);assert.equal(r.end[0],G.f*G.scale);}
+ const shifted=moveImaging(s,'screen',200);assert.equal(shifted.atInfinity,true);assert.equal(imagingState(shifted).clear,false);assert.ok(imagingState(shifted).spread>0);assert.equal(moveImaging(s,'object',320).atInfinity,undefined);assert.ok(imagingRays(shifted).every(r=>r.end.flat().every(Number.isFinite)));
+});
+test('F內形成透鏡前同側的正立放大虛像，反向延長線會交但屏幕不會對焦',()=>{
+ const s=imagingKeypointState('inside'),g=imagingState(s);assert.deepEqual(s,{object:50,screen:200});assert.equal(g.type,'virtual');assert.equal(g.v,-100);assert.equal(g.m,2);assert.equal(g.upright,true);assert.equal(g.clear,false);assert.equal(g.unreachable,false);
+ for(const screen of [50,100,200,500])assert.equal(imagingState({...s,screen}).clear,false);
+ for(const r of imagingRays(s)){assert.ok(r.virtual[0]<r.from[0]);const slope=(r.end[1]-r.lens[1])/(r.end[0]-r.lens[0]);assert.ok(Math.abs(r.lens[1]+r.virtual[0]*slope-r.virtual[1])<1e-10);assert.ok(r.name==='top'?r.virtual[1]>G.axis:r.virtual[1]<G.axis);}
 });

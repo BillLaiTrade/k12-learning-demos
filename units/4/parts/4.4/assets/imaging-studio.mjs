@@ -1,5 +1,5 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261103-imaging-single1';
+import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261103-imaging-six1';
 const root=document.querySelector('[data-imaging-lab]');
 if(root) initialise(root);
 function initialise(root){
@@ -8,7 +8,8 @@ function initialise(root){
  state=moveImaging(state,'screen',imagingState(state).v);
  const distanceLabel=value=>{const n=Number((value/G.f).toFixed(3));return n===1?'F':`${n}F`;};
  const dialog=document.querySelector('#imaging-workspace-dialog'),expand=$('[data-imaging-expand]'),comparison=$('[data-imaging-comparison]'),compact=matchMedia('(max-width:999px)'),home=document.createComment('imaging-workspace-home');root.before(home);let returnScroll=null;
- function syncWorkspaceLayout(){comparison.open=!(dialog.open&&compact.matches);}
+ function syncWorkspaceLayout(){comparison.open=!compact.matches;}
+ syncWorkspaceLayout();
  function openWorkspace(){if(dialog.open)return;returnScroll={left:scrollX,top:scrollY};root.classList.add('imaging-expanded');dialog.querySelector('[data-imaging-workspace-slot]').append(root);dialog.showModal();document.documentElement.classList.add('imaging-is-expanded');syncWorkspaceLayout();clearGestureNotice();requestAnimationFrame(()=>{if(!canvas.hidden)canvas.focus({preventScroll:true});});}
  if(typeof dialog.showModal==='function')expand.addEventListener('click',openWorkspace);else expand.hidden=true;
  dialog.querySelector('[data-imaging-close]').addEventListener('click',()=>dialog.close());
@@ -21,6 +22,7 @@ function initialise(root){
  const paper=$('[data-imaging-paper]'),pc=paper.getContext('2d');
  function paintProjection(){
   const g=imagingState(state),W=paper.width,H=paper.height;pc.fillStyle='#f1f1e5';pc.fillRect(0,0,W,H);
+  if(state.atInfinity){const rx=Math.max(5,g.spread*W/G.screenWidth),ry=Math.max(5,g.spread*H/G.screenHeight);pc.fillStyle='#d17c36';pc.beginPath();pc.ellipse(W/2,H/2,rx,ry,0,0,Math.PI*2);pc.fill();return g;}
   // Uniform pupil samples spread an extended object on the actual receiving plane.
   // Their envelope is exactly the same thin-lens rayAt geometry as the helper rays.
   const samples=g.spread<.003?1:61;pc.save();pc.globalAlpha=1/samples;
@@ -35,29 +37,32 @@ function initialise(root){
  function showGestureNotice(key){clearGestureNotice();$$('[data-imaging-ruler]').forEach(r=>r.toggleAttribute('data-guided',r.dataset.imagingRuler===key));const note=$('[data-imaging-gesture-note]');note.textContent=key==='lens'?'凸透鏡是固定的。':`請使用下方金框標示的${key==='object'?'圖卡尺':'屏幕尺'}的刻度按鈕或綠色把手調整距離。`;note.hidden=false;root.dataset.gestureHelp='true';}
  function update(){
   const g=paintProjection();
-  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.textContent=key==='object'?'圖卡 ↔':'屏幕 ↔';b.setAttribute('aria-pressed',String(key===selected));b.setAttribute('aria-label',`${key==='object'?'發光圖卡':'屏幕'}，${distanceLabel(state[key])}，可用方向鍵移動`);});
-  for(const handle of $$('[data-imaging-ruler-handle]')){const key=handle.dataset.imagingRulerHandle,max=G[key+'Max'];handle.style.left=`${(key==='object'?1-state[key]/max:state[key]/max)*100}%`;handle.setAttribute('aria-valuemin',String(G[key+'Min']/G.f));handle.setAttribute('aria-valuemax',String(max/G.f));handle.setAttribute('aria-valuenow',String(Number((state[key]/G.f).toFixed(3))));handle.setAttribute('aria-valuetext',`${key==='object'?'圖卡':'屏幕'}距離透鏡${distanceLabel(state[key])}`);}
-  const target=$('[data-imaging-target]');target.hidden=!g.finite||g.unreachable;target.dataset.distance=g.finite?String(g.v):'';target.style.setProperty('--target-position',`${g.finite?g.v/G.screenMax*100:0}%`);$('[data-imaging-target-label]').setAttribute('aria-label',g.finite?`屏幕移至清楚像位置，${distanceLabel(g.v)}`:'沒有有限距離的清楚像位置');
-  $('[data-imaging-target-status]').hidden=g.finite&&!g.unreachable;
-  $('[data-imaging-target-status]').textContent=!g.finite?'圖卡位於焦點，沒有有限距離的清楚像。':g.unreachable?`清楚像在 ${distanceLabel(g.v)}，已超出軌道。`:`清楚像位置：${distanceLabel(g.v)}`;
-  for(const key of ['object','screen']){const output=$(`[data-imaging-distance=${key}]`);output.textContent=distanceLabel(state[key]);output.setAttribute('aria-label',`${key==='object'?'物距':'屏幕距離'} ${distanceLabel(state[key])}`);}
-  $('[data-imaging-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-imaging-rays]').setAttribute('aria-pressed',String(showRays));$('[data-imaging-trace]').hidden=!showRays;
+  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.textContent=key==='object'?'圖卡 ↔':'屏幕 ↔';b.setAttribute('aria-pressed',String(key===selected));b.setAttribute('aria-label',`${key==='object'?'發光圖卡':'屏幕'}，${key==='object'&&state.atInfinity?'無窮遠':distanceLabel(state[key])}，可用方向鍵移動`);});
+  for(const handle of $$('[data-imaging-ruler-handle]')){const key=handle.dataset.imagingRulerHandle,max=G[key+'Max'];handle.hidden=key==='object'&&!!state.atInfinity;handle.style.left=`${(key==='object'?1-state[key]/max:state[key]/max)*100}%`;handle.setAttribute('aria-valuemin',String(G[key+'Min']/G.f));handle.setAttribute('aria-valuemax',String(max/G.f));handle.setAttribute('aria-valuenow',String(Number((state[key]/G.f).toFixed(3))));handle.setAttribute('aria-valuetext',`${key==='object'?'圖卡':'屏幕'}距離透鏡${key==='object'&&state.atInfinity?'無窮遠':distanceLabel(state[key])}`);}
+  const target=$('[data-imaging-target]');target.hidden=!g.finite||g.type!=='real'||g.unreachable;target.dataset.distance=g.finite&&g.type==='real'?String(g.v):'';target.style.setProperty('--target-position',`${g.finite?g.v/G.screenMax*100:0}%`);$('[data-imaging-target-label]').setAttribute('aria-label',g.finite&&g.type==='real'?`屏幕移至清楚像位置，${distanceLabel(g.v)}`:'沒有有限距離的清楚像位置');
+  $('[data-imaging-target-status]').hidden=g.type==='real'&&g.finite&&!g.unreachable;
+  $('[data-imaging-target-status]').textContent=g.type==='virtual'?'虛像在透鏡前，屏幕接不到清楚像。':!g.finite?'圖卡位於焦點，沒有有限距離的清楚像。':g.unreachable?`清楚像在 ${distanceLabel(g.v)}，已超出軌道。`:`清楚像位置：${distanceLabel(g.v)}`;
+  for(const key of ['object','screen']){const output=$(`[data-imaging-distance=${key}]`);output.textContent=key==='object'&&state.atInfinity?'∞':distanceLabel(state[key]);output.setAttribute('aria-label',`${key==='object'?'物距':'屏幕距離'} ${key==='object'&&state.atInfinity?'無窮遠':distanceLabel(state[key])}`);}
+  $('[data-imaging-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-imaging-rays]').setAttribute('aria-pressed',String(showRays));$('[data-imaging-trace]').hidden=!showRays||!!state.atInfinity;
+  $('[data-imaging-limit-note]').hidden=!state.atInfinity;$('[id=imaging-object-ruler-help]').textContent=state.atInfinity?'無窮遠：點刻度返回有限距離':'點選刻度按鈕或移動圖卡';
   $$('[data-imaging-point]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingPoint===point)));
   $('[data-imaging-view]').textContent=front?'返回實驗台':'屏幕視角';$('[data-imaging-view]').setAttribute('aria-label',front?'返回實驗台視角':'切換到屏幕視角');$('[data-imaging-view]').setAttribute('aria-pressed',String(front));
 
   let message=g.clear?`屏幕已對焦：倒立${g.sizeLabel}的實像。`:'屏幕尚未對焦。移動屏幕，找清楚的倒立像。';
-  if(!g.finite)message='物體在焦點上，無法在有限距離的屏幕上找到清楚像。將圖卡移遠一些再試。';
+  if(state.atInfinity)message=g.clear?'無窮遠的軸上物點以平行光入射，在透鏡另一側F會聚成點像。':'無窮遠物點的像在另一側F；移動屏幕至F可接到點像。';
+  else if(g.type==='virtual')message='圖卡在F內，虛像位於透鏡前、圖卡同側，正立且放大；屏幕接不到清楚像。虛線是光線的反向延長線。';
+  else if(!g.finite)message='圖卡位於F，沒有有限距離的清楚像；屏幕接不到清楚像。';
   else if(g.unreachable)message='清楚像的位置已超出軌道，屏幕移到最遠仍無法對焦。請把圖卡移遠透鏡一些，再重新找像。';
-  if(g.clipped)message+=' 部分投影超出屏幕；保留實際比例，不縮小圖案填入。';
-  if(showRays)message+=point==='top'?' 紅線追蹤圖卡上端，在清楚像的下方會聚。':point==='bottom'?' 藍線追蹤圖卡下端，在清楚像的上方會聚。':' 紅、藍線來自不同物點，分別形成對應的像點。';
-  $('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=!g.finite?'物體位於焦點':g.unreachable?'清楚像超出軌道':g.clear?`已對焦・倒立${g.sizeLabel}${g.clipped?'・部分超出屏幕':''}`:'屏幕尚未對焦';
-  const keypoint=!g.finite?'focus':!g.clear?'':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between';
+  if(g.clipped&&g.type==='real'&&!state.atInfinity)message+=' 部分投影超出屏幕；保留實際比例，不縮小圖案填入。';
+  if(showRays&&g.finite&&g.type==='real'&&!state.atInfinity)message+=point==='top'?' 紅線追蹤圖卡上端，在清楚像的下方會聚。':point==='bottom'?' 藍線追蹤圖卡下端，在清楚像的上方會聚。':' 紅、藍線來自不同物點，分別形成對應的像點。';
+  $('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=state.atInfinity?(g.clear?'另一側 F・點像':'移動屏幕至 F 觀察點像'):g.type==='virtual'?'正立放大虛像・屏幕接不到':!g.finite?'物體位於焦點':g.unreachable?'清楚像超出軌道':g.clear?`已對焦・倒立${g.sizeLabel}${g.clipped?'・部分超出屏幕':''}`:'屏幕尚未對焦';
+  const keypoint=state.atInfinity?'infinity':g.type==='virtual'?'inside':!g.finite?'focus':!g.clear?'':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between';
   $$('[data-imaging-keypoint]').forEach(row=>{const active=row.dataset.imagingKeypoint===keypoint;row.dataset.active=String(active);row.querySelector('button').setAttribute('aria-pressed',String(active));});
   $$('[data-imaging-quick]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.imagingQuick===keypoint)));
-  const region=!g.finite?'focus':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between',cells=$(`[data-imaging-keypoint=${region}]`).cells;
-  $('[data-imaging-quick-summary]').textContent=(g.unreachable?'清楚像超出軌道。':!g.clear&&g.finite?'屏幕尚未對焦。':'')+(g.finite?`清楚像在${cells[1].textContent}，${cells[2].textContent}。`:`${cells[1].textContent}，${cells[2].textContent}。`);
-  root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.clear=String(g.clear);root.dataset.magnification=g.finite?String(g.m):'';root.dataset.projectionScale=g.projectionScale;root.dataset.spread=g.spread;root.dataset.rays=showRays;root.dataset.view=front?'screen':'orbit';root.dataset.point=point;
-  canvas.setAttribute('aria-label',`旋轉與縮放觀察的立體凸透鏡成像台，使用下方位置尺調整距離，物距${distanceLabel(state.object)}，屏幕距離${distanceLabel(state.screen)}，${$('[data-imaging-badge]').textContent}`);
+  const region=state.atInfinity?'infinity':g.type==='virtual'?'inside':!g.finite?'focus':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between',cells=$(`[data-imaging-keypoint=${region}]`).cells;
+  $('[data-imaging-quick-summary]').textContent=(g.unreachable?'清楚像超出軌道。':!g.clear&&g.type==='real'?'屏幕尚未對焦。':'')+(g.type==='virtual'?`${cells[1].textContent}，${cells[2].textContent}；屏幕接不到。`:g.finite?`像在${cells[1].textContent}，${cells[2].textContent}。`:`${cells[1].textContent}，${cells[2].textContent}。`);
+  root.dataset.atInfinity=String(!!state.atInfinity);root.dataset.imageType=g.type;root.dataset.imagePosition=g.finite?g.v:'';root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.clear=String(g.clear);root.dataset.magnification=g.finite?String(g.m):'';root.dataset.projectionScale=g.projectionScale;root.dataset.spread=g.spread;root.dataset.rays=showRays;root.dataset.view=front?'screen':'orbit';root.dataset.point=point;
+  canvas.setAttribute('aria-label',`旋轉與縮放觀察的立體凸透鏡成像台，使用下方位置尺調整距離，物距${state.atInfinity?'無窮遠':distanceLabel(state.object)}，屏幕距離${distanceLabel(state.screen)}，${$('[data-imaging-badge]').textContent}`);
   studio?.update();
  }
  function move(key,value){clearGestureNotice();state=moveImaging(state,key,value);selected=key;update();}
@@ -66,7 +71,7 @@ function initialise(root){
    const value=Number(button.dataset.imagingRulerMark),position=(key==='object'?1-value/max:value/max)*100;button.style.left=position+'%';
    const line=document.createElement('span');line.className='imaging-ruler-major-line';line.dataset.imagingRulerMajorLine=String(value);line.style.left=position+'%';line.setAttribute('aria-hidden','true');track.append(line);return value;
   }).filter(value=>value>=G[key+'Min']&&value<=max);let drag=null;
-  track.addEventListener('click',e=>{if(e.target.closest('[data-imaging-ruler-handle]'))return;const mark=e.target.closest('[data-imaging-ruler-mark]');if(e.target.closest('[data-imaging-target]')){const g=imagingState(state);if(g.finite&&!g.unreachable)move('screen',g.v);return;}if(mark){move(key,Number(mark.dataset.imagingRulerMark));return;}const r=track.getBoundingClientRect();if(!r.width)return;const fraction=(e.clientX-r.left)/r.width;move(key,(key==='object'?1-fraction:fraction)*G[key+'Max']);});
+  track.addEventListener('click',e=>{if(e.target.closest('[data-imaging-ruler-handle]'))return;const mark=e.target.closest('[data-imaging-ruler-mark]');if(e.target.closest('[data-imaging-target]')){const g=imagingState(state);if(g.finite&&g.type==='real'&&!g.unreachable)move('screen',g.v);return;}if(mark){move(key,Number(mark.dataset.imagingRulerMark));return;}const r=track.getBoundingClientRect();if(!r.width)return;const fraction=(e.clientX-r.left)/r.width;move(key,(key==='object'?1-fraction:fraction)*G[key+'Max']);});
   handle.addEventListener('pointerdown',e=>{if(e.button!==0||drag||handle.disabled)return;clearGestureNotice();e.preventDefault();handle.focus({preventScroll:true});handle.setPointerCapture(e.pointerId);drag={id:e.pointerId,x:e.clientX,value:state[key],width:track.getBoundingClientRect().width};});
   handle.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id||!drag.width)return;const value=drag.value+(e.clientX-drag.x)/drag.width*max*(key==='object'?-1:1),nearest=marks.reduce((a,b)=>Math.abs(b-value)<Math.abs(a-value)?b:a);move(key,Math.abs(nearest-value)/max*drag.width<=3?nearest:value);});
   for(const event of ['pointerup','pointercancel','lostpointercapture'])handle.addEventListener(event,e=>{if(e.pointerId===drag?.id)drag=null;});
@@ -76,8 +81,7 @@ function initialise(root){
  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.addEventListener('click',()=>{selected=key;update();});b.addEventListener('keydown',e=>{let value=state[key];if(e.key==='Home')value=G[key+'Min'];else if(e.key==='End')value=G[key+'Max'];else if(['ArrowLeft','ArrowRight','ArrowDown','ArrowUp'].includes(e.key)){const direction=['ArrowLeft','ArrowDown'].includes(e.key)?-1:1;value+=(key==='object'?-direction:direction)*(e.shiftKey?.2:1);}else return;e.preventDefault();move(key,value);});});
  $$('[data-imaging-keypoint],[data-imaging-quick]').forEach(b=>b.addEventListener('click',()=>{
   const next=imagingKeypointState(b.dataset.imagingKeypoint||b.dataset.imagingQuick);if(!next)return;clearGestureNotice();state=next;selected='screen';front=false;update();
-  if(dialog.open){if(b.dataset.imagingQuick&&compact.matches)comparison.open=false;return;}
-  requestAnimationFrame(()=>{const r=$('.imaging-stage').getBoundingClientRect(),nav=document.querySelector('.route'),top=innerWidth<=760?(nav?.getBoundingClientRect().height||0)+8:12;window.scrollBy({top:r.top-top,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});if(!canvas.hidden)canvas.focus({preventScroll:true});});
+  if(b.dataset.imagingQuick&&compact.matches)comparison.open=false;
  }));
  try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-imaging-fallback]').hidden=false;$('[data-imaging-view]').hidden=true;root.dataset.webgl='unavailable';console.warn('Imaging 3D:',error.message);}
  update();root.dataset.ready='true';
@@ -118,7 +122,7 @@ function initialise(root){
   }
   const sourceName=caption('發光圖卡','object',source.position.x,-.045,.30);caption('凸透鏡・固定','lens',0,-.045,.30);
   for(const n of [-200,-100,100,200])caption(Math.abs(n)===200?'2F':'F',`focus${n}`,n*G.scale,.30,.25,true);
-  function updateRays(){for(const m of [...rays.children]){m.geometry.dispose();m.material.dispose();rays.remove(m);}rays.visible=showRays&&!front;if(!showRays)return;for(const r of imagingRays(state,point)){const color=r.name==='top'?'#f4a17e':'#88c7ee';for(const [from,to]of [[r.from,r.lens],[r.lens,r.end]]){const A=new THREE.Vector3(...from),B=new THREE.Vector3(...to),tube=new THREE.Mesh(new THREE.TubeGeometry(new THREE.LineCurve3(A,B),1,.009,6,false),new THREE.MeshBasicMaterial({color,toneMapped:false}));tube.userData={name:r.name,from,to};rays.add(tube);const arrow=new THREE.Mesh(new THREE.ConeGeometry(.036,.13,10),new THREE.MeshBasicMaterial({color,toneMapped:false}));arrow.position.copy(A).lerp(B,.64);arrow.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),B.clone().sub(A).normalize());rays.add(arrow);}}}
+  function updateRays(){for(const m of [...rays.children]){m.geometry.dispose();m.material.dispose();rays.remove(m);}rays.visible=showRays&&!front;if(!showRays)return;for(const r of imagingRays(state,point)){const color=r.name==='top'?'#f4a17e':'#88c7ee';for(const [from,to]of [[r.from,r.lens],[r.lens,r.end]]){const A=new THREE.Vector3(...from),B=new THREE.Vector3(...to),tube=new THREE.Mesh(new THREE.TubeGeometry(new THREE.LineCurve3(A,B),1,.009,6,false),new THREE.MeshBasicMaterial({color,toneMapped:false}));tube.userData={name:r.name,from,to};rays.add(tube);const arrow=new THREE.Mesh(new THREE.ConeGeometry(.036,.13,10),new THREE.MeshBasicMaterial({color,toneMapped:false}));arrow.position.copy(A).lerp(B,.64);arrow.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),B.clone().sub(A).normalize());rays.add(arrow);}if(r.virtual){const A=new THREE.Vector3(...r.lens),B=new THREE.Vector3(...r.virtual),line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([A,B]),new THREE.LineDashedMaterial({color,dashSize:.07,gapSize:.05,transparent:true,opacity:.8}));line.computeLineDistances();line.userData={name:r.name,from:r.lens,to:r.virtual,virtual:true};rays.add(line);}}}
   function directionFor(azimuth,polar){return new THREE.Vector3(Math.sin(polar)*Math.sin(azimuth),Math.cos(polar),Math.sin(polar)*Math.cos(azimuth));}
   function fitToViewport(){
    camera.fov=39;camera.updateProjectionMatrix();let radius=9;
@@ -134,10 +138,10 @@ function initialise(root){
   }
   function draw(){pending=0;renderer.render(scene,camera);}
   function requestDraw(){if(!pending)pending=requestAnimationFrame(draw);}
-  function syncScene(){source.position.x=-state.object*G.scale;sourceName.position.x=source.position.x;annotations.visible=!front;screen.position.x=state.screen*G.scale;projectedTexture.needsUpdate=true;updateRays();updateCamera();scene.updateMatrixWorld(true);requestDraw();}
+  function syncScene(){source.visible=!state.atInfinity;sourceName.visible=!state.atInfinity;source.position.x=-state.object*G.scale;sourceName.position.x=source.position.x;annotations.visible=!front;screen.position.x=state.screen*G.scale;projectedTexture.needsUpdate=true;updateRays();updateCamera();scene.updateMatrixWorld(true);requestDraw();}
   const devices={object:source,screen,lens:lensGroup},pointers=new Map(),raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let gesture=null;
   function ray(e){const r=canvas.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,1-(e.clientY-r.top)/r.height*2);raycaster.setFromCamera(pointer,camera);}
-  function hit(e){if(front)return null;ray(e);const h=raycaster.intersectObjects(Object.values(devices),true)[0];if(!h)return null;let group=h.object;while(group.parent!==scene&&group.parent)group=group.parent;return {...h,key:Object.keys(devices).find(key=>devices[key]===group)};}
+  function hit(e){if(front)return null;ray(e);const h=raycaster.intersectObjects(Object.values(devices).filter(group=>group.visible),true)[0];if(!h)return null;let group=h.object;while(group.parent!==scene&&group.parent)group=group.parent;return {...h,key:Object.keys(devices).find(key=>devices[key]===group)};}
   const pinch=()=>{const p=[...pointers.values()];return p.length<2?0:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);};
   canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.setPointerCapture(e.pointerId);if(pointers.size>1){clearGestureNotice();gesture={kind:'pinch',distance:pinch(),zoom:orbit.zoom};return;}const h=hit(e);if(!h)clearGestureNotice();gesture={kind:h?'apparatus':'orbit',key:h?.key,startX:e.clientX,startY:e.clientY,azimuth:orbit.azimuth,polar:orbit.polar};});
   canvas.addEventListener('pointermove',e=>{
