@@ -6,6 +6,7 @@ function initialise(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],canvas=$('#imaging-canvas');
  let state={object:320,screen:240},showRays=true,point='both',front=false,selected='screen',studio=null;
  state=moveImaging(state,'screen',imagingState(state).v);
+ const distanceLabel=value=>{const n=Number((value/G.f).toFixed(3));return n===1?'F':`${n}F`;};
  const art=document.createElement('canvas');art.width=350;art.height=600;const a=art.getContext('2d');
  a.fillStyle='#dd684f';a.beginPath();a.moveTo(175,80);a.lineTo(133,170);a.lineTo(217,170);a.closePath();a.fill();
  a.strokeStyle='#688d65';a.lineWidth=13;a.lineCap='round';a.beginPath();a.moveTo(175,190);a.lineTo(175,442);a.stroke();a.fillStyle='#438dbb';a.beginPath();a.arc(175,500,35,0,Math.PI*2);a.fill();
@@ -22,16 +23,16 @@ function initialise(root){
   }
   pc.restore();return g;
  }
- function clearGestureNotice(){const note=$('[data-imaging-gesture-note]');note.hidden=true;root.dataset.gestureHelp='false';}
- function showGestureNotice(key){const note=$('[data-imaging-gesture-note]');note.textContent=key==='lens'?'凸透鏡是固定的。':`請使用下方${key==='object'?'圖卡尺':'屏幕尺'}的刻度按鈕或綠色把手調整距離。`;note.hidden=false;root.dataset.gestureHelp='true';}
+ function clearGestureNotice(){const note=$('[data-imaging-gesture-note]');note.hidden=true;root.dataset.gestureHelp='false';$$('[data-imaging-ruler]').forEach(r=>r.removeAttribute('data-guided'));}
+ function showGestureNotice(key){clearGestureNotice();$$('[data-imaging-ruler]').forEach(r=>r.toggleAttribute('data-guided',r.dataset.imagingRuler===key));const note=$('[data-imaging-gesture-note]');note.textContent=key==='lens'?'凸透鏡是固定的。':`請使用下方金框標示的${key==='object'?'圖卡尺':'屏幕尺'}的刻度按鈕或綠色把手調整距離。`;note.hidden=false;root.dataset.gestureHelp='true';}
  function update(){
   const g=paintProjection();
-  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.textContent=key==='object'?'圖卡 ↔':'屏幕 ↔';b.setAttribute('aria-pressed',String(key===selected));b.setAttribute('aria-label',`${key==='object'?'發光圖卡':'屏幕'}，${state[key]}公分，可用方向鍵移動`);});
-  for(const handle of $$('[data-imaging-ruler-handle]')){const key=handle.dataset.imagingRulerHandle,max=G[key+'Max'];handle.style.left=`${(key==='object'?1-state[key]/max:state[key]/max)*100}%`;handle.setAttribute('aria-valuenow',String(state[key]));handle.setAttribute('aria-valuetext',`${key==='object'?'圖卡':'屏幕'}距離透鏡${state[key]}公分`);}
-  const target=$('[data-imaging-target]');target.hidden=!g.finite||g.unreachable;target.dataset.distance=g.finite?String(g.v):'';target.style.setProperty('--target-position',`${g.finite?g.v/G.screenMax*100:0}%`);$('[data-imaging-target-label]').setAttribute('aria-label',g.finite?`屏幕移至清楚像位置，${Math.round(g.v*10)/10}公分`:'沒有有限距離的清楚像位置');
+  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.textContent=key==='object'?'圖卡 ↔':'屏幕 ↔';b.setAttribute('aria-pressed',String(key===selected));b.setAttribute('aria-label',`${key==='object'?'發光圖卡':'屏幕'}，${distanceLabel(state[key])}，可用方向鍵移動`);});
+  for(const handle of $$('[data-imaging-ruler-handle]')){const key=handle.dataset.imagingRulerHandle,max=G[key+'Max'];handle.style.left=`${(key==='object'?1-state[key]/max:state[key]/max)*100}%`;handle.setAttribute('aria-valuemin',String(G[key+'Min']/G.f));handle.setAttribute('aria-valuemax',String(max/G.f));handle.setAttribute('aria-valuenow',String(Number((state[key]/G.f).toFixed(3))));handle.setAttribute('aria-valuetext',`${key==='object'?'圖卡':'屏幕'}距離透鏡${distanceLabel(state[key])}`);}
+  const target=$('[data-imaging-target]');target.hidden=!g.finite||g.unreachable;target.dataset.distance=g.finite?String(g.v):'';target.style.setProperty('--target-position',`${g.finite?g.v/G.screenMax*100:0}%`);$('[data-imaging-target-label]').setAttribute('aria-label',g.finite?`屏幕移至清楚像位置，${distanceLabel(g.v)}`:'沒有有限距離的清楚像位置');
   $('[data-imaging-target-status]').hidden=g.finite&&!g.unreachable;
-  $('[data-imaging-target-status]').textContent=!g.finite?'圖卡位於焦點，沒有有限距離的清楚像。':g.unreachable?`清楚像在 ${Math.round(g.v*10)/10} 公分，已超出軌道。`:`清楚像位置：${Math.round(g.v*10)/10} 公分`;
-  for(const key of ['object','screen']){const output=$(`[data-imaging-distance=${key}]`);output.textContent=`${state[key]} 公分`;output.setAttribute('aria-label',`${key==='object'?'物距':'屏幕距離'} ${state[key]} 公分`);}
+  $('[data-imaging-target-status]').textContent=!g.finite?'圖卡位於焦點，沒有有限距離的清楚像。':g.unreachable?`清楚像在 ${distanceLabel(g.v)}，已超出軌道。`:`清楚像位置：${distanceLabel(g.v)}`;
+  for(const key of ['object','screen']){const output=$(`[data-imaging-distance=${key}]`);output.textContent=distanceLabel(state[key]);output.setAttribute('aria-label',`${key==='object'?'物距':'屏幕距離'} ${distanceLabel(state[key])}`);}
   $('[data-imaging-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-imaging-rays]').setAttribute('aria-pressed',String(showRays));$('[data-imaging-trace]').hidden=!showRays;
   $$('[data-imaging-point]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingPoint===point)));
   $('[data-imaging-view]').textContent=front?'返回實驗台':'屏幕視角';$('[data-imaging-view]').setAttribute('aria-label',front?'返回實驗台視角':'切換到屏幕視角');$('[data-imaging-view]').setAttribute('aria-pressed',String(front));
@@ -45,7 +46,7 @@ function initialise(root){
   const keypoint=!g.finite?'focus':!g.clear?'':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between';
   $$('[data-imaging-keypoint]').forEach(row=>{const active=row.dataset.imagingKeypoint===keypoint;row.dataset.active=String(active);row.querySelector('button').setAttribute('aria-pressed',String(active));});
   root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.clear=String(g.clear);root.dataset.magnification=g.finite?String(g.m):'';root.dataset.projectionScale=g.projectionScale;root.dataset.spread=g.spread;root.dataset.rays=showRays;root.dataset.view=front?'screen':'orbit';root.dataset.point=point;
-  canvas.setAttribute('aria-label',`旋轉與縮放觀察的立體凸透鏡成像台，使用下方位置尺調整距離，物距${state.object}公分，屏幕距離${state.screen}公分，${$('[data-imaging-badge]').textContent}`);
+  canvas.setAttribute('aria-label',`旋轉與縮放觀察的立體凸透鏡成像台，使用下方位置尺調整距離，物距${distanceLabel(state.object)}，屏幕距離${distanceLabel(state.screen)}，${$('[data-imaging-badge]').textContent}`);
   studio?.update();
  }
  function move(key,value){clearGestureNotice();state=moveImaging(state,key,value);selected=key;update();}
