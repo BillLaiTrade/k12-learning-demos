@@ -1,5 +1,5 @@
 import {TOOL_HOME,directPosition,limitPosition,approach,parkPosition} from './collection-task-direct.mjs?v=retry-1';
-import {DESK_MATERIALS,createDesk,actDesk,advanceDesk,reacting,deskFrame,liquidSeal} from './collection-task-model.mjs?v=retry-1';
+import {DESK_MATERIALS,createDesk,actDesk,advanceDesk,reacting,deskFrame,liquidSeal} from './collection-task-model.mjs?v=feedback-1';
 import {createCollectionScene,materialArt} from './collection-task-scene.mjs?v=retry-1';
 const form=document.querySelector('#gas-report-form'),svg=form.querySelector('.task-scene'),scene=createCollectionScene(svg),operation=form.querySelector('[data-desk-operate]'),feedback=form.querySelector('#gas-report-feedback');
 let state=createDesk(),raf=0,last=0,suspended=false,drag=null;
@@ -15,8 +15,8 @@ function render(){
  for(const b of form.querySelectorAll('[data-desk-tool]')){if(!b.dataset.deskMaterial)b.setAttribute('aria-pressed',String(state.tool===b.dataset.deskTool));b.disabled=!!state.motion||(!b.dataset.deskMaterial&&state.phase==='complete');b.dataset.installed=String(b.dataset.deskTool==='rig'&&state.rig||b.dataset.deskTool==='funnel'&&state.funnel||b.dataset.deskTool==='plate'&&state.jarCovered);}
  form.querySelector('[data-desk-action=stop]').hidden=!['water','acid'].includes(state.motion?.kind);
  form.querySelector('[data-desk-action=inspect]').disabled=!!state.motion||state.phase==='complete';
- form.querySelector('.desk-instruction').textContent=state.phase==='complete'?'氣體已封存在瓶中。可重做實驗，嘗試不同操作。':'點工具上桌 → 將瓶嘴、管尖或玻璃片對準開口 → 看提示，停靠或放開。';
- if(feedback.textContent!==state.feedback)feedback.textContent=state.feedback;feedback.dataset.kind=state.feedbackKind;feedback.dataset.result=state.result||'';
+ form.querySelector('.desk-instruction').textContent=state.phase==='complete'?'氣體已封存在瓶中。可重做實驗，嘗試不同操作。':'點材料上桌 → 拖曳器材對準開口 → 看提示後放開。';
+ if(feedback.textContent!==state.feedback)feedback.textContent=state.feedback;feedback.hidden=!state.feedback;feedback.dataset.kind=state.feedbackKind;feedback.dataset.result=state.result||'';
  {
   const frame=deskFrame(state),observation=state.phase==='complete'?'已在水下蓋片，氣體封存在集氣瓶中。':!frame.reaction&&state.acid>0&&state.reactionUsed>=state.acid-.00001?'這一份反應物已反應完，氣泡已停止；未導入瓶內的氣體已逸散。':!frame.reaction&&state.flaskWater>0?'反應瓶內已有清水；單加清水不會產生二氧化碳。':!frame.reaction?'尚未反應；移動或加水都不會產生氣體。':!liquidSeal(state)?state.rig&&state.funnel?'反應瓶有氣泡；液面尚未蓋過漏斗末端，氣體會從漏斗逸出。':'反應瓶有氣泡；瓶口未密合，氣體直接逸出。':frame.collecting&&state.airRemaining>0?'正在收進裝置原有的空氣；應先在集氣瓶外排氣。':frame.collecting?state.jarWater>.015?'反應瓶與瓶內冒泡，集氣瓶的水位逐漸下降。':'瓶內的水已排出，多餘氣體由瓶口逸入水中。':frame.outlet.y+10>524-119*state.tankWater?'出口在瓶外水中冒泡，集氣瓶水位不變。':'導管出口在水面上方，氣體直接逸入空氣。';
   const readout=form.querySelector('[data-desk-observation]');if(readout.textContent!==observation)readout.textContent=observation;
