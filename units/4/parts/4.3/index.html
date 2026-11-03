@@ -32,10 +32,11 @@
   <script type="module" src="assets/oblique-cart.mjs?v=20261103-cart2"></script>
   <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261103-fit2"></script>
   <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-fit2">
-  <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-fit2"></script>
+  <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-refresh1"></script>
   <link rel="stylesheet" href="assets/light-beam.css?v=20261103-fit2">
   <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-fit2">
 <link rel="stylesheet" href="assets/integrated-refraction.css?v=20261103-fit2">
+  <link rel="stylesheet" href="assets/return-refraction-refresh.css?v=20261103-refresh1">
   <script type="module" src="assets/lesson.mjs?v=20261102-return1">
 </script>
 </head>
@@ -392,6 +393,7 @@
       </aside>
     </div>
   </figure>
+  <div class="return-control-deck">
   <div class="return-controls">
     <div class="return-switches" role="group" aria-label="獨立開關 A、B 光源">
       <button type="button" id="return-toggle-a" class="return-switch" aria-pressed="false" disabled><span class="return-switch-indicator" aria-hidden="true"></span><span class="return-switch-label">A 紅光<small>關閉</small></span></button>
@@ -403,7 +405,8 @@
     <label class="return-angle-control" for="return-angle"><span><span id="return-angle-caption">水側角度</span><output id="return-angle-value" class="angle-output" for="return-angle">30°</output></span><span class="return-slider"><input id="return-angle" class="angle-input" type="range" min="0" max="35" value="30" step="1" aria-label="水側角度，從法線量起" disabled><span>0°</span><span>35°</span></span></label>
     <div class="return-finding"><strong id="return-finding">分別開啟 A、B，再比較兩個方向</strong><span id="return-route">空氣側 41.8°｜水側 30°</span></div>
   </div>
-  <p id="return-status" role="status">正在準備實驗場景……</p><button type="button" id="return-retry" hidden>重新載入場景</button>
+  </div>
+  <p id="return-status" class="visually-hidden" role="status">正在準備實驗場景……</p><button type="button" id="return-retry" hidden>重新載入場景</button>
   <span class="visually-hidden">水／玻璃側角度 <span id="return-water-value" class="incident-readout">30°</span>，空氣側角度 <span id="return-air-value" class="refracted-readout">41.8°</span>。</span>
   <details class="return-explanation"><summary>光路反向時，兩個角的角色怎麼交換？</summary><p>光沿原光路反向射入，會沿原路返回。原本的折射角會成為反向的入射角，原本的入射角會成為反向的折射角；兩個角通常不相等。</p><p>拖曳 A 或 B 時，另一端會自動對準對應光路。分別開燈，再同時開啟，比較路徑與箭頭；兩種光色只用來區分方向，不比較色散。</p></details>
   <noscript><p>水中入射角30°時，射回空氣的折射角約41.8°；代表玻璃約48.6°。光偏離法線，沿這條光路反向射入則可返回。啟用 JavaScript 後可獨立開關兩支光源、調角及局部放大。</p></noscript>
