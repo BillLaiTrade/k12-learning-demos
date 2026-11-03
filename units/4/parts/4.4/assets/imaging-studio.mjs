@@ -51,10 +51,13 @@ function initialise(root){
  }
  function move(key,value){clearGestureNotice();state=moveImaging(state,key,value);selected=key;update();}
  for(const handle of $$('[data-imaging-ruler-handle]')){
-  const key=handle.dataset.imagingRulerHandle,track=$(`[data-imaging-ruler-track=${key}]`);let drag=null;
+  const key=handle.dataset.imagingRulerHandle,track=$(`[data-imaging-ruler-track=${key}]`),max=G[key+'Max'],marks=[...track.querySelectorAll('[data-imaging-ruler-mark]')].map(button=>{
+   const value=Number(button.dataset.imagingRulerMark),position=(key==='object'?1-value/max:value/max)*100;button.style.left=position+'%';
+   const line=document.createElement('span');line.className='imaging-ruler-major-line';line.dataset.imagingRulerMajorLine=String(value);line.style.left=position+'%';line.setAttribute('aria-hidden','true');track.append(line);return value;
+  }).filter(value=>value>=G[key+'Min']&&value<=max);let drag=null;
   track.addEventListener('click',e=>{if(e.target.closest('[data-imaging-ruler-handle]'))return;const mark=e.target.closest('[data-imaging-ruler-mark]');if(e.target.closest('[data-imaging-target]')){const g=imagingState(state);if(g.finite&&!g.unreachable)move('screen',g.v);return;}if(mark){move(key,Number(mark.dataset.imagingRulerMark));return;}const r=track.getBoundingClientRect();if(!r.width)return;const fraction=(e.clientX-r.left)/r.width;move(key,(key==='object'?1-fraction:fraction)*G[key+'Max']);});
   handle.addEventListener('pointerdown',e=>{if(e.button!==0||drag||handle.disabled)return;clearGestureNotice();e.preventDefault();handle.focus({preventScroll:true});handle.setPointerCapture(e.pointerId);drag={id:e.pointerId,x:e.clientX,value:state[key],width:track.getBoundingClientRect().width};});
-  handle.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id||!drag.width)return;move(key,drag.value+(e.clientX-drag.x)/drag.width*G[key+'Max']*(key==='object'?-1:1));});
+  handle.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id||!drag.width)return;const value=drag.value+(e.clientX-drag.x)/drag.width*max*(key==='object'?-1:1),nearest=marks.reduce((a,b)=>Math.abs(b-value)<Math.abs(a-value)?b:a);move(key,Math.abs(nearest-value)/max*drag.width<=3?nearest:value);});
   for(const event of ['pointerup','pointercancel','lostpointercapture'])handle.addEventListener(event,e=>{if(e.pointerId===drag?.id)drag=null;});
  }
  $('[data-imaging-rays]').addEventListener('click',()=>{showRays=!showRays;update();});$('[data-imaging-view]').addEventListener('click',()=>{clearGestureNotice();front=!front;update();});
