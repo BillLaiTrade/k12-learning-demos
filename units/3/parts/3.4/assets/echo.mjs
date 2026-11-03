@@ -1,6 +1,6 @@
 import {bindWellQuiz} from './well-quiz.mjs?v=d5c30da4230a';
 import {bindRoomWaveLab} from './room-wave-lab.mjs?v=0df53bfb7d7b';
-import {renderSonar, bindSonar, beginSonar, sonarDuration, sonarTaps} from './sonar-lab.mjs?v=20261101-workspace';
+import {renderSonar, bindSonar, beginSonar, sonarDuration, sonarTaps} from './sonar-lab.mjs?v=20261103-no-pause';
 import {arrivals} from './echo-model.mjs?v=20261101-room-contrast';
 import {renderReflection, REFLECTION_DURATION, REFLECTION_RETURN_TIME} from './reflection-lab.mjs';
 import {renderDistance, bindDistanceWall, bindDistanceSpeakers, distanceDuration, distanceTaps} from './distance-lab.mjs?v=20261103-distance-conditions';
@@ -91,7 +91,9 @@ function player(id, render, duration, {room = false, mode = () => '', restartOnP
       pauseButton.textContent = value === 'paused' ? '繼續' : '暫停';
       pauseButton.setAttribute('aria-label', value === 'paused' ? '繼續聲波觀察' : '暫停聲波觀察');
     }
-    const messages = id === 'reflection'
+    const messages = id === 'sonar'
+      ? {ready: '準備好，可發出聲波探測。', playing: '探測中，等待回波。', paused: '探測已中斷，可再次發聲重新探測。', complete: '本次探測結束，可移船再次發聲。'}
+      : id === 'reflection'
       ? {ready: '準備好，可點喇叭或按鈕發出一次短音。', playing: '播放中，可再次發聲，從頭觀察。', paused: '觀察已中斷，可再次發聲，從頭觀察。', complete: '本次觀察結束，可再次發聲。'}
       : {ready: '準備好，可播放或直接比較；重來保留目前條件。', playing: '播放中，可暫停觀察。', paused: '已暫停，位置保留；繼續時接著播放。', complete: '本次觀察結束，可重看或改變條件。'};
     $(`${id}-status`).textContent = messages[value];

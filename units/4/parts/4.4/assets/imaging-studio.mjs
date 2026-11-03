@@ -1,4 +1,4 @@
-import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261103-imaging-refine1';
+import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261103-imaging-zoom5x1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261103-imaging-six1';
 const root=document.querySelector('[data-imaging-lab]');
@@ -38,7 +38,7 @@ function initialise(root){
   $('[data-imaging-target-status]').textContent=g.type==='virtual'?'虛像在透鏡前，屏幕接不到清楚像。':!g.finite?'圖卡位於焦點，沒有有限距離的清楚像。':g.unreachable?`清楚像在 ${distanceLabel(g.v)}，已超出軌道。`:`清楚像位置：${distanceLabel(g.v)}`;
   for(const key of ['object','screen']){const output=$(`[data-imaging-distance=${key}]`);output.textContent=key==='object'&&state.atInfinity?'∞':distanceLabel(state[key]);output.setAttribute('aria-label',`${key==='object'?'物距':'屏幕距離'} ${key==='object'&&state.atInfinity?'無窮遠':distanceLabel(state[key])}`);}
   $('[data-imaging-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-imaging-rays]').setAttribute('aria-pressed',String(showRays));$('[data-imaging-trace]').hidden=!showRays||!!state.atInfinity;
-  $('[data-imaging-limit-note]').hidden=!state.atInfinity;$('[id=imaging-object-ruler-help]').textContent=state.atInfinity?'無窮遠：點刻度返回有限距離':'點選刻度按鈕或移動圖卡';
+  $('[id=imaging-object-ruler-help]').textContent=state.atInfinity?'無窮遠：點刻度返回有限距離':'點選刻度按鈕或移動圖卡';
   $$('[data-imaging-point]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingPoint===point)));
   $('[data-imaging-view]').textContent=front?'返回實驗台':'屏幕視角';$('[data-imaging-view]').setAttribute('aria-label',front?'返回實驗台視角':'切換到屏幕視角');$('[data-imaging-view]').setAttribute('aria-pressed',String(front));
 
@@ -49,7 +49,7 @@ function initialise(root){
   else if(g.unreachable)message='清楚像的位置已超出軌道，屏幕移到最遠仍無法對焦。請把圖卡移遠透鏡一些，再重新找像。';
   if(g.clipped&&g.type==='real'&&!state.atInfinity)message+=' 部分投影超出屏幕；保留實際比例，不縮小圖案填入。';
   if(showRays&&g.finite&&g.type==='real'&&!state.atInfinity)message+=point==='top'?' 紅線追蹤圖卡上端，在清楚像的下方會聚。':point==='bottom'?' 藍線追蹤圖卡下端，在清楚像的上方會聚。':' 紅、藍線來自不同物點，分別形成對應的像點。';
-  $('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=state.atInfinity?(g.clear?'另一側 F・點像':'移動屏幕至 F 觀察點像'):g.type==='virtual'?'正立放大虛像・屏幕接不到':!g.finite?'物體位於焦點':g.unreachable?'清楚像超出軌道':g.clear?`已對焦・倒立${g.sizeLabel}${g.clipped?'・部分超出屏幕':''}`:'屏幕尚未對焦';
+  $('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=state.atInfinity?(g.clear?'點像':'屏幕尚未對焦'):g.type==='virtual'?'正立、放大的虛像':!g.finite?'屏幕接不到清楚像':g.unreachable?'清楚像超出軌道':g.clear?`倒立、${g.sizeLabel}的實像`:'屏幕尚未對焦';
   const keypoint=state.atInfinity?'infinity':g.type==='virtual'?'inside':!g.finite?'focus':!g.clear?'':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between';
   $$('[data-imaging-keypoint]').forEach(row=>{const active=row.dataset.imagingKeypoint===keypoint;row.dataset.active=String(active);row.querySelector('button').setAttribute('aria-pressed',String(active));});
   root.dataset.atInfinity=String(!!state.atInfinity);root.dataset.imageType=g.type;root.dataset.imagePosition=g.finite?g.v:'';root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.clear=String(g.clear);root.dataset.magnification=g.finite?String(g.m):'';root.dataset.projectionScale=g.projectionScale;root.dataset.spread=g.spread;root.dataset.rays=showRays;root.dataset.view=front?'screen':'orbit';root.dataset.point=point;
@@ -79,7 +79,8 @@ function initialise(root){
  function createStudio(){
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   const scene=new THREE.Scene();scene.background=new THREE.Color('#566b5b');scene.fog=new THREE.Fog('#566b5b',35,80);
-  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3(1.05,1.5,0);let orbit={azimuth:-.15,polar:1.38,zoom:1},fitRadius=9,pending=0,viewport=null;
+  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3(1.05,1.5,0);let orbit={azimuth:-.62,polar:1.33,zoom:1},fitRadius=9,pending=0,viewport=null;
+  const clampZoom=value=>THREE.MathUtils.clamp(value,.2,1);
   scene.add(new THREE.HemisphereLight('#f2f3df','#3a503e',2.1));const light=new THREE.DirectionalLight('#fff0cf',3.1);light.position.set(-3,8,6);light.castShadow=true;light.shadow.mapSize.set(1024,1024);Object.assign(light.shadow.camera,{left:-8,right:10,top:7,bottom:-5});light.shadow.bias=-.0004;scene.add(light);const rim=new THREE.DirectionalLight('#d3e9e0',1.6);rim.position.set(5,4,-4);scene.add(rim);
   const mat=(color,options={})=>new THREE.MeshStandardMaterial({color,roughness:.5,metalness:.15,...options}),dark=mat('#283e30',{metalness:.5,roughness:.36}),steel=mat('#a2b4a4',{metalness:.7,roughness:.27}),brass=mat('#bba267',{metalness:.7,roughness:.3});
   function box(parent,size,pos,material){const mesh=new THREE.Mesh(new THREE.BoxGeometry(...size),material);mesh.position.set(...pos);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;}
@@ -117,7 +118,7 @@ function initialise(root){
   function fitToViewport(){
    camera.fov=39;camera.updateProjectionMatrix();let radius=9;
    const bounds=[];for(const [xs,ys,zs]of [[[-4.9,-1.4],[.3,G.axis+G.cardHeight/2+.1],[-.9,.9]],[[G.screenMin*G.scale-.3,7.4],[.3,3.6],[-1,1]],[[-5.4,7.4],[-.25,.25],[-1.15,1.15]]])for(const x of xs)for(const y of ys)for(const z of zs)bounds.push(new THREE.Vector3(x,y,z));
-   const directions=[directionFor(-.15,1.38)];
+   const directions=[directionFor(-.62,1.33)];
    for(let i=0;i<40;i++){const fits=directions.every(direction=>{camera.position.copy(target).addScaledVector(direction,radius);camera.lookAt(target);camera.updateMatrixWorld();return bounds.every(p=>{const q=p.clone().project(camera);return Math.abs(q.x)<.9&&Math.abs(q.y)<.8;});});if(fits)break;radius*=1.06;}
    fitRadius=radius;
   }
@@ -138,14 +139,14 @@ function initialise(root){
   canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.setPointerCapture(e.pointerId);if(pointers.size>1){clearGestureNotice();gesture={kind:'pinch',distance:pinch(),zoom:orbit.zoom};return;}const h=hit(e);if(!h)clearGestureNotice();gesture={kind:h?'apparatus':'orbit',key:h?.key,startX:e.clientX,startY:e.clientY,azimuth:orbit.azimuth,polar:orbit.polar};});
   canvas.addEventListener('pointermove',e=>{
    if(!pointers.has(e.pointerId)){canvas.style.cursor=hit(e)?'help':'grab';return;}pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(!gesture)return;
-   if(pointers.size>1){if(gesture.kind!=='pinch')return;front=false;orbit.zoom=THREE.MathUtils.clamp(gesture.zoom*gesture.distance/Math.max(pinch(),1),.65,1);update();return;}
+   if(pointers.size>1){if(gesture.kind!=='pinch')return;front=false;orbit.zoom=clampZoom(gesture.zoom*gesture.distance/Math.max(pinch(),1));update();return;}
    if(gesture.kind==='pinch')return;
    if(gesture.kind==='apparatus'){if(Math.hypot(e.clientX-gesture.startX,e.clientY-gesture.startY)>=4)showGestureNotice(gesture.key);return;}
    front=false;orbit.azimuth=gesture.azimuth-(e.clientX-gesture.startX)*.005;orbit.polar=THREE.MathUtils.clamp(gesture.polar+(e.clientY-gesture.startY)*.004,.25,1.55);update();
   });
   function stop(e){pointers.delete(e.pointerId);gesture=null;canvas.style.cursor='grab';}
   for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,stop);
-  canvas.addEventListener('wheel',e=>{e.preventDefault();clearGestureNotice();if(front)return;orbit.zoom=THREE.MathUtils.clamp(orbit.zoom+e.deltaY*.001,.65,1);update();},{passive:false});
+  canvas.addEventListener('wheel',e=>{e.preventDefault();clearGestureNotice();if(front)return;orbit.zoom=clampZoom(orbit.zoom+e.deltaY*.001);update();},{passive:false});
   canvas.addEventListener('keydown',e=>{const steps={ArrowLeft:[.06,0],ArrowRight:[-.06,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!steps[e.key])return;e.preventDefault();clearGestureNotice();front=false;orbit.azimuth=orbit.azimuth+steps[e.key][0];orbit.polar=THREE.MathUtils.clamp(orbit.polar+steps[e.key][1],.25,1.55);update();});
   function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);viewport=workspace.safeRect();camera.aspect=viewport.width/viewport.height;fitToViewport();updateCamera();requestDraw();}new ResizeObserver(resize).observe(canvas);resize();
   return {update:syncScene,scene,camera,renderer,source,lens,screen,screenPlane,rays,devices};
