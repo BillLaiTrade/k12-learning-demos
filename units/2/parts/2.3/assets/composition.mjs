@@ -149,7 +149,7 @@ if('IntersectionObserver' in window)new IntersectionObserver(entries=>{visible=e
 for(const field of fields)field.svg.addEventListener('click',event=>{const particle=event.target.closest('[data-particle]');if(particle)choose(particle.dataset.gas);});
 renderParticles();syncMotion();
 choose('all');
-knowledge.querySelector('.air-knowledge-hint').hidden = false;
+section.querySelector('.air-knowledge-hint').hidden = false;
 updateConnector();
 const links = [...document.querySelectorAll('.route a[href^="#"]')];
 const sections = links.map(link => document.querySelector(link.getAttribute('href')));
