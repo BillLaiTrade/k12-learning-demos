@@ -31,7 +31,7 @@ let focused = null;
 let hovered = null;
 let connectorFrame = 0;
 function emphasize() {
-  section.dataset.emphasis = hovered || focused || selected;
+  section.dataset.emphasis = selected !== 'all' ? selected : hovered || focused || selected;
 }
 function describe() {
   status.textContent = selected === 'all' ? '' : descriptions[selected] + (section.dataset.arrangement === 'mixed' ? ' 粒子混合在一起，比例不變。' : ' 分區只為比較比例；實際空氣中的氣體混合在一起。');
