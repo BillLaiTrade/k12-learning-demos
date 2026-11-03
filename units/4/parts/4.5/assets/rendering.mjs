@@ -38,7 +38,24 @@ export function prismDiagram(state,id){
  const marks=state.inserted?rays.map(r=>{const p=map(r.points.at(-1));return `<path d="M742 ${p[1]}h13" stroke="${state.light==='white'?rgbCss(r.rgb):rgbCss(LIGHTS[state.light].rgb)}" stroke-width="2.4"/>`;}).join(''):`<path d="M742 ${source[1]}h13" stroke="${rgbCss(LIGHTS[state.light].rgb)}" stroke-width="9"/>`;
  return `<svg viewBox="0 0 850 400" aria-label="三稜鏡與白幕的光路示意">${defs(id)}<path d="M0 0H850V400H0Z" fill="#9eaf9e"/><path d="M0 325L850 312V400H0Z" fill="url(#${id}-wood)"/><path d="M0 347H850M0 379H850" stroke="#dbb789" opacity=".2"/>${foot(112,id)}${foot(748,id)}<path d="M737 60h24v268h-24Z" fill="#f8f7eb" stroke="#56716b" stroke-width="3"/>${marks}<rect x="31" y="${source[1]-27}" width="83" height="54" rx="11" fill="url(#${id}-metal)"/><ellipse cx="113" cy="${source[1]}" rx="8" ry="25" fill="#263f37"/><ellipse cx="116" cy="${source[1]}" rx="5" ry="18" fill="${rgbCss(LIGHTS[state.light].rgb)}"/>${state.rays&&state.inserted?`<path d="M${map(rays[0].points[0]).join(' ')}L${map(rays[0].points[1]).join(' ')}" fill="none" stroke="${rgbCss(LIGHTS[state.light].rgb)}" stroke-width="3"/>`:''}${lines}<g data-prism-hit role="button" tabindex="0" aria-label="${state.inserted?'移開':'放入'}三稜鏡" style="cursor:grab"><polygon points="${poly.map(p=>`${p[0]},${p[1]-32}`).join(' ')}" fill="url(#${id}-glass)" stroke="#e4fff5" stroke-width="2"/><polygon points="${points}" fill="url(#${id}-glass)" stroke="#e4fff5" stroke-width="2"/>${poly.map(p=>`<path d="M${p[0]} ${p[1]}v-32" stroke="#b5e0d5" stroke-width="2"/>`).join('')}</g><text x="108" y="378" text-anchor="middle" fill="#fff9eb" font-size="17">光源</text><text x="748" y="378" text-anchor="middle" fill="#fff9eb" font-size="17">白幕</text></svg>`;
 }
+function surfaceDiagram(state,id,signal){
+ const input=rgbCss(signal.incoming),output=rgbCss(signal.outgoing);
+ return `<svg viewBox="0 0 850 400" aria-hidden="true">${defs(id)}
+ <path d="M0 0H850V400H0Z" fill="#9eaf9e"/>
+ <path d="M0 210L590 128L850 253V400H0Z" fill="url(#${id}-wood)"/>
+ <path d="M100 351L640 289M107 361L647 299" stroke="#9ca99c" stroke-width="5"/>
+ <path d="M121 337h73l12 12h-99Z" fill="#293d36"/><path d="M156 339V265" stroke="url(#${id}-metal)" stroke-width="8"/>
+ <rect x="88" y="233" width="104" height="54" rx="13" fill="url(#${id}-metal)"/>
+ <ellipse cx="194" cy="260" rx="8" ry="23" fill="${input}"/>
+ <path d="M489 298h62l10 12h-82Z" fill="#293d36"/><path d="M521 300V252" stroke="url(#${id}-metal)" stroke-width="7"/>
+ <path d="M455 89L579 120V269L455 238Z" fill="${output}" stroke="#344c3f" stroke-width="6"/>
+ ${state.rays?`<path d="M202 258L517 185" stroke="${input}" stroke-width="3" fill="none"/>
+ <path d="M517 185L329 116M517 185L273 209M517 185L349 317" stroke="${output}" stroke-width="3" fill="none"/>
+ <path d="M355 128L343 120L358 120M309 212L295 211L306 204M370 293L358 306L373 301" stroke="${output}" stroke-width="3" fill="none"/>`:''}
+ </svg>`;
+}
 export function materialDiagram(state,id,signal){
+ if(state.kind==='surface')return surfaceDiagram(state,id,signal);
  const kind=state.kind,filter=kind==='filter'||kind==='eye'&&state.mode==='transmission';
  const input=rgbCss(signal.incoming),output=rgbCss(signal.outgoing),blocked=kind==='eye'&&state.blocked;
  const fill=filter?(FILTERS[state.filter||'green']?.css||'#43a672'):rgbCss(signal.outgoing);
