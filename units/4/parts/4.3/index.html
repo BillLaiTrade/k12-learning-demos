@@ -28,13 +28,13 @@
   <script type="module" src="assets/light-speed-lab.mjs?v=20261101-controls2"></script>
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
   <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-compact1"></script>
-  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-inline1">
-  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261103-inline1"></script>
-  <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-inline1">
-  <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-inline1"></script>
-  <link rel="stylesheet" href="assets/light-beam.css?v=20261103-inline1">
-  <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-inline1">
-<link rel="stylesheet" href="assets/linked-refraction-analysis.css?v=20261103-inline1">
+  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-angle40">
+  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261103-angle40"></script>
+  <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-angle40">
+  <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-angle40"></script>
+  <link rel="stylesheet" href="assets/light-beam.css?v=20261103-angle40">
+  <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-angle40">
+<link rel="stylesheet" href="assets/linked-refraction-analysis.css?v=20261103-angle40">
   <script type="module" src="assets/lesson.mjs?v=20261102-return1">
 </script>
 </head>
@@ -221,7 +221,7 @@
 
       </div>
       <div class="oblique-settings">
-        <label class="oblique-angle-control" for="oblique-angle"><span>調整入射角<output id="oblique-angle-value" class="visually-hidden" for="oblique-angle">30°</output></span><span class="oblique-slider"><input id="oblique-angle" type="range" min="0" max="90" value="30" step="1" aria-label="入射角，從法線量起" disabled><span>0°</span><span>90°</span></span></label>
+        <label class="oblique-angle-control" for="oblique-angle"><span>調整入射角<output id="oblique-angle-value" class="visually-hidden" for="oblique-angle">30°</output></span><span class="oblique-slider"><input id="oblique-angle" type="range" min="0" max="40" value="30" step="1" aria-label="入射角，從法線量起" disabled><span>0°</span><span>40°</span></span></label>
           <div class="oblique-angle-readouts" role="group" aria-label="讀值對應圖中同色扇形，角度皆從法線量起">
             <div class="oblique-angle-reading oblique-incident-color"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M17 18V2A16 16 0 0 0 5.7 6.7Z"/></svg>入射角</span><output id="oblique-in-value" class="oblique-in-value">30°</output></div>
             <div class="oblique-angle-reading oblique-refracted-color"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 2V18A16 16 0 0 0 11 15.9Z"/></svg>折射角</span><output id="oblique-out-value" class="oblique-out-value">22.0°</output></div>
@@ -235,7 +235,7 @@
       <section class="refraction-concept linked-analysis" id="oblique-concept" aria-labelledby="oblique-concept-title">
         <h3 id="oblique-concept-title">光速改變，光線怎麼轉向？</h3>
         <div class="concept-flow"><span><b data-concept-upper>空氣</b><small data-speed-upper>光速較快</small></span><b aria-hidden="true">→</b><span><b data-concept-lower>水</b><small data-speed-lower>光速較慢</small></span><b aria-hidden="true">→</b><strong data-speed-result>光速由快變慢</strong></div>
-        <div class="analysis-layout"><div class="analysis-figure"><svg id="oblique-analysis-scene" class="analysis-svg" viewBox="0 0 720 520" role="img" aria-label="目前入射角的完整光路解析，角度皆從法線量起。"></svg></div><div class="analysis-callout"><h4 data-analysis-title>偏向法線</h4><p data-analysis-equation-label>折射角與入射角</p><p class="analysis-equation" data-analysis-equation><span class="angle-out">22.0°</span><span>&lt;</span><span class="angle-in">30°</span></p><p class="analysis-reason" data-analysis-reason>折射角變小，光線更靠近法線。</p><p class="analysis-threshold" data-analysis-threshold></p></div></div>
+        <div class="analysis-layout"><div class="analysis-figure"><svg id="oblique-analysis-scene" class="analysis-svg" viewBox="0 0 720 520" role="img" aria-label="目前入射角的完整光路解析，角度皆從法線量起。"></svg></div><div class="analysis-callout"><h4 data-analysis-title>偏向法線</h4><p data-analysis-equation-label>折射角與入射角</p><p class="analysis-equation" data-analysis-equation><span class="angle-out">22.0°</span><span>&lt;</span><span class="angle-in">30°</span></p><p class="analysis-reason" data-analysis-reason>折射角變小，光線更靠近法線。</p></div></div>
         <p class="analysis-note">兩個角都從法線量起。<span data-reference-note><i aria-hidden="true"></i>灰色虛線：原方向延長線，僅作比較參考。</span></p>
       </section>
     </div>
@@ -253,7 +253,7 @@
         </div>
         <p><strong>斜著進入時，波前各處先後進入另一種介質，行進速度改變的時間不同，因此傳播方向改變。</strong>就像小車的一側輪子先變慢，整體會轉向。</p>
         <p>光從空氣進入水或玻璃，傳播速度降低；斜向入射時，折射角比入射角小，光路偏向法線。沿法線入射（0°）時，波前各處同時進入新介質，速度仍會改變，但方向不偏折，兩個角都是0°。</p>
-        <p class="oblique-model-note">小車為類比，不代表光受到摩擦。光路與角度由代表模型計算，水與玻璃的代表折射率分別為4/3與1.5；不要求計算公式。器材及光跡非實際比例，穿越動畫採共同慢動作、非實際秒數，一般情況省略介面的部分反射；90°另標示沿介面的掠射。</p>
+        <p class="oblique-model-note">小車為類比，不代表光受到摩擦。光路與角度由代表模型計算，水與玻璃的代表折射率分別為4/3與1.5；不要求計算公式。器材及光跡非實際比例，穿越動畫採共同慢動作、非實際秒數，省略介面的部分反射。</p>
       </div>
     </details>
   </div>
@@ -263,7 +263,7 @@
 <span class="lesson-number">04</span>
 <div>
 <h2 id="heading-4">光由水或玻璃射回空氣，方向又會怎樣？</h2>
-<p>由慢進入快：觀察折射、全反射與掠射</p>
+<p>由慢進入快：比較偏離法線與角度變大</p>
 </div>
 </header>
 <div class="lesson-body card-main">
@@ -300,7 +300,7 @@
 
       </div>
       <div class="oblique-settings">
-        <label class="oblique-angle-control" for="exit-angle"><span>調整入射角<output id="exit-angle-value" class="visually-hidden" for="exit-angle">30°</output></span><span class="oblique-slider"><input id="exit-angle" type="range" min="0" max="90" value="30" step="1" aria-label="入射角，從法線量起" disabled><span>0°</span><span>90°</span></span></label>
+        <label class="oblique-angle-control" for="exit-angle"><span>調整入射角<output id="exit-angle-value" class="visually-hidden" for="exit-angle">30°</output></span><span class="oblique-slider"><input id="exit-angle" type="range" min="0" max="40" value="30" step="1" aria-label="入射角，從法線量起" disabled><span>0°</span><span>40°</span></span></label>
           <div class="oblique-angle-readouts" role="group" aria-label="讀值對應圖中同色扇形，角度皆從法線量起">
             <div class="oblique-angle-reading oblique-incident-color"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M17 18V2A16 16 0 0 0 5.7 6.7Z"/></svg>入射角</span><output id="exit-in-value" class="oblique-in-value">30°</output></div>
             <div class="oblique-angle-reading oblique-refracted-color"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 2V18A16 16 0 0 0 11 15.9Z"/></svg>折射角</span><output id="exit-out-value" class="oblique-out-value">41.8°</output></div>
@@ -315,11 +315,11 @@
       <section class="refraction-concept linked-analysis" id="exit-concept" aria-labelledby="exit-concept-title">
         <h3 id="exit-concept-title">光速改變，光線怎麼轉向？</h3>
         <div class="concept-flow"><span><b data-concept-upper>水</b><small data-speed-upper>光速較慢</small></span><b aria-hidden="true">→</b><span><b data-concept-lower>空氣</b><small data-speed-lower>光速較快</small></span><b aria-hidden="true">→</b><strong data-speed-result>光速由慢變快</strong></div>
-        <div class="analysis-layout"><div class="analysis-figure"><svg id="exit-analysis-scene" class="analysis-svg" viewBox="0 0 720 520" role="img" aria-label="目前入射角的完整光路解析，角度皆從法線量起。"></svg></div><div class="analysis-callout"><h4 data-analysis-title>偏離法線</h4><p data-analysis-equation-label>折射角與入射角</p><p class="analysis-equation" data-analysis-equation><span class="angle-out">41.8°</span><span>&gt;</span><span class="angle-in">30°</span></p><p class="analysis-reason" data-analysis-reason>折射角變大，光線更遠離法線。</p><p class="analysis-threshold" data-analysis-threshold></p></div></div>
+        <div class="analysis-layout"><div class="analysis-figure"><svg id="exit-analysis-scene" class="analysis-svg" viewBox="0 0 720 520" role="img" aria-label="目前入射角的完整光路解析，角度皆從法線量起。"></svg></div><div class="analysis-callout"><h4 data-analysis-title>偏離法線</h4><p data-analysis-equation-label>折射角與入射角</p><p class="analysis-equation" data-analysis-equation><span class="angle-out">41.8°</span><span>&gt;</span><span class="angle-in">30°</span></p><p class="analysis-reason" data-analysis-reason>折射角變大，光線更遠離法線。</p></div></div>
         <p class="analysis-note">兩個角都從法線量起。<span data-reference-note><i aria-hidden="true"></i>灰色虛線：原方向延長線，僅作比較參考。</span></p>
       </section>
     </div>
-  <details class="return-explanation oblique-explanation" id="exit-explanation"><summary>為什麼從水或玻璃射回空氣，會偏離法線？</summary><p>光在水或玻璃中的傳播速度較慢，在空氣中較快。波前斜著抵達介面時，一側先進入空氣、速度先增加，另一側仍在水或玻璃中，還比較慢；波前因而轉向，使光的前進方向偏離法線。所以斜向進入較快介質時，折射角比入射角大。</p><p>沿法線入射（0°）時，波前各處同時進入新介質，速度仍會改變，但方向不偏折，兩個角都是0°。角度都從法線量起；入射角超過臨界角時會全反射；90°另標示沿介面的掠射。</p></details>
+  <details class="return-explanation oblique-explanation" id="exit-explanation"><summary>為什麼從水或玻璃射回空氣，會偏離法線？</summary><p>光在水或玻璃中的傳播速度較慢，在空氣中較快。波前斜著抵達介面時，一側先進入空氣、速度先增加，另一側仍在水或玻璃中，還比較慢；波前因而轉向，使光的前進方向偏離法線。所以斜向進入較快介質時，折射角比入射角大。</p><p>沿法線入射（0°）時，波前各處同時進入新介質，速度仍會改變，但方向不偏折，兩個角都是0°。角度都從法線量起。</p></details>
 
 </div>
 </section>
@@ -526,7 +526,7 @@
   </main>
   <footer class="shell">
 <p class="footer-brand">國二上・自然科學</p>
-<p>一般折射示意省略部分反射；第四區另呈現臨界角、全反射及90°掠射。圖中尺寸與光點為教學示意；第一、二區的光束依設定路程與代表光速計時，其餘動畫時間為教學示意。</p>
+<p>折射示意省略介面的部分反射。圖中尺寸與光點為教學示意；第一、二區的光束依設定路程與代表光速計時，其餘動畫時間為教學示意。</p>
 <p>參考：<a href="https://openstax.org/books/college-physics-2e/pages/25-3-the-law-of-refraction">OpenStax：折射與視深</a> · <a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001823">自然科學領域課綱</a>
 </p>
 <a href="#s1">回到第一個探索 ↑</a>
