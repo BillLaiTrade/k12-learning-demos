@@ -1291,3 +1291,14 @@ node --test --test-concurrency=1 tests/unit-2.3-discussion.test.cjs tests/unit-2
 ## 4.3 第五區主圖側別角度、取消放大（2026-11-03）
 
 return-lab改為10項：無放大、四種開燈組合的固定側別名稱、雙介質0／1／5／30／34／35°數字及弧線真實角度、鍵盤／兩端拖曳及觸控、光路端點／三層一致、切換及重設、競態與失敗重試。return-refresh20項改驗直接顯示角度，16視窗64筆新增文字互不重疊及不被切換遮住的條件；保留同視窗／觸控／不捲動及等比例。第三／四區專項只將第五區放大入口預期改為不存在。指令及公開環境變數沿用；目前完整組合52項（含外層），歷史54項及近拍專項由本節更新。
+
+## 2.3 第二輪重審 A1–A12（2026-11-03）
+
+新增 `unit-2.3-reaudit-model.test.mjs`（17項）及 `unit-2.3-reaudit.test.cjs`（7項子測試及外層）。模型驗證滿瓶氣體置換、原位置繼續反應但預覽不漏水／不拆卸、實際補救可重新通過、流出液體補入空氣、出口共用分類、累積容量／溢流／淹管／中止、整組停放和氣液守恆。瀏覽器以真實滑鼠、鍵盤及原生觸控驗取消、滿瓶再混空氣失敗、塞子可再抓取、正在溢流的即時提示，以及文案、清水介紹、無 JS 與資源／程式錯誤。
+
+```sh
+node --test --test-reporter=tap --test-concurrency=1 tests/unit-2.3-*-model.test.mjs
+node --test --test-reporter=tap --test-concurrency=1 tests/unit-2.3-reaudit.test.cjs tests/unit-2.3-discussion.test.cjs tests/unit-2.3-move.test.cjs tests/unit-2.3-eight.test.cjs tests/unit-2.3-feedback.test.cjs tests/unit-2.3-full.test.cjs tests/unit-2.3-nine-details.test.cjs tests/unit-2.3-composition.test.cjs tests/unit-2.3-properties.test.cjs tests/unit-2.3-captions.test.cjs
+```
+
+新套件公開驗證參數：`UNIT23_REAUDIT_URL`、`UNIT23_REAUDIT_ARTIFACT_DIR`。公開證據與本機使用不同目錄。部分舊測試依採用決策改驗滿瓶仍置換氣體、預覽不解除液封，以及溢流後仍保留部分錯誤藥品；不再要求舊的錯誤行為。

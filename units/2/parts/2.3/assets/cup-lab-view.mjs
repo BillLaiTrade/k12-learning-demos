@@ -1,4 +1,4 @@
-import { cupGeometry } from './cup-lab-model.mjs?v=cup-lab-6';
+import { cupGeometry } from './cup-lab-model.mjs?v=reaudit-20261103-2';
 const X = x => 500 + x * 24, Y = y => 210 + y * 24;
 const f = n => Number(n).toFixed(2);
 export function cupSVG(state, { id = 'cup', mini = false, bubbles = [] } = {}) {

@@ -1,4 +1,4 @@
-import {ARGON_DURATION,argonFrame} from './argon-model.mjs?v=argon-2';
+import {ARGON_DURATION,argonFrame} from './argon-model.mjs?v=reaudit-20261103-2';
 const panel=document.querySelector('.argon-comparison');
 const button=panel.querySelector('.argon-replay'),label=button.querySelector('span'),status=panel.querySelector('[role=status]');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');

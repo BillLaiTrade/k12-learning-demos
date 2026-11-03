@@ -1,6 +1,6 @@
-import {bodyOffset} from './collection-task-layout.mjs?v=move-1';
+import {bodyOffset} from './collection-task-layout.mjs?v=reaudit-20261103-2';
 // 第六區的實物接觸幾何；場景提示與判定共用輪廓，座標來自器材繪圖。
-import {jarMouth,waterSurface,rigPosition} from './collection-task-model.mjs?v=discussion-20261103-1';
+import {jarMouth,waterSurface,rigPosition} from './collection-task-model.mjs?v=reaudit-20261103-2';
 export const STONE_OFFSETS=[[-48,-12],[0,-22],[48,-10],[-27,17],[27,19]];
 const polygon=points=>({kind:'polygon',points});
 const ellipse=(x,y,rx,ry)=>({kind:'ellipse',x,y,rx,ry});

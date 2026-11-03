@@ -1,5 +1,5 @@
-import { CUP, freshCup, moveCup, advanceCup, cupGeometry } from './cup-lab-model.mjs?v=cup-lab-6';
-import { cupSVG } from './cup-lab-view.mjs?v=cup-lab-7';
+import { CUP, freshCup, moveCup, advanceCup, cupGeometry } from './cup-lab-model.mjs?v=reaudit-20261103-2';
+import { cupSVG } from './cup-lab-view.mjs?v=reaudit-20261103-2';
 const $ = s => document.querySelector(s);
 const scene = $('#cup-scene'), reduced = matchMedia('(prefers-reduced-motion: reduce)');
 let cup = freshCup(), before = null, after = null, preview = null, bubbles = [], drag = null;

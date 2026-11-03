@@ -1,9 +1,9 @@
-import {bodyOffset,bodyPoint} from './collection-task-layout.mjs?v=move-1';
-import {regionPath,looseFunnelPose,STONE_OFFSETS} from './collection-task-contact.mjs?v=discussion-20261103-1';
-import {directPosition,parkPosition} from './collection-task-direct.mjs?v=discussion-20261103-1';
-import {createThistleFunnel,createDoubleStopper,svgNode as n} from './thistle-apparatus.mjs?v=discussion-20261103-1';
-import {taskHosePoints,deskFrame,jarPose,jarMouth,waterSurface,flaskSurface,ease,mix,clamp,rigPosition,heldMaterial,usedMarbleIds,vesselReaction,marbleFraction} from './collection-task-model.mjs?v=discussion-20261103-1';
-import {liquidGeometry} from './co2-model.mjs?v=marble-fast-1';
+import {bodyOffset,bodyPoint} from './collection-task-layout.mjs?v=reaudit-20261103-2';
+import {regionPath,looseFunnelPose,STONE_OFFSETS} from './collection-task-contact.mjs?v=reaudit-20261103-2';
+import {directPosition,parkPosition} from './collection-task-direct.mjs?v=reaudit-20261103-2';
+import {createThistleFunnel,createDoubleStopper,svgNode as n} from './thistle-apparatus.mjs?v=reaudit-20261103-2';
+import {taskHosePoints,deskFrame,outletPose,jarPose,jarMouth,waterSurface,flaskSurface,ease,mix,clamp,rigPosition,heldMaterial,usedMarbleIds,vesselReaction,marbleFraction} from './collection-task-model.mjs?v=reaudit-20261103-2';
+import {liquidGeometry} from './co2-model.mjs?v=reaudit-20261103-2';
 const image=(file,box)=>{const el=n('image',{href:'assets/'+file,preserveAspectRatio:'none'});['x','y','width','height'].forEach((key,i)=>el.setAttribute(key,box[i]));return el;};
 const box=(el,b)=>['x','y','width','height'].forEach((k,i)=>el.setAttribute(k,b[i]));
 export function sprite(file,crop,b,size){const el=n('svg',{viewBox:crop.join(' '),preserveAspectRatio:'none',overflow:'hidden'});box(el,b);el.append(image(file,[0,0,...size]));return el;}
@@ -116,8 +116,9 @@ export function createCollectionScene(svg){
  const contact=n('path',{'data-desk-contact':'',fill:'#ffdf7033',stroke:'#a97710','stroke-width':3,'stroke-dasharray':'7 4','pointer-events':'none'});svg.append(contact);
  const hoseGrip=n('path',{'data-desk-drag-proxy':'outlet',fill:'none',stroke:'transparent','stroke-width':38});hoseGrip.style.pointerEvents='visibleStroke';rubber.append(hoseGrip);
  const anchor=(el,p)=>{el.dataset.anchorX=p.x;el.dataset.anchorY=p.y;};
- let hoseKey='';
- return{render(s){
+ let hoseKey='',dragOrder=null;
+ const layers={flask:[flask,neckFront,labels.flask],tank:[tankProxy,water,surface,deposits.tank.group,localBubbles.tank,tankBody,labels.tank],jar:[jarProxy,jar,jarWater,meniscus,deposits.jar.group,localBubbles.jar,jarFront,sample,labels.jar],marble:[bowl,labels.marble],rig:[funnel.group,first,collector,rubber],outlet:[collector,rubber],funnel:[funnel.group],plate:[plate],forceps:[movingStone,movingPowder,forceps],...Object.fromEntries(Object.entries(bottles).map(([id,node])=>[id,[node]])),catalyst:[spare.catalyst]};
+ return{startDrag(id,s){dragOrder=[...art.children];const nodes=id==='rig'&&!s.funnel?layers.rig.filter(n=>n!==funnel.group):id==='jar'&&s.jarCovered?[...layers.jar,plate]:id==='flask'&&s.rig?[...layers.flask,...layers.rig]:layers[id]||[];for(const node of nodes)art.append(node);},endDrag(){if(dragOrder){for(const node of dragOrder)art.append(node);dragOrder=null;}},render(s){
   const fd=bodyOffset(s,'flask'),td=bodyOffset(s,'tank'),md=bodyOffset(s,'marble');
   const has=id=>s.selected.includes(id);
   contact.setAttribute('visibility',s.contact?'visible':'hidden');if(s.contact)contact.setAttribute('d',regionPath(s.contact));
@@ -142,14 +143,14 @@ export function createCollectionScene(svg){
   if(s.jarCovered&&!['uncover'].includes(f.motion)&&s.dragging?.id!=='plate')plateTransform=jt;
   else if(pp)plateTransform=`translate(${pp.x-870} ${pp.y-228})`;
   plate.setAttribute('visibility',s.jarCovered||s.positions.plate||['cover','uncover'].includes(f.motion)?'visible':'hidden');plate.setAttribute('opacity','1');plate.setAttribute('transform',plateTransform);if(pp)anchor(plate,pp);
-  let rigPose={...rigPosition(s),angle:0},op=f.outlet,rigVisible=s.rig||!!s.positions.rig||f.motion==='rig'||f.motion==='remove-rig';if(!s.rig)op={x:rigPose.x+130,y:rigPose.y+55};
+  let rigPose={...rigPosition(s),angle:0},op=outletPose(s),rigVisible=s.rig||!!s.positions.rig||f.motion==='rig'||f.motion==='remove-rig';if(!s.rig)op={x:rigPose.x+130,y:rigPose.y+55};
   if(f.motion==='rig'||f.motion==='remove-rig'){
    const start=m.toolStart||{x:500,y:50},end=f.motion==='rig'?bodyPoint(s,'flask',300,205):m.endTool||{x:500,y:50};
    rigPose=p<.4?line(start,{x:start.x,y:-60},p/.4):p<.7?line({x:start.x,y:-60},{x:end.x,y:-60},(p-.4)/.3):line({x:end.x,y:-60},end,(p-.7)/.3);
    rigPose.angle=0;op={x:rigPose.x+130,y:rigPose.y+55};
   }
   first.setAttribute('transform',`translate(${rigPose.x} ${rigPose.y}) rotate(${rigPose.angle})`);first.setAttribute('visibility',rigVisible?'visible':'hidden');neckFront.setAttribute('visibility',has('flask')&&s.rig&&rigPose.y>185+fd.y?'visible':'hidden');
-  let fp=s.funnel?rigPose:looseFunnelPose(directPosition(s,'funnel'));const fv=s.funnel||!!s.positions.funnel||f.motion==='funnel'||(f.motion==='remove-rig'&&m.hasFunnel);
+  let fp=s.funnel&&!s.dragging?.detachFunnel?rigPose:looseFunnelPose(directPosition(s,'funnel'));const fv=s.funnel||!!s.positions.funnel||f.motion==='funnel'||(f.motion==='remove-rig'&&m.hasFunnel);
   if(f.motion==='funnel'){
    const start=m.toolStart||directPosition(s,'funnel'),base=m.rigAnchor||rigPose;
    // 長管任一段對孔後，先沿原位置抬高，再由孔口下降，避免管身穿過塞子。
@@ -166,9 +167,9 @@ export function createCollectionScene(svg){
   anchor(first,rigPose);anchor(funnel.group,{x:+funnel.group.dataset.tipX,y:+funnel.group.dataset.tipY});anchor(jar,{x:870+jp.x,y:330+jp.y});anchor(collector,{x:op.x+260,y:op.y+10});first.dataset.installed=String(s.rig);funnel.group.dataset.installed=String(s.funnel);
   collector.setAttribute('transform',`translate(${op.x} ${op.y})`);collector.setAttribute('visibility',rigVisible?'visible':'hidden');rubber.setAttribute('visibility',rigVisible?'visible':'hidden');
   if(rigVisible){const rad=rigPose.angle*Math.PI/180,start={x:rigPose.x+146*Math.cos(rad)+70*Math.sin(rad),y:rigPose.y+146*Math.sin(rad)-70*Math.cos(rad)},key=[start.x,start.y,op.x,op.y].join('/');if(key!==hoseKey){hoseKey=key;const pts=taskHosePoints(start,{x:op.x,y:op.y-140});hoseGrip.setAttribute('d',pts.map((p,i)=>`${i?'L':'M'}${p.x} ${p.y}`).join(''));segments.forEach(({g,piece},i)=>{const a=pts[i],b=pts[i+1];g.setAttribute('transform',`translate(${a.x} ${a.y}) rotate(${Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI-90})`);piece.setAttribute('height',Math.hypot(b.x-a.x,b.y-a.y)+1);});}}
-  const tip={x:f.outlet.x+260,y:f.outlet.y+10},inWater=s.rig&&f.flow&&tip.y>sy+td.y&&tip.x>595+td.x&&tip.x<1050+td.x,inside=f.collecting&&s.jarWater>.015,bubbleTop=inside?Math.max(level,top+8):sy+td.y;
+  const tip={x:f.outlet.x+260,y:f.outlet.y+10},inWater=s.rig&&f.flow&&f.location!=='air',inside=f.collecting&&s.jarWater>.015,bubbleTop=inside?Math.max(level,top+8):sy+td.y;
   const overflowing=f.collecting&&s.jarWater<=.015;
-  outletBubbles.setAttribute('opacity',String(inWater&&(!f.collecting||inside||overflowing)?f.reactionStrength:0));outletBubbles.dataset.location=inside?'jar':'tank';
+  outletBubbles.setAttribute('opacity',String(inWater&&(!f.collecting||inside||overflowing)?f.reactionStrength:0));outletBubbles.dataset.location=f.location;
   [...outletBubbles.children].forEach((b,i)=>{const origin=overflowing?{x:948+td.x,y:432+td.y}:tip;b.setAttribute('cx',origin.x+Math.sin(s.time/350+i)*4);b.setAttribute('cy',origin.y-((s.time/850+i*.14)%1)*Math.max(0,origin.y-bubbleTop));});
   forceps.setAttribute('visibility',sp?'visible':'hidden');movingStone.setAttribute('visibility',sp?.showRock&&sp.material!=='catalyst'?'visible':'hidden');movingPowder.setAttribute('visibility',sp?.showRock&&sp.material==='catalyst'?'visible':'hidden');if(sp){forceps.setAttribute('transform',`translate(${sp.tip.x} ${sp.tip.y}) rotate(-12)`);anchor(forceps,sp.tip);movingStone.setAttribute('viewBox',crops[(m?.index??s.heldStoneId??s.flaskMarbles)%5].join(' '));box(movingStone,[sp.rock.x-24,sp.rock.y-20,48,40]);box(movingPowder,[sp.rock.x-14,sp.rock.y-8,28,16]);}
   const isPour=['water','acid','peroxide','put-away'].includes(f.motion),kind=f.motion==='put-away'?m.pourKind:f.motion;
@@ -185,10 +186,11 @@ export function createCollectionScene(svg){
    }
    const rad=angle*Math.PI/180,local={x:-75+116/500*150,y:-85+83/810*170};bottle.setAttribute('transform',`translate(${lip.x-local.x*Math.cos(rad)+local.y*Math.sin(rad)} ${lip.y-local.x*Math.sin(rad)-local.y*Math.cos(rad)}) rotate(${angle})`);anchor(bottle,lip);
   }
-  if(s.funnel&&funnel.group.nextSibling!==first)art.insertBefore(funnel.group,first);
-  if(s.rig&&neckFront.previousSibling!==first)art.insertBefore(neckFront,first.nextSibling);
-  const chosen=({forceps,water:bottles.water,acid:bottles.acid,peroxide:bottles.peroxide,rig:first,funnel:funnel.group,plate,...spare})[s.tool];if(chosen&&art.lastChild!==chosen&&!(s.tool==='rig'&&s.rig)&&!(s.tool==='funnel'&&s.funnel))art.append(chosen);
-  const mouth=jarMouth(s);spill.setAttribute('opacity',s.spilling?'1':'0');spill.setAttribute('d',`M${mouth.x} ${mouth.y}Q${mouth.x+15} ${mouth.y+45} ${mouth.x+10} ${Math.max(570,mouth.y+75)}`);
+  if(!dragOrder&&s.funnel&&funnel.group.nextSibling!==first)art.insertBefore(funnel.group,first);
+  if(!dragOrder&&s.rig&&neckFront.previousSibling!==first)art.insertBefore(neckFront,first.nextSibling);
+  const chosen=({forceps,water:bottles.water,acid:bottles.acid,peroxide:bottles.peroxide,rig:first,funnel:funnel.group,plate,...spare})[s.tool];if(!dragOrder&&chosen&&art.lastChild!==chosen&&!(s.tool==='rig'&&s.rig)&&!(s.tool==='funnel'&&s.funnel))art.append(chosen);
+  const mouth=jarMouth(s),overflow=s.overflow&&s.time-s.overflow.time<500;spill.setAttribute('opacity',s.spilling||overflow?'1':'0');spill.setAttribute('d',`M${mouth.x} ${mouth.y}Q${mouth.x+15} ${mouth.y+45} ${mouth.x+10} ${Math.max(570,mouth.y+75)}`);
+  if(overflow){const a=s.overflow.target==='tank'?bodyPoint(s,'tank',1010,397):s.overflow.target==='jar'?mouth:s.overflow.viaFunnel?funnel.mouth():bodyPoint(s,'flask',340,212);spill.setAttribute('d',`M${a.x} ${a.y}Q${a.x+28} ${a.y+45} ${a.x+18} 585`);}
   labels.flask.setAttribute('transform',`translate(${300+fd.x} ${620+fd.y})`);labels.marble.setAttribute('transform',`translate(${520+md.x} ${640+md.y})`);labels.tank.setAttribute('transform',`translate(${1000+td.x} ${590+td.y})`);labels.jar.setAttribute('transform',`translate(${870+jp.x} ${Math.max(...ys)+32})`);
   sample.textContent=s.sampleStarted?(s.otherVolume>.01?'混有其他氣體':s.airVolume>.01?'混有空氣':s.co2Volume>.98?'二氧化碳':'正在集氣'):'';sample.setAttribute('x',870+jp.x);sample.setAttribute('y',330+jp.y);sample.setAttribute('opacity',s.co2Volume>0||s.airVolume>0||s.otherVolume>0?'1':'0');
   return{jar:{x:870+jp.x,y:330+jp.y},flask:bodyPoint(s,'flask',300,410),marble:bodyPoint(s,'marble',520,560),tank:bodyPoint(s,'tank',1000,480),outlet:{x:op.x+260,y:op.y+10},funnel:{x:274+fd.x,y:75+fd.y}};
