@@ -194,6 +194,8 @@ h1 { margin: 6px 0 12px; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.2;
 #s4 .interaction-hint{margin:8px 0 0}
 #s4 .condition-strip{margin-top:11px;padding-top:10px}
 #s4 .channel-row{gap:10px;margin-top:12px}
+#s4 .surface-comparison{margin-bottom:14px}
+#s4 .surface-comparison .channel-row{margin-top:0}
 #s4 .channel-cell{padding:12px 13px;background:#fafcf5}
 #s4 .channel-cell .label{font-size:.75rem;margin-bottom:5px}
 #s4 .channel-cell strong{font-size:.86rem;line-height:1.6}
