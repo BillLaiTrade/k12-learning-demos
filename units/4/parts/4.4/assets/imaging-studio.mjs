@@ -1,4 +1,4 @@
-import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261103-imaging-portrait1';
+import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261103-imaging-fixed1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261103-imaging-six1';
 const root=document.querySelector('[data-imaging-lab]');
@@ -79,7 +79,7 @@ function initialise(root){
  function createStudio(){
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   const scene=new THREE.Scene();scene.background=new THREE.Color('#566b5b');scene.fog=new THREE.Fog('#566b5b',35,80);
-  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3(1.05,1.5,0);let orbit={azimuth:-.15,polar:1.38,zoom:1},fitRadius=9,pending=0,viewport=null;
+  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3(1.05,1.5,0);let orbit={azimuth:-.62,polar:1.33,zoom:1},fitRadius=9,pending=0,viewport=null;
   scene.add(new THREE.HemisphereLight('#f2f3df','#3a503e',2.1));const light=new THREE.DirectionalLight('#fff0cf',3.1);light.position.set(-3,8,6);light.castShadow=true;light.shadow.mapSize.set(1024,1024);Object.assign(light.shadow.camera,{left:-8,right:10,top:7,bottom:-5});light.shadow.bias=-.0004;scene.add(light);const rim=new THREE.DirectionalLight('#d3e9e0',1.6);rim.position.set(5,4,-4);scene.add(rim);
   const mat=(color,options={})=>new THREE.MeshStandardMaterial({color,roughness:.5,metalness:.15,...options}),dark=mat('#283e30',{metalness:.5,roughness:.36}),steel=mat('#a2b4a4',{metalness:.7,roughness:.27}),brass=mat('#bba267',{metalness:.7,roughness:.3});
   function box(parent,size,pos,material){const mesh=new THREE.Mesh(new THREE.BoxGeometry(...size),material);mesh.position.set(...pos);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;}
@@ -117,7 +117,7 @@ function initialise(root){
   function fitToViewport(){
    camera.fov=39;camera.updateProjectionMatrix();let radius=9;
    const bounds=[];for(const [xs,ys,zs]of [[[-4.9,-1.4],[.3,G.axis+G.cardHeight/2+.1],[-.9,.9]],[[G.screenMin*G.scale-.3,7.4],[.3,3.6],[-1,1]],[[-5.4,7.4],[-.25,.25],[-1.15,1.15]]])for(const x of xs)for(const y of ys)for(const z of zs)bounds.push(new THREE.Vector3(x,y,z));
-   const directions=[directionFor(-.15,1.38)];
+   const directions=[directionFor(-.62,1.33)];
    for(let i=0;i<40;i++){const fits=directions.every(direction=>{camera.position.copy(target).addScaledVector(direction,radius);camera.lookAt(target);camera.updateMatrixWorld();return bounds.every(p=>{const q=p.clone().project(camera);return Math.abs(q.x)<.9&&Math.abs(q.y)<.8;});});if(fits)break;radius*=1.06;}
    fitRadius=radius;
   }

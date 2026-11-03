@@ -1240,6 +1240,8 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4.test.cjs
 
 ## 4.4 第三區外置位置尺與常駐屏幕面板（2026-11-03）
 
+最新固定右欄修訂：`IMAGING_ONLY_HUD=1` 擴至十個相關專項，核對第三／第四區的實際舞台高度規則、右欄固定座標、無拖曳入口、旋轉及縮放、六種成像、器材提示與手機觸控。短螢幕按雙尺剩餘高度縮短主圖。`IMAGING_ONLY_SCREEN=1` 可獨立重驗屏幕進入焦距內與正面近看，該專項會自行建立物距條件。
+
 後續直立面板修訂以 `IMAGING_ONLY_HUD=1 node tests/unit-4.4-imaging-studio.test.cjs` 檢查十尺寸下的直立比例、屏幕／簡短成像特徵／按鈕上下排列、無復位按鈕及提示文字、觀察列無按鈕框線；保留整列點選、面板拖移、鍵盤及手機觸控。5項通過（含主項），其餘17項跳過。
 
 沿用 `node tests/unit-4.4-imaging-studio.test.cjs` 及 `node tests/unit-4.4.test.cjs`。第三區專項檢查十種視窗下主圖與兩尺同窗、兩尺與常駐六列表格位於3D舞台外、屏幕面板沒有收合入口、摘要與詳細狀態整合、面板拖移／復位／觸控、水平完整旋轉及俯視、相機距離和投影像素保持；保留原光學、尺定位、鍵盤微調、觸控取消／雙指縮放及WebGL備援。`IMAGING_URL`、`IMAGING_CAPTURE_DIR` 沿用。
