@@ -92,7 +92,7 @@ function initialiseLab(root,index){
  function fallback(){canvas.hidden=true;diagram.hidden=false;root.dataset.renderer='diagram';$('[data-view]').hidden=true;const note=$('[data-load-note]');note.classList.add('is-fallback');note.hidden=false;text(note,'立體觀察暫時無法使用，這裡改用同一組條件的平面光路示意；操作與近看仍可使用。');}
  async function loadStudio(){
   if(loading||studio)return;loading=true;
-  try{studioModule ||= import('./studio.mjs?v=merged-surface-20261103');const module=await studioModule;studio=module.createStudio(root,{prism(value){state.inserted=value;update();},unavailable:fallback});canvas.hidden=false;diagram.hidden=true;studio.update(state,signal);studio.setView(state.view);root.dataset.renderer='three';}
+  try{studioModule ||= import('./studio.mjs?v=surface-viewport-20261103');const module=await studioModule;studio=module.createStudio(root,{prism(value){state.inserted=value;update();},unavailable:fallback});canvas.hidden=false;diagram.hidden=true;studio.update(state,signal);studio.setView(state.view);root.dataset.renderer='three';}
   catch{fallback();}
  }
  ready(root);update();root.dataset.renderer='diagram';

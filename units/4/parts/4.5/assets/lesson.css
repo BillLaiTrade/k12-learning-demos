@@ -250,3 +250,134 @@ h1 { margin: 6px 0 12px; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.2;
  #s4 .surface-controls .choice-row button{font-size:.72rem}
  #s4 .surface-result{font-size:.82rem;padding:10px}
 }
+
+/* Keep comparison, apparatus and all nine choices in one viewport workspace. */
+#s4 .lesson-head{padding:17px 22px 15px;grid-template-columns:48px minmax(0,1fr);gap:13px}
+#s4 .lesson-number{width:40px;height:40px;border-radius:12px}
+#s4 .lesson-head h2{font-size:clamp(1.18rem,1.8vw,1.45rem)}
+#s4 .lesson-head p{margin-top:5px;font-size:.82rem}
+#s4 .lesson-body{padding:15px 22px 18px}
+#s4 .surface-intro{gap:10px;margin-bottom:10px}
+#s4 .surface-intro .dialogue{padding:7px 10px;font-size:.8rem;line-height:1.6}
+#s4 .surface-intro .speaker::before{width:36px;height:36px}
+#s4 .surface-workspace{--surface-nav-space:0px;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:9px;height:clamp(420px,calc(100svh - 240px),650px);min-width:0}
+#s4 .surface-workspace .surface-comparison{margin:0}
+#s4 .surface-workspace .channel-cell{padding:7px 11px}
+#s4 .surface-workspace .channel-cell .label{font-size:.72rem;line-height:1.2;margin-bottom:2px}
+#s4 .surface-workspace .channel-cell strong{display:block;font-size:.82rem;line-height:1.3}
+#s4 .surface-workspace .surface-channel-bars{margin-top:5px;gap:7px}
+#s4 .surface-workspace .surface-channel-bar{line-height:1}
+#s4 .surface-workspace .surface-channel-note{margin-top:4px;font-size:.63rem;line-height:1.45}
+#s4 .surface-workspace .studio-layout{min-height:0}
+#s4 .surface-workspace .stage>[data-studio],#s4 .surface-workspace .scene-fallback{top:0;bottom:23px;height:calc(100% - 23px)}
+#s4 .surface-workspace .stage{height:100%;min-height:0;aspect-ratio:auto;--surface-preview-width:clamp(112px,17%,148px)}
+#s4 .surface-workspace .surface-preview{padding:7px;top:9px;right:9px}
+#s4 .surface-workspace .surface-preview .receiver-heading{font-size:.66rem;margin-bottom:4px}
+#s4 .surface-workspace .surface-preview .surface-name{font-size:.6rem;margin:6px 0 3px}
+#s4 .surface-workspace .surface-preview [data-receiver-label]{font-size:.66rem}
+#s4 .surface-workspace .surface-controls{margin:0;gap:9px}
+#s4 .surface-workspace .lab-controls{padding:8px 10px;flex-shrink:0}
+#s4 .surface-workspace .surface-control-heading{margin-bottom:6px}
+#s4 .surface-workspace .surface-control-heading .control-label{font-size:.8rem;line-height:1.25}
+#s4 .surface-workspace .surface-control-hint{font-size:.61rem}
+#s4 .surface-workspace .choice-row{gap:6px}
+#s4 .surface-workspace .choice-row button{padding:6px 4px;min-height:44px}
+#s4 .surface-label-short{display:none}
+#s4 .interaction-hint{margin-top:7px;font-size:.7rem}
+#s4 .surface-result{margin-top:10px;padding:8px 11px;font-size:.82rem}
+@container(min-width:560px) and (max-width:799px){
+ #s4 .surface-controls{grid-template-columns:minmax(0,1fr) minmax(0,1.12fr)}
+ #s4 [data-surface-lights]{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #s4 [data-surface-materials]{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:900px){#s4 .surface-workspace{--surface-nav-space:90px}}
+@media(max-width:650px){
+ #s4 .lesson-head{padding:14px;gap:10px;grid-template-columns:37px minmax(0,1fr)}
+ #s4 .lesson-number{width:35px;height:35px}
+ #s4 .lesson-body{padding:12px 13px 15px}
+ #s4 .surface-intro{gap:7px}
+ #s4 .surface-intro .dialogue{font-size:.78rem;padding:7px 9px}
+ #s4 .surface-workspace{height:min(690px,calc(100svh - var(--surface-nav-space) - 18px));gap:8px}
+ #s4 .surface-workspace .channel-row{gap:5px}
+ #s4 .surface-workspace .channel-cell{padding:4px 7px}
+ #s4 .surface-workspace .channel-cell .label{font-size:.61rem;line-height:1.2}
+ #s4 .surface-workspace .channel-cell strong{min-height:2.3em;font-size:.66rem;line-height:1.15}
+ #s4 .surface-workspace .surface-channel-bars{flex-direction:row;gap:3px;margin-top:4px}
+ #s4 .surface-workspace .surface-channel-bar{font-size:.56rem;line-height:1;gap:2px}
+ #s4 .surface-workspace .surface-channel-bar i{height:5px}
+ #s4 .surface-workspace .stage{--surface-preview-width:92px}
+ #s4 .surface-workspace .stage>[data-studio],#s4 .surface-workspace .scene-fallback{top:64px;bottom:23px;height:calc(100% - 87px)}
+ #s4 .surface-workspace .surface-preview{top:7px;right:7px;padding:5px;display:grid;grid-template-columns:30px minmax(0,1fr);gap:4px;align-items:center}
+ #s4 .surface-workspace .surface-preview .receiver-heading,#s4 .surface-workspace .surface-preview .surface-name{display:none}
+ #s4 .surface-workspace .surface-preview canvas{width:30px;height:30px;aspect-ratio:1;border-radius:4px}
+ #s4 .surface-workspace .surface-preview [data-receiver-label]{margin:0;font-size:.57rem;line-height:1.4}
+ #s4 .surface-workspace .scene-tools{top:8px;left:7px;right:calc(var(--surface-preview-width) + 15px);gap:4px}
+ #s4 .surface-workspace .scene-tools button{font-size:.62rem;padding:5px;min-height:34px}
+ #s4 .surface-workspace .lab-controls{padding:5px 9px}
+ #s4 .surface-workspace .surface-control-heading{margin-bottom:5px}
+ #s4 .surface-workspace .surface-control-heading .control-label{font-size:.76rem;line-height:1.3}
+ #s4 .surface-workspace .surface-control-hint{display:none}
+ #s4 .surface-workspace .choice-row{gap:5px}
+}
+@media(max-width:650px) and (max-height:620px){
+ #s4 .surface-workspace .surface-controls{grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);gap:6px}
+ #s4 .surface-workspace .lab-controls{padding:6px}
+ #s4 [data-surface-lights],#s4 [data-surface-materials]{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #s4 .surface-workspace .choice-row button{font-size:.69rem;gap:4px;padding:5px 3px}
+ #s4 .surface-label-full{display:none}
+ #s4 .surface-label-short{display:inline}
+ #s4 .surface-workspace .surface-control-heading .control-label{font-size:.7rem}
+}
+@media(min-width:651px) and (max-height:520px){
+ #s4 .surface-workspace{height:calc(100svh - var(--surface-nav-space) - 16px);grid-template-columns:minmax(0,1fr) minmax(250px,.7fr);grid-template-rows:auto minmax(0,1fr);gap:7px}
+ #s4 .surface-workspace .surface-comparison{grid-column:1/-1}
+ #s4 .surface-workspace .studio-layout{grid-column:1;grid-row:2}
+ #s4 .surface-workspace .surface-controls{grid-column:2;grid-row:2;display:flex;flex-direction:column;gap:6px}
+ #s4 .surface-workspace .lab-controls{padding:6px}
+ #s4 .surface-workspace .surface-control-heading{margin-bottom:4px}
+ #s4 .surface-workspace .surface-control-hint{display:none}
+ #s4 .surface-workspace .surface-control-heading .control-label{font-size:.72rem}
+ #s4 [data-surface-lights]{grid-template-columns:repeat(4,minmax(0,1fr))}
+ #s4 [data-surface-materials]{grid-template-columns:repeat(3,minmax(0,1fr))}
+ #s4 .surface-workspace .choice-row button{font-size:.68rem;gap:4px;padding:5px 3px}
+ #s4 .surface-workspace .surface-preview{width:86px;padding:5px;display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px;align-items:center}
+ #s4 .surface-workspace .surface-preview .receiver-heading,#s4 .surface-workspace .surface-preview .surface-name{display:none}
+ #s4 .surface-workspace .surface-preview canvas{width:28px;height:28px;aspect-ratio:1;border-radius:4px}
+ #s4 .surface-workspace .surface-preview [data-receiver-label]{margin:0;font-size:.57rem;line-height:1.4}
+ #s4 .surface-workspace .scene-tools{right:110px}
+ #s4 .surface-workspace .scene-tools button{font-size:.65rem;padding:5px 7px;min-height:34px}
+ #s4 .surface-workspace .channel-cell{padding:5px 9px}
+ #s4 .surface-workspace .channel-cell .label{font-size:.64rem}
+ #s4 .surface-workspace .channel-cell strong{font-size:.72rem}
+ #s4 .surface-workspace .surface-channel-bars{margin-top:4px}
+}
+@media(max-width:650px) and (max-height:620px){
+ #s4 .surface-workspace{--surface-nav-space:86px;height:calc(100svh - var(--surface-nav-space) - 8px)}
+}
+@media(max-width:650px) and (max-height:520px){
+ #s4 .surface-workspace{gap:6px}
+ #s4 .surface-workspace .surface-channel-note{display:none}
+ #s4 .surface-workspace .channel-cell{padding:4px 5px}
+ #s4 .surface-workspace .channel-cell .label{font-size:.59rem;line-height:1.1}
+ #s4 .surface-workspace .channel-cell strong{font-size:.64rem;line-height:1.1;min-height:2.2em}
+ #s4 .surface-workspace .surface-channel-bars{margin-top:3px}
+ #s4 .surface-workspace .surface-channel-bar{font-size:.52rem}
+ #s4 .surface-workspace .lab-controls{padding:3px}
+ #s4 .surface-workspace .surface-control-heading{margin-bottom:3px}
+ #s4 .surface-workspace .surface-control-heading .control-label{font-size:.66rem;line-height:1.1}
+ #s4 .surface-workspace .choice-row{gap:3px}
+ #s4 .surface-workspace .choice-row button{font-size:.66rem;padding:4px 2px}
+ #s4 .surface-workspace .stage>[data-studio],#s4 .surface-workspace .scene-fallback{top:46px;bottom:18px;height:calc(100% - 64px)}
+ #s4 .surface-workspace .scene-caption{font-size:.54rem;padding:3px 6px;line-height:1.4}
+ #s4 .surface-workspace .scene-tools button{min-height:32px;font-size:.59rem;padding:4px}
+}
+@media(min-width:651px) and (max-height:520px){
+ #s4 .surface-workspace .surface-controls{gap:4px}
+ #s4 .surface-workspace .lab-controls{padding:5px}
+ #s4 .surface-workspace .surface-control-heading{margin-bottom:3px}
+ #s4 .surface-workspace .surface-control-heading .control-label{line-height:1.15}
+ #s4 .surface-workspace .choice-row{gap:4px}
+}
+/* Below these practical limits, preserve a visible scene and natural page flow. */
+@media(max-width:650px) and (max-height:520px){#s4 .surface-workspace{min-height:386px}}
+@media(min-width:651px) and (max-height:520px){#s4 .surface-workspace{min-height:284px}}

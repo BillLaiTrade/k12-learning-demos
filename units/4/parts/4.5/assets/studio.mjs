@@ -94,7 +94,7 @@ export function createStudio(root,callbacks){
  }
  function updateCamera(){if(topView){if(surface){camera.position.set(-1.35,9.2,.05);camera.lookAt(-1.35,.5,0);}else{camera.position.set(-.1,12.7,-.4);camera.lookAt(0,.5,-.7);}}else{camera.position.set(target.x+Math.sin(orbit.azimuth)*Math.sin(orbit.polar)*orbit.radius*fit,target.y+Math.cos(orbit.polar)*orbit.radius*fit,target.z+Math.cos(orbit.azimuth)*Math.sin(orbit.polar)*orbit.radius*fit);camera.lookAt(target);}camera.updateProjectionMatrix();}
  function requestDraw(){if(frame)return;frame=requestAnimationFrame(()=>{frame=0;updateCamera();renderer.render(scene,camera);root.dataset.orbit=JSON.stringify({radius:orbit.radius,azimuth:orbit.azimuth,polar:orbit.polar});});}
- function resize(){const width=canvas.clientWidth,height=canvas.clientHeight;if(!width||!height)return;if(canvasWidth!==width){canvasWidth=width;fit=Math.max(1,1.33/(width/height));}renderer.setSize(width,height,false);camera.aspect=width/height;requestDraw();}
+ function resize(){const width=canvas.clientWidth,height=canvas.clientHeight;if(!width||!height)return;if(canvasWidth!==width||surface){canvasWidth=width;fit=Math.max(1,1.33/(width/height));}renderer.setSize(width,height,false);camera.aspect=width/height;requestDraw();}
  new ResizeObserver(resize).observe(canvas);
  function pointer(event){const r=canvas.getBoundingClientRect();return new THREE.Vector2((event.clientX-r.left)/r.width*2-1,-(event.clientY-r.top)/r.height*2+1);}
  const raycaster=new THREE.Raycaster(),plane=new THREE.Plane(new THREE.Vector3(0,1,0),-AXIS),pointers=new Map();
