@@ -1,0 +1,56 @@
+[
+  {
+    "u": 30,
+    "gain": 1.3422818791946307,
+    "eye": {
+      "redY": 159.52507374631267,
+      "blueY": 375.3939393939394,
+      "height": 271,
+      "redCount": 1356,
+      "blueCount": 1386
+    },
+    "reference": {
+      "redY": 47.89060489060489,
+      "blueY": 208.80402010050253,
+      "height": 202,
+      "redCount": 777,
+      "blueCount": 796
+    }
+  },
+  {
+    "u": 60,
+    "gain": 1.7968750000000002,
+    "eye": {
+      "redY": 143.6635616438356,
+      "blueY": 395,
+      "height": 316,
+      "redCount": 1825,
+      "blueCount": 1876
+    },
+    "reference": {
+      "redY": 57.535,
+      "blueY": 197.17333333333335,
+      "height": 175,
+      "redCount": 600,
+      "blueCount": 600
+    }
+  },
+  {
+    "u": 90,
+    "gain": 2.4299065420560746,
+    "eye": {
+      "redY": 122.32333083270818,
+      "blueY": 422.387132763109,
+      "height": 378,
+      "redCount": 2666,
+      "blueCount": 2689
+    },
+    "reference": {
+      "redY": 64.07333333333334,
+      "blueY": 188.25641025641025,
+      "height": 155,
+      "redCount": 450,
+      "blueCount": 468
+    }
+  }
+]
