@@ -20,7 +20,7 @@ function observation(spots,regions){
 
 export function initialiseFrontMix(root){
  const canvas=root.querySelector('[data-mix]'),ctx=canvas.getContext('2d'),torchButtons=[...root.querySelectorAll('[data-torch]')];
- let spots=arrangeMix(),preset='pairs',drag=null,frame=0;
+ let spots=arrangeMix(),preset='pairs',drag=null,frame=0,suppressTorchClick=null;
  const scene=root.querySelector('.mix-scene'),guide=document.createElementNS('http://www.w3.org/2000/svg','svg');
  guide.classList.add('mix-drag-guide');guide.setAttribute('aria-hidden','true');guide.setAttribute('hidden','');
  guide.innerHTML=`<defs>
@@ -101,9 +101,8 @@ export function initialiseFrontMix(root){
   root.dataset.aim=JSON.stringify(spots.map((s,i)=>torchAim(i,s)));
   refreshTorchPoses();
   torchButtons.forEach((b,i)=>{
-   b.dataset.on=String(spots[i].on);b.setAttribute('aria-label',`${NAMES[i]}色手電筒：拖曳或用方向鍵調整照射位置，目前${spots[i].on?'開啟':'關閉'}，落點橫向${Math.round(spots[i].x*100)}%、縱向${Math.round(spots[i].y*100)}%`);
+   b.dataset.on=String(spots[i].on);b.setAttribute('aria-pressed',String(spots[i].on));b.querySelector('[data-torch-state]').textContent=spots[i].on?'開':'關';b.setAttribute('aria-label',`${NAMES[i]}色手電筒：點按開／關燈，拖曳或用方向鍵調整照射位置，目前${spots[i].on?'開啟':'關閉'}，落點橫向${Math.round(spots[i].x*100)}%、縱向${Math.round(spots[i].y*100)}%`);
   });
-  for(const b of root.querySelectorAll('[data-lamp]')){const i=MIX_KEYS.indexOf(b.dataset.lamp);b.setAttribute('aria-pressed',String(spots[i].on));b.querySelector('[data-lamp-label]').textContent=`${NAMES[i]}光 ${spots[i].on?'開':'關'}`;}
   for(const b of root.querySelectorAll('[data-preset]'))b.setAttribute('aria-pressed',String(b.dataset.preset===preset));
   const condition=root.querySelector('[data-conditions]');condition.textContent=`紅光：${spots[0].on?'開':'關'}　綠光：${spots[1].on?'開':'關'}　藍光：${spots[2].on?'開':'關'}　白幕：正面觀察`;
   root.closest('section').querySelector('[data-mix-observation]').textContent=message;
@@ -112,6 +111,7 @@ export function initialiseFrontMix(root){
  }
  function end(cancel=false){
   if(!drag)return;const current=drag;drag=null;
+  if(current.moved||cancel)suppressTorchClick=current.button;
   if(cancel){spots[current.i]={...current.before};preset=current.preset;}
   root.dataset.dragging='false';current.button.removeAttribute('data-dragging');
   if(current.button.hasPointerCapture(current.id))current.button.releasePointerCapture(current.id);
@@ -119,7 +119,7 @@ export function initialiseFrontMix(root){
  }
  torchButtons.forEach((button,i)=>{
   button.addEventListener('pointerdown',e=>{
-   if(e.button!==0||drag)return;e.preventDefault();button.focus({preventScroll:true});
+   if(e.button!==0||drag)return;suppressTorchClick=null;e.preventDefault();button.focus({preventScroll:true});
    const box=canvas.getBoundingClientRect();drag={i,id:e.pointerId,button,x:e.clientX,y:e.clientY,before:{...spots[i]},preset,width:box.width,height:box.height,moved:false};button.setPointerCapture(e.pointerId);
   });
   button.addEventListener('pointermove',e=>{
@@ -136,9 +136,13 @@ export function initialiseFrontMix(root){
   });
  });
  root.addEventListener('click',e=>{
-  const b=e.target.closest('button[data-lamp],button[data-preset]');if(!b||b.disabled)return;end(true);
-  if(b.hasAttribute('data-preset')){preset=b.dataset.preset;spots=arrangeMix(preset,spots);}
-  else{const i=MIX_KEYS.indexOf(b.dataset.lamp);spots[i].on=!spots[i].on;}update();
+  const button=e.target.closest('button[data-torch],button[data-preset]');if(!button||button.disabled)return;
+  if(button.hasAttribute('data-torch')){
+   // Ignore the compatibility click following a drag/cancel; native keyboard activation has detail=0.
+   if(e.detail!==0&&suppressTorchClick===button){suppressTorchClick=null;return;}
+   end(true);const i=MIX_KEYS.indexOf(button.dataset.torch);spots[i].on=!spots[i].on;
+  }else{end(true);preset=button.dataset.preset;spots=arrangeMix(preset,spots);}
+  update();
  });
  window.addEventListener('blur',()=>end(true));
  document.addEventListener('visibilitychange',()=>{if(document.hidden)end(true);});
