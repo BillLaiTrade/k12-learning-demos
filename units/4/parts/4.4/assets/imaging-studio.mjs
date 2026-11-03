@@ -46,7 +46,7 @@ function initialise(root){
   if(showRays)message+=point==='top'?' 紅線追蹤圖卡上端，在清楚像的下方會聚。':point==='bottom'?' 藍線追蹤圖卡下端，在清楚像的上方會聚。':' 紅、藍線來自不同物點，分別形成對應的像點。';
   $('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=!g.finite?'物體位於焦點':g.unreachable?'清楚像超出軌道':g.clear?`已對焦・倒立${g.sizeLabel}${g.clipped?'・部分超出屏幕':''}`:'屏幕尚未對焦';
   const keypoint=!g.finite?'focus':!g.clear?'':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between';
-  $$('[data-imaging-keypoint]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingKeypoint===keypoint)));
+  $$('[data-imaging-keypoint]').forEach(row=>{const active=row.dataset.imagingKeypoint===keypoint;row.dataset.active=String(active);row.querySelector('button').setAttribute('aria-pressed',String(active));});
   root.dataset.mode=state.stage;root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.clear=String(g.clear);root.dataset.magnification=g.finite?String(g.m):'';root.dataset.projectionScale=g.projectionScale;root.dataset.spread=g.spread;root.dataset.rays=showRays;root.dataset.view=front?'screen':'orbit';root.dataset.point=point;
   canvas.setAttribute('aria-label',`旋轉與縮放觀察的立體凸透鏡成像台，使用下方位置尺調整距離，物距${state.object}公分，屏幕距離${state.screen}公分，${$('[data-imaging-badge]').textContent}`);
   studio?.update();
@@ -99,9 +99,9 @@ function initialise(root){
   const rays=new THREE.Group();scene.add(rays);
   const annotations=new THREE.Group();annotations.name='imaging-annotations';scene.add(annotations);
   function caption(text,key,x,y,height,dark=false){
-   const c=document.createElement('canvas'),ctx=c.getContext('2d'),font='600 52px system-ui, sans-serif';ctx.font=font;c.width=Math.ceil(ctx.measureText(text).width)+32;c.height=76;ctx.font=font;ctx.textAlign='center';ctx.textBaseline='middle';
-   ctx.fillStyle=dark?'#36503f':'#f8f6e9';ctx.strokeStyle=dark?'#36503f':'#9aa98c';ctx.lineWidth=2;ctx.beginPath();if(ctx.roundRect)ctx.roundRect(1,1,c.width-2,c.height-2,10);else ctx.rect(1,1,c.width-2,c.height-2);ctx.fill();ctx.stroke();ctx.fillStyle=dark?'#fff9df':'#254b35';ctx.fillText(text,c.width/2,c.height/2);
-   const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;const mesh=new THREE.Mesh(new THREE.PlaneGeometry(height*c.width/c.height,height),new THREE.MeshBasicMaterial({map:texture,transparent:true,toneMapped:false,depthWrite:false}));mesh.position.set(x,y,1.06);mesh.userData={annotation:key,text};annotations.add(mesh);return mesh;
+   const c=document.createElement('canvas'),ctx=c.getContext('2d'),font='600 52px system-ui, sans-serif',resolution=4;ctx.font=font;const logicalWidth=Math.ceil(ctx.measureText(text).width)+32,logicalHeight=76;c.width=logicalWidth*resolution;c.height=logicalHeight*resolution;ctx.scale(resolution,resolution);ctx.font=font;ctx.textAlign='center';ctx.textBaseline='middle';
+   ctx.fillStyle=dark?'#36503f':'#f8f6e9';ctx.strokeStyle=dark?'#36503f':'#9aa98c';ctx.lineWidth=2;ctx.beginPath();if(ctx.roundRect)ctx.roundRect(1,1,logicalWidth-2,logicalHeight-2,10);else ctx.rect(1,1,logicalWidth-2,logicalHeight-2);ctx.fill();ctx.stroke();ctx.fillStyle=dark?'#fff9df':'#254b35';ctx.fillText(text,logicalWidth/2,logicalHeight/2);
+   const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;texture.anisotropy=Math.min(16,renderer.capabilities.getMaxAnisotropy());const mesh=new THREE.Mesh(new THREE.PlaneGeometry(height*logicalWidth/logicalHeight,height),new THREE.MeshBasicMaterial({map:texture,transparent:true,toneMapped:false,depthWrite:false}));mesh.position.set(x,y,1.06);mesh.userData={annotation:key,text};annotations.add(mesh);return mesh;
   }
   const sourceName=caption('發光圖卡','object',source.position.x,-.045,.30);caption('凸透鏡・固定','lens',0,-.045,.30);
   for(const n of [-200,-100,100,200])caption(Math.abs(n)===200?'2F':'F',`focus${n}`,n*G.scale,.30,.25,true);

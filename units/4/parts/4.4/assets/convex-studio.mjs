@@ -40,7 +40,7 @@ function initialise(root){
   $('[data-parallel-close]').textContent=close?'返回整體觀察':'近看折射';$('[data-parallel-close]').setAttribute('aria-pressed',String(close));
   root.querySelectorAll('[data-convex-step]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.convexStep===step)));
   $('[data-convex-explain]').textContent=step==='enter'?'先看第一個表面：光從空氣進入玻璃，偏向這個表面的法線，與法線的夾角變小。':'再看第二個表面：光從玻璃進入空氣，偏離這個表面的法線，與法線的夾角變大。';
-  $('[data-result]').textContent=showRays?'凸透鏡中間厚、邊緣薄。這組平行光在另一側會聚，會聚位置稱為焦點；光通過焦點後仍繼續前進。':'先觀察鏡片厚薄，再顯示輔助光路，追蹤入射、玻璃內部與出射的方向。';
+  $('[data-result]').textContent=showRays?'凸透鏡中間厚、邊緣薄。這組平行光在另一側會聚，會聚位置稱為焦點 F。凸透鏡中心到 F 的距離叫焦距；光通過焦點後仍繼續前進。':'先觀察鏡片厚薄，再顯示輔助光路，追蹤入射、玻璃內部與出射的方向。';
   canvas.setAttribute('aria-label',`立體凸透鏡實驗台，${close?'近看'+(step==='enter'?'進入玻璃':'離開玻璃'):'平行光會聚於焦點'}，光路${showRays?'顯示':'隱藏'}`);
   root.dataset.view=close?'surface':'overall';root.dataset.rays=String(showRays);root.dataset.step=step;
   studio?.update();
