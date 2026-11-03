@@ -289,3 +289,18 @@ node --test --test-concurrency=1 tests/unit-4.3-exit-cart.test.cjs tests/unit-4.
 ```
 
 `CART_CAPTURE_DIR`保存畫面／七寬度量測；各專項請指定不同目錄以保留兩方向的同名截圖。公開URL與代理變數沿用。
+
+
+## 第五區比照第三／四區更新樣式（2026-11-03）
+
+依使用者要求保持雙光源可逆功能，改為充滿卡片寬度的介質內部場景，重用第三／四區照片裁切、上方嵌入式水／玻璃切換與整合操作列。紅／藍光仍區分往返方向，補上光暈、明亮核心與方向箭頭；主圖及中央放大圖使用同一照片質感。介質標籤明列光速較快／較慢，字體及44px控制保持可讀。
+
+`return-refraction-view.mjs`只處理視窗高度、等比例視野、介質照片裁切及標示；原可逆模型不變。主場景與操作列依實際視窗、導覽及控制列高度安排；手機單欄／短橫向緊縮，聚焦不推移畫面。中央放大仍對準同一交點，尺寸依上下空間限制，關閉鈕避讓切換與圖內標籤。
+
+A／B獨立開關、點燈、雙向拖曳／方向鍵、0–35°、材質切換保留燈態、放大／Escape／焦點還原、重設及載入失敗重試保持；不新增發射動畫或改變光速、光學角度及單燈／雙燈的角色文字。詳細原因及反射對照仍可展開。
+
+```sh
+node --test --test-concurrency=1 tests/unit-4.3-return-model.test.mjs tests/unit-4.3-return-lab.test.cjs tests/unit-4.3-return-refresh.test.cjs tests/unit-4.3-oblique-lab.test.cjs tests/unit-4.3-flow.test.cjs tests/unit-4.3-format.test.cjs tests/unit-4.3.test.cjs
+```
+
+新樣式專項20項，含16種視窗×雙介質×0°／35°共64筆、關閉鈕避讓、圖內字體及光源／操作列可見、聚焦不捲頁等檢查。`RETURN_CAPTURE_DIR`保存既有功能專項畫面；`RETURN_REFRESH_CAPTURE_DIR`保存新版主圖／放大及measurements.json。公開URL與代理設定沿用。

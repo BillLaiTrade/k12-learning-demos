@@ -1,3 +1,4 @@
+import {createReciprocalView} from './return-refraction-view.mjs?v=20261103-refresh1';
 import {mediumSelector} from './medium-selector.mjs?v=20261103-concept1';
 import {exitGeometry,angleFromExitSource,exitSnapshot,exitDurationMs} from './exit-refraction-model.mjs?v=20261103-beam1';
 import {drawDirections} from './light-beam.mjs?v=20261103-beam1';
@@ -31,10 +32,6 @@ views.forEach((svg,index)=>{
  <clipPath id="exit-media-${id}"><rect x="196" y="274" width="862" height="613"/></clipPath>
  </defs>
  ${!dual?`${index?`<image class="return-detail-photo" width="1254" height="1254" href="${picture.src}"/>`:''}<g class="exit-media-layer" clip-path="url(#exit-media-${id})"><image class="exit-media-photo" width="1254" height="1254" transform="translate(0 1140) scale(1 -1)" href="${picture.src}"/></g>`:''}
- ${index&&dual?`<image class="return-detail-photo" width="1254" height="1254" href="${picture.src}"/><rect x="350" y="340" width="600" height="460" fill="#fffdf6" fill-opacity=".12"/>
- <svg x="350" y="550" width="600" height="20" viewBox="350 520 600 20" opacity=".85"><image class="return-detail-photo" width="1254" height="1254" href="${picture.src}"/></svg>
- <svg x="350" y="570" width="600" height="30" viewBox="350 620 600 30" opacity=".85"><image class="return-detail-photo" width="1254" height="1254" href="${picture.src}"/></svg>
- <path class="return-interface" d="M350 570H950"/>`:''}
  ${index&&!dual?'<rect x="350" y="340" width="600" height="460" fill="#fffdf6" fill-opacity=".12"/><path class="return-interface" d="M350 570H950"/>':''}
  <path class="return-normal-underlay" d="M650 270V885"/><path class="return-normal" d="M650 270V885"/>
  ${index?`<g class="return-angle-marks" visibility="hidden">
@@ -43,18 +40,21 @@ views.forEach((svg,index)=>{
  <g class="return-angle-label return-upper-label"><path class="return-angle-leader"/><text data-sized x="710" y="470"><tspan class="return-angle-name" x="710">折射角</tspan><tspan class="return-angle-number" x="710" dy="50">41.8°</tspan></text></g>
  <g class="return-angle-label return-lower-label"><path class="return-angle-leader"/><text data-sized x="610" y="625" text-anchor="end"><tspan class="return-angle-name" x="610">入射角</tspan><tspan class="return-angle-number" x="610" dy="50">30°</tspan></text></g>
  </g>`:''}
- ${sourceKeys.map(key=>`<g class="return-light return-light-${key}" visibility="hidden">${!dual?'<path class="lesson-beam-halo"/>':''}<path class="return-beam return-beam-${key}${!dual?' lesson-beam-ray':''}"/>${!dual?'<path class="lesson-beam-core"/>':''}<path class="return-direction return-direction-${key}${!dual?' lesson-beam-direction':''}" data-segment="0"/><path class="return-direction return-direction-${key}${!dual?' lesson-beam-direction':''}" data-segment="1"/></g>`).join('')}
+ ${sourceKeys.map(key=>`<g class="return-light return-light-${key}" visibility="hidden">${dual?`<path class="return-beam-halo" filter="url(#beam-glow-${id})"/>`:'<path class="lesson-beam-halo"/>'}<path class="return-beam return-beam-${key}${!dual?' lesson-beam-ray':''}"/>${dual?'<path class="return-beam-core"/>':'<path class="lesson-beam-core"/>'}<path class="return-direction return-direction-${key}${!dual?' lesson-beam-direction':''}" data-segment="0"/><path class="return-direction return-direction-${key}${!dual?' lesson-beam-direction':''}" data-segment="1"/></g>`).join('')}
 
  ${index?'<text data-sized x="670" y="395">法線</text><text data-marker x="666" y="566">M</text><g class="return-medium-badge"><rect/><text data-sized x="385" y="530">空氣</text></g><g class="return-medium-badge"><rect/><text data-sized class="return-medium-name" x="395" y="770">水</text></g>':'<g class="return-medium-badge"><rect/><text data-sized x="950" y="440">空氣</text></g><g class="return-medium-badge"><rect/><text data-sized class="return-medium-name" x="230" y="740">水</text></g>'}`;
  if(!dual){const labels=svg.querySelectorAll('.return-medium-badge text');labels[0].classList.add('return-medium-name');labels[1].classList.remove('return-medium-name');labels[1].textContent='空氣';}
 });
 devices.innerHTML=sourceKeys.map(key=>source(key,`${prefix}-main`)).join('');
+const presentation=dual?createReciprocalView(root,scene,zoom,devices):null;
 function positionDetail(){
  const box=viewport.getBoundingClientRect(),p=new DOMPoint(layout.axis,layout.boundary).matrixTransform(scene.getScreenCTM()),x=p.x-box.x,y=p.y-box.y;
  magnify.style.left=`${x}px`;magnify.style.top=`${y}px`;viewport.style.setProperty('--return-x',`${x}px`);viewport.style.setProperty('--return-y',`${y}px`);
- if(!detail.hidden){detail.style.left=`${x-detail.offsetWidth/2}px`;detail.style.top=`${y-detail.offsetHeight/2}px`;}
+ if(dual){const gap=Math.max(36,Math.min(y,box.height-y)-8);detail.style.width=`${Math.min(box.width*.76,520,14+(2*gap-14)*600/460)}px`;}
+ if(!detail.hidden){detail.style.left=`${x-detail.offsetWidth/2}px`;detail.style.top=`${y-detail.offsetHeight/2}px`;if(dual){const toolbar=mediumButton.getBoundingClientRect(),panel=detail.getBoundingClientRect(),blocked=panel.right-4>toolbar.left&&panel.right-48<toolbar.right&&panel.top+4<toolbar.bottom&&panel.top+48>toolbar.top;const compact=detail.offsetWidth<280;close.style.left=!compact&&blocked?'4px':'';close.style.right=!compact&&blocked?'auto':'';close.style.top=compact?'auto':'';close.style.bottom=compact?'4px':'';}}
 }
 function render(){
+ presentation?.layout();
  const g=geometry(medium,angle),active=state==='ready'&&(lights.a||lights.b),both=lights.a&&lights.b;
  root.dataset.state=state;root.dataset.medium=medium;root.dataset.angle=String(angle);root.dataset.airAngle=String(g.airAngle);root.dataset.lightA=String(lights.a);root.dataset.lightB=String(lights.b);
  root.setAttribute('aria-busy',String(state==='loading'));input.value=String(angle);$('#return-angle-value').value=`${angle}°`;
@@ -68,17 +68,20 @@ function render(){
   if(dual)for(const key of sourceKeys){
    const sceneMatrix=scene.getScreenCTM(),distanceScale=index?Math.hypot(sceneMatrix.a,sceneMatrix.b)/ratio:1,path=(key==='a'?g.forward:g.backward).map(p=>[layout.axis+(p[0]-layout.axis)*distanceScale,layout.boundary+(p[1]-layout.boundary)*distanceScale]),group=svg.querySelector(`.return-light-${key}`),on=lights[key];
    group.setAttribute('visibility',on&&state==='ready'?'visible':'hidden');group.querySelector('.return-beam').setAttribute('d',`M${path.map(p=>p.join(' ')).join('L')}`);group.querySelector('.return-beam').setAttribute('stroke-width',String(Math.max(key==='a'&&both?8:4,(key==='a'&&both?5:2.6)/ratio)));
+   group.querySelectorAll('.return-beam-halo,.return-beam-core').forEach(p=>p.setAttribute('d',`M${path.map(p=>p.join(' ')).join('L')}`));group.querySelector('.return-beam-halo').setAttribute('stroke-width',String((key==='a'&&both?14:11)/ratio));group.querySelector('.return-beam-core').setAttribute('stroke-width',String((key==='a'&&both?0:1)/ratio));
    group.querySelectorAll('.return-direction').forEach((head,i)=>head.setAttribute('d',arrow(path[i],path[i+1],key==='a'?.32:.36,Math.max(12,8/ratio))));
   }
-  for(const badge of svg.querySelectorAll('.return-medium-badge')){const b=badge.querySelector('text').getBBox(),r=badge.querySelector('rect'),p=(index?4:5)/ratio;for(const [k,v]of Object.entries({x:b.x-p,y:b.y-p*.6,width:b.width+2*p,height:b.height+1.2*p,rx:7/ratio}))r.setAttribute(k,String(v));}
+  presentation?.labels(svg,index,g,ratio);
+  for(const badge of svg.querySelectorAll('.return-medium-badge')){const boxes=[...badge.querySelectorAll('text')].map(e=>e.getBBox()),b={x:Math.min(...boxes.map(b=>b.x)),y:Math.min(...boxes.map(b=>b.y))};b.width=Math.max(...boxes.map(b=>b.x+b.width))-b.x;b.height=Math.max(...boxes.map(b=>b.y+b.height))-b.y;const r=badge.querySelector('rect'),p=(index?4:5)/ratio;for(const [k,v]of Object.entries({x:b.x-p,y:b.y-p*.6,width:b.width+2*p,height:b.height+1.2*p,rx:7/ratio}))r.setAttribute(k,String(v));}
   svg.setAttribute('aria-label',`${g.name}在${dual?'下':'上'}方，空氣在${dual?'上':'下'}方。${g.name}側${angle}度，空氣側${g.airAngle.toFixed(1)}度。${dual?`A紅光${lights.a?'開啟':'關閉'}，B藍光${lights.b?'開啟':'關閉'}`:`光源${lights.b?'開啟':'關閉'}`}。`);
  });
- const matrix=devices.getScreenCTM(),ratio=Math.max(.05,matrix?Math.hypot(matrix.a,matrix.b):.8),scale=Math.max(.8,20/(70*ratio));
+ const matrix=devices.getScreenCTM(),ratio=Math.max(.05,matrix?Math.hypot(matrix.a,matrix.b):.8),scale=Math.max(.8,30/(70*ratio));
  for(const key of sourceKeys){
   const lamp=devices.querySelector(`[data-source=${key}]`),p=key==='a'?g.sourceA:g.sourceB,rotation=dual?(key==='a'?-g.airAngle:180-angle):-angle,on=lights[key],value=key==='a'?g.airAngle:angle,maximum=key==='a'?geometry(medium,35).airAngle:35;
   lamp.setAttribute('transform',`translate(${p.join(' ')}) rotate(${rotation}) scale(${scale})`);lamp.setAttribute('aria-disabled',String(state!=='ready'));lamp.setAttribute('tabindex',state==='ready'?'0':'-1');lamp.setAttribute('aria-valuemax',String(maximum));lamp.setAttribute('aria-valuenow',String(value));lamp.setAttribute('aria-valuetext',`${dual?key.toUpperCase():'光源'} ${value.toFixed(1)}度，${on?'開啟':'關閉'}；拖曳或方向鍵調角${dual?'，另一端同步對準':''}`);
+  lamp.querySelector('.return-device-letter').style.fontSize=`${Math.max(22,14/(ratio*scale))}px`;
   lamp.querySelector('.return-lens').setAttribute('fill',on&&state==='ready'?(key==='a'?'#ff767b':dual?'#74c9ff':'#ffe28c'):'#243c3c');
-  const hitSize=Math.max(96,45/(ratio*scale)),hit=lamp.querySelector('.return-source-hit');for(const [k,v]of Object.entries({x:-hitSize/2,y:-hitSize/2,width:hitSize,height:hitSize}))hit.setAttribute(k,String(v));
+  const hitSize=Math.max(96,45/(ratio*scale)),hit=lamp.querySelector('.return-source-hit');for(const [k,v]of Object.entries({x:-hitSize/2,y:-34-hitSize/2,width:hitSize,height:hitSize}))hit.setAttribute(k,String(v));
  }
  zoom.querySelector('.return-angle-marks').setAttribute('visibility',active?'visible':'hidden');
  for(const upper of [true,false]){
@@ -97,6 +100,7 @@ function render(){
   $('#return-finding').textContent=both?'往返光路重合，方向相反':!active?'分別開啟 A、B，再比較兩個方向':lights.b?'B → M → A：從下方射回空氣':'A → M → B：從空氣射入下方';
   $('#return-route').textContent=both?'A → M → B　／　B → M → A':lights.b?`光速慢 → 快；入射 ${angle}° → 折射 ${g.airAngle.toFixed(1)}°`:lights.a?`光速快 → 慢；入射 ${g.airAngle.toFixed(1)}° → 折射 ${angle}°`:`空氣側 ${g.airAngle.toFixed(1)}°｜${g.name}側 ${angle}°`;
  }
+ $('#return-status').classList.toggle('visually-hidden',state!=='error');
  $('#return-status').textContent=state==='loading'?'正在準備實驗場景……':state==='error'?'場景未能載入，請重試或切換介質。':dual?'點擊開關光源；拖動 A 或 B 調角，另一端自動對準。':'點燈開關光源，拖曳調整入射角；觀察慢 → 快的折射方向。';
  positionDetail();if(!dual)drawSingleBeam();
 }
@@ -144,7 +148,7 @@ async function prepare(target,retry=false){
  catch{if(id!==loadId)return;state='error';$('#return-retry').hidden=false;render();}
 }
 $('#return-retry').onclick=()=>prepare(requested,true);
-const observer=new ResizeObserver(render);observer.observe(viewport);observer.observe(zoom);
+const observer=new ResizeObserver(render);observer.observe(viewport);observer.observe(zoom);if(dual){observer.observe(root.querySelector('.return-control-deck'));const route=document.querySelector('.route');if(route)observer.observe(route);window.addEventListener('resize',render);window.visualViewport?.addEventListener('resize',render);}
 document.addEventListener('visibilitychange',()=>{if(document.hidden){if(!dual)freeze();press=null;}});
 if(!dual&&'IntersectionObserver' in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting){freeze();press=null;}},{threshold:0}).observe(viewport);
 render();prepare('water');

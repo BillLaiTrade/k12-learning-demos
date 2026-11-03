@@ -1258,3 +1258,10 @@ node --test --test-concurrency=1 tests/unit-4.3-exit-cart.test.cjs tests/unit-4.
 ```
 
 `CART_CAPTURE_DIR`保存畫面／七寬度量測；各專項請指定不同目錄以保留兩方向的同名截圖。公開URL與代理變數沿用。
+
+
+## 4.3 第五區樣式對齊與完整操作（2026-11-03）
+
+新增`unit-4.3-return-refresh.test.cjs`20項（含外層）：照片裁切、凹入式選擇、同光路三層光線、16種視窗×兩介質×0°／35°共64筆，驗證主圖／按鍵／讀值同視窗、光源不被切換遮擋、最小字體及觸控範圍、放大交點對齊與關閉鈕不遮文字、焦點不推移場景。`RETURN_REFRESH_CAPTURE_DIR`保存畫面與measurements.json；原return-lab保留11項功能子檢查及外層，`RETURN_CAPTURE_DIR`沿用；加模型及其他區回歸的指令見單元README。
+
+第五區樣式核對及既有flow回歸在視窗縮放後等待版面與ResizeObserver更新完成，再量測可見範圍與字體；原範圍／字級／不捲動的斷言保持。
