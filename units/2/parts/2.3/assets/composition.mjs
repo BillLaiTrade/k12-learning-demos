@@ -13,7 +13,7 @@ const detailTriggers = [...section.querySelectorAll('[aria-controls~="air-minor-
 const knowledge = section.querySelector('#air-gas-knowledge');
 const profiles = [...knowledge.querySelectorAll('[data-gas-profile]')];
 function showKnowledge(gas) {
-  if (gas === 'all') return; // Dismissing chart emphasis keeps the article being read.
+  knowledge.hidden = gas === 'all';
   for (const profile of profiles) profile.hidden = profile.dataset.gasProfile !== gas;
   knowledge.dataset.knowledgeCurrent = gas;
 }
@@ -124,8 +124,12 @@ document.addEventListener('click', event => {
   if (selected !== 'all' || section.dataset.emphasis !== 'all') choose('all');
 });
 section.addEventListener('keydown', event => {
-  if (event.key === 'Escape' && !detail.hidden) {
+  if (event.key === 'Escape' && selected !== 'all') {
     event.preventDefault();
+    if (knowledge.contains(document.activeElement)) {
+      const target = controls.find(control => control.dataset.airGas === selected) || shares.find(share => share.dataset.component === selected);
+      target?.focus({ preventScroll: true });
+    }
     choose('all');
   }
 });
@@ -156,7 +160,7 @@ document.addEventListener('visibilitychange',syncMotion);
 if('IntersectionObserver' in window)new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;syncMotion();},{rootMargin:'100px'}).observe(panel);else visible=true;
 for(const field of fields)field.svg.addEventListener('click',event=>{const particle=event.target.closest('[data-particle]');if(particle)choose(particle.dataset.gas);});
 renderParticles();syncMotion();
-choose('nitrogen');
+choose('all');
 knowledge.querySelector('.air-knowledge-hint').hidden = false;
 updateConnector();
 const links = [...document.querySelectorAll('.route a[href^="#"]')];
