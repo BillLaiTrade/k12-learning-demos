@@ -1,14 +1,8 @@
 import {MIX_SETUP,MIX_KEYS,MIX_SOURCES,SOURCE_LINEAR,arrangeMix,mixSample,mixtureRegions,torchAim} from './mix-optics.mjs?v=mix-front-20261102';
 
-const NAMES=['紅','綠','藍'],COLORS=['#ed5146','#3dab67','#508ee2'];
+const NAMES=['紅','綠','藍'];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const srgb=v=>{v=clamp(v,0,1);return v<=.0031308?v*12.92:1.055*v**(1/2.4)-.055;};
-
-function torchDrawing(index,spot){
- const {angle,length}=torchAim(index,spot),id='mix-torch-'+index,c=COLORS[index];
- // Viewed from behind: the rear cap faces the learner, the head points at the wall.
- return`<svg viewBox="0 75 240 135" aria-hidden="true" focusable="false"><defs><linearGradient id="${id}-body"><stop stop-color="#111d1a"/><stop offset=".25" stop-color="#59665e"/><stop offset=".43" stop-color="#28362f"/><stop offset=".78" stop-color="#101c18"/><stop offset="1" stop-color="#657068"/></linearGradient><linearGradient id="${id}-head"><stop stop-color="#18251f"/><stop offset=".32" stop-color="#758178"/><stop offset=".55" stop-color="#34463b"/><stop offset="1" stop-color="#102019"/></linearGradient><radialGradient id="${id}-cap"><stop stop-color="#35433b"/><stop offset=".72" stop-color="#17251e"/><stop offset="1" stop-color="#758176"/></radialGradient></defs><ellipse cx="120" cy="194" rx="50" ry="9" fill="#243d312b"/><g transform="translate(120 185) rotate(${angle.toFixed(3)})"><path d="M-22 0L-24 ${-length+20}Q-24 ${-length+9} 0 ${-length+9}Q24 ${-length+9} 24 ${-length+20}L22 0Z" fill="url(#${id}-body)" stroke="#17281f" stroke-width="2"/><path d="M-24 ${-length+31}L-31 ${-length+9}Q-32 ${-length-5} 0 ${-length-5}Q32 ${-length-5} 31 ${-length+9}L24 ${-length+31}Z" fill="url(#${id}-head)" stroke="#2a3e30" stroke-width="2"/><ellipse cy="${-length+1}" rx="30" ry="9" fill="#293b2e" stroke="#98a390" stroke-width="2"/><path d="M-29 ${-length+14}Q0 ${-length+25} 29 ${-length+14}" fill="none" stroke="${c}" stroke-width="8" opacity="${spot.on?1:.4}"/><path d="M-25 ${-length+25}Q0 ${-length+34} 25 ${-length+25}" fill="none" stroke="#17271f" stroke-width="4"/>${[0,1,2,3,4].map(i=>`<path d="M-22 ${-6-i*6}Q0 ${4-i*6} 22 ${-6-i*6}" fill="none" stroke="#8e9b8760" stroke-width="1.5"/>`).join('')}<ellipse rx="22" ry="12" fill="url(#${id}-cap)" stroke="#909d88" stroke-width="2"/><ellipse rx="15" ry="7" fill="#192920" stroke="#50634d" stroke-width="2"/></g></svg>`;
-}
 
 function observation(spots,regions){
  const active=spots.flatMap((s,i)=>s.on?[i]:[]);
@@ -23,6 +17,24 @@ function observation(spots,regions){
 export function initialiseFrontMix(root){
  const canvas=root.querySelector('[data-mix]'),ctx=canvas.getContext('2d'),torchButtons=[...root.querySelectorAll('[data-torch]')];
  let spots=arrangeMix(),preset='pairs',drag=null,frame=0;
+ const studios=[],defaultAim=arrangeMix().map((spot,i)=>torchAim(i,spot));let loadingTorches=false;
+ torchButtons.forEach((button,i)=>{
+  const image=new URL(`./torch-${MIX_KEYS[i]}.png?v=torch-metal-20261103`,import.meta.url).href;
+  button.querySelector('[data-torch-drawing]').innerHTML=`<img src="${image}" width="360" height="260" alt="" aria-hidden="true" data-torch-image><canvas width="360" height="260" aria-hidden="true" data-torch-canvas hidden></canvas>`;
+  button.dataset.torchRenderer='image';
+ });
+ function fallbackTorch(i){const button=torchButtons[i];button.querySelector('[data-torch-image]').hidden=false;button.querySelector('[data-torch-canvas]').hidden=true;button.dataset.torchRenderer='image';}
+ async function loadTorches(){
+  if(loadingTorches)return;loadingTorches=true;
+  try{
+   const module=await import('./torch-studio.mjs?v=torch-metal-20261103');
+   torchButtons.forEach((button,i)=>{
+    try{const canvas=button.querySelector('[data-torch-canvas]');studios[i]=module.createTorchStudio(canvas,i,{unavailable(){studios[i]?.dispose();studios[i]=null;fallbackTorch(i);},ready(){canvas.hidden=false;button.querySelector('[data-torch-image]').hidden=true;button.dataset.torchRenderer='three';}});studios[i].update(spots[i]);}
+    catch{fallbackTorch(i);}
+   });
+  }catch{torchButtons.forEach((_,i)=>fallbackTorch(i));}
+ }
+
  const pixels=ctx.createImageData(canvas.width,canvas.height),{width,height,radius,edge,ambient,exposure}=MIX_SETUP;
  function paint(){
   frame=0;
@@ -42,7 +54,10 @@ export function initialiseFrontMix(root){
   const regions=mixtureRegions(spots),message=observation(spots,regions);
   root.dataset.spots=JSON.stringify(spots);root.dataset.preset=preset;root.dataset.center=JSON.stringify(mixSample(.5,.5,spots).linear);root.dataset.regions=JSON.stringify(regions);
   root.dataset.aim=JSON.stringify(spots.map((s,i)=>torchAim(i,s)));
-  torchButtons.forEach((b,i)=>{b.querySelector('[data-torch-drawing]').innerHTML=torchDrawing(i,spots[i]);b.dataset.on=String(spots[i].on);b.setAttribute('aria-label',`${NAMES[i]}色手電筒：拖曳或用方向鍵調整照射位置，目前${spots[i].on?'開啟':'關閉'}，落點橫向${Math.round(spots[i].x*100)}%、縱向${Math.round(spots[i].y*100)}%`);});
+  torchButtons.forEach((b,i)=>{
+   const aim=torchAim(i,spots[i]);b.querySelector('[data-torch-image]').style.transform=`rotate(${((aim.angle-defaultAim[i].angle)*.28).toFixed(2)}deg)`;
+   studios[i]?.update(spots[i]);b.dataset.on=String(spots[i].on);b.setAttribute('aria-label',`${NAMES[i]}色手電筒：拖曳或用方向鍵調整照射位置，目前${spots[i].on?'開啟':'關閉'}，落點橫向${Math.round(spots[i].x*100)}%、縱向${Math.round(spots[i].y*100)}%`);
+  });
   for(const b of root.querySelectorAll('[data-lamp]')){const i=MIX_KEYS.indexOf(b.dataset.lamp);b.setAttribute('aria-pressed',String(spots[i].on));b.querySelector('[data-lamp-label]').textContent=`${NAMES[i]}光 ${spots[i].on?'開':'關'}`;}
   for(const b of root.querySelectorAll('[data-preset]'))b.setAttribute('aria-pressed',String(b.dataset.preset===preset));
   const condition=root.querySelector('[data-conditions]');condition.textContent=`紅光：${spots[0].on?'開':'關'}　綠光：${spots[1].on?'開':'關'}　藍光：${spots[2].on?'開':'關'}　白幕：正面觀察`;
@@ -83,4 +98,5 @@ export function initialiseFrontMix(root){
  for(const b of root.querySelectorAll('[data-pending],[data-torch]'))b.disabled=false;
  root.querySelector('[data-load-note]').hidden=true;root.dataset.ready='true';root.dataset.dragging='false';root.dataset.renderer='front';
  root.dataset.sources=JSON.stringify(MIX_SOURCES);update();
+ const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){observer.disconnect();loadTorches();}},{rootMargin:'180px'});observer.observe(root);
 }
