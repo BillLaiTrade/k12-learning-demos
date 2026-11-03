@@ -22,6 +22,21 @@ export function initialiseFrontMix(root){
  const canvas=root.querySelector('[data-mix]'),ctx=canvas.getContext('2d'),torchButtons=[...root.querySelectorAll('[data-torch]')];
  let spots=arrangeMix(),preset='pairs',drag=null,frame=0,suppressTorchClick=null;
  const scene=root.querySelector('.mix-scene'),guide=document.createElementNS('http://www.w3.org/2000/svg','svg');
+ const filters=document.createElementNS('http://www.w3.org/2000/svg','svg');
+ filters.classList.add('mix-torch-filters');filters.setAttribute('width','0');filters.setAttribute('height','0');filters.setAttribute('aria-hidden','true');filters.setAttribute('focusable','false');
+ // Threshold the alpha mask so the contact shadow does not acquire a golden outline.
+ filters.innerHTML=`<defs><filter id="mix-torch-gold" x="-30%" y="-40%" width="160%" height="180%" color-interpolation-filters="sRGB">
+  <feComponentTransfer in="SourceAlpha" result="body"><feFuncA type="discrete" tableValues="0 0 0 0 0 1 1 1 1 1"/></feComponentTransfer>
+  <feMorphology in="body" operator="dilate" radius="1.5" result="expanded"/>
+  <feComposite in="expanded" in2="body" operator="out" result="rim"/>
+  <feGaussianBlur in="expanded" stdDeviation="4" result="bloom"/>
+  <feFlood flood-color="#efb642" flood-opacity=".85" result="gold"/>
+  <feComposite in="gold" in2="bloom" operator="in" result="halo"/>
+  <feFlood flood-color="#fff0bd" flood-opacity="1" result="edge"/>
+  <feComposite in="edge" in2="rim" operator="in" result="outline"/>
+  <feMerge><feMergeNode in="halo"/><feMergeNode in="outline"/><feMergeNode in="SourceGraphic"/></feMerge>
+ </filter></defs>`;
+ scene.append(filters);
  guide.classList.add('mix-drag-guide');guide.setAttribute('aria-hidden','true');guide.setAttribute('hidden','');
  guide.innerHTML=`<defs>
   <linearGradient id="mix-beam-color"><stop stop-color="currentColor" stop-opacity=".85"/><stop offset=".55" stop-color="currentColor" stop-opacity=".5"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient>
