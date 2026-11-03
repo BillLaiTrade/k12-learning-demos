@@ -1,3 +1,12 @@
+## 4.5 第四區檢視與第五、六區集中操作（2026-11-03）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.5-surface-inset.test.cjs tests/unit-4.5-surface-viewport.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.5-path-lessons.test.cjs tests/unit-4.5.test.cjs
+```
+
+第四區既有22項檢查20種組合、14組視窗與手機操作。第五六區專項檢查四種色片×四種照明的單變因、數值色條／預覽像素與動態角色一致；直接讀取測試攔截後的實際3D光線與遮板座標，確認遮擋時止於入射面且只改入眼量；八種視窗保留器材、預覽避讓、44px按鈕與完整選項。另驗證鍵盤、手機真實點按／拖曳取消及兩種入眼情境的WebGL備援。正式程式不新增測試API，純光學數值未改。支援COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH，軟體GPU檢查依序執行。
+
 ## 4.5 指標焦點與拖曳綠框（2026-11-03）
 
 

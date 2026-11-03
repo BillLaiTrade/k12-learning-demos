@@ -10,11 +10,11 @@ function woodTexture(){
 }
 function basic(rgb){return new THREE.MeshBasicMaterial({color:new THREE.Color().setRGB(...rgb),toneMapped:false,side:THREE.DoubleSide});}
 export function createStudio(root,callbacks){
- const canvas=root.querySelector('[data-studio]'),surface=root.dataset.lab==='surface';
+ const canvas=root.querySelector('[data-studio]'),surface=root.dataset.lab==='surface',pathLesson=!!root.querySelector('.path-workspace');
  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
  const scene=new THREE.Scene();scene.background=new THREE.Color(surface?'#283126':'#91a190');scene.fog=new THREE.Fog(surface?'#283126':'#91a190',23,50);
- const camera=new THREE.PerspectiveCamera(40,1,.05,70),target=surface?new THREE.Vector3(-1.6,1.05,.1):new THREE.Vector3(0,1.1,-.65);
- const orbit=surface?{azimuth:-1.05,polar:1.16,radius:7.0}:{azimuth:-.85,polar:1.08,radius:12.6};let topView=false,frame=0,state=null,signal=null,drag=null,canvasWidth=0,fit=1;
+ const camera=new THREE.PerspectiveCamera(40,1,.05,70),target=surface?new THREE.Vector3(-1.6,1.05,.1):root.dataset.lab==='eye'?new THREE.Vector3(-.4,1.1,.25):new THREE.Vector3(0,1.1,-.65);
+ const orbit=surface?{azimuth:-1.05,polar:1.16,radius:7.0}:{azimuth:-.85,polar:1.08,radius:pathLesson?(root.dataset.lab==='eye'?10.6:9.6):12.6};let topView=false,frame=0,state=null,signal=null,drag=null,canvasWidth=0,fit=1;
  scene.add(new THREE.HemisphereLight('#fff7e2','#6a7a60',surface?.08:2.2));const sun=new THREE.DirectionalLight('#fff4dc',surface?.28:3.3);sun.position.set(-4,8,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-7,right:7,top:7,bottom:-7});sun.shadow.bias=-.0006;scene.add(sun);
  const fill=new THREE.DirectionalLight('#d6f0f7',surface?.1:1.3);fill.position.set(6,4,-3);scene.add(fill);
  const metal=new THREE.MeshStandardMaterial({color:'#82928b',metalness:.8,roughness:.28}),dark=new THREE.MeshStandardMaterial({color:'#293d36',metalness:.5,roughness:.35}),brass=new THREE.MeshStandardMaterial({color:'#bd9a63',metalness:.75,roughness:.3}),paper=new THREE.MeshStandardMaterial({color:'#e8e9de',roughness:.92,side:THREE.DoubleSide});
@@ -81,11 +81,13 @@ export function createStudio(root,callbacks){
     if(state.inserted)for(const wavelength of[450,550,650]){const ray=trace.reduce((a,b)=>Math.abs(a.wavelength-wavelength)<Math.abs(b.wavelength-wavelength)?a:b);arrow(v(ray.points[2]),v(ray.points[3]),state.light==='white'?ray.rgb:LIGHTS[state.light].rgb,.55);}
    }else{
     const source=v([-3.2,0]),origin=v([0,0]);line([source,origin],signal.incoming);arrow(source,origin,signal.incoming);
+    // Stop at the incident face of the board, rather than short of it or through it.
+    const stopAtBoard=end=>{const normal=new THREE.Vector3(0,0,1).applyQuaternion(blocker.quaternion),direction=end.clone().sub(origin).normalize();return end.clone().multiplyScalar(.52).addScaledVector(direction,-.035/Math.abs(normal.dot(direction)));};
     const output=signal.outgoing;
     if(Math.max(...output)>.008){
-     if(isFilter){const end=state.kind==='eye'?new THREE.Vector3(eyeTarget.x,AXIS,eyeTarget.z):v([SCREEN_X,0]);if(blocker.visible)end.lerp(origin,.48);line([origin,end],output);arrow(origin,end,output);}
+     if(isFilter){let end=state.kind==='eye'?new THREE.Vector3(eyeTarget.x,AXIS,eyeTarget.z):v([SCREEN_X,0]);if(blocker.visible){const stop=stopAtBoard(new THREE.Vector3(eyeTarget.x,0,eyeTarget.z));end.set(stop.x,AXIS,stop.z);}line([origin,end],output);arrow(origin,end,output);}
      else{
-      for(const end of[v([-2.2,1.7]),v([-1.2,-1.6]),new THREE.Vector3(eyeTarget.x,AXIS,eyeTarget.z)]){if(blocker.visible&&end.z>2)end.lerp(origin,.48);line([origin,end],output,.8);arrow(origin,end,output);}
+      for(const end of[v([-2.2,1.7]),v([-1.2,-1.6]),new THREE.Vector3(eyeTarget.x,AXIS,eyeTarget.z)]){if(blocker.visible&&end.z>2){const stop=stopAtBoard(new THREE.Vector3(eyeTarget.x,0,eyeTarget.z));end.set(stop.x,AXIS,stop.z);}line([origin,end],output,.8);arrow(origin,end,output);}
      }
     }
    }
