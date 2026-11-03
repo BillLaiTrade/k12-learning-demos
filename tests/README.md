@@ -1227,3 +1227,8 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4.test.cjs
 ## 4.3 第三區小車動畫（2026-11-03）
 
 `unit-4.3-oblique-cart.test.cjs` 檢查兩輪跨界時序、車軸只有異速才旋轉、同速後保持方向／慢速、重播及收合／離屏／隱藏停止、一般偏好自播／減少動態手動、鍵盤／原生觸控、七寬度，以及第二區直行類比與第三區光學操作獨立。配合既有oblique-lab及整課回歸；`CART_CAPTURE_DIR`保存畫面。完整指令見單元README。
+
+
+## 4.4 第三區外置位置尺與常駐屏幕面板（2026-11-03）
+
+沿用 `node tests/unit-4.4-imaging-studio.test.cjs` 及 `node tests/unit-4.4.test.cjs`。第三區專項檢查十種視窗下主圖與兩尺同窗、兩尺與常駐六列表格位於3D舞台外、屏幕面板沒有收合入口、摘要與詳細狀態整合、面板拖移／復位／觸控、水平完整旋轉及俯視、相機距離和投影像素保持；保留原光學、尺定位、鍵盤微調、觸控取消／雙指縮放及WebGL備援。`IMAGING_URL`、`IMAGING_CAPTURE_DIR` 沿用。
