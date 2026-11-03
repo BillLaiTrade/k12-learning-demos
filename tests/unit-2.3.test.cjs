@@ -61,7 +61,7 @@ test('2.3: complete learning page preserves cup dragging, water retention and re
     assert.equal(await page.locator('section.lesson').count(), 6);
     assert.deepEqual(await page.locator('.route a').evaluateAll(nodes => nodes.map(n => n.getAttribute('href'))), ['#s1', '#s2', '#s3', '#s4', '#s5', '#s6']);
     assert.equal(await page.locator('#s2 .dialogue.xiaokui, #s2 .dialogue.grandpa').count(), 2);
-    assert.equal(await page.locator('#s2 .air-share').count(), 100);
+    assert.equal(await page.locator('#s2 .air-share').count(), 3);
     assert.equal(await page.locator('#setup-scene, #reaction-scene, #humidity-chart, #report-form').count(), 0);
     assert.equal(await page.locator('script[src*="air.js"]').count(), 0);
   });

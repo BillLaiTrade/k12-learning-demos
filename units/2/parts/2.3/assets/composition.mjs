@@ -1,3 +1,4 @@
+import {createParticles} from './composition-particles-model.mjs?v=particles-1';
 const section = document.querySelector('#s2');
 const controls = [...section.querySelectorAll('[data-air-gas]')];
 const viewControls = [...section.querySelectorAll('[data-air-view]')];
@@ -19,10 +20,10 @@ function showKnowledge(gas) {
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 const descriptions = {
   all: '',
-  nitrogen: '100份乾燥空氣中，約78份是氮氣（約78%）。',
-  oxygen: '100份乾燥空氣中，約21份是氧氣（約21%）。',
-  argon: '氬氣占全部乾燥空氣約0.93%。斜紋格合併氬氣與其餘少量；放大圖突出的是氬氣。',
-  minor: '斜紋格合併氬氣與其餘少量氣體，合計約1%；氬氣占全部約0.93%。右側兩項與放大圖一併標示，可再選名稱分別查看。',
+  nitrogen: '氮氣約占乾燥空氣78%，含量最多。',
+  oxygen: '氧氣約占乾燥空氣21%，含量第二多。',
+  argon: '氬氣占全部乾燥空氣約0.93%。小成分區合併氬氣與其餘少量；放大圖突出的是氬氣。',
+  minor: '小成分區合併氬氣與其餘少量氣體，合計約1%；氬氣占全部約0.93%。右側兩項與放大圖一併標示，可再選名稱分別查看。',
   other: '其餘氣體包含二氧化碳等，不再包含已單獨列出的氬氣；放大圖突出的是其餘少量成分。'
 };
 let selected = 'all';
@@ -33,20 +34,13 @@ function emphasize() {
   section.dataset.emphasis = hovered || focused || selected;
 }
 function describe() {
-  status.textContent = selected === 'all' ? '' : descriptions[selected] + (section.dataset.arrangement === 'mixed' ? ' 排列改變，比例不變；氣體混合在一起。' : ' 集中排列，方便比較比例。');
+  status.textContent = selected === 'all' ? '' : descriptions[selected] + (section.dataset.arrangement === 'mixed' ? ' 粒子混合在一起，比例不變。' : ' 分區只為比較比例；實際空氣中的氣體混合在一起。');
 }
-// A fixed permutation of all 100 positions: every tile moves, no share is added or removed.
-// The coarse minor tile stays on the bottom row so its connector does not cross the chart.
-const positionOf = index => section.dataset.arrangement === 'mixed' ? (index * 37 + 31) % 100 : index;
-shares.forEach((share, index) => {
-  const position = (index * 37 + 31) % 100;
-  share.style.setProperty('--mix-x', position % 10 - index % 10);
-  share.style.setProperty('--mix-y', Math.floor(position / 10) - Math.floor(index / 10));
-});
 function updateConnector() {
   if (detail.hidden) return;
   const p = panel.getBoundingClientRect();
-  const m = minor.getBoundingClientRect();
+  const target=section.dataset.arrangement==='mixed'?section.querySelector(`.air-particle-scene[data-particle-field=main] .air-particle[data-gas="${selected==='other'?'other':'argon'}"]`):minor;
+  const m = target.getBoundingClientRect();
   const d = detail.getBoundingClientRect();
   const x = m.left + m.width / 2 - p.left;
   const y = m.bottom - p.top + 3;
@@ -101,32 +95,23 @@ for (const button of section.querySelectorAll('[data-knowledge-gas]')) {
   });
 }
 for (const [index, share] of shares.entries()) {
-  share.disabled = false;
+  share.removeAttribute('aria-disabled');
   share.addEventListener('click', () => choose(share.dataset.component, share));
   share.addEventListener('focus', () => { focused = share.dataset.component; emphasize(); });
   share.addEventListener('blur', () => { focused = null; emphasize(); });
   share.addEventListener('keydown', event => {
-    const position = positionOf(index);
-    const row = Math.floor(position / 10), column = position % 10;
-    const targets = {
-      ArrowLeft: row * 10 + Math.max(0, column - 1),
-      ArrowRight: row * 10 + Math.min(9, column + 1),
-      ArrowUp: Math.max(0, row - 1) * 10 + column,
-      ArrowDown: Math.min(9, row + 1) * 10 + column,
-      Home: row * 10,
-      End: row * 10 + 9
-    };
-    if (!(event.key in targets)) return;
-    event.preventDefault();
-    const target = shares.find((_, i) => positionOf(i) === targets[event.key]);
-    for (const candidate of shares) candidate.tabIndex = candidate === target ? 0 : -1;
-    target.focus({ preventScroll: true });
+    if(['Enter',' '].includes(event.key)){event.preventDefault();choose(share.dataset.component,share);return;}
+    const delta={ArrowLeft:-1,ArrowUp:-1,ArrowRight:1,ArrowDown:1};
+    if(!(event.key in delta)&&!['Home','End'].includes(event.key))return;
+    event.preventDefault();const next=event.key==='Home'?0:event.key==='End'?shares.length-1:(index+delta[event.key]+shares.length)%shares.length;
+    shares.forEach((s,i)=>s.tabIndex=i===next?0:-1);shares[next].focus({preventScroll:true});
   });
 }
 for (const button of viewControls) {
   button.disabled = false;
   button.addEventListener('click', () => {
     section.dataset.arrangement = button.dataset.airView;
+    fields[0].model.setMode(button.dataset.airView,{immediate:reducedMotion.matches||userPaused});renderParticles();syncMotion();
     for (const control of viewControls) control.setAttribute('aria-pressed', String(control === button));
     hovered = null; focused = null;
     emphasize(); describe(); followConnector();
@@ -134,7 +119,7 @@ for (const button of viewControls) {
 }
 // Clicking away dismisses the selection without consuming the other action.
 document.addEventListener('click', event => {
-  const control = event.target.closest('.air-share, [data-air-gas], [data-air-view]');
+  const control = event.target.closest('.air-share, .air-particle, [data-air-gas], [data-air-view], [data-air-motion]');
   if ((control && section.contains(control)) || detail.contains(event.target) || knowledge.contains(event.target)) return;
   if (selected !== 'all' || section.dataset.emphasis !== 'all') choose('all');
 });
@@ -145,6 +130,32 @@ section.addEventListener('keydown', event => {
   }
 });
 new ResizeObserver(followConnector).observe(panel);
+const fields=[...section.querySelectorAll('[data-particle-field]')].map(svg=>({svg,model:createParticles({detail:svg.dataset.particleField==='detail'}),nodes:[...svg.querySelectorAll('[data-particle]')],trails:[...svg.querySelectorAll('[data-trail]')]}));
+const motionButton=section.querySelector('[data-air-motion]');let userPaused=false,visible=false,motionFrame=0,previousTime=0;
+function renderParticles(){
+ for(const field of fields){
+  field.nodes.forEach((node,i)=>{const p=field.model.particles[i];node.setAttribute('cx',p.x.toFixed(3));node.setAttribute('cy',p.y.toFixed(3));});
+  field.trails.forEach(node=>{const p=field.model.particles[+node.dataset.trail],speed=Math.hypot(p.vx,p.vy)||1,dx=p.vx/speed,dy=p.vy/speed;node.setAttribute('d',`M${p.x-dx*1.8} ${p.y-dy*1.8}Q${p.x-dx*.8-dy*.25} ${p.y-dy*.8+dx*.25} ${p.x} ${p.y}`);});
+  field.svg.dataset.regrouping=String(field.model.regrouping);
+ }
+ updateConnector();
+}
+function tickParticles(time){
+ motionFrame=0;const dt=previousTime?Math.min(.035,(time-previousTime)/1000):0;previousTime=time;
+ fields[0].model.step(dt);if(!detail.hidden)fields[1].model.step(dt);renderParticles();motionFrame=requestAnimationFrame(tickParticles);
+}
+function syncMotion(){
+ const running=visible&&!document.hidden&&!userPaused&&!reducedMotion.matches;
+ section.dataset.particleMotion=running?'running':userPaused?'paused':reducedMotion.matches?'reduced':document.hidden?'hidden':'offscreen';
+ motionButton.hidden=reducedMotion.matches;motionButton.textContent=userPaused?'繼續粒子':'暫停粒子';motionButton.setAttribute('aria-pressed',String(userPaused));
+ if(!running){cancelAnimationFrame(motionFrame);motionFrame=0;previousTime=0;}else if(!motionFrame){previousTime=0;motionFrame=requestAnimationFrame(tickParticles);}
+}
+motionButton.addEventListener('click',()=>{userPaused=!userPaused;syncMotion();});
+reducedMotion.addEventListener('change',()=>{if(reducedMotion.matches){fields[0].model.setMode(section.dataset.arrangement,{immediate:true});renderParticles();}syncMotion();});
+document.addEventListener('visibilitychange',syncMotion);
+if('IntersectionObserver' in window)new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;syncMotion();},{rootMargin:'100px'}).observe(panel);else visible=true;
+for(const field of fields)field.svg.addEventListener('click',event=>{const particle=event.target.closest('[data-particle]');if(particle)choose(particle.dataset.gas);});
+renderParticles();syncMotion();
 choose('nitrogen');
 knowledge.querySelector('.air-knowledge-hint').hidden = false;
 updateConnector();
