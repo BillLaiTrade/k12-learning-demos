@@ -28,7 +28,8 @@
   <script type="module" src="assets/light-speed-lab.mjs?v=20261101-controls2"></script>
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
   <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-compact1"></script>
-  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-fit2">
+  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-cart1">
+  <script type="module" src="assets/oblique-cart.mjs?v=20261103-cart1"></script>
   <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261103-fit2"></script>
   <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-fit2">
   <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-fit2"></script>
@@ -228,17 +229,39 @@
     <details class="oblique-explanation" id="oblique-explanation">
       <summary>為什麼斜著進入，就會轉向？</summary>
       <div class="oblique-explanation-body">
-        <p class="oblique-cart-pan-hint">↔ 左右滑動，查看小車的三個階段。</p>
-        <div class="oblique-cart-viewport" role="region" tabindex="0" aria-label="小車轉向類比，窄螢幕可左右滑動">
-        <svg class="oblique-cart-sequence" viewBox="0 0 780 190" role="img" aria-label="小車斜著前進，一側輪子先進入較難前進的地面而變慢，另一側稍後進入，整體轉向法線。">
-          <defs><linearGradient id="oblique-cart-tire" x1="0" x2="1"><stop stop-color="#172125"/><stop offset=".4" stop-color="#65706e"/><stop offset="1" stop-color="#142023"/></linearGradient><g id="oblique-cart-body"><rect x="-30" y="-5" width="60" height="10" rx="4" fill="#bb8c53" stroke="#85633d"/><rect x="-34" y="-19" width="14" height="38" rx="5" fill="url(#oblique-cart-tire)"/><rect x="20" y="-19" width="14" height="38" rx="5" fill="url(#oblique-cart-tire)"/></g></defs>
-          <path d="M0 80H780V160H0Z" fill="#dac29e"/><path d="M0 80H780" stroke="#ab916c" stroke-width="2"/><path d="M260 0V190M520 0V190" stroke="#fffdf5" stroke-width="4"/><path d="M130 8V150M390 8V150M650 8V150" stroke="#568568" stroke-width="1.8" stroke-dasharray="5 6"/>
-          <use href="#oblique-cart-body" transform="translate(85 35) rotate(-45)"/><use href="#oblique-cart-body" transform="translate(390 80) rotate(-30)"/><use href="#oblique-cart-body" transform="translate(666 125) rotate(-20)"/>
-          <g fill="#3e5947" font-size="18" text-anchor="middle"><text x="130" y="180">斜著前進</text><text x="390" y="180">一側先進入、先變慢</text><text x="650" y="180">一起變慢，方向已改變</text></g>
-        </svg>
+        <div class="oblique-analogy-grid">
+          <div>
+            <div class="oblique-cart-scene">
+              <svg viewBox="0 0 520 340" role="img" aria-label="小車斜著前進，一側輪子先進入較難前進的地面而變慢，整體轉向；兩輪都進入後沿新方向前進。">
+                <defs>
+                  <linearGradient id="oblique-cart-tire" x1="0" x2="1"><stop stop-color="#20272b"/><stop offset=".3" stop-color="#4a5053"/><stop offset=".65" stop-color="#252b2e"/><stop offset="1" stop-color="#11181c"/></linearGradient>
+                  <linearGradient id="oblique-cart-axle" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e5bb7e"/><stop offset=".4" stop-color="#c59151"/><stop offset=".65" stop-color="#d3a267"/><stop offset="1" stop-color="#94612f"/></linearGradient>
+                  <linearGradient id="oblique-cart-metal" x1="0" x2="1"><stop stop-color="#626d72"/><stop offset=".4" stop-color="#e5e7e4"/><stop offset=".6" stop-color="#8b9599"/><stop offset="1" stop-color="#444d52"/></linearGradient>
+                  <pattern id="oblique-cart-rough" width="17" height="19" patternUnits="userSpaceOnUse"><path d="m2 5 3-1m5 9 2 2m-9 1 2-2" stroke="#a7804e" stroke-width="1.2" opacity=".27"/><path d="m12 3 2 1m-6 5 2-1" stroke="#fff4d6" stroke-width="2" opacity=".6"/></pattern>
+                  <pattern id="oblique-cart-tread" width="8" height="9" patternUnits="userSpaceOnUse"><path d="M0 2h8m-8 5h8" stroke="#89908e" stroke-width="1" opacity=".35"/></pattern>
+                </defs>
+                <rect width="520" height="340" fill="#f2eee5"/><path d="M0 160H520V340H0Z" fill="#d8bd94"/><path d="M0 160H520V340H0Z" fill="url(#oblique-cart-rough)"/><path d="M0 160H520" stroke="#b89d77" stroke-width="3"/>
+                <text x="20" y="31" fill="#6d756b" font-size="18">平滑地面</text><text x="20" y="316" fill="#6d624f" font-size="18">較難前進的地面</text>
+                <path id="oblique-cart-normal" stroke="#487c62" stroke-width="2" stroke-dasharray="7 6"/><text id="oblique-cart-normal-label" y="27" fill="#487c62" font-size="18">法線</text>
+                <path id="oblique-cart-trail" fill="none" stroke="#64826a" stroke-width="3" opacity=".55"/>
+                <g id="oblique-cart" transform="translate(145 67) rotate(-40)">
+                  <ellipse cy="12" rx="97" ry="31" fill="#4a4533" opacity=".14"/>
+                  <rect x="-70" y="-10" width="140" height="20" rx="7" fill="url(#oblique-cart-axle)" stroke="#a8783f"/>
+                  <g data-wheel="left"><rect x="-87" y="-34" width="34" height="68" rx="12" fill="url(#oblique-cart-tire)" stroke="#111a1e"/><rect x="-87" y="-34" width="34" height="68" rx="12" fill="url(#oblique-cart-tread)"/><rect x="-57" y="-13" width="12" height="26" rx="3" fill="url(#oblique-cart-metal)"/></g>
+                  <g data-wheel="right"><rect x="53" y="-34" width="34" height="68" rx="12" fill="url(#oblique-cart-tire)" stroke="#111a1e"/><rect x="53" y="-34" width="34" height="68" rx="12" fill="url(#oblique-cart-tread)"/><rect x="45" y="-13" width="12" height="26" rx="3" fill="url(#oblique-cart-metal)"/></g>
+                  <path d="M0 17V57m-7-9 7 10 7-10" fill="none" stroke="#286747" stroke-width="3"/>
+                </g>
+              </svg>
+            </div>
+            <p class="oblique-cart-caption" id="oblique-cart-status" role="status">斜著前進，兩輪速度相同。</p>
+            <button class="oblique-cart-action" id="oblique-cart-play" type="button">播放小車示範</button>
+          </div>
+          <div class="oblique-cart-copy">
+            <p><strong>一側先進入、先變慢，小車便轉向；兩輪都進入後，沿新方向前進。</strong></p>
+            <p>斜著進入時，波前各處先後進入另一種介質，行進速度改變的時間不同，因此傳播方向改變。</p>
+            <p>光由較快的空氣進入較慢的水或玻璃，光路偏向法線，折射角變小。沿法線入射（0°）時，各處同時變慢，方向不偏折。</p>
+          </div>
         </div>
-        <p><strong>斜著進入時，波前各處先後進入另一種介質，行進速度改變的時間不同，因此傳播方向改變。</strong>就像小車的一側輪子先變慢，整體會轉向。</p>
-        <p>光從空氣進入水或玻璃，傳播速度降低；斜向入射時，折射角比入射角小，光路偏向法線。沿法線入射（0°）時，波前各處同時進入新介質，速度仍會改變，但方向不偏折，兩個角都是0°。</p>
         <p class="oblique-model-note">小車為類比，不代表光受到摩擦。光路與角度由代表模型計算，水與玻璃的代表折射率分別為4/3與1.5；不要求計算公式。器材及光跡非實際比例，穿越動畫採共同慢動作、非實際秒數，省略介面的部分反射。</p>
       </div>
     </details>

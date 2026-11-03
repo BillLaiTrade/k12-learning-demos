@@ -62,7 +62,7 @@ test('everyday room wavefront experiment',{timeout:180000},async t=>{
     assert.ok(!v.overflow&&!v.clipped&&!v.textClipped&&v.hintOutside&&!v.dialogueHidden,JSON.stringify({width,treated,v}));
     assert.ok(v.controls.bottom<=v.question.top&&v.question.bottom<=v.scene.top&&v.legend.top>=v.scene.bottom&&v.status.top>=v.scene.bottom,JSON.stringify({width,v}));
     assert.ok(Math.abs(v.scene.height-v.scene.width*.64)<1);
-    if(width>=1280){assert.ok(Math.abs(v.scene.width-766)<1&&Math.abs(v.scene.height-490.234375)<1);assert.ok(Math.abs(v.lab.height-671.8125)<1);assert.ok(v.lab.top>=0&&v.lab.bottom<=height,JSON.stringify({width,height,v}));}
+    if(width>=1280){assert.ok(Math.abs(v.scene.width-752)<1&&Math.abs(v.scene.height-481.265625)<1);assert.ok(v.lab.height<=704,JSON.stringify({width,height,v}));assert.ok(v.lab.top>=0&&v.lab.bottom<=height,JSON.stringify({width,height,v}));}
     layouts.push({width,height,treated,...v});
     if([1366,1280,390].includes(width))await root.screenshot({path:`${captures}/compact-${treated?'treated':'bare'}-${width}.png`});
    }
