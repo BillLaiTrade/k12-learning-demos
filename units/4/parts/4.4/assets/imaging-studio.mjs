@@ -1,10 +1,10 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {IMAGING as G,moveImaging,imagingState,imagingRays} from './imaging-optics.mjs?v=20261103-imaging-double1';
+import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261103-imaging-guide1';
 const root=document.querySelector('[data-imaging-lab]');
 if(root) initialise(root);
 function initialise(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],canvas=$('#imaging-canvas');
- let state={object:320,screen:240,stage:'focus'},showRays=true,point='both',front=false,selected='screen',records=[],studio=null;
+ let state={object:320,screen:240,stage:'focus'},showRays=true,point='both',front=false,selected='screen',studio=null;
  state=moveImaging(state,'screen',imagingState(state).v);
  const art=document.createElement('canvas');art.width=350;art.height=600;const a=art.getContext('2d');
  a.fillStyle='#dd684f';a.beginPath();a.moveTo(175,80);a.lineTo(133,170);a.lineTo(217,170);a.closePath();a.fill();
@@ -22,25 +22,12 @@ function initialise(root){
   }
   pc.restore();return g;
  }
- function renderRecords(){
-  const container=$('[data-imaging-records]');container.replaceChildren();
-  if(!records.length){for(const label of ['較遠','兩倍焦距','較近']){const card=document.createElement('div');card.className='imaging-record';const p=document.createElement('div');p.className='imaging-empty-paper';p.textContent='等待觀察';const h=document.createElement('h4');h.textContent=label;card.append(p,h);container.append(card);}return;}
-  for(const r of [...records].sort((a,b)=>b.object-a.object)){
-   const card=document.createElement('div');card.className='imaging-record';card.dataset.current=String(Math.abs(r.object-state.object)<.05);
-   const img=document.createElement('img');img.src=r.image;img.width=380;img.height=600;img.alt=`物距${r.object}公分，倒立${r.size}的屏幕影像`;
-   const h=document.createElement('h4');h.textContent=`${r.object===200?'兩倍焦距':r.object>200?'較遠':'較近'}｜倒立${r.size}`;
-   const p=document.createElement('p');p.textContent=`物距 ${r.object} 公分・屏幕距離 ${r.screen} 公分`;
-   const remove=document.createElement('button');remove.type='button';remove.textContent='刪除此筆';remove.setAttribute('aria-label',`刪除物距${r.object}公分的觀察紀錄`);remove.addEventListener('click',()=>{records=records.filter(v=>v!==r);renderRecords();updateRecordHint();});card.append(img,h,p,remove);container.append(card);
-  }
-  for(let i=records.length;i<3;i++){const card=document.createElement('div');card.className='imaging-record';const blank=document.createElement('div');blank.className='imaging-empty-paper';blank.textContent='等待觀察';const p=document.createElement('p');p.textContent='換個物距，再留下清楚像。';card.append(blank,p);container.append(card);}
- }
- function updateRecordHint(){const duplicate=records.some(r=>r.object===state.object);$('[data-imaging-record]').textContent=duplicate?'更新這次清楚像':'留下這次清楚像';$('[data-imaging-record-hint]').textContent=records.length?`已留下 ${records.length} 筆；相同物距會更新，其他紀錄會保留。`:'找到清楚像後，留下這次觀察。';}
  function clearGestureNotice(){const note=$('[data-imaging-gesture-note]');note.hidden=true;root.dataset.gestureHelp='false';}
  function showGestureNotice(key){const note=$('[data-imaging-gesture-note]');note.textContent=key==='lens'?'凸透鏡是固定的。':key==='object'&&state.stage==='focus'?'發光圖卡目前固定。請切換到「調整圖卡與屏幕」模式，再使用下方圖卡尺調整遠近。':`請使用下方${key==='object'?'圖卡尺':'屏幕尺'}的刻度按鈕或綠色把手調整距離。`;note.hidden=false;root.dataset.gestureHelp='true';}
  function update(){
   const g=paintProjection(),focus=state.stage==='focus';
   $$('[data-imaging-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingMode===state.stage)));
-  $('[data-imaging-object-controls]').hidden=focus;$('[data-imaging-comparison]').hidden=focus;
+  $('[data-imaging-object-controls]').hidden=focus;
   $('[data-imaging-prompt]').textContent=focus?'固定圖卡與透鏡；點選下方刻度按鈕，觀察屏幕清楚與模糊的變化。':'使用下方圖卡尺改變物距，再調整屏幕尺重新對焦。';
   $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.disabled=key==='object'&&focus;b.textContent=key==='object'?'圖卡 ↔':'屏幕 ↔';b.setAttribute('aria-pressed',String(key===selected));b.setAttribute('aria-label',`${key==='object'?'發光圖卡':'屏幕'}，${state[key]}公分，可用方向鍵移動`);});
   for(const handle of $$('[data-imaging-ruler-handle]')){const key=handle.dataset.imagingRulerHandle,max=G[key+'Max'];handle.style.left=`${(key==='object'?1-state[key]/max:state[key]/max)*100}%`;handle.setAttribute('aria-valuenow',String(state[key]));handle.setAttribute('aria-valuetext',`${key==='object'?'圖卡':'屏幕'}距離透鏡${state[key]}公分`);}
@@ -51,17 +38,18 @@ function initialise(root){
   $('[data-imaging-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-imaging-rays]').setAttribute('aria-pressed',String(showRays));$('[data-imaging-trace]').hidden=!showRays;
   $$('[data-imaging-point]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingPoint===point)));
   $('[data-imaging-view]').textContent=front?'返回實驗台':'屏幕視角';$('[data-imaging-view]').setAttribute('aria-label',front?'返回實驗台視角':'切換到屏幕視角');$('[data-imaging-view]').setAttribute('aria-pressed',String(front));
-  $('[data-imaging-hint]').textContent=front?'正面觀察同一片屏幕；點選下方刻度按鈕調整。輔助光路在整體視角顯示。':'空白處可旋轉視角，滾輪或雙指縮放；器材距離請使用下方位置尺調整。';
+
   let message=g.clear?`屏幕已對焦：倒立${g.sizeLabel}的實像。`:'屏幕尚未對焦。移動屏幕，找清楚的倒立像。';
   if(!g.finite)message='物體在焦點上，無法在有限距離的屏幕上找到清楚像。將圖卡移遠一些再試。';
   else if(g.unreachable)message='清楚像的位置已超出軌道，屏幕移到最遠仍無法對焦。請把圖卡移遠透鏡一些，再重新找像。';
   if(g.clipped)message+=' 部分投影超出屏幕；保留實際比例，不縮小圖案填入。';
   if(showRays)message+=point==='top'?' 紅線追蹤圖卡上端，在清楚像的下方會聚。':point==='bottom'?' 藍線追蹤圖卡下端，在清楚像的上方會聚。':' 紅、藍線來自不同物點，分別形成對應的像點。';
   $('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=!g.finite?'物體位於焦點':g.unreachable?'清楚像超出軌道':g.clear?`已對焦・倒立${g.sizeLabel}${g.clipped?'・部分超出屏幕':''}`:'屏幕尚未對焦';
-  $('[data-imaging-record]').disabled=!g.clear||g.unreachable;updateRecordHint();
+  const keypoint=!g.finite?'focus':!g.clear?'':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between';
+  $$('[data-imaging-keypoint]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingKeypoint===keypoint)));
   root.dataset.mode=state.stage;root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.clear=String(g.clear);root.dataset.magnification=g.finite?String(g.m):'';root.dataset.projectionScale=g.projectionScale;root.dataset.spread=g.spread;root.dataset.rays=showRays;root.dataset.view=front?'screen':'orbit';root.dataset.point=point;
   canvas.setAttribute('aria-label',`旋轉與縮放觀察的立體凸透鏡成像台，使用下方位置尺調整距離，物距${state.object}公分，屏幕距離${state.screen}公分，${$('[data-imaging-badge]').textContent}`);
-  studio?.update();$$('.imaging-record[data-current]').forEach(c=>c.dataset.current=String(c.querySelector('img')?.alt.startsWith(`物距${state.object}公分，`)));
+  studio?.update();
  }
  function move(key,value){clearGestureNotice();state=moveImaging(state,key,value);selected=key;update();}
  $$('[data-imaging-mode]').forEach(b=>b.addEventListener('click',()=>{clearGestureNotice();state={...state,stage:b.dataset.imagingMode};if(state.stage==='focus')selected='screen';update();}));
@@ -75,9 +63,12 @@ function initialise(root){
  $('[data-imaging-rays]').addEventListener('click',()=>{showRays=!showRays;update();});$('[data-imaging-view]').addEventListener('click',()=>{clearGestureNotice();front=!front;update();});
  $$('[data-imaging-point]').forEach(b=>b.addEventListener('click',()=>{point=b.dataset.imagingPoint;update();}));
  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.addEventListener('click',()=>{selected=key;update();});b.addEventListener('keydown',e=>{let value=state[key];if(e.key==='Home')value=G[key+'Min'];else if(e.key==='End')value=G[key+'Max'];else if(['ArrowLeft','ArrowRight','ArrowDown','ArrowUp'].includes(e.key)){const direction=['ArrowLeft','ArrowDown'].includes(e.key)?-1:1;value+=(key==='object'?-direction:direction)*(e.shiftKey?.2:1);}else return;e.preventDefault();move(key,value);});});
- $('[data-imaging-record]').addEventListener('click',()=>{const g=imagingState(state);if(!g.clear||g.unreachable)return;const record={object:state.object,screen:state.screen,size:g.sizeLabel,image:paper.toDataURL('image/png')},i=records.findIndex(r=>r.object===state.object);if(i<0)records.push(record);else records[i]=record;renderRecords();updateRecordHint();});
- try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-imaging-fallback]').hidden=false;$('[data-imaging-view]').hidden=true;$$('.imaging-anchor,.imaging-focus').forEach(e=>e.hidden=true);root.dataset.webgl='unavailable';console.warn('Imaging 3D:',error.message);}
- renderRecords();update();root.dataset.ready='true';
+ $$('[data-imaging-keypoint]').forEach(b=>b.addEventListener('click',()=>{
+  const next=imagingKeypointState(b.dataset.imagingKeypoint);if(!next)return;clearGestureNotice();state=next;selected='screen';front=false;update();
+  requestAnimationFrame(()=>{const r=$('.imaging-stage').getBoundingClientRect(),nav=document.querySelector('.route'),top=innerWidth<=760?(nav?.getBoundingClientRect().height||0)+8:12;window.scrollBy({top:r.top-top,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});if(!canvas.hidden)canvas.focus({preventScroll:true});});
+ }));
+ try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-imaging-fallback]').hidden=false;$('[data-imaging-view]').hidden=true;root.dataset.webgl='unavailable';console.warn('Imaging 3D:',error.message);}
+ update();root.dataset.ready='true';
  function createStudio(){
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   const scene=new THREE.Scene();scene.background=new THREE.Color('#566b5b');scene.fog=new THREE.Fog('#566b5b',35,80);
@@ -106,11 +97,19 @@ function initialise(root){
   for(const group of [source,screen]){box(group,[.34,.18,.36],[0,.54,.84],brass);for(let i=0;i<4;i++)box(group,[.35,.014,.27],[0,.49+i*.033,.84],dark);}
   for(const n of [-200,-100,100,200])box(scene,[.025,.10,.12],[n*G.scale,.3,.87],brass);
   const rays=new THREE.Group();scene.add(rays);
+  const annotations=new THREE.Group();annotations.name='imaging-annotations';scene.add(annotations);
+  function caption(text,key,x,y,height,dark=false){
+   const c=document.createElement('canvas'),ctx=c.getContext('2d'),font='600 52px system-ui, sans-serif';ctx.font=font;c.width=Math.ceil(ctx.measureText(text).width)+32;c.height=76;ctx.font=font;ctx.textAlign='center';ctx.textBaseline='middle';
+   ctx.fillStyle=dark?'#36503f':'#f8f6e9';ctx.strokeStyle=dark?'#36503f':'#9aa98c';ctx.lineWidth=2;ctx.beginPath();if(ctx.roundRect)ctx.roundRect(1,1,c.width-2,c.height-2,10);else ctx.rect(1,1,c.width-2,c.height-2);ctx.fill();ctx.stroke();ctx.fillStyle=dark?'#fff9df':'#254b35';ctx.fillText(text,c.width/2,c.height/2);
+   const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;const mesh=new THREE.Mesh(new THREE.PlaneGeometry(height*c.width/c.height,height),new THREE.MeshBasicMaterial({map:texture,transparent:true,toneMapped:false,depthWrite:false}));mesh.position.set(x,y,1.06);mesh.userData={annotation:key,text};annotations.add(mesh);return mesh;
+  }
+  const sourceName=caption('發光圖卡','object',source.position.x,-.045,.30);caption('凸透鏡・固定','lens',0,-.045,.30);
+  for(const n of [-200,-100,100,200])caption(Math.abs(n)===200?'2F':'F',`focus${n}`,n*G.scale,.30,.25,true);
   function updateRays(){for(const m of [...rays.children]){m.geometry.dispose();m.material.dispose();rays.remove(m);}rays.visible=showRays&&!front;if(!showRays)return;for(const r of imagingRays(state,point)){const color=r.name==='top'?'#f4a17e':'#88c7ee';for(const [from,to]of [[r.from,r.lens],[r.lens,r.end]]){const A=new THREE.Vector3(...from),B=new THREE.Vector3(...to),tube=new THREE.Mesh(new THREE.TubeGeometry(new THREE.LineCurve3(A,B),1,.009,6,false),new THREE.MeshBasicMaterial({color,toneMapped:false}));tube.userData={name:r.name,from,to};rays.add(tube);const arrow=new THREE.Mesh(new THREE.ConeGeometry(.036,.13,10),new THREE.MeshBasicMaterial({color,toneMapped:false}));arrow.position.copy(A).lerp(B,.64);arrow.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),B.clone().sub(A).normalize());rays.add(arrow);}}}
   function directionFor(azimuth,polar){return new THREE.Vector3(Math.sin(polar)*Math.sin(azimuth),Math.cos(polar),Math.sin(polar)*Math.cos(azimuth));}
   function fitToViewport(){
    camera.fov=39;camera.updateProjectionMatrix();let radius=9;
-   const bounds=[];for(const [xs,ys,zs]of [[[-4.9,-1.4],[.3,G.axis+G.cardHeight/2+.1],[-.9,.9]],[[G.screenMin*G.scale-.3,7.4],[.3,3.6],[-1,1]],[[-5.4,7.4],[-.25,.25],[-1,1]]])for(const x of xs)for(const y of ys)for(const z of zs)bounds.push(new THREE.Vector3(x,y,z));
+   const bounds=[];for(const [xs,ys,zs]of [[[-4.9,-1.4],[.3,G.axis+G.cardHeight/2+.1],[-.9,.9]],[[G.screenMin*G.scale-.3,7.4],[.3,3.6],[-1,1]],[[-5.4,7.4],[-.25,.25],[-1.15,1.15]]])for(const x of xs)for(const y of ys)for(const z of zs)bounds.push(new THREE.Vector3(x,y,z));
    const directions=[directionFor(-.9,1.38)];
    for(let i=0;i<40;i++){const fits=directions.every(direction=>{camera.position.copy(target).addScaledVector(direction,radius);camera.lookAt(target);camera.updateMatrixWorld();return bounds.every(p=>{const q=p.clone().project(camera);return Math.abs(q.x)<.9&&Math.abs(q.y)<.8;});});if(fits)break;radius*=1.06;}
    fitRadius=radius;
@@ -120,17 +119,9 @@ function initialise(root){
    else{camera.fov=39;camera.position.copy(target).addScaledVector(directionFor(orbit.azimuth,orbit.polar),fitRadius*orbit.zoom);camera.lookAt(target);}
    camera.updateProjectionMatrix();camera.updateMatrixWorld();
   }
-  function labels(){
-   const rect=canvas.getBoundingClientRect(),overlap=(a,b)=>a.left<b.right+3&&a.right>b.left-3&&a.top<b.bottom+3&&a.bottom>b.top-3;
-   const placed=[$('.imaging-tools'),$('.imaging-preview'),$('[data-imaging-badge]')].filter(e=>!e.hidden&&e.getClientRects().length).map(e=>e.getBoundingClientRect());
-   for(const e of $$('.imaging-focus')){const v=new THREE.Vector3(Number(e.dataset.imagingFocus)*G.scale,.40,.9).project(camera);e.hidden=front||Math.abs(v.x)>.97||Math.abs(v.y)>.94||v.z< -1||v.z>1;if(e.hidden)continue;const w=e.offsetWidth,h=e.offsetHeight,x=Math.max(w/2+4,Math.min(rect.width-w/2-4,(v.x+1)*rect.width/2)),y=Math.max(h/2+4,Math.min(rect.height-h/2-4,(1-v.y)*rect.height/2+15));let chosen=y;for(const cy of [y,y-h-5,y+h+5]){if(cy-h/2<$('.imaging-tools').getBoundingClientRect().bottom-rect.top+4||cy+h/2>rect.height-4)continue;const box={left:rect.left+x-w/2,right:rect.left+x+w/2,top:rect.top+cy-h/2,bottom:rect.top+cy+h/2};if(placed.some(p=>overlap(box,p)))continue;chosen=cy;break;}e.style.left=x+'px';e.style.top=chosen+'px';placed.push(e.getBoundingClientRect());}
-   const names=$$('.imaging-anchor');names.forEach(e=>e.hidden=front);const widths=names.map(e=>e.offsetWidth),ideal=[source.position.x,0].map(x=>(new THREE.Vector3(x,.50,.95).project(camera).x+1)*rect.width/2);let centers=ideal.map((x,i)=>Math.max(widths[i]/2+4,Math.min(rect.width-widths[i]/2-4,x)));
-   if(centers[0]+widths[0]/2+6>centers[1]-widths[1]/2){const total=widths[0]+widths[1]+6,left=Math.max(4,Math.min(rect.width-total-4,(centers[0]+centers[1]-total)/2));centers=[left+widths[0]/2,left+widths[0]+6+widths[1]/2];}
-   names.forEach((e,i)=>{e.hidden=front;e.style.left=centers[i]+'px';e.style.top='16px';});
-  }
-  function draw(){pending=0;renderer.render(scene,camera);labels();}
+  function draw(){pending=0;renderer.render(scene,camera);}
   function requestDraw(){if(!pending)pending=requestAnimationFrame(draw);}
-  function syncScene(){source.position.x=-state.object*G.scale;screen.position.x=state.screen*G.scale;projectedTexture.needsUpdate=true;updateRays();updateCamera();scene.updateMatrixWorld(true);requestDraw();}
+  function syncScene(){source.position.x=-state.object*G.scale;sourceName.position.x=source.position.x;annotations.visible=!front;screen.position.x=state.screen*G.scale;projectedTexture.needsUpdate=true;updateRays();updateCamera();scene.updateMatrixWorld(true);requestDraw();}
   const devices={object:source,screen,lens:lensGroup},pointers=new Map(),raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let gesture=null;
   function ray(e){const r=canvas.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,1-(e.clientY-r.top)/r.height*2);raycaster.setFromCamera(pointer,camera);}
   function hit(e){if(front)return null;ray(e);const h=raycaster.intersectObjects(Object.values(devices),true)[0];if(!h)return null;let group=h.object;while(group.parent!==scene&&group.parent)group=group.parent;return {...h,key:Object.keys(devices).find(key=>devices[key]===group)};}
@@ -138,14 +129,14 @@ function initialise(root){
   canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.setPointerCapture(e.pointerId);if(pointers.size>1){clearGestureNotice();gesture={kind:'pinch',distance:pinch(),zoom:orbit.zoom};return;}const h=hit(e);if(!h)clearGestureNotice();gesture={kind:h?'apparatus':'orbit',key:h?.key,startX:e.clientX,startY:e.clientY,azimuth:orbit.azimuth,polar:orbit.polar};});
   canvas.addEventListener('pointermove',e=>{
    if(!pointers.has(e.pointerId)){canvas.style.cursor=hit(e)?'help':'grab';return;}pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(!gesture)return;
-   if(pointers.size>1){if(gesture.kind!=='pinch')return;front=false;orbit.zoom=THREE.MathUtils.clamp(gesture.zoom*gesture.distance/Math.max(pinch(),1),.65,1.6);update();return;}
+   if(pointers.size>1){if(gesture.kind!=='pinch')return;front=false;orbit.zoom=THREE.MathUtils.clamp(gesture.zoom*gesture.distance/Math.max(pinch(),1),.65,1);update();return;}
    if(gesture.kind==='pinch')return;
    if(gesture.kind==='apparatus'){if(Math.hypot(e.clientX-gesture.startX,e.clientY-gesture.startY)>=4)showGestureNotice(gesture.key);return;}
    front=false;orbit.azimuth=THREE.MathUtils.clamp(gesture.azimuth-(e.clientX-gesture.startX)*.005,-1.2,-.15);orbit.polar=THREE.MathUtils.clamp(gesture.polar+(e.clientY-gesture.startY)*.004,.9,1.48);update();
   });
   function stop(e){pointers.delete(e.pointerId);gesture=null;canvas.style.cursor='grab';}
   for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,stop);
-  canvas.addEventListener('wheel',e=>{e.preventDefault();clearGestureNotice();if(front)return;orbit.zoom=THREE.MathUtils.clamp(orbit.zoom+e.deltaY*.001,.65,1.6);update();},{passive:false});
+  canvas.addEventListener('wheel',e=>{e.preventDefault();clearGestureNotice();if(front)return;orbit.zoom=THREE.MathUtils.clamp(orbit.zoom+e.deltaY*.001,.65,1);update();},{passive:false});
   canvas.addEventListener('keydown',e=>{const steps={ArrowLeft:[.06,0],ArrowRight:[-.06,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!steps[e.key])return;e.preventDefault();clearGestureNotice();front=false;orbit.azimuth=THREE.MathUtils.clamp(orbit.azimuth+steps[e.key][0],-1.2,-.15);orbit.polar=THREE.MathUtils.clamp(orbit.polar+steps[e.key][1],.9,1.48);update();});
   function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;fitToViewport();updateCamera();requestDraw();}new ResizeObserver(resize).observe(canvas);resize();
   return {update:syncScene,scene,camera,renderer,source,lens,screen,screenPlane,rays,devices};
