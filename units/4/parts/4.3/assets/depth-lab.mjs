@@ -1,5 +1,5 @@
-import { depthGeometry, solveCoinRay, clamp, TANK } from './depth-model.mjs?v=20261103-dual1';
-import { createTextures, renderObserver } from './depth-observer.mjs?v=20261103-dual1';
+import { depthGeometry, clamp, TANK } from './depth-model.mjs?v=20261103-dual2';
+import { createTextures, renderObserver } from './depth-observer.mjs?v=20261103-dual2';
 
 const root = document.querySelector('#depth-lab');
 if (root) {
@@ -70,14 +70,14 @@ if (root) {
   function drawConstruction() {
     const g = geometry, show = q('#show-rays').checked;
     const representative = g.representative, blocked = !representative.visible;
-    const traces = [-.3, .3].map(offset => solveCoinRay(g.depth, g.eyeX + offset, representative.coin[0]));
+    const traces = g.rays;
     const lightProgress = Math.min(1, progress / .76);
     let content = '';
     if (show) {
       const normalX = X(representative.hit[0]);
       content += `<path class="depth-normal" d="M${normalX} ${Y(g.depth)-57}V${Y(g.depth)+55}"/>`;
       for (const [i, ray] of traces.entries()) {
-        const end = blocked ? ray.blockPoint : ray.eye;
+        const end = ray.visible ? ray.eye : ray.blockPoint;
         const points = [ray.coin, ray.hit, end], d = path(partial(points, lightProgress));
         content += `<g opacity="${i ? .55 : 1}"><path class="depth-ray-halo" d="${d}"/><path class="depth-ray" d="${d}"/><path class="depth-core" d="${d}"/>${[.26,.76].filter(t => lightProgress > t).map(t => arrow(points,t)).join('')}</g>`;
       }

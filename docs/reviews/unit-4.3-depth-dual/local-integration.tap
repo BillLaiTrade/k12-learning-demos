@@ -1,30 +1,30 @@
 ▶ sixth section teaches apparent depth with synchronized side and rendered observer views
-  ✔ the default is a complete readable example without starting an animation or answering a question (309.725435ms)
-  ✔ water and observer changes really repaint the coin, with the physical coin remaining fixed (1109.726543ms)
-  ✔ occlusion changes actual rendered pixels, and adding water at the same viewpoint reveals the coin (1009.150976ms)
-  ✔ hiding the construction preserves the eye view and the physical scene (178.179239ms)
-  ✔ keyboard and pointer change the same viewing position without losing focus (1499.392804ms)
-  ✔ replay traces coin to eye before revealing auxiliary lines, pauses offscreen, and can restart (3426.513252ms)
-  ✔ desktop and phone keep panels, labels and controls readable without horizontal page scrolling (7367.313374ms)
-  ✔ native mobile touch moves the viewpoint and updates the eye view (2024.131716ms)
-  ✔ reduced motion retains a complete static example after replay (282.786109ms)
-  ✔ texture failure has a usable fallback and retry restores materials without resetting controls (3470.03184ms)
-  ✔ reading remains available with JavaScript disabled (794.285061ms)
-✔ sixth section teaches apparent depth with synchronized side and rendered observer views (26825.019806ms)
-✔ depth construction conserves Snell direction and uses the backward intersection, with a fixed floor coin (31.158924ms)
-✔ side visibility and independently traced reverse camera rays agree at the rim (7.791576ms)
-✔ first person view has a fixed target and finds the same coin through air-to-water refraction (1.330674ms)
-✔ every submerged camera ray conserves tangential direction in both horizontal axes (1.552742ms)
-✔ controls stay finite across boundaries and the apparent point depends on observation position (0.395523ms)
+  ✔ the default is a complete readable example without starting an animation or answering a question (328.831934ms)
+  ✔ water and observer changes really repaint the coin, with the physical coin remaining fixed (1026.531857ms)
+  ✔ occlusion changes actual rendered pixels, and adding water at the same viewpoint reveals the coin (1060.626795ms)
+  ✔ hiding the construction preserves the eye view and the physical scene (153.720153ms)
+  ✔ keyboard and pointer change the same viewing position without losing focus (2712.972422ms)
+  ✔ replay traces coin to eye before revealing auxiliary lines, pauses offscreen, and can restart (3829.682953ms)
+  ✔ desktop and phone keep panels, labels and controls readable without horizontal page scrolling (9647.324385ms)
+  ✔ native mobile touch moves the viewpoint and updates the eye view (2783.166511ms)
+  ✔ reduced motion retains a complete static example after replay (383.967288ms)
+  ✔ texture failure has a usable fallback and retry restores materials without resetting controls (4548.320494ms)
+  ✔ reading remains available with JavaScript disabled (1623.827272ms)
+✔ sixth section teaches apparent depth with synchronized side and rendered observer views (31229.356757ms)
+✔ depth construction conserves Snell direction and uses the backward intersection, with a fixed floor coin (51.532577ms)
+✔ side visibility and independently traced reverse camera rays agree at the rim (9.16857ms)
+✔ first person view has a fixed target and finds the same coin through air-to-water refraction (1.830438ms)
+✔ every submerged camera ray conserves tangential direction in both horizontal axes (1.144766ms)
+✔ controls stay finite across boundaries and the apparent point depends on observation position (0.711284ms)
 ▶ 4.3 shared lesson format keeps navigation and content usable
-  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (222.290393ms)
-  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (1625.91663ms)
-  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (9483.552402ms)
-  ✔ quiz alias and original deep links arrive below the mobile route (394.822648ms)
-✔ 4.3 shared lesson format keeps navigation and content usable (14125.621878ms)
-✔ transmitted rays conserve tangential optical direction and reverse exactly (1.947103ms)
-✔ apparent coin is the backward intersection of independently refracted pupil rays (5.421864ms)
-✔ 4.3 complete basic lesson works on desktop and mobile (17530.072326ms)
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (218.064218ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (963.180714ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (10556.235557ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (520.183985ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (19101.76914ms)
+✔ transmitted rays conserve tangential optical direction and reverse exactly (2.872899ms)
+✔ apparent coin is the backward intersection of independently refracted pupil rays (10.367087ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (13929.225527ms)
 ℹ tests 25
 ℹ suites 0
 ℹ pass 25
@@ -32,4 +32,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 60509.997758
+ℹ duration_ms 67392.274471

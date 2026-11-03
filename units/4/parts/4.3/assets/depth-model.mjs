@@ -24,15 +24,18 @@ export function depthGeometry(depth = 70, eyeX = 250) {
   depth = clamp(Number.isFinite(depth) ? depth : 70, 40, 100);
   eyeX = clamp(Number.isFinite(eyeX) ? eyeX : 250, 210, 340);
   const center = solveCoinRay(depth, eyeX);
-  const rays = [-.3, .3].map(offset => solveCoinRay(depth, eyeX + offset));
-  const slopes = rays.map(r => (r.hit[0] - r.eye[0]) / (depth - r.eye[1]));
-  const apparentY = depth + (rays[1].hit[0] - rays[0].hit[0]) / (slopes[0] - slopes[1]);
-  const apparent = [rays[0].hit[0] + slopes[0] * (apparentY - depth), apparentY];
   const samples = [-12, -8, -4, 0, 4, 8, 12].map(dx => solveCoinRay(depth, eyeX, TANK.coinX + dx));
   const visibleSamples = samples.filter(r => r.visible);
   const status = !visibleSamples.length ? 'hidden' : visibleSamples.length === samples.length ? 'visible' : 'partial';
+  const representative = center.visible ? center : visibleSamples[0] || center;
+  // If only an edge of the coin is visible, construct the image of that same
+  // visible point, rather than extending a blocked ray from the coin's centre.
+  const rays = [-.3, .3].map(offset => solveCoinRay(depth, eyeX + offset, representative.coin[0]));
+  const slopes = rays.map(r => (r.hit[0] - r.eye[0]) / (depth - r.eye[1]));
+  const apparentY = depth + (rays[1].hit[0] - rays[0].hit[0]) / (slopes[0] - slopes[1]);
+  const apparent = [rays[0].hit[0] + slopes[0] * (apparentY - depth), apparentY];
   return { depth, eyeX, coin: center.coin, eye: center.eye, center, rays, apparent,
-    apparentDepth: depth - apparentY, status, representative: center.visible ? center : visibleSamples[0] || center };
+    apparentDepth: depth - apparentY, status, representative };
 }
 
 export function observerCamera(g, aspect = 1.4) {

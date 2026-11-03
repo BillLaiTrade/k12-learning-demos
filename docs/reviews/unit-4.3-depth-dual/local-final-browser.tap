@@ -1,16 +1,16 @@
 ▶ sixth section teaches apparent depth with synchronized side and rendered observer views
-  ✔ the default is a complete readable example without starting an animation or answering a question (302.156475ms)
-  ✔ water and observer changes really repaint the coin, with the physical coin remaining fixed (1585.37455ms)
-  ✔ occlusion changes actual rendered pixels, and adding water at the same viewpoint reveals the coin (817.174998ms)
-  ✔ hiding the construction preserves the eye view and the physical scene (170.657777ms)
-  ✔ keyboard and pointer change the same viewing position without losing focus (1227.929091ms)
-  ✔ replay traces coin to eye before revealing auxiliary lines, pauses offscreen, and can restart (3431.314022ms)
-  ✔ desktop and phone keep panels, labels and controls readable without horizontal page scrolling (8507.927391ms)
-  ✔ native mobile touch moves the viewpoint and updates the eye view (4194.00533ms)
-  ✔ reduced motion retains a complete static example after replay (544.086136ms)
-  ✔ texture failure has a usable fallback and retry restores materials without resetting controls (3370.290524ms)
-  ✔ reading remains available with JavaScript disabled (1870.298623ms)
-✔ sixth section teaches apparent depth with synchronized side and rendered observer views (29137.558ms)
+  ✔ the default is a complete readable example without starting an animation or answering a question (372.27563ms)
+  ✔ water and observer changes really repaint the coin, with the physical coin remaining fixed (1331.868442ms)
+  ✔ occlusion changes actual rendered pixels, and adding water at the same viewpoint reveals the coin (1571.548971ms)
+  ✔ hiding the construction preserves the eye view and the physical scene (212.621851ms)
+  ✔ keyboard and pointer change the same viewing position without losing focus (2303.176513ms)
+  ✔ replay traces coin to eye before revealing auxiliary lines, pauses offscreen, and can restart (3470.401504ms)
+  ✔ desktop and phone keep panels, labels and controls readable without horizontal page scrolling (8358.711727ms)
+  ✔ native mobile touch moves the viewpoint and updates the eye view (2085.676057ms)
+  ✔ reduced motion retains a complete static example after replay (247.653808ms)
+  ✔ texture failure has a usable fallback and retry restores materials without resetting controls (4452.283883ms)
+  ✔ reading remains available with JavaScript disabled (1880.300533ms)
+✔ sixth section teaches apparent depth with synchronized side and rendered observer views (29255.110789ms)
 ℹ tests 12
 ℹ suites 0
 ℹ pass 12
@@ -18,4 +18,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 29743.084958
+ℹ duration_ms 30021.127432

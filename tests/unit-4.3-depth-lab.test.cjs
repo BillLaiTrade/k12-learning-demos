@@ -47,6 +47,15 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   await set(100,300);assert.ok(+await page.locator('#depth-observer').getAttribute('data-coin-pixels')>50);
   assert.match(await page.locator('#depth-visibility').innerText(),/可以看見/);
   if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,'water-reveals-coin.png')});
+  await set(70,300);
+  const construction=await page.locator('#depth-scene').evaluate(e=>{
+    const values=s=>[...s.matchAll(/-?\d+(?:\.\d+)?(?:e[+-]?\d+)?/gi)].map(m=>Number(m[0]));
+    return{actual:values(e.querySelector('.depth-core').getAttribute('d')),extension:values(e.querySelector('.extension').getAttribute('d'))};
+  });
+  const a=construction.actual,b=construction.extension;
+  assert.ok(Math.abs(a[2]-b[0])<1e-6&&Math.abs(a[3]-b[1])<1e-6);
+  assert.ok(Math.abs((a[4]-a[2])*(b[3]-b[1])-(a[5]-a[3])*(b[2]-b[0]))<1e-6,'partial coin extends the same visible ray');
+  if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,'partial-coin.png')});
  });
  await t.test('hiding the construction preserves the eye view and the physical scene',async()=>{
   const before=await page.locator('#depth-observer').evaluate(e=>e.toDataURL());

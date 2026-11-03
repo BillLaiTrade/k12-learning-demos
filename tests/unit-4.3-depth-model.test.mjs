@@ -9,7 +9,8 @@ test('depth construction conserves Snell direction and uses the backward interse
     assert.deepEqual(g.coin,[55,0]);assert.deepEqual(g.eye,[eyeX,190]);
     assert.ok(g.apparent[1]>0&&g.apparent[1]<depth);
     for(const r of g.rays){
-      const wi=(r.hit[0]-55)/Math.hypot(r.hit[0]-55,depth);
+      assert.equal(r.coin[0],g.representative.coin[0]);
+      const wi=(r.hit[0]-r.coin[0])/Math.hypot(r.hit[0]-r.coin[0],depth);
       const ai=(r.eye[0]-r.hit[0])/Math.hypot(r.eye[0]-r.hit[0],190-depth);
       close(TANK.n*wi,ai);
       close((g.apparent[0]-r.hit[0])*(r.eye[1]-depth)-(g.apparent[1]-depth)*(r.eye[0]-r.hit[0]),0);
@@ -27,6 +28,9 @@ test('side visibility and independently traced reverse camera rays agree at the 
   }
   assert.ok(blocked>0&&visible>0);
   assert.equal(depthGeometry(40,340).status,'hidden');assert.equal(depthGeometry(100,250).status,'visible');
+  const partial=depthGeometry(70,300);assert.equal(partial.status,'partial');
+  assert.equal(partial.center.visible,false);assert.equal(partial.representative.visible,true);
+  assert.ok(partial.rays.every(r=>r.coin[0]===partial.representative.coin[0]));
 });
 test('first person view has a fixed target and finds the same coin through air-to-water refraction',()=>{
   for(const depth of [40,70,100])for(const eyeX of [210,250,280]){
