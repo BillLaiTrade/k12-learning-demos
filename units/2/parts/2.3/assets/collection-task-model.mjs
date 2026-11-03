@@ -57,15 +57,15 @@ function tubePose(m,p){
 }
 export function outletPose(s){if(s.dragging?.id==='outlet')return{x:s.dragging.position.x-260,y:s.dragging.position.y-10};return s.motion?.kind==='outlet'?tubePose(s.motion,s.motion.elapsed/s.motion.duration):poses[s.outlet];}
 export function gasEntersJar(s){const o=outletPose(s),mouth=jarMouth(s);return !s.jarCovered&&s.jarAngle>179&&mouthUnderwater(s)&&o.x+260>mouth.x-55&&o.x+260<mouth.x+55&&o.y+10<mouth.y-4&&o.y+10>mouth.y-65;}
-function tell(s,text,kind='hint'){s.feedback=text;s.feedbackKind=kind;s.result=null;}
+function tell(s,text,kind='hint'){s.feedback=text;s.feedbackKind=kind==='revise'?'error':kind;s.result=null;}
 function move(s,kind,duration,extra={}){s.motion={kind,duration,elapsed:0,tool:s.tool,toolStart:s.tool&&s.positions[s.tool]?{...s.positions[s.tool]}:null,...extra};s.tool=null;s.focus=null;}
 export function inspectDesk(s){
  if(s.phase==='complete')return{correct:true,message:'你已收集並封存一瓶二氧化碳。'};
- if(s.otherVolume>.01)return{correct:false,message:'瓶中混入了氧氣或其他氣體；請清空集氣瓶、重新裝滿清水再收集二氧化碳。'};
- for(const target of ['flask','jar','tank']){const c=s.contents[target];if(c.peroxide>0||c.catalyst>0||(target!=='flask'&&c.acid>0)||(target==='jar'&&c.stones.length))return{correct:false,message:(target==='flask'?'反應瓶':target==='jar'?'集氣瓶':'水槽')+'內混入了不適合這次集氣的材料。可從材料區收回這個容器清空，再取用重試。'};}
+ if(s.otherVolume>.01)return{correct:false,kind:'error',message:'瓶中混入了氧氣或其他氣體；請清空集氣瓶、重新裝滿清水再收集二氧化碳。'};
+ for(const target of ['flask','jar','tank']){const c=s.contents[target];if(c.peroxide>0||c.catalyst>0||(target!=='flask'&&c.acid>0)||(target==='jar'&&c.stones.length))return{correct:false,kind:'error',message:(target==='flask'?'反應瓶':target==='jar'?'集氣瓶':'水槽')+'內混入了不適合這次集氣的材料。可從材料區收回這個容器清空，再取用重試。'};}
  if(s.acid>0&&s.reactionUsed>=s.acid-.00001&&s.co2Volume<.98&&s.airVolume<.01)return{correct:false,message:'這一份反應物已反應完，生成的氣體未完整收集。請重新補充反應物，先裝好器材與排氣，再重試。'};
- if(s.co2Volume<.98)return{correct:false,message:s.airVolume>.01?'瓶中混入了原有空氣。可重新裝滿水、倒置，再收集已排除空氣的氣體。':s.jarWater>.02?'瓶內還有水，繼續觀察導管位置和水位變化。':'目前還沒有收集到一整瓶二氧化碳。檢查反應、液封和出口位置。'};
- if(s.airVolume>.01)return{correct:false,message:'瓶中混入了原有空氣。重新裝滿水後，再收集已排除空氣的氣體。'};
+ if(s.co2Volume<.98)return{correct:false,kind:s.airVolume>.01?'error':'revise',message:s.airVolume>.01?'瓶中混入了原有空氣。可重新裝滿水、倒置，再收集已排除空氣的氣體。':s.jarWater>.02?'瓶內還有水，繼續觀察導管位置和水位變化。':'目前還沒有收集到一整瓶二氧化碳。檢查反應、液封和出口位置。'};
+ if(s.airVolume>.01)return{correct:false,kind:'error',message:'瓶中混入了原有空氣。重新裝滿水後，再收集已排除空氣的氣體。'};
  if(!s.sealedUnderwater||!s.jarCovered)return{correct:false,message:'氣體已收集。請先撤出導管，在水下蓋好玻璃片。'};
  if(s.jarPlace>.01||s.jarAngle>.01)return{correct:false,message:'保持蓋片，將集氣瓶取出並扶正放在桌上。'};
  return{correct:true,message:'完成！你利用排水集氣法收集二氧化碳，先撤管、在水下蓋片，再取出扶正。'};
@@ -101,7 +101,7 @@ export function actDesk(s,action,value){
  if(action==='reset')return createDesk();
  if(action==='take'&&s.phase==='complete'){s.phase='operate';s.result=null;}
  if(s.phase!=='operate')return s;
- if(action==='inspect'){const r=inspectDesk(s);s.result=r.correct?'correct':'revise';s.feedback=r.message;s.feedbackKind=s.result;if(r.correct)s.phase='complete';return s;}
+ if(action==='inspect'){const r=inspectDesk(s);s.result=r.correct?'correct':'revise';s.feedback=r.message;s.feedbackKind=r.kind||s.result;if(r.correct)s.phase='complete';return s;}
  if(action==='stop'&&['water','acid','peroxide'].includes(s.motion?.kind)){const m=s.motion;move(s,'put-away',450,{pourKind:m.kind,target:m.target,viaFunnel:m.viaFunnel,stopAt:m.elapsed/m.duration});tell(s,'收起倒液工具，已倒入的液體會保留。');return s;}
  if(s.motion){tell(s,'請等手上的動作完成。');return s;}
  if(action==='take'){
@@ -145,7 +145,7 @@ export function actDesk(s,action,value){
    const to=target==='flask'&&tool!=='water'?from+1:1;
    move(s,tool,tool==='acid'?1750:1600,{target,from,to,contentFrom:tool==='water'?0:c[tool],viaFunnel:target==='flask'&&s.rig&&s.funnel});
    const container=target==='flask'?'反應瓶':target==='jar'?'集氣瓶':'水槽';
-   tell(s,tool==='peroxide'?`雙氧水由瓶口倒入${container}；這是製氧材料，並非製備二氧化碳所需的稀鹽酸。`:tool==='acid'&&target!=='flask'?`已向${container}倒入稀鹽酸；這裡應裝清水，可收回容器清空重試。`:tool==='acid'?s.rig&&s.funnel?'稀鹽酸由試藥瓶口流入漏斗，再沿長管進入錐形瓶。':'由試藥瓶口倒入開口的錐形瓶；此時生成的氣體會直接逸出。':target==='flask'?'清水由瓶口加入反應瓶；單加清水不會產生二氧化碳。':'清水由壺嘴流入容器；可在倒滿前放下工具。',tool==='peroxide'||tool==='acid'&&target!=='flask'?'revise':'hint');return s;
+   tell(s,tool==='peroxide'?`用錯藥品：雙氧水是製氧材料，不是本次製備二氧化碳所需的稀鹽酸。請從材料區收回${container}清空後重試。`:tool==='acid'&&target!=='flask'?`稀鹽酸倒錯容器：${container}應裝清水，不應加入稀鹽酸。請從材料區收回${container}，清空後再裝清水。`:tool==='acid'?s.rig&&s.funnel?'稀鹽酸由試藥瓶口流入漏斗，再沿長管進入錐形瓶。':'由試藥瓶口倒入開口的錐形瓶；此時生成的氣體會直接逸出。':target==='flask'?'清水由瓶口加入反應瓶；單加清水不會產生二氧化碳。':'清水由壺嘴流入容器；可在倒滿前放下工具。',tool==='peroxide'||tool==='acid'&&target!=='flask'?'error':'hint');return s;
   }
   if(tool==='forceps'){
    const solid=heldMaterial(s);
@@ -164,7 +164,7 @@ export function actDesk(s,action,value){
     if(value==='jar'&&(s.jarAngle>.01||s.jarPlace>.01||s.jarCovered)){tell(s,'先扶正集氣瓶並移開玻璃片，才能由瓶口放入材料。','revise');return s;}
     const correct=value==='flask'&&solid==='marble';
     move(s,correct?'place-stone':'drop-solid',1350,{target:value,solid,index:s.heldStoneId??0,tilt:correct&&liquidAmount(s,'flask')<.01});
-    tell(s,correct?'鑷子從瓶口進入，讓大理石沿瓶內側滑下。':`已從開口放入${solid==='marble'?'大理石':'二氧化錳'}；${value==='flask'?'二氧化錳是製氧用的材料。':'這不是本次集氣所需的材料位置，可收回容器清空重試。'}`,correct?'hint':'revise');return s;
+    tell(s,correct?'鑷子從瓶口進入，讓大理石沿瓶內側滑下。':`${solid==='catalyst'?'用錯材料：二氧化錳是製氧用的材料，不是本次製備二氧化碳所需的大理石。':'放錯位置：大理石應放入反應瓶，不是集氣瓶或水槽。'}請從材料區收回${value==='flask'?'反應瓶':value==='jar'?'集氣瓶':'水槽'}，清空後重試。`,correct?'hint':'error');return s;
    }
   }
   if(tool==='rig'&&value==='flask'){
