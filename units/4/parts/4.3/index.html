@@ -28,11 +28,12 @@
   <script type="module" src="assets/light-speed-lab.mjs?v=20261101-controls2"></script>
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
   <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-compact1"></script>
-  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-concept1">
-  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261103-concept1"></script>
-  <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-concept1">
-  <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-concept1"></script>
-  <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-concept1">
+  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-beam1">
+  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261103-beam1"></script>
+  <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-beam1">
+  <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-beam1"></script>
+  <link rel="stylesheet" href="assets/light-beam.css?v=20261103-beam1">
+  <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-beam1">
   <script type="module" src="assets/lesson.mjs?v=20261102-return1">
 </script>
 </head>
@@ -235,14 +236,12 @@
 
       <section class="refraction-concept" id="oblique-concept" aria-labelledby="oblique-concept-title">
         <p class="concept-eyebrow">實驗重點 · 光速與折射方向</p>
-        <h3 id="oblique-concept-title">光速由快變慢，為什麼會偏向法線？</h3>
-        <div class="concept-flow"><span>空氣<small>光較快</small></span><b aria-hidden="true">→</b><span><span data-concept-medium>水</span><small>光較慢</small></span></div>
-        <div class="concept-discussion"><div><h4>斜射時，為什麼會轉向？</h4><p>波前斜著抵達介面時，一側先進入水或玻璃，速度先降低；另一側稍後才進入。波前因而轉向，使光的前進方向偏向法線。</p><p>因此，斜射進入較慢的介質時，折射光偏向法線，<strong>折射角小於入射角</strong>。判斷折射方向時，要先比較兩種介質中的光速。</p></div>
-        <div class="concept-result"><h4>對照你現在的實驗</h4>        <div class="finding oblique-finding">
+        <h3 id="oblique-concept-title">光速由快變慢，斜射時偏向法線</h3>
+        <div class="concept-flow"><span>空氣</span><b aria-hidden="true">→</b><span><span data-concept-medium>水</span></span></div>
+        <div class="concept-discussion"><div class="concept-result"><h4>對照你現在的實驗</h4>        <div class="finding oblique-finding">
           <div class="oblique-rule-head"><strong id="oblique-finding-text">空氣 → 水，光速由快變慢</strong></div>
           <div class="oblique-rule-caption"><p id="oblique-relation"><span class="oblique-refracted-color">折射角</span><span id="oblique-angle-comparison"> &lt; </span><span class="oblique-incident-color">入射角</span></p><span class="oblique-rule-divider" aria-hidden="true">｜</span><p id="oblique-zoom-note">斜射時偏向法線</p></div>
         </div><p class="concept-live">入射角 <output data-concept-in>45°</output><span aria-hidden="true"> → </span>折射角 <output data-concept-out>32.0°</output></p><p class="concept-measure">兩個角都從法線量起。</p></div></div>
-        <p class="concept-exception"><strong>沿法線入射（0°）呢？</strong>波前各處同時進入新介質，速度仍會改變，但方向不偏折；入射角與折射角都是0°。</p>
       </section>
     </div>
     <details class="oblique-explanation" id="oblique-explanation">
@@ -258,7 +257,7 @@
         </svg>
         </div>
         <p><strong>斜著進入時，波前各處先後進入另一種介質，行進速度改變的時間不同，因此傳播方向改變。</strong>就像小車的一側輪子先變慢，整體會轉向。</p>
-        <p>光從空氣進入水或玻璃，傳播速度降低；斜向入射時，折射角比入射角小，光路偏向法線。調到0°，就會重現上一區的筆直光路。</p>
+        <p>光從空氣進入水或玻璃，傳播速度降低；斜向入射時，折射角比入射角小，光路偏向法線。沿法線入射（0°）時，波前各處同時進入新介質，速度仍會改變，但方向不偏折，兩個角都是0°。</p>
         <p class="oblique-model-note">小車為類比，不代表光受到摩擦。光路與角度由代表模型計算，水與玻璃的代表折射率分別為4/3與1.5；不要求計算公式。器材及光跡非實際比例，穿越動畫採共同慢動作、非實際秒數，只畫穿透光束。</p>
       </div>
     </details>
@@ -304,6 +303,7 @@
   <div class="return-controls">
     <div class="return-switches" role="group" aria-label="射回空氣的光源開關">
       <button type="button" id="exit-toggle-b" class="return-switch" aria-pressed="false" disabled><span class="return-switch-indicator" aria-hidden="true"></span><span class="return-switch-label">光源<small>關閉</small></span></button>
+      <button type="button" id="exit-pause" disabled aria-label="暫停光束">Ⅱ 暫停</button>
     </div>
     <button type="button" id="exit-reset" aria-label="重設角度並關閉光源" disabled>↻ 重設</button>
   </div>
@@ -316,13 +316,11 @@
 
       <section class="refraction-concept" id="exit-concept" aria-labelledby="exit-concept-title">
         <p class="concept-eyebrow">實驗重點 · 光速與折射方向</p>
-        <h3 id="exit-concept-title">光速由慢變快，為什麼會偏離法線？</h3>
-        <div class="concept-flow"><span><span data-concept-medium>水</span><small>光較慢</small></span><b aria-hidden="true">→</b><span>空氣<small>光較快</small></span></div>
-        <div class="concept-discussion"><div><h4>斜射時，為什麼會轉向？</h4><p>波前斜著抵達介面時，一側先進入空氣，速度先增加；另一側仍在水或玻璃中，還比較慢。波前因而轉向，使光的前進方向偏離法線。</p><p>因此，斜射進入較快的介質時，折射光偏離法線，<strong>折射角大於入射角</strong>。判斷折射方向時，要先比較兩種介質中的光速。</p></div>
-        <div class="concept-result"><h4>對照你現在的實驗</h4>    <div class="return-finding"><strong id="exit-finding">水 → 空氣，光速由慢變快</strong><span id="exit-route">空氣側 41.8°｜水側 30°</span></div><p class="concept-live">入射角 <output data-concept-in>30°</output><span aria-hidden="true"> → </span>折射角 <output data-concept-out>41.8°</output></p><p class="concept-measure">兩個角都從法線量起。</p></div></div>
-        <p class="concept-exception"><strong>沿法線入射（0°）呢？</strong>波前各處同時進入新介質，速度仍會改變，但方向不偏折；入射角與折射角都是0°。</p>
+        <h3 id="exit-concept-title">光速由慢變快，斜射時偏離法線</h3>
+        <div class="concept-flow"><span><span data-concept-medium>水</span></span><b aria-hidden="true">→</b><span>空氣</span></div>
+        <div class="concept-discussion"><div class="concept-result"><h4>對照你現在的實驗</h4>    <div class="return-finding"><strong id="exit-finding">水 → 空氣，光速由慢變快</strong><span id="exit-route">空氣側 41.8°｜水側 30°</span></div><p class="concept-live">入射角 <output data-concept-in>30°</output><span aria-hidden="true"> → </span>折射角 <output data-concept-out>41.8°</output></p><p class="concept-measure">兩個角都從法線量起。</p></div></div>
       </section>
-  <details class="return-explanation"><summary>為什麼從水或玻璃射回空氣，會偏離法線？</summary><p>光在水或玻璃中的傳播速度較慢，在空氣中較快。斜向射回空氣時，光速由慢變快，因此折射光偏離法線，折射角比入射角大。</p><p>沿法線入射時，速度仍會改變，但方向不偏折。角度都從法線量起；本區只比較可射出介面的角度範圍。</p></details>
+  <details class="return-explanation"><summary>為什麼從水或玻璃射回空氣，會偏離法線？</summary><p>光在水或玻璃中的傳播速度較慢，在空氣中較快。波前斜著抵達介面時，一側先進入空氣、速度先增加，另一側仍在水或玻璃中，還比較慢；波前因而轉向，使光的前進方向偏離法線。所以斜向進入較快介質時，折射角比入射角大。</p><p>沿法線入射（0°）時，波前各處同時進入新介質，速度仍會改變，但方向不偏折，兩個角都是0°。角度都從法線量起；本區只比較可射出介面的角度範圍。</p></details>
   <noscript><p>水中入射角30°時，射回空氣的折射角約41.8°；代表玻璃約48.6°。光偏離法線，沿這條光路反向射入則可返回。啟用 JavaScript 後可開關光源、調角及局部放大。</p></noscript>
 </div>
 </div>

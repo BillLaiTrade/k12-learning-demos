@@ -190,3 +190,18 @@ node --test --test-concurrency=1 tests/unit-4.3-oblique-model.test.mjs tests/uni
 ```
 
 共56項（含外層）。新增上方入射的獨立角度／折射定律驗證、拖曳逆算與邊界，及實際主圖／近拍端點對位、角色標示、小角度／極值、材質一致與全寬常駐說明、同步讀值；三區在八種視窗的選項可見、畫面內置中、唯一選取、0°不遮光源與文字邊界一併檢查。詳見 `docs/decisions/unit-4.3-medium-order-and-concepts.md`。維持第四階段修訂。
+
+
+## 第三、第四區統一光束與嵌入式控制（2026-11-03）
+
+依使用者新一輪三項回饋，兩區結合第三區金色光暈／亮芯與第四區方向箭頭。`light-beam.css`／`light-beam.mjs`共用亮度、線寬與箭頭規則，近拍依視圖座標換算保持相同視覺粗細；箭頭只在光束越過箭頭尖端後顯示。第三區原發光速率不變，第四區新增連續前緣動畫，沿用空氣0.24、水0.18、玻璃0.16示意單位/ms，因此慢→快也有對應速度變化。預設待命，光源開啟開始，關閉後再開啟可重播；新增暫停／繼續，離屏及頁面隱藏會保留進度並暫停，完成後不空轉。調角或切換介質時提供完整新光路預覽。
+
+第三／四區介質控制維持已核可位置，改為箱體底框的金屬固定面板、螺絲及嵌入按鍵，水／玻璃仍同時可見；第五區的介質面板及雙光源互動不變。避免共用減少動態樣式讓縮放後面板暫時未繪出，兩個固定面板與子元素明確停用過場。
+
+重點區保留上下白色介質流程與即時結果，移除快慢小字、左側長篇轉向說明與額外0°說明段。原因與0°例外統一保留在下方可展開內容，第四區亦補足波前先後進入的原因。詳細說明不會遺失，簡要結論與目前角度仍可直接看見。
+
+```sh
+node --test --test-concurrency=1 tests/unit-4.3-oblique-model.test.mjs tests/unit-4.3-return-model.test.mjs tests/unit-4.3-exit-model.test.mjs tests/unit-4.3-oblique-lab.test.cjs tests/unit-4.3-return-lab.test.cjs tests/unit-4.3-flow.test.cjs tests/unit-4.3-beam.test.cjs tests/unit-4.3-format.test.cjs tests/unit-4.3.test.cjs
+```
+
+共64項（含外層）。光速與前緣連續、兩區主圖／近拍亮度及線寬、箭頭不超前、暫停／續播／重播／離屏、改角及介質預覽、面板縮放與可選取、簡要區塊與展開說明分工，以及既有全課／手機／幾何回歸。詳見 `docs/decisions/unit-4.3-unified-beams-and-controls.md`。維持第四階段修訂。

@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {exitGeometry,angleFromExitSource} from '../units/4/parts/4.3/assets/exit-refraction-model.mjs';
+import {exitGeometry,angleFromExitSource,exitSnapshot,exitDurationMs} from '../units/4/parts/4.3/assets/exit-refraction-model.mjs';
 
 test('upper water or glass emits downward into air with the independently measured larger refracted angle',()=>{
  for(const [medium,n]of [['water',4/3],['glass',1.5]])for(let angle=0;angle<=35;angle++){
@@ -25,5 +25,17 @@ test('the upper source and outgoing endpoint stay inside the apparatus at zero a
   const g=exitGeometry(medium,a);
   for(const [x,y]of [g.sourceB,g.sourceA])assert.ok(x>220&&x<1030&&y>=300&&y<=850);
   assert.deepEqual(g.backward,[g.sourceB,g.hit,g.sourceA]);
+ }
+});
+
+test('exit light advances continuously using the same air speed and material-relative speeds as the third experiment',()=>{
+ const distance=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
+ for(const [medium,n]of [['water',4/3],['glass',1.5]])for(const angle of [0,1,30,35]){
+  const g=exitSnapshot(medium,angle,0),before=exitSnapshot(medium,angle,200),at=exitSnapshot(medium,angle,g.entryMs),after=exitSnapshot(medium,angle,g.entryMs+200),end=exitSnapshot(medium,angle,g.arrivalMs+100);
+  assert.equal(g.entered,false);assert.equal(g.arrived,false);assert.deepEqual(g.front,g.source);
+  assert.ok(Math.abs(distance(g.front,before.front)/200-.24/n)<1e-10);
+  assert.equal(at.entered,true);assert.deepEqual(at.front,g.hit);assert.ok(Math.abs(distance(at.front,after.front)/200-.24)<1e-10);
+  assert.ok(distance(exitSnapshot(medium,angle,g.entryMs-.001).front,at.front)<.001);
+  assert.deepEqual(end.front,g.end);assert.equal(end.arrived,true);assert.equal(exitDurationMs(medium,angle),g.arrivalMs);
  }
 });
