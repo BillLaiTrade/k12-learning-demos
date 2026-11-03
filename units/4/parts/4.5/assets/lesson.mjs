@@ -1,4 +1,4 @@
-import {initialiseFrontMix} from './mix-lab.mjs?v=mix-torch-controls-20261103';
+import {initialiseFrontMix} from './mix-lab.mjs?v=mix-balanced-20261103';
 import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-source-comparison-20261102';
 import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays,QUIZ} from './color-model.mjs';
 import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs';

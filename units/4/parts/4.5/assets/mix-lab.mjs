@@ -101,7 +101,7 @@ export function initialiseFrontMix(root){
   root.dataset.aim=JSON.stringify(spots.map((s,i)=>torchAim(i,s)));
   refreshTorchPoses();
   torchButtons.forEach((b,i)=>{
-   b.dataset.on=String(spots[i].on);b.setAttribute('aria-pressed',String(spots[i].on));b.querySelector('[data-torch-state]').textContent=spots[i].on?'開':'關';b.setAttribute('aria-label',`${NAMES[i]}色手電筒：點按開／關燈，拖曳或用方向鍵調整照射位置，目前${spots[i].on?'開啟':'關閉'}，落點橫向${Math.round(spots[i].x*100)}%、縱向${Math.round(spots[i].y*100)}%`);
+   b.dataset.on=String(spots[i].on);b.setAttribute('aria-pressed',String(spots[i].on));b.setAttribute('aria-label',`${NAMES[i]}色手電筒：點按開／關燈，拖曳或用方向鍵調整照射位置，目前${spots[i].on?'開啟':'關閉'}，落點橫向${Math.round(spots[i].x*100)}%、縱向${Math.round(spots[i].y*100)}%`);
   });
   for(const b of root.querySelectorAll('[data-preset]'))b.setAttribute('aria-pressed',String(b.dataset.preset===preset));
   const condition=root.querySelector('[data-conditions]');condition.textContent=`紅光：${spots[0].on?'開':'關'}　綠光：${spots[1].on?'開':'關'}　藍光：${spots[2].on?'開':'關'}　白幕：正面觀察`;
