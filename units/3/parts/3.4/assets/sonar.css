@@ -71,14 +71,10 @@
 @media(max-width:760px){.sonar-toolbar{flex-direction:column;align-items:stretch;gap:8px;padding:10px}.sonar-actions{gap:8px}.sonar-instruments{gap:6px}.sonar-instruments>div{flex-direction:column;gap:0}.sonar-instruments>div>span{font-size:.66rem}.sonar-instruments strong{font-size:.98rem}.sonar-reception{justify-content:flex-start;align-items:center}.sonar-reception strong{font-size:.78rem}.sonar-controls{flex:1;min-width:0}.sonar-controls button{flex:1 1 auto;font-size:.8rem;padding:8px}.sonar-layout{grid-template-columns:minmax(0,1fr);padding:8px;gap:8px}.sonar-chart-plot,.sonar-chart svg{min-height:150px}.sonar-results{gap:8px}.sonar-results h3{font-size:1rem}.sonar-records table{font-size:.86rem}.sonar-records th,.sonar-records td{padding:8px 6px}.sonar-records thead th{font-size:.78rem}.sonar-table-wrap{min-height:190px}.sonar-record-heading button,.sonar-pagination button{font-size:.8rem}.sonar-current-point{font-size:.8rem}.sonar-depth strong{font-size:2rem}.sonar-calculation #sonar-answer{font-size:.86rem;min-height:2.4em}.sonar-depth-label{font-size:.82rem}.sonar-ocean .sonar-steer{top:calc(max(30.24%, 7.84% + 44px) + 24px)}.sonar-point text{font-size:42px}.sonar-probe-label{font-size:32px}.sonar-hint{font-size:.73rem;padding:0 10px 10px}}
 
 #s4{scroll-margin-top:12px}
-#s4 .lesson-head{grid-template-columns:52px minmax(0,1fr);gap:12px;padding:16px 18px 12px}
-#s4 .lesson-number{width:42px;height:42px;border-radius:12px}
-#s4 .lesson-head h2{font-size:clamp(1.2rem,1.8vw,1.45rem)}
-#s4 .lesson-head p{font-size:.82rem;margin-top:4px}
 #s4 .lesson-body{padding:10px 12px 12px}
 .sonar-explanation{margin-top:8px;color:#5e7062;font-size:.77rem;line-height:1.6}
 .sonar-explanation summary{cursor:pointer}
-@media(max-width:650px){#s4 .lesson-head{grid-template-columns:42px minmax(0,1fr);gap:10px;padding:14px}#s4 .lesson-body{padding:8px 8px 12px}}
+@media(max-width:650px){#s4 .lesson-body{padding:8px 8px 12px}}
 
 /* Read the question and guidance before surveying; keep the explanation below. */
 .sonar-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-bottom:10px}
