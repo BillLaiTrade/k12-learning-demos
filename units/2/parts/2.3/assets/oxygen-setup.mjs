@@ -1,4 +1,4 @@
-import {createThistleFunnel,createDoubleStopper} from './thistle-apparatus.mjs?v=thistle-1';
+import {createThistleFunnel,createDoubleStopper} from './thistle-apparatus.mjs?v=discussion-20261103-1';
 // The preparation is one bounded instructional clock. All water is clear water;
 // no peroxide, catalyst or gas has entered the apparatus at this point.
 export const SETUP_DURATION = 20800;

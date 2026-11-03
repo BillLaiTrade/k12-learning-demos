@@ -181,3 +181,8 @@
 .co2-main-scene,.co2-closeup svg{pointer-events:auto;user-select:none;-webkit-user-select:none}
 
 .co2-paint-resources{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+
+#s4 .experiment-accessory{display:flex;align-items:center;gap:12px;padding:8px 12px;border-top:1px solid #d3ddcf;background:#f6f7ef;line-height:1.5;font-size:.85rem}
+#s4 .experiment-accessory button{display:flex;align-items:center;gap:10px;min-height:44px;padding:5px 12px;border:1px solid #b7c9b0;border-radius:8px;background:#fffef5;color:#315d43;font:inherit;cursor:pointer}
+#s4 .experiment-accessory svg{width:12px;height:44px}
+#s4 .experiment-accessory button>span{background:#fffef5}

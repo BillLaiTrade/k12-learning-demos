@@ -1,0 +1,54 @@
+{
+  "model": {
+    "tests": 161,
+    "passed": 161,
+    "failed": 0
+  },
+  "browser_suites": {
+    "2.3 oxygen: readable captions fade, survive automatic steps and pause with the experiment": {
+      "result": "passed",
+      "subtests": 9,
+      "source": "unit23-browser-regression.tap"
+    },
+    "2.3 composition: moving particles in the existing responsive panel": {
+      "result": "passed",
+      "subtests": 17,
+      "source": "unit23-browser-regression.tap"
+    },
+    "2.3 discussed revisions: content, actual contents, release confirmation, keyboard and continued work": {
+      "result": "passed",
+      "subtests": 11,
+      "source": "unit23-final-discussion-visual.tap"
+    },
+    "eight requested collection desk refinements": {
+      "result": "passed",
+      "subtests": 6,
+      "source": "unit23-final-browser.tap"
+    },
+    "clear error feedback remains distinct from guidance and does not block experiments": {
+      "result": "passed",
+      "subtests": 4,
+      "source": "unit23-browser-regression.tap"
+    },
+    "section five: stacked splint comparison and CO2 limewater experiment": {
+      "result": "passed",
+      "subtests": 15,
+      "source": "unit23-browser-regression.tap"
+    },
+    "2.3 complete page: five teaching sections and one evidence-based quiz": {
+      "result": "passed",
+      "subtests": 8,
+      "source": "unit23-final-browser.tap"
+    },
+    "movable apparatus and current flow guidance": {
+      "result": "passed",
+      "subtests": 5,
+      "source": "unit23-final-browser.tap"
+    },
+    "nine visual corrections: real sources, bubbles, occlusion and compact neutral labels": {
+      "result": "passed",
+      "subtests": 6,
+      "source": "unit23-final-discussion-visual.tap"
+    }
+  }
+}

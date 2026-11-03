@@ -1,0 +1,976 @@
+TAP version 13
+# Subtest: argon flow follows ambient air observation and completes without extrapolated measurements
+ok 1 - argon flow follows ambient air observation and completes without extrapolated measurements
+  ---
+  duration_ms: 1.879394
+  type: 'test'
+  ...
+# Subtest: funnel appears upright, entirely inside desk and every straight stem portion can align with the empty hole
+ok 2 - funnel appears upright, entirely inside desk and every straight stem portion can align with the empty hole
+  ---
+  duration_ms: 4.948224
+  type: 'test'
+  ...
+# Subtest: funnel can be assembled with a loose stopper without selecting a flask
+ok 3 - funnel can be assembled with a loose stopper without selecting a flask
+  ---
+  duration_ms: 3.195988
+  type: 'test'
+  ...
+# Subtest: preassembled funnel stays attached when stopper is installed, pulled and reinstalled
+ok 4 - preassembled funnel stays attached when stopper is installed, pulled and reinstalled
+  ---
+  duration_ms: 0.694305
+  type: 'test'
+  ...
+# Subtest: pulling stopper with outlet inside jar first withdraws tube and then removes the assembled rig
+ok 5 - pulling stopper with outlet inside jar first withdraws tube and then removes the assembled rig
+  ---
+  duration_ms: 0.578815
+  type: 'test'
+  ...
+# Subtest: first manual stone placement queues remaining stones individually and finishes exactly five unique stones
+ok 6 - first manual stone placement queues remaining stones individually and finishes exactly five unique stones
+  ---
+  duration_ms: 2.190114
+  type: 'test'
+  ...
+# Subtest: picking, returning or dropping away from flask does not start automatic filling
+ok 7 - picking, returning or dropping away from flask does not start automatic filling
+  ---
+  duration_ms: 0.682568
+  type: 'test'
+  ...
+# Subtest: seven operations merge real apparatus positioning into adding marble
+ok 8 - seven operations merge real apparatus positioning into adding marble
+  ---
+  duration_ms: 4.587863
+  type: 'test'
+  ...
+# Subtest: five individual textured stones transfer once, through the neck, and never duplicate
+ok 9 - five individual textured stones transfer once, through the neck, and never duplicate
+  ---
+  duration_ms: 40.978464
+  type: 'test'
+  ...
+# Subtest: every operation meets the next without a position, angle, liquid or quantity jump
+ok 10 - every operation meets the next without a position, angle, liquid or quantity jump
+  ---
+  duration_ms: 0.658953
+  type: 'test'
+  ...
+# Subtest: rigid glass moves by translation and rotation; rubber keeps its own fixed arc length
+ok 11 - rigid glass moves by translation and rotation; rubber keeps its own fixed arc length
+  ---
+  duration_ms: 39.355543
+  type: 'test'
+  ...
+# Subtest: the full collecting rod clears the jar rim before crossing; purge remains outside
+ok 12 - the full collecting rod clears the jar rim before crossing; purge remains outside
+  ---
+  duration_ms: 1.631138
+  type: 'test'
+  ...
+# Subtest: acid uses the photographed inner curved bottom, with sloping walls and a level surface
+ok 13 - acid uses the photographed inner curved bottom, with sloping walls and a level surface
+  ---
+  duration_ms: 0.508511
+  type: 'test'
+  ...
+# Subtest: marble is placed with forceps in a tilted flask while the dish remains level on the bench
+ok 14 - marble is placed with forceps in a tilted flask while the dish remains level on the bench
+  ---
+  duration_ms: 0.170742
+  type: 'test'
+  ...
+# Subtest: acid stream starts at the real transformed open-bottle lip and the neck stays outside the flask
+ok 15 - acid stream starts at the real transformed open-bottle lip and the neck stays outside the flask
+  ---
+  duration_ms: 1.503289
+  type: 'test'
+  ...
+# Subtest: forceps enter and leave through the top without popping in over the bench
+ok 16 - forceps enter and leave through the top without popping in over the bench
+  ---
+  duration_ms: 10.626924
+  type: 'test'
+  ...
+# Subtest: every incoming and outgoing stone/forceps trajectory crosses the opening, never the bottle wall
+ok 17 - every incoming and outgoing stone/forceps trajectory crosses the opening, never the bottle wall
+  ---
+  duration_ms: 34.89311
+  type: 'test'
+  ...
+# Subtest: thistle liquid seal follows assembly and addition; the fixed stem enters only from above
+ok 18 - thistle liquid seal follows assembly and addition; the fixed stem enters only from above
+  ---
+  duration_ms: 3.436974
+  type: 'test'
+  ...
+# Subtest: forceps movement is twice as fast after positioning and still transfers only one stone at a time
+ok 19 - forceps movement is twice as fast after positioning and still transfers only one stone at a time
+  ---
+  duration_ms: 1.323053
+  type: 'test'
+  ...
+# Subtest: partition regions cover the container with approximately 78/21/1 area shares
+ok 20 - partition regions cover the container with approximately 78/21/1 area shares
+  ---
+  duration_ms: 8.791207
+  type: 'test'
+  ...
+# Subtest: all particles freely move within their continuous partitions and retain stable identities
+ok 21 - all particles freely move within their continuous partitions and retain stable identities
+  ---
+  duration_ms: 935.682425
+  type: 'test'
+  ...
+# Subtest: removing partitions never teleports or regenerates particles; colors spread through the same shared container
+ok 22 - removing partitions never teleports or regenerates particles; colors spread through the same shared container
+  ---
+  duration_ms: 688.105242
+  type: 'test'
+  ...
+# Subtest: returning to comparison gathers the same particles continuously and repeated switches stay bounded
+ok 23 - returning to comparison gathers the same particles continuously and repeated switches stay bounded
+  ---
+  duration_ms: 211.786666
+  type: 'test'
+  ...
+# Subtest: reduced motion changes views immediately while preserving quantities and keeping correct boundaries
+ok 24 - reduced motion changes views immediately while preserving quantities and keeping correct boundaries
+  ---
+  duration_ms: 21.751945
+  type: 'test'
+  ...
+# Subtest: minor-component magnification shows mostly argon with other gases mixed in the same field
+ok 25 - minor-component magnification shows mostly argon with other gases mixed in the same field
+  ---
+  duration_ms: 40.556856
+  type: 'test'
+  ...
+# Subtest: water bottle lip to flask mouth
+ok 26 - water bottle lip to flask mouth
+  ---
+  duration_ms: 2.33032
+  type: 'test'
+  ...
+# Subtest: acid bottle lip to flask mouth
+ok 27 - acid bottle lip to flask mouth
+  ---
+  duration_ms: 1.704556
+  type: 'test'
+  ...
+# Subtest: water to collector upper opening
+ok 28 - water to collector upper opening
+  ---
+  duration_ms: 0.409735
+  type: 'test'
+  ...
+# Subtest: stopper bottom to flask opening
+ok 29 - stopper bottom to flask opening
+  ---
+  duration_ms: 0.210431
+  type: 'test'
+  ...
+# Subtest: funnel tip to empty stopper hole
+ok 30 - funnel tip to empty stopper hole
+  ---
+  duration_ms: 0.398108
+  type: 'test'
+  ...
+# Subtest: funnel tip rejects occupied stopper hole
+ok 31 - funnel tip rejects occupied stopper hole
+  ---
+  duration_ms: 0.296568
+  type: 'test'
+  ...
+# Subtest: acid to installed funnel cup
+ok 32 - acid to installed funnel cup
+  ---
+  duration_ms: 0.273844
+  type: 'test'
+  ...
+# Subtest: water to installed funnel cup
+ok 33 - water to installed funnel cup
+  ---
+  duration_ms: 0.198333
+  type: 'test'
+  ...
+# Subtest: forceps tips on a particular stone
+ok 34 - forceps tips on a particular stone
+  ---
+  duration_ms: 0.383236
+  type: 'test'
+  ...
+# Subtest: forceps tips to mouth, not body
+ok 35 - forceps tips to mouth, not body
+  ---
+  duration_ms: 0.360823
+  type: 'test'
+  ...
+# Subtest: glass plate to upright mouth
+ok 36 - glass plate to upright mouth
+  ---
+  duration_ms: 0.215619
+  type: 'test'
+  ...
+# Subtest: glass plate to inverted mouth
+ok 37 - glass plate to inverted mouth
+  ---
+  duration_ms: 0.292251
+  type: 'test'
+  ...
+# Subtest: peroxide bottle uses its open lip
+ok 38 - peroxide bottle uses its open lip
+  ---
+  duration_ms: 0.274896
+  type: 'test'
+  ...
+# Subtest: distractor dish uses its edge
+ok 39 - distractor dish uses its edge
+  ---
+  duration_ms: 0.293734
+  type: 'test'
+  ...
+# Subtest: tank accepts the entire sloping upper rim; front wall, outside and old lower box reject
+ok 40 - tank accepts the entire sloping upper rim; front wall, outside and old lower box reject
+  ---
+  duration_ms: 1.667281
+  type: 'test'
+  ...
+# Subtest: jar uses its base at the upper rim; center at old fixed target no longer inserts through the wall
+ok 41 - jar uses its base at the upper rim; center at old fixed target no longer inserts through the wall
+  ---
+  duration_ms: 0.409825
+  type: 'test'
+  ...
+# Subtest: outlet accepts water only inside tank and enters inverted jar from below
+ok 42 - outlet accepts water only inside tank and enters inverted jar from below
+  ---
+  duration_ms: 0.962982
+  type: 'test'
+  ...
+# Subtest: absent target and a missing stopper never cause funnel insertion
+ok 43 - absent target and a missing stopper never cause funnel insertion
+  ---
+  duration_ms: 0.689317
+  type: 'test'
+  ...
+# Subtest: contact geometry tracks the moved and turned collector, not original position
+ok 44 - contact geometry tracks the moved and turned collector, not original position
+  ---
+  duration_ms: 1.081746
+  type: 'test'
+  ...
+# Subtest: tilted funnel keeps actual visible tip at its interaction anchor without changing tube length
+ok 45 - tilted funnel keeps actual visible tip at its interaction anchor without changing tube length
+  ---
+  duration_ms: 0.222268
+  type: 'test'
+  ...
+# Subtest: picked stone identity survives placement and the remaining stones stay individually pickable
+ok 46 - picked stone identity survives placement and the remaining stones stay individually pickable
+  ---
+  duration_ms: 1.898884
+  type: 'test'
+  ...
+# Subtest: moving an outlet from the far side of an inverted jar goes below its rim before crossing
+ok 47 - moving an outlet from the far side of an inverted jar goes below its rim before crossing
+  ---
+  duration_ms: 1.020607
+  type: 'test'
+  ...
+# Subtest: covered composite inversion enters from above and extraction rights the same jar
+ok 48 - covered composite inversion enters from above and extraction rights the same jar
+  ---
+  duration_ms: 3.241956
+  type: 'test'
+  ...
+# Subtest: uncovered inversion and extraction still lose water or CO2
+ok 49 - uncovered inversion and extraction still lose water or CO2
+  ---
+  duration_ms: 1.565631
+  type: 'test'
+  ...
+# Subtest: tube blocks compound jar motion and cover remains recoverable
+ok 50 - tube blocks compound jar motion and cover remains recoverable
+  ---
+  duration_ms: 0.39986
+  type: 'test'
+  ...
+# Subtest: positions follow real tools, support repeated use and remain finite inside the desk
+ok 51 - positions follow real tools, support repeated use and remain finite inside the desk
+  ---
+  duration_ms: 0.877455
+  type: 'test'
+  ...
+# Subtest: only meaningful approaches produce actions; blank positions have no unrelated effect
+ok 52 - only meaningful approaches produce actions; blank positions have no unrelated effect
+  ---
+  duration_ms: 1.602505
+  type: 'test'
+  ...
+# Subtest: covered plate detaches by dragging; exposed plate returns to the mouth
+ok 53 - covered plate detaches by dragging; exposed plate returns to the mouth
+  ---
+  duration_ms: 1.376522
+  type: 'test'
+  ...
+# Subtest: free outlet dragging cannot pass through bottle walls and never stretches rubber
+ok 54 - free outlet dragging cannot pass through bottle walls and never stretches rubber
+  ---
+  duration_ms: 5.227677
+  type: 'test'
+  ...
+# Subtest: actual outlet position controls collection during a drag, never a hidden target flag
+ok 55 - actual outlet position controls collection during a drag, never a hidden target flag
+  ---
+  duration_ms: 0.221708
+  type: 'test'
+  ...
+# Subtest: 07 never describes an unfilled empty jar as collected, including after attempting gas delivery
+ok 56 - 07 never describes an unfilled empty jar as collected, including after attempting gas delivery
+  ---
+  duration_ms: 3.896722
+  type: 'test'
+  ...
+# Subtest: 08 stopping before the stream flows preserves sample contents and its history
+ok 57 - 08 stopping before the stream flows preserves sample contents and its history
+  ---
+  duration_ms: 1.406216
+  type: 'test'
+  ...
+# Subtest: 08 actual partial filling displaces only the corresponding gas and full filling clears that sample
+ok 58 - 08 actual partial filling displaces only the corresponding gas and full filling clears that sample
+  ---
+  duration_ms: 0.676128
+  type: 'test'
+  ...
+# Subtest: 09 wrong oxygen materials are explained before missing marble and do not instruct mixing more drugs
+ok 59 - 09 wrong oxygen materials are explained before missing marble and do not instruct mixing more drugs
+  ---
+  duration_ms: 4.855217
+  type: 'test'
+  ...
+# Subtest: 09/10 clear water does not mask exhaustion or contradict acceptance of a valid sample
+ok 60 - 09/10 clear water does not mask exhaustion or contradict acceptance of a valid sample
+  ---
+  duration_ms: 7.363241
+  type: 'test'
+  ...
+# Subtest: 11 acid is finite and leftover marbles shrink; a second acid charge consumes the remaining stones
+ok 61 - 11 acid is finite and leftover marbles shrink; a second acid charge consumes the remaining stones
+  ---
+  duration_ms: 8.693233
+  type: 'test'
+  ...
+# Subtest: 11 one stone can run out before the acid and cannot generate gas indefinitely
+ok 62 - 11 one stone can run out before the acid and cannot generate gas indefinitely
+  ---
+  duration_ms: 0.66365
+  type: 'test'
+  ...
+# Subtest: 12 uncollected water has no lost-CO2 error; actual unprotected gas does
+ok 63 - 12 uncollected water has no lost-CO2 error; actual unprotected gas does
+  ---
+  duration_ms: 0.352691
+  type: 'test'
+  ...
+# Subtest: 13 a tube hanging in air is independent of tank movement
+ok 64 - 13 a tube hanging in air is independent of tank movement
+  ---
+  duration_ms: 1.169747
+  type: 'test'
+  ...
+# Subtest: 16 observation is a phenomenon, feedback explains the cause and next action
+ok 65 - 16 observation is a phenomenon, feedback explains the cause and next action
+  ---
+  duration_ms: 0.417336
+  type: 'test'
+  ...
+# Subtest: 17 successful samples remain movable and chemistry continues; opening the cover invalidates success
+ok 66 - 17 successful samples remain movable and chemistry continues; opening the cover invalidates success
+  ---
+  duration_ms: 0.79954
+  type: 'test'
+  ...
+# Subtest: restart fully clears the table and independent reaction/sample history
+ok 67 - restart fully clears the table and independent reaction/sample history
+  ---
+  duration_ms: 0.260384
+  type: 'test'
+  ...
+# Subtest: 11 a fully used portion can be replaced through the existing material shelf while keeping tank water
+ok 68 - 11 a fully used portion can be replaced through the existing material shelf while keeping tank water
+  ---
+  duration_ms: 4.947214
+  type: 'test'
+  ...
+# Subtest: reaction in another vessel cannot be mistaken for exhausted marble in the flask
+ok 69 - reaction in another vessel cannot be mistaken for exhausted marble in the flask
+  ---
+  duration_ms: 4.480063
+  type: 'test'
+  ...
+# Subtest: water in the flask explains materials, dilution and recovery
+ok 70 - water in the flask explains materials, dilution and recovery
+  ---
+  duration_ms: 2.886842
+  type: 'test'
+  ...
+# Subtest: marble pick and place have half their previous durations
+ok 71 - marble pick and place have half their previous durations
+  ---
+  duration_ms: 0.369385
+  type: 'test'
+  ...
+# Subtest: all tank stones have separate persisted landing positions
+ok 72 - all tank stones have separate persisted landing positions
+  ---
+  duration_ms: 2.510476
+  type: 'test'
+  ...
+# Subtest: funnel accepts the shown overhead neighborhood but rejects distant locations
+ok 73 - funnel accepts the shown overhead neighborhood but rejects distant locations
+  ---
+  duration_ms: 1.129898
+  type: 'test'
+  ...
+# Subtest: uncovered extraction is permitted and immediately warns with recovery steps
+ok 74 - uncovered extraction is permitted and immediately warns with recovery steps
+  ---
+  duration_ms: 0.966176
+  type: 'test'
+  ...
+# Subtest: unpurged collection gets a persistent explicit error, purged collection remains clean
+ok 75 - unpurged collection gets a persistent explicit error, purged collection remains clean
+  ---
+  duration_ms: 1.457912
+  type: 'test'
+  ...
+# Subtest: water warning does not misclassify a correctly collected pure sample
+ok 76 - water warning does not misclassify a correctly collected pure sample
+  ---
+  duration_ms: 0.338319
+  type: 'test'
+  ...
+# Subtest: water to flask has the right severity without blocking the pour
+ok 77 - water to flask has the right severity without blocking the pour
+  ---
+  duration_ms: 2.79386
+  type: 'test'
+  ...
+# Subtest: water to jar has the right severity without blocking the pour
+ok 78 - water to jar has the right severity without blocking the pour
+  ---
+  duration_ms: 0.317569
+  type: 'test'
+  ...
+# Subtest: water to tank has the right severity without blocking the pour
+ok 79 - water to tank has the right severity without blocking the pour
+  ---
+  duration_ms: 0.660284
+  type: 'test'
+  ...
+# Subtest: acid to flask has the right severity without blocking the pour
+ok 80 - acid to flask has the right severity without blocking the pour
+  ---
+  duration_ms: 0.263789
+  type: 'test'
+  ...
+# Subtest: acid to jar has the right severity without blocking the pour
+ok 81 - acid to jar has the right severity without blocking the pour
+  ---
+  duration_ms: 0.687375
+  type: 'test'
+  ...
+# Subtest: acid to tank has the right severity without blocking the pour
+ok 82 - acid to tank has the right severity without blocking the pour
+  ---
+  duration_ms: 2.321517
+  type: 'test'
+  ...
+# Subtest: peroxide to flask has the right severity without blocking the pour
+ok 83 - peroxide to flask has the right severity without blocking the pour
+  ---
+  duration_ms: 0.295696
+  type: 'test'
+  ...
+# Subtest: peroxide to jar has the right severity without blocking the pour
+ok 84 - peroxide to jar has the right severity without blocking the pour
+  ---
+  duration_ms: 0.275266
+  type: 'test'
+  ...
+# Subtest: peroxide to tank has the right severity without blocking the pour
+ok 85 - peroxide to tank has the right severity without blocking the pour
+  ---
+  duration_ms: 0.241606
+  type: 'test'
+  ...
+# Subtest: marble to flask distinguishes wrong materials and locations
+ok 86 - marble to flask distinguishes wrong materials and locations
+  ---
+  duration_ms: 1.303715
+  type: 'test'
+  ...
+# Subtest: marble to jar distinguishes wrong materials and locations
+ok 87 - marble to jar distinguishes wrong materials and locations
+  ---
+  duration_ms: 0.229328
+  type: 'test'
+  ...
+# Subtest: marble to tank distinguishes wrong materials and locations
+ok 88 - marble to tank distinguishes wrong materials and locations
+  ---
+  duration_ms: 0.214367
+  type: 'test'
+  ...
+# Subtest: catalyst to flask distinguishes wrong materials and locations
+ok 89 - catalyst to flask distinguishes wrong materials and locations
+  ---
+  duration_ms: 0.179475
+  type: 'test'
+  ...
+# Subtest: catalyst to jar distinguishes wrong materials and locations
+ok 90 - catalyst to jar distinguishes wrong materials and locations
+  ---
+  duration_ms: 0.239063
+  type: 'test'
+  ...
+# Subtest: catalyst to tank distinguishes wrong materials and locations
+ok 91 - catalyst to tank distinguishes wrong materials and locations
+  ---
+  duration_ms: 0.22325
+  type: 'test'
+  ...
+# Subtest: incomplete is a hint, while contaminated material and air are explicit errors when inspecting
+ok 92 - incomplete is a hint, while contaminated material and air are explicit errors when inspecting
+  ---
+  duration_ms: 0.699743
+  type: 'test'
+  ...
+# Subtest: blocked physical action is an error; successful recovery returns to normal feedback
+ok 93 - blocked physical action is an error; successful recovery returns to normal feedback
+  ---
+  duration_ms: 0.431998
+  type: 'test'
+  ...
+# Subtest: all marble moves to flask
+ok 94 - all marble moves to flask
+  ---
+  duration_ms: 3.237489
+  type: 'test'
+  ...
+# Subtest: all marble moves to jar
+ok 95 - all marble moves to jar
+  ---
+  duration_ms: 0.547528
+  type: 'test'
+  ...
+# Subtest: all marble moves to tank
+ok 96 - all marble moves to tank
+  ---
+  duration_ms: 1.201304
+  type: 'test'
+  ...
+# Subtest: missing marble guidance is specific and clears after addition
+ok 97 - missing marble guidance is specific and clears after addition
+  ---
+  duration_ms: 0.437255
+  type: 'test'
+  ...
+# Subtest: unstoppered loss is remembered after later assembly and exhaustion
+ok 98 - unstoppered loss is remembered after later assembly and exhaustion
+  ---
+  duration_ms: 4.41024
+  type: 'test'
+  ...
+# Subtest: moving bodies moves pour, stone and water geometry
+ok 99 - moving bodies moves pour, stone and water geometry
+  ---
+  duration_ms: 2.128012
+  type: 'test'
+  ...
+# Subtest: state descriptions distinguish purge complete, active collection and exhausted reaction
+ok 100 - state descriptions distinguish purge complete, active collection and exhausted reaction
+  ---
+  duration_ms: 0.639403
+  type: 'test'
+  ...
+# Subtest: uncovered extraction requests remaking rather than blindly refilling
+ok 101 - uncovered extraction requests remaking rather than blindly refilling
+  ---
+  duration_ms: 0.136482
+  type: 'test'
+  ...
+# Subtest: filling the tank is preserved while making new reactants
+ok 102 - filling the tank is preserved while making new reactants
+  ---
+  duration_ms: 1.152201
+  type: 'test'
+  ...
+# Subtest: do not recommend reusing nonexistent tank water or stale sealing steps
+ok 103 - do not recommend reusing nonexistent tank water or stale sealing steps
+  ---
+  duration_ms: 0.241536
+  type: 'test'
+  ...
+# Subtest: moving connected bodies respects the available hose length
+ok 104 - moving connected bodies respects the available hose length
+  ---
+  duration_ms: 0.419169
+  type: 'test'
+  ...
+# Subtest: water really pours into flask
+ok 105 - water really pours into flask
+  ---
+  duration_ms: 5.88668
+  type: 'test'
+  ...
+# Subtest: water really pours into jar
+ok 106 - water really pours into jar
+  ---
+  duration_ms: 0.361314
+  type: 'test'
+  ...
+# Subtest: water really pours into tank
+ok 107 - water really pours into tank
+  ---
+  duration_ms: 0.307074
+  type: 'test'
+  ...
+# Subtest: acid really pours into flask
+ok 108 - acid really pours into flask
+  ---
+  duration_ms: 0.793181
+  type: 'test'
+  ...
+# Subtest: acid really pours into jar
+ok 109 - acid really pours into jar
+  ---
+  duration_ms: 0.8266
+  type: 'test'
+  ...
+# Subtest: acid really pours into tank
+ok 110 - acid really pours into tank
+  ---
+  duration_ms: 0.327193
+  type: 'test'
+  ...
+# Subtest: peroxide really pours into flask
+ok 111 - peroxide really pours into flask
+  ---
+  duration_ms: 0.273584
+  type: 'test'
+  ...
+# Subtest: peroxide really pours into jar
+ok 112 - peroxide really pours into jar
+  ---
+  duration_ms: 0.342386
+  type: 'test'
+  ...
+# Subtest: peroxide really pours into tank
+ok 113 - peroxide really pours into tank
+  ---
+  duration_ms: 0.270029
+  type: 'test'
+  ...
+# Subtest: marble can be carried and deposited into flask
+ok 114 - marble can be carried and deposited into flask
+  ---
+  duration_ms: 1.241052
+  type: 'test'
+  ...
+# Subtest: marble can be carried and deposited into jar
+ok 115 - marble can be carried and deposited into jar
+  ---
+  duration_ms: 0.632614
+  type: 'test'
+  ...
+# Subtest: marble can be carried and deposited into tank
+ok 116 - marble can be carried and deposited into tank
+  ---
+  duration_ms: 0.672132
+  type: 'test'
+  ...
+# Subtest: catalyst can be carried and deposited into flask
+ok 117 - catalyst can be carried and deposited into flask
+  ---
+  duration_ms: 0.696107
+  type: 'test'
+  ...
+# Subtest: catalyst can be carried and deposited into jar
+ok 118 - catalyst can be carried and deposited into jar
+  ---
+  duration_ms: 0.642579
+  type: 'test'
+  ...
+# Subtest: catalyst can be carried and deposited into tank
+ok 119 - catalyst can be carried and deposited into tank
+  ---
+  duration_ms: 0.615539
+  type: 'test'
+  ...
+# Subtest: marbles placed elsewhere are absent from the dish and auto-fill takes only those remaining
+ok 120 - marbles placed elsewhere are absent from the dish and auto-fill takes only those remaining
+  ---
+  duration_ms: 8.540748
+  type: 'test'
+  ...
+# Subtest: the catalyst can be returned or put away without leaving a held-state lock
+ok 121 - the catalyst can be returned or put away without leaving a held-state lock
+  ---
+  duration_ms: 0.56251
+  type: 'test'
+  ...
+# Subtest: wrong reagents react only after contact, and oxygen is not counted as CO2
+ok 122 - wrong reagents react only after contact, and oxygen is not counted as CO2
+  ---
+  duration_ms: 4.292106
+  type: 'test'
+  ...
+# Subtest: acid/marble and peroxide/MnO2 react in jar without producing a successful sample
+ok 123 - acid/marble and peroxide/MnO2 react in jar without producing a successful sample
+  ---
+  duration_ms: 3.288434
+  type: 'test'
+  ...
+# Subtest: acid/marble and peroxide/MnO2 react in tank without producing a successful sample
+ok 124 - acid/marble and peroxide/MnO2 react in tank without producing a successful sample
+  ---
+  duration_ms: 2.108272
+  type: 'test'
+  ...
+# Subtest: fresh water does not erase wrong materials; returning each vessel clears its contents and allows a clean retry
+ok 125 - fresh water does not erase wrong materials; returning each vessel clears its contents and allows a clean retry
+  ---
+  duration_ms: 1.374029
+  type: 'test'
+  ...
+# Subtest: incorrect materials do not bypass real lids and stopper, and stopping a wrong pour preserves its partial amount
+ok 126 - incorrect materials do not bypass real lids and stopper, and stopping a wrong pour preserves its partial amount
+  ---
+  duration_ms: 0.316567
+  type: 'test'
+  ...
+# Subtest: all reagent lips accept the upper tank area, with no action at walls or blank desk positions
+ok 127 - all reagent lips accept the upper tank area, with no action at walls or blank desk positions
+  ---
+  duration_ms: 7.029678
+  type: 'test'
+  ...
+# Subtest: overhead water filling tolerates the reported position, while a real collector body still occludes the stream
+ok 128 - overhead water filling tolerates the reported position, while a real collector body still occludes the stream
+  ---
+  duration_ms: 0.448563
+  type: 'test'
+  ...
+# Subtest: auto-fill does not pick invisible stock after the marble dish was returned
+ok 129 - auto-fill does not pick invisible stock after the marble dish was returned
+  ---
+  duration_ms: 0.502722
+  type: 'test'
+  ...
+# Subtest: tube entry precedes displacement; withdrawal precedes glass cover
+ok 130 - tube entry precedes displacement; withdrawal precedes glass cover
+  ---
+  duration_ms: 3.829894
+  type: 'test'
+  ...
+# Subtest: shared insertion completes before oxygen ignition; results remain at duration
+ok 131 - shared insertion completes before oxygen ignition; results remain at duration
+  ---
+  duration_ms: 0.787783
+  type: 'test'
+  ...
+# Subtest: selected step stays bounded at both ends without leaking into the next step
+ok 132 - selected step stays bounded at both ends without leaking into the next step
+  ---
+  duration_ms: 0.454851
+  type: 'test'
+  ...
+# Subtest: assembly adds reagents in order, starts reaction after catalyst, and seals before gas enters the tube
+ok 133 - assembly adds reagents in order, starts reaction after catalyst, and seals before gas enters the tube
+  ---
+  duration_ms: 2.441695
+  type: 'test'
+  ...
+# Subtest: operation windows stop at purposeful boundaries, with prerequisites and withdrawal before covering
+ok 134 - operation windows stop at purposeful boundaries, with prerequisites and withdrawal before covering
+  ---
+  duration_ms: 0.895673
+  type: 'test'
+  ...
+# Subtest: placement settles the submerged full jar before lowering the outlet; later chemistry keeps its existing timing
+ok 135 - placement settles the submerged full jar before lowering the outlet; later chemistry keeps its existing timing
+  ---
+  duration_ms: 6.812847
+  type: 'test'
+  ...
+# Subtest: clear water fills both empty vessels before a covered inversion and underwater uncovering
+ok 136 - clear water fills both empty vessels before a covered inversion and underwater uncovering
+  ---
+  duration_ms: 12.292707
+  type: 'test'
+  ...
+# Subtest: storage covers underwater before lifting, turns upright only above water, then sets the sealed jar down
+ok 137 - storage covers underwater before lifting, turns upright only above water, then sets the sealed jar down
+  ---
+  duration_ms: 3.505995
+  type: 'test'
+  ...
+# Subtest: thistle apparatus is assembled before addition; gas reaches the tube only after the liquid covers the tip
+ok 138 - thistle apparatus is assembled before addition; gas reaches the tube only after the liquid covers the tip
+  ---
+  duration_ms: 1.161094
+  type: 'test'
+  ...
+# Subtest: initial splints share a glowing start without a flame; limewater starts clear without bubbles
+ok 139 - initial splints share a glowing start without a flame; limewater starts clear without bubbles
+  ---
+  duration_ms: 2.327516
+  type: 'test'
+  ...
+# Subtest: splints finish their identical insertion before oxygen relights; CO2 progressively loses its glow
+ok 140 - splints finish their identical insertion before oxygen relights; CO2 progressively loses its glow
+  ---
+  duration_ms: 0.869284
+  type: 'test'
+  ...
+# Subtest: CO2 is supplied before bubbles, and bubbles precede gradual clouding
+ok 141 - CO2 is supplied before bubbles, and bubbles precede gradual clouding
+  ---
+  duration_ms: 1.67975
+  type: 'test'
+  ...
+# Subtest: both experiments are bounded and retain a readable end state
+ok 142 - both experiments are bounded and retain a readable end state
+  ---
+  duration_ms: 0.760833
+  type: 'test'
+  ...
+# Subtest: collector can be placed across the full desk, and mouth and fill target follow the parked bottle
+ok 143 - collector can be placed across the full desk, and mouth and fill target follow the parked bottle
+  ---
+  duration_ms: 3.343586
+  type: 'test'
+  ...
+# Subtest: water and acid accept realistic upper-body overlap with vessel mouth, but reject side walls
+ok 144 - water and acid accept realistic upper-body overlap with vessel mouth, but reject side walls
+  ---
+  duration_ms: 1.675032
+  type: 'test'
+  ...
+# Subtest: unsealed reactants bubble initially, fade and are exhausted; installing equipment afterwards does not recover escaped gas
+ok 145 - unsealed reactants bubble initially, fade and are exhausted; installing equipment afterwards does not recover escaped gas
+  ---
+  duration_ms: 5.571455
+  type: 'test'
+  ...
+# Subtest: fresh acid allows a retry, but moving tools or adding clear water cannot reset exhaustion
+ok 146 - fresh acid allows a retry, but moving tools or adding clear water cannot reset exhaustion
+  ---
+  duration_ms: 4.643565
+  type: 'test'
+  ...
+# Subtest: immediate collection differs from outside purge and permanently contains initial apparatus air
+ok 147 - immediate collection differs from outside purge and permanently contains initial apparatus air
+  ---
+  duration_ms: 15.47851
+  type: 'test'
+  ...
+# Subtest: stopper can be pulled from the visible rim with a short upward motion
+ok 148 - stopper can be pulled from the visible rim with a short upward motion
+  ---
+  duration_ms: 0.435864
+  type: 'test'
+  ...
+# Subtest: all twelve shelf items can be added, removed and added without duplicate objects
+ok 149 - all twelve shelf items can be added, removed and added without duplicate objects
+  ---
+  duration_ms: 2.333034
+  type: 'test'
+  ...
+# Subtest: returning a water or acid source keeps all previously poured liquid
+ok 150 - returning a water or acid source keeps all previously poured liquid
+  ---
+  duration_ms: 1.035278
+  type: 'test'
+  ...
+# Subtest: forceps return the held marble before leaving the table
+ok 151 - forceps return the held marble before leaving the table
+  ---
+  duration_ms: 1.194463
+  type: 'test'
+  ...
+# Subtest: a covered plate is uncovered before being returned, preserving submerged water
+ok 152 - a covered plate is uncovered before being returned, preserving submerged water
+  ---
+  duration_ms: 1.050961
+  type: 'test'
+  ...
+# Subtest: returning a collector first withdraws the rigid outlet below its mouth
+ok 153 - returning a collector first withdraws the rigid outlet below its mouth
+  ---
+  duration_ms: 4.88372
+  type: 'test'
+  ...
+# Subtest: returning a tank also returns its submerged bottle and attached plate without orphaning the tube
+ok 154 - returning a tank also returns its submerged bottle and attached plate without orphaning the tube
+  ---
+  duration_ms: 1.317024
+  type: 'test'
+  ...
+# Subtest: returning the reaction flask withdraws the tube and returns installed attachments
+ok 155 - returning the reaction flask withdraws the tube and returns installed attachments
+  ---
+  duration_ms: 1.583357
+  type: 'test'
+  ...
+# Subtest: returning a stopper keeps reactants but returns its installed funnel
+ok 156 - returning a stopper keeps reactants but returns its installed funnel
+  ---
+  duration_ms: 1.963298
+  type: 'test'
+  ...
+# Subtest: returning a funnel opens the seal without deleting the stopper or reactants
+ok 157 - returning a funnel opens the seal without deleting the stopper or reactants
+  ---
+  duration_ms: 0.184182
+  type: 'test'
+  ...
+# Subtest: water can enter the reaction flask but marble and water alone never produce CO2
+ok 158 - water can enter the reaction flask but marble and water alone never produce CO2
+  ---
+  duration_ms: 0.83993
+  type: 'test'
+  ...
+# Subtest: adding acid after water starts reaction and the combined liquid makes the seal
+ok 159 - adding acid after water starts reaction and the combined liquid makes the seal
+  ---
+  duration_ms: 0.478005
+  type: 'test'
+  ...
+# Subtest: water follows the funnel when installed and cannot pass through a closed stopper
+ok 160 - water follows the funnel when installed and cannot pass through a closed stopper
+  ---
+  duration_ms: 3.835953
+  type: 'test'
+  ...
+# Subtest: the material toggle remains available after completion, clearing stale success
+ok 161 - the material toggle remains available after completion, clearing stale success
+  ---
+  duration_ms: 0.383937
+  type: 'test'
+  ...
+1..161
+# tests 161
+# suites 0
+# pass 161
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2105.699213

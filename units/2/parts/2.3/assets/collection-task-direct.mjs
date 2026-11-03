@@ -1,6 +1,6 @@
 import {BODY_HOME,bodyOffset,bodyPoint} from './collection-task-layout.mjs?v=move-1';
-import {jarPose,jarMouth,outletPose,clamp,rigPosition,heldMaterial,usedMarbleIds} from './collection-task-model.mjs?v=move-1';
-import {contactRegions,contains} from './collection-task-contact.mjs?v=move-1';
+import {jarPose,jarMouth,outletPose,clamp,rigPosition,heldMaterial,usedMarbleIds} from './collection-task-model.mjs?v=discussion-20261103-1';
+import {contactRegions,contains} from './collection-task-contact.mjs?v=discussion-20261103-1';
 export const TOOL_HOME={forceps:{x:485,y:305},water:{x:660,y:130},acid:{x:440,y:65},rig:{x:500,y:50},funnel:{x:535,y:550},plate:{x:605,y:-20},peroxide:{x:680,y:65},catalyst:{x:490,y:450}};
 export function directPosition(s,id){
  if(s.dragging?.id===id)return s.dragging.position;
@@ -13,7 +13,7 @@ export function directPosition(s,id){
  return s.positions[id]||TOOL_HOME[id];
 }
 function connectedBodyLimit(s,id,q){
- if(!s.rig)return q;
+ if(!s.rig||id==='tank'&&s.outlet!=='jar')return q;
  const a=bodyPoint(s,'flask',446,135),out=outletPose(s),b={x:out.x,y:out.y-140};
  if(id==='flask'){a.x=q.x+146;a.y=q.y-275;}else{const t=bodyPoint(s,'tank',1000,480);b.x+=q.x-t.x;b.y+=q.y-t.y;}
  const dx=b.x-a.x,dy=b.y-a.y,distance=Math.hypot(dx,dy);if(distance<=420)return q;
@@ -29,7 +29,7 @@ export function limitPosition(s,id,p){
  if(id==='rig'&&s.rig){const a=bodyPoint(s,'flask',300,205);q.x=a.x;q.y=Math.min(a.y,q.y);}
  if(id==='outlet'){
   const t=bodyOffset(s,'tank'),mouth=jarMouth(s),under=s.jarPlace>.5&&s.jarAngle>90?mouth.y+28:460+t.y;
-  q.x=clamp(q.x,620+t.x,1000+t.x);q.y=clamp(q.y,210+t.y,495+t.y);
+  q.x=clamp(q.x,350,1035);q.y=clamp(q.y,120,590);
   if(s.outlet==='jar'&&s.dragging?.position.y<under&&q.y<under)q.x=mouth.x;
   else if(q.x>mouth.x-75)q.y=Math.max(under,q.y);
   const f=bodyOffset(s,'flask'),dx=q.x-(706+f.x),dy=q.y-(285+f.y),distance=Math.hypot(dx,dy);if(distance>385){q.x=706+f.x+dx*385/distance;q.y=285+f.y+dy*385/distance;}

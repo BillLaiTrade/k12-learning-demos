@@ -1,8 +1,8 @@
 import { createExperimentPlayerFooter } from './experiment-player.mjs?v=player-1';
 import { createSceneCaptions } from './oxygen-captions.mjs?v=player-1';
 import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=nine-details-2';
-import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=nine-details-1';
-import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=nine-details-1';
+import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=discussion-20261103-1';
+import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=discussion-20261103-1';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];
@@ -247,7 +247,7 @@ function createPreparationPlayer() {
   function select(index,focusContent=false,autoplay=false){
     const focusInScene=panels[stage].contains(document.activeElement);
     explorer?.close();cancel();
-    if(!autoplay){captions.reset();captions.pause();}
+    captions.reset();if(!autoplay)captions.pause();
     stage=index;elapsed=0;state='ready';
     panels.forEach((view,i)=>{view.hidden=i!==stage;});
     steps.forEach((tab,i)=>{

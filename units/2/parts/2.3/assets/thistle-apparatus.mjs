@@ -4,7 +4,13 @@ export const svgNode=(tag,attrs={})=>{const n=document.createElementNS(NS,tag);f
 const transform=p=>`translate(${p.x} ${p.y}) rotate(${p.angle||0})`;
 const point=(p,t)=>{const a=(t.angle||0)*Math.PI/180;return{x:t.x+p.x*Math.cos(a)-p.y*Math.sin(a),y:t.y+p.x*Math.sin(a)+p.y*Math.cos(a)};};
 export function apparatusSprite(kind,box){const n=svgNode('svg',{viewBox:THISTLE_ATLAS[kind].join(' '),x:box[0],y:box[1],width:box[2],height:box[3],preserveAspectRatio:'none',overflow:'hidden'});n.append(svgNode('image',{href:THISTLE_ATLAS.file,width:1536,height:1024}));return n;}
-export function createDoubleStopper(){const n=svgNode('g',{'data-double-hole-stopper':''});n.append(apparatusSprite('stopper',[-52,-11,104,70]));return n;}
+let stopperSerial=0;
+export function createDoubleStopper(){
+ const n=svgNode('g',{'data-double-hole-stopper':'','data-bore-alignment':'-26,26'}),id='stopper-bores-'+(++stopperSerial),defs=svgNode('defs'),mask=svgNode('mask',{id,maskUnits:'userSpaceOnUse',x:-55,y:-15,width:110,height:80});
+ mask.append(svgNode('rect',{x:-55,y:-15,width:110,height:80,fill:'white'}));
+ for(const x of [-26,26])mask.append(svgNode('ellipse',{cx:x,cy:.3,rx:9,ry:3.2,fill:'black'}));
+ defs.append(mask);const body=svgNode('g',{mask:`url(#${id})`});body.append(apparatusSprite('stopper',[-52,-11,104,70]));n.append(defs,body);return n;
+}
 export function createThistleFunnel(prefix,{top=-140,tip=350,port=-26}={}){
  const group=svgNode('g',{'data-thistle-funnel':''}),height=tip-top,width=height*154/1005;
  const art=apparatusSprite('funnel',[port-width/2,top,width,height]);

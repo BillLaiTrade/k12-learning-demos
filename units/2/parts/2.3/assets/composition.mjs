@@ -1,4 +1,4 @@
-import {createParticles} from './composition-particles-model.mjs?v=particles-motion-2';
+import {createParticles} from './composition-particles-model.mjs?v=discussion-20261103-1';
 const section = document.querySelector('#s2');
 const controls = [...section.querySelectorAll('[data-air-gas]')];
 const viewControls = [...section.querySelectorAll('[data-air-view]')];

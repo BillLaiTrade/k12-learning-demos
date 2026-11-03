@@ -22,7 +22,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
   page.on('requestfailed', r => errors.push(r.url()));
   page.on('response', r => { if (r.status() >= 400) errors.push(r.url()); });
   await page.clock.install(); await page.goto(url, { waitUntil: 'networkidle' });await page.waitForFunction(()=>document.querySelector('.oxygen-preparation').dataset.ready==='true');await page.clock.pauseAt(await page.evaluate(()=>Date.now()+100));
-  const artifacts = path.resolve(process.env.AIR_FULL_ARTIFACT_DIR || 'docs/reviews/unit-2.3-complete'); mkdirSync(artifacts, { recursive: true });
+  const artifacts = path.resolve(process.env.AIR_FULL_ARTIFACT_DIR || '/tmp/unit23-full'); mkdirSync(artifacts, { recursive: true });
   await t.test('all six sections and routes exist, with gas profiles and no retired experiment', async () => {
     assert.deepEqual(await page.locator('section.lesson').evaluateAll(nodes => nodes.map(n => n.id)), ['s1','s2','s3','s4','s5','s6']);
     assert.equal(await page.locator('form').count(), 1);
@@ -113,7 +113,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     const staticPage = await context.newPage(); await staticPage.goto(url, {waitUntil:'networkidle'});
     for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#air-profile-nitrogen .gas-profile-properties','#air-profile-oxygen .gas-profile-properties','#air-profile-argon .gas-profile-properties','#s3 .sequence-grid','#s3 .properties-collected-note','#s4 .co2-step','#s5 .oxygen-comparison','#s5 .properties-limewater','#s6 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
     assert.equal(await staticPage.locator('#s4 .co2-step:visible').count(),7);
-    assert.equal(await staticPage.locator('#s4 [data-co2-info]:visible').count(),7);
+    assert.equal(await staticPage.locator('#s4 [data-co2-info]:visible').count(),8);
     await context.close();
   });
   await t.test('touch, reduced motion, keyboard selects and last-section anchor work', async () => {

@@ -1254,3 +1254,12 @@ node --test --test-concurrency=1 tests/unit-4.3-exit-cart.test.cjs tests/unit-4.
 ```
 
 `CART_CAPTURE_DIR`保存畫面／七寬度量測；各專項請指定不同目錄以保留兩方向的同名截圖。公開URL與代理變數沿用。
+
+## 2.3 全單元盤點後的討論修訂（2026-11-03）
+
+```sh
+node --test tests/unit-2.3-*-model.test.mjs
+node --test --test-concurrency=1 tests/unit-2.3-discussion.test.cjs tests/unit-2.3-composition.test.cjs tests/unit-2.3-captions.test.cjs tests/unit-2.3-feedback.test.cjs tests/unit-2.3-eight.test.cjs tests/unit-2.3-full.test.cjs tests/unit-2.3-properties.test.cjs tests/unit-2.3-move.test.cjs
+```
+
+新增模型涵蓋空瓶不能完成、倒液開始／中止／部分／滿瓶的實際量、錯藥與耗盡提示、清水偏差與成果一致、大理石有限、無樣本不誤報逸散、空氣中出口不隨水槽、成功後持續反應及開封重新判定。瀏覽器以真實事件驗杯子首次完全浸水解鎖、預設紀錄保持、比例與身分、工具介紹、連續播放與字幕同步、停靠不執行、放開及中止、鍵盤確認／取消、空瓶錯誤、成功樣本開封、手機遠處器材取景與提示、七種寬度、無JS及資源／程式錯誤。`UNIT23_REVIEW_URL`與`UNIT23_REVIEW_ARTIFACT_DIR`可指定公開頁及獨立證據；其他套件沿用各自既有參數。公開回歸不覆寫本機證據。
