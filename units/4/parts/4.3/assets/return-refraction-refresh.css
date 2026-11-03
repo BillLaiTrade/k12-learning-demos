@@ -48,9 +48,6 @@
 #return-lab .return-finding{padding-left:12px;border-left:3px solid #7a9b73}
 #return-lab .return-finding strong{font-size:.96rem;line-height:1.4}
 #return-lab #return-route{font-size:.76rem;line-height:1.5;margin-top:2px}
-#return-lab .return-detail{border-radius:12px;background:#fffef2;box-shadow:0 12px 32px #1b30274a,0 2px 6px #203a2826}
-#return-lab #return-close{width:44px;height:44px;min-height:44px;font-size:1.5rem}
-#return-lab #return-zoom{background:#d7c49e}
 #return-lab .return-explanation{margin:12px var(--return-inset) 0;border:1px solid #d9e4d9;border-radius:13px;background:linear-gradient(130deg,#fcfdf9,#f6f9f1)}
 #return-lab .return-explanation summary{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:17px 20px;list-style:none;color:#284d3d;font-size:1.06rem;font-weight:750}
 #return-lab .return-explanation summary::-webkit-details-marker{display:none}

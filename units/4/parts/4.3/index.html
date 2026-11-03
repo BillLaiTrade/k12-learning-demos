@@ -31,12 +31,12 @@
   <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-cart1">
   <script type="module" src="assets/oblique-cart.mjs?v=20261103-cart2"></script>
   <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261103-fit2"></script>
-  <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-fit2">
-  <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-refresh1"></script>
+  <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-inline1">
+  <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-inline1"></script>
   <link rel="stylesheet" href="assets/light-beam.css?v=20261103-fit2">
   <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-fit2">
 <link rel="stylesheet" href="assets/integrated-refraction.css?v=20261103-fit2">
-  <link rel="stylesheet" href="assets/return-refraction-refresh.css?v=20261103-refresh1">
+  <link rel="stylesheet" href="assets/return-refraction-refresh.css?v=20261103-inline1">
   <script type="module" src="assets/lesson.mjs?v=20261102-return1">
 </script>
 </head>
@@ -379,18 +379,14 @@
 <p>分別開啟 A、B，再一起開啟，看看兩個方向的光路是否重合。</p>
 </div>
 </div>
-<div class="lab" id="return-lab" data-return-lab data-flow="dual" data-detail-open="false" aria-busy="true">
+<div class="lab" id="return-lab" data-return-lab data-flow="dual" aria-busy="true">
   <figure class="return-overview">
     <div class="return-table" id="return-viewport">
             <div id="return-medium-toggle" class="lab-medium-toggle" role="group" data-current="water" aria-label="切換介質，目前為水"><span class="medium-toggle-icon" aria-hidden="true">⇄</span><span class="medium-toggle-caption" aria-hidden="true">介質</span><button type="button" data-lab-medium="water" aria-pressed="true">水</button><button type="button" data-lab-medium="glass" aria-pressed="false">玻璃</button></div>
       <img id="return-background" src="assets/oblique-entry-water.png" width="1254" height="1254" alt="上方空氣、下方水的寫實水槽。">
       <svg id="return-scene" class="return-view" viewBox="0 0 1254 1254" role="img" aria-label="水與空氣間的往返光路。"></svg>
       <svg id="return-devices" class="return-view" viewBox="0 0 1254 1254" role="group" aria-label="點擊 A、B 開關光源；拖曳任一支調角。"></svg>
-      <button type="button" id="return-magnify" aria-label="放大中央介面交點" aria-expanded="false" aria-controls="return-detail" disabled></button><span class="return-magnify-hint" aria-hidden="true">⌕ 放大</span>
-      <aside id="return-detail" class="return-detail" role="region" aria-labelledby="return-detail-title" hidden>
-        <h3 id="return-detail-title" class="visually-hidden">A、B 往返光路與角度放大</h3><button type="button" id="return-close" aria-label="關閉中央放大">×</button>
-        <svg id="return-zoom" class="return-view" viewBox="350 340 600 460" role="group" aria-label="同一介面交點的局部放大。"></svg>
-      </aside>
+
     </div>
   </figure>
   <div class="return-control-deck">
@@ -408,8 +404,8 @@
   </div>
   <p id="return-status" class="visually-hidden" role="status">正在準備實驗場景……</p><button type="button" id="return-retry" hidden>重新載入場景</button>
   <span class="visually-hidden">水／玻璃側角度 <span id="return-water-value" class="incident-readout">30°</span>，空氣側角度 <span id="return-air-value" class="refracted-readout">41.8°</span>。</span>
-  <details class="return-explanation"><summary>光路反向時，兩個角的角色怎麼交換？</summary><p>光沿原光路反向射入，會沿原路返回。原本的折射角會成為反向的入射角，原本的入射角會成為反向的折射角；兩個角通常不相等。</p><p>拖曳 A 或 B 時，另一端會自動對準對應光路。分別開燈，再同時開啟，比較路徑與箭頭；兩種光色只用來區分方向，不比較色散。</p></details>
-  <noscript><p>水中入射角30°時，射回空氣的折射角約41.8°；代表玻璃約48.6°。光偏離法線，沿這條光路反向射入則可返回。啟用 JavaScript 後可獨立開關兩支光源、調角及局部放大。</p></noscript>
+  <details class="return-explanation"><summary>光路反向時，兩個角的角色怎麼交換？</summary><p>光沿原光路反向射入，會沿原路返回。原本的折射角會成為反向的入射角，原本的入射角會成為反向的折射角；兩個角通常不相等。主圖以空氣側及水／玻璃側命名，兩側角度皆從法線量起。</p><p>拖曳 A 或 B 時，另一端會自動對準對應光路。分別開燈，再同時開啟，比較路徑與箭頭；兩種光色只用來區分方向，不比較色散。</p></details>
+  <noscript><p>水中入射角30°時，射回空氣的折射角約41.8°；代表玻璃約48.6°。光偏離法線，沿這條光路反向射入則可返回。啟用 JavaScript 後可獨立開關兩支光源、調角，並直接查看兩側角度。</p></noscript>
 </div>
 <details id="reversibility-comparison" class="reciprocity-comparison"><summary>對照反射：兩種光路都能沿原路返回</summary>
 <div class="lab">
