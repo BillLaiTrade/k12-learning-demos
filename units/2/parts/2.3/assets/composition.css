@@ -78,7 +78,7 @@
  .air-zoom-bar{height:auto}.air-zoom-labels{display:grid;gap:5px}
 }
 @media(max-width:760px){.air-composition-panel{padding:14px;--air-gap:3px}.air-panel-heading h3{font-size:1rem}}
-@media(prefers-reduced-motion:reduce){.air-particle,.air-region,.air-regions{transition:none}}
+@media(prefers-reduced-motion:reduce){.air-particle-trails{display:none}.air-particle,.air-region,.air-regions{transition:none}}
 
 /* 沿用圖左卡右及手機上下配置，只細修既有元件的表面層次。 */
 .air-view-switch{box-shadow:inset 0 1px 3px #36543e05}

@@ -1,4 +1,4 @@
-import {createParticles} from './composition-particles-model.mjs?v=particles-1';
+import {createParticles} from './composition-particles-model.mjs?v=particles-motion-2';
 const section = document.querySelector('#s2');
 const controls = [...section.querySelectorAll('[data-air-gas]')];
 const viewControls = [...section.querySelectorAll('[data-air-view]')];
@@ -142,12 +142,12 @@ function renderParticles(){
 }
 function tickParticles(time){
  motionFrame=0;const dt=previousTime?Math.min(.035,(time-previousTime)/1000):0;previousTime=time;
- fields[0].model.step(dt);if(!detail.hidden)fields[1].model.step(dt);renderParticles();motionFrame=requestAnimationFrame(tickParticles);
+ const step=dt*(reducedMotion.matches ? .4 : 1);fields[0].model.step(step);if(!detail.hidden)fields[1].model.step(step);renderParticles();motionFrame=requestAnimationFrame(tickParticles);
 }
 function syncMotion(){
- const running=visible&&!document.hidden&&!userPaused&&!reducedMotion.matches;
- section.dataset.particleMotion=running?'running':userPaused?'paused':reducedMotion.matches?'reduced':document.hidden?'hidden':'offscreen';
- motionButton.hidden=reducedMotion.matches;motionButton.textContent=userPaused?'繼續粒子':'暫停粒子';motionButton.setAttribute('aria-pressed',String(userPaused));
+ const running=visible&&!document.hidden&&!userPaused;
+ section.dataset.particleMotion=running?'running':userPaused?'paused':document.hidden?'hidden':'offscreen';
+ section.dataset.particleReduced=String(reducedMotion.matches);motionButton.hidden=false;motionButton.textContent=userPaused?'繼續粒子':'暫停粒子';motionButton.setAttribute('aria-pressed',String(userPaused));
  if(!running){cancelAnimationFrame(motionFrame);motionFrame=0;previousTime=0;}else if(!motionFrame){previousTime=0;motionFrame=requestAnimationFrame(tickParticles);}
 }
 motionButton.addEventListener('click',()=>{userPaused=!userPaused;syncMotion();});
