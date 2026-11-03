@@ -3,6 +3,7 @@ exports.direct=async(page,{touch=false}={})=>{
  const f=page.locator('#gas-report-form'),scene=f.locator('.task-scene'),scroll=f.locator('.desk-scroll'),cdp=touch?await page.context().newCDPSession(page):null;
  const run=ms=>page.clock.runFor(ms),tool=async id=>{const b=f.locator(`[data-desk-tool=${id}]`);if(await b.getAttribute('data-present')!=='true')await b.click();};
  async function select(){for(const id of ['flask','jar','tank','marble']){const b=f.locator(`[data-desk-material=${id}]`);if(await b.getAttribute('data-present')!=='true')await b[touch?'tap':'click']();}}
+ async function clear(){await f.locator('[data-desk-action=restart]').click();const present=f.locator('[data-desk-material][data-present=true]');while(await present.count())await present.first()[touch?'tap':'click']();await f.locator('[data-desk-action=restart]').click();}
  const world=async p=>scene.evaluate((el,p)=>{const q=new DOMPoint(p.x,p.y).matrixTransform(el.getScreenCTM());return{x:q.x,y:q.y};},p);
  const send=async(kind,p)=>{if(cdp)await cdp.send('Input.dispatchTouchEvent',{type:kind==='down'?'touchStart':kind==='up'?'touchEnd':kind==='cancel'?'touchCancel':'touchMove',touchPoints:['up','cancel'].includes(kind)?[]:[{x:p.x,y:p.y,radiusX:3,radiusY:3,force:1}]});else if(kind==='down'){await page.mouse.move(p.x,p.y);await page.mouse.down();}else if(kind==='move')await page.mouse.move(p.x,p.y);else if(kind==='up')await page.mouse.up();else await scene.dispatchEvent('pointercancel',{pointerId:1});};
  async function start(id,worldGrip=null){await scroll.scrollIntoViewIfNeeded();const el=scene.locator(`[data-desk-drag=${id}]`);const anchor=await el.evaluate(n=>({x:+n.dataset.anchorX,y:+n.dataset.anchorY}));const grip=worldGrip?await world(worldGrip):await el.locator(`[data-desk-grip=${id}]`).evaluate(n=>{const p=new DOMPoint(+n.dataset.gripX,+n.dataset.gripY).matrixTransform(n.getScreenCTM());return{x:p.x,y:p.y};});
@@ -24,5 +25,5 @@ exports.direct=async(page,{touch=false}={})=>{
  async function charge(){await tool('forceps');await drag('forceps',{x:520,y:555},{ms:750});await drag('forceps',{x:300,y:195},{ms:1450});await tool('rig');await drag('rig',{x:300,y:140},{ms:1550});await tool('funnel');await drag('funnel',{x:274,y:190},{ms:1450});await tool('acid');await drag('acid',{x:274,y:65},{ms:1850});}
  async function collect(){await drag('outlet',{x:690,y:415},{ms:950});await run(2800);await drag('outlet',{x:870,y:465},{ms:1550});await run(7000);}
  async function seal(){await drag('outlet',{x:690,y:465},{ms:1550});await drag('plate',{x:870,y:432},{ms:900});await drag('jar',{x:870,y:210},{ms:1900});await f.locator('[data-desk-action=inspect]').click();}
- return{f,scene,scroll,run,tool,select,world,start,move,end,drag,prepare,charge,collect,seal};
+ return{f,scene,scroll,run,tool,select,clear,world,start,move,end,drag,prepare,charge,collect,seal};
 };
