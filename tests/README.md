@@ -1240,6 +1240,8 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4.test.cjs
 
 ## 4.4 第三區外置位置尺與常駐屏幕面板（2026-11-03）
 
+虛像呈現修訂：`node tests/unit-4.4-imaging-optics.test.mjs` 與 `node tests/unit-4.4-imaging-studio.test.cjs` 驗證連續虛像位置／倍率、反向延長線交點、透明圖案與無底座、實際像素差、同一屏幕投影、取景／縮放、十尺寸與原生觸控。`IMAGING_ONLY_VIRTUAL=1` 可單獨執行虛像專項；五倍近看之外可再縮小查看完整長軌。
+
 五倍放大修訂：`IMAGING_ONLY_ZOOM=1` 檢查實際相機距離達初始1/5、滾輪及原生雙指相同邊界、旋轉保持距離、縮回全景，並核對器材狀態、投影像素與固定屏幕座標。`IMAGING_ONLY_LAYOUT=1` 檢查去除標題／無窮遠入射／旋轉提示三列後的十尺寸版面與六種成像。
 
 最新固定右欄修訂：`IMAGING_ONLY_HUD=1` 擴至十個相關專項，核對第三／第四區的實際舞台高度規則、右欄固定座標、無拖曳入口、旋轉及縮放、六種成像、器材提示與手機觸控。短螢幕按雙尺剩餘高度縮短主圖。`IMAGING_ONLY_SCREEN=1` 可獨立重驗屏幕進入焦距內與正面近看，該專項會自行建立物距條件。

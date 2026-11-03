@@ -48,3 +48,7 @@
 @container imaging (min-width:420px) and (max-width:599px) { .imaging-stage { --imaging-stage-min:310px; --observer-width:136px; } }
 @container imaging (max-width:419px) { .imaging-stage { --imaging-stage-min:380px; } }
 @container imaging (max-width:299px) { .imaging-stage { --imaging-stage-min:400px; --observer-width:88px; } }
+
+.imaging-image-tag { position:absolute; z-index:2; padding:3px 6px; border:1px solid #b6c7a3; border-radius:6px; background:#faf9e9ed; color:#315438; font-size:.67rem; line-height:1.4; white-space:nowrap; pointer-events:none; }
+.imaging-image-tag--virtual { border-style:dashed; font-weight:700; }
+@media(max-width:760px) { .imaging-image-tag { padding:2px 4px; font-size:.6rem; } }

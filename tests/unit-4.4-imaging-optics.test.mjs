@@ -45,3 +45,12 @@ test('F內形成透鏡前同側的正立放大虛像，反向延長線會交但�
  for(const screen of [50,100,200,500])assert.equal(imagingState({...s,screen}).clear,false);
  for(const r of imagingRays(s)){assert.ok(r.virtual[0]<r.from[0]);const slope=(r.end[1]-r.lens[1])/(r.end[0]-r.lens[0]);assert.ok(Math.abs(r.lens[1]+r.virtual[0]*slope-r.virtual[1])<1e-10);assert.ok(r.name==='top'?r.virtual[1]>G.axis:r.virtual[1]<G.axis);}
 });
+
+
+test('F內連續移動時虛像位置、倍率及兩個物點的延長線保持一致',()=>{
+ for(const object of [50,60,75,90,99]){
+  const state={object,screen:200},g=imagingState(state),rays=imagingRays(state);
+  assert.equal(g.type,'virtual');assert.ok(g.v< -object);assert.ok(g.m>1);assert.equal(rays.length,4);
+  for(const r of rays){const y=r.name==='top'?G.pointTop:G.pointBottom;assert.ok(Math.abs(r.virtual[0]-g.v*G.scale)<1e-8);assert.ok(Math.abs(r.virtual[1]-G.axis-g.m*y)<1e-8);const t=r.virtual[0]/r.end[0];assert.ok(Math.abs(r.lens[1]+t*(r.end[1]-r.lens[1])-r.virtual[1])<1e-8);}
+ }
+});
