@@ -38,7 +38,6 @@ export function renderDistance(progress) {
   const arrival = echo(selection === 'near' ? FIXED_DISTANCE : distance, AIR_SPEED).time;
   const elapsed = ready ? 0 : Math.min(arrival, progress * distanceDuration(distance, selection) / TIME_SCALE);
   root.dataset.elapsed = elapsed.toFixed(4);
-  $('distance-elapsed').textContent = seconds(elapsed);
   const number = $('wall-distance-number');
   if (document.activeElement !== number) number.value = String(distance);
   $('distance-far-record-label').textContent = `${distance === FIXED_DISTANCE ? '同距' : '遠牆'}（${distance} 公尺）`;
