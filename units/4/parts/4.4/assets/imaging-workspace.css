@@ -1,6 +1,5 @@
-.imaging-workspace-home { height:1px; }
-.imaging-hud .imaging-stage { height:clamp(560px,calc(100svh - 80px),760px); isolation:isolate; }
-.imaging-hud #imaging-canvas { width:100%; height:100%; }
+.imaging-hud .imaging-stage { height:clamp(620px,calc(100svh - 100px),760px); isolation:isolate; }
+.imaging-lab.imaging-hud .imaging-stage>#imaging-canvas { position:absolute; inset:0; width:100%; height:100%; }
 .imaging-hud .imaging-tools { top:16px; left:16px; right:90px; }
 .imaging-hud .imaging-limit-note { top:66px; max-width:260px; }
 .imaging-hud .imaging-floating-panel { position:absolute; z-index:5; right:auto; bottom:auto; margin:0; padding:0; display:flex; flex-direction:column; min-width:0; max-height:calc(100% - var(--hud-dock-height,155px) - 80px); border:1px solid #b6c5a7; border-radius:13px; background:#fafbf0f5; color:#264d37; box-shadow:0 7px 20px #172e2840; overflow:hidden; }
@@ -38,23 +37,16 @@
 .imaging-hud .imaging-badge { left:18px; bottom:calc(var(--hud-dock-height,155px) + 25px); max-width:calc(100% - 36px); transform:none; }
 .imaging-hud .imaging-gesture-note { bottom:calc(var(--hud-dock-height,155px) + 22px); }
 .imaging-hud .imaging-fallback { min-height:0; position:absolute; left:18px; top:260px; width:55%; padding:16px; background:#314f3dd9; border-radius:12px; }
-.imaging-dialog { inset:0; width:100%; height:100svh; max-width:none; max-height:none; margin:0; padding:0; border:0; border-radius:0; overflow:hidden; }
-.imaging-dialog[open] { display:block; }
-.imaging-dialog-header { position:absolute; z-index:12; left:16px; right:16px; top:12px; margin:0; padding:0; border:0; pointer-events:none; }
-.imaging-dialog-header h2 { color:#fffdf0; font-size:1.55rem; text-shadow:0 1px 5px #263c32; }
-.imaging-dialog-header span { display:none; }
-.imaging-dialog-header button { pointer-events:auto; box-shadow:0 2px 7px #15271b33; }
-.imaging-dialog-body { width:100%; height:100%; margin:0; padding:0; overflow:hidden; }
-.imaging-dialog .imaging-expanded { width:100%; height:100%; margin:0; }
-.imaging-dialog .imaging-stage { width:100%; height:100%; border:0; border-radius:0; }
-.imaging-expanded.imaging-hud .imaging-tools { top:66px; }
-.imaging-expanded.imaging-hud .imaging-limit-note { top:116px; }
 .imaging-hud[data-compact=true] .imaging-observations { width:min(360px,calc(100% - 16px)); }
 .imaging-hud[data-compact=true] .imaging-observations[data-collapsed=true] { width:240px; }
 .imaging-hud[data-compact=true] .imaging-panel-grip small { display:none; }
 .imaging-hud[data-compact=true] .imaging-preview { width:230px; height:176px; }
 .imaging-hud[data-compact=true] .imaging-current { display:none; }
 .imaging-hud[data-compact=true] .imaging-quick-observations { display:block; }
+.imaging-hud[data-compact=true] .imaging-quick-buttons { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:4px; }
+.imaging-hud[data-compact=true] .imaging-quick-buttons button { min-width:0; min-height:32px; padding:4px 2px; background:#fffef5; border-color:#9bb18f; font-size:.7rem; white-space:nowrap; }
+.imaging-hud[data-compact=true] .imaging-quick-buttons button[aria-pressed=true] { background:#196c54; color:#fff; border-color:#196c54; }
+.imaging-hud [data-imaging-quick-summary] { margin:6px 0 0; font-size:.72rem; line-height:1.45; color:#31533d; }
 .imaging-hud[data-compact=true] .imaging-keypoints>p { display:none; }
 .imaging-hud[data-compact=true] .imaging-comparison>summary { display:block; margin-top:6px; color:#286c4d; font-size:.72rem; text-decoration:underline; cursor:pointer; }
 .imaging-hud[data-compact=false] .imaging-comparison>summary,.imaging-hud[data-compact=false] .imaging-quick-observations { display:none; }
@@ -77,9 +69,9 @@
 .imaging-hud[data-narrow=true] .imaging-tools { left:8px; right:124px; flex-wrap:wrap; gap:5px; }
 .imaging-hud[data-narrow=true] .imaging-limit-note { max-width:180px; top:102px; left:8px; font-size:.63rem; }
 .imaging-hud[data-narrow=true] .imaging-badge { left:12px; font-size:.68rem; padding:4px 8px; }
-@media(max-width:600px) {
- .imaging-dialog-header { left:10px; right:10px; top:10px; }
- .imaging-dialog-header h2 { font-size:1.1rem; }
- .imaging-dialog-header button { min-height:32px; padding:4px 8px; font-size:.73rem; }
- .imaging-expanded.imaging-hud .imaging-tools { top:52px; }
+.imaging-hud[data-narrow=true] .imaging-stage { height:clamp(680px,calc(100svh - 100px),760px); }
+.imaging-hud[data-narrow=true] .imaging-trace { max-width:100%; flex-wrap:wrap; }
+@container imaging (max-width:305px) {
+ .imaging-hud[data-narrow=true] .imaging-observations[data-collapsed=true] { width:calc(100% - 132px); }
+ .imaging-hud[data-narrow=true] .imaging-observations[data-collapsed=true] [data-imaging-panel-reset] { display:none; }
 }

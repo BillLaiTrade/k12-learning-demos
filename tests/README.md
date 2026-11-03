@@ -1098,11 +1098,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.1-
 
 原聲音、暫停、同時刻切換、結尾清空、背景取消、錯誤重試與觸控／鍵盤回歸保留。`ROOM_URL`可指向公開正式課程，`ROOM_CAPTURE_DIR`保存截圖及 `compact-layouts.json`；公開另跑房間13項。控制器、模型及音檔未改，不重跑未受影響的純模型／PCM檢查。
 
-## 4.4 滿視窗浮動操作（2026-11-03）
+## 4.4 區塊內浮動操作（2026-11-03）
 
-`node --test tests/unit-4.4-imaging-studio.test.cjs`：以新滿視窗版型取代已被取代的左右欄尺寸檢查，保留投影、F刻度、光路、六種成像、手勢及WebGL備援回歸。新增五組桌機／四組窄螢幕同窗、平面面板原生拖移／取消／鍵盤／復位／收合、面板拖移不動相機、3D旋轉縮放不動介面、預設進入及返回不反覆開啟、同一canvas與狀態保留。包含螢幕映射後實際器材投影角點、面板與位置尺無遮擋。IMAGING_URL／IMAGING_CAPTURE_DIR沿用；IMAGING_ONLY_HUD=1只跑新版介面檢查。IMAGING_ONLY_ENTRY=1及IMAGING_ONLY_PANELS=1可分別補驗入口與面板；LENS_ONLY_RECHECK=1補驗排版基準及跨章節觸控。排版參考頁僅讀HTML／CSS，不執行不相關的實驗。整課檢查補上原生dialog的返回操作，維持課程導覽與其餘區塊檢查。
+`node tests/unit-4.4-imaging-studio.test.cjs`：直接在課程內驗證同一canvas、兩把固定尺、可移動／收合面板及六種成像，確認沒有dialog或滿視窗按鈕。九種尺寸比較舞台與canvas高度，防止舊高度規則裁切；器材投影角點保持在舞台及底部尺上方。原生滑鼠／觸控移動面板、鍵盤復位、尺精準對齊，以及導覽離開／返回仍保留條件。IMAGING_URL／IMAGING_CAPTURE_DIR沿用，IMAGING_ONLY_HUD=1只跑本輪四項介面情境；其餘成像／光路回歸仍保留。IMAGING_ONLY_ENTRY及IMAGING_ONLY_PANELS可分別補驗導覽及面板。
 
-## 4.4 一般課程預設對照及六種成像（2026-11-03）
+## 4.4 一般課程預設對照及六種成像（2026-11-03，前輪紀錄）
 
 `node tests/unit-4.4-imaging-studio.test.cjs`：一般網址不帶workspace、dialog未開啟時，五組桌機左圖右表與兩把尺同窗；四組手機／平板直接六點位與摘要、表格可展開。一般頁及展開工作區實際切換六種情況並核對無捲動、器材／尺／模型一致；另核對無窮遠平行光、焦點點像像素、有限圖卡隱藏／返回、F內正立放大虛像及六條反向延長線，屏幕不會對焦。保留F刻度、金框、原生手勢與返回狀態。IMAGING_URL及IMAGING_CAPTURE_DIR指定公開頁與證據目錄。模型9項、整課專項亦檢查；實際結果見本輪交付紀錄。
 
@@ -1220,3 +1220,5 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4.test.cjs
 ## 4.3 第三／四區單視窗完整操作（2026-11-03）
 
 完整單元指令加入`tests/unit-4.3-viewport.test.cjs`：16組寬高×兩區×水／玻璃×0°／40°共128筆，驗證對齊操作區後全場景／解說／按鍵／滑桿皆在可見視窗內，無內部捲軸、文字裁切或角度壓扁，並保留44px觸控、介質標籤位置與光線不遮解說檢查。`VIEWPORT_CAPTURE_DIR`保存畫面及measurements.json；公開URL／代理設定沿用。另驗證聚焦／重設／重播不推移場景及短橫向視窗的發射前後解說可見性，整課75項（21模型／54瀏覽器，含外層）。
+
+4.3格式檢查在視窗縮放後先等待兩次畫面更新，再量測錨點位置，避免容器尺寸重算時讀到中途版面；原導覽／標題可見條件保持。

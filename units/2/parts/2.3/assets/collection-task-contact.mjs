@@ -1,5 +1,6 @@
+import {bodyOffset} from './collection-task-layout.mjs?v=move-1';
 // 第六區的實物接觸幾何；場景提示與判定共用輪廓，座標來自器材繪圖。
-import {jarMouth,waterSurface,rigPosition} from './collection-task-model.mjs?v=eight-2';
+import {jarMouth,waterSurface,rigPosition} from './collection-task-model.mjs?v=move-1';
 export const STONE_OFFSETS=[[-48,-12],[0,-22],[48,-10],[-27,17],[27,19]];
 const polygon=points=>({kind:'polygon',points});
 const ellipse=(x,y,rx,ry)=>({kind:'ellipse',x,y,rx,ry});
@@ -17,8 +18,8 @@ export function regionPath(r){if(r.outline)return regionPath(r.outline);return r
 // 開口輪廓向外延伸一小段操作空間，避免要求手指壓在一條細線上。
 const opening=(x,y,rx,depth=32,down=false)=>({...polygon([[x-rx,y],[x-rx*.9,y+(down?depth:-depth)],[x+rx*.9,y+(down?depth:-depth)],[x+rx,y],[x+rx*.8,y+8],[x-rx*.8,y+8]]),outline:ellipse(x,y,rx,rx<20?5:10)});
 export function contactRegions(s){
- const m=jarMouth(s),sy=waterSurface(s),rig=rigPosition(s),c=s.positions.catalyst||{x:490,y:450};
- return {
+ const m=jarMouth(s),sy=waterSurface(s)-bodyOffset(s,'tank').y,rig=rigPosition(s),c=s.positions.catalyst||{x:490,y:450};
+ const regions={
   flask:opening(300,205,47),
   pourFlask:{...opening(300,205,95,180),points:[[205,230],[215,25],[385,25],[395,230]],outline:ellipse(300,205,47,10)},
   pourJar:{...opening(m.x,m.y,95,150),points:[[m.x-95,m.y+25],[m.x-85,m.y-150],[m.x+85,m.y-150],[m.x+95,m.y+25]],outline:ellipse(m.x,m.y,69,10)},
@@ -38,6 +39,10 @@ export function contactRegions(s){
   bowl:ellipse(520,560,100,48),
   stones:STONE_OFFSETS.map(([x,y])=>ellipse(520+x,560+y,25,21))
  };
+ const shift=(r,d)=>({...r,...(r.kind==='ellipse'?{x:r.x+d.x,y:r.y+d.y}:{points:r.points.map(([x,y])=>[x+d.x,y+d.y])}),...(r.outline?{outline:shift(r.outline,d)}:{})});
+ for(const [id,keys]of Object.entries({flask:['flask','pourFlask','funnel'],tank:['tank','tankDrop','tankWater','tankAir','immerse','extract'],marble:['bowl']}))for(const key of keys)regions[key]=shift(regions[key],bodyOffset(s,id));
+ regions.stones=regions.stones.map(r=>shift(r,bodyOffset(s,'marble')));
+ return regions;
 }
 export function looseFunnelPose(tip,angle=0){
  const a=angle*Math.PI/180;
