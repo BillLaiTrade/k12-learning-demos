@@ -28,10 +28,10 @@
   <script type="module" src="assets/light-speed-lab.mjs?v=20261101-controls2"></script>
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
   <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-compact1"></script>
-  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261102-angle-labels1">
-  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261102-angle-labels1"></script>
-  <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261102-return1">
-  <script type="module" src="assets/return-refraction-lab.mjs?v=20261102-return1"></script>
+  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-refine1">
+  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261103-refine1"></script>
+  <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-refine1">
+  <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-refine1"></script>
   <script type="module" src="assets/lesson.mjs?v=20261102-return1">
 </script>
 </head>
@@ -202,11 +202,10 @@
     <div class="lab" id="oblique-lab" data-state="loading" data-detail-open="false" aria-label="單一折射實驗與同步入射點放大畫面">
       <div class="oblique-experiment">
         <figure class="oblique-overview">
-          <figcaption><span class="oblique-overview-title">實驗全景</span><div class="oblique-toolbar" role="group" aria-label="選擇射入的介質"><span>射入介質</span><button type="button" data-oblique-medium="water" aria-pressed="true">水</button><button type="button" data-oblique-medium="glass" aria-pressed="false">玻璃</button></div></figcaption>
+          <figcaption><div class="oblique-toolbar" role="group" aria-label="選擇射入的介質"><button type="button" data-oblique-medium="water" aria-pressed="true">水</button><button type="button" data-oblique-medium="glass" aria-pressed="false">玻璃</button></div></figcaption>
           <div class="oblique-table" id="oblique-viewport">
             <img id="oblique-background" src="assets/oblique-entry-water.png" width="1254" height="1254" alt="寫實木桌上的單槽光路剖面：上方空氣，下方為水。">
             <svg id="oblique-scene" viewBox="0 0 1254 1254" role="group" aria-label="點燈發射，拖曳光源調整入射角。"></svg>
-            <span class="oblique-state" id="oblique-state">準備場景</span>
             <button id="oblique-magnify" type="button" aria-label="放大中央入射點" aria-expanded="false" aria-controls="oblique-detail" disabled></button><span class="oblique-magnify-label" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5M10 7v6M7 10h6"/></svg>放大</span>
         <aside class="oblique-detail" id="oblique-detail" role="region" aria-labelledby="oblique-detail-title" hidden>
           <div class="oblique-detail-heading"><h3 id="oblique-detail-title" class="visually-hidden"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg>入射點放大</h3><button id="oblique-close" type="button" aria-label="關閉入射點放大">×</button></div>
@@ -280,11 +279,11 @@
 </div>
 <div class="lab" id="return-lab" data-ray-lab="leave" data-return-lab data-detail-open="false" aria-busy="true">
   <figure class="return-overview">
-    <figcaption><span class="return-overview-title">實驗全景</span><div class="return-toolbar" role="group" aria-label="下方介質"><span>下方介質</span><button type="button" data-medium="water" aria-pressed="true">水</button><button type="button" data-medium="glass" aria-pressed="false">玻璃</button></div></figcaption>
+    <figcaption><div class="return-toolbar" role="group" aria-label="下方介質"><button type="button" data-medium="water" aria-pressed="true">水</button><button type="button" data-medium="glass" aria-pressed="false">玻璃</button></div></figcaption>
     <div class="return-table" id="return-viewport">
       <img id="return-background" src="assets/oblique-entry-water.png" width="1254" height="1254" alt="上方空氣、下方水的寫實水槽。">
-      <svg id="return-scene" class="return-view" viewBox="0 0 1254 1254" role="group" aria-label="點擊 A、B 光源，拖動 B 調角。"></svg>
-      <span class="return-device-status" id="return-device-status">兩支光源已關閉</span>
+      <svg id="return-scene" class="return-view" viewBox="0 0 1254 1254" role="img" aria-label="水與空氣間的往返光路。"></svg>
+      <svg id="return-devices" class="return-view" viewBox="0 0 1254 1254" role="group" aria-label="點擊 A、B 開關光源；拖曳任一支調角。"></svg>
       <button type="button" id="return-magnify" aria-label="放大中央介面交點" aria-expanded="false" aria-controls="return-detail" disabled></button><span class="return-magnify-hint" aria-hidden="true">⌕ 放大</span>
       <aside id="return-detail" class="return-detail" role="region" aria-labelledby="return-detail-title" hidden>
         <h3 id="return-detail-title" class="visually-hidden">A、B 往返光路與角度放大</h3><button type="button" id="return-close" aria-label="關閉中央放大">×</button>
@@ -305,7 +304,7 @@
   </div>
   <p id="return-status" role="status">正在準備實驗場景……</p><button type="button" id="return-retry" hidden>重新載入場景</button>
   <span class="visually-hidden">水／玻璃側角度 <span id="return-water-value" class="incident-readout">30°</span>，空氣側角度 <span id="return-air-value" class="refracted-readout">41.8°</span>。</span>
-  <details class="return-explanation"><summary>為什麼射回空氣會偏離法線？</summary><p>光由水或玻璃斜射回空氣，進入傳播速度較快的介質時，折射角比入射角大，方向偏離法線。垂直入射時，方向不偏折。</p><p>A 會自動對準 B 的對應光路，讓你比較兩個方向；紅藍光都開啟時，觀察它們沿同一路徑、朝相反方向傳播。反向時，原本的入射角與折射角角色互換，不代表兩角相等。</p><p>本區只比較可射出介面的角度範圍。水與代表玻璃的折射率沿用前區，圖中只畫穿透光；不同光色僅用來區分方向，不比較色散。</p></details>
+  <details class="return-explanation"><summary>為什麼射回空氣會偏離法線？</summary><p>光由水或玻璃斜射回空氣，進入傳播速度較快的介質時，折射角比入射角大，方向偏離法線。垂直入射時，方向不偏折。</p><p>拖動 A 或 B 時，另一端會自動對準對應光路，讓你比較兩個方向；紅藍光都開啟時，觀察它們沿同一路徑、朝相反方向傳播。反向時，原本的入射角與折射角角色互換，不代表兩角相等。</p><p>本區只比較可射出介面的角度範圍。水與代表玻璃的折射率沿用前區，圖中只畫穿透光；不同光色僅用來區分方向，不比較色散。</p></details>
   <noscript><p>水中入射角30°時，射回空氣的折射角約41.8°；代表玻璃約48.6°。光偏離法線，沿這條光路反向射入則可返回。啟用 JavaScript 後可獨立開關兩支光源、調角及局部放大。</p></noscript>
 </div>
 </div>

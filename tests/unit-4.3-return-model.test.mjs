@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {geometry,clampAngle,angleMark,arrow,zoomViewBox} from '../units/4/parts/4.3/assets/return-refraction-model.mjs';
+import {geometry,clampAngle,angleMark,arrow,zoomViewBox,angleFromSource} from '../units/4/parts/4.3/assets/return-refraction-model.mjs';
 import {materials,refractedAngle} from '../units/4/parts/4.3/assets/optics.mjs';
 
 test('all selectable outgoing rays obey refraction and retrace the independently calculated reverse direction',()=>{
@@ -16,7 +16,7 @@ test('all selectable outgoing rays obey refraction and retrace the independently
 });
 test('zero, bounds and angle sectors retain a single optical plane',()=>{
  assert.equal(clampAngle(-10),0);assert.equal(clampAngle(80),35);assert.equal(clampAngle(NaN),30);assert.throws(()=>geometry('air',30));
- assert.deepEqual(geometry('water',0).forward,[[650,410],[650,570],[650,730]]);
+ assert.deepEqual(geometry('water',0).forward,[[650,340],[650,570],[650,820]]);
  assert.equal(angleMark(0,true).arc,'');assert.equal(angleMark(0,false).sector,'');assert.match(angleMark(30,false).sector,/^M650 570L650 668A/);
  assert.equal(zoomViewBox,'350 340 600 460');
 });
@@ -27,3 +27,5 @@ test('arrow tips point along their own forward and backward segments',()=>{
   assert.ok((numbers[0]-center[0])*(to[0]-from[0])+(numbers[1]-center[1])*(to[1]-from[1])>0);
  }
 });
+
+test('dragging either source recovers the shared angle without changing the reciprocal geometry',()=>{for(const m of ['water','glass'])for(let a=0;a<=35;a++){const g=geometry(m,a);assert.equal(angleFromSource(m,'a',...g.sourceA),a);assert.equal(angleFromSource(m,'b',...g.sourceB),a);assert.ok(g.sourceA[1]>=340-1e-8&&g.sourceB[1]<=820+1e-8);assert.ok(Math.hypot(g.sourceA[0]-650,g.sourceA[1]-570)>=230-1e-8);assert.ok(Math.hypot(g.sourceB[0]-650,g.sourceB[1]-570)>=250-1e-8);}assert.equal(angleFromSource('water','a',-1000,560),35);assert.equal(angleFromSource('glass','b',650,820),0);});
