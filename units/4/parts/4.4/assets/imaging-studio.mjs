@@ -5,6 +5,7 @@ if(root) initialise(root);
 function initialise(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],canvas=$('#imaging-canvas');
  let state={object:320,screen:240,stage:'focus'},showRays=true,point='both',front=false,selected='screen',records=[],studio=null;
+ state=moveImaging(state,'screen',imagingState(state).v);
  const art=document.createElement('canvas');art.width=350;art.height=600;const a=art.getContext('2d');
  a.fillStyle='#dd684f';a.beginPath();a.moveTo(175,80);a.lineTo(133,170);a.lineTo(217,170);a.closePath();a.fill();
  a.strokeStyle='#688d65';a.lineWidth=13;a.lineCap='round';a.beginPath();a.moveTo(175,190);a.lineTo(175,442);a.stroke();a.fillStyle='#438dbb';a.beginPath();a.arc(175,500,35,0,Math.PI*2);a.fill();
@@ -40,10 +41,11 @@ function initialise(root){
   const g=paintProjection(),focus=state.stage==='focus';
   $$('[data-imaging-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingMode===state.stage)));
   $('[data-imaging-object-controls]').hidden=focus;$('[data-imaging-comparison]').hidden=focus;
-  $('[data-imaging-prompt]').textContent=focus?'固定圖卡與透鏡，拖曳下方屏幕位置尺的把手，找清楚的倒立像。':'使用下方圖卡位置尺改變物距，再調整屏幕位置尺重新對焦。';
+  $('[data-imaging-prompt]').textContent=focus?'固定圖卡與透鏡；點擊下方位置尺或拖曳把手，觀察屏幕清楚與模糊的變化。':'使用下方圖卡位置尺改變物距，再調整屏幕位置尺重新對焦。';
   $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.disabled=key==='object'&&focus;b.textContent=key==='object'?'圖卡 ↔':'屏幕 ↔';b.setAttribute('aria-pressed',String(key===selected));b.setAttribute('aria-label',`${key==='object'?'發光圖卡':'屏幕'}，${state[key]}公分，可用方向鍵移動`);});
   for(const handle of $$('[data-imaging-ruler-handle]')){const key=handle.dataset.imagingRulerHandle,max=G[key+'Max'];handle.style.left=`${(key==='object'?1-state[key]/max:state[key]/max)*100}%`;handle.setAttribute('aria-valuenow',String(state[key]));handle.setAttribute('aria-valuetext',`${key==='object'?'圖卡':'屏幕'}距離透鏡${state[key]}公分`);}
   const target=$('[data-imaging-target]');target.hidden=!g.finite||g.unreachable;target.dataset.distance=g.finite?String(g.v):'';target.style.setProperty('--target-position',`${g.finite?g.v/G.screenMax*100:0}%`);$('[data-imaging-target-label]').setAttribute('aria-label',g.finite?`屏幕移至清楚像位置，${Math.round(g.v*10)/10}公分`:'沒有有限距離的清楚像位置');
+  $('[data-imaging-target-status]').hidden=g.finite&&!g.unreachable;
   $('[data-imaging-target-status]').textContent=!g.finite?'圖卡位於焦點，沒有有限距離的清楚像。':g.unreachable?`清楚像在 ${Math.round(g.v*10)/10} 公分，已超出軌道。`:`清楚像位置：${Math.round(g.v*10)/10} 公分`;
   $('[data-imaging-distance=object]').textContent=`物距 ${state.object} 公分`;$('[data-imaging-distance=screen]').textContent=`屏幕距離 ${state.screen} 公分`;
   $('[data-imaging-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-imaging-rays]').setAttribute('aria-pressed',String(showRays));$('[data-imaging-trace]').hidden=!showRays;

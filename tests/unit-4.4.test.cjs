@@ -28,7 +28,7 @@ test('4.4 十區整合版：獨立透鏡、共用成像台及跨尺寸導覽',{t
  });
  await t.test('共用立體成像台先固定圖卡，直接操作屏幕且沒有拉霸',async()=>{
   assert.equal(await page.locator('#lab3').count(),0);assert.equal(await lab(4).getAttribute('data-mode'),'focus');assert.equal(await lab(4).locator('[data-imaging-device=object]').isDisabled(),true);assert.equal(await lab(4).locator('[data-imaging-record]').isVisible(),false);assert.equal(await lab(4).locator('input[type=range]').count(),0);
-  assert.match(await result(4).innerText(),/尚未對焦/);await lab(4).locator('[data-imaging-device=screen]').focus();await page.keyboard.press('Home');assert.equal(await lab(4).getAttribute('data-screen'),'50');assert.equal(await lab(4).getAttribute('data-rays'),'true');await lab(4).locator('[data-imaging-point=top]').click();assert.match(await result(4).innerText(),/上端.*下方/);await shot(3,'focus-stage');
+  assert.match(await result(4).innerText(),/已對焦/);assert.equal(await lab(4).getAttribute('data-screen'),'145.5');await lab(4).locator('[data-imaging-device=screen]').focus();await page.keyboard.press('Home');assert.equal(await lab(4).getAttribute('data-screen'),'50');assert.equal(await lab(4).getAttribute('data-rays'),'true');await lab(4).locator('[data-imaging-point=top]').click();assert.match(await result(4).innerText(),/上端.*下方/);await shot(3,'focus-stage');
  });
  await t.test('物距變化不搬屏幕，切換階段保留器材，未清楚時不記錄',async()=>{
   await lab(4).locator('[data-imaging-mode=compare]').click();assert.equal(await lab(4).locator('[data-imaging-device=object]').isDisabled(),false);assert.equal(await lab(4).locator('[data-imaging-record]').isDisabled(),true);
