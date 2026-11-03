@@ -6,7 +6,7 @@ import {contactRegions,contains,looseFunnelPose} from '../units/2/parts/2.3/asse
 const ready=()=>Object.assign(createDesk(),{selected:[...REQUIRED_MATERIALS,'peroxide','catalyst']});
 for(const [name,id,good,bad,setup,value] of [
  ['water bottle lip to flask mouth','water',{x:320,y:190},{x:300,y:300},{},'flask'],
- ['acid bottle lip to flask mouth','acid',{x:280,y:190},{x:274,y:65},{},'flask'],
+ ['acid bottle lip to flask mouth','acid',{x:280,y:190},{x:274,y:-20},{},'flask'],
  ['water to collector upper opening','water',{x:910,y:55},{x:870,y:160},{},'jar'],
  ['stopper bottom to flask opening','rig',{x:300,y:140},{x:300,y:205},{},'flask'],
  ['funnel tip to empty stopper hole','funnel',{x:274,y:190},{x:300,y:100},{rig:true},'flask'],

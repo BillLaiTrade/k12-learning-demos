@@ -88,3 +88,5 @@
 #s6 .desk-target{display:none}
 #s6 .task-scene [data-desk-drag],#s6 .task-scene [data-desk-drag] *{pointer-events:none}
 #s6 .task-scene [data-desk-grip]{pointer-events:visible}
+
+#s6 .task-scene [data-desk-drag=rig][data-installed=true],#s6 .task-scene [data-desk-drag-proxy]{cursor:grab;touch-action:none}
