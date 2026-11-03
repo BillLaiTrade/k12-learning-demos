@@ -1,10 +1,10 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261103-imaging-guide1';
+import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261103-imaging-single1';
 const root=document.querySelector('[data-imaging-lab]');
 if(root) initialise(root);
 function initialise(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],canvas=$('#imaging-canvas');
- let state={object:320,screen:240,stage:'focus'},showRays=true,point='both',front=false,selected='screen',studio=null;
+ let state={object:320,screen:240},showRays=true,point='both',front=false,selected='screen',studio=null;
  state=moveImaging(state,'screen',imagingState(state).v);
  const art=document.createElement('canvas');art.width=350;art.height=600;const a=art.getContext('2d');
  a.fillStyle='#dd684f';a.beginPath();a.moveTo(175,80);a.lineTo(133,170);a.lineTo(217,170);a.closePath();a.fill();
@@ -23,13 +23,10 @@ function initialise(root){
   pc.restore();return g;
  }
  function clearGestureNotice(){const note=$('[data-imaging-gesture-note]');note.hidden=true;root.dataset.gestureHelp='false';}
- function showGestureNotice(key){const note=$('[data-imaging-gesture-note]');note.textContent=key==='lens'?'凸透鏡是固定的。':key==='object'&&state.stage==='focus'?'發光圖卡目前固定。請切換到「調整圖卡與屏幕」模式，再使用下方圖卡尺調整遠近。':`請使用下方${key==='object'?'圖卡尺':'屏幕尺'}的刻度按鈕或綠色把手調整距離。`;note.hidden=false;root.dataset.gestureHelp='true';}
+ function showGestureNotice(key){const note=$('[data-imaging-gesture-note]');note.textContent=key==='lens'?'凸透鏡是固定的。':`請使用下方${key==='object'?'圖卡尺':'屏幕尺'}的刻度按鈕或綠色把手調整距離。`;note.hidden=false;root.dataset.gestureHelp='true';}
  function update(){
-  const g=paintProjection(),focus=state.stage==='focus';
-  $$('[data-imaging-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingMode===state.stage)));
-  $('[data-imaging-object-controls]').hidden=focus;
-  $('[data-imaging-prompt]').textContent=focus?'固定圖卡與透鏡；點選下方刻度按鈕，觀察屏幕清楚與模糊的變化。':'使用下方圖卡尺改變物距，再調整屏幕尺重新對焦。';
-  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.disabled=key==='object'&&focus;b.textContent=key==='object'?'圖卡 ↔':'屏幕 ↔';b.setAttribute('aria-pressed',String(key===selected));b.setAttribute('aria-label',`${key==='object'?'發光圖卡':'屏幕'}，${state[key]}公分，可用方向鍵移動`);});
+  const g=paintProjection();
+  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.textContent=key==='object'?'圖卡 ↔':'屏幕 ↔';b.setAttribute('aria-pressed',String(key===selected));b.setAttribute('aria-label',`${key==='object'?'發光圖卡':'屏幕'}，${state[key]}公分，可用方向鍵移動`);});
   for(const handle of $$('[data-imaging-ruler-handle]')){const key=handle.dataset.imagingRulerHandle,max=G[key+'Max'];handle.style.left=`${(key==='object'?1-state[key]/max:state[key]/max)*100}%`;handle.setAttribute('aria-valuenow',String(state[key]));handle.setAttribute('aria-valuetext',`${key==='object'?'圖卡':'屏幕'}距離透鏡${state[key]}公分`);}
   const target=$('[data-imaging-target]');target.hidden=!g.finite||g.unreachable;target.dataset.distance=g.finite?String(g.v):'';target.style.setProperty('--target-position',`${g.finite?g.v/G.screenMax*100:0}%`);$('[data-imaging-target-label]').setAttribute('aria-label',g.finite?`屏幕移至清楚像位置，${Math.round(g.v*10)/10}公分`:'沒有有限距離的清楚像位置');
   $('[data-imaging-target-status]').hidden=g.finite&&!g.unreachable;
@@ -47,15 +44,14 @@ function initialise(root){
   $('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=!g.finite?'物體位於焦點':g.unreachable?'清楚像超出軌道':g.clear?`已對焦・倒立${g.sizeLabel}${g.clipped?'・部分超出屏幕':''}`:'屏幕尚未對焦';
   const keypoint=!g.finite?'focus':!g.clear?'':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between';
   $$('[data-imaging-keypoint]').forEach(row=>{const active=row.dataset.imagingKeypoint===keypoint;row.dataset.active=String(active);row.querySelector('button').setAttribute('aria-pressed',String(active));});
-  root.dataset.mode=state.stage;root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.clear=String(g.clear);root.dataset.magnification=g.finite?String(g.m):'';root.dataset.projectionScale=g.projectionScale;root.dataset.spread=g.spread;root.dataset.rays=showRays;root.dataset.view=front?'screen':'orbit';root.dataset.point=point;
+  root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.clear=String(g.clear);root.dataset.magnification=g.finite?String(g.m):'';root.dataset.projectionScale=g.projectionScale;root.dataset.spread=g.spread;root.dataset.rays=showRays;root.dataset.view=front?'screen':'orbit';root.dataset.point=point;
   canvas.setAttribute('aria-label',`旋轉與縮放觀察的立體凸透鏡成像台，使用下方位置尺調整距離，物距${state.object}公分，屏幕距離${state.screen}公分，${$('[data-imaging-badge]').textContent}`);
   studio?.update();
  }
  function move(key,value){clearGestureNotice();state=moveImaging(state,key,value);selected=key;update();}
- $$('[data-imaging-mode]').forEach(b=>b.addEventListener('click',()=>{clearGestureNotice();state={...state,stage:b.dataset.imagingMode};if(state.stage==='focus')selected='screen';update();}));
  for(const handle of $$('[data-imaging-ruler-handle]')){
   const key=handle.dataset.imagingRulerHandle,track=$(`[data-imaging-ruler-track=${key}]`);let drag=null;
-  track.addEventListener('click',e=>{if(e.target.closest('[data-imaging-ruler-handle]')||key==='object'&&state.stage==='focus')return;const mark=e.target.closest('[data-imaging-ruler-mark]');if(e.target.closest('[data-imaging-target]')){const g=imagingState(state);if(g.finite&&!g.unreachable)move('screen',g.v);return;}if(mark){move(key,Number(mark.dataset.imagingRulerMark));return;}const r=track.getBoundingClientRect();if(!r.width)return;const fraction=(e.clientX-r.left)/r.width;move(key,(key==='object'?1-fraction:fraction)*G[key+'Max']);});
+  track.addEventListener('click',e=>{if(e.target.closest('[data-imaging-ruler-handle]'))return;const mark=e.target.closest('[data-imaging-ruler-mark]');if(e.target.closest('[data-imaging-target]')){const g=imagingState(state);if(g.finite&&!g.unreachable)move('screen',g.v);return;}if(mark){move(key,Number(mark.dataset.imagingRulerMark));return;}const r=track.getBoundingClientRect();if(!r.width)return;const fraction=(e.clientX-r.left)/r.width;move(key,(key==='object'?1-fraction:fraction)*G[key+'Max']);});
   handle.addEventListener('pointerdown',e=>{if(e.button!==0||drag||handle.disabled)return;clearGestureNotice();e.preventDefault();handle.focus({preventScroll:true});handle.setPointerCapture(e.pointerId);drag={id:e.pointerId,x:e.clientX,value:state[key],width:track.getBoundingClientRect().width};});
   handle.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id||!drag.width)return;move(key,drag.value+(e.clientX-drag.x)/drag.width*G[key+'Max']*(key==='object'?-1:1));});
   for(const event of ['pointerup','pointercancel','lostpointercapture'])handle.addEventListener(event,e=>{if(e.pointerId===drag?.id)drag=null;});
@@ -72,7 +68,7 @@ function initialise(root){
  function createStudio(){
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   const scene=new THREE.Scene();scene.background=new THREE.Color('#566b5b');scene.fog=new THREE.Fog('#566b5b',35,80);
-  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3(1.05,1.5,0);let orbit={azimuth:-.90,polar:1.38,zoom:1},fitRadius=9,pending=0;
+  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3(1.05,1.5,0);let orbit={azimuth:-.15,polar:1.38,zoom:1},fitRadius=9,pending=0;
   scene.add(new THREE.HemisphereLight('#f2f3df','#3a503e',2.1));const light=new THREE.DirectionalLight('#fff0cf',3.1);light.position.set(-3,8,6);light.castShadow=true;light.shadow.mapSize.set(1024,1024);Object.assign(light.shadow.camera,{left:-8,right:10,top:7,bottom:-5});light.shadow.bias=-.0004;scene.add(light);const rim=new THREE.DirectionalLight('#d3e9e0',1.6);rim.position.set(5,4,-4);scene.add(rim);
   const mat=(color,options={})=>new THREE.MeshStandardMaterial({color,roughness:.5,metalness:.15,...options}),dark=mat('#283e30',{metalness:.5,roughness:.36}),steel=mat('#a2b4a4',{metalness:.7,roughness:.27}),brass=mat('#bba267',{metalness:.7,roughness:.3});
   function box(parent,size,pos,material){const mesh=new THREE.Mesh(new THREE.BoxGeometry(...size),material);mesh.position.set(...pos);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;}
@@ -110,7 +106,7 @@ function initialise(root){
   function fitToViewport(){
    camera.fov=39;camera.updateProjectionMatrix();let radius=9;
    const bounds=[];for(const [xs,ys,zs]of [[[-4.9,-1.4],[.3,G.axis+G.cardHeight/2+.1],[-.9,.9]],[[G.screenMin*G.scale-.3,7.4],[.3,3.6],[-1,1]],[[-5.4,7.4],[-.25,.25],[-1.15,1.15]]])for(const x of xs)for(const y of ys)for(const z of zs)bounds.push(new THREE.Vector3(x,y,z));
-   const directions=[directionFor(-.9,1.38)];
+   const directions=[directionFor(-.15,1.38)];
    for(let i=0;i<40;i++){const fits=directions.every(direction=>{camera.position.copy(target).addScaledVector(direction,radius);camera.lookAt(target);camera.updateMatrixWorld();return bounds.every(p=>{const q=p.clone().project(camera);return Math.abs(q.x)<.9&&Math.abs(q.y)<.8;});});if(fits)break;radius*=1.06;}
    fitRadius=radius;
   }

@@ -107,7 +107,18 @@ function initialise(root){
    camera.updateProjectionMatrix();camera.updateMatrixWorld();
   }
   const labels={source:{point:new THREE.Vector3(sourceX,AXIS+.92,0),dx:-10,dy:-18},thick:{point:new THREE.Vector3(centerX,AXIS,0),dx:42,dy:-8},thin:{point:new THREE.Vector3(centerX,AXIS+R*.94,0),dx:48,dy:-12},focus:{point:focus.position,dx:0,dy:-22},axis:{point:new THREE.Vector3(g.rays[0].end[0]*SCALE,AXIS,0),dx:-12,dy:29}};
-  function updateLabels(){const rect=canvas.getBoundingClientRect();for(const[name,config]of Object.entries(labels)){const e=$(`[data-convex-label=${name}]`),v=config.point.clone().project(camera);e.hidden=(name==='focus'&&!showRays)||v.z< -1||v.z>1||Math.abs(v.x)>.96||Math.abs(v.y)>.9;if(e.hidden)continue;const x=(v.x+1)*rect.width/2+config.dx,y=(1-v.y)*rect.height/2+config.dy;e.style.left=Math.max(e.offsetWidth/2+5,Math.min(rect.width-e.offsetWidth/2-5,x))+'px';e.style.top=Math.max(67,y)+'px';}}
+  function updateLabels(){const rect=canvas.getBoundingClientRect();updateFocalDistance(rect);for(const[name,config]of Object.entries(labels)){const e=$(`[data-convex-label=${name}]`),v=config.point.clone().project(camera);e.hidden=(name==='focus'&&!showRays)||v.z< -1||v.z>1||Math.abs(v.x)>.96||Math.abs(v.y)>.9;if(e.hidden)continue;const x=(v.x+1)*rect.width/2+(rect.width<400&&name==='thin'?-12:config.dx),y=(1-v.y)*rect.height/2+(rect.width<400&&name==='focus'?-44:config.dy);e.style.left=Math.max(e.offsetWidth/2+5,Math.min(rect.width-e.offsetWidth/2-5,x))+'px';e.style.top=Math.max(67,y)+'px';}}
+  function updateFocalDistance(rect){
+   const overlay=$('[data-convex-focal-distance]'),a=new THREE.Vector3(centerX,AXIS,0).project(camera),b=focus.position.clone().project(camera);
+   overlay.toggleAttribute('hidden',close||!showRays||[a,b].some(v=>v.z< -1||v.z>1||Math.abs(v.x)>.96||Math.abs(v.y)>.8));if(overlay.hasAttribute('hidden'))return;
+   overlay.setAttribute('viewBox',`0 0 ${rect.width} ${rect.height}`);overlay.style.height=rect.height+'px';
+   const ax=(a.x+1)*rect.width/2,ay=(1-a.y)*rect.height/2,bx=(b.x+1)*rect.width/2,by=(1-b.y)*rect.height/2,offset=rect.width<600?48:66;
+   $('[data-focal-guides]').setAttribute('d',`M${ax} ${ay}V${ay+offset}M${bx} ${by}V${by+offset}`);
+   const dot=$('[data-focal-center]');dot.setAttribute('cx',ax);dot.setAttribute('cy',ay);
+   const line=$('[data-focal-distance]');for(const[k,v]of Object.entries({x1:ax,y1:ay+offset,x2:bx,y2:by+offset}))line.setAttribute(k,v);
+   $('[data-focal-label]').setAttribute('transform',`translate(${(ax+bx)/2} ${(ay+by)/2+offset})`);
+   const label=$('[data-focal-center-label]');label.setAttribute('transform',`translate(${ax} ${ay+offset+25})`);
+  }
   let lastRayRadius=0;
   function draw(){pending=0;
    const distance=camera.position.distanceTo(close?world(g.rays[0][step]):target),pixelWorld=2*distance*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))/Math.max(1,canvas.clientHeight),radius=THREE.MathUtils.clamp(pixelWorld*.72,.004,.045);
