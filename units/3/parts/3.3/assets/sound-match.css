@@ -15,7 +15,7 @@
 .match-step{min-width:0;padding:12px;border:1px solid #d7e1dd;border-radius:13px;background:#fffefa}
 .match-step-heading{display:grid;grid-template-columns:28px minmax(0,1fr);align-items:center;gap:10px;min-width:0}
 .match-step-number{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#f0f5ee;color:#204f3f;font-size:.9rem;font-weight:750;line-height:1}
-.match-step h3{display:inline-block;margin:0;padding:3px 8px;border-radius:6px;background:#f0f5ee;color:#204f3f;font-size:.95rem;line-height:1.4}
+.match-step h3{display:inline-block;margin:0;padding:0;color:#204f3f;font-size:.95rem;line-height:1.4}
 .match-step-heading p{margin:5px 0 0;color:#62716c;font-size:.85rem;line-height:1.6}
 .match-target{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 110px auto;align-items:center;gap:12px;background:#fffefa}
 .match-picture{display:grid;place-items:center;min-width:0;height:56px;filter:drop-shadow(0 7px 4px #8a682c28)}
@@ -27,7 +27,7 @@
 .sound-match button:focus-visible{outline:3px solid #bc782d;outline-offset:3px}
 .match-form{display:grid;gap:10px;margin-top:10px}
 .match-workbench-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
-.match-switch-wrap{display:flex;align-items:center;gap:8px;flex:none}
+.match-switch-wrap{display:flex;align-items:center;gap:8px;grid-column:1/-1;min-width:0}
 .match-switch-wrap p{margin:0;white-space:nowrap;color:#62716c;font-size:.78rem;line-height:1.5}
 .match-switch{min-height:40px;border-color:#becbbf;border-radius:9px;color:#40564b;line-height:1.3;font-size:.85rem}
 .match-switch>span{display:inline-block;margin-right:6px;font-size:1.4em;vertical-align:middle;line-height:1}
@@ -76,11 +76,13 @@
 }
 @media(min-width:1024px){
  .match-workbench{display:grid;grid-template-columns:minmax(0,1fr) 270px;column-gap:16px}
- .match-workbench-head{grid-column:1/-1}
- .match-wave-panel{grid-column:1;grid-row:2;align-self:center}
+ .match-workbench-head{grid-column:1;grid-row:1}
+ .match-wave-panel{grid-column:1;grid-row:2;align-self:stretch}
+ .match-plot{display:flex;flex-direction:column;align-self:stretch}
+ .match-wave{flex:1;min-height:150px}
  .match-wave{height:150px}
  .match-legend{grid-column:1;grid-row:3;align-self:start}
- .match-controls{grid-column:2;grid-row:2/4;grid-template-columns:1fr;margin:0;gap:6px}
+ .match-controls{grid-column:2;grid-row:1/3;grid-template-columns:1fr;margin:0;gap:6px}
  .match-actions{grid-column:1/-1;grid-row:4}
 }
 @media(min-width:1024px) and (max-width:1100px){
