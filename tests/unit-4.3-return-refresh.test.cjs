@@ -30,14 +30,14 @@ test('4.3 fifth-section apparatus follows the shared visual style with live main
   }
   if(capture&&[1440,390,320,812].includes(width))await p.screenshot({path:path.join(capture,`${width}x${height}-both.png`)});
  });
- await t.test('side labels are always neutral and visible in the main scene whenever either lamp is on',async()=>{
+ await t.test('single lamps use incident and refracted angles; both lamps use material-side names',async()=>{
   assert.equal(await p.locator('#return-magnify,#return-detail,#return-zoom,#return-close').count(),0);
   for(const medium of ['water','glass']){
    await select(medium);
    for(const combo of [[true,false],[false,true],[true,true],[false,false]]){
     for(const [i,key]of ['a','b'].entries())if((await root.getAttribute(`data-light-${key}`)==='true')!==combo[i])await p.locator(`#return-toggle-${key}`).click();
     assert.equal(await p.locator('#return-scene .return-angle-marks').getAttribute('visibility'),combo.some(Boolean)?'visible':'hidden');
-    assert.equal(await p.locator('.return-upper-label .return-angle-name').textContent(),'空氣側');assert.equal(await p.locator('.return-lower-label .return-angle-name').textContent(),`${medium==='water'?'水':'玻璃'}側`);
+    if(combo.some(Boolean)){assert.equal(await p.locator('.return-upper-label .return-angle-name').textContent(),combo.every(Boolean)?'空氣側':combo[0]?'入射角':'折射角');assert.equal(await p.locator('.return-lower-label .return-angle-name').textContent(),combo.every(Boolean)?`${medium==='water'?'水':'玻璃'}側`:combo[1]?'入射角':'折射角');}
    }
   }
  });

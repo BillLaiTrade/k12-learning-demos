@@ -1,3 +1,11 @@
+## 4.5 第五區精簡下拉選單（2026-11-03）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5-path-lessons.test.cjs
+```
+
+沿用第五六區專項（含外層6項），以三組原生select驗證80組合、保留另外兩組狀態、三段色條／預覽／3D同步；八種視窗選單並排、控制區≤110px、無溢出、44px高度，原生鍵盤選取保持焦點，手機情境與拖曳取消、第六區備援保持。支援COLOR_URL與COLOR_CAPTURE_DIR。整課unit-4.5.test.cjs同步第五區選擇器；本輪僅執行專項，未重跑整課及未改動的純模型。下方直向按鈕描述為前輪歷史。
+
 ## 4.5 第五區三組獨立選項（2026-11-03）
 
 ```sh
@@ -1302,3 +1310,14 @@ node --test --test-reporter=tap --test-concurrency=1 tests/unit-2.3-reaudit.test
 ```
 
 新套件公開驗證參數：`UNIT23_REAUDIT_URL`、`UNIT23_REAUDIT_ARTIFACT_DIR`。公開證據與本機使用不同目錄。部分舊測試依採用決策改驗滿瓶仍置換氣體、預覽不解除液封，以及溢流後仍保留部分錯誤藥品；不再要求舊的錯誤行為。
+
+## 第五區依開燈方向切換角度角色（2026-11-03）
+
+依使用者最新指示，單開A時上方空氣為入射角、下方介質為折射角；單開B時下方介質為入射角、上方空氣為折射角。單燈模式藍色為入射、綠色為折射，扇形／引線／數字同步；只有雙燈同開才顯示空氣側與水／玻璃側，沿用綠色空氣側、藍色慢介質側。全關仍隱藏。主圖、無放大、數值與光路、角度範圍及操作保持。主圖ARIA及單燈結果列同步使用入射／折射名稱。
+
+本輪執行`node --test --test-concurrency=1 tests/unit-4.3-return-lab.test.cjs tests/unit-4.3-return-refresh.test.cjs`，30項（含外層）。功能專項驗證四種開燈組合的名稱、顏色及雙介質數值；版面專項維持16視窗64筆及固定條件。未更改原可逆模型與其他區，完整52項為前輪歷史，本輪依受影響範圍檢查。
+
+
+## 4.4 第四區圖卡尺與五列觀察（2026-11-03）
+
+沿用 `node tests/unit-4.4-magnifier-optics.test.mjs`、`node tests/unit-4.4-magnifier-studio.test.cjs`、`node tests/unit-4.4.test.cjs`。本輪4＋11＋23＝38項（瀏覽器含主項）。第四區新增整列／鍵盤切換、實際條件選取、尺拖曳／鍵盤／觸控、五倍縮放、0.6F虛像真交點與透明圖案；保留同尺度實際像素、屏幕遮擋／取下復原、七寬度、原生觸控及WebGL失敗備援。`MAGNIFIER_URL`／`MAGNIFIER_CAPTURE_DIR`可指定公開頁及獨立證據；正式程式無測試API。

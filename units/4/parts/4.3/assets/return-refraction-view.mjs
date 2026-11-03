@@ -54,18 +54,19 @@ export function createReciprocalView(root,scene,devices){
    attributes(scene.querySelector('.return-normal-name'),{x:650+12/ratio,y:570-4/ratio});
    scene.querySelector('feGaussianBlur').setAttribute('stdDeviation',String(3/pixelRatio));
   },
-  angles(g,active,pixelRatio){
+  angles(g,active,pixelRatio,lights){
+   const both=lights.a&&lights.b;
    const marks=scene.querySelector('.return-angle-marks');marks.setAttribute('visibility',active?'visible':'hidden');marks.setAttribute('aria-hidden',String(!active));
    const sourceRadius=Math.min(Math.hypot(g.sourceA[0]-650,g.sourceA[1]-570),Math.hypot(g.sourceB[0]-650,g.sourceB[1]-570));
    const radius=Math.min(Math.max(98,30/pixelRatio),sourceRadius*.65),r=radius*pixelRatio,font=Math.max(16,30*pixelRatio),line=font*1.5;
    marks.dataset.radius=String(radius);
    for(const upper of [true,false]){
-    const kind=upper?'upper':'lower',degrees=upper?g.airAngle:g.waterAngle,color=upper?'#24783a':'#165fc2',mark=angleMark(degrees,upper,radius),sign=upper?-1:1,half=degrees*Math.PI/360;
+    const kind=upper?'upper':'lower',degrees=upper?g.airAngle:g.waterAngle,incident=upper?lights.a:lights.b,color=(both?!upper:incident)?'#165fc2':'#24783a',mark=angleMark(degrees,upper,radius),sign=upper?-1:1,half=degrees*Math.PI/360;
     const sector=scene.querySelector(`.return-${kind}-sector`),arc=scene.querySelector(`.return-${kind}-arc`),label=scene.querySelector(`.return-${kind}-label`),text=label.querySelector('text'),leader=label.querySelector('path');
     const x=650+(upper?Math.max(46,r*.72):-Math.max(16,r*.65))/pixelRatio,y=570+(upper?-Math.max(40,r*.9):Math.max(30,r*.72))/pixelRatio;
     sector.setAttribute('d',mark.sector);sector.setAttribute('fill',color);arc.setAttribute('d',mark.arc);arc.setAttribute('stroke',color);arc.style.strokeWidth=`${2.5/pixelRatio}px`;
     text.style.fontSize=`${font/pixelRatio}px`;text.style.fill=color;text.style.strokeWidth=`${1.4/pixelRatio}px`;text.setAttribute('text-anchor',upper?'start':'end');
-    const name=label.querySelector('.return-angle-name'),number=label.querySelector('.return-angle-number');name.textContent=upper?'空氣側':`${g.name}側`;number.textContent=upper?`${g.airAngle.toFixed(1)}°`:`${g.waterAngle}°`;attributes(name,{x,y});attributes(number,{x,y:y+line/pixelRatio});
+    const name=label.querySelector('.return-angle-name'),number=label.querySelector('.return-angle-number');name.textContent=both?(upper?'空氣側':`${g.name}側`):(incident?'入射角':'折射角');number.textContent=upper?`${g.airAngle.toFixed(1)}°`:`${g.waterAngle}°`;attributes(name,{x,y});attributes(number,{x,y:y+line/pixelRatio});
     const a=[650+sign*radius*Math.sin(half),570+sign*radius*Math.cos(half)],end=x+(upper?-8:8)/pixelRatio;
     leader.setAttribute('d',degrees?`M${a.join(' ')}L${end} ${y-4/pixelRatio}`:'');leader.setAttribute('stroke',color);leader.style.strokeWidth=`${1.3/pixelRatio}px`;
    }
