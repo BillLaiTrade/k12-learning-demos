@@ -1,16 +1,11 @@
-const required=['marble','acid','flask','jar','tank','water','funnel','rig','plate','forceps'];
+// 共用回歸流程改用真實器材拖曳；不依賴已移除的輔助選單。
+const {direct}=require('./unit23-direct.cjs');
 exports.desk=page=>{
  const f=page.locator('#gas-report-form'),scene=f.locator('.task-scene');
- const run=ms=>page.clock.runFor(ms);
- const assist=async()=>{await f.locator('.desk-assistance').evaluate(n=>n.open=true);};
- const click=async(a,v)=>{await assist();return f.locator(`[data-desk-action="${a}"]${v?`[data-value="${v}"]`:''}`).click();};
- async function select(){for(const id of ['flask','jar','tank','marble']){const b=f.locator(`[data-desk-material=${id}]`);if(await b.getAttribute('data-present')!=='true')await b.click();}}
- async function use(tool,target,ms){await assist();const b=f.locator(`[data-desk-tool=${tool}]`);if(await b.getAttribute('data-present')==='true')await scene.locator(`[data-desk-drag=${tool}]`).press('Enter');else await b.click();await f.locator(`[data-desk-object=${target==='funnel'?'flask':target}]`).click();if(ms)await run(ms);if(tool==='forceps'&&target==='flask'&&ms>=1350)await run(8500);}
- async function focus(id){await assist();const tool=f.locator('[data-desk-material][data-active=true]');if(await tool.count())await page.keyboard.press('Escape');const obj=f.locator(`[data-desk-object=${id}]`);if(await obj.getAttribute('aria-pressed')!=='true')await obj.click();}
- async function action(a,v,ms=0){await focus(['rotate','relocate','uncover'].includes(a)?'jar':a==='outlet'?'outlet':'flask');await click(a,v);if(ms)await run(ms);}
- async function prepare(){await use('water','tank',1700);await use('water','jar',1700);await use('plate','jar',900);await action('rotate',null,1200);await action('relocate',null,1300);await action('uncover',null,750);}
- async function charge(){await use('forceps','marble',750);await use('forceps','flask',1450);await use('rig','flask',1550);await use('funnel','flask',1450);await use('acid','flask',1850);}
- async function collect(){await run(2800);await action('outlet','tank',950);await action('outlet','jar',1550);await run(7000);}
- async function seal(){await action('outlet','tank',1550);await use('plate','jar',900);await action('relocate',null,1300);await action('rotate',null,1200);await click('inspect');}
- return{f,scene,run,click,select,use,focus,action,prepare,charge,collect,seal};
+ const get=()=>direct(page),run=ms=>page.clock.runFor(ms);
+ const click=(a,v)=>f.locator(`[data-desk-action="${a}"]${v?`[data-value="${v}"]`:''}`).click();
+ async function use(tool,target,ms=0){const d=await get();await d.tool(tool);const p=tool==='forceps'?target==='marble'?{x:520,y:555}:{x:300,y:195}:tool==='rig'?{x:300,y:140}:tool==='funnel'?{x:274,y:190}:tool==='acid'?{x:274,y:65}:target==='tank'?{x:1000,y:355}:tool==='plate'&&+(await scene.getAttribute('data-angle'))>90?{x:870,y:432}:{x:870,y:68};await d.drag(tool,p,{ms});}
+ async function action(a,v,ms=0){if(a!=='outlet')throw Error('已移除輔助操作，請使用真實器材拖曳：'+a);await(await get()).drag('outlet',v==='jar'?{x:870,y:465}:v==='tank'?{x:690,y:415}:{x:690,y:300},{ms});}
+ const delegate=name=>async(...args)=>(await get())[name](...args);
+ return{f,scene,run,click,use,action,select:delegate('select'),prepare:delegate('prepare'),charge:delegate('charge'),collect:delegate('collect'),seal:delegate('seal')};
 };

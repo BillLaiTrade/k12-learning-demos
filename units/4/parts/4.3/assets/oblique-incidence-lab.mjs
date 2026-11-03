@@ -1,5 +1,5 @@
-import {exitGeometry,exitSnapshot,exitDurationMs} from './exit-refraction-model.mjs?v=20261103-shared1';
-import {drawDirections} from './light-beam.mjs?v=20261103-shared1';
+import {exitGeometry,exitSnapshot,exitDurationMs} from './exit-refraction-model.mjs?v=20261103-shared2';
+import {drawDirections} from './light-beam.mjs?v=20261103-shared2';
 import {mediumSelector} from './medium-selector.mjs?v=20261103-concept1';
 import { layout, media, clampAngle as entryClamp, geometry as entryGeometry, durationMs as entryDuration, snapshot as entrySnapshot, zoomViewBox } from './oblique-incidence-model.mjs?v=20261103-refine1';
 
