@@ -66,8 +66,25 @@ function surfaceDiagram(state,id,signal){
  <path d="M389 174l-6-4 6-2M419 269l-2 6 6-3" stroke="${output}" stroke-opacity="${peak*.3}" stroke-width="1.4" fill="none"/>`:''}
  </svg>`;
 }
+function eyeDiagram(state,id,signal){
+ const transmission=state.mode==='transmission',origin=[transmission?454:426,190],eye=transmission?[735,190]:[255,305];
+ const direction=eye.map((v,i)=>v-origin[i]),length=Math.hypot(...direction),unit=direction.map(v=>v/length);
+ const board=origin.map((v,i)=>v+direction[i]*.52),end=state.blocked?board.map((v,i)=>v-unit[i]*7):eye;
+ const input=rgbCss(signal.incoming),output=rgbCss(signal.outgoing);
+ const point=p=>p.join(' '),segment=(a,b,color)=>`<path d="M${point(a)}L${point(b)}" fill="none" stroke="${color}" stroke-width="4"/><path d="M-8 -4L0 0L-8 4" fill="none" stroke="${color}" stroke-width="2" transform="translate(${point(a.map((v,i)=>v+(b[i]-v)*.6))}) rotate(${Math.atan2(b[1]-a[1],b[0]-a[0])*180/Math.PI})"/>`;
+ return `<svg viewBox="0 0 850 400" aria-hidden="true">${defs(id)}
+ <path d="M0 0H850V400H0Z" fill="#91a190"/><path d="M0 105L850 80V400H0Z" fill="url(#${id}-wood)"/>
+ <rect x="51" y="165" width="82" height="50" rx="10" fill="url(#${id}-metal)"/><ellipse cx="137" cy="190" rx="7" ry="22" fill="${input}"/>
+ <path d="M426 103h28v174h-28Z" fill="${transmission?'#d6e3d7':output}" fill-opacity="${transmission?.55:1}" stroke="#385546" stroke-width="4"/>
+ ${state.rays?segment([145,190],[426,190],input)+segment(origin,end,output)+(!transmission?segment(origin,[300,103],output)+segment(origin,[365,330],output):''):''}
+ ${state.blocked?`<g transform="translate(${point(board)}) rotate(${Math.atan2(unit[1],unit[0])*180/Math.PI})"><rect x="-7" y="-48" width="14" height="96" rx="3" fill="#253b30" stroke="#a5b49b" stroke-width="2"/></g>`:''}
+ <g transform="translate(${point(eye)})"><path d="M-38 0Q0-34 38 0Q0 34-38 0" fill="#fffdf5" stroke="#536d5b" stroke-width="3"/><circle r="12" fill="#607d68"/><circle r="6" fill="#203c31"/></g>
+ <g fill="#fff9eb" font-size="17" text-anchor="middle"><text x="96" y="246">白光光源</text><text x="440" y="307">${transmission?'綠色色片':'綠色色卡'}</text><text x="${eye[0]}" y="${eye[1]+48}">眼睛</text></g>
+ </svg>`;
+}
 export function materialDiagram(state,id,signal){
  if(state.kind==='surface')return surfaceDiagram(state,id,signal);
+ if(state.kind==='eye')return eyeDiagram(state,id,signal);
  const kind=state.kind,filter=kind==='filter'||kind==='eye'&&state.mode==='transmission';
  const input=rgbCss(signal.incoming),output=rgbCss(signal.outgoing),blocked=kind==='eye'&&state.blocked;
  const fill=filter?(FILTERS[state.filter||'green']?.css||'#43a672'):rgbCss(signal.outgoing);
@@ -80,7 +97,7 @@ export function drawObservation(canvas,state,signal){
  if(state.kind==='filter'||state.kind==='eye'&&state.mode==='transmission'){
   rounded(c,26,28,w-52,h-56,10,'#13261f','#a6b6a1');const rgb=state.blocked?[0,0,0]:signal.outgoing;
   if(Math.max(...rgb)>.01){const g=c.createRadialGradient(w/2,h/2,20,w/2,h/2,120);g.addColorStop(0,rgbCss(rgb));g.addColorStop(.68,rgbCss(rgb));g.addColorStop(1,'#14251f');c.fillStyle=g;c.fillRect(30,32,w-60,h-64);}
-  if(state.blocked){c.fillStyle='#63796a';c.fillRect(70,50,w-140,h-100);}
+  if(state.blocked){c.fillStyle='#63796a';c.fillRect(70,50,w-140,h-100);c.fillStyle='#eef3e8';c.font='26px sans-serif';c.textAlign='center';c.fillText('視線被擋住',w/2,h/2+8);}
  }else{
   const rgb=state.blocked?[.005,.005,.005]:signal.outgoing;card(105,45,210,rgb,'');
   if(state.blocked){c.fillStyle='#788b7c';c.fillRect(99,39,222,222);c.fillStyle='#e6ece0';c.font='26px sans-serif';c.textAlign='center';c.fillText('視線被擋住',w/2,h/2+8);}

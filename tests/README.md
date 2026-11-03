@@ -1,3 +1,12 @@
+## 4.5 第四區檢視與第五、六區集中操作（2026-11-03）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.5-surface-inset.test.cjs tests/unit-4.5-surface-viewport.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.5-path-lessons.test.cjs tests/unit-4.5.test.cjs
+```
+
+第四區既有22項檢查20種組合、14組視窗與手機操作。第五六區專項檢查四種色片×四種照明的單變因、數值色條／預覽像素與動態角色一致；直接讀取測試攔截後的實際3D光線與遮板座標，確認遮擋時止於入射面且只改入眼量；八種視窗保留器材、預覽避讓、44px按鈕與完整選項。另驗證鍵盤、手機真實點按／拖曳取消及兩種入眼情境的WebGL備援。正式程式不新增測試API，純光學數值未改。支援COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH，軟體GPU檢查依序執行。
+
 ## 4.5 指標焦點與拖曳綠框（2026-11-03）
 
 
@@ -1227,6 +1236,11 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4.test.cjs
 ## 4.3 第三區小車動畫（2026-11-03）
 
 `unit-4.3-oblique-cart.test.cjs` 檢查兩輪跨界時序、車軸只有異速才旋轉、同速後保持方向／慢速、重播及收合／離屏／隱藏停止、一般偏好自播／減少動態手動、鍵盤／原生觸控、七寬度，以及第二區直行類比與第三區光學操作獨立。配合既有oblique-lab及整課回歸；`CART_CAPTURE_DIR`保存畫面。完整指令見單元README。
+
+
+## 4.4 第三區外置位置尺與常駐屏幕面板（2026-11-03）
+
+沿用 `node tests/unit-4.4-imaging-studio.test.cjs` 及 `node tests/unit-4.4.test.cjs`。第三區專項檢查十種視窗下主圖與兩尺同窗、兩尺與常駐六列表格位於3D舞台外、屏幕面板沒有收合入口、摘要與詳細狀態整合、面板拖移／復位／觸控、水平完整旋轉及俯視、相機距離和投影像素保持；保留原光學、尺定位、鍵盤微調、觸控取消／雙指縮放及WebGL備援。`IMAGING_URL`、`IMAGING_CAPTURE_DIR` 沿用。
 
 
 ## 第四區反向小車動畫（2026-11-03）

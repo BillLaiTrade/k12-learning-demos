@@ -1,4 +1,4 @@
-import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261103-imaging-inline1';
+import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261103-imaging-refine1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261103-imaging-six1';
 const root=document.querySelector('[data-imaging-lab]');
@@ -8,7 +8,7 @@ function initialise(root){
  let state={object:320,screen:240},showRays=true,point='both',front=false,selected='screen',studio=null;
  state=moveImaging(state,'screen',imagingState(state).v);
  const distanceLabel=value=>{const n=Number((value/G.f).toFixed(3));return n===1?'F':`${n}F`;};
- const workspace=createImagingWorkspace(root),comparison=$('[data-imaging-comparison]');
+ const workspace=createImagingWorkspace(root);
 
  const art=document.createElement('canvas');art.width=350;art.height=600;const a=art.getContext('2d');
  a.fillStyle='#dd684f';a.beginPath();a.moveTo(175,80);a.lineTo(133,170);a.lineTo(217,170);a.closePath();a.fill();
@@ -52,9 +52,6 @@ function initialise(root){
   $('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=state.atInfinity?(g.clear?'另一側 F・點像':'移動屏幕至 F 觀察點像'):g.type==='virtual'?'正立放大虛像・屏幕接不到':!g.finite?'物體位於焦點':g.unreachable?'清楚像超出軌道':g.clear?`已對焦・倒立${g.sizeLabel}${g.clipped?'・部分超出屏幕':''}`:'屏幕尚未對焦';
   const keypoint=state.atInfinity?'infinity':g.type==='virtual'?'inside':!g.finite?'focus':!g.clear?'':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between';
   $$('[data-imaging-keypoint]').forEach(row=>{const active=row.dataset.imagingKeypoint===keypoint;row.dataset.active=String(active);row.querySelector('button').setAttribute('aria-pressed',String(active));});
-  $$('[data-imaging-quick]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.imagingQuick===keypoint)));
-  const region=state.atInfinity?'infinity':g.type==='virtual'?'inside':!g.finite?'focus':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between',cells=$(`[data-imaging-keypoint=${region}]`).cells;
-  $('[data-imaging-quick-summary]').textContent=(g.unreachable?'清楚像超出軌道。':!g.clear&&g.type==='real'?'屏幕尚未對焦。':'')+(g.type==='virtual'?`${cells[1].textContent}，${cells[2].textContent}；屏幕接不到。`:g.finite?`像在${cells[1].textContent}，${cells[2].textContent}。`:`${cells[1].textContent}，${cells[2].textContent}。`);
   root.dataset.atInfinity=String(!!state.atInfinity);root.dataset.imageType=g.type;root.dataset.imagePosition=g.finite?g.v:'';root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.clear=String(g.clear);root.dataset.magnification=g.finite?String(g.m):'';root.dataset.projectionScale=g.projectionScale;root.dataset.spread=g.spread;root.dataset.rays=showRays;root.dataset.view=front?'screen':'orbit';root.dataset.point=point;
   canvas.setAttribute('aria-label',`旋轉與縮放觀察的立體凸透鏡成像台，使用下方位置尺調整距離，物距${state.atInfinity?'無窮遠':distanceLabel(state.object)}，屏幕距離${distanceLabel(state.screen)}，${$('[data-imaging-badge]').textContent}`);
   studio?.update();
@@ -73,9 +70,8 @@ function initialise(root){
  $('[data-imaging-rays]').addEventListener('click',()=>{showRays=!showRays;update();});$('[data-imaging-view]').addEventListener('click',()=>{clearGestureNotice();front=!front;update();});
  $$('[data-imaging-point]').forEach(b=>b.addEventListener('click',()=>{point=b.dataset.imagingPoint;update();}));
  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.addEventListener('click',()=>{selected=key;update();});b.addEventListener('keydown',e=>{let value=state[key];if(e.key==='Home')value=G[key+'Min'];else if(e.key==='End')value=G[key+'Max'];else if(['ArrowLeft','ArrowRight','ArrowDown','ArrowUp'].includes(e.key)){const direction=['ArrowLeft','ArrowDown'].includes(e.key)?-1:1;value+=(key==='object'?-direction:direction)*(e.shiftKey?.2:1);}else return;e.preventDefault();move(key,value);});});
- $$('[data-imaging-keypoint],[data-imaging-quick]').forEach(b=>b.addEventListener('click',()=>{
-  const next=imagingKeypointState(b.dataset.imagingKeypoint||b.dataset.imagingQuick);if(!next)return;clearGestureNotice();state=next;selected='screen';front=false;update();
-  if(b.dataset.imagingQuick&&workspace.compact)comparison.open=false;
+ $$('[data-imaging-keypoint]').forEach(b=>b.addEventListener('click',()=>{
+  const next=imagingKeypointState(b.dataset.imagingKeypoint);if(!next)return;clearGestureNotice();state=next;selected='screen';front=false;update();
  }));
  try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-imaging-fallback]').hidden=false;$('[data-imaging-view]').hidden=true;root.dataset.webgl='unavailable';console.warn('Imaging 3D:',error.message);}
  update();root.dataset.ready='true';
@@ -145,12 +141,12 @@ function initialise(root){
    if(pointers.size>1){if(gesture.kind!=='pinch')return;front=false;orbit.zoom=THREE.MathUtils.clamp(gesture.zoom*gesture.distance/Math.max(pinch(),1),.65,1);update();return;}
    if(gesture.kind==='pinch')return;
    if(gesture.kind==='apparatus'){if(Math.hypot(e.clientX-gesture.startX,e.clientY-gesture.startY)>=4)showGestureNotice(gesture.key);return;}
-   front=false;orbit.azimuth=THREE.MathUtils.clamp(gesture.azimuth-(e.clientX-gesture.startX)*.005,-1.2,-.15);orbit.polar=THREE.MathUtils.clamp(gesture.polar+(e.clientY-gesture.startY)*.004,.9,1.48);update();
+   front=false;orbit.azimuth=gesture.azimuth-(e.clientX-gesture.startX)*.005;orbit.polar=THREE.MathUtils.clamp(gesture.polar+(e.clientY-gesture.startY)*.004,.25,1.55);update();
   });
   function stop(e){pointers.delete(e.pointerId);gesture=null;canvas.style.cursor='grab';}
   for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,stop);
   canvas.addEventListener('wheel',e=>{e.preventDefault();clearGestureNotice();if(front)return;orbit.zoom=THREE.MathUtils.clamp(orbit.zoom+e.deltaY*.001,.65,1);update();},{passive:false});
-  canvas.addEventListener('keydown',e=>{const steps={ArrowLeft:[.06,0],ArrowRight:[-.06,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!steps[e.key])return;e.preventDefault();clearGestureNotice();front=false;orbit.azimuth=THREE.MathUtils.clamp(orbit.azimuth+steps[e.key][0],-1.2,-.15);orbit.polar=THREE.MathUtils.clamp(orbit.polar+steps[e.key][1],.9,1.48);update();});
+  canvas.addEventListener('keydown',e=>{const steps={ArrowLeft:[.06,0],ArrowRight:[-.06,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!steps[e.key])return;e.preventDefault();clearGestureNotice();front=false;orbit.azimuth=orbit.azimuth+steps[e.key][0];orbit.polar=THREE.MathUtils.clamp(orbit.polar+steps[e.key][1],.25,1.55);update();});
   function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);viewport=workspace.safeRect();camera.aspect=viewport.width/viewport.height;fitToViewport();updateCamera();requestDraw();}new ResizeObserver(resize).observe(canvas);resize();
   return {update:syncScene,scene,camera,renderer,source,lens,screen,screenPlane,rays,devices};
  }
