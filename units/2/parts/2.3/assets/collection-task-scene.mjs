@@ -1,7 +1,7 @@
-import {regionPath,looseFunnelPose,STONE_OFFSETS} from './collection-task-contact.mjs?v=eight-1';
-import {directPosition,parkPosition} from './collection-task-direct.mjs?v=eight-1';
+import {regionPath,looseFunnelPose,STONE_OFFSETS} from './collection-task-contact.mjs?v=eight-2';
+import {directPosition,parkPosition} from './collection-task-direct.mjs?v=eight-2';
 import {createThistleFunnel,createDoubleStopper,svgNode as n} from './thistle-apparatus.mjs?v=thistle-1';
-import {taskHosePoints,deskFrame,jarPose,jarMouth,waterSurface,flaskSurface,ease,mix,clamp,rigPosition,heldMaterial,usedMarbleIds,vesselReaction} from './collection-task-model.mjs?v=eight-1';
+import {taskHosePoints,deskFrame,jarPose,jarMouth,waterSurface,flaskSurface,ease,mix,clamp,rigPosition,heldMaterial,usedMarbleIds,vesselReaction} from './collection-task-model.mjs?v=eight-2';
 import {liquidGeometry} from './co2-model.mjs?v=marble-fast-1';
 const image=(file,box)=>{const el=n('image',{href:'assets/'+file,preserveAspectRatio:'none'});['x','y','width','height'].forEach((key,i)=>el.setAttribute(key,box[i]));return el;};
 const box=(el,b)=>['x','y','width','height'].forEach((k,i)=>el.setAttribute(k,b[i]));
@@ -22,7 +22,7 @@ export function materialArt(id){
  if(id==='forceps')s.append(sprite('co2-tools-atlas.png',[842,35,110,1155],[65,0,16,140],[1268,1241]));
  if(id==='funnel'){const f=createThistleFunnel('desk-icon-'+Math.random().toString(36).slice(2),{top:0,tip:130,port:0});f.render({x:90,y:3});s.append(f.group);}
  if(id==='rig'){
-  const id='desk-tool-'+Math.random().toString(36).slice(2),defs=n('defs'),clip=n('clipPath',{id});clip.append(n('path',{d:'M15 195V-48Q15 -84 52 -84H150V-57H52Q37 -57 37 -45V195Z'}));defs.append(clip);s.append(defs);
+  const id='desk-tool-'+Math.random().toString(36).slice(2),defs=n('defs'),clip=n('clipPath',{id});clip.append(n('path',{d:'M15 -20V-48Q15 -84 52 -84H150V-57H52Q37 -57 37 -45V-20ZM15 74H37V195H15Z'}));defs.append(clip);s.append(defs);
   const g=n('g',{transform:'translate(25 49) scale(.25)'}),photo=n('g',{'clip-path':`url(#${id})`});photo.append(sprite('co2-tube.webp',[85,45,172,350],[6.8,-90,137.6,280],[440,440]));g.append(photo,createDoubleStopper());s.append(g);
   const u=n('g',{transform:'translate(92 75) scale(.25)'});s.append(u);glass('M0 -140V40Q0 60 20 60H240Q260 60 260 40V10',u);
   const pts=taskHosePoints({x:61.5,y:31.5},{x:92,y:40},100);pts.slice(1).forEach((b,i)=>{const a=pts[i],piece=n('g',{transform:`translate(${a.x} ${a.y}) rotate(${Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI-90})`});piece.append(sprite('co2-tools-atlas.png',[338,100+i*980/64,90,24],[-2,0,4,Math.hypot(b.x-a.x,b.y-a.y)+.5],[1268,1241]));s.append(piece);});
@@ -80,9 +80,9 @@ export function createCollectionScene(svg){
  const tankBody=sprite('oxygen-setup-sprites.png',[650,170,750,360],[580,310,480,270],[1686,933]);art.append(tankBody);
  // 先畫漏斗，再畫瓶塞；塞子會遮住穿孔內的長管。
  const funnel=createThistleFunnel('desk',{top:-140,tip:350,port:-26});art.append(funnel.group);
- const first=n('g',{'data-desk-rig':''}),firstClip=n('clipPath',{id:'desk-first-glass'});firstClip.append(n('path',{d:'M15 195V-48Q15 -84 52 -84H150V-57H52Q37 -57 37 -45V195Z'}));defs.append(firstClip);
+ const first=n('g',{'data-desk-rig':''}),firstClip=n('clipPath',{id:'desk-first-glass'});firstClip.append(n('path',{d:'M15 -20V-48Q15 -84 52 -84H150V-57H52Q37 -57 37 -45V-20ZM15 74H37V195H15Z'}));defs.append(firstClip);
  const firstGlass=n('g',{'clip-path':'url(#desk-first-glass)'});firstGlass.append(sprite('co2-tube.webp',[85,45,172,350],[6.8,-90,137.6,280],[440,440]));const stopper=createDoubleStopper();stopper.setAttribute('transform','scale(1 .74)');
- const jointMask=n('mask',{id:'desk-stopper-bores',maskUnits:'userSpaceOnUse',x:-55,y:-15,width:110,height:80});jointMask.append(n('rect',{x:-55,y:-15,width:110,height:80,fill:'white'}));for(const x of [-26,26])jointMask.append(n('ellipse',{cx:x,cy:.3,rx:9,ry:3.2,fill:'black'}));defs.append(jointMask);stopper.setAttribute('mask','url(#desk-stopper-bores)');stopper.dataset.deskBoreAlignment='-26,26';first.append(firstGlass,stopper);art.append(first);
+ const jointMask=n('mask',{id:'desk-stopper-bores',maskUnits:'userSpaceOnUse',x:-55,y:-15,width:110,height:80});jointMask.append(n('rect',{x:-55,y:-15,width:110,height:80,fill:'white'}));for(const x of [-26,26])jointMask.append(n('ellipse',{cx:x,cy:.3,rx:9,ry:3.2,fill:'black'}));defs.append(jointMask);stopper.setAttribute('mask','url(#desk-stopper-bores)');stopper.dataset.deskBoreAlignment='-26,26';const boreGlass=sprite('co2-tube.webp',[98,250,22,100],[17.2,-20,17.6,96],[440,440]);boreGlass.dataset.deskBoreGlass='';first.append(firstGlass,boreGlass,stopper);art.append(first);
  const neckClip=n('clipPath',{id:'desk-neck-front'});neckClip.append(n('path',{d:'M252 205Q300 225 348 205V212Q300 232 252 212ZM254 215L264 218L268 274H259ZM336 218L346 215L341 274H333Z'}));defs.append(neckClip);const neckFront=image('co2-flask.webp',[70,145,460,460]);neckFront.setAttribute('clip-path','url(#desk-neck-front)');neckFront.setAttribute('data-desk-neck-front','');art.append(neckFront);
  const collector=n('g',{'data-desk-collector':''});art.append(collector);glass('M0 -140V40Q0 60 20 60H240Q260 60 260 40V10',collector);
  const rubber=n('g',{'data-desk-hose':''}),segments=[];art.append(rubber);for(let i=0;i<64;i++){const g=n('g'),piece=sprite('co2-tools-atlas.png',[338,100+i*980/64,90,24],[-7,0,14,10],[1268,1241]);g.append(piece);rubber.append(g);segments.push({g,piece});}

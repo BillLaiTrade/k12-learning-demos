@@ -1,5 +1,5 @@
-import {jarPose,jarMouth,outletPose,clamp,rigPosition,heldMaterial,usedMarbleIds} from './collection-task-model.mjs?v=eight-1';
-import {contactRegions,contains} from './collection-task-contact.mjs?v=eight-1';
+import {jarPose,jarMouth,outletPose,clamp,rigPosition,heldMaterial,usedMarbleIds} from './collection-task-model.mjs?v=eight-2';
+import {contactRegions,contains} from './collection-task-contact.mjs?v=eight-2';
 export const TOOL_HOME={forceps:{x:485,y:305},water:{x:660,y:130},acid:{x:440,y:65},rig:{x:500,y:50},funnel:{x:535,y:550},plate:{x:605,y:-20},peroxide:{x:680,y:65},catalyst:{x:490,y:450}};
 export function directPosition(s,id){
  if(s.dragging?.id===id)return s.dragging.position;

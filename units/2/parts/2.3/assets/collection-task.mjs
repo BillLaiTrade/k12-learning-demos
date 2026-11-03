@@ -1,6 +1,6 @@
-import {TOOL_HOME,directPosition,limitPosition,approach,parkPosition} from './collection-task-direct.mjs?v=eight-1';
-import {DESK_MATERIALS,createDesk,actDesk,advanceDesk,reacting,deskFrame,liquidSeal,heldMaterial,vesselReaction,setupGuidance} from './collection-task-model.mjs?v=eight-1';
-import {createCollectionScene,materialArt} from './collection-task-scene.mjs?v=eight-1';
+import {TOOL_HOME,directPosition,limitPosition,approach,parkPosition} from './collection-task-direct.mjs?v=eight-2';
+import {DESK_MATERIALS,createDesk,actDesk,advanceDesk,reacting,deskFrame,liquidSeal,heldMaterial,vesselReaction,setupGuidance} from './collection-task-model.mjs?v=eight-2';
+import {createCollectionScene,materialArt} from './collection-task-scene.mjs?v=eight-2';
 const form=document.querySelector('#gas-report-form'),svg=form.querySelector('.task-scene'),scene=createCollectionScene(svg),operation=form.querySelector('[data-desk-operate]'),feedback=form.querySelector('#gas-report-feedback');
 let state=createDesk(),raf=0,last=0,suspended=false,drag=null,feedbackKey=null;
 const scroller=form.querySelector('.desk-scroll'),hint=form.querySelector('[data-desk-hint]');
