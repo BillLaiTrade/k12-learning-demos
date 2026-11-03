@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
   <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-compact1"></script>
   <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-cart1">
-  <script type="module" src="assets/oblique-cart.mjs?v=20261103-cart1"></script>
+  <script type="module" src="assets/oblique-cart.mjs?v=20261103-cart2"></script>
   <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261103-fit2"></script>
   <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-fit2">
   <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-fit2"></script>
@@ -313,7 +313,45 @@
       </div>
       <noscript><p>光由水或玻璃進入空氣，由慢變快，斜射時偏離法線，折射角較大。0°時不偏折。啟用JavaScript後可切換介質、發射並直接在光路上觀察角度與說明。</p></noscript>
     </div>
-  <details class="return-explanation oblique-explanation" id="exit-explanation"><summary>為什麼從水或玻璃射回空氣，會偏離法線？</summary><p>光在水或玻璃中的傳播速度較慢，在空氣中較快。波前斜著抵達介面時，一側先進入空氣、速度先增加，另一側仍在水或玻璃中，還比較慢；波前因而轉向，使光的前進方向偏離法線。所以斜向進入較快介質時，折射角比入射角大。</p><p>沿法線入射（0°）時，波前各處同時進入新介質，速度仍會改變，但方向不偏折，兩個角都是0°。角度都從法線量起。</p></details>
+    <details class="oblique-explanation" id="exit-explanation">
+      <summary>為什麼從水或玻璃射回空氣，會偏離法線？</summary>
+      <div class="oblique-explanation-body">
+        <div class="oblique-analogy-grid">
+          <div>
+            <div class="oblique-cart-scene">
+              <svg viewBox="0 0 520 340" role="img" aria-label="小車由上方較難前進的地面斜入下方平滑地面，一側先加速而轉向；類比光由水或玻璃射入空氣，偏離法線。">
+                <defs>
+                  <linearGradient id="exit-cart-tire" x1="0" x2="1"><stop stop-color="#20272b"/><stop offset=".3" stop-color="#4a5053"/><stop offset=".65" stop-color="#252b2e"/><stop offset="1" stop-color="#11181c"/></linearGradient>
+                  <linearGradient id="exit-cart-axle" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e5bb7e"/><stop offset=".4" stop-color="#c59151"/><stop offset=".65" stop-color="#d3a267"/><stop offset="1" stop-color="#94612f"/></linearGradient>
+                  <linearGradient id="exit-cart-metal" x1="0" x2="1"><stop stop-color="#626d72"/><stop offset=".4" stop-color="#e5e7e4"/><stop offset=".6" stop-color="#8b9599"/><stop offset="1" stop-color="#444d52"/></linearGradient>
+                  <pattern id="exit-cart-rough" width="17" height="19" patternUnits="userSpaceOnUse"><path d="m2 5 3-1m5 9 2 2m-9 1 2-2" stroke="#a7804e" stroke-width="1.2" opacity=".27"/><path d="m12 3 2 1m-6 5 2-1" stroke="#fff4d6" stroke-width="2" opacity=".6"/></pattern>
+                  <pattern id="exit-cart-tread" width="8" height="9" patternUnits="userSpaceOnUse"><path d="M0 2h8m-8 5h8" stroke="#89908e" stroke-width="1" opacity=".35"/></pattern>
+                </defs>
+                <rect width="520" height="340" fill="#f2eee5"/><path d="M0 0H520V160H0Z" fill="#d8bd94"/><path d="M0 0H520V160H0Z" fill="url(#exit-cart-rough)"/><path d="M0 160H520" stroke="#b89d77" stroke-width="3"/>
+                <text id="exit-cart-medium-label" x="20" y="28" fill="#3d624c" font-size="18">水（光速較慢）</text><text x="20" y="50" fill="#6d624f" font-size="14">類比：較難前進的地面</text><text x="20" y="299" fill="#3d624c" font-size="18">空氣（光速較快）</text><text x="20" y="322" fill="#6d756b" font-size="14">類比：平滑地面</text>
+                <path id="exit-cart-normal" stroke="#487c62" stroke-width="2" stroke-dasharray="7 6"/><text id="exit-cart-normal-label" y="27" fill="#487c62" font-size="18">法線</text>
+                <path id="exit-cart-trail" fill="none" stroke="#64826a" stroke-width="3" opacity=".55"/>
+                <g id="exit-cart" transform="translate(145 67) rotate(-30)">
+                  <ellipse cy="12" rx="97" ry="31" fill="#4a4533" opacity=".14"/>
+                  <rect x="-70" y="-10" width="140" height="20" rx="7" fill="url(#exit-cart-axle)" stroke="#a8783f"/>
+                  <g data-wheel="left"><rect x="-87" y="-34" width="34" height="68" rx="12" fill="url(#exit-cart-tire)" stroke="#111a1e"/><rect x="-87" y="-34" width="34" height="68" rx="12" fill="url(#exit-cart-tread)"/><rect x="-57" y="-13" width="12" height="26" rx="3" fill="url(#exit-cart-metal)"/></g>
+                  <g data-wheel="right"><rect x="53" y="-34" width="34" height="68" rx="12" fill="url(#exit-cart-tire)" stroke="#111a1e"/><rect x="53" y="-34" width="34" height="68" rx="12" fill="url(#exit-cart-tread)"/><rect x="45" y="-13" width="12" height="26" rx="3" fill="url(#exit-cart-metal)"/></g>
+                  <path d="M0 17V57m-7-9 7 10 7-10" fill="none" stroke="#286747" stroke-width="3"/>
+                </g>
+              </svg>
+            </div>
+            <p class="oblique-cart-caption" id="exit-cart-status" role="status">斜著前進，兩輪速度相同。</p>
+            <button class="oblique-cart-action" id="exit-cart-play" type="button">播放小車示範</button>
+          </div>
+          <div class="oblique-cart-copy">
+            <p><strong>一側先進入、先加速，小車便轉向；兩輪都進入後，沿新方向前進。</strong></p>
+            <p>斜著進入時，波前各處先後進入另一種介質，一側先加速，另一側還比較慢，因此傳播方向偏離法線。</p>
+            <p>光由上方較慢的<span data-cart-medium>水</span>進入下方較快的空氣，光路偏離法線，折射角變大。沿法線入射（0°）時，各處同時加速，方向不偏折。</p>
+          </div>
+        </div>
+        <p class="oblique-model-note">小車為類比，不代表光受到摩擦。光路與角度由代表模型計算，水與玻璃的代表折射率分別為4/3與1.5；不要求計算公式。器材及光跡非實際比例，穿越動畫採共同慢動作、非實際秒數，省略介面的部分反射。</p>
+      </div>
+    </details>
 
 </div>
 </section>
