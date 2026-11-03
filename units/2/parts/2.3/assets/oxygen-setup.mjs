@@ -82,7 +82,8 @@ export function createSetupScene(view,panels) {
   const tube=svg('g',{'data-setup-body':'tube'}),pipeOuter=svg('path',{fill:'none',stroke:'#759aa2','stroke-width':19,'stroke-linecap':'round','stroke-linejoin':'round','data-shared-tube-path':''}),pipeInner=svg('path',{fill:'none',stroke:'#d4ecee','stroke-width':12,'stroke-linecap':'round','stroke-linejoin':'round'}),pipeShine=svg('path',{fill:'none',stroke:'#fff','stroke-opacity':'.9','stroke-width':3,'stroke-linecap':'round'});
   tube.append(pipeOuter,pipeInner,pipeShine);art.append(tube);
   const restingTube=svg('g',{'data-photographic-equipment':'tube'});
-  const restClip=svg('clipPath',{id:'oxygen-rest-glass'});restClip.append(svg('rect',{x:90,y:-110,width:530,height:170}));defs.append(restClip);
+  // Exclude the adjacent plate corner in the atlas, below the bent tube.
+  const restClip=svg('clipPath',{id:'oxygen-rest-glass'});restClip.append(svg('path',{d:'M90 -110H620V0H540V60H90Z'}));defs.append(restClip);
   const restGlass=svg('g',{'clip-path':'url(#oxygen-rest-glass)'});restGlass.append(sprite('tube',-27.3,-105.3,612.3,152.1));restingTube.append(restGlass);
   for(const[stroke,width]of[['#759aa2',15],['#d4ecee',10],['#fff',2]])restingTube.append(svg('path',{d:'M20 -11H96',fill:'none',stroke,'stroke-width':width}));
   const restStopper=createDoubleStopper();restStopper.setAttribute('transform','translate(20 15) rotate(-90)');restingTube.append(restStopper);art.append(restingTube);

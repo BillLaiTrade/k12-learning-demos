@@ -33,3 +33,5 @@
 2026-11-03第五區依核可圖改為三組獨立直向按鈕。新增filter-paper-model.mjs計算透射後的紙張反射；filter-paper-appearance.mjs以紙紋、霧面無自發光材質與透射色光聚光燈呈現實驗紙張；filter-paper-rendering.mjs共用模型畫固定曝光預覽及暗色備援。既有Three.js、器材幾何與正式角色保持，不把示意圖作網頁背景，無新圖像或套件。低環境光只改第五區，紙面照明與光路開關分離。
 
 2026-11-03第五區依最新回饋改用三組原生下拉選單；lesson.mjs接收change並保留另外兩組狀態，path-lessons.css收斂高度。filter-paper模型、照明及渲染檔案未改，不新增素材或依賴。前輪直向按鈕為歷史。
+
+2026-11-03第一、二區依核可分工新增prism-lessons.css及prism-refraction-explanation.svg／prism-dispersion-explanation.svg。SVG由scripts/build-prism-explanations.mjs讀取既有光學模型產生，玻璃漸層與細陰影為呈現，幾何／光路維持同一比例；局部近看兩軸同倍率、不改角差。角色沿用正式共用頭像，核可概念圖僅作設計證據，未嵌入頁面。precision-prism新增固定白光參照canvas，沿用原drawProjection與曝光；原光學及3D模組未改。

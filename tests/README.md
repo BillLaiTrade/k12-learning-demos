@@ -1,3 +1,12 @@
+## 4.5 第一、二區色散教學分工（2026-11-03）
+
+```sh
+node tests/unit-4.5-prism-explanations.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+圖解4項核對靜態產物與正式模型、均勻比例、折點／法線、紅藍偏折順序與局部近看不改角差。整課保留真實3D／白幕像素、第一區滑軌與鍵盤、第二區固定器材與各色落點、七寬度器材避讓、手機觸控／取消、WebGL備援及無JS；新增教學分工、原生details與圖像載入、同一幕面白光參照固定不變。支援COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH。模型未改，不重跑未受影響的純模型套件；新增圖解檢查以node直接執行，確認列出4項子測試。
+
 ## 4.5 第五區精簡下拉選單（2026-11-03）
 
 ```sh
@@ -1321,6 +1330,11 @@ node --test --test-reporter=tap --test-concurrency=1 tests/unit-2.3-reaudit.test
 ## 4.4 第四區圖卡尺與五列觀察（2026-11-03）
 
 沿用 `node tests/unit-4.4-magnifier-optics.test.mjs`、`node tests/unit-4.4-magnifier-studio.test.cjs`、`node tests/unit-4.4.test.cjs`。本輪4＋11＋23＝38項（瀏覽器含主項）。第四區新增整列／鍵盤切換、實際條件選取、尺拖曳／鍵盤／觸控、五倍縮放、0.6F虛像真交點與透明圖案；保留同尺度實際像素、屏幕遮擋／取下復原、七寬度、原生觸控及WebGL失敗備援。`MAGNIFIER_URL`／`MAGNIFIER_CAPTURE_DIR`可指定公開頁及獨立證據；正式程式無測試API。
+
+
+## 4.4 第四區跨F與預設光路（2026-11-03）
+
+沿用magnifier-optics、magnifier-studio及unit-4.4三支專項指令，模型5＋立體12＋整課23＝40項（瀏覽器含主項）。新增F前後0.001F／F／1.5F／2F的真實像距、反向線與平行出射、角度投影有限極限、會聚光進入固定眼睛的未解析狀態、遠像位置標籤及相機範圍；七寬度×四種成像共28組。原生觸控與鍵盤可跨F，確認預設已開光路、切列偏好及返回F內恢復原像素。`MAGNIFIER_URL`／`MAGNIFIER_CAPTURE_DIR`與整課`LENS_URL`／`LENS_CAPTURE_DIR`沿用；正式程式沒有測試API。
 
 ## 2.3 空氣組成主圖粒子減半（2026-11-03）
 
