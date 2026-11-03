@@ -1,6 +1,7 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {PRISM,SOURCE,SCREEN_X,SCREEN_RANGE,prismRays,LIGHTS,MATERIALS,FILTERS,rgbCss} from './color-model.mjs';
 import {drawScreen} from './rendering.mjs';
+import {createSurfaceAppearance} from './surface-appearance.mjs?v=surface-diffuse-20261103';
 const AXIS=1.65;
 function woodTexture(){
  const c=document.createElement('canvas');c.width=512;c.height=256;const x=c.getContext('2d');x.fillStyle='#b38a59';x.fillRect(0,0,512,256);
@@ -14,8 +15,8 @@ export function createStudio(root,callbacks){
  const scene=new THREE.Scene();scene.background=new THREE.Color('#91a190');scene.fog=new THREE.Fog('#91a190',23,50);
  const camera=new THREE.PerspectiveCamera(40,1,.05,70),target=surface?new THREE.Vector3(-1.6,1.05,.1):new THREE.Vector3(0,1.1,-.65);
  const orbit=surface?{azimuth:-1.05,polar:1.16,radius:7.0}:{azimuth:-.85,polar:1.08,radius:12.6};let topView=false,frame=0,state=null,signal=null,drag=null,canvasWidth=0,fit=1;
- scene.add(new THREE.HemisphereLight('#fff7e2','#6a7a60',2.2));const sun=new THREE.DirectionalLight('#fff4dc',3.3);sun.position.set(-4,8,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-7,right:7,top:7,bottom:-7});sun.shadow.bias=-.0006;scene.add(sun);
- const fill=new THREE.DirectionalLight('#d6f0f7',1.3);fill.position.set(6,4,-3);scene.add(fill);
+ scene.add(new THREE.HemisphereLight('#fff7e2','#6a7a60',surface?1.15:2.2));const sun=new THREE.DirectionalLight('#fff4dc',surface?2.1:3.3);sun.position.set(-4,8,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-7,right:7,top:7,bottom:-7});sun.shadow.bias=-.0006;scene.add(sun);
+ const fill=new THREE.DirectionalLight('#d6f0f7',surface?.65:1.3);fill.position.set(6,4,-3);scene.add(fill);
  const metal=new THREE.MeshStandardMaterial({color:'#82928b',metalness:.8,roughness:.28}),dark=new THREE.MeshStandardMaterial({color:'#293d36',metalness:.5,roughness:.35}),brass=new THREE.MeshStandardMaterial({color:'#bd9a63',metalness:.75,roughness:.3}),paper=new THREE.MeshStandardMaterial({color:'#e8e9de',roughness:.92,side:THREE.DoubleSide});
  const box=(parent,size,position,material,shadow=true)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(...size),material);m.position.set(...position);m.castShadow=shadow;m.receiveShadow=true;parent.add(m);return m;};
  const cylinder=(parent,radius,height,position,material)=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,height,48),material);m.position.set(...position);m.castShadow=true;parent.add(m);return m;};
@@ -43,23 +44,16 @@ export function createStudio(root,callbacks){
  for(const z of SCREEN_RANGE){box(screen,[.065,2.48,.06],[SCREEN_X,1.6,z],metal);mount(screen,SCREEN_X,z,.35);}for(const y of[.39,2.81])box(screen,[.065,.06,SCREEN_RANGE[1]-SCREEN_RANGE[0]+.1],[SCREEN_X,y,(SCREEN_RANGE[0]+SCREEN_RANGE[1])/2],metal);
  const sample=new THREE.Group();scene.add(sample);mount(sample,0,0,.5);box(sample,[.11,.14,1.37],[0,.97,0],dark);
  const card=new THREE.Mesh(new THREE.PlaneGeometry(1.25,1.4),basic(MATERIALS.red.rgb));card.rotation.y=-Math.PI/2;card.position.y=AXIS;sample.add(card);
+ const surfaceAppearance=surface?createSurfaceAppearance(scene,card):null;
  for(const z of[-.65,.65])box(sample,[.07,1.55,.045],[0,AXIS,z],metal);for(const y of[AXIS-.75,AXIS+.75])box(sample,[.07,.045,1.35],[0,y,0],metal);
  const observer=new THREE.Group();scene.add(observer);mount(observer,0,0,.75);
  const eyeCanvas=document.createElement('canvas');eyeCanvas.width=256;eyeCanvas.height=160;const ec=eyeCanvas.getContext('2d');ec.fillStyle='#eff2e8';ec.fillRect(0,0,256,160);ec.beginPath();ec.moveTo(30,80);ec.quadraticCurveTo(128,-10,226,80);ec.quadraticCurveTo(128,170,30,80);ec.fillStyle='#fffdf5';ec.fill();ec.strokeStyle='#637e6c';ec.lineWidth=7;ec.stroke();ec.beginPath();ec.arc(128,80,35,0,Math.PI*2);ec.fillStyle='#536e61';ec.fill();ec.beginPath();ec.arc(128,80,15,0,Math.PI*2);ec.fillStyle='#203c31';ec.fill();const eyeTexture=new THREE.CanvasTexture(eyeCanvas);eyeTexture.colorSpace=THREE.SRGBColorSpace;
  const eyeSign=new THREE.Mesh(new THREE.PlaneGeometry(1.25,.78),new THREE.MeshBasicMaterial({map:eyeTexture,side:THREE.DoubleSide,toneMapped:false}));eyeSign.position.y=AXIS;observer.add(eyeSign);
  const blocker=new THREE.Group();scene.add(blocker);mount(blocker,0,0,.65);box(blocker,[1.15,1.65,.07],[0,AXIS,0],new THREE.MeshStandardMaterial({color:'#263830',roughness:.9}));
  const rays=new THREE.Group();scene.add(rays);
- function clearRays(){for(const node of [...rays.children]){rays.remove(node);node.geometry?.dispose();node.material?.dispose();}}
- function line(points,color,opacity=.9){
-  if(surface){
-   for(let i=1;i<points.length;i++){
-    const a=points[i-1],b=points[i],direction=b.clone().sub(a);
-    const m=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,direction.length(),8),new THREE.MeshBasicMaterial({color:new THREE.Color().setRGB(...color),transparent:true,opacity,depthWrite:false,toneMapped:false}));
-    m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),direction.normalize());rays.add(m);
-   }return;
-  }
-  const m=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:new THREE.Color().setRGB(...color),transparent:true,opacity,depthWrite:false,toneMapped:false}));rays.add(m);}
- function arrow(a,b,color,at=.55){const material=basic(color),cone=new THREE.Mesh(new THREE.ConeGeometry(surface?.045:.035,surface?.16:.12,10),material);const dir=b.clone().sub(a).normalize();cone.position.copy(a).lerp(b,at);cone.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);rays.add(cone);}
+ function clearRays(){const materials=new Set();for(const node of [...rays.children]){rays.remove(node);node.traverse(part=>{part.geometry?.dispose();if(part.material)materials.add(part.material);});}for(const material of materials)material.dispose();}
+ function line(points,color,opacity=.9){const m=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:new THREE.Color().setRGB(...color),transparent:true,opacity,depthWrite:false,toneMapped:false}));rays.add(m);}
+ function arrow(a,b,color,at=.55){const material=basic(color),cone=new THREE.Mesh(new THREE.ConeGeometry(.035,.12,10),material);const dir=b.clone().sub(a).normalize();cone.position.copy(a).lerp(b,at);cone.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);rays.add(cone);}
  const v=([x,z],y=AXIS)=>new THREE.Vector3(x,y,z);
  function update(next,modelSignal){
   state=next;signal=modelSignal;const isPrism=state.kind==='prism',isFilter=state.kind==='filter'||state.kind==='eye'&&state.mode==='transmission';
@@ -77,14 +71,15 @@ export function createStudio(root,callbacks){
   blocker.position.copy(eyeTarget).multiplyScalar(.52);blocker.rotation.y=state.mode==='transmission'?Math.PI/2:-.6;
   clearRays();rays.visible=state.rays;
   if(state.rays){
-   if(isPrism){
+   if(surface)surfaceAppearance.update(signal,rays);
+   else if(isPrism){
     const trace=prismRays(state.light,state.inserted);const visible=state.inserted?trace.filter((_,i)=>i%2===0):[trace[Math.floor(trace.length/2)]];
     if(state.inserted)for(const y of[AXIS-.07,AXIS,AXIS+.07])line([v(SOURCE,y),v(trace[0].points[1],y)],LIGHTS[state.light].rgb,.95);
     for(const ray of visible){const color=state.light==='white'?(state.inserted?ray.rgb:[1,1,1]):LIGHTS[state.light].rgb;for(const y of[AXIS-.07,AXIS,AXIS+.07])line((state.inserted?ray.points.slice(1):ray.points).map(p=>v(p,y)),color,state.inserted?.75:.9);}
     arrow(v(SOURCE),v(state.inserted?trace[0].points[1]:[SCREEN_X,0]),LIGHTS[state.light].rgb,.45);
     if(state.inserted)for(const wavelength of[450,550,650]){const ray=trace.reduce((a,b)=>Math.abs(a.wavelength-wavelength)<Math.abs(b.wavelength-wavelength)?a:b);arrow(v(ray.points[2]),v(ray.points[3]),state.light==='white'?ray.rgb:LIGHTS[state.light].rgb,.55);}
    }else{
-    const source=v([-3.2,0]),origin=v([surface?-.02:0,0]);line([source,origin],signal.incoming);arrow(source,origin,signal.incoming);
+    const source=v([-3.2,0]),origin=v([0,0]);line([source,origin],signal.incoming);arrow(source,origin,signal.incoming);
     const output=signal.outgoing;
     if(Math.max(...output)>.008){
      if(isFilter){const end=state.kind==='eye'?new THREE.Vector3(eyeTarget.x,AXIS,eyeTarget.z):v([SCREEN_X,0]);if(blocker.visible)end.lerp(origin,.48);line([origin,end],output);arrow(origin,end,output);}

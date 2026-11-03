@@ -1,5 +1,5 @@
 import {TOOL_HOME,directPosition,limitPosition,approach,parkPosition} from './collection-task-direct.mjs?v=open-1';
-import {DESK_MATERIALS,createDesk,actDesk,advanceDesk,reacting,deskFrame,liquidSeal,heldMaterial,vesselReaction} from './collection-task-model.mjs?v=strong-1';
+import {DESK_MATERIALS,createDesk,actDesk,advanceDesk,reacting,deskFrame,liquidSeal,heldMaterial,vesselReaction,setupGuidance} from './collection-task-model.mjs?v=five-1';
 import {createCollectionScene,materialArt} from './collection-task-scene.mjs?v=open-1';
 const form=document.querySelector('#gas-report-form'),svg=form.querySelector('.task-scene'),scene=createCollectionScene(svg),operation=form.querySelector('[data-desk-operate]'),feedback=form.querySelector('#gas-report-feedback');
 let state=createDesk(),raf=0,last=0,suspended=false,drag=null,feedbackKey=null;
@@ -16,28 +16,29 @@ function render(){
  for(const b of form.querySelectorAll('[data-desk-tool]')){if(!b.dataset.deskMaterial)b.setAttribute('aria-pressed',String(state.tool===b.dataset.deskTool));b.disabled=!!state.motion||(!b.dataset.deskMaterial&&state.phase==='complete');b.dataset.installed=String(b.dataset.deskTool==='rig'&&state.rig||b.dataset.deskTool==='funnel'&&state.funnel||b.dataset.deskTool==='plate'&&state.jarCovered);}
  form.querySelector('[data-desk-action=stop]').hidden=!['water','acid','peroxide'].includes(state.motion?.kind);
  form.querySelector('[data-desk-action=inspect]').disabled=!!state.motion||state.phase==='complete';
- form.querySelector('.desk-instruction').textContent=state.phase==='complete'?'氣體已封存在瓶中。可重做實驗，嘗試不同操作。':'點材料上桌 → 拖曳器材對準開口 → 看提示後放開。';
+ form.querySelector('.desk-instruction').textContent=state.phase==='complete'?'氣體已封存在瓶中。可重做實驗，嘗試不同操作。':'點材料上桌 → 拖曳器材到操作位置 → 看提示後放開。';
  const nextFeedbackKey=state.feedbackKind+'|'+state.feedback;
  if(nextFeedbackKey!==feedbackKey){feedbackKey=nextFeedbackKey;const error=state.feedbackKind==='error';feedback.setAttribute('role',error?'alert':'status');feedback.setAttribute('aria-live',error?'assertive':'polite');feedback.replaceChildren();if(error){const label=document.createElement('strong');label.className='desk-feedback-label';label.textContent='操作錯誤';feedback.append(label,document.createTextNode(' '+state.feedback));}else feedback.textContent=state.feedback;}
  feedback.hidden=!state.feedback;feedback.dataset.kind=state.feedbackKind;feedback.dataset.result=state.result||'';
  {
-  const frame=deskFrame(state),observation=frame.oxygen?'反應瓶中產生氧氣或混合氣體，不能當作本次要收集的純二氧化碳。':vesselReaction(state,'jar')||vesselReaction(state,'tank')?'集氣瓶或水槽內的材料正在反應冒泡；這不是由導管送入的二氧化碳集氣。':state.phase==='complete'?'已在水下蓋片，氣體封存在集氣瓶中。':!frame.reaction&&state.contents.flask.peroxide>0&&state.contents.flask.peroxideUsed>=state.contents.flask.peroxide-.00001?'這一份雙氧水已反應完，氣泡停止；產生的氣體並非二氧化碳。':!frame.reaction&&state.acid>0&&state.reactionUsed>=state.acid-.00001?'這一份反應物已反應完，氣泡已停止；未導入瓶內的氣體已逸散。':!frame.reaction&&state.flaskWater>0?'反應瓶內已有清水；單加清水不會產生二氧化碳。':!frame.reaction?'目前沒有反應氣泡。可繼續操作，觀察材料接觸後的變化。':!liquidSeal(state)?state.rig&&state.funnel?'反應瓶有氣泡；液面尚未蓋過漏斗末端，氣體會從漏斗逸出。':'反應瓶有氣泡；瓶口未密合，氣體直接逸出。':frame.collecting&&state.airRemaining>0?'正在收進裝置原有的空氣；應先在集氣瓶外排氣。':frame.collecting?state.jarWater>.015?'反應瓶與瓶內冒泡，集氣瓶的水位逐漸下降。':'瓶內的水已排出，多餘氣體由瓶口逸入水中。':frame.outlet.y+10>524-119*state.tankWater?'出口在瓶外水中冒泡，集氣瓶水位不變。':'導管出口在水面上方，氣體直接逸入空氣。';
+  const frame=deskFrame(state),observation=setupGuidance(state)|| (frame.oxygen?'反應瓶中產生氧氣或混合氣體，不能當作本次要收集的純二氧化碳。':vesselReaction(state,'jar')||vesselReaction(state,'tank')?'集氣瓶或水槽內的材料正在反應冒泡；這不是由導管送入的二氧化碳集氣。':state.phase==='complete'?'已在水下蓋片，氣體封存在集氣瓶中。':!frame.reaction&&state.contents.flask.peroxide>0&&state.contents.flask.peroxideUsed>=state.contents.flask.peroxide-.00001?'這一份雙氧水已反應完，氣泡停止；產生的氣體並非二氧化碳。':!frame.reaction&&state.acid>0&&state.reactionUsed>=state.acid-.00001?'這一份反應物已反應完，氣泡已停止；未導入瓶內的氣體已逸散。':!frame.reaction&&state.flaskWater>0?'反應瓶內已有清水；單加清水不會產生二氧化碳。':!frame.reaction?'目前沒有反應氣泡。可繼續操作，觀察材料接觸後的變化。':!liquidSeal(state)?state.rig&&state.funnel?'反應瓶有氣泡；液面尚未蓋過漏斗末端，氣體會從漏斗逸出。':'反應瓶有氣泡；瓶口未密合，氣體直接逸出。':frame.collecting&&state.airRemaining>0?'正在收進裝置原有的空氣；應先在集氣瓶外排氣。':frame.collecting?state.jarWater>.015?'反應瓶與瓶內冒泡，集氣瓶的水位逐漸下降。':'瓶內的水已排出，多餘氣體由瓶口逸入水中。':frame.outlet.y+10>524-119*state.tankWater?'出口在瓶外水中冒泡，集氣瓶水位不變。':'導管出口在水面上方，氣體直接逸入空氣。');
   const readout=form.querySelector('[data-desk-observation]');if(readout.textContent!==observation)readout.textContent=observation;
   const coords=scene.render(state);for(const b of targets){const id=b.dataset.deskTarget,c=coords[id];b.style.left=c.x/1100*100+'%';b.style.top=(c.y+100)/750*100+'%';b.hidden=id==='outlet'?!state.rig:id==='funnel'?!state.funnel:!state.selected.includes(id);b.disabled=!!state.motion||state.phase==='complete';b.dataset.active=String(state.focus===id);b.dataset.available=String(!!state.tool);}
  }
 }
-function pause(){cancelDrag();cancelAnimationFrame(raf);raf=0;last=0;suspended=true;form.dataset.paused='true';}
+function pause(){cancelShelf();cancelDrag();cancelAnimationFrame(raf);raf=0;last=0;suspended=true;form.dataset.paused='true';}
 function tick(now){if(suspended||state.phase!=='operate'){raf=0;return;}const dt=last?Math.min(120,now-last):0;last=now;const before=state.motion;advanceDesk(state,dt);if(before&&!state.motion&&innerWidth<=700&&!before.returnAfter){const id=before.tool,p=['rig','funnel'].includes(id)&&state[id]?{x:300,y:300}:id&&state.positions[id]?state.positions[id]:before.kind==='outlet'?directPosition(state,'outlet'):directPosition(state,'jar');camera(p);}
+ if(shelf?.moved){const r=scroller.getBoundingClientRect();if(shelf.clientY>innerHeight-60&&r.top>shelf.clientY-60)window.scrollBy(0,9);else if(shelf.clientY<60&&r.bottom<shelf.clientY+60)window.scrollBy(0,-9);}
  if(drag?.moved)updateDrag(now,true);render();raf=requestAnimationFrame(tick);}
 function resume(){if(state.phase!=='operate')return;suspended=false;last=0;document.dispatchEvent(new CustomEvent('air-experiment-play',{detail:'collection-task'}));if(!raf)raf=requestAnimationFrame(tick);}
 function camera(p){if(innerWidth>700||!p)return;const scale=svg.getBoundingClientRect().width/1100;scroller.scrollLeft=Math.max(0,(p.x*scale)-scroller.clientWidth/2);}
 function perform(action,value){
  const oldMotion=state.motion;
- if(action==='restart'){cancelDrag();cancelAnimationFrame(raf);raf=0;const selected=[...state.selected];state=createDesk();state.selected=selected;for(const id of selected)if(TOOL_HOME[id])state.positions[id]={...TOOL_HOME[id]};}
+ if(action==='restart'){cancelDrag();cancelAnimationFrame(raf);raf=0;cancelShelf();state=createDesk();}
  else {if(action==='reset'||action==='take')cancelDrag();state=actDesk(state,action,value);}
  if((action==='tool'||action==='take')&&state.selected.includes(value)){if(TOOL_HOME[value]&&!state.positions[value])state.positions[value]={...TOOL_HOME[value]};const p=['rig','funnel'].includes(value)&&state[value]?{x:300,y:300}:TOOL_HOME[value]?directPosition(state,value):value==='flask'?{x:300,y:350}:value==='tank'?{x:1000,y:440}:value==='marble'?{x:520,y:550}:directPosition(state,'jar');camera(p);if(innerWidth<=700)scroller.scrollIntoView({block:'center',behavior:'instant'});}
  if(state.motion&&state.motion!==oldMotion){
-  const m=state.motion;if(m.kind==='place-stone')m.autoFill=true;if(m.kind==='uncover'){m.tool='plate';m.toolStart=state.dragging?.position||directPosition(state,'plate');}
+  const m=state.motion;if(m.kind==='place-stone'||m.kind==='drop-solid'&&m.solid==='marble')m.autoFill=true;if(m.kind==='uncover'){m.tool='plate';m.toolStart=state.dragging?.position||directPosition(state,'plate');}
   if(m.tool)m.endTool=parkPosition(state,m.tool,m.target||value);
   if(action==='stop'&&oldMotion){m.tool=oldMotion.tool;m.toolStart=oldMotion.toolStart;m.endTool=oldMotion.endTool;}
   const id=action==='target'?value:['rotate','relocate','uncover','immerse','extract'].includes(action)?'jar':action==='outlet'?'outlet':null;
@@ -49,13 +50,19 @@ function perform(action,value){
  if(state.phase!=='operate'){cancelAnimationFrame(raf);raf=0;last=0;}
 }
 form.addEventListener('submit',e=>e.preventDefault());
-// 觸控以同一按鈕上的按下／放開直接處理；捲動、取消及相容 click 不重複切換。
-let materialTouch=null,lastMaterialTouch=null;
-form.addEventListener('pointerdown',e=>{const b=e.target.closest('[data-desk-material]');if(e.pointerType==='touch'&&e.isPrimary&&b&&!b.disabled)materialTouch={id:e.pointerId,b,x:e.clientX,y:e.clientY};});
-form.addEventListener('pointermove',e=>{if(materialTouch?.id===e.pointerId&&Math.hypot(e.clientX-materialTouch.x,e.clientY-materialTouch.y)>12)materialTouch=null;});
-form.addEventListener('pointercancel',e=>{if(materialTouch?.id===e.pointerId)materialTouch=null;});
-form.addEventListener('pointerup',e=>{if(materialTouch?.id!==e.pointerId)return;const t=materialTouch;materialTouch=null;if(e.target.closest('[data-desk-material]')!==t.b||t.b.disabled)return;e.preventDefault();lastMaterialTouch={b:t.b,time:e.timeStamp};perform('take',t.b.dataset.deskMaterial);});
-form.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.deskMaterial&&(e.pointerType==='touch'||e.sourceCapabilities?.firesTouchEvents||e.detail>0&&!e.pointerType&&lastMaterialTouch?.b===b&&e.timeStamp-lastMaterialTouch.time<750))return;if(b.dataset.deskMaterial)perform('take',b.dataset.deskMaterial);else if(b.dataset.deskTool)perform('tool',b.dataset.deskTool);else if(b.dataset.deskTarget)perform('target',b.dataset.deskTarget);else if(b.dataset.deskAction)perform(b.dataset.deskAction,b.dataset.value);});
+// 材料區支援點選與拖曳取用，放到桌面才取用；取消或放在桌外不改變狀態。
+let shelf=null,lastMaterialTouch=null;
+function cancelShelf(){if(!shelf)return;const d=shelf;shelf=null;d.ghost?.remove();if(d.b.hasPointerCapture?.(d.id))d.b.releasePointerCapture(d.id);}
+form.addEventListener('pointerdown',e=>{const b=e.target.closest('[data-desk-material]');if(!b||b.disabled||!e.isPrimary||e.button!==0)return;shelf={id:e.pointerId,b,x:e.clientX,y:e.clientY,moved:false,clientY:e.clientY};b.setPointerCapture(e.pointerId);resume();});
+form.addEventListener('pointermove',e=>{if(shelf?.id!==e.pointerId)return;const d=shelf;d.clientY=e.clientY;if(!d.moved&&Math.hypot(e.clientX-d.x,e.clientY-d.y)<10)return;e.preventDefault();if(!d.moved){d.moved=true;d.ghost=document.createElement('div');d.ghost.className='desk-shelf-ghost';d.ghost.setAttribute('aria-hidden','true');d.ghost.append(materialArt(d.b.dataset.deskMaterial));document.body.append(d.ghost);}d.ghost.style.left=e.clientX+'px';d.ghost.style.top=e.clientY+'px';},{passive:false});
+form.addEventListener('pointerup',e=>{if(shelf?.id!==e.pointerId)return;const d=shelf,id=d.b.dataset.deskMaterial;lastMaterialTouch={b:d.b,time:e.timeStamp};cancelShelf();e.preventDefault();if(!d.moved){perform('take',id);return;}const r=scroller.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)return;if(!state.selected.includes(id))perform('take',id);if(!state.selected.includes(id))return;if(TOOL_HOME[id]&&!(id==='rig'&&state.rig||id==='funnel'&&state.funnel||id==='plate'&&state.jarCovered)){const q=world(e.clientX,e.clientY);state.positions[id]=limitPosition(state,id,q);}else if(id==='jar'&&state.jarPlace===0&&!state.jarCovered){const q=world(e.clientX,e.clientY);state.positions.jar=limitPosition(state,id,q);}state.tool=null;render();resume();});
+form.addEventListener('pointercancel',cancelShelf);form.addEventListener('lostpointercapture',e=>{if(shelf?.id===e.pointerId)cancelShelf();});
+let actionTouch=null,lastActionTouch=null;
+form.addEventListener('pointerdown',e=>{const b=e.target.closest('[data-desk-action]');if(e.pointerType==='touch'&&e.isPrimary&&b&&!b.disabled)actionTouch={id:e.pointerId,b,x:e.clientX,y:e.clientY};});
+form.addEventListener('pointermove',e=>{if(actionTouch?.id===e.pointerId&&Math.hypot(e.clientX-actionTouch.x,e.clientY-actionTouch.y)>12)actionTouch=null;});
+form.addEventListener('pointercancel',()=>{actionTouch=null;});
+form.addEventListener('pointerup',e=>{if(actionTouch?.id!==e.pointerId)return;const t=actionTouch;actionTouch=null;if(e.target.closest('[data-desk-action]')!==t.b||t.b.disabled)return;e.preventDefault();lastActionTouch={b:t.b,time:e.timeStamp};perform(t.b.dataset.deskAction,t.b.dataset.value);});
+form.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.deskAction&&e.detail>0&&lastActionTouch?.b===b&&e.timeStamp-lastActionTouch.time<750)return;if(b.dataset.deskMaterial&&(e.detail>0&&lastMaterialTouch?.b===b&&e.timeStamp-lastMaterialTouch.time<750))return;if(b.dataset.deskMaterial)perform('take',b.dataset.deskMaterial);else if(b.dataset.deskTool)perform('tool',b.dataset.deskTool);else if(b.dataset.deskTarget)perform('target',b.dataset.deskTarget);else if(b.dataset.deskAction)perform(b.dataset.deskAction,b.dataset.value);});
 const world=(x,y)=>{const m=svg.getScreenCTM();return new DOMPoint(x,y).matrixTransform(m.inverse());};
 function clearHint(){hint.textContent='';hint.hidden=true;state.contact=null;}
 function cancelDrag(){if(!drag)return;const d=drag;drag=null;state.dragging=null;clearHint();if(d.b.hasPointerCapture?.(d.id))d.b.releasePointerCapture(d.id);form.dataset.dragging='';render();}
@@ -94,5 +101,5 @@ svg.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;e.
 svg.addEventListener('pointerup',e=>{if(drag?.id===e.pointerId){if(drag.moved)updateDrag(performance.now());finishDrag(true);}});
 svg.addEventListener('pointercancel',cancelDrag);svg.addEventListener('lostpointercapture',()=>{if(drag)cancelDrag();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});window.addEventListener('pagehide',pause);document.addEventListener('air-experiment-play',e=>{if(e.detail!=='collection-task')pause();});new IntersectionObserver(entries=>{if(!entries[0].isIntersecting&&state.phase==='operate')pause();},{rootMargin:'100px'}).observe(form);
-form.addEventListener('keydown',e=>{if(e.key==='Escape'){if(drag){cancelDrag();return;}if(['water','acid','peroxide'].includes(state.motion?.kind))perform('stop');else if(state.tool)perform('tool',state.tool);}});
+form.addEventListener('keydown',e=>{if(e.key==='Escape'){if(shelf){cancelShelf();return;}if(drag){cancelDrag();return;}if(['water','acid','peroxide'].includes(state.motion?.kind))perform('stop');else if(state.tool)perform('tool',state.tool);}});
 render();

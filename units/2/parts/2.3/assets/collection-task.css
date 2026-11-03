@@ -89,3 +89,7 @@
 /* 已知錯誤與一般操作回饋區分；不中斷拖曳或重試。 */
 #s6 .desk-feedback[data-kind=error]{background:#fff0ed;color:#842d25;border-top-color:#cf8c80;border-left:6px solid #ad3e30;font-weight:650;line-height:1.75}
 #s6 .desk-feedback-label{display:inline-block;margin-right:7px;padding:1px 8px;border-radius:4px;background:#a73529;color:#fff;font-weight:800;white-space:nowrap}
+
+#s6 .desk-material{touch-action:none;cursor:grab}
+.desk-shelf-ghost{position:fixed;z-index:9999;width:86px;height:86px;transform:translate(-50%,-50%);pointer-events:none;filter:drop-shadow(0 5px 5px #243c3250)}
+.desk-shelf-ghost svg{width:100%;height:100%}
