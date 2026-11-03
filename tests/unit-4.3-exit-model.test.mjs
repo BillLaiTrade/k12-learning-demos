@@ -53,8 +53,8 @@ test('detail arrows are positioned on the visible part of each ray rather than o
  const box=[530,480,240,180];
  for(const medium of ['water','glass'])for(const angle of [0,1,30,35])for(const g of [entryGeometry(medium,angle),exitGeometry(medium,angle)]){
   for(const [index,from,to]of [[0,g.source,g.hit],[1,g.hit,g.end]]){
-   const [start,end]=visibleInterval(from,to,box),fraction=start+(end-start)*(index===0?.18:.82),p=from.map((n,i)=>n+(to[i]-n)*fraction);
-   assert.ok(p[0]>=530&&p[0]<=770&&p[1]>=480&&p[1]<=660);assert.ok(Math.hypot(p[0]-650,p[1]-570)>70);
+   const [start,end]=visibleInterval(from,to,box),fraction=start+(end-start)*(index===0?.18:.4),p=from.map((n,i)=>n+(to[i]-n)*fraction);
+   assert.ok(p[0]>=530&&p[0]<=770&&p[1]>=480&&p[1]<=660);assert.ok(index===0?Math.hypot(p[0]-650,p[1]-570)>70:Math.hypot(p[0]-650,p[1]-570)<66);
   }
  }
  assert.equal(visibleInterval([0,0],[20,0],box),null);
