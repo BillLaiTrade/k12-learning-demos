@@ -41,7 +41,7 @@ function initialise(root){
   const g=paintProjection(),focus=state.stage==='focus';
   $$('[data-imaging-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingMode===state.stage)));
   $('[data-imaging-object-controls]').hidden=focus;$('[data-imaging-comparison]').hidden=focus;
-  $('[data-imaging-prompt]').textContent=focus?'固定圖卡與透鏡；點擊下方位置尺或拖曳把手，觀察屏幕清楚與模糊的變化。':'使用下方圖卡位置尺改變物距，再調整屏幕位置尺重新對焦。';
+  $('[data-imaging-prompt]').textContent=focus?'固定圖卡與透鏡；點選下方刻度按鈕，觀察屏幕清楚與模糊的變化。':'使用下方圖卡位置尺改變物距，再調整屏幕位置尺重新對焦。';
   $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.disabled=key==='object'&&focus;b.textContent=key==='object'?'圖卡 ↔':'屏幕 ↔';b.setAttribute('aria-pressed',String(key===selected));b.setAttribute('aria-label',`${key==='object'?'發光圖卡':'屏幕'}，${state[key]}公分，可用方向鍵移動`);});
   for(const handle of $$('[data-imaging-ruler-handle]')){const key=handle.dataset.imagingRulerHandle,max=G[key+'Max'];handle.style.left=`${(key==='object'?1-state[key]/max:state[key]/max)*100}%`;handle.setAttribute('aria-valuenow',String(state[key]));handle.setAttribute('aria-valuetext',`${key==='object'?'圖卡':'屏幕'}距離透鏡${state[key]}公分`);}
   const target=$('[data-imaging-target]');target.hidden=!g.finite||g.unreachable;target.dataset.distance=g.finite?String(g.v):'';target.style.setProperty('--target-position',`${g.finite?g.v/G.screenMax*100:0}%`);$('[data-imaging-target-label]').setAttribute('aria-label',g.finite?`屏幕移至清楚像位置，${Math.round(g.v*10)/10}公分`:'沒有有限距離的清楚像位置');
@@ -51,7 +51,7 @@ function initialise(root){
   $('[data-imaging-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-imaging-rays]').setAttribute('aria-pressed',String(showRays));$('[data-imaging-trace]').hidden=!showRays;
   $$('[data-imaging-point]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingPoint===point)));
   $('[data-imaging-view]').textContent=front?'返回實驗台':'放大查看';$('[data-imaging-view]').setAttribute('aria-pressed',String(front));
-  $('[data-imaging-hint]').textContent=front?'正面觀察同一片屏幕；點擊下方位置尺或拖曳把手調整。輔助光路在整體視角顯示。':'空白處可旋轉視角，滾輪或雙指縮放；器材距離請使用下方位置尺調整。';
+  $('[data-imaging-hint]').textContent=front?'正面觀察同一片屏幕；點選下方刻度按鈕調整。輔助光路在整體視角顯示。':'空白處可旋轉視角，滾輪或雙指縮放；器材距離請使用下方位置尺調整。';
   let message=g.clear?`屏幕已對焦：倒立${g.sizeLabel}的實像。`:'屏幕尚未對焦。移動屏幕，找清楚的倒立像。';
   if(!g.finite)message='物體在焦點上，無法在有限距離的屏幕上找到清楚像。將圖卡移遠一些再試。';
   else if(g.unreachable)message='清楚像的位置已超出軌道，屏幕移到最遠仍無法對焦。請把圖卡移遠透鏡一些，再重新找像。';
