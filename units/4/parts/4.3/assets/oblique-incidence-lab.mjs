@@ -1,3 +1,4 @@
+import {drawDirections} from './light-beam.mjs?v=20261103-beam1';
 import {mediumSelector} from './medium-selector.mjs?v=20261103-concept1';
 import { layout, media, clampAngle, geometry, durationMs, snapshot, zoomViewBox } from './oblique-incidence-model.mjs?v=20261103-refine1';
 
@@ -10,7 +11,7 @@ const selector=mediumSelector(mediumButton,key=>{if(key!==requestedMedium||state
 let medium='water',requestedMedium='water',angle=45,elapsed=0,state='loading',frame=0,startTime=0,drag=null,loadId=0,restoreLight=false;
 const name=()=>medium==='water'?'水':'玻璃',clickSlop=5;
 const label=(id,x,y,text,width=110)=>`<g id="${id}" class="oblique-medium-badge" transform="translate(${x} ${y})"><rect x="0" y="-35" width="${width}" height="52" rx="9" fill="#fffef4" fill-opacity=".96"/><text x="${width/2}" y="0" text-anchor="middle" font-size="30">${text}</text></g>`;
-const beam=()=>'<g class="oblique-beam" visibility="hidden"><path class="oblique-halo"/><path class="oblique-ray"/><path class="oblique-core"/></g>';
+const beam=()=>'<g class="oblique-beam" visibility="hidden"><path class="oblique-halo lesson-beam-halo"/><path class="oblique-ray lesson-beam-ray"/><path class="oblique-core lesson-beam-core"/><path class="oblique-direction lesson-beam-direction"/><path class="oblique-direction lesson-beam-direction"/></g>';
 scene.setAttribute('viewBox',`0 0 ${layout.width} ${layout.height}`);
 scene.innerHTML=`<defs>
  <filter id="oblique-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5"/></filter>
@@ -33,7 +34,7 @@ scene.innerHTML=`<defs>
     <g class="oblique-source-lamp" filter="url(#oblique-shadow)"><rect x="-35" y="-78" width="70" height="69" rx="13" fill="url(#oblique-metal)" stroke="#131e20" stroke-width="2"/><path d="M-23-69V-25M-18-69V-25" stroke="#9aa5a1" stroke-width="2" opacity=".45"/><rect x="-38" y="-23" width="76" height="16" rx="5" fill="url(#oblique-rim)"/><ellipse cx="0" cy="-5" rx="35" ry="15" fill="url(#oblique-rim)" stroke="#162423" stroke-width="2"/><ellipse class="oblique-lens" cx="0" cy="-3" rx="26" ry="10" fill="url(#oblique-dark-lens)" stroke="#111d1c" stroke-width="2"/></g>
    </g>
  </g>`;
-zoom.setAttribute('viewBox',zoomViewBox);
+zoom.setAttribute('viewBox',zoomViewBox);zoom.classList.add('lesson-beam-detail');
 zoom.innerHTML=`<defs>
  <linearGradient id="oblique-glass-edge"><stop stop-color="#effcf9" stop-opacity=".65"/><stop offset=".04" stop-color="#ffffff" stop-opacity="0"/><stop offset=".96" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#dff5ef" stop-opacity=".65"/></linearGradient>
  <linearGradient id="oblique-surface-air" x1="0" y1="0" x2="0" y2="1"><stop stop-color="white" stop-opacity="0"/><stop offset=".2" stop-color="white"/><stop offset="1" stop-color="white"/></linearGradient>
@@ -68,7 +69,7 @@ zoom.innerHTML=`<defs>
   <g class="oblique-medium-badge"><rect x="539" y="645" width="48" height="25" rx="4"/><text id="oblique-zoom-medium" x="546" y="648">水</text></g>
   <g><rect x="534" y="552" width="48" height="25" rx="4"/><text x="558" y="570" text-anchor="middle">介面</text></g>
  </g>`;
-const source=scene.querySelector('.oblique-source'),views=[scene,zoom].map(svg=>({svg,beam:svg.querySelector('.oblique-beam'),paths:[...svg.querySelectorAll('.oblique-beam path')]}));
+const source=scene.querySelector('.oblique-source'),views=[scene,zoom].map(svg=>({svg,beam:svg.querySelector('.oblique-beam'),paths:[...svg.querySelectorAll('.oblique-halo,.oblique-ray,.oblique-core')]}));
 const photos=new Map();
 function photo(key,reload=false){
  if(!photos.has(key)||reload){const img=new Image();img.src=new URL(`oblique-entry-${key}.png${reload?`?retry=${Date.now()}`:''}`,import.meta.url).href;photos.set(key,img);}
@@ -131,7 +132,7 @@ function render(){
  const g=snapshot(medium,angle,elapsed),lit=elapsed>0,path=`M${g.source.join(' ')} ${g.entered?`L${g.hit.join(' ')} `:''}L${g.front.join(' ')}`;
  zoom.querySelectorAll('.oblique-angle-marks').forEach(group=>group.setAttribute('visibility',g.entered?'visible':'hidden'));
  root.dataset.elapsedMs=String(elapsed);root.dataset.entered=String(g.entered);root.dataset.arrived=String(g.arrived);source.dataset.lit=String(lit);
- views.forEach(view=>{view.paths.forEach(p=>p.setAttribute('d',path));view.beam.setAttribute('visibility',lit?'visible':'hidden');view.svg.dataset.frontX=String(g.front[0]);view.svg.dataset.frontY=String(g.front[1]);view.svg.dataset.hitX=String(g.hit[0]);view.svg.dataset.hitY=String(g.hit[1]);});
+ views.forEach(view=>{view.paths.forEach(p=>p.setAttribute('d',path));view.beam.setAttribute('visibility',lit?'visible':'hidden');view.svg.dataset.frontX=String(g.front[0]);view.svg.dataset.frontY=String(g.front[1]);view.svg.dataset.hitX=String(g.hit[0]);view.svg.dataset.hitY=String(g.hit[1]);const ratio=Math.hypot(view.svg.getScreenCTM().a,view.svg.getScreenCTM().b),drawn=g.entered?g.sourceRadius+Math.hypot(g.front[0]-g.hit[0],g.front[1]-g.hit[1]):Math.hypot(g.front[0]-g.source[0],g.front[1]-g.source[1]);drawDirections(view.beam,[g.source,g.hit,g.end],drawn,ratio,lit);});
 }
 function controls(){
  root.dataset.state=state;root.setAttribute('aria-busy',String(state==='loading'));start.disabled=['loading','error'].includes(state);pause.disabled=!['running','paused'].includes(state);input.disabled=start.disabled;magnify.disabled=start.disabled;

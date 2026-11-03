@@ -18,15 +18,14 @@
 .return-finding strong{font-size:1rem}
 #exit-lab{--return-blue:#e8ab24}
 #exit-toggle-b[aria-pressed=true]{background:#fffaf0!important;border-color:#ddc88f}
-[data-flow=exit] .return-beam-b{filter:drop-shadow(0 0 1px #ffc741)}
+
 .refraction-concept{margin-top:20px;padding:22px 24px;border:1px solid #b8cdb5;border-top:4px solid #4e8060;border-radius:13px;background:linear-gradient(130deg,#f3f8eb,#fbfcf7);color:#294b39}
 .refraction-concept .concept-eyebrow{margin:0 0 6px;color:#627a4d;font-size:.77rem;font-weight:750;letter-spacing:.07em}
 .refraction-concept h3{margin:0 0 15px;font-size:1.28rem;line-height:1.5;color:#254e3a}
 .concept-flow{display:flex;align-items:center;justify-content:center;gap:24px;padding:14px 18px;border:1px solid #d5e1ca;border-radius:10px;background:#fffef9;text-align:center}
 .concept-flow>span{min-width:68px;font-size:1.07rem;font-weight:750}
-.concept-flow small{display:block;color:#6c7d61;font-size:.81rem;font-weight:500}
 .concept-flow>b{color:#80906b;font-size:1.3rem}
-.concept-discussion{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:start;gap:20px;margin-top:18px}
+.concept-discussion{display:block;margin-top:12px}
 .refraction-concept h4{margin:0 0 7px;font-size:1rem;color:#31583f}
 .concept-discussion p{margin:0 0 10px;font-size:.93rem;line-height:1.85}
 .concept-result{padding:15px 17px;border:1px solid #d7e3cc;border-radius:9px;background:#ffffffa6}
@@ -57,3 +56,18 @@
  .return-switches{grid-column:1;grid-row:1}
  :is(#return-reset,#exit-reset){grid-column:2;grid-row:1}
 }
+
+/* Recessed brass housing and fasteners make these controls part of the case. */
+:is(#oblique-medium-toggle,#exit-medium-toggle){padding:3px 12px;border:1px solid #63482c;border-top-color:#e9d5ac;border-radius:4px;background:linear-gradient(#dec69e,#b58c54 15%,#ac814a 85%,#73502e);box-shadow:inset 0 1px #fff1ca99,inset 0 -2px #49331e66,0 1px 2px #201d1870;backdrop-filter:none}
+:is(#oblique-medium-toggle,#exit-medium-toggle)::before,:is(#oblique-medium-toggle,#exit-medium-toggle)::after{content:"";position:absolute;top:50%;width:6px;height:6px;transform:translateY(-50%);border:1px solid #514632;border-radius:50%;background:linear-gradient(135deg,transparent 39%,#4c5148 40% 55%,transparent 56%),radial-gradient(circle at 35% 30%,#f5eacd,#a59c7a 70%);box-shadow:0 1px 1px #372b2570}
+:is(#oblique-medium-toggle,#exit-medium-toggle)::before{left:3px}
+:is(#oblique-medium-toggle,#exit-medium-toggle)::after{right:3px}
+:is(#oblique-medium-toggle,#exit-medium-toggle) :is(.medium-toggle-icon,.medium-toggle-caption){color:#3f3828;text-shadow:0 1px #eed5a877}
+:is(#oblique-medium-toggle,#exit-medium-toggle) button{border:1px solid #1f302a;border-radius:3px;background:linear-gradient(#344a3e,#21372d);color:#e6e2cf;box-shadow:inset 0 1px #ffffff26,inset 0 -1px #0d1a1659}
+:is(#oblique-medium-toggle,#exit-medium-toggle) button[aria-pressed=true]{border-color:#304b35;background:linear-gradient(#dbf0ce,#b8d5a6);color:#234a31;box-shadow:inset 0 1px #ffffffab,inset 0 0 3px #416d3770}
+:is(#oblique-medium-toggle,#exit-medium-toggle) button[data-lab-medium=glass][aria-pressed=true]{background:linear-gradient(#eef1e8,#c8d3ca)}
+:is(#oblique-medium-toggle,#exit-medium-toggle) button[aria-pressed=false]:hover{background:#425947}
+:is(#oblique-medium-toggle,#exit-medium-toggle) button:focus-visible{outline-color:#f7e4ae}
+:is(#oblique-medium-toggle,#exit-medium-toggle),:is(#oblique-medium-toggle,#exit-medium-toggle) *,:is(#oblique-medium-toggle,#exit-medium-toggle)::before,:is(#oblique-medium-toggle,#exit-medium-toggle)::after{transition:none!important}
+#exit-pause{min-height:44px;min-width:72px;padding:6px 9px;border-color:#bdcdb7;background:#f8fbf2;color:#31583e;font-size:.82rem;white-space:nowrap}
+#exit-pause:disabled{opacity:.45;cursor:default}

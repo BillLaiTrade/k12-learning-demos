@@ -42,8 +42,6 @@
 .air-legend strong>span{font-size:.75rem;margin-left:2px}
 .air-legend small{grid-column:1/-1;color:var(--muted);font-size:.68rem;font-weight:400;margin-top:2px}
 .air-legend strong.air-small-value{font-size:1.05rem;letter-spacing:0}
-.air-highlight-status:empty{margin:0;min-height:0}
-.air-highlight-status{color:#47634e;font-size:.81rem;line-height:1.8;margin:14px 0 0;min-height:2.9em}
 [data-emphasis=nitrogen] .air-particle:not([data-gas=nitrogen]),[data-emphasis=oxygen] .air-particle:not([data-gas=oxygen]){opacity:.3}
 [data-emphasis=argon] .air-particle:not([data-gas=argon]),[data-emphasis=other] .air-particle:not([data-gas=other]),[data-emphasis=minor] .air-particle[data-gas=nitrogen],[data-emphasis=minor] .air-particle[data-gas=oxygen]{opacity:.2}
 .air-other-detail{grid-area:detail;position:relative;min-width:0;margin:0;padding:13px;background:#f3f1f9;border:1px solid #d9d4e6;border-radius:11px}
@@ -88,4 +86,17 @@
 /* 選取圖例時同步突出對應區域；混合模式則突出同類粒子。 */
 [data-arrangement=proportion][data-emphasis=nitrogen] .air-region[data-region=nitrogen]{fill:#c9e2ce;stroke:#42825e;stroke-width:.8}
 [data-arrangement=proportion][data-emphasis=oxygen] .air-region[data-region=oxygen]{fill:#f7dda7;stroke:#b67b24;stroke-width:.8}
-[data-arrangement=proportion]:is([data-emphasis=argon],[data-emphasis=other],[data-emphasis=minor]) .air-region[data-region=minor]{fill:#d9cff0;stroke:#7869a1;stroke-width:1}
+[data-arrangement=proportion]:is([data-emphasis=argon],[data-emphasis=minor]) .air-region[data-region=minor]{fill:#d9cff0;stroke:#7869a1;stroke-width:1}
+
+/* 其餘氣體使用灰色選取面，與氬氣的紫色清楚區分。 */
+[data-arrangement=proportion][data-emphasis=other] .air-region[data-region=minor]{fill:#d4ddda;stroke:#667b73;stroke-width:1}
+[data-emphasis=other] .air-other-detail{background:#edf0ef;border-color:#a9b8b1}
+[data-emphasis=other] .air-detail-backdrop{fill:#e0e6e3}
+[data-emphasis=other] .air-other-heading h3,[data-emphasis=other] .air-zoom-labels b{color:#405c50}
+[data-emphasis=other] .air-other-heading>span,[data-emphasis=other] .air-zoom-labels p,[data-emphasis=other] .air-detail-note{color:#5b7066}
+[data-emphasis=other] .air-zoom-link path{stroke:#768c80}
+
+/* 放大圖的成分說明列同步標出目前選取。 */
+.air-zoom-labels p{padding:6px 9px;border:1px solid transparent;border-left-width:4px;border-radius:7px}
+[data-emphasis=other] .air-zoom-labels p:has(.air-dot.other){background:#d4dfd9;border-color:#738b7d;color:#284d3b;font-weight:700}
+[data-emphasis=argon] .air-zoom-labels p:has(.air-dot.argon){background:#e0d9f1;border-color:#8c7cab;color:#51406e;font-weight:700}

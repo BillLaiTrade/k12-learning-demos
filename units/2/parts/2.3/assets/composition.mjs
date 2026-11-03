@@ -3,7 +3,6 @@ const section = document.querySelector('#s2');
 const controls = [...section.querySelectorAll('[data-air-gas]')];
 const viewControls = [...section.querySelectorAll('[data-air-view]')];
 const shares = [...section.querySelectorAll('.air-share')];
-const status = section.querySelector('#air-highlight-status');
 const panel = section.querySelector('.air-composition-panel');
 const minor = section.querySelector('[data-component="minor"]');
 const detail = section.querySelector('.air-other-detail');
@@ -18,23 +17,12 @@ function showKnowledge(gas) {
   knowledge.dataset.knowledgeCurrent = gas;
 }
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-const descriptions = {
-  all: '',
-  nitrogen: '氮氣約占乾燥空氣78%，含量最多。',
-  oxygen: '氧氣約占乾燥空氣21%，含量第二多。',
-  argon: '氬氣占全部乾燥空氣約0.93%。小成分區合併氬氣與其餘少量；放大圖突出的是氬氣。',
-  minor: '小成分區合併氬氣與其餘少量氣體，合計約1%；氬氣占全部約0.93%。右側兩項與放大圖一併標示，可再選名稱分別查看。',
-  other: '其餘氣體包含二氧化碳等，不再包含已單獨列出的氬氣；放大圖突出的是其餘少量成分。'
-};
 let selected = 'all';
 let focused = null;
 let hovered = null;
 let connectorFrame = 0;
 function emphasize() {
   section.dataset.emphasis = selected !== 'all' ? selected : hovered || focused || selected;
-}
-function describe() {
-  status.textContent = selected === 'all' ? '' : descriptions[selected] + (section.dataset.arrangement === 'mixed' ? ' 粒子混合在一起，比例不變。' : ' 分區只為比較比例；實際空氣中的氣體混合在一起。');
 }
 function updateConnector() {
   if (detail.hidden) return;
@@ -73,7 +61,7 @@ function choose(gas, sourceShare) {
   detail.hidden = !expanded;
   connectorElement.toggleAttribute('hidden', !expanded);
   for (const trigger of detailTriggers) trigger.setAttribute('aria-expanded', String(expanded));
-  showKnowledge(gas); describe(); emphasize(); followConnector();
+  showKnowledge(gas); emphasize(); followConnector();
 }
 for (const button of controls) {
   button.disabled = false;
@@ -114,7 +102,7 @@ for (const button of viewControls) {
     fields[0].model.setMode(button.dataset.airView,{immediate:reducedMotion.matches||userPaused});renderParticles();syncMotion();
     for (const control of viewControls) control.setAttribute('aria-pressed', String(control === button));
     hovered = null; focused = null;
-    emphasize(); describe(); followConnector();
+    emphasize(); followConnector();
   });
 }
 // Clicking away dismisses the selection without consuming the other action.
