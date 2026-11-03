@@ -1,11 +1,11 @@
-/* 沿用 1.1／2.3 完成版的單元小測框架。 */
-.well-quiz{scroll-margin-top:30px;border-color:#ddd6c4;border-radius:20px}
-.well-quiz .quiz-head{align-items:flex-start;gap:18px;padding:25px 28px 21px;border-bottom:1px solid #e7e1d2;background:linear-gradient(105deg,#fffdf6,#fdfbf3);color:#243d35;line-height:1.8}
-.well-quiz .quiz-head>div{min-width:0}
-.well-quiz .quiz-mark{flex:0 0 50px;width:50px;height:50px;border:0;border-radius:15px;background:#f5ead0;color:#8b6725;font-size:1.45rem;font-weight:800}
-.well-quiz .quiz-head .quiz-kicker{margin:0 0 4px;color:#946f2d;font-size:.82rem;font-weight:800;letter-spacing:.06em}
-.well-quiz .quiz-head h2{margin:0;font-size:clamp(1.15rem,1.85vw,1.5rem);line-height:1.55;letter-spacing:-.02em}
-.well-quiz .quiz-head .quiz-intro{margin:9px 0 0;color:var(--muted);font-size:.9rem;font-weight:400}
+/* 小測外框與標頭對齊 3.3；井深活動保留自己的內容配置。 */
+.well-quiz{scroll-margin-top:30px;border-color:#eadfca;border-radius:24px}
+.well-quiz .quiz-head{position:relative;display:flex;align-items:center;justify-content:flex-start;gap:14px;padding:20px 24px;border-bottom:0;background:#f8f1e4;color:#182326;line-height:1.7}
+.well-quiz .quiz-head>div{min-width:0;flex:1}
+.well-quiz .quiz-mark{display:grid;place-items:center;flex:none;width:50px;height:50px;border:0;border-radius:15px;background:#f7e5b5;color:#85601d;font-size:1.3rem;font-weight:400}
+.well-quiz .quiz-head .quiz-kicker{display:inline-block;margin:0 10px 0 0;color:#88652a;font-size:.78rem;font-weight:800;letter-spacing:.05em}
+.well-quiz .quiz-head h2{display:inline;margin:0;padding:0;font-size:1.65rem;line-height:1.35;letter-spacing:normal;color:#143f34}
+.well-quiz .quiz-head .quiz-intro{margin:5px 0 0;color:var(--muted);font-size:.88rem;font-weight:400}
 .well-quiz .quiz-body{padding:25px 30px 30px}
 .well-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(245px,1fr);gap:18px;padding:0 0 18px;align-items:start}
 .well-picture,.well-side{min-width:0}
@@ -53,4 +53,4 @@
 @media(min-width:1051px) and (max-width:1250px){.well-layout{grid-template-columns:minmax(0,1.2fr) minmax(230px,1fr);gap:14px}.well-panel{padding:13px}}
 @media(max-width:720px){.well-person{left:9%;top:10%;width:38%;height:65%}.well-bubble{left:45%;top:11%}.well-scene{aspect-ratio:4/3;min-height:0;flex:none}.well-layout{grid-template-columns:1fr}.well-side{gap:10px}.well-time strong{font-size:2.2rem}.well-controls button{font-size:.92rem}}
 
-@media(max-width:760px){.well-quiz .quiz-head{padding:20px 16px;gap:12px}.well-quiz .quiz-mark{flex-basis:42px;width:42px;height:42px;border-radius:13px}.well-quiz .quiz-head .quiz-intro{font-size:.85rem}.well-quiz .quiz-body{padding:20px 16px}.well-quiz .well-feedback{margin:14px 0 16px}}
+@media(max-width:760px){.well-quiz .quiz-head{display:grid;grid-template-columns:50px minmax(0,1fr);gap:10px;padding:16px}.well-quiz .quiz-mark{width:50px;height:50px;border-radius:15px;font-size:1.3rem}.well-quiz .quiz-head h2{padding:0;font-size:1.4rem}.well-quiz .quiz-body{padding:20px 16px}.well-quiz .well-feedback{margin:14px 0 16px}}
