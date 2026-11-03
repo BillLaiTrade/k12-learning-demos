@@ -1,4 +1,4 @@
-import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261103-imaging-hud1';
+import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261103-imaging-inline1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261103-imaging-six1';
 const root=document.querySelector('[data-imaging-lab]');
@@ -8,7 +8,7 @@ function initialise(root){
  let state={object:320,screen:240},showRays=true,point='both',front=false,selected='screen',studio=null;
  state=moveImaging(state,'screen',imagingState(state).v);
  const distanceLabel=value=>{const n=Number((value/G.f).toFixed(3));return n===1?'F':`${n}F`;};
- const workspace=createImagingWorkspace(root,{onOpen:clearGestureNotice}),comparison=$('[data-imaging-comparison]');
+ const workspace=createImagingWorkspace(root),comparison=$('[data-imaging-comparison]');
 
  const art=document.createElement('canvas');art.width=350;art.height=600;const a=art.getContext('2d');
  a.fillStyle='#dd684f';a.beginPath();a.moveTo(175,80);a.lineTo(133,170);a.lineTo(217,170);a.closePath();a.fill();

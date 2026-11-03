@@ -44,6 +44,7 @@ function surfaceDiagram(state,id,signal){
  const paths=[[[512,176],[331,112]],[[521,183],[294,172]],[[510,193],[309,246]],[[522,199],[373,318]],[[529,178],[407,120]],[[514,187],[330,297]],[[525,191],[278,212]]];
  return `<svg viewBox="0 0 850 400" aria-hidden="true">${defs(id)}
  <defs>
+  <linearGradient id="${id}-surface-wood" x2="0" y2="1"><stop stop-color="#806344"/><stop offset="1" stop-color="#3b2c1d"/></linearGradient>
   <linearGradient id="${id}-paper" x2=".8" y2="1"><stop stop-color="${shade(.77)}"/><stop offset=".5" stop-color="${shade(.9)}"/><stop offset="1" stop-color="${shade(.65)}"/></linearGradient>
   <radialGradient id="${id}-lit"><stop stop-color="${shade(1.25)}" stop-opacity=".6"/><stop offset="1" stop-color="${output}" stop-opacity="0"/></radialGradient>
   <linearGradient id="${id}-beam"><stop stop-color="${input}" stop-opacity=".14"/><stop offset="1" stop-color="${input}" stop-opacity=".06"/></linearGradient>
@@ -51,8 +52,8 @@ function surfaceDiagram(state,id,signal){
   <pattern id="${id}-grain" width="9" height="11" patternUnits="userSpaceOnUse"><path d="M2 1l1 3M6 7l1 2" stroke="#fff" stroke-opacity=".055" stroke-width=".6"/></pattern>
   ${paths.map(([from,to],i)=>`<linearGradient id="${id}-diffuse-${i}" gradientUnits="userSpaceOnUse" x1="${from[0]}" y1="${from[1]}" x2="${to[0]}" y2="${to[1]}"><stop stop-color="${output}" stop-opacity="${peak*.6}"/><stop offset="1" stop-color="${output}" stop-opacity="0"/></linearGradient>`).join('')}
  </defs>
- <path d="M0 0H850V400H0Z" fill="#9eaf9e"/>
- <path d="M0 210L590 128L850 253V400H0Z" fill="url(#${id}-wood)"/>
+ <path d="M0 0H850V400H0Z" fill="#283126"/>
+ <path d="M0 210L590 128L850 253V400H0Z" fill="url(#${id}-surface-wood)"/>
  <path d="M100 351L640 289M107 361L647 299" stroke="#9ca99c" stroke-width="5"/>
  <path d="M121 337h73l12 12h-99Z" fill="#293d36"/><path d="M156 339V265" stroke="url(#${id}-metal)" stroke-width="8"/>
  <rect x="88" y="233" width="104" height="54" rx="13" fill="url(#${id}-metal)"/>
@@ -76,9 +77,7 @@ export function drawObservation(canvas,state,signal){
  const c=canvas.getContext('2d'),w=canvas.width,h=canvas.height; c.clearRect(0,0,w,h);
  const bg=c.createLinearGradient(0,0,w,h);bg.addColorStop(0,'#fbfbf2');bg.addColorStop(1,'#e2e9db');c.fillStyle=bg;c.fillRect(0,0,w,h);
  function card(x,y,size,rgb,label){c.save();c.shadowBlur=13;c.shadowColor='#20362933';c.shadowOffsetY=6;rounded(c,x,y,size,size,9,rgbCss(rgb),'#c5d0bf');c.restore();if(label){c.fillStyle='#4d6454';c.font='23px sans-serif';c.textAlign='center';c.fillText(label,x+size/2,y+size+39);}}
- if(state.kind==='lighting'){
-  card(30,68,155,MATERIALS[state.material].rgb,'白光下');card(235,68,155,signal.outgoing,'目前照明');
- }else if(state.kind==='filter'||state.kind==='eye'&&state.mode==='transmission'){
+ if(state.kind==='filter'||state.kind==='eye'&&state.mode==='transmission'){
   rounded(c,26,28,w-52,h-56,10,'#13261f','#a6b6a1');const rgb=state.blocked?[0,0,0]:signal.outgoing;
   if(Math.max(...rgb)>.01){const g=c.createRadialGradient(w/2,h/2,20,w/2,h/2,120);g.addColorStop(0,rgbCss(rgb));g.addColorStop(.68,rgbCss(rgb));g.addColorStop(1,'#14251f');c.fillStyle=g;c.fillRect(30,32,w-60,h-64);}
   if(state.blocked){c.fillStyle='#63796a';c.fillRect(70,50,w-140,h-100);}
