@@ -1,7 +1,7 @@
 import {initialiseFrontMix} from './mix-lab.mjs?v=mix-drag-focus-20261103';
 import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-source-comparison-20261102';
 import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays,QUIZ} from './color-model.mjs?v=merged-surface-20261103';
-import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs?v=path-lessons-20261103';
+import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs?v=path-lessons-colour-20261103';
 import {surfaceObservation} from './surface-model.mjs?v=merged-surface-20261103';
 let studioModule=null;
 const text=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};

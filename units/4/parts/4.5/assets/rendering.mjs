@@ -75,7 +75,7 @@ function eyeDiagram(state,id,signal){
  return `<svg viewBox="0 0 850 400" aria-hidden="true">${defs(id)}
  <path d="M0 0H850V400H0Z" fill="#91a190"/><path d="M0 105L850 80V400H0Z" fill="url(#${id}-wood)"/>
  <rect x="51" y="165" width="82" height="50" rx="10" fill="url(#${id}-metal)"/><ellipse cx="137" cy="190" rx="7" ry="22" fill="${input}"/>
- <path d="M426 103h28v174h-28Z" fill="${transmission?'#d6e3d7':output}" fill-opacity="${transmission?.55:1}" stroke="#385546" stroke-width="4"/>
+ <path d="M426 103h28v174h-28Z" fill="${transmission?FILTERS.green.css:output}" fill-opacity="${transmission?.55:1}" stroke="#385546" stroke-width="4"/>
  ${state.rays?segment([145,190],[426,190],input)+segment(origin,end,output)+(!transmission?segment(origin,[300,103],output)+segment(origin,[365,330],output):''):''}
  ${state.blocked?`<g transform="translate(${point(board)}) rotate(${Math.atan2(unit[1],unit[0])*180/Math.PI})"><rect x="-7" y="-48" width="14" height="96" rx="3" fill="#253b30" stroke="#a5b49b" stroke-width="2"/></g>`:''}
  <g transform="translate(${point(eye)})"><path d="M-38 0Q0-34 38 0Q0 34-38 0" fill="#fffdf5" stroke="#536d5b" stroke-width="3"/><circle r="12" fill="#607d68"/><circle r="6" fill="#203c31"/></g>
