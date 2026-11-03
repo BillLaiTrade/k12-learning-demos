@@ -75,6 +75,7 @@ function initialiseLab(root,index){
    else channels(root,kind==='eye'?[['光源提供',signal.incoming],['離開物體',signal.outgoing],['到達眼睛',signal.received,state.blocked?'這條光路被擋住':channelsText(signal.received)]]:[['照過來的光',signal.incoming],[kind==='filter'?'通過色片':'反射出去',signal.outgoing],['被吸收的部分',signal.absorbed,Math.max(...signal.absorbed)===0?'沒有色光被吸收':channelsText(signal.absorbed)]]);
   }
   for(const[attr,key]of[['data-prism',state.inserted?'in':'out'],['data-light',state.light],['data-material',state.material],['data-filter',state.filter],['data-eye-mode',state.mode]])pressed(root,`[${attr}]`,key);
+  root.querySelectorAll('select[data-filter-setting]').forEach(select=>{const value=state[select.dataset.filterSetting];if(select.value!==value)select.value=value;});
   text($('[data-rays]'),state.rays?'隱藏輔助光路':'顯示輔助光路');$('[data-rays]').setAttribute('aria-pressed',String(state.rays));text($('[data-view]'),state.view?'返回斜向觀察':'俯看實驗台');$('[data-view]').setAttribute('aria-pressed',String(state.view));
   studio?.update(state,signal);
  }
@@ -90,6 +91,12 @@ function initialiseLab(root,index){
   else if(b.hasAttribute('data-rays'))state.rays=!state.rays;
   else if(b.hasAttribute('data-view')){state.view=!state.view;studio?.setView(state.view);}
   else return;update();
+ });
+ root.addEventListener('change',event=>{
+  const select=event.target;if(kind!=='filter'||!select.matches('select[data-filter-setting]')||select.matches(':disabled'))return;
+  const key=select.dataset.filterSetting,options={light:LIGHTS,filter:FILTERS,material:MATERIALS};
+  if(!Object.hasOwn(options,key)||!Object.hasOwn(options[key],select.value))return;
+  state[key]=select.value;update();
  });
  root.addEventListener('keydown',event=>{if(event.target.matches('[data-prism-hit]')&&['Enter',' '].includes(event.key)){event.preventDefault();state.inserted=!state.inserted;update();}});
  function fallback(){canvas.hidden=true;diagram.hidden=false;root.dataset.renderer='diagram';$('[data-view]').hidden=true;const note=$('[data-load-note]');note.classList.add('is-fallback');note.hidden=false;text(note,'立體觀察暫時無法使用，這裡改用同一組條件的平面光路示意；操作與近看仍可使用。');}
