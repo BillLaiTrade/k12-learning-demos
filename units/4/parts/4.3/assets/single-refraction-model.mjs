@@ -1,7 +1,7 @@
 import {materials} from './optics.mjs';
 
 export const layout=Object.freeze({width:1254,height:1254,axis:650,boundary:570,radius:300});
-export const airRate=.24;
+export const airRate=.48;
 export const clampAngle=value=>Math.max(0,Math.min(90,Number.isFinite(Number(value))?Number(value):30));
 export const criticalAngle=medium=>Math.asin(1/materials[medium].n)*180/Math.PI;
 export function geometry(medium,value,reverse=false){
