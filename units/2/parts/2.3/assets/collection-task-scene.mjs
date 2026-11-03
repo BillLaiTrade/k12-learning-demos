@@ -1,7 +1,7 @@
-import {regionPath,looseFunnelPose,STONE_OFFSETS} from './collection-task-contact.mjs?v=open-1';
-import {directPosition,parkPosition} from './collection-task-direct.mjs?v=open-1';
+import {regionPath,looseFunnelPose,STONE_OFFSETS} from './collection-task-contact.mjs?v=eight-2';
+import {directPosition,parkPosition} from './collection-task-direct.mjs?v=eight-2';
 import {createThistleFunnel,createDoubleStopper,svgNode as n} from './thistle-apparatus.mjs?v=thistle-1';
-import {taskHosePoints,deskFrame,jarPose,jarMouth,waterSurface,flaskSurface,ease,mix,clamp,rigPosition,heldMaterial,usedMarbleIds,vesselReaction} from './collection-task-model.mjs?v=open-1';
+import {taskHosePoints,deskFrame,jarPose,jarMouth,waterSurface,flaskSurface,ease,mix,clamp,rigPosition,heldMaterial,usedMarbleIds,vesselReaction} from './collection-task-model.mjs?v=eight-2';
 import {liquidGeometry} from './co2-model.mjs?v=marble-fast-1';
 const image=(file,box)=>{const el=n('image',{href:'assets/'+file,preserveAspectRatio:'none'});['x','y','width','height'].forEach((key,i)=>el.setAttribute(key,box[i]));return el;};
 const box=(el,b)=>['x','y','width','height'].forEach((k,i)=>el.setAttribute(k,b[i]));
@@ -22,7 +22,7 @@ export function materialArt(id){
  if(id==='forceps')s.append(sprite('co2-tools-atlas.png',[842,35,110,1155],[65,0,16,140],[1268,1241]));
  if(id==='funnel'){const f=createThistleFunnel('desk-icon-'+Math.random().toString(36).slice(2),{top:0,tip:130,port:0});f.render({x:90,y:3});s.append(f.group);}
  if(id==='rig'){
-  const id='desk-tool-'+Math.random().toString(36).slice(2),defs=n('defs'),clip=n('clipPath',{id});clip.append(n('path',{d:'M15 195V-48Q15 -84 52 -84H150V-57H52Q37 -57 37 -45V195Z'}));defs.append(clip);s.append(defs);
+  const id='desk-tool-'+Math.random().toString(36).slice(2),defs=n('defs'),clip=n('clipPath',{id});clip.append(n('path',{d:'M15 -20V-48Q15 -84 52 -84H150V-57H52Q37 -57 37 -45V-20ZM15 74H37V195H15Z'}));defs.append(clip);s.append(defs);
   const g=n('g',{transform:'translate(25 49) scale(.25)'}),photo=n('g',{'clip-path':`url(#${id})`});photo.append(sprite('co2-tube.webp',[85,45,172,350],[6.8,-90,137.6,280],[440,440]));g.append(photo,createDoubleStopper());s.append(g);
   const u=n('g',{transform:'translate(92 75) scale(.25)'});s.append(u);glass('M0 -140V40Q0 60 20 60H240Q260 60 260 40V10',u);
   const pts=taskHosePoints({x:61.5,y:31.5},{x:92,y:40},100);pts.slice(1).forEach((b,i)=>{const a=pts[i],piece=n('g',{transform:`translate(${a.x} ${a.y}) rotate(${Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI-90})`});piece.append(sprite('co2-tools-atlas.png',[338,100+i*980/64,90,24],[-2,0,4,Math.hypot(b.x-a.x,b.y-a.y)+.5],[1268,1241]));s.append(piece);});
@@ -41,7 +41,7 @@ function stonePose(s,f){
  }
  if(m?.kind==='drop-solid'){
   const mouth=m.target==='flask'?{x:300,y:205}:m.target==='jar'?jarMouth(s):m.dropAt||{x:700,y:350},above={x:mouth.x,y:mouth.y-80},release={x:mouth.x,y:mouth.y+18};
-  const jp=jarPose(s),count=m.target==='jar'?s.contents.jar.stones.length:s.contents.tank.stones.length,bottom=m.target==='flask'?{x:267+Math.min(2,s.contents.flask.catalyst)*23,y:558+(s.contents.flask.catalyst%2)*10}:m.target==='jar'?m.solid==='catalyst'?{x:856+jp.x+Math.min(2,s.contents.jar.catalyst)*20,y:439+jp.y-11}:{x:870+jp.x-48+Math.min(4,count)*25,y:439+jp.y-16}:{x:clamp(m.dropAt?.x??700,630,1006),y:510+(clamp(m.dropAt?.x??700,630,1006)-650)*.05};
+  const jp=jarPose(s),count=m.target==='jar'?s.contents.jar.stones.length:s.contents.tank.stones.length,bottom=m.target==='flask'?{x:267+Math.min(2,s.contents.flask.catalyst)*23,y:558+(s.contents.flask.catalyst%2)*10}:m.target==='jar'?m.solid==='catalyst'?{x:856+jp.x+Math.min(2,s.contents.jar.catalyst)*20,y:439+jp.y-11}:{x:870+jp.x-48+Math.min(4,count)*25,y:439+jp.y-16}:{x:clamp((m.dropAt?.x??700)-60,630,850)+s.contents.tank.stonePositions.length*32,y:510+(clamp((m.dropAt?.x??700)-60,630,850)+s.contents.tank.stonePositions.length*32-650)*.05+(s.contents.tank.stonePositions.length%2)*6};
   const tip=p<.2?held:p<.43?line(held,above,(p-.2)/.23):p<.6?line(above,release,(p-.43)/.17):p<.79?line(release,above,(p-.6)/.19):line(above,end,(p-.79)/.21);
   return{tip,rock:p<.6?tip:line(release,bottom,(p-.6)/.23),showRock:!m.deposited,material:m.solid};
  }
@@ -80,8 +80,9 @@ export function createCollectionScene(svg){
  const tankBody=sprite('oxygen-setup-sprites.png',[650,170,750,360],[580,310,480,270],[1686,933]);art.append(tankBody);
  // 先畫漏斗，再畫瓶塞；塞子會遮住穿孔內的長管。
  const funnel=createThistleFunnel('desk',{top:-140,tip:350,port:-26});art.append(funnel.group);
- const first=n('g',{'data-desk-rig':''}),firstClip=n('clipPath',{id:'desk-first-glass'});firstClip.append(n('path',{d:'M15 195V-48Q15 -84 52 -84H150V-57H52Q37 -57 37 -45V195Z'}));defs.append(firstClip);
- const firstGlass=n('g',{'clip-path':'url(#desk-first-glass)'});firstGlass.append(sprite('co2-tube.webp',[85,45,172,350],[6.8,-90,137.6,280],[440,440]));const stopper=createDoubleStopper();stopper.setAttribute('transform','scale(.86 .74)');first.append(firstGlass,stopper);art.append(first);
+ const first=n('g',{'data-desk-rig':''}),firstClip=n('clipPath',{id:'desk-first-glass'});firstClip.append(n('path',{d:'M15 -20V-48Q15 -84 52 -84H150V-57H52Q37 -57 37 -45V-20ZM15 74H37V195H15Z'}));defs.append(firstClip);
+ const firstGlass=n('g',{'clip-path':'url(#desk-first-glass)'});firstGlass.append(sprite('co2-tube.webp',[85,45,172,350],[6.8,-90,137.6,280],[440,440]));const stopper=createDoubleStopper();stopper.setAttribute('transform','scale(1 .74)');
+ const jointMask=n('mask',{id:'desk-stopper-bores',maskUnits:'userSpaceOnUse',x:-55,y:-15,width:110,height:80});jointMask.append(n('rect',{x:-55,y:-15,width:110,height:80,fill:'white'}));for(const x of [-26,26])jointMask.append(n('ellipse',{cx:x,cy:.3,rx:9,ry:3.2,fill:'black'}));defs.append(jointMask);stopper.setAttribute('mask','url(#desk-stopper-bores)');stopper.dataset.deskBoreAlignment='-26,26';const boreGlass=sprite('co2-tube.webp',[98,250,22,100],[17.2,-20,17.6,96],[440,440]);boreGlass.dataset.deskBoreGlass='';first.append(firstGlass,boreGlass,stopper);art.append(first);
  const neckClip=n('clipPath',{id:'desk-neck-front'});neckClip.append(n('path',{d:'M252 205Q300 225 348 205V212Q300 232 252 212ZM254 215L264 218L268 274H259ZM336 218L346 215L341 274H333Z'}));defs.append(neckClip);const neckFront=image('co2-flask.webp',[70,145,460,460]);neckFront.setAttribute('clip-path','url(#desk-neck-front)');neckFront.setAttribute('data-desk-neck-front','');art.append(neckFront);
  const collector=n('g',{'data-desk-collector':''});art.append(collector);glass('M0 -140V40Q0 60 20 60H240Q260 60 260 40V10',collector);
  const rubber=n('g',{'data-desk-hose':''}),segments=[];art.append(rubber);for(let i=0;i<64;i++){const g=n('g'),piece=sprite('co2-tools-atlas.png',[338,100+i*980/64,90,24],[-7,0,14,10],[1268,1241]);g.append(piece);rubber.append(g);segments.push({g,piece});}
@@ -89,7 +90,7 @@ export function createCollectionScene(svg){
  const movingStone=stone(0,[-25,-22,50,44]),movingPowder=powder([-14,-8,28,16]),forceps=n('g',{'data-desk-forceps':''});forceps.append(sprite('co2-tools-atlas.png',[842,35,110,1155],[-15,-300,30,300],[1268,1241]));movingStone.dataset.deskHeldSolid='marble';movingPowder.dataset.deskHeldSolid='catalyst';art.append(movingStone,movingPowder,forceps);
  const bottles={};for(const id of ['water','acid','peroxide']){const g=n('g',{'data-desk-bottle-id':id});g.append(image('oxygen-peroxide-open.webp',[-75,-85,150,170]));const label=n('text',{x:0,y:35,'text-anchor':'middle','font-size':18,fill:'#31584f',stroke:'#fff','stroke-width':5,'paint-order':'stroke'});label.textContent=id==='water'?'清水':id==='acid'?'稀鹽酸':'雙氧水';g.append(label);art.append(g);bottles[id]=g;}
  const stream=n('path',{fill:'none',stroke:'#b4dae0','stroke-opacity':.8,'stroke-width':4,'stroke-linecap':'round','data-desk-stream':''}),spill=n('path',{fill:'none',stroke:'#acd5dc','stroke-opacity':.65,'stroke-width':5,'data-desk-spill':''});art.append(stream,spill);
- const labels={};for(const[id,text]of[['flask','反應瓶'],['jar','集氣瓶'],['tank','水槽'],['marble','大理石']]){const g=n('g'),r=n('rect',{x:-49,y:-22,width:98,height:33,rx:6,fill:'#fffef6','fill-opacity':.95}),t=n('text',{'text-anchor':'middle','font-size':19,fill:'#31584f',y:1});t.textContent=text;g.append(r,t);art.append(g);labels[id]=g;}
+ const labels={};for(const[id,text]of[['flask','錐形瓶'],['jar','集氣瓶'],['tank','水槽'],['marble','大理石']]){const g=n('g'),r=n('rect',{x:-49,y:-22,width:98,height:33,rx:6,fill:'#fffef6','fill-opacity':.95}),t=n('text',{'text-anchor':'middle','font-size':19,fill:'#31584f',y:1});t.textContent=text;g.append(r,t);art.append(g);labels[id]=g;}
  const sample=n('text',{'text-anchor':'middle','font-size':19,fill:'#31584f','paint-order':'stroke',stroke:'#fff','stroke-width':4,'data-desk-sample':''});art.append(sample);
  const draggable=(el,id,shape,grip)=>{el.dataset.deskDrag=id;el.setAttribute('role','button');el.setAttribute('tabindex','0');el.setAttribute('aria-label',({forceps:'鑷子',water:'清水瓶',acid:'稀鹽酸瓶',rig:'雙孔塞與導管',funnel:'薊頭漏斗',plate:'玻璃片',jar:'集氣瓶',outlet:'導管出口',peroxide:'雙氧水',catalyst:'二氧化錳'})[id]+'，可拖曳');// 子圖的透明像素不接收事件；只由沿實物輪廓的路徑接收拖曳。
  const hit=n('path',{d:shape,fill:'transparent',stroke:'transparent','stroke-width':['forceps','outlet'].includes(id)?76:12,'data-desk-grip':id,'data-grip-x':grip[0],'data-grip-y':grip[1]});if(id==='outlet'){hit.setAttribute('fill','none');hit.style.pointerEvents='visibleStroke';}

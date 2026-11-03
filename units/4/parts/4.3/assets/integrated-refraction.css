@@ -1,6 +1,6 @@
 /* A single enlarged optical field, with controls and explanations in the apparatus. */
 #s3 .lesson-body,#s4 .lesson-body{container-type:inline-size;container-name:oblique-card;--lab-inset:28px}
-:is(#oblique-lab,#exit-lab){margin:14px calc(-1 * var(--lab-inset)) 0;padding:0;border:0;border-radius:0;background:none;color:#234c3a;--scene-ratio:1200 / 820}
+:is(#oblique-lab,#exit-lab){margin:14px calc(-1 * var(--lab-inset)) 0;padding:0;border:0;border-radius:0;background:none;color:#234c3a;--scene-ratio:1200 / 820;--scene-mode:wide}
 :is(#oblique-lab,#exit-lab) .oblique-table{display:block;position:relative;width:100%;height:auto;aspect-ratio:auto;overflow:hidden;border-radius:0;background:#d7c49e}
 :is(#oblique-lab,#exit-lab) .oblique-table::after{display:none}
 .integrated-stage{position:relative;aspect-ratio:var(--scene-ratio);overflow:hidden}
@@ -52,7 +52,7 @@
 :is(#oblique-retry,#exit-retry){grid-column:1 / -1;justify-self:center}:is(#oblique-retry,#exit-retry)[hidden]{display:none}
 @media(max-width:900px){#s3 .lesson-body,#s4 .lesson-body{--lab-inset:21px}}
 @container oblique-card (max-width:560px){
- :is(#oblique-lab,#exit-lab){--scene-ratio:900 / 1400}
+ :is(#oblique-lab,#exit-lab){--scene-ratio:900 / 1400;--scene-mode:tall}
  :is(#oblique-medium-toggle,#exit-medium-toggle){top:10px;right:auto;left:50%;transform:translateX(-50%);min-width:0;width:calc(100% - 28px);max-width:300px;min-height:60px;padding:3px 8px;gap:5px}
  :is(#oblique-medium-toggle,#exit-medium-toggle) button{min-width:66px;min-height:50px;font-size:1rem;padding:5px 9px}
  :is(#oblique-medium-toggle,#exit-medium-toggle) .medium-toggle-caption{font-size:.88rem;padding:0 3px}
@@ -74,3 +74,29 @@
 @container oblique-card (min-width:561px) and (max-width:720px){.integrated-copy{top:94px}.integrated-copy h3{font-size:1.25rem}.integrated-speed{font-size:.82rem;margin-bottom:5px}.integrated-equation{font-size:1.1rem;margin-bottom:5px}.integrated-equation small{font-size:.68rem}.integrated-reason{font-size:.78rem}}
 
 :is(#oblique-lab,#exit-lab) .oblique-status:not(.visually-hidden){margin:8px 18px;color:#7b4126;font-size:.9rem}
+
+/* Keep the optical field and its controls together inside the visible viewport. */
+.integrated-stage{aspect-ratio:auto}
+:is(#oblique-lab,#exit-lab)[data-layout=tall] .integrated-copy{top:auto;bottom:36px}
+@media(max-height:600px) and (orientation:landscape){
+ :is(#oblique-lab,#exit-lab){--scene-mode:wide}
+ :is(#oblique-medium-toggle,#exit-medium-toggle){top:8px;right:3%;left:auto;transform:none;width:auto;min-width:250px;min-height:52px;padding:2px 8px;gap:5px}
+ :is(#oblique-medium-toggle,#exit-medium-toggle) button{min-height:44px;min-width:66px;font-size:1rem;padding:3px 8px}
+ :is(#oblique-medium-toggle,#exit-medium-toggle) .medium-toggle-caption{font-size:.86rem}
+ :is(#oblique-medium-toggle,#exit-medium-toggle) .medium-toggle-icon{font-size:1.4rem}
+ :is(#oblique-lab,#exit-lab) .integrated-controls{grid-template-columns:auto minmax(0,1fr);padding:8px 12px;gap:8px}
+ :is(#oblique-lab,#exit-lab) .oblique-actions button{min-height:44px;padding:7px 10px;font-size:.86rem}
+ :is(#oblique-lab,#exit-lab) .oblique-angle-control{gap:8px;font-size:.82rem}
+ :is(#oblique-lab,#exit-lab)[data-layout=wide] .integrated-copy{display:block;left:65%;right:2%;top:64px;bottom:auto}
+ :is(#oblique-lab,#exit-lab)[data-layout=wide] .integrated-copy h3{font-size:1.18rem;margin-bottom:3px}
+ :is(#oblique-lab,#exit-lab)[data-layout=wide] .integrated-speed{font-size:.78rem;line-height:1.35;margin-bottom:4px}
+ :is(#oblique-lab,#exit-lab)[data-layout=wide] .integrated-equation{font-size:1.05rem;line-height:1.15;margin-bottom:4px;justify-content:flex-start}
+ :is(#oblique-lab,#exit-lab)[data-layout=wide] .integrated-equation small{font-size:.64rem;line-height:1.4}
+ :is(#oblique-lab,#exit-lab)[data-layout=wide] .integrated-reason{font-size:.72rem;line-height:1.5}
+}
+/* Height and SVG coordinates must settle together, including reduced-motion styles. */
+:is(#oblique-lab,#exit-lab),:is(#oblique-lab,#exit-lab) *{transition:none!important}
+
+/* Native focus uses the visible route height while operating these two scenes. */
+html:has(:is(#oblique-lab,#exit-lab):focus-within){scroll-padding-top:var(--optics-scroll-inset,8px)}
+:is(#oblique-lab,#exit-lab) :is(.integrated-copy,.integrated-legend)[hidden]{display:none!important}
