@@ -99,3 +99,5 @@
 .return-medium-badge rect{fill:#fffcf0;fill-opacity:.93;stroke:#d8cdb0;stroke-opacity:.65;stroke-width:1}
 .return-medium-badge text,.return-medium-name{fill:#183e36!important;stroke:none!important;font-weight:800}
 .return-medium-badge:has(.return-medium-name) rect{fill:#f0fffc;stroke:#7caeaa}
+/* Do not interpolate SVG transforms or paths independently of the optical model. */
+.return-view *{transition:none!important}

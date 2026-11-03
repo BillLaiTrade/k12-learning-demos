@@ -156,3 +156,5 @@
 #oblique-air-label text,#oblique-material-label text,#oblique-zoom .oblique-medium-badge text{fill:#183e36;stroke:none;font-weight:800;letter-spacing:.4px}
 #oblique-material-label rect,#oblique-zoom .oblique-medium-badge:has(#oblique-zoom-medium) rect{fill:#f0fffc;stroke:#7caeaa}
 #oblique-zoom #oblique-zoom-medium{fill:#183e36;stroke:none;font-weight:800}
+/* Geometry follows pointer and frame updates immediately, including reduced motion. */
+#oblique-scene *,#oblique-zoom *{transition:none!important}
