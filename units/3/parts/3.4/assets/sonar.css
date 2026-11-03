@@ -80,3 +80,8 @@
 .sonar-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-bottom:10px}
 .sonar-intro .dialogue{min-width:0}
 @media(max-width:760px){.sonar-intro{grid-template-columns:minmax(0,1fr);gap:8px}}
+
+/* 操作提示置於中央，水中聲速與往返時間並列。 */
+.sonar-toolbar-hint{flex:1 1 150px;min-width:0;margin:0;color:#5e7062;font-size:.72rem;line-height:1.4}
+.sonar-instruments{flex:0 0 auto;justify-content:flex-end;gap:16px}
+@media(max-width:760px){.sonar-toolbar-hint{flex:initial;font-size:.73rem}.sonar-instruments{flex:initial;justify-content:space-between;gap:6px}}
