@@ -175,3 +175,18 @@ node --test --test-concurrency=1 tests/unit-4.3-oblique-model.test.mjs tests/uni
 ```
 
 共51項（含外層）。新增學習順序、第四區單燈操作與零度／玻璃、三區狀態獨立、唯一ID、八種視窗下置中切換、手機點按及反射補充；其餘動畫、近拍角度、兩端拖曳、觸控、載入競態／重試、全課／小測回歸沿用。詳見 `docs/decisions/unit-4.3-learning-flow.md`。本輪不改幾何模型或照片，也不代表整單元最終核可。
+
+
+## 第四區上方入射與下方重點說明（2026-11-03）
+
+第四區改成上方水／玻璃、下方空氣，單一光源由左上往右下照；主圖與放大圖的介質、入射／折射角、細引線、箭頭及拖曳方向一起交換。新增 `exit-refraction-model.mjs` 沿用原折射模型的角度與界面，旋轉光路座標，保留0–35°範圍、同一路徑與原生操作。第五區雙向光路的物理模型保持。
+
+三區皆以同時可見的水／玻璃原生按鈕標出目前選項，放在操作畫面內的下方中央。`medium-selector.mjs` 共用選取顯示及讀屏／焦點處理；快速切換與載入失敗仍可復原。窄於700px的內容區在操作畫面內保留下方52px，避免選項遮住第五區光源，含0°中央位置。
+
+第三／四區的速度原因、波前先後轉向、偏向／偏離法線與角度大小，移至實驗下方全寬、常駐的重點區塊，不放在操作列側邊或折疊內容。隨介質／角度同步顯示目前數值，並解釋0°時速度改變但方向不偏折。原小車補充保留。照片原檔不變，第四區光學視圖只交換內部介質表面，器材邊框維持正向；主圖與近拍共用相同材質與界面。
+
+```sh
+node --test --test-concurrency=1 tests/unit-4.3-oblique-model.test.mjs tests/unit-4.3-return-model.test.mjs tests/unit-4.3-exit-model.test.mjs tests/unit-4.3-oblique-lab.test.cjs tests/unit-4.3-return-lab.test.cjs tests/unit-4.3-flow.test.cjs tests/unit-4.3-format.test.cjs tests/unit-4.3.test.cjs
+```
+
+共56項（含外層）。新增上方入射的獨立角度／折射定律驗證、拖曳逆算與邊界，及實際主圖／近拍端點對位、角色標示、小角度／極值、材質一致與全寬常駐說明、同步讀值；三區在八種視窗的選項可見、畫面內置中、唯一選取、0°不遮光源與文字邊界一併檢查。詳見 `docs/decisions/unit-4.3-medium-order-and-concepts.md`。維持第四階段修訂。

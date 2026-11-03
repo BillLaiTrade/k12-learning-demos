@@ -1,3 +1,4 @@
+import {mediumSelector} from './medium-selector.mjs?v=20261103-concept1';
 import { layout, media, clampAngle, geometry, durationMs, snapshot, zoomViewBox } from './oblique-incidence-model.mjs?v=20261103-refine1';
 
 const root=document.querySelector('#oblique-lab'),$=selector=>root.querySelector(selector);
@@ -5,6 +6,7 @@ const scene=$('#oblique-scene'),zoom=$('#oblique-zoom'),picture=$('#oblique-back
 const detail=$('#oblique-detail'),magnify=$('#oblique-magnify'),closeDetail=$('#oblique-close'),viewport=$('#oblique-viewport');
 const input=$('#oblique-angle'),output=$('#oblique-angle-value'),start=$('#oblique-start'),pause=$('#oblique-pause'),retry=$('#oblique-retry');
 const status=$('#oblique-status'),mediumButton=$('#oblique-medium-toggle');
+const selector=mediumSelector(mediumButton,key=>{if(key!==requestedMedium||state==='error')prepare(key);});
 let medium='water',requestedMedium='water',angle=45,elapsed=0,state='loading',frame=0,startTime=0,drag=null,loadId=0,restoreLight=false;
 const name=()=>medium==='water'?'水':'玻璃',clickSlop=5;
 const label=(id,x,y,text,width=110)=>`<g id="${id}" class="oblique-medium-badge" transform="translate(${x} ${y})"><rect x="0" y="-35" width="${width}" height="52" rx="9" fill="#fffef4" fill-opacity=".96"/><text x="${width/2}" y="0" text-anchor="middle" font-size="30">${text}</text></g>`;
@@ -102,6 +104,7 @@ function drawGeometry(){
  for(const group of detail.hidden?[]:zoom.querySelectorAll('.oblique-zoom-labels > g')){const box=group.querySelector('text').getBBox(),plate=group.querySelector('rect');for(const [key,value] of Object.entries({x:box.x-4,y:box.y-3,width:box.width+8,height:box.height+6}))plate.setAttribute(key,String(value));}
  const description=`空氣射入${name()}，入射角${angle}度，折射角${g.outgoing.toFixed(1)}度。法線通過入射點；角度皆從法線量起。`;
  scene.setAttribute('aria-label',`${description}點燈發射，拖曳可調角度。`);zoom.setAttribute('aria-label',`同一入射點的放大畫面。${description}`);
+ root.querySelectorAll('[data-concept-medium]').forEach(e=>e.textContent=name());$('[data-concept-in]').textContent=`${angle}°`;$('[data-concept-out]').textContent=`${g.outgoing.toFixed(1)}°`;
  $('#oblique-finding-text').textContent=`空氣 → ${name()}，光速由快變慢`;
  $('#oblique-angle-comparison').textContent=angle===0?' = ':' < ';
  $('#oblique-zoom-note').textContent=angle===0?'沿法線入射，不偏折':'斜射時偏向法線';
@@ -120,7 +123,7 @@ function setDetailOpen(open){
  if(open&&magnify.disabled)return;
  detail.hidden=!open;root.dataset.detailOpen=String(open);magnify.setAttribute('aria-expanded',String(open));magnify.tabIndex=open?-1:0;magnify.setAttribute('aria-hidden',String(open));
  drawGeometry();render();
- (open?closeDetail:magnify.disabled?mediumButton:magnify).focus({preventScroll:true});
+ if(!open&&magnify.disabled)selector.focus();else (open?closeDetail:magnify).focus({preventScroll:true});
 }
 magnify.onclick=()=>setDetailOpen(true);closeDetail.onclick=()=>setDetailOpen(false);
 root.addEventListener('keydown',event=>{if(event.key==='Escape'&&!detail.hidden){event.preventDefault();setDetailOpen(false);}});
@@ -132,7 +135,7 @@ function render(){
 }
 function controls(){
  root.dataset.state=state;root.setAttribute('aria-busy',String(state==='loading'));start.disabled=['loading','error'].includes(state);pause.disabled=!['running','paused'].includes(state);input.disabled=start.disabled;magnify.disabled=start.disabled;
- mediumButton.dataset.current=requestedMedium;mediumButton.setAttribute('aria-pressed',String(requestedMedium==='glass'));mediumButton.querySelector('strong').textContent=requestedMedium==='water'?'水':'玻璃';mediumButton.setAttribute('aria-label',`目前為${requestedMedium==='water'?'水':'玻璃'}，點擊切換為${requestedMedium==='water'?'玻璃':'水'}`);
+ selector.render(requestedMedium);
  source.setAttribute('aria-disabled',String(start.disabled));source.setAttribute('tabindex',start.disabled?'-1':'0');start.classList.toggle('primary',!start.disabled&&state!=='running');pause.classList.toggle('primary',['running','paused'].includes(state));pause.dataset.action=state==='paused'?'resume':'pause';pause.querySelector('span').textContent=state==='paused'?'繼續觀察':'暫停觀察';
  status.textContent={loading:'正在準備實驗場景……',error:`${requestedMedium==='water'?'水':'玻璃'}場景未能載入，請重試或切換介質。`,idle:'點燈發射，拖曳光源可調角度。',running:'全景與放大畫面同步前進。',paused:'已暫停，可仔細觀察入射點。',preview:'光路已更新，可重新發射觀察。',complete:'光路已展開，可調角度或切換介質。'}[state];
 }
@@ -182,7 +185,6 @@ async function prepare(target,reload=false){
  try{const img=photo(target,reload);await img.decode();if(id!==loadId)return;medium=target;picture.src=img.src;zoom.querySelector('#oblique-detail-background').setAttribute('href',img.src);picture.alt=`寫實木桌上的單槽光路剖面：上方空氣，下方為${name()}。`;elapsed=restoreLight?durationMs(medium,angle):0;state=restoreLight?'preview':'idle';drawGeometry();render();controls();}
  catch{if(id!==loadId)return;state='error';controls();retry.hidden=false;}
 }
-mediumButton.onclick=()=>prepare(requestedMedium==='water'?'glass':'water');
 retry.onclick=()=>prepare(requestedMedium,true);
 const resize=new ResizeObserver(()=>{drawGeometry();render();});resize.observe(viewport);resize.observe(zoom);
 drawGeometry();render();controls();prepare('water');
