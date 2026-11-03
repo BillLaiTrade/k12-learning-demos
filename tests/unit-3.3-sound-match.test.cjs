@@ -26,6 +26,8 @@ test('sound-match assessment follows the approved layout and shares actual audio
   assert.deepEqual(await root.locator('.match-step h3').allTextContents(),['聽目標聲音','調整並試聽','完成比較']);
   assert.deepEqual(await root.locator('.match-step-number').allTextContents(),['1','2','3']);
   assert.equal(await root.locator('.match-target [data-play=quiz-base]').count(),1);
+  assert.equal(await root.locator('.match-target .match-target-actions [data-match-new]').count(),1);
+  const pair=await root.locator('.match-target-actions').evaluate(n=>{const a=n.querySelector('[data-play]').getBoundingClientRect(),b=n.querySelector('[data-match-new]').getBoundingClientRect();return {below:b.top>=a.bottom,right:Math.abs(a.right-b.right)<1};});assert.deepEqual(pair,{below:true,right:true});
   assert.equal(await root.locator('.match-workbench [data-play=quiz-choice]').count(),1);
   assert.equal(await root.locator('.match-comparison [type=submit]').count(),1);
   assert.equal(await root.locator('[type=submit]').evaluate(n=>n.form===document.querySelector('#settings-form')),true);
