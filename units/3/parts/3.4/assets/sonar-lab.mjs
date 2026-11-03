@@ -83,6 +83,15 @@ export function renderSonar(progress = 0) {
 }
 export function bindSonar(player) {
  controller=player;
+ const pause=controller.pause;
+ controller.pause=()=>{
+   const playing=controller.phase==='playing';
+   pause();
+   if(playing && current && !current.done){
+     records=records.filter(record=>record.done);current=null;
+     controller.reset();
+   }
+ };
  const resize = new ResizeObserver(() => drawChart());
  resize.observe($('sonar-chart'));
  $('sonar-prev').addEventListener('click',()=>{recordPage--;renderSonar(controller.elapsed/sonarDuration());});

@@ -1,6 +1,6 @@
 import {bindWellQuiz} from './well-quiz.mjs?v=d5c30da4230a';
 import {bindRoomWaveLab} from './room-wave-lab.mjs?v=0df53bfb7d7b';
-import {renderSonar, bindSonar, beginSonar, sonarDuration, sonarTaps} from './sonar-lab.mjs?v=20261103-no-pause';
+import {renderSonar, bindSonar, beginSonar, sonarDuration, sonarTaps} from './sonar-lab.mjs?v=20261103-silent-cancel';
 import {arrivals} from './echo-model.mjs?v=20261101-room-contrast';
 import {renderReflection, REFLECTION_DURATION, REFLECTION_RETURN_TIME} from './reflection-lab.mjs';
 import {renderDistance, bindDistanceWall, bindDistanceSpeakers, distanceDuration, distanceTaps} from './distance-lab.mjs?v=20261103-distance-conditions';
@@ -39,7 +39,7 @@ function stopActive() { if (active) active.pause(); stopSound(); }
 async function sound(panel, elapsed = 0) {
   stopSound();
   audioError(panel);
-  if (panel.sound && !panel.sound.checked) return;
+  if (panel.id === 'sonar' || (panel.sound && !panel.sound.checked)) return;
   const epoch = audioEpoch;
   try {
     await resumeAudio();
