@@ -40,12 +40,22 @@ export function createSoundMatch(root,{onChange}){
   find('[data-match-switch]').setAttribute('aria-label',`換一種波形，目前波形${MATCH_TONES.indexOf(answer.tone)+1}，共3種`);
   renderWave();
  }
+ let pictureObserver;
+ function updatePicture(){
+  pictureObserver?.disconnect();
+  const picture=document.querySelector(`#card-05 [data-timbre="${target().tone}"] .timbre-picture`);
+  const show=()=>find('[data-match-picture]').replaceChildren(...[...picture.childNodes].map(n=>n.cloneNode(true)));
+  show();
+  if(!picture.childNodes.length){
+   pictureObserver=new MutationObserver(()=>{show();if(picture.childNodes.length)pictureObserver.disconnect();});
+   pictureObserver.observe(picture,{childList:true});
+  }
+ }
  function startQuestion(){
   hideTarget();
   root.dataset.matchState='answering';
   onChange();heardTarget=false;heardChoice=false;answer={...target().start};
-  const picture=document.querySelector(`#card-05 [data-timbre="${target().tone}"] .timbre-picture`);
-  find('[data-match-picture]').replaceChildren(...[...picture.childNodes].map(n=>n.cloneNode(true)));
+  updatePicture();
   find('[data-match-picture]').setAttribute('aria-label',`${MATCH_NAMES[target().tone]}，目標聲音的發聲器材`);
   find('[data-match-picture]').dataset.instrument=target().tone;
   update();

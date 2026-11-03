@@ -63,6 +63,19 @@ test('sound-match assessment follows the approved layout and shares actual audio
   assert.equal(await page.evaluate(()=>window.matchRuns.length),0);assert.equal(await plot.getAttribute('data-tone'),'pipe');assert.equal(await root.locator('[data-match-new]').isVisible(),true);assert.equal(await root.locator('[data-match-progress],[data-match-dots],[data-match-summary],[data-match-restart],[data-match-next]').count(),0);
   assert.ok(await root.locator('[data-match-picture] image').count());await root.screenshot({path:`${capture}/initial-1440.png`});
  });
+ await t.test('a delayed instrument view fills the current target picture after switching questions',async()=>{
+  const p=await browser.newPage();let release;const gate=new Promise(r=>release=r);
+  await p.route('**/timbre-experiment.mjs*',async route=>{await gate;await route.continue();});
+  try{
+   await p.goto(base+'#unit-quiz',{waitUntil:'domcontentloaded'});
+   await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');
+   assert.equal(await p.locator('[data-match-picture]').evaluate(n=>n.childNodes.length),0);
+   await p.locator('[data-match-new]').click();release();
+   await p.waitForFunction(()=>document.querySelector('[data-match-picture]').childNodes.length>0);
+   assert.equal(await p.locator('[data-match-picture]').evaluate(n=>n.innerHTML===document.querySelector(`#card-05 [data-timbre="${n.dataset.instrument}"] .timbre-picture`).innerHTML),true);
+   assert.equal(await p.locator('#unit-quiz [aria-pressed=true]').count(),0);
+  }finally{release();await p.close();}
+ });
  await t.test('shape switch changes timbre without changing frequency or amplitude; both step controls redraw the actual selected signal',async()=>{
   const before=await plot.locator('.signal').getAttribute('d');await root.locator('[data-match-switch]').click();await ready();assert.notEqual(await plot.locator('.signal').getAttribute('d'),before);assert.equal(await plot.getAttribute('data-frequency'),'440');assert.equal(await plot.getAttribute('data-amplitude'),'0.3');
   await set('frequency',660);assert.equal(await plot.getAttribute('data-frequency'),'660');await set('amplitude',.9);assert.equal(await plot.getAttribute('data-amplitude'),'0.9');assert.equal(await page.evaluate(()=>window.matchRuns.length),0);
