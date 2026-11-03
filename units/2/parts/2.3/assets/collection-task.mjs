@@ -16,7 +16,7 @@ function render(){
  for(const b of form.querySelectorAll('[data-desk-tool]')){if(!b.dataset.deskMaterial)b.setAttribute('aria-pressed',String(state.tool===b.dataset.deskTool));b.disabled=!!state.motion||(!b.dataset.deskMaterial&&state.phase==='complete');b.dataset.installed=String(b.dataset.deskTool==='rig'&&state.rig||b.dataset.deskTool==='funnel'&&state.funnel||b.dataset.deskTool==='plate'&&state.jarCovered);}
  form.querySelector('[data-desk-action=stop]').hidden=!['water','acid','peroxide'].includes(state.motion?.kind);
  form.querySelector('[data-desk-action=inspect]').disabled=!!state.motion||state.phase==='complete';
- form.querySelector('.desk-instruction').textContent=state.phase==='complete'?'氣體已封存在瓶中。可重做實驗，嘗試不同操作。':'點材料上桌 → 拖曳器材對準開口 → 看提示後放開。';
+ form.querySelector('.desk-instruction').textContent=state.phase==='complete'?'氣體已封存在瓶中。可重做實驗，嘗試不同操作。':'點材料上桌 → 拖曳器材到操作位置 → 看提示後放開。';
  const nextFeedbackKey=state.feedbackKind+'|'+state.feedback;
  if(nextFeedbackKey!==feedbackKey){feedbackKey=nextFeedbackKey;const error=state.feedbackKind==='error';feedback.setAttribute('role',error?'alert':'status');feedback.setAttribute('aria-live',error?'assertive':'polite');feedback.replaceChildren();if(error){const label=document.createElement('strong');label.className='desk-feedback-label';label.textContent='操作錯誤';feedback.append(label,document.createTextNode(' '+state.feedback));}else feedback.textContent=state.feedback;}
  feedback.hidden=!state.feedback;feedback.dataset.kind=state.feedbackKind;feedback.dataset.result=state.result||'';
