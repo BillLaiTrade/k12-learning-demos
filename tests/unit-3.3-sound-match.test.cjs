@@ -47,11 +47,12 @@ test('sound-match assessment follows the approved layout and shares actual audio
  await t.test('initial screen has instrument listening above one editable wave, fixed step buttons and no answer reveal or autoplay',async()=>{
   const reference=await browser.newPage({viewport:{width:1440,height:1000}});
   try{
-   const referenceUrl=process.env.SOUND33_BASE_URL?new URL('../../../2/parts/2.1/',base).href:`http://127.0.0.1:${port}/units/2/parts/2.1/`;
+   const referenceUrl=process.env.SOUND33_BASE_URL?new URL('../3.2/',base).href:`http://127.0.0.1:${port}/units/3/parts/3.2/`;
    await reference.goto(referenceUrl,{waitUntil:'networkidle'});
-   const format=p=>p.locator('#unit-quiz').evaluate(n=>{const pick=(el,keys)=>{const s=getComputedStyle(el);return Object.fromEntries(keys.map(k=>[k,s[k]]));};return{headerColumns:getComputedStyle(n.querySelector('.quiz-head')).gridTemplateColumns.split(' ').length,card:pick(n,['backgroundColor','color','border','borderRadius','boxShadow','lineHeight']),header:pick(n.querySelector('.quiz-head'),['display','columnGap','borderBottom','backgroundColor']),mark:pick(n.querySelector('.quiz-mark'),['width','height','backgroundColor','color','borderRadius','fontSize']),title:pick(n.querySelector('h2'),['fontSize','lineHeight','color']),kicker:pick(n.querySelector('.quiz-kicker'),['fontSize','color','backgroundColor','letterSpacing'])};});
-   assert.deepEqual(await format(page),await format(reference),'quiz frame, header hierarchy and palette match unit 2.1; compact spacing is independent');
+   const format=p=>p.locator('#unit-quiz').evaluate(n=>{const pick=(el,keys)=>{const s=getComputedStyle(el);return Object.fromEntries(keys.map(k=>[k,s[k]]));};return{card:pick(n,['backgroundColor','color','border','borderRadius','boxShadow','lineHeight']),header:pick(n.querySelector('.quiz-head'),['display','columnGap','borderBottom','backgroundColor']),mark:pick(n.querySelector('.quiz-mark'),['width','height','backgroundColor','color','borderRadius','fontSize']),title:pick(n.querySelector('h2'),['fontSize','lineHeight','color']),kicker:pick(n.querySelector('.quiz-kicker,.fireworks-kicker'),['fontSize','color','backgroundColor','letterSpacing'])};});
+   assert.deepEqual(await format(page),await format(reference),'quiz frame, warm header, badge, title and kicker follow unit 3.2; task spacing stays compact');
    assert.equal(await root.locator('.quiz-mark').innerText(),'?');
+   const panel=p=>p.evaluate(()=>{const n=document.querySelector('#unit-quiz .match-step h3,#unit-quiz .fireworks-panel h3'),s=getComputedStyle(n);return {color:s.color,backgroundColor:s.backgroundColor,fontSize:s.fontSize};});assert.deepEqual(await panel(page),await panel(reference));
   }finally{await reference.close();}
   await checkSteps();
   assert.equal(await page.locator('.quiz').count(),1);assert.equal(await root.locator('select').count(),0);assert.equal(await root.locator('input').count(),0);assert.equal(await root.locator('[data-play]').count(),2);assert.equal(await root.locator('[data-match-step]').count(),4);
