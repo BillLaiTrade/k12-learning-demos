@@ -9,7 +9,7 @@ node --test tests/unit-4.5.test.cjs
 node --test tests/unit-4.5-color-model.test.mjs tests/unit-4.5-prism-optics.test.mjs tests/unit-4.5-mix-optics.test.mjs
 ```
 
-專項驗證五種色卡的主畫面材質／預覽／定性文字／逐色條長同步，反射與吸收逐色相加等於入射，遮隱光路及旋轉／俯看／方向鍵不改結果。用測試限定的唯讀觀察核對真實3D色卡為不透明、教學光路均留在入射側、不新增眼睛；七種寬度的預覽／工具不遮住預設器材且無水平溢出；手機可直接點選全部材料，WebGL失效時平面圖與結果仍可用。正式程式不新增測試API。支援`COLOR_URL`、`COLOR_CAPTURE_DIR`及`CHROMIUM_PATH`。
+專項驗證五種色卡的主畫面材質／預覽／定性文字／逐色條長同步，反射與吸收逐色相加等於入射，遮隱光路及旋轉／俯看／方向鍵不改結果。用測試限定的唯讀觀察核對真實3D色卡為不透明、有紙面紋理的高粗糙度非金屬材質、無自發光；分散光路由不同起點離開且均留在入射側，不新增眼睛；另以實際渲染像素核對隱藏光路後藍卡／白卡的受光區仍較邊緣明亮，固定照明不被關閉；七種寬度的預覽／工具不遮住預設器材且無水平溢出；手機可直接點選全部材料，WebGL失效時平面圖與結果仍可用。正式程式不新增測試API。支援`COLOR_URL`、`COLOR_CAPTURE_DIR`及`CHROMIUM_PATH`。
 
 `node --test tests/unit-4.5-torch-focus.test.cjs`：5項含外層，三色開關後移開無框且保留方向鍵焦點、拖曳可見／放開及各種取消清除、Tab與鍵盤提示、手機原生點按及touchEnd／touchCancel。使用圖片備援隔離焦點事件；另跑真立體金邊5與快速比較4項。光束8／版面15／整頁34與純模型本輪未重跑。COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH沿用。
 
