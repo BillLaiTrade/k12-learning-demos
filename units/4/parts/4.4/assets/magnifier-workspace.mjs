@@ -2,6 +2,8 @@
 export const observations=Object.freeze({
  near:{object:30,screenIn:false,extensions:false},
  focus:{object:90,screenIn:false,extensions:false},
+ at_f:{object:100,screenIn:false,extensions:false},
+ outside:{object:200,screenIn:false,extensions:false},
  virtual:{object:60,screenIn:false,rays:true,extensions:true},
  screen:{object:60,screenIn:true,extensions:false},
  restore:{object:60,screenIn:false,extensions:false}
@@ -17,7 +19,7 @@ export function createMagnifierWorkspace(root,{f,move,observe}){
   observe(observations[row.dataset.magObservation]);
  }));
  return {update(state,rays,extensions){
-  ruler.value=state.object;ruler.setAttribute('aria-valuetext',`${Number((state.object/f).toFixed(3))}F，焦距內`);
+  ruler.value=state.object;ruler.setAttribute('aria-valuetext',`${Number((state.object/f).toFixed(3))}F，${state.object<f?'焦距內':state.object===f?'剛好在焦點':'焦距外'}`);
   for(const row of rows){const preset=observations[row.dataset.magObservation],active=state.object===preset.object&&state.screenIn===preset.screenIn&&(preset.rays===undefined||rays===preset.rays)&&extensions===preset.extensions;
    row.dataset.active=String(active);row.querySelector('button').setAttribute('aria-pressed',String(active));
   }

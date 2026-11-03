@@ -11,6 +11,18 @@ test('不同物點的實線入固定瞳孔，延長線交於同一虛像位置',
 test('屏幕只有散開光斑，半徑與實線光路包絡一致且會擋住眼睛',()=>{
  for(const object of [30,60,90])for(const screen of [45,95,140]){const s={object,screen,screenIn:true},g=magnifierState(s);assert.ok(g.spread>0);assert.equal(g.blocked,true);const top=magnifierRays(s,'top').map(r=>r.end[1]);assert.ok(Math.abs((Math.max(...top)-Math.min(...top))/2-g.spread)<1e-9);assert.equal(magnifierRays(s)[0].end[0],screen*G.scale);}
 });
-test('物距維持焦距內，屏幕在鏡片與眼睛之間，移動單一器材不改另一器材',()=>{
- const s={object:60,screen:95,screenIn:true};assert.equal(moveMagnifier(s,'object',1000).object,90);assert.equal(moveMagnifier(s,'object',0).object,30);assert.equal(moveMagnifier(s,'screen',1000).screen,140);assert.ok(G.screenMax<G.eye);assert.deepEqual(moveMagnifier(s,'object',45),{...s,object:45});assert.deepEqual(moveMagnifier(s,'object',NaN),s);assert.equal(magnifierState({...s,object:90}).virtualOutside,true);
+test('圖卡可跨過F至2F，屏幕在鏡片與眼睛之間，移動單一器材不改另一器材',()=>{
+ const s={object:60,screen:95,screenIn:true};assert.equal(moveMagnifier(s,'object',1000).object,200);assert.equal(moveMagnifier(s,'object',0).object,30);assert.equal(moveMagnifier(s,'screen',1000).screen,140);assert.ok(G.screenMax<G.eye);assert.deepEqual(moveMagnifier(s,'object',45),{...s,object:45});assert.deepEqual(moveMagnifier(s,'object',NaN),s);assert.equal(magnifierState({...s,object:90}).virtualOutside,true);
+});
+
+test('跨越F時連續保留真實成像，焦點平行光的眼睛投影沒有除零',()=>{
+ for(const object of [30,90,99.9,100,100.1,110,150,200]){
+  const g=magnifierState({object,screen:95,screenIn:false}),rays=magnifierRays({object,screen:95,screenIn:false});
+  assert.equal(g.type,object<100?'virtual':object===100?'infinity':'real');assert.ok(Number.isFinite(g.referenceScale)&&g.spread>0);assert.equal(rays.length,6);
+  for(const r of rays){assert.ok([...r.from,...r.lens,...r.end,...(r.virtual||[])].every(Number.isFinite));if(object>=100)assert.equal(r.virtual,null);}
+  if(object>100){assert.ok(g.v>G.eye&&g.m<0);assert.equal(g.eyeMode,'converging');assert.equal(g.imageScale,null);assert.equal(g.angularGain,null);for(const r of rays){const t=g.v*G.scale/r.end[0];assert.ok(Math.abs(r.lens[1]+t*(r.end[1]-r.lens[1])-(G.axis+g.m*(r.name==='top'?.44:-.4)))<1e-8);}}
+  else assert.ok(Number.isFinite(g.imageScale));
+ }
+ const atF=magnifierState({object:100,screen:95});assert.equal(atF.eyeMode,'parallel');assert.equal(atF.imageScale,.5);assert.equal(atF.v,null);
+ for(const name of ['top','bottom']){const slopes=magnifierRays({object:100,screen:95}).filter(r=>r.name===name).map(r=>(r.end[1]-r.lens[1])/r.end[0]);assert.ok(Math.max(...slopes)-Math.min(...slopes)<1e-10);}
 });
