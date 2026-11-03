@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {IMAGING as G,moveImaging,imagingState,imagingRays} from '../units/4/parts/4.4/assets/imaging-optics.mjs';
+import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from '../units/4/parts/4.4/assets/imaging-optics.mjs';
 test('三種物距的清楚像位置、倒立倍率與每個物點會聚一致',()=>{
  for(const [object,screen,m]of [[320,100*320/220,-100/220],[200,200,-1],[150,300,-2],[125,500,-4]]){
   const s={stage:'compare',object,screen},g=imagingState(s);assert.equal(g.clear,true);assert.ok(Math.abs(g.m-m)<1e-10);assert.ok(g.spread<1e-10);assert.ok(Math.abs(g.projectionScale-m)<1e-10);
@@ -28,4 +28,9 @@ test('圖卡與代表物點放大兩倍，像距與倍率保持，放大像按�
  assert.equal(g.clear,true);assert.ok(Math.abs(g.m+1/2.2)<1e-10);
  for(const [name,y]of [['top',.88],['bottom',-.8]])for(const ray of rays.filter(r=>r.name===name)){assert.ok(Math.abs(ray.from[1]-G.axis-y)<1e-10);assert.ok(Math.abs(ray.end[1]-G.axis-g.m*y)<1e-10);}
  assert.equal(imagingState({object:200,screen:200}).clipped,false);assert.equal(imagingState({object:175,screen:700/3}).clipped,false);assert.equal(imagingState({object:150,screen:300}).clipped,true);
+});
+
+test('四個觀察重點同步定位，F沒有有限清楚像，不改原物理規則',()=>{
+ for(const [key,object,screen]of [['beyond',320,145.5],['double',200,200],['between',175,233.3],['focus',100,500]]){const s=imagingKeypointState(key);assert.deepEqual(s,{object,screen,stage:'compare'});const g=imagingState(s);assert.equal(g.clear,key!=='focus');assert.equal(g.finite,key!=='focus');if(key==='beyond')assert.ok(g.v>G.f&&g.v<G.f*2);if(key==='double')assert.equal(g.v,G.f*2);if(key==='between')assert.ok(g.v>G.f*2);}
+ assert.equal(imagingKeypointState('missing'),null);
 });

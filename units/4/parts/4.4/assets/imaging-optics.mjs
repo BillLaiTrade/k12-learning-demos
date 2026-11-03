@@ -20,3 +20,9 @@ export function imagingRays(state,point='both'){
  }
  return points;
 }
+
+export function imagingKeypointState(id){
+ const object={beyond:320,double:200,between:175,focus:100}[id];if(!Number.isFinite(object))return null;
+ const state={object,screen:IMAGING.screenMax,stage:'compare'},g=imagingState(state);
+ return moveImaging(state,'screen',g.finite&&!g.unreachable?g.v:IMAGING.screenMax);
+}
