@@ -43,6 +43,12 @@ function followConnector() {
   };
   connectorFrame = requestAnimationFrame(step);
 }
+function syncDetail() {
+  const expanded = section.dataset.arrangement === 'proportion' && ['minor', 'argon', 'other'].includes(selected);
+  detail.hidden = !expanded;
+  connectorElement.toggleAttribute('hidden', !expanded);
+  for (const trigger of detailTriggers) trigger.setAttribute('aria-expanded', String(expanded));
+}
 function choose(gas, sourceShare) {
   selected = gas;
   hovered = null;
@@ -57,10 +63,7 @@ function choose(gas, sourceShare) {
   }
   const target = sourceShare || shares.find(share => share.dataset.component === (['argon', 'other'].includes(gas) ? 'minor' : gas));
   if (target) for (const share of shares) share.tabIndex = share === target ? 0 : -1;
-  const expanded = ['minor', 'argon', 'other'].includes(gas);
-  detail.hidden = !expanded;
-  connectorElement.toggleAttribute('hidden', !expanded);
-  for (const trigger of detailTriggers) trigger.setAttribute('aria-expanded', String(expanded));
+  syncDetail();
   showKnowledge(gas); emphasize(); followConnector();
 }
 for (const button of controls) {
@@ -99,6 +102,7 @@ for (const button of viewControls) {
   button.disabled = false;
   button.addEventListener('click', () => {
     section.dataset.arrangement = button.dataset.airView;
+    syncDetail();
     fields[0].model.setMode(button.dataset.airView,{immediate:reducedMotion.matches||userPaused});renderParticles();syncMotion();
     for (const control of viewControls) control.setAttribute('aria-pressed', String(control === button));
     hovered = null; focused = null;
