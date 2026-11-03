@@ -1,13 +1,13 @@
-import { layout, media, clampAngle, geometry, durationMs, snapshot, zoomViewBox } from './oblique-incidence-model.mjs?v=20261102-center1';
+import { layout, media, clampAngle, geometry, durationMs, snapshot, zoomViewBox } from './oblique-incidence-model.mjs?v=20261103-refine1';
 
 const root=document.querySelector('#oblique-lab'),$=selector=>root.querySelector(selector);
 const scene=$('#oblique-scene'),zoom=$('#oblique-zoom'),picture=$('#oblique-background');
 const detail=$('#oblique-detail'),magnify=$('#oblique-magnify'),closeDetail=$('#oblique-close'),viewport=$('#oblique-viewport');
 const input=$('#oblique-angle'),output=$('#oblique-angle-value'),start=$('#oblique-start'),pause=$('#oblique-pause'),retry=$('#oblique-retry');
-const status=$('#oblique-status'),badge=$('#oblique-state'),buttons=[...root.querySelectorAll('[data-oblique-medium]')];
+const status=$('#oblique-status'),buttons=[...root.querySelectorAll('[data-oblique-medium]')];
 let medium='water',requestedMedium='water',angle=45,elapsed=0,state='loading',frame=0,startTime=0,drag=null,loadId=0,restoreLight=false;
 const name=()=>medium==='water'?'水':'玻璃',clickSlop=5;
-const label=(id,x,y,text,width=110)=>`<g id="${id}" transform="translate(${x} ${y})"><rect x="0" y="-35" width="${width}" height="52" rx="9" fill="#fffef4" fill-opacity=".96"/><text x="${width/2}" y="0" text-anchor="middle" font-size="30">${text}</text></g>`;
+const label=(id,x,y,text,width=110)=>`<g id="${id}" class="oblique-medium-badge" transform="translate(${x} ${y})"><rect x="0" y="-35" width="${width}" height="52" rx="9" fill="#fffef4" fill-opacity=".96"/><text x="${width/2}" y="0" text-anchor="middle" font-size="30">${text}</text></g>`;
 const beam=()=>'<g class="oblique-beam" visibility="hidden"><path class="oblique-halo"/><path class="oblique-ray"/><path class="oblique-core"/></g>';
 scene.setAttribute('viewBox',`0 0 ${layout.width} ${layout.height}`);
 scene.innerHTML=`<defs>
@@ -62,8 +62,8 @@ zoom.innerHTML=`<defs>
  ${beam()}
  <g class="oblique-zoom-labels">
   <g><rect x="657" y="458" width="43" height="24" rx="4"/><text class="oblique-normal-name" x="662" y="500">法線</text></g>
-  <g><rect x="539" y="508" width="43" height="24" rx="4"/><text x="558" y="542" text-anchor="middle">空氣</text></g>
-  <g><rect x="539" y="645" width="48" height="25" rx="4"/><text id="oblique-zoom-medium" x="546" y="648">水</text></g>
+  <g class="oblique-medium-badge"><rect x="539" y="508" width="43" height="24" rx="4"/><text x="558" y="542" text-anchor="middle">空氣</text></g>
+  <g class="oblique-medium-badge"><rect x="539" y="645" width="48" height="25" rx="4"/><text id="oblique-zoom-medium" x="546" y="648">水</text></g>
   <g><rect x="534" y="552" width="48" height="25" rx="4"/><text x="558" y="570" text-anchor="middle">介面</text></g>
  </g>`;
 const source=scene.querySelector('.oblique-source'),views=[scene,zoom].map(svg=>({svg,beam:svg.querySelector('.oblique-beam'),paths:[...svg.querySelectorAll('.oblique-beam path')]}));
@@ -88,13 +88,14 @@ function labelAngle(kind,degrees,up){
  zoom.querySelector(`#oblique-zoom-${kind}-value`).textContent=`${up?degrees:degrees.toFixed(1)}°`;
 }
 function drawGeometry(){
- const g=geometry(medium,angle),ratio=Math.max(.1,scene.getBoundingClientRect().width/layout.width),sourceScale=Math.max(.9,22/(70*ratio)),fontScale=Math.max(.8,13/(30*ratio));
+ const g=geometry(medium,angle),ratio=Math.max(.1,scene.getBoundingClientRect().width/layout.width),sourceScale=Math.max(.9,22/(70*ratio)),fontScale=Math.max(.8,15/(30*ratio));
  input.value=angle;output.value=`${angle}°`;root.dataset.angle=String(angle);root.dataset.medium=medium;root.dataset.outgoing=String(g.outgoing);
  source.setAttribute('transform',`translate(${g.source.join(' ')}) rotate(${-angle}) scale(${sourceScale})`);
  source.setAttribute('aria-label',`${name()}組光源，點擊或按Enter發射，拖曳或方向鍵調角度`);source.setAttribute('aria-valuenow',String(angle));source.setAttribute('aria-valuetext',`${angle}度，折射角${g.outgoing.toFixed(1)}度`);
  const hit=source.querySelector('.oblique-source-hit'),hitSize=Math.max(96,44/(ratio*sourceScale));for(const [key,value] of Object.entries({x:-hitSize/2,y:-34-hitSize/2,width:hitSize,height:hitSize}))hit.setAttribute(key,String(value));
  scene.querySelector('#oblique-case-label').setAttribute('transform',`translate(650 155) scale(${fontScale})`);scene.querySelector('#oblique-case-name').textContent=`空氣 → ${name()}`;
  scene.querySelector('#oblique-air-label').setAttribute('transform',`translate(${1030-110*fontScale} 440) scale(${fontScale})`);scene.querySelector('#oblique-material-label').setAttribute('transform',`translate(230 740) scale(${fontScale})`);scene.querySelector('#oblique-material-label text').textContent=name();
+ for(const group of scene.querySelectorAll('.oblique-medium-badge')){const b=group.querySelector('text').getBBox(),r=group.querySelector('rect');for(const [k,v]of Object.entries({x:b.x-10,y:b.y-5,width:b.width+20,height:b.height+10}))r.setAttribute(k,String(v));}
  for(const kind of ['sector','base']){zoom.querySelector(`.oblique-in-${kind}`).setAttribute('d',sector(angle,true));zoom.querySelector(`.oblique-out-${kind}`).setAttribute('d',sector(g.outgoing,false));}zoom.querySelector('.oblique-in-arc').setAttribute('d',arc(angle,true));zoom.querySelector('.oblique-out-arc').setAttribute('d',arc(g.outgoing,false));$('#oblique-in-value').value=`${angle}°`;$('#oblique-out-value').value=`${g.outgoing.toFixed(1)}°`;zoom.querySelector('#oblique-zoom-medium').textContent=name();
  labelAngle('in',angle,true);labelAngle('out',g.outgoing,false);
  zoom.style.setProperty('--zoom-font-scale',String(Math.max(1,14*240/(11*Math.max(80,zoom.getBoundingClientRect().width||200)))));
@@ -133,7 +134,6 @@ function controls(){
  root.dataset.state=state;root.setAttribute('aria-busy',String(state==='loading'));start.disabled=['loading','error'].includes(state);pause.disabled=!['running','paused'].includes(state);input.disabled=start.disabled;magnify.disabled=start.disabled;
  buttons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.obliqueMedium===requestedMedium)));
  source.setAttribute('aria-disabled',String(start.disabled));source.setAttribute('tabindex',start.disabled?'-1':'0');start.classList.toggle('primary',!start.disabled&&state!=='running');pause.classList.toggle('primary',['running','paused'].includes(state));pause.dataset.action=state==='paused'?'resume':'pause';pause.querySelector('span').textContent=state==='paused'?'繼續觀察':'暫停觀察';
- badge.textContent={loading:'準備場景',error:'場景未就緒',idle:'準備發射',running:'光束穿越中',paused:'已暫停觀察',preview:'光路預覽',complete:'光路已展開'}[state];
  status.textContent={loading:'正在準備實驗場景……',error:`${requestedMedium==='water'?'水':'玻璃'}場景未能載入，請重試或切換介質。`,idle:'點燈發射，拖曳光源可調角度。',running:'全景與放大畫面同步前進。',paused:'已暫停，可仔細觀察入射點。',preview:'光路已更新，可重新發射觀察。',complete:'光路已展開，可調角度或切換介質。'}[state];
 }
 function stop(){cancelAnimationFrame(frame);frame=0;}

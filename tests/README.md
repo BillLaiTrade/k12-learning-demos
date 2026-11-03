@@ -67,7 +67,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
 CHROMIUM_PATH=/usr/bin/chromium MATCH_CAPTURE_DIR=/tmp/unit33-three-steps DECIBEL_CAPTURE_DIR=/tmp/unit33-three-steps-page node --test --test-concurrency=1 tests/unit-3.3-sound-match.test.cjs tests/unit-3.3.test.cjs
 ```
 
-小測專項與整頁檢查：緊湊版保留框架、配色及標頭兩欄結構，內距與實際欄寬依本輪核可獨立處理；三區順序與至少10px間距、三個主按鈕175px等寬靠右對齊，桌面完成區說明及按鈕同列、手機自然換行、提交仍屬原表單，答對／答錯回饋在第三區，八種寬度無溢出。取代舊的單一視窗高度限制，保留原聲音／波形一致、配對、結果保留、重試、換題、鍵盤及手機觸控檢查。`SOUND33_BASE_URL`可指定公開頁，截圖請存至獨立目錄。
+小測專項與整頁檢查：依2026-11-03核可，以3.2為小測樣式基準，直接比對外框、淡米黃標頭、問號徽章、並列標題與小標字級及配色；任務內距保留緊湊配置。整頁七區仍沿用既有格式；三區順序與至少10px間距、三個主按鈕175px等寬靠右對齊，桌面完成區說明及按鈕同列、手機自然換行、提交仍屬原表單，答對／答錯回饋在第三區，八種寬度無溢出。取代舊的單一視窗高度限制，保留原聲音／波形一致、配對、結果保留、重試、換題、鍵盤及手機觸控檢查。`SOUND33_BASE_URL`可指定公開頁，截圖請存至獨立目錄。
 
 ## 3.3 第四區操作精簡
 
