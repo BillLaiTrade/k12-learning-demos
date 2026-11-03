@@ -1,4 +1,4 @@
-import { materials, rayGeometry, apparentDepth } from './optics.mjs';
+import { materials, rayGeometry } from './optics.mjs';
 const $ = (s, root = document) => root.querySelector(s);
 const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 const line = (a,b,cls='ray',extra='') => `<path class="${cls}" d="M${a} L${b}" ${extra}/>`;
@@ -36,13 +36,6 @@ function drawPaths(){
   $('#reverse-path').textContent=reversed?'恢復由 A 前往 B':'反向沿原路走';$('#reverse-path').setAttribute('aria-pressed',String(reversed));
 }
 $('#reverse-path').onclick=()=>{reversed=!reversed;drawPaths();};drawPaths();
-function drawDepth(){
-  const depth=Number($('#depth-input').value), g=apparentDepth(depth), show=$('#show-rays').checked;
-  $('#depth-output').textContent=`${depth} 公分`;
-  $('#depth-scene').innerHTML=defs('depth-arrow')+`<rect x="50" y="${g.surface}" width="590" height="${370-g.surface}" fill="#dceeea"/>`+line([50,g.surface],[640,g.surface],'normal')+label(540,g.surface-14,'水面')+label(555,350,'水中')+label(555,45,'空氣')+line([50,370],[640,370],'normal')+(show?g.rays.map(r=>arrow(g.coin,r.hit,'depth-arrow')+arrow(r.hit,r.eye,'depth-arrow')+line(r.hit,g.apparent,'extension')).join(''):'')+`<circle cx="${g.coin[0]}" cy="${g.coin[1]}" r="11" fill="#966023"/><circle cx="${g.apparent[0]}" cy="${g.apparent[1]}" r="11" fill="#fff9ee" stroke="#c96b32" stroke-width="3"/>`+label(190,405,'硬幣實際位置')+label(g.apparent[0]+18,g.apparent[1]+5,'看起來的位置')+`<ellipse cx="370" cy="60" rx="22" ry="13" fill="white" stroke="#203f36" stroke-width="2"/><circle cx="370" cy="60" r="7" fill="#203f36"/>`+label(405,67,'小葵的眼睛')+line([100,g.surface],[100,g.coin[1]],'normal')+line([90,g.surface],[110,g.surface],'normal')+line([90,g.coin[1]],[110,g.coin[1]],'normal')+label(115,(g.surface+g.coin[1])/2,`${depth} cm`);
-  $('#depth-scene').setAttribute('aria-label',`實際水深${depth}公分，硬幣實際位置固定，看起來的位置在硬幣上方。${show?'顯示由硬幣進入眼睛的光與反向延長線。':'光路已隱藏。'}`);
-}
-$('#depth-input').oninput=drawDepth;$('#show-rays').onchange=drawDepth;drawDepth();
 const quiz=$('#quiz'), result=$('#quiz-result');
 const answers=['toward','speed','apparent'];
 const explanations=['光由空氣進入水中會偏向法線，折射角較小。','沿法線入射時，速度改變，方向不偏折。','光由水中進入空氣時折射，眼睛沿入眼光線反向延伸，判斷出較淺的位置。'];

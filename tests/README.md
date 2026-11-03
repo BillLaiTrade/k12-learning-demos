@@ -1325,3 +1325,9 @@ node --test --test-reporter=tap --test-concurrency=1 tests/unit-2.3-reaudit.test
 ## 2.3 空氣組成主圖粒子減半（2026-11-03）
 
 `unit-2.3-composition-particles-model.test.mjs`與`unit-2.3-composition.test.cjs`改驗主圖500顆（390／105／4／1）；放大圖仍93／7。沿用模型邊界、連續切換／身分、移動、點選、暫停、手機觸控、減少動態偏好、七寬度與無JS檢查，不新增鏡像測試。討論整合套件的主圖數量預期同步。
+
+## 4.3 第六區同步雙視角（2026-11-03）
+
+unit-4.3-depth-model.test.mjs五項檢查水深／觀看位置全域的Snell關係、局部視位置共線、獨立相機光線與側面槽緣遮擋一致、三維切向折射及固定觀看目標。unit-4.3-depth-lab.test.cjs十一子項加外層，涵蓋初始無作答教學、實際Canvas像素與幣像位置變化、固定硬幣、槽壁遮擋及同位置加水可見、輔助線開關、鍵盤／拖曳／原生觸控、重設、離屏續播、九種視窗與44px觸控區、減少動態偏好、材質失敗重試及無JavaScript閱讀。
+
+DEPTH_CAPTURE_DIR保存畫面與measurements.json；LESSON_BASE_URL／LESSON_USE_PROXY沿用既有公開測試設定。整課回歸的固定硬幣斷言改讀新實體幣與視位置的語意節點，不再假設前兩個circle就是硬幣。與原optics、整課及format組合共25項（含外層）。

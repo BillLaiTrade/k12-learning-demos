@@ -37,7 +37,9 @@
   <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-fit2">
 <link rel="stylesheet" href="assets/integrated-refraction.css?v=20261103-fit2">
   <link rel="stylesheet" href="assets/return-refraction-refresh.css?v=20261103-inline1">
-  <script type="module" src="assets/lesson.mjs?v=20261102-return1">
+  <link rel="stylesheet" href="assets/depth-lab.css?v=20261103-dual1">
+  <script type="module" src="assets/depth-lab.mjs?v=20261103-dual1"></script>
+  <script type="module" src="assets/lesson.mjs?v=20261103-depth1">
 </script>
 </head>
 <body>
@@ -452,25 +454,50 @@
 <span class="speaker">
 <span class="visually-hidden">阿公</span>
 </span>
-<p>硬幣留在原處。看看進入眼睛的光，再把它往回延伸。</p>
+<p>硬幣留在原處。把光路和從這裡看見的畫面放在一起，比較水面下的位置。</p>
 </div>
 </div>
-<div class="lab">
-<svg id="depth-scene" class="scene" viewBox="0 0 700 430" role="img" aria-label="固定水底硬幣、眼睛與折射光路">
+<div id="depth-lab" data-state="ready" data-depth="70" data-eye-x="250">
+<p class="depth-intro">左邊看光怎麼走，右邊看從這個位置會看見什麼。硬幣固定，兩個視角同步。</p>
+<div class="depth-views">
+<figure class="depth-view">
+<figcaption>光怎麼進入眼睛<small>側面剖面</small></figcaption>
+<div class="depth-stage">
+<svg id="depth-scene" viewBox="0 0 720 500" role="group" aria-label="硬幣固定，折射光進入目前觀看位置">
 </svg>
-<label class="control">實際水深：<output id="depth-output">70 公分</output>
-<input id="depth-input" type="range" min="40" max="100" value="70" step="1" aria-label="硬幣上方的實際水深">
-</label>
-<label class="controls">
-<input id="show-rays" type="checkbox" checked>顯示入眼光路與反向延長線</label>
-<div class="legend">
-<span>實際傳播的光</span>
-<span class="dashed">向後延伸的輔助線</span>
 </div>
-<p class="note">側面示意：以一小束進入眼睛的光估計看見的位置。橘色虛線是判斷位置的輔助線，並非光真的在那裡傳播。</p>
+<div class="depth-view-note"><span><i></i>實線：真正的光路</span><span><i class="dashed"></i>虛線：位置判斷的輔助線</span></div>
+</figure>
+<figure class="depth-view">
+<figcaption>從這個位置看進去<small>與左側觀看位置同步</small></figcaption>
+<div class="depth-stage">
+<canvas id="depth-observer" width="640" height="444" role="img" aria-label="目前觀看位置所見的水槽與硬幣">硬幣固定在槽底。光出水時折射，讓硬幣看起來較淺。</canvas>
+<span class="depth-observer-state" id="depth-visibility">目前可以看見硬幣</span>
 </div>
-<p class="finding">
-<strong>觀察重點</strong>　眼睛依進入眼中的光線方向往回判斷位置，於是硬幣看起來較淺；實際位置沒有改變。</p>
+<div class="depth-view-note" id="depth-view-result">光經過水面折射後，進入目前的觀看位置。</div>
+</figure>
+</div>
+<div class="depth-controls" role="group" aria-label="同步調整兩個視角">
+<label class="depth-control" for="depth-input"><span>調整水位</span><output id="depth-output">70 公分</output>
+<input id="depth-input" type="range" min="40" max="100" value="70" step="1" aria-label="硬幣上方的實際水深" aria-describedby="depth-control-help">
+<span class="depth-range-ends"><span>40 公分</span><span>100 公分</span></span></label>
+<label class="depth-control" for="depth-eye"><span>觀看位置</span><output id="depth-eye-output">較近</output>
+<input id="depth-eye" type="range" min="210" max="340" value="250" step="1" aria-label="觀看位置，數值越大離水槽越遠" aria-describedby="depth-control-help">
+<span class="depth-range-ends"><span>靠近</span><span>遠離</span></span></label>
+<div class="depth-actions"><button id="depth-replay" type="button">▶ 重播光路</button><button id="depth-reset" type="button">↻ 重設</button></div>
+</div>
+<div class="depth-options"><span id="depth-control-help">調整水位或觀看位置，左右畫面一起改變；也可拖曳左側眼睛。</span><label><input id="show-rays" type="checkbox" checked>顯示光路與輔助線</label></div>
+<p id="depth-live" class="visually-hidden" role="status" aria-live="polite"></p>
+<p id="depth-fallback" class="depth-fallback"></p>
+<p class="depth-takeaway">硬幣沒有移動，改變的是光進入眼睛的方向。<small>出水折射 → 沿入眼方向判斷 → 水中硬幣看起來較淺。</small></p>
+<details class="depth-more"><summary>為什麼看到的位置與實際位置不同？</summary><div>
+<p>硬幣反射的光從水進入空氣，斜射時偏離法線。眼睛依入眼光線的方向往回判斷，得到比硬幣更靠近水面的視位置。左邊的橘色虛線只用來說明這個判斷，光並沒有沿虛線傳播。</p>
+<p>右邊是左側觀看位置的視野。觀看位置太遠、水位較低時，前側槽壁可能遮住硬幣的光；靠近或加水，便能觀察可見範圍如何改變。即使暫時看不到硬幣，它仍固定在槽底。</p>
+<p>生活中，池底或水中物體也常看起來較淺；看見的深度不能直接當作實際水深。</p>
+<p class="note">模型：平坦水面、代表水折射率4/3，小瞳孔附近的光估計局部視位置。右側以相同場景的光線追跡繪製，從槽口觀看，前側槽壁設為不透光以呈現遮擋；未模擬透過槽壁的另一組折射、波浪與部分反射。光路重播是慢動作示意。</p>
+</div></details>
+<noscript><p class="depth-fallback">水底硬幣沒有移動。光出水時折射，眼睛沿入眼方向往回判斷，因此看起來較淺；啟用JavaScript後可同步調整水位與觀看位置。</p></noscript>
+</div>
 </div>
 </section>
 <section class="unit-quiz" id="s7" aria-labelledby="heading-7">

@@ -1,0 +1,57 @@
+[
+  {
+    "section": 1,
+    "unchanged": true,
+    "sha256": "f77847f1a3ee0df0941ba8f17c3e6dc7200addf07dc63aa69b8873dbe36b25d5"
+  },
+  {
+    "section": 2,
+    "unchanged": true,
+    "sha256": "e5cd73dffcd55d2411d6015f06b9de4ef612c694e86918cda64935b3d4f6deff"
+  },
+  {
+    "section": 3,
+    "unchanged": true,
+    "sha256": "29bbedd6ba4f54011ee5c7318e3f3473cac51fdb99e518e745a184c3b5f39910"
+  },
+  {
+    "section": 4,
+    "unchanged": true,
+    "sha256": "76cfc3e6a3ff68b7139132af5c51e0d8bcb4b0eaf6850917f261377ae70b5eb7"
+  },
+  {
+    "section": 5,
+    "unchanged": true,
+    "sha256": "14a4d9b74416c12150ba900c4ceb41b355a3a6fe5301abc84d0a0ccb29dd633d"
+  },
+  {
+    "section": 7,
+    "unchanged": true,
+    "sha256": "60bac98d44189d779bfc15a999677d30a39d1ed966c27eafb2936bf1516db98b"
+  },
+  {
+    "asset": "optics.mjs",
+    "unchanged": true,
+    "sha256": "a45eeb8d660ed21d1ec3ebe5362f06e015eebdc831a63fac1a38f71d54a0d8ec"
+  },
+  {
+    "asset": "oblique-incidence-lab.mjs",
+    "unchanged": true,
+    "sha256": "da554c05a0efb9c26a45aa56eaf3bf94573aa1aa9c9741b822ab0e33d777aee0"
+  },
+  {
+    "asset": "return-refraction-lab.mjs",
+    "unchanged": true,
+    "sha256": "a142b11f4c7d78fcd4176a0ab367e74343a84267920e57f8205a1f3241a014c0"
+  },
+  {
+    "asset": "integrated-refraction-scene.mjs",
+    "unchanged": true,
+    "sha256": "d0330e839b68a03c7744c277c7c4e714db2ab7d41a745566bfe07c09f4ce94e4"
+  },
+  {
+    "asset": "oblique-entry-water.png",
+    "unchanged": true,
+    "sha256": "5641f703ac6bafaa7c8023e00426186c46e50b411a7045651ddb8c5bf2a47b5f"
+  }
+]
