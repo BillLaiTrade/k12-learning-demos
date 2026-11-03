@@ -1236,3 +1236,16 @@ CHROMIUM_PATH=/usr/bin/chromium node tests/unit-4.4.test.cjs
 ## 4.3 第三區小車動畫（2026-11-03）
 
 `unit-4.3-oblique-cart.test.cjs` 檢查兩輪跨界時序、車軸只有異速才旋轉、同速後保持方向／慢速、重播及收合／離屏／隱藏停止、一般偏好自播／減少動態手動、鍵盤／原生觸控、七寬度，以及第二區直行類比與第三區光學操作獨立。配合既有oblique-lab及整課回歸；`CART_CAPTURE_DIR`保存畫面。完整指令見單元README。
+
+
+## 第四區反向小車動畫（2026-11-03）
+
+第四區展開說明加入與第三區共用的小車控制器；上方粗糙地面類比較慢的水／玻璃，下方平滑地面類比較快的空氣。一側先加速、方向偏離法線，兩輪都進入後同速沿新方向前進。介質名稱跟隨第四區選擇，類比示意速度固定70→100，不代替光學模型或與入射角聯動。第三區原100→55保持，各自獨立播放／重播／收合／離屏／隱藏停止。
+
+新增`tests/unit-4.3-exit-cart.test.cjs`，同時回歸第三區：
+
+```sh
+node --test --test-concurrency=1 tests/unit-4.3-exit-cart.test.cjs tests/unit-4.3-oblique-cart.test.cjs tests/unit-4.3-oblique-lab.test.cjs tests/unit-4.3-viewport.test.cjs tests/unit-4.3.test.cjs
+```
+
+`CART_CAPTURE_DIR`保存畫面／七寬度量測；各專項請指定不同目錄以保留兩方向的同名截圖。公開URL與代理變數沿用。
