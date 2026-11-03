@@ -78,6 +78,5 @@
 
 /* Read the question and guidance before surveying; keep the explanation below. */
 .sonar-intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-bottom:10px}
-.sonar-intro .dialogue{min-width:0;margin:0;padding:8px 10px;gap:8px}
-.sonar-intro .dialogue p{font-size:.88rem;line-height:1.6}
-@media(max-width:760px){.sonar-intro{grid-template-columns:minmax(0,1fr);gap:8px}.sonar-intro .dialogue p{font-size:.94rem}}
+.sonar-intro .dialogue{min-width:0}
+@media(max-width:760px){.sonar-intro{grid-template-columns:minmax(0,1fr);gap:8px}}

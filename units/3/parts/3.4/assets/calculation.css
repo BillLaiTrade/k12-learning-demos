@@ -87,8 +87,5 @@
 /* Keep the whole interaction and its linked data together. */
 #s3 .lesson-body{padding:14px 20px 18px}
 #s3 .card-main>p:first-child{font-size:.88rem;line-height:1.6;margin-bottom:8px}
-#s3 .dialogue{padding:6px 10px;margin:7px 0;gap:8px}
-#s3 .dialogue p{font-size:.88rem;line-height:1.6}
-#s3 .dialogue .speaker::before{width:32px;height:32px}
 #s3 .model-note{font-size:.74rem;line-height:1.5;margin:8px 0 0}
 @media(max-width:760px){#s3 .lesson-body{padding:12px 14px 16px}}
