@@ -97,7 +97,8 @@ h1 { margin: 6px 0 12px; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.2;
 .mix-torch .torch-name{display:block;padding:3px 7px;border:1px solid #b6b69d;border-radius:7px;background:#fffdf0d9;font-size:.78rem;line-height:1.5;pointer-events:none;white-space:nowrap}
 .mix-torch[aria-pressed=true]{border-color:transparent;background:transparent;color:#36553b}
 .mix-torch:hover{background:#f7faec38;filter:none}
-.mix-torch:focus-visible,.mix-torch[data-dragging=true]{outline:2px solid #548060;outline-offset:-3px;background:#f3f9df55}
+.mix-torch[data-pointer-focus]:not([data-dragging=true]){outline:none}
+.mix-torch:focus-visible:not([data-pointer-focus]),.mix-torch[data-dragging=true]{outline:2px solid #548060;outline-offset:-3px;background:#f3f9df55}
 .mix-torch[data-dragging=true]{cursor:grabbing}
 .mix-torch-filters{position:absolute;width:0;height:0;overflow:visible;pointer-events:none}
 .mix-torch[data-on=true] .torch-drawing{filter:url(#mix-torch-gold)}

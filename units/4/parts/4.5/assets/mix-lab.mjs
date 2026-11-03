@@ -134,7 +134,7 @@ export function initialiseFrontMix(root){
  }
  torchButtons.forEach((button,i)=>{
   button.addEventListener('pointerdown',e=>{
-   if(e.button!==0||drag)return;suppressTorchClick=null;e.preventDefault();button.focus({preventScroll:true});
+   if(e.button!==0||drag)return;suppressTorchClick=null;button.setAttribute('data-pointer-focus','');e.preventDefault();button.focus({preventScroll:true});
    const box=canvas.getBoundingClientRect();drag={i,id:e.pointerId,button,x:e.clientX,y:e.clientY,before:{...spots[i]},preset,width:box.width,height:box.height,moved:false};button.setPointerCapture(e.pointerId);
   });
   button.addEventListener('pointermove',e=>{
@@ -144,9 +144,11 @@ export function initialiseFrontMix(root){
    spots[i].x=clamp(drag.before.x+dx/drag.width,.05,.95);spots[i].y=clamp(drag.before.y+dy/drag.height,.08,.92);preset='custom';update(false);
   });
   for(const event of['pointerup','pointercancel','lostpointercapture'])button.addEventListener(event,e=>{if(drag?.id===e.pointerId&&drag.button===button)end(event!=='pointerup');});
+  button.addEventListener('blur',()=>button.removeAttribute('data-pointer-focus'));
   button.addEventListener('keydown',e=>{
    const d={ArrowLeft:[-.025,0],ArrowRight:[.025,0],ArrowUp:[0,-.025],ArrowDown:[0,.025]}[e.key];
    if(e.key==='Escape'&&drag){e.preventDefault();end(true);return;}
+   button.removeAttribute('data-pointer-focus');
    if(!d)return;e.preventDefault();end(true);spots[i].x=clamp(spots[i].x+d[0],.05,.95);spots[i].y=clamp(spots[i].y+d[1],.08,.92);preset='custom';update();
   });
  });

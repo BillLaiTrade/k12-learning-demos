@@ -1,3 +1,7 @@
+## 4.5 指標焦點與拖曳綠框（2026-11-03）
+
+`node --test tests/unit-4.5-torch-focus.test.cjs`：5項含外層，三色開關後移開無框且保留方向鍵焦點、拖曳可見／放開及各種取消清除、Tab與鍵盤提示、手機原生點按及touchEnd／touchCancel。使用圖片備援隔離焦點事件；另跑真立體金邊5與快速比較4項。光束8／版面15／整頁34與純模型本輪未重跑。COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH沿用。
+
 ## 4.5 手電筒金色輪廓（2026-11-03）
 
 `node --test tests/unit-4.5-torch-gold.test.cjs`：5項含外層。真立體三色靜置輪廓、點按／鍵盤、快速比較恢復、拖曳／取消、WebGL失效備援與手機原生觸控；以PNG像素核對金色跟隨透明外形、金屬內部保持、四角沒有矩形框、白幕保持。小數位置按截圖包絡對齊，PNG先decode。軟體GPU檢查採依序執行，避免兩組立體場景並行耗盡資源。搭配既有快速比較4及光束8項；COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH沿用。
