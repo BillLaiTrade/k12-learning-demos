@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="比較振幅、頻率與波形，探索琴弦、空氣柱、音色及聽覺範圍，認識分貝的基本讀法。">
 <title>不同的聲音，差別在哪裡？｜3.3 聲音的特性</title>
-<link rel="stylesheet" href="assets/lesson.css?v=pan-controls-47">
+<link rel="stylesheet" href="assets/lesson.css?v=pitch-notes-49">
 <script type="module" src="assets/lesson.mjs?v=picture-ready-48">
 </script>
 <link rel="stylesheet" href="assets/sound-match.css?v=balanced-controls-13">
@@ -136,7 +136,7 @@
 <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>要讓喇叭更大聲，可以讓它振動的幅度更大。那要讓聲音變高或變低，又要怎麼改變它的振動呢？</p></div>
 <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>音調的高低，和振動的頻率有關。我們可以觀察一下它們之間的關聯。</p></div>
 <div class="pitch-view-switch" role="group" aria-label="喇叭正面與側面切換"><button type="button" data-pitch-view="front" aria-pressed="true" aria-controls="pitch-front-left pitch-front-right pitch-side-left pitch-side-right">正面</button><button type="button" data-pitch-view="side" aria-pressed="false" aria-controls="pitch-front-left pitch-front-right pitch-side-left pitch-side-right">側面</button></div>
-<p class="model-note">頻率的單位是赫茲（Hz）。</p>
+<p class="model-note">頻率的單位是赫茲（Hz），200 Hz 表示每秒振動 200 次。</p>
 <div class="pitch-bench"><div class="pitch-column" data-pitch-side="left">
 <h3>固定參照</h3><div class="pitch-frequency-row"><span class="pitch-frequency">200 Hz</span></div>
 <div class="pitch-apparatus">
@@ -164,10 +164,15 @@
 <button class="play pitch-play" type="button" data-play="pitch-live" aria-pressed="false"><span aria-hidden="true">▶</span> 播放右邊</button>
 <div class="pitch-wave-card"><h4 id="pitch-count-right">10毫秒內振動4次</h4><span class="wave-label">相對位移</span><svg class="wave pitch-wave" id="pitch-live" viewBox="0 0 340 200" role="img" aria-label="相同10毫秒時間內的振動紀錄"></svg></div>
 </div></div>
-<p class="model-note" data-pitch-slow-motion>喇叭振動與波形以慢動作呈現，聲音維持原本音高。</p>
+<p class="model-note" data-pitch-slow-motion>振動與波形以慢動作呈現，聲音維持原本音高。</p>
 <p class="play-state visually-hidden" role="status">左側固定200 Hz；右側每次加減100 Hz（200～800 Hz）。</p>
 <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我發現，振動越快，頻率越高，音調就越高；振動越慢，頻率越低，音調就越低。</p></div>
-<p class="model-note">Hz表示每秒振動次數；圖的橫軸是時間，不是聲波傳播的距離。固定訊號振幅，不代表不同頻率聽起來一定同樣大聲；音調高也不代表聲音傳得較快。</p>
+<details class="pitch-notes">
+<summary>圖表與聲音補充說明</summary>
+<p>圖的橫軸是時間，呈現振動隨時間的變化，不是聲波傳播的距離。</p>
+<p>兩邊的振幅設定相同，但不同頻率不一定聽起來一樣大聲。</p>
+<p>在相同介質與條件下，音調較高，不代表聲音傳得較快。</p>
+</details>
 </div></section>
 <section class="lesson-card" id="card-03" data-core="琴弦的音調">
 <header class="lesson-head"><span class="lesson-number">03</span><div><h2>同一條琴弦，怎麼彈出不同高低的聲音？</h2><p>改變琴弦的長短或鬆緊，聽聽聲音，觀察振動的變化。</p></div></header>

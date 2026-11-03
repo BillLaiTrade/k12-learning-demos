@@ -15,7 +15,7 @@ test('pitch comparison: independent speakers, controlled frequency and synchroni
  const play=async side=>{await (side==='left'?left:right).locator('.pitch-play').click();await page.waitForFunction(()=>document.querySelector('#card-02').dataset.playing==='true');};
  const change=async target=>{let value=Number((await page.locator('#pitch-reading').innerText()).replace(/\D/g,''));while(value!==target){await root.locator(`[data-pitch-step="${target>value?100:-100}"]`).click();value+=target>value?100:-100;}};
  await t.test('approved controls, matching speakers and actual shared characters render without autoplay',async()=>{
-  assert.equal(await root.locator('[data-pitch-slow-motion]').innerText(),'喇叭振動與波形以慢動作呈現，聲音維持原本音高。');assert.equal(await root.locator('[data-pitch-slow-motion]').isVisible(),true);
+  assert.equal(await root.locator('[data-pitch-slow-motion]').innerText(),'振動與波形以慢動作呈現，聲音維持原本音高。');assert.equal(await root.locator('[data-pitch-slow-motion]').isVisible(),true);
   assert.equal(await root.locator('.pitch-step').count(),2);assert.equal(await left.locator('.pitch-step').count(),0);assert.equal(await right.locator('.pitch-step').count(),2);
   assert.equal(await root.locator('input[type=range],.stop,.reset').count(),0);assert.equal(await root.locator('.pitch-play').count(),2);assert.equal(await root.locator('.pitch-fixed').count(),2);assert.equal(await root.locator('.pitch-surround-top,.pitch-surround-bottom').count(),4);
   assert.equal(await left.locator('img').getAttribute('src'),await right.locator('img').getAttribute('src'));
