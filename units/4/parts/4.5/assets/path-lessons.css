@@ -70,3 +70,23 @@
  .path-result{font-size:.81rem}
 }
 @media(min-width:651px) and (max-height:520px){.path-workspace .stage{min-height:300px}}
+
+/* Fifth lesson: three independent columns; choices run DOWN each column. */
+#s5 .path-workspace .stage{background:#283126}
+#s5 .filter-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:12px}
+#s5 .filter-controls .lab-controls{display:block;padding:11px;min-width:0}
+#s5 .filter-controls .control-group{display:block}
+#s5 .filter-controls .control-label{font-size:.85rem;font-weight:700;margin-bottom:10px}
+#s5 .filter-controls .choice-row{display:flex;flex-direction:column;gap:7px}
+#s5 .filter-controls .choice-row button{width:100%;min-height:44px;justify-content:flex-start;padding:9px 12px;font-size:.83rem}
+#s5 .filter-label-short{display:none}
+@media(max-width:650px){
+ #s5 .filter-controls{gap:6px}
+ #s5 .filter-controls .lab-controls{padding:8px 5px}
+ #s5 .filter-controls .control-label{font-size:.69rem;margin-bottom:8px}
+ #s5 .filter-controls .choice-row{gap:6px}
+ #s5 .filter-controls .choice-row button{font-size:.67rem;gap:4px;padding:7px 3px}
+ #s5 .filter-label-full{display:none}
+ #s5 .filter-label-short{display:inline}
+ #s5 .filter-controls .swatch-dot{width:8px;height:8px;flex-shrink:0}
+}

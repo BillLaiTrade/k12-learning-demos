@@ -1,4 +1,5 @@
 import {LIGHTS,MATERIALS,FILTERS,PRISM,SCREEN_RANGE,prismRays,rgbCss,wavelengthRgb,linearToSrgb,mixAt,colorName} from './color-model.mjs';
+import {drawFilterPaper,filterPaperDiagram} from './filter-paper-rendering.mjs?v=filter-paper-20261103';
 export function rounded(ctx,x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.stroke();}}
 export function drawScreen(canvas,state,close=true){
  const rays=prismRays(state.light,state.inserted),ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;
@@ -84,6 +85,7 @@ function eyeDiagram(state,id,signal){
 }
 export function materialDiagram(state,id,signal){
  if(state.kind==='surface')return surfaceDiagram(state,id,signal);
+ if(state.kind==='filter')return filterPaperDiagram(state,id,signal);
  if(state.kind==='eye')return eyeDiagram(state,id,signal);
  const kind=state.kind,filter=kind==='filter'||kind==='eye'&&state.mode==='transmission';
  const input=rgbCss(signal.incoming),output=rgbCss(signal.outgoing),blocked=kind==='eye'&&state.blocked;
@@ -91,6 +93,7 @@ export function materialDiagram(state,id,signal){
  return `<svg viewBox="0 0 850 400" aria-hidden="true">${defs(id)}<path d="M0 0H850V400H0Z" fill="#9eaf9e"/><path d="M0 325L850 312V400H0Z" fill="url(#${id}-wood)"/>${foot(123,id)}${kind==='filter'&&state.filter==='clear'?'':foot(425,id)}${foot(730,id)}<rect x="43" y="159" width="90" height="66" rx="12" fill="url(#${id}-metal)"/><ellipse cx="135" cy="192" rx="9" ry="29" fill="#263f37"/><ellipse cx="138" cy="192" rx="5" ry="20" fill="${input}"/><g opacity="${kind==='filter'&&state.filter==='clear'?0:1}"><rect x="407" y="113" width="45" height="168" rx="5" fill="#e0e5d6" stroke="#47685c" stroke-width="4"/><rect x="414" y="120" width="31" height="152" fill="${fill}" opacity="${filter?.55:1}"/></g>${state.rays?`<path d="M143 192H407" stroke="${input}" stroke-width="5" opacity=".8"/>${filter?`<path d="M451 192H${blocked?580:721}" stroke="${output}" stroke-width="6" opacity=".85"/>`:`<path d="M406 192L${blocked?535:720} 252M406 192L344 80M406 192L260 264" stroke="${output}" stroke-width="4" opacity=".8" fill="none"/>`}`:''}<rect x="715" y="125" width="28" height="160" rx="3" fill="#f5f3e9" stroke="#56716b" stroke-width="3"/>${!blocked?`<path d="M718 ${filter?163:226}h22v52h-22Z" fill="${output}"/>`:''}${blocked?'<rect x="547" y="113" width="25" height="174" rx="4" fill="#2e3d37" stroke="#8b9e90" stroke-width="3"/>':''}<text x="118" y="378" text-anchor="middle" fill="#fff9eb" font-size="17">光源</text><text x="429" y="378" text-anchor="middle" fill="#fff9eb" font-size="17">${filter?'透明色片':'不透明色卡'}</text><text x="730" y="378" text-anchor="middle" fill="#fff9eb" font-size="17">${kind==='eye'?'觀察位置':filter?'白幕':'反射光'}</text></svg>`;
 }
 export function drawObservation(canvas,state,signal){
+ if(state.kind==='filter'){drawFilterPaper(canvas,state,signal);return;}
  const c=canvas.getContext('2d'),w=canvas.width,h=canvas.height; c.clearRect(0,0,w,h);
  const bg=c.createLinearGradient(0,0,w,h);bg.addColorStop(0,'#fbfbf2');bg.addColorStop(1,'#e2e9db');c.fillStyle=bg;c.fillRect(0,0,w,h);
  function card(x,y,size,rgb,label){c.save();c.shadowBlur=13;c.shadowColor='#20362933';c.shadowOffsetY=6;rounded(c,x,y,size,size,9,rgbCss(rgb),'#c5d0bf');c.restore();if(label){c.fillStyle='#4d6454';c.font='23px sans-serif';c.textAlign='center';c.fillText(label,x+size/2,y+size+39);}}

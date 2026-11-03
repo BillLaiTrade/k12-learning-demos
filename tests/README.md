@@ -1,3 +1,12 @@
+## 4.5 第五區三組獨立選項（2026-11-03）
+
+```sh
+node tests/unit-4.5-filter-paper-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.5-path-lessons.test.cjs tests/unit-4.5.test.cjs
+```
+
+純模型4項檢查80種條件、色片／紙張各自吸收及逐色守恆、沒有入射就沒有輸出、無色片與黑紙。第五六區專項核對80種實際點選、三組選項獨立、入射／透射／紙張反射的色條與預覽像素、真實3D紙張為霧面非自發光材質／燈色採透射光、紙張漫反射線不穿透、八種視窗三欄直向按鈕／44px觸控／器材避讓、手機原生操作與備援，以及第六區回歸。整課保留六區及唯一小測。使用COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH指定公開頁及證據位置，GPU檢查依序執行。
+
 ## 4.5 第四區檢視與第五、六區集中操作（2026-11-03）
 
 ```sh
@@ -1277,3 +1286,8 @@ node --test --test-concurrency=1 tests/unit-2.3-discussion.test.cjs tests/unit-2
 新增`unit-4.3-return-refresh.test.cjs`20項（含外層）：照片裁切、凹入式選擇、同光路三層光線、16種視窗×兩介質×0°／35°共64筆，驗證主圖／按鍵／讀值同視窗、光源不被切換遮擋、最小字體及觸控範圍、放大交點對齊與關閉鈕不遮文字、焦點不推移場景。`RETURN_REFRESH_CAPTURE_DIR`保存畫面與measurements.json；原return-lab保留11項功能子檢查及外層，`RETURN_CAPTURE_DIR`沿用；加模型及其他區回歸的指令見單元README。
 
 第五區樣式核對及既有flow回歸在視窗縮放後等待版面與ResizeObserver更新完成，再量測可見範圍與字體；原範圍／字級／不捲動的斷言保持。
+
+
+## 4.3 第五區主圖側別角度、取消放大（2026-11-03）
+
+return-lab改為10項：無放大、四種開燈組合的固定側別名稱、雙介質0／1／5／30／34／35°數字及弧線真實角度、鍵盤／兩端拖曳及觸控、光路端點／三層一致、切換及重設、競態與失敗重試。return-refresh20項改驗直接顯示角度，16視窗64筆新增文字互不重疊及不被切換遮住的條件；保留同視窗／觸控／不捲動及等比例。第三／四區專項只將第五區放大入口預期改為不存在。指令及公開環境變數沿用；目前完整組合52項（含外層），歷史54項及近拍專項由本節更新。

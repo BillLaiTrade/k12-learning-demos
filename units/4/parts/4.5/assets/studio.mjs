@@ -2,6 +2,7 @@ import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {PRISM,SOURCE,SCREEN_X,SCREEN_RANGE,prismRays,LIGHTS,MATERIALS,FILTERS,rgbCss} from './color-model.mjs';
 import {drawScreen} from './rendering.mjs';
 import {createSurfaceAppearance} from './surface-appearance.mjs?v=merged-surface-20261103';
+import {createFilterPaperAppearance} from './filter-paper-appearance.mjs?v=filter-paper-20261103';
 const AXIS=1.65;
 function woodTexture(){
  const c=document.createElement('canvas');c.width=512;c.height=256;const x=c.getContext('2d');x.fillStyle='#b38a59';x.fillRect(0,0,512,256);
@@ -10,13 +11,13 @@ function woodTexture(){
 }
 function basic(rgb){return new THREE.MeshBasicMaterial({color:new THREE.Color().setRGB(...rgb),toneMapped:false,side:THREE.DoubleSide});}
 export function createStudio(root,callbacks){
- const canvas=root.querySelector('[data-studio]'),surface=root.dataset.lab==='surface',pathLesson=!!root.querySelector('.path-workspace');
+ const canvas=root.querySelector('[data-studio]'),surface=root.dataset.lab==='surface',filterPaper=root.dataset.lab==='filter',pathLesson=!!root.querySelector('.path-workspace'),dim=surface||filterPaper;
  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
- const scene=new THREE.Scene();scene.background=new THREE.Color(surface?'#283126':'#91a190');scene.fog=new THREE.Fog(surface?'#283126':'#91a190',23,50);
+ const scene=new THREE.Scene();scene.background=new THREE.Color(dim?'#283126':'#91a190');scene.fog=new THREE.Fog(dim?'#283126':'#91a190',23,50);
  const camera=new THREE.PerspectiveCamera(40,1,.05,70),target=surface?new THREE.Vector3(-1.6,1.05,.1):root.dataset.lab==='eye'?new THREE.Vector3(-.4,1.1,.25):new THREE.Vector3(0,1.1,-.65);
  const orbit=surface?{azimuth:-1.05,polar:1.16,radius:7.0}:{azimuth:-.85,polar:1.08,radius:pathLesson?(root.dataset.lab==='eye'?10.6:9.6):12.6};let topView=false,frame=0,state=null,signal=null,drag=null,canvasWidth=0,fit=1;
- scene.add(new THREE.HemisphereLight('#fff7e2','#6a7a60',surface?.08:2.2));const sun=new THREE.DirectionalLight('#fff4dc',surface?.28:3.3);sun.position.set(-4,8,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-7,right:7,top:7,bottom:-7});sun.shadow.bias=-.0006;scene.add(sun);
- const fill=new THREE.DirectionalLight('#d6f0f7',surface?.1:1.3);fill.position.set(6,4,-3);scene.add(fill);
+ scene.add(new THREE.HemisphereLight('#fff7e2','#6a7a60',surface?.08:filterPaper?.25:2.2));const sun=new THREE.DirectionalLight('#fff4dc',surface?.28:filterPaper?.6:3.3);sun.position.set(-4,8,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-7,right:7,top:7,bottom:-7});sun.shadow.bias=-.0006;scene.add(sun);
+ const fill=new THREE.DirectionalLight('#d6f0f7',surface?.1:filterPaper?.2:1.3);fill.position.set(6,4,-3);scene.add(fill);
  const metal=new THREE.MeshStandardMaterial({color:'#82928b',metalness:.8,roughness:.28}),dark=new THREE.MeshStandardMaterial({color:'#293d36',metalness:.5,roughness:.35}),brass=new THREE.MeshStandardMaterial({color:'#bd9a63',metalness:.75,roughness:.3}),paper=new THREE.MeshStandardMaterial({color:'#e8e9de',roughness:.92,side:THREE.DoubleSide});
  const box=(parent,size,position,material,shadow=true)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(...size),material);m.position.set(...position);m.castShadow=shadow;m.receiveShadow=true;parent.add(m);return m;};
  const cylinder=(parent,radius,height,position,material)=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,height,48),material);m.position.set(...position);m.castShadow=true;parent.add(m);return m;};
@@ -24,7 +25,7 @@ export function createStudio(root,callbacks){
  box(scene,[9.65,.11,7.65],[0,-.095,-.9],new THREE.MeshStandardMaterial({color:'#765332',roughness:.7}));
  for(const z of[-.28,.28])box(scene,[8,.035,.035],[-.1,.27,z],metal,false);
  for(const[x,z]of[[-4.3,-3.9],[4.3,-3.9],[-4.3,2.1],[4.3,2.1]])box(scene,[.22,2,.22],[x,-1,z],dark);
- const floor=new THREE.Mesh(new THREE.PlaneGeometry(120,120),new THREE.MeshStandardMaterial({color:'#b8c3a8',roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-2;floor.receiveShadow=true;scene.add(floor);
+ const floor=new THREE.Mesh(new THREE.PlaneGeometry(120,120),new THREE.MeshStandardMaterial({color:filterPaper?'#41473e':'#b8c3a8',roughness:1}));floor.rotation.x=-Math.PI/2;floor.position.y=-2;floor.receiveShadow=true;scene.add(floor);
  function mount(parent,x,z,height=.65){box(parent,[.65,.1,.55],[x,.3,z],dark);box(parent,[.55,.045,.46],[x,.37,z],metal);cylinder(parent,.047,height,[x,.39+height/2,z],metal);cylinder(parent,.085,.13,[x,.55,z],brass);}
  const lamp=new THREE.Group();scene.add(lamp);mount(lamp,-3.6,0,.92);
  const lampHousing=cylinder(lamp,.25,.75,[-3.6,AXIS,0],dark);lampHousing.rotation.z=Math.PI/2;
@@ -40,10 +41,13 @@ export function createStudio(root,callbacks){
  for(const[x,z]of PRISM)cylinder(prism,.035,.18,[x,1.08,z],brass);
  const screen=new THREE.Group();scene.add(screen);const screenCanvas=document.createElement('canvas');screenCanvas.width=640;screenCanvas.height=320;
  const texture=new THREE.CanvasTexture(screenCanvas);texture.colorSpace=THREE.SRGBColorSpace;
- const screenPaper=new THREE.Mesh(new THREE.PlaneGeometry(SCREEN_RANGE[1]-SCREEN_RANGE[0],2.35),new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide,toneMapped:false}));screenPaper.rotation.y=-Math.PI/2;screenPaper.position.set(SCREEN_X,1.6,(SCREEN_RANGE[0]+SCREEN_RANGE[1])/2);screen.add(screenPaper);
- for(const z of SCREEN_RANGE){box(screen,[.065,2.48,.06],[SCREEN_X,1.6,z],metal);mount(screen,SCREEN_X,z,.35);}for(const y of[.39,2.81])box(screen,[.065,.06,SCREEN_RANGE[1]-SCREEN_RANGE[0]+.1],[SCREEN_X,y,(SCREEN_RANGE[0]+SCREEN_RANGE[1])/2],metal);
+ const paperRange=filterPaper?[-1.35,1.35]:SCREEN_RANGE;
+ const screenPaper=new THREE.Mesh(new THREE.PlaneGeometry(paperRange[1]-paperRange[0],2.35),new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide,toneMapped:false}));screenPaper.rotation.y=-Math.PI/2;screenPaper.position.set(SCREEN_X,1.6,(paperRange[0]+paperRange[1])/2);screen.add(screenPaper);
+ for(const z of paperRange){box(screen,[.065,2.48,.06],[SCREEN_X,1.6,z],metal);mount(screen,SCREEN_X,z,.35);}for(const y of[.39,2.81])box(screen,[.065,.06,paperRange[1]-paperRange[0]+.1],[SCREEN_X,y,(paperRange[0]+paperRange[1])/2],metal);
+ const filterPaperAppearance=filterPaper?createFilterPaperAppearance(screenPaper):null;
  const sample=new THREE.Group();scene.add(sample);mount(sample,0,0,.5);box(sample,[.11,.14,1.37],[0,.97,0],dark);
  const card=new THREE.Mesh(new THREE.PlaneGeometry(1.25,1.4),basic(MATERIALS.red.rgb));card.rotation.y=-Math.PI/2;card.position.y=AXIS;sample.add(card);
+ if(filterPaper){card.material.dispose();card.material=new THREE.MeshStandardMaterial({roughness:.35,metalness:0,side:THREE.DoubleSide,transparent:true,opacity:.38});}
  const surfaceAppearance=surface?createSurfaceAppearance(scene,card):null;
  for(const z of[-.65,.65])box(sample,[.07,1.55,.045],[0,AXIS,z],metal);for(const y of[AXIS-.75,AXIS+.75])box(sample,[.07,.045,1.35],[0,y,0],metal);
  const observer=new THREE.Group();scene.add(observer);mount(observer,0,0,.75);
@@ -51,9 +55,10 @@ export function createStudio(root,callbacks){
  const eyeSign=new THREE.Mesh(new THREE.PlaneGeometry(1.25,.78),new THREE.MeshBasicMaterial({map:eyeTexture,side:THREE.DoubleSide,toneMapped:false}));eyeSign.position.y=AXIS;observer.add(eyeSign);
  const blocker=new THREE.Group();scene.add(blocker);mount(blocker,0,0,.65);box(blocker,[1.15,1.65,.07],[0,AXIS,0],new THREE.MeshStandardMaterial({color:'#263830',roughness:.9}));
  const rays=new THREE.Group();scene.add(rays);
+ const filterGuides=filterPaper?new THREE.Scene():null;if(filterGuides)filterGuides.add(rays);
  function clearRays(){const materials=new Set();for(const node of [...rays.children]){rays.remove(node);node.traverse(part=>{part.geometry?.dispose();if(part.material)materials.add(part.material);});}for(const material of materials)material.dispose();}
  function line(points,color,opacity=.9){const m=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:new THREE.Color().setRGB(...color),transparent:true,opacity,depthWrite:false,toneMapped:false}));rays.add(m);}
- function arrow(a,b,color,at=.55){const material=basic(color),cone=new THREE.Mesh(new THREE.ConeGeometry(.035,.12,10),material);const dir=b.clone().sub(a).normalize();cone.position.copy(a).lerp(b,at);cone.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);rays.add(cone);}
+ function arrow(a,b,color,at=.55){const material=basic(color),cone=new THREE.Mesh(new THREE.ConeGeometry(.035,.12,10),material);const dir=b.clone().sub(a).normalize();cone.position.copy(a).lerp(b,at);cone.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);rays.add(cone);return cone;}
  const v=([x,z],y=AXIS)=>new THREE.Vector3(x,y,z);
  function update(next,modelSignal){
   state=next;signal=modelSignal;const isPrism=state.kind==='prism',isFilter=state.kind==='filter'||state.kind==='eye'&&state.mode==='transmission';
@@ -62,9 +67,9 @@ export function createStudio(root,callbacks){
   if(isPrism){drawScreen(screenCanvas,state,false);texture.needsUpdate=true;}
   else{
    const material=isFilter?FILTERS[state.filter||'green']:MATERIALS[state.material||'green'];
-   card.material.color.setRGB(...(isFilter?material.rgb:signal.outgoing));card.material.transparent=isFilter;card.material.opacity=isFilter?.38:1;card.material.needsUpdate=true;sample.visible=!(state.kind==='filter'&&state.filter==='clear');
+   card.material.color.setRGB(...(isFilter?material.rgb:signal.outgoing));card.material.transparent=isFilter;card.material.opacity=filterPaper&&state.filter==='clear'?.14:isFilter?.38:1;card.material.needsUpdate=true;sample.visible=true;
    if(state.kind==='filter'){
-    const c=screenCanvas.getContext('2d');c.fillStyle='#192b23';c.fillRect(0,0,640,320);const glow=c.createRadialGradient(320,160,20,320,160,150);glow.addColorStop(0,rgbCss(signal.outgoing));glow.addColorStop(.7,rgbCss(signal.outgoing));glow.addColorStop(1,'#192b23');c.fillStyle=glow;c.fillRect(0,0,640,320);texture.needsUpdate=true;
+    filterPaperAppearance.update(signal,state.material);
    }
   }
   const eyeTarget=new THREE.Vector3(...(state.mode==='transmission'?[2.8,0,0]:[-1.8,0,2.7]));observer.position.copy(eyeTarget);observer.rotation.y=state.mode==='transmission'?-Math.PI/2:-.6;
@@ -73,7 +78,16 @@ export function createStudio(root,callbacks){
   clearRays();rays.visible=state.rays;
   if(state.rays){
    if(surface)surfaceAppearance.update(signal,rays);
-   else if(isPrism){
+   else if(filterPaper){
+    const source=v([-3.2,0]),filter=v([0,0]),paper=v([SCREEN_X-.015,0]);
+    line([source,filter],signal.incoming,.65);arrow(source,filter,signal.incoming);
+    line([filter,paper],signal.transmitted,.6);arrow(filter,paper,signal.transmitted);
+    const peak=Math.max(...signal.outgoing);
+    if(peak>.001)for(const [dy,dz,ey,ez]of [[-.12,-.10,.45,-.7],[.08,.09,.1,1.05],[.02,-.15,-.5,.65],[-.08,.15,.65,.3]]){
+     const from=new THREE.Vector3(SCREEN_X-.025,AXIS+dy,dz),to=new THREE.Vector3(2.1,AXIS+ey,ez);
+     line([from,to],signal.outgoing,peak*.4);const tip=arrow(from,to,signal.outgoing,.62);tip.material.transparent=true;tip.material.opacity=peak*.35;tip.material.depthWrite=false;
+    }
+   }else if(isPrism){
     const trace=prismRays(state.light,state.inserted);const visible=state.inserted?trace.filter((_,i)=>i%2===0):[trace[Math.floor(trace.length/2)]];
     if(state.inserted)for(const y of[AXIS-.07,AXIS,AXIS+.07])line([v(SOURCE,y),v(trace[0].points[1],y)],LIGHTS[state.light].rgb,.95);
     for(const ray of visible){const color=state.light==='white'?(state.inserted?ray.rgb:[1,1,1]):LIGHTS[state.light].rgb;for(const y of[AXIS-.07,AXIS,AXIS+.07])line((state.inserted?ray.points.slice(1):ray.points).map(p=>v(p,y)),color,state.inserted?.75:.9);}
@@ -95,7 +109,7 @@ export function createStudio(root,callbacks){
   requestDraw();
  }
  function updateCamera(){if(topView){if(surface){camera.position.set(-1.35,9.2,.05);camera.lookAt(-1.35,.5,0);}else{camera.position.set(-.1,12.7,-.4);camera.lookAt(0,.5,-.7);}}else{camera.position.set(target.x+Math.sin(orbit.azimuth)*Math.sin(orbit.polar)*orbit.radius*fit,target.y+Math.cos(orbit.polar)*orbit.radius*fit,target.z+Math.cos(orbit.azimuth)*Math.sin(orbit.polar)*orbit.radius*fit);camera.lookAt(target);}camera.updateProjectionMatrix();}
- function requestDraw(){if(frame)return;frame=requestAnimationFrame(()=>{frame=0;updateCamera();renderer.render(scene,camera);root.dataset.orbit=JSON.stringify({radius:orbit.radius,azimuth:orbit.azimuth,polar:orbit.polar});});}
+ function requestDraw(){if(frame)return;frame=requestAnimationFrame(()=>{frame=0;updateCamera();renderer.render(scene,camera);if(filterPaperAppearance){renderer.autoClear=false;renderer.render(filterPaperAppearance.scene,camera);renderer.render(filterGuides,camera);renderer.autoClear=true;}root.dataset.orbit=JSON.stringify({radius:orbit.radius,azimuth:orbit.azimuth,polar:orbit.polar});});}
  function resize(){const width=canvas.clientWidth,height=canvas.clientHeight;if(!width||!height)return;if(canvasWidth!==width||surface){canvasWidth=width;fit=Math.max(1,1.33/(width/height));}renderer.setSize(width,height,false);camera.aspect=width/height;requestDraw();}
  new ResizeObserver(resize).observe(canvas);
  function pointer(event){const r=canvas.getBoundingClientRect();return new THREE.Vector2((event.clientX-r.left)/r.width*2-1,-(event.clientY-r.top)/r.height*2+1);}
