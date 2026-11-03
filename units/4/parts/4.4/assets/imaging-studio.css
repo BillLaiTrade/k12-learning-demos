@@ -17,7 +17,7 @@
 .imaging-trace button[aria-pressed=true] { background:#d8e9ce; color:#294b32; border-color:#8caa7c; }
 .imaging-anchor,.imaging-focus { position:absolute; transform:translate(-50%,-50%); pointer-events:none; white-space:nowrap; font-size:.74rem; border-radius:5px; padding:3px 7px; background:#f9f8edec; color:#254b35; border:1px solid #e4e9da; }
 .imaging-focus { font-size:.7rem; padding:1px 4px; background:#36503f; color:#fff9df; border:0; }
-.imaging-badge { position:absolute; bottom:calc(var(--label-strip-height) + 12px); left:50%; transform:translateX(-50%); margin:0; max-width:94%; padding:5px 13px; border:1px solid #9cb795; border-radius:20px; color:#fffbea; background:#314e3eec; font-size:.8rem; white-space:nowrap; }
+.imaging-badge { position:absolute; bottom:calc(var(--label-strip-height) + 12px); left:50%; transform:translateX(-50%); margin:0; max-width:94%; padding:5px 13px; border:1px solid #9cb795; border-radius:20px; color:#fffbea; background:#314e3eec; font-size:.8rem; white-space:nowrap; transition:none; }
 .imaging-hint { margin:9px 0; color:#63796a; font-size:.76rem; }
 .imaging-rulers { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
 .imaging-lab[data-mode=focus] .imaging-rulers { grid-template-columns:1fr; }
@@ -85,8 +85,7 @@
 .imaging-ruler-instruction { margin:0; color:#315d48; font-size:.7rem; line-height:1.3; }
 .imaging-ruler-help { margin:7px 0; font-size:.72rem; color:#63796a; }
 .imaging-ruler-heading { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:5px; margin:0; line-height:1.3; }
-.imaging-ruler-heading h3 { margin:0; font-size:.85rem; color:#31533d; }
-.imaging-ruler-heading output { font-size:.74rem; color:#526d59; }
+.imaging-ruler-heading output { font-size:.65rem; color:#526d59; white-space:nowrap; }
 .imaging-target-status { margin:4px 0 0; font-size:.7rem; color:#895323; }
 .imaging-ruler-target { position:absolute; inset:0; z-index:1; pointer-events:none; color:#895323; }
 .imaging-ruler-target::before { content:""; position:absolute; top:20px; height:24px; left:var(--target-position); border-left:2px dashed #bb7735; }
@@ -105,10 +104,6 @@
 .imaging-preview { position:absolute; z-index:3; top:10px; right:10px; width:var(--preview-width); padding:5px; border:1px solid #9bad91; border-radius:10px; background:#f5f8ef; box-shadow:0 2px 9px #15271b25; }
 .imaging-preview-title { display:block; margin-bottom:3px; color:#31533d; text-align:center; font-size:.7rem; line-height:1.3; }
 .imaging-preview canvas { display:block; width:100%; height:auto; border:3px solid #435344; background:#f1f1e5; }
-.imaging-preview button { display:block; width:100%; min-height:30px; margin-top:4px; padding:3px; font-size:.68rem; line-height:1.3; }
-.imaging-lab[data-view=screen] .imaging-preview { width:auto; padding:0; background:transparent; border:0; box-shadow:none; }
-.imaging-lab[data-view=screen] .imaging-preview-title,.imaging-lab[data-view=screen] .imaging-preview canvas { display:none; }
-.imaging-lab[data-view=screen] .imaging-preview button { min-height:40px; padding:8px 11px; font-size:.8rem; background:#fffdf2; color:#31513e; }
 
 .imaging-anchor { width:max-content; font-size:.65rem; line-height:1.2; padding:2px 5px; transition:none; }
 .imaging-gesture-note { position:absolute; z-index:4; left:8px; right:8px; bottom:calc(var(--label-strip-height) + 8px); margin:0; padding:8px 10px; border:1px solid #d7bd79; border-radius:9px; color:#614c21; background:#fff4d9f5; font-size:.8rem; line-height:1.5; pointer-events:none; }
@@ -124,3 +119,12 @@
 .imaging-equipment-labels { position:relative; height:32px; background:#edf3e7; border-top:1px solid #849a8540; }
 .imaging-lab[data-view=screen] .imaging-equipment-labels,.imaging-lab[data-webgl=unavailable] .imaging-equipment-labels { display:none; }
 .imaging-lab[data-view=screen] .imaging-stage,.imaging-lab[data-webgl=unavailable] .imaging-stage { --label-strip-height:0px; }
+
+.imaging-tools .imaging-view-button { flex:0 0 auto; background:#e4eddf; border-color:#8da58a; font-weight:700; transition:none; }
+.imaging-tools .imaging-view-button[aria-pressed=true] { background:#196c54; color:#fff; border-color:#196c54; }
+.imaging-lab[data-view=screen] .imaging-preview { display:none; }
+@container imaging (max-width:319px) {
+ .imaging-tools { flex-wrap:wrap; }
+ .imaging-view-button { margin-left:auto; }
+ .imaging-preview { top:100px; }
+}

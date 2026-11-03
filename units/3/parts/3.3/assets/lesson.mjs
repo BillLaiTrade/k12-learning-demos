@@ -232,6 +232,6 @@ initialize('card-07',async()=>{
  });
 });
 initialize('unit-quiz',async()=>{
- const {createSoundMatch}=await import('./sound-match.mjs?v=7');
+ const {createSoundMatch}=await import('./sound-match.mjs?v=8');
  quizView=createSoundMatch($('unit-quiz'),{onChange:()=>{if($('unit-quiz').dataset.activityState==='ready')stop();}});
 });
