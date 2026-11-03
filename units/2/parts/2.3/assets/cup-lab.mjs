@@ -32,7 +32,7 @@ function update(depth, angle, { capture = true, elapsed = 0 } = {}) {
   const g = geometry();
   if (g.mouthExposed) bubbles = [];
   emit(old, g);
-  if (capture && !drag && cup.depth >= 11.5 && !before && !cup.wet && g.submerged && g.paperBelowOutside && Math.abs(cup.angle) < .5) before = snapshot();
+  if (capture && !drag && !before && !cup.wet && g.submerged && g.paperBelowOutside && Math.abs(cup.angle) < .5) before = snapshot();
   if (capture && !drag && before && cup.wet && !after) {
     after = snapshot();
     // In reduced motion, a static transition trace replaces moving bubbles.
@@ -40,19 +40,18 @@ function update(depth, angle, { capture = true, elapsed = 0 } = {}) {
   }
 }
 function status(g) {
-  if (preview) return preview === 'before' ? '回看直立入水：紙團低於外側水面，仍保持乾燥。' : '回看傾斜之後：空氣從杯口逸出，水進入並接觸紙團。';
+  if (preview) return preview === 'before' ? '回看杯口朝下入水：紙團低於外側水面，仍保持乾燥。' : '回看傾斜之後：空氣從杯口逸出，水進入並接觸紙團。';
   if (g.draining) return '杯口露出水面，空氣進入，杯內的水正從杯口流出；紙團仍然是濕的。';
   if (cup.wet && !g.mouthExposed && g.minY < 0 && g.waterArea > 71) return '杯口還在水中，水仍留在杯內；紙團已經沾濕。';
   if (rotationUnlocked && g.mouthExposed) return cup.wet ? g.waterArea > .01 ? '能流出的水已流出，仍有水留在杯內較低處；紙團仍然是濕的。' : '杯內的水已流回水槽；紙團仍然是濕的。' : '杯口已接通外界空氣；上下移動仍會保留你設定的角度。';
   if (cup.wet) return Math.abs(cup.angle) < 2 ? '紙團已經沾水；回正杯子，不會自動補回空氣或讓紙團變乾。' : '空氣從杯口逸出，水進入杯內；水碰到紙團，紙團才變濕。';
   if (g.vent > .005) return '空氣從杯口逸出，水逐漸進入；繼續觀察水是否碰到紙團。';
-  if (g.submerged && g.paperBelowOutside && cup.depth < 11.5) return '紙團已低於外側水面，仍保持乾燥。再往下放一些，放開後即可拖動杯口。';
   if (g.submerged && g.paperBelowOutside) return '紙團低於外側水面，仍保持乾燥。杯裡的水未填滿，空氣可稍微壓縮。';
-  return '紙團目前還在外側水面以上。先把整只杯子垂直放入水中。';
+  return '請再往下移，讓整個杯子浸入水中；放開後即可抓杯口旋轉。';
 }
 function render() {
   const state = displayed(), g = geometry(state);
-  if (!drag && cup.depth >= 11.5 && g.submerged && g.paperBelowOutside) rotationUnlocked = true;
+  if (!drag && !preview && geometry().submerged && geometry().paperBelowOutside) rotationUnlocked = true;
   const canRotate = rotationUnlocked;
   scene.innerHTML = cupSVG(state, { id: 'cup-main', bubbles: preview ? state.bubbles || [] : bubbles });
   Object.assign(scene.dataset, { depth: cup.depth, angle: cup.angle, escaped: cup.escaped, wet: cup.wet, preview: preview || '',

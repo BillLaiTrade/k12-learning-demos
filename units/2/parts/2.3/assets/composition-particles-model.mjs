@@ -8,7 +8,7 @@ export const groupOf=gas=>['argon','other'].includes(gas)?'minor':gas;
 const ease=t=>t*t*(3-2*t);
 export function createParticles({detail=false,seed=2303}={}){
  let randomState=seed;const random=()=>{randomState=(Math.imul(1664525,randomState)+1013904223)>>>0;return randomState/4294967296;};
- const counts=detail?{argon:93,other:7}:{nitrogen:100,oxygen:27,argon:3,other:1},height=detail?30:100,radius=detail?.65:.8;
+ const counts=detail?{argon:93,other:7}:{nitrogen:780,oxygen:210,argon:9,other:1},height=detail?30:100,radius=detail?.65:.4;
  let mode=detail?'mixed':'proportion',returning=null;
  const inside=(gas,x,y,target=mode)=>{
   if(x<radius||x>100-radius||y<radius||y>height-radius)return false;

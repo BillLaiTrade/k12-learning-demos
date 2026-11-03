@@ -1,4 +1,4 @@
-import {COMPARISON_DURATION,comparisonFrame} from './oxygen-model.mjs?v=nine-details-1';
+import {COMPARISON_DURATION,comparisonFrame} from './oxygen-model.mjs?v=discussion-20261103-1';
 export const PROPERTY_DURATIONS=Object.freeze({splints:COMPARISON_DURATION,limewater:7600});
 const unit=x=>Math.max(0,Math.min(1,x));
 const ease=x=>{const t=unit(x);return t*t*(3-2*t);};

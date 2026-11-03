@@ -1,0 +1,126 @@
+TAP version 13
+# Subtest: 2.3 discussed revisions: content, actual contents, release confirmation, keyboard and continued work
+    # Subtest: 01/02 cup rotates as soon as fully submerged; initial comparison and conclusion remain readable
+    ok 1 - 01/02 cup rotates as soon as fully submerged; initial comparison and conclusion remain readable
+      ---
+      duration_ms: 436.682986
+      type: 'test'
+      ...
+    # Subtest: 03 mixed particle ratios and stable quantities match approximate composition
+    ok 2 - 03 mixed particle ratios and stable quantities match approximate composition
+      ---
+      duration_ms: 766.987293
+      type: 'test'
+      ...
+    # Subtest: 05/06 material lists include usable spoon and forceps introductions with consistent names
+    ok 3 - 05/06 material lists include usable spoon and forceps introductions with consistent names
+      ---
+      duration_ms: 660.523426
+      type: 'test'
+      ...
+    # Subtest: 18 automatic steps replace captions immediately; pause freezes them, while continuous playback remains
+    ok 4 - 18 automatic steps replace captions immediately; pause freezes them, while continuous playback remains
+      ---
+      duration_ms: 10621.91096
+      type: 'test'
+      ...
+    # Subtest: 14 resting over a target does not pour; releasing starts transfer and stopping preserves the actual partial amount
+    ok 5 - 14 resting over a target does not pour; releasing starts transfer and stopping preserves the actual partial amount
+      ---
+      duration_ms: 1721.97216
+      type: 'test'
+      ...
+    # Subtest: 08 stopping before the water stream starts adds no water
+    ok 6 - 08 stopping before the water stream starts adds no water
+      ---
+      duration_ms: 536.15128
+      type: 'test'
+      ...
+    # Subtest: 20B keyboard movement confirms and cancels on the same geometry, with no ghost targets
+    ok 7 - 20B keyboard movement confirms and cancels on the same geometry, with no ghost targets
+      ---
+      duration_ms: 1148.684237
+      type: 'test'
+      ...
+    # Subtest: 07 an empty unfilled jar cannot produce a false completion message
+    ok 8 - 07 an empty unfilled jar cannot produce a false completion message
+      ---
+      duration_ms: 12538.766933
+      type: 'test'
+      ...
+    # Subtest: 16/17 a complete sample remains movable while the reaction continues; removing its cover invalidates success
+    ok 9 - 16/17 a complete sample remains movable while the reaction continues; removing its cover invalidates success
+      ---
+      duration_ms: 18030.181568
+      type: 'test'
+      ...
+    # Subtest: 20A extreme mobile positions use current apparatus anchors and keep the active hint visible
+    ok 10 - 20A extreme mobile positions use current apparatus anchors and keep the active hint visible
+      ---
+      duration_ms: 3290.689448
+      type: 'test'
+      ...
+    # Subtest: all six sections retain accessible content with no horizontal page overflow at seven widths
+    ok 11 - all six sections retain accessible content with no horizontal page overflow at seven widths
+      ---
+      duration_ms: 1751.80802
+      type: 'test'
+      ...
+    1..11
+ok 1 - 2.3 discussed revisions: content, actual contents, release confirmation, keyboard and continued work
+  ---
+  duration_ms: 53406.451075
+  type: 'test'
+  ...
+# Subtest: nine visual corrections: real sources, bubbles, occlusion and compact neutral labels
+    # Subtest: peroxide bottle and its pouring stream are actually painted while the liquid rises
+    ok 1 - peroxide bottle and its pouring stream are actually painted while the liquid rises
+      ---
+      duration_ms: 816.024771
+      type: 'test'
+      ...
+    # Subtest: a loaded spoon crosses above the flask, and falling grains are actually painted
+    ok 2 - a loaded spoon crosses above the flask, and falling grains are actually painted
+      ---
+      duration_ms: 1333.376855
+      type: 'test'
+      ...
+    # Subtest: purge bubbles appear at the submerged outlet and change position during playback
+    ok 3 - purge bubbles appear at the submerged outlet and change position during playback
+      ---
+      duration_ms: 818.346776
+      type: 'test'
+      ...
+    # Subtest: both stoppers hide the funnel stem within the solid body, while the gas tube remains in place
+    ok 4 - both stoppers hide the funnel stem within the solid body, while the gas tube remains in place
+      ---
+      duration_ms: 996.502258
+      type: 'test'
+      ...
+    # Subtest: material names stay white after closing, and all oxygen stages use the same double-hole asset
+    ok 5 - material names stay white after closing, and all oxygen stages use the same double-hole asset
+      ---
+      duration_ms: 1888.670385
+      type: 'test'
+      ...
+    # Subtest: seven widths keep compact captions, unobstructed labels and usable controls
+    ok 6 - seven widths keep compact captions, unobstructed labels and usable controls
+      ---
+      duration_ms: 7159.090705
+      type: 'test'
+      ...
+    1..6
+ok 2 - nine visual corrections: real sources, bubbles, occlusion and compact neutral labels
+  ---
+  duration_ms: 14882.462695
+  type: 'test'
+  ...
+1..2
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 69013.036013

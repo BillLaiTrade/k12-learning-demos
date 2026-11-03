@@ -1,4 +1,4 @@
-import {svgNode as n,createThistleFunnel,createDoubleStopper} from './thistle-apparatus.mjs?v=thistle-1';
+import {svgNode as n,createThistleFunnel,createDoubleStopper} from './thistle-apparatus.mjs?v=discussion-20261103-1';
 import {liquidGeometry} from './co2-model.mjs?v=marble-fast-1';
 const image=(file,x,y,width,height)=>n('image',{href:'assets/'+file,x,y,width,height,preserveAspectRatio:'none'});
 function sprite(file,crop,box,size){const s=n('svg',{viewBox:crop.join(' '),x:box[0],y:box[1],width:box[2],height:box[3],preserveAspectRatio:'none',overflow:'hidden'});s.append(image(file,0,0,...size));return s;}
