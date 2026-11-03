@@ -26,6 +26,9 @@ test('sound-match assessment follows the approved layout and shares actual audio
   assert.deepEqual(await root.locator('.match-step h3').allTextContents(),['聽目標聲音','調整並試聽','完成比較']);
   assert.deepEqual(await root.locator('.match-step-number').allTextContents(),['1','2','3']);
   assert.equal(await root.locator('.match-target [data-play=quiz-base]').count(),1);
+  assert.equal(await root.locator('.match-controls > .match-switch-wrap [data-match-switch]').count(),1);
+  assert.equal(await root.locator('.match-target .match-target-actions [data-match-new]').count(),1);
+  const pair=await root.locator('.match-target-actions').evaluate(n=>{const a=n.querySelector('[data-play]').getBoundingClientRect(),b=n.querySelector('[data-match-new]').getBoundingClientRect();return {below:b.top>=a.bottom,right:Math.abs(a.right-b.right)<1};});assert.deepEqual(pair,{below:true,right:true});
   assert.equal(await root.locator('.match-workbench [data-play=quiz-choice]').count(),1);
   assert.equal(await root.locator('.match-comparison [type=submit]').count(),1);
   assert.equal(await root.locator('[type=submit]').evaluate(n=>n.form===document.querySelector('#settings-form')),true);
@@ -52,13 +55,26 @@ test('sound-match assessment follows the approved layout and shares actual audio
    const format=p=>p.locator('#unit-quiz').evaluate(n=>{const pick=(el,keys)=>{const s=getComputedStyle(el);return Object.fromEntries(keys.map(k=>[k,s[k]]));};return{card:pick(n,['backgroundColor','color','border','borderRadius','boxShadow','lineHeight']),header:pick(n.querySelector('.quiz-head'),['display','columnGap','borderBottom','backgroundColor']),mark:pick(n.querySelector('.quiz-mark'),['width','height','backgroundColor','color','borderRadius','fontSize']),title:pick(n.querySelector('h2'),['fontSize','lineHeight','color']),kicker:pick(n.querySelector('.quiz-kicker,.fireworks-kicker'),['fontSize','color','backgroundColor','letterSpacing'])};});
    assert.deepEqual(await format(page),await format(reference),'quiz frame, warm header, badge, title and kicker follow unit 3.2; task spacing stays compact');
    assert.equal(await root.locator('.quiz-mark').innerText(),'?');
-   const panel=p=>p.evaluate(()=>{const n=document.querySelector('#unit-quiz .match-step h3,#unit-quiz .fireworks-panel h3'),s=getComputedStyle(n);return {color:s.color,backgroundColor:s.backgroundColor,fontSize:s.fontSize};});assert.deepEqual(await panel(page),await panel(reference));
+   const panel=p=>p.evaluate(()=>{const n=document.querySelector('#unit-quiz .match-step h3,#unit-quiz .fireworks-panel h3'),s=getComputedStyle(n);return {color:s.color,fontSize:s.fontSize};});assert.deepEqual(await panel(page),await panel(reference));
   }finally{await reference.close();}
   await checkSteps();
   assert.equal(await page.locator('.quiz').count(),1);assert.equal(await root.locator('select').count(),0);assert.equal(await root.locator('input').count(),0);assert.equal(await root.locator('[data-play]').count(),2);assert.equal(await root.locator('[data-match-step]').count(),4);
   assert.equal(await root.locator('[data-match-picture]').getAttribute('data-instrument'),'string');assert.equal(await root.locator('.match-target svg.match-wave').count(),0);assert.equal(await root.locator('[data-match-target]').isHidden(),true);assert.equal(await root.locator('.match-result').isHidden(),true);
   assert.equal(await page.evaluate(()=>window.matchRuns.length),0);assert.equal(await plot.getAttribute('data-tone'),'pipe');assert.equal(await root.locator('[data-match-new]').isVisible(),true);assert.equal(await root.locator('[data-match-progress],[data-match-dots],[data-match-summary],[data-match-restart],[data-match-next]').count(),0);
   assert.ok(await root.locator('[data-match-picture] image').count());await root.screenshot({path:`${capture}/initial-1440.png`});
+ });
+ await t.test('a delayed instrument view fills the current target picture after switching questions',async()=>{
+  const p=await browser.newPage();let release;const gate=new Promise(r=>release=r);
+  await p.route('**/timbre-experiment.mjs*',async route=>{await gate;await route.continue();});
+  try{
+   await p.goto(base+'#unit-quiz',{waitUntil:'domcontentloaded'});
+   await p.waitForFunction(()=>document.querySelector('#unit-quiz').dataset.waveReady==='true');
+   assert.equal(await p.locator('[data-match-picture]').evaluate(n=>n.childNodes.length),0);
+   await p.locator('[data-match-new]').click();release();
+   await p.waitForFunction(()=>document.querySelector('[data-match-picture]').childNodes.length>0);
+   assert.equal(await p.locator('[data-match-picture]').evaluate(n=>n.innerHTML===document.querySelector(`#card-05 [data-timbre="${n.dataset.instrument}"] .timbre-picture`).innerHTML),true);
+   assert.equal(await p.locator('#unit-quiz [aria-pressed=true]').count(),0);
+  }finally{release();await p.close();}
  });
  await t.test('shape switch changes timbre without changing frequency or amplitude; both step controls redraw the actual selected signal',async()=>{
   const before=await plot.locator('.signal').getAttribute('d');await root.locator('[data-match-switch]').click();await ready();assert.notEqual(await plot.locator('.signal').getAttribute('d'),before);assert.equal(await plot.getAttribute('data-frequency'),'440');assert.equal(await plot.getAttribute('data-amplitude'),'0.3');

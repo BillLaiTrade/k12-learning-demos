@@ -22,3 +22,10 @@ test('固定階段不能移動圖卡，移動單一器材保留另一器材及�
 test('屏幕可在焦距內移動，幾何投影及光路仍使用同一接收面',()=>{
  const initial={object:200,screen:240,stage:'compare'},s=moveImaging(initial,'screen',70),g=imagingState(s);assert.equal(s.screen,70);assert.equal(s.object,200);assert.ok(s.screen<G.f);assert.equal(g.clear,false);assert.equal(g.projectionScale,-.35);assert.ok(g.spread>0);for(const ray of imagingRays(s))assert.equal(ray.end[0],70*G.scale);assert.equal(moveImaging(s,'screen',0).screen,G.screenMin);assert.ok(G.screenMin<G.f);
 });
+
+test('圖卡與代表物點放大兩倍，像距與倍率保持，放大像按真實屏幕裁切',()=>{
+ assert.equal(G.cardWidth,1.4);assert.equal(G.cardHeight,2.4);const s={object:320,screen:100*320/220,stage:'compare'},g=imagingState(s),rays=imagingRays(s);
+ assert.equal(g.clear,true);assert.ok(Math.abs(g.m+1/2.2)<1e-10);
+ for(const [name,y]of [['top',.88],['bottom',-.8]])for(const ray of rays.filter(r=>r.name===name)){assert.ok(Math.abs(ray.from[1]-G.axis-y)<1e-10);assert.ok(Math.abs(ray.end[1]-G.axis-g.m*y)<1e-10);}
+ assert.equal(imagingState({object:200,screen:200}).clipped,false);assert.equal(imagingState({object:175,screen:700/3}).clipped,false);assert.equal(imagingState({object:150,screen:300}).clipped,true);
+});

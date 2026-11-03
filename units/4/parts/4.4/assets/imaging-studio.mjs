@@ -1,5 +1,5 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {IMAGING as G,moveImaging,imagingState,imagingRays} from './imaging-optics.mjs?v=20261102-imaging-paired1';
+import {IMAGING as G,moveImaging,imagingState,imagingRays} from './imaging-optics.mjs?v=20261103-imaging-double1';
 const root=document.querySelector('[data-imaging-lab]');
 if(root) initialise(root);
 function initialise(root){
@@ -36,21 +36,21 @@ function initialise(root){
  }
  function updateRecordHint(){const duplicate=records.some(r=>r.object===state.object);$('[data-imaging-record]').textContent=duplicate?'更新這次清楚像':'留下這次清楚像';$('[data-imaging-record-hint]').textContent=records.length?`已留下 ${records.length} 筆；相同物距會更新，其他紀錄會保留。`:'找到清楚像後，留下這次觀察。';}
  function clearGestureNotice(){const note=$('[data-imaging-gesture-note]');note.hidden=true;root.dataset.gestureHelp='false';}
- function showGestureNotice(key){const note=$('[data-imaging-gesture-note]');note.textContent=key==='lens'?'凸透鏡是固定的。':key==='object'&&state.stage==='focus'?'發光圖卡目前固定。請切換到「調整圖卡與屏幕」模式，再使用下方「發光圖卡位置」的位置尺調整遠近。':`請使用下方「${key==='object'?'發光圖卡位置':'屏幕位置'}」的位置尺調整距離。`;note.hidden=false;root.dataset.gestureHelp='true';}
+ function showGestureNotice(key){const note=$('[data-imaging-gesture-note]');note.textContent=key==='lens'?'凸透鏡是固定的。':key==='object'&&state.stage==='focus'?'發光圖卡目前固定。請切換到「調整圖卡與屏幕」模式，再使用下方圖卡尺調整遠近。':`請使用下方${key==='object'?'圖卡尺':'屏幕尺'}的刻度按鈕或綠色把手調整距離。`;note.hidden=false;root.dataset.gestureHelp='true';}
  function update(){
   const g=paintProjection(),focus=state.stage==='focus';
   $$('[data-imaging-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingMode===state.stage)));
   $('[data-imaging-object-controls]').hidden=focus;$('[data-imaging-comparison]').hidden=focus;
-  $('[data-imaging-prompt]').textContent=focus?'固定圖卡與透鏡；點選下方刻度按鈕，觀察屏幕清楚與模糊的變化。':'使用下方圖卡位置尺改變物距，再調整屏幕位置尺重新對焦。';
+  $('[data-imaging-prompt]').textContent=focus?'固定圖卡與透鏡；點選下方刻度按鈕，觀察屏幕清楚與模糊的變化。':'使用下方圖卡尺改變物距，再調整屏幕尺重新對焦。';
   $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.disabled=key==='object'&&focus;b.textContent=key==='object'?'圖卡 ↔':'屏幕 ↔';b.setAttribute('aria-pressed',String(key===selected));b.setAttribute('aria-label',`${key==='object'?'發光圖卡':'屏幕'}，${state[key]}公分，可用方向鍵移動`);});
   for(const handle of $$('[data-imaging-ruler-handle]')){const key=handle.dataset.imagingRulerHandle,max=G[key+'Max'];handle.style.left=`${(key==='object'?1-state[key]/max:state[key]/max)*100}%`;handle.setAttribute('aria-valuenow',String(state[key]));handle.setAttribute('aria-valuetext',`${key==='object'?'圖卡':'屏幕'}距離透鏡${state[key]}公分`);}
   const target=$('[data-imaging-target]');target.hidden=!g.finite||g.unreachable;target.dataset.distance=g.finite?String(g.v):'';target.style.setProperty('--target-position',`${g.finite?g.v/G.screenMax*100:0}%`);$('[data-imaging-target-label]').setAttribute('aria-label',g.finite?`屏幕移至清楚像位置，${Math.round(g.v*10)/10}公分`:'沒有有限距離的清楚像位置');
   $('[data-imaging-target-status]').hidden=g.finite&&!g.unreachable;
   $('[data-imaging-target-status]').textContent=!g.finite?'圖卡位於焦點，沒有有限距離的清楚像。':g.unreachable?`清楚像在 ${Math.round(g.v*10)/10} 公分，已超出軌道。`:`清楚像位置：${Math.round(g.v*10)/10} 公分`;
-  $('[data-imaging-distance=object]').textContent=`物距 ${state.object} 公分`;$('[data-imaging-distance=screen]').textContent=`屏幕距離 ${state.screen} 公分`;
+  for(const key of ['object','screen']){const output=$(`[data-imaging-distance=${key}]`);output.textContent=`${state[key]} 公分`;output.setAttribute('aria-label',`${key==='object'?'物距':'屏幕距離'} ${state[key]} 公分`);}
   $('[data-imaging-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-imaging-rays]').setAttribute('aria-pressed',String(showRays));$('[data-imaging-trace]').hidden=!showRays;
   $$('[data-imaging-point]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.imagingPoint===point)));
-  $('[data-imaging-view]').textContent=front?'返回實驗台':'放大查看';$('[data-imaging-view]').setAttribute('aria-pressed',String(front));
+  $('[data-imaging-view]').textContent=front?'返回實驗台':'屏幕視角';$('[data-imaging-view]').setAttribute('aria-label',front?'返回實驗台視角':'切換到屏幕視角');$('[data-imaging-view]').setAttribute('aria-pressed',String(front));
   $('[data-imaging-hint]').textContent=front?'正面觀察同一片屏幕；點選下方刻度按鈕調整。輔助光路在整體視角顯示。':'空白處可旋轉視角，滾輪或雙指縮放；器材距離請使用下方位置尺調整。';
   let message=g.clear?`屏幕已對焦：倒立${g.sizeLabel}的實像。`:'屏幕尚未對焦。移動屏幕，找清楚的倒立像。';
   if(!g.finite)message='物體在焦點上，無法在有限距離的屏幕上找到清楚像。將圖卡移遠一些再試。';
@@ -110,7 +110,7 @@ function initialise(root){
   function directionFor(azimuth,polar){return new THREE.Vector3(Math.sin(polar)*Math.sin(azimuth),Math.cos(polar),Math.sin(polar)*Math.cos(azimuth));}
   function fitToViewport(){
    camera.fov=39;camera.updateProjectionMatrix();let radius=9;
-   const bounds=[];for(const [xs,ys,zs]of [[[-4.9,-1.4],[.3,2.7],[-.9,.9]],[[G.screenMin*G.scale-.3,7.4],[.3,3.6],[-1,1]],[[-5.4,7.4],[-.25,.25],[-1,1]]])for(const x of xs)for(const y of ys)for(const z of zs)bounds.push(new THREE.Vector3(x,y,z));
+   const bounds=[];for(const [xs,ys,zs]of [[[-4.9,-1.4],[.3,G.axis+G.cardHeight/2+.1],[-.9,.9]],[[G.screenMin*G.scale-.3,7.4],[.3,3.6],[-1,1]],[[-5.4,7.4],[-.25,.25],[-1,1]]])for(const x of xs)for(const y of ys)for(const z of zs)bounds.push(new THREE.Vector3(x,y,z));
    const directions=[directionFor(-.9,1.38)];
    for(let i=0;i<40;i++){const fits=directions.every(direction=>{camera.position.copy(target).addScaledVector(direction,radius);camera.lookAt(target);camera.updateMatrixWorld();return bounds.every(p=>{const q=p.clone().project(camera);return Math.abs(q.x)<.9&&Math.abs(q.y)<.8;});});if(fits)break;radius*=1.06;}
    fitRadius=radius;
@@ -122,7 +122,7 @@ function initialise(root){
   }
   function labels(){
    const rect=canvas.getBoundingClientRect(),overlap=(a,b)=>a.left<b.right+3&&a.right>b.left-3&&a.top<b.bottom+3&&a.bottom>b.top-3;
-   const placed=[$('.imaging-tools'),$('.imaging-preview'),$('[data-imaging-badge]')].filter(e=>!e.hidden).map(e=>e.getBoundingClientRect());
+   const placed=[$('.imaging-tools'),$('.imaging-preview'),$('[data-imaging-badge]')].filter(e=>!e.hidden&&e.getClientRects().length).map(e=>e.getBoundingClientRect());
    for(const e of $$('.imaging-focus')){const v=new THREE.Vector3(Number(e.dataset.imagingFocus)*G.scale,.40,.9).project(camera);e.hidden=front||Math.abs(v.x)>.97||Math.abs(v.y)>.94||v.z< -1||v.z>1;if(e.hidden)continue;const w=e.offsetWidth,h=e.offsetHeight,x=Math.max(w/2+4,Math.min(rect.width-w/2-4,(v.x+1)*rect.width/2)),y=Math.max(h/2+4,Math.min(rect.height-h/2-4,(1-v.y)*rect.height/2+15));let chosen=y;for(const cy of [y,y-h-5,y+h+5]){if(cy-h/2<$('.imaging-tools').getBoundingClientRect().bottom-rect.top+4||cy+h/2>rect.height-4)continue;const box={left:rect.left+x-w/2,right:rect.left+x+w/2,top:rect.top+cy-h/2,bottom:rect.top+cy+h/2};if(placed.some(p=>overlap(box,p)))continue;chosen=cy;break;}e.style.left=x+'px';e.style.top=chosen+'px';placed.push(e.getBoundingClientRect());}
    const names=$$('.imaging-anchor');names.forEach(e=>e.hidden=front);const widths=names.map(e=>e.offsetWidth),ideal=[source.position.x,0].map(x=>(new THREE.Vector3(x,.50,.95).project(camera).x+1)*rect.width/2);let centers=ideal.map((x,i)=>Math.max(widths[i]/2+4,Math.min(rect.width-widths[i]/2-4,x)));
    if(centers[0]+widths[0]/2+6>centers[1]-widths[1]/2){const total=widths[0]+widths[1]+6,left=Math.max(4,Math.min(rect.width-total-4,(centers[0]+centers[1]-total)/2));centers=[left+widths[0]/2,left+widths[0]+6+widths[1]/2];}
