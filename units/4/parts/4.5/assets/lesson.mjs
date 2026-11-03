@@ -1,7 +1,7 @@
 import {initialiseFrontMix} from './mix-lab.mjs?v=mix-drag-focus-20261103';
 import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-source-comparison-20261102';
 import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays,QUIZ} from './color-model.mjs';
-import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs';
+import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs?v=surface-inset-20261103';
 let studioModule=null;
 const text=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};
 const pressed=(root,selector,key)=>root.querySelectorAll(selector).forEach(b=>b.setAttribute('aria-pressed',String(b.getAttribute(selector.slice(1,-1))===key)));
@@ -9,7 +9,31 @@ function ready(root){root.querySelectorAll('[data-pending]').forEach(e=>e.disabl
 function condition(root,pairs){const node=root.querySelector('[data-conditions]');node.replaceChildren();for(const[label,value]of pairs){const s=document.createElement('span');s.append(label+'：');const b=document.createElement('strong');b.textContent=value;s.append(b);node.append(s);}}
 function channels(root,groups){
  const row=root.querySelector('[data-channels]');if(!row)return;row.replaceChildren();
- for(const[label,rgb]of groups){const cell=document.createElement('div');cell.className='channel-cell';const name=document.createElement('span');name.className='label';name.textContent=label;const value=document.createElement('strong');value.textContent=channelsText(rgb);const dots=document.createElement('div');dots.className='channel-dots';dots.setAttribute('aria-hidden','true');['#dd6b5b','#58a574','#5888c6'].forEach((color,i)=>{const dot=document.createElement('i');dot.style.setProperty('--channel',color);dot.style.setProperty('--strength',Math.max(.06,rgb[i]));dots.append(dot);});cell.append(name,value,dots);row.append(cell);}
+ const surface=root.dataset.lab==='surface';
+ for(const[label,rgb,description]of groups){
+  const cell=document.createElement('div');cell.className='channel-cell';
+  const name=document.createElement('span');name.className='label';name.textContent=label;
+  const value=document.createElement('strong');value.textContent=description||channelsText(rgb);
+  const dots=document.createElement('div');dots.className=surface?'surface-channel-bars':'channel-dots';dots.setAttribute('aria-hidden','true');
+  ['#dd6b5b','#58a574','#5888c6'].forEach((color,i)=>{
+   if(surface){
+    const bar=document.createElement('span');bar.className='surface-channel-bar';
+    const label=document.createElement('span');label.textContent=['紅','綠','藍'][i];
+    const track=document.createElement('i'),fill=document.createElement('b');
+    fill.style.backgroundColor=color;fill.style.width=`${rgb[i]*100}%`;
+    track.append(fill);bar.append(label,track);dots.append(bar);
+   }else{
+    const dot=document.createElement('i');dot.style.setProperty('--channel',color);dot.style.setProperty('--strength',Math.max(.06,rgb[i]));dots.append(dot);
+   }
+  });cell.append(name,value,dots);row.append(cell);
+ }
+}
+function surfaceChannels(root,signal,material){
+ const white=material==='white',black=material==='black',dominant=['紅','綠','藍'][signal.outgoing.indexOf(Math.max(...signal.outgoing))];
+ const others=['紅','綠','藍'].filter(color=>color!==dominant).join('、');
+ channels(root,[['照過來的光',signal.incoming,'紅、綠、藍'],
+  ['反射出去的光',signal.outgoing,white?'各色光都較多':black?'各色光都較少':`以${dominant}光為主`],
+  ['被吸收的光',signal.absorbed,white?'各色光都較少':black?'各色光都較多':`${others}較多，${dominant}較少`]]);
 }
 
 function initialiseLab(root,index){
@@ -32,7 +56,8 @@ function initialiseLab(root,index){
    if(kind==='surface'){
     condition(root,[['照明','白光固定'],['物體',MATERIALS[state.material].name],['觀察位置','固定']]);
     text($('[data-result]'),state.material==='black'?'黑色色卡吸收較多可見光，反射較少，所以在這個白光照明下看起來很暗。':state.material==='white'?'白色色卡反射較多種類的可見光，因此在白光下看起來接近白色。':`同樣的白光照到${MATERIALS[state.material].name}，主要反射${channelsText(signal.outgoing)}光；其他部分較多被吸收。`);
-    text($('[data-receiver-label]'),`白光下的${MATERIALS[state.material].name}，主要反射的光呈${colorName(output)}。`);
+    text($('[data-surface-name]'),`白光下的${MATERIALS[state.material].name}`);
+    text($('[data-receiver-label]'),state.material==='black'?'反射少，外觀很暗':state.material==='white'?'多種色光反射較多':`主要反射${channelsText(output)}色光`);
    }else if(kind==='lighting'){
     condition(root,[['同一物體',MATERIALS[state.material].name],['目前照明',LIGHTS[state.light].name],['左側參照','白光下的同一色卡']]);
     text($('[data-result]'),`物體仍是${MATERIALS[state.material].name}。在${LIGHTS[state.light].name}下，這次反射的光讓它看起來${colorName(output)}。外觀由照明與材料的反射特性共同決定。`);
@@ -48,7 +73,8 @@ function initialiseLab(root,index){
     text($('[data-receiver-label]'),state.blocked?'這條光路被遮住，眼睛看不到原物體的顏色。':`從這條光路接收到的色光呈${colorName(output)}。`);
     text($('[data-blocker]'),state.blocked?'移開遮光板':'放入遮光板');$('[data-blocker]').setAttribute('aria-pressed',String(state.blocked));
    }
-   channels(root,kind==='eye'?[['光源提供',signal.incoming],['離開物體',signal.outgoing],['到達眼睛',signal.received]]:[['照過來的光',signal.incoming],[kind==='filter'?'通過色片':'反射出去',signal.outgoing],['被吸收的部分',signal.absorbed]]);
+   if(kind==='surface')surfaceChannels(root,signal,state.material);
+   else channels(root,kind==='eye'?[['光源提供',signal.incoming],['離開物體',signal.outgoing],['到達眼睛',signal.received]]:[['照過來的光',signal.incoming],[kind==='filter'?'通過色片':'反射出去',signal.outgoing],['被吸收的部分',signal.absorbed]]);
   }
   for(const[attr,key]of[['data-prism',state.inserted?'in':'out'],['data-light',state.light],['data-material',state.material],['data-filter',state.filter],['data-filter-step',state.step],['data-eye-mode',state.mode]])pressed(root,`[${attr}]`,key);
   text($('[data-rays]'),state.rays?'隱藏輔助光路':'顯示輔助光路');$('[data-rays]').setAttribute('aria-pressed',String(state.rays));text($('[data-view]'),state.view?'返回斜向觀察':'俯看實驗台');$('[data-view]').setAttribute('aria-pressed',String(state.view));
@@ -72,7 +98,7 @@ function initialiseLab(root,index){
  function fallback(){canvas.hidden=true;diagram.hidden=false;root.dataset.renderer='diagram';$('[data-view]').hidden=true;const note=$('[data-load-note]');note.classList.add('is-fallback');note.hidden=false;text(note,'立體觀察暫時無法使用，這裡改用同一組條件的平面光路示意；操作與近看仍可使用。');}
  async function loadStudio(){
   if(loading||studio)return;loading=true;
-  try{studioModule ||= import('./studio.mjs');const module=await studioModule;studio=module.createStudio(root,{prism(value){state.inserted=value;update();},unavailable:fallback});canvas.hidden=false;diagram.hidden=true;studio.update(state,signal);studio.setView(state.view);root.dataset.renderer='three';}
+  try{studioModule ||= import('./studio.mjs?v=surface-inset-20261103');const module=await studioModule;studio=module.createStudio(root,{prism(value){state.inserted=value;update();},unavailable:fallback});canvas.hidden=false;diagram.hidden=true;studio.update(state,signal);studio.setView(state.view);root.dataset.renderer='three';}
   catch{fallback();}
  }
  ready(root);update();root.dataset.renderer='diagram';

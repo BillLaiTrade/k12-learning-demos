@@ -173,3 +173,55 @@ h1 { margin: 6px 0 12px; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.2;
 .mix-beam-body{fill:url(#mix-beam-color);opacity:.5;filter:url(#mix-beam-soft)}
 .mix-beam-core{fill:url(#mix-beam-light);opacity:.85;filter:url(#mix-beam-soft)}
 .mix-beam-emitter{fill:#fff;opacity:.9;filter:url(#mix-beam-soft)}
+
+/* Fourth section: the current material experiment with an inset observation. */
+#s4 .surface-intro{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:16px}
+#s4 .surface-intro .dialogue{margin:0;padding:10px 12px;font-size:.85rem;line-height:1.75}
+#s4 .lab{margin-top:0}
+#s4 .studio-layout{display:block}
+#s4 .stage{--surface-preview-width:clamp(130px,20%,180px);aspect-ratio:1.8;min-height:0}
+#s4 .scene-tools{right:calc(var(--surface-preview-width) + 24px)}
+#s4 .surface-preview{position:absolute;z-index:3;top:12px;right:12px;width:var(--surface-preview-width);padding:10px;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;border:1px solid #b8cbb0;border-radius:12px;background:#f6f9f0f5;box-shadow:0 3px 10px #15271b25;text-align:center}
+#s4 .surface-preview .receiver-heading{margin:0 0 7px;align-self:stretch;font-size:.72rem;line-height:1.4}
+#s4 .surface-preview canvas{display:block;width:100%;height:auto;aspect-ratio:420/320;max-width:none;max-height:none;object-fit:contain;border-radius:8px}
+#s4 .surface-preview .surface-name{font-size:.65rem;line-height:1.5;color:#73856b;margin:9px 0 4px}
+#s4 .surface-preview [data-receiver-label]{font-size:.72rem;line-height:1.55;font-weight:650;color:#4c674c;margin:0}
+#s4 .lab-controls{padding:11px 13px;margin-top:15px;border:1px solid #d7e1cf;border-radius:13px;background:#f4f7ee;display:block}
+#s4 .lab-controls .control-group{display:flex;flex-direction:row;align-items:center;gap:17px}
+#s4 .control-label{white-space:nowrap;font-weight:500}
+#s4 .choice-row{flex:1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+#s4 .choice-row button{width:100%;padding:9px 6px;min-height:44px;font-size:.8rem;white-space:nowrap}
+#s4 .interaction-hint{margin:8px 0 0}
+#s4 .condition-strip{margin-top:11px;padding-top:10px}
+#s4 .channel-row{gap:10px;margin-top:12px}
+#s4 .channel-cell{padding:12px 13px;background:#fafcf5}
+#s4 .channel-cell .label{font-size:.75rem;margin-bottom:5px}
+#s4 .channel-cell strong{font-size:.86rem;line-height:1.6}
+#s4 .surface-channel-bars{display:flex;gap:9px;margin-top:10px}
+#s4 .surface-channel-bar{display:flex;align-items:center;gap:4px;flex:1;min-width:0;font-size:.64rem;color:#73866b}
+#s4 .surface-channel-bar i{display:block;flex:1;height:6px;border-radius:6px;background:#e8eee1;overflow:hidden}
+#s4 .surface-channel-bar b{display:block;height:100%;border-radius:6px}
+#s4 .surface-channel-note{margin:7px 0 0;font-size:.67rem;color:#73856b}
+#s4 .live-result{margin-top:12px;padding:12px 15px;border-left:0;border-radius:12px}
+@media(max-width:650px){
+ #s4 .surface-intro{grid-template-columns:1fr;gap:9px;margin-bottom:12px}
+ #s4 .surface-intro .dialogue{font-size:.82rem;padding:9px 10px}
+ #s4 .stage{--surface-preview-width:106px;aspect-ratio:1;min-height:365px}
+ #s4 .stage>[data-studio],#s4 .scene-fallback{top:116px;bottom:26px;height:calc(100% - 142px)}
+ #s4 .surface-preview{top:8px;right:8px;padding:6px;border-radius:10px}
+ #s4 .surface-preview .receiver-heading{font-size:.62rem;margin-bottom:4px}
+ #s4 .surface-preview canvas{aspect-ratio:1;object-fit:cover}
+ #s4 .surface-preview .surface-name{display:none}
+ #s4 .surface-preview [data-receiver-label]{font-size:.6rem;line-height:1.4;margin-top:5px}
+ #s4 .scene-tools{top:9px;left:9px;right:calc(var(--surface-preview-width) + 17px)}
+ #s4 .lab-controls{padding:10px}
+ #s4 .lab-controls .control-group{align-items:stretch;flex-direction:column;gap:8px}
+ #s4 .choice-row{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ #s4 .choice-row button{font-size:.72rem;padding:8px 5px}
+ #s4 .channel-row{gap:6px}
+ #s4 .channel-cell{padding:9px 8px}
+ #s4 .channel-cell .label{font-size:.65rem}
+ #s4 .channel-cell strong{display:block;font-size:.72rem;min-height:3.2em}
+ #s4 .surface-channel-bars{flex-direction:column;gap:6px;margin-top:8px}
+ #s4 .surface-channel-bar{font-size:.62rem}
+}

@@ -1,11 +1,11 @@
-import {geometry as modelGeometry,snapshot as modelSnapshot,durationMs as modelDuration,layout,clampAngle as modelClamp} from './single-refraction-model.mjs?v=20261103-inline1';
-import {drawDirections} from './light-beam.mjs?v=20261103-inline1';
+import {geometry as modelGeometry,snapshot as modelSnapshot,durationMs as modelDuration,layout,clampAngle as modelClamp} from './single-refraction-model.mjs?v=20261103-angle40';
+import {drawDirections} from './light-beam.mjs?v=20261103-angle40';
 import {mediumSelector} from './medium-selector.mjs?v=20261103-concept1';
-import {mountAnalysis} from './linked-refraction-analysis.mjs?v=20261103-inline1';
+import {mountAnalysis} from './linked-refraction-analysis.mjs?v=20261103-angle40';
 function mountSingleLab(rootSelector,prefix,reverse){
  const root=document.querySelector(rootSelector),$=s=>root.querySelector(s.replaceAll('#oblique-',`#${prefix}-`));
  const scene=$('#oblique-scene'),picture=$('#oblique-background'),viewport=$('#oblique-viewport'),input=$('#oblique-angle'),output=$('#oblique-angle-value'),start=$('#oblique-start'),pause=$('#oblique-pause'),retry=$('#oblique-retry'),status=$('#oblique-status');
- const geometry=(m,a)=>modelGeometry(m,a,reverse),snapshot=(m,a,t)=>modelSnapshot(m,a,t,reverse),durationMs=(m,a)=>modelDuration(m,a,reverse),clampAngle=v=>Math.round(modelClamp(v));
+ const geometry=(m,a)=>modelGeometry(m,a,reverse),snapshot=(m,a,t)=>modelSnapshot(m,a,t,reverse),durationMs=(m,a)=>modelDuration(m,a,reverse),clampAngle=v=>Math.round(Math.min(40,modelClamp(v)));
  let medium='water',requestedMedium='water',angle=30,elapsed=0,state='loading',frame=0,startTime=0,drag=null,loadId=0,restoreLight=false;
  const name=()=>medium==='water'?'水':'玻璃',clickSlop=5,selector=mediumSelector($('#oblique-medium-toggle'),key=>{if(key!==requestedMedium||state==='error')prepare(key);});
 const label=(id,x,y,text,width=110)=>`<g id="${id}" class="oblique-medium-badge" transform="translate(${x} ${y})"><rect x="0" y="-35" width="${width}" height="52" rx="9" fill="#fffef4" fill-opacity=".96"/><text x="${width/2}" y="0" text-anchor="middle" font-size="30">${text}</text></g>`;
@@ -25,7 +25,7 @@ scene.innerHTML=`<defs>
   <path class="oblique-normal" d="M${layout.axis} 270V885"/>
   ${label('oblique-air-label',920,450,'空氣')}${label('oblique-material-label',230,740,'水')}
   ${beam()}
-   <g class="oblique-source" tabindex="0" role="slider" aria-label="${medium==='water'?'水':'玻璃'}組光源，點擊或按Enter發射，拖曳或方向鍵調角度" aria-keyshortcuts="Enter Space" aria-valuemin="0" aria-valuemax="90" aria-valuenow="30" aria-valuetext="30度" data-lit="false">
+   <g class="oblique-source" tabindex="0" role="slider" aria-label="${medium==='water'?'水':'玻璃'}組光源，點擊或按Enter發射，拖曳或方向鍵調角度" aria-keyshortcuts="Enter Space" aria-valuemin="0" aria-valuemax="40" aria-valuenow="30" aria-valuetext="30度" data-lit="false">
     <title>點燈發射；拖曳調角度</title>
     <rect class="oblique-source-hit" x="-48" y="-82" width="96" height="96" fill="transparent"/>
     <rect class="oblique-focus" x="-42" y="-86" width="84" height="105" rx="15"/>
@@ -45,7 +45,7 @@ function photo(key,reload=false){if(!photos.has(key)||reload){const img=new Imag
 function drawGeometry(){
  const g=geometry(medium,angle),ratio=Math.max(.1,scene.getBoundingClientRect().width/layout.width),sourceScale=Math.max(.9,22/(70*ratio)),fontScale=Math.max(.8,15/(30*ratio));
  input.value=angle;output.value=`${angle}°`;root.dataset.angle=String(angle);root.dataset.medium=medium;root.dataset.kind=g.kind;root.dataset.outgoing=g.outgoing===null?'':String(g.outgoing);
- source.setAttribute('transform',`translate(${g.source.join(' ')}) rotate(${-angle}) scale(${sourceScale})`);source.setAttribute('aria-valuemax','90');source.setAttribute('aria-valuenow',String(angle));source.setAttribute('aria-label','光源，點擊或按Enter發射，拖曳或方向鍵調角');source.setAttribute('aria-valuetext',`${angle}度，${g.outgoing===null?g.kind==='tir'?'全反射，沒有折射光':'沿介面掠射':`折射角${g.outgoing.toFixed(1)}度`}`);
+ source.setAttribute('transform',`translate(${g.source.join(' ')}) rotate(${-angle}) scale(${sourceScale})`);source.setAttribute('aria-valuemax','40');source.setAttribute('aria-valuenow',String(angle));source.setAttribute('aria-label','光源，點擊或按Enter發射，拖曳或方向鍵調角');source.setAttribute('aria-valuetext',`${angle}度，${g.outgoing===null?g.kind==='tir'?'全反射，沒有折射光':'沿介面掠射':`折射角${g.outgoing.toFixed(1)}度`}`);
  const hit=source.querySelector('.oblique-source-hit'),hitSize=Math.max(96,44/(ratio*sourceScale));for(const[k,v]of Object.entries({x:-hitSize/2,y:-34-hitSize/2,width:hitSize,height:hitSize}))hit.setAttribute(k,String(v));
  $('#oblique-case-label').setAttribute('transform',`translate(650 155) scale(${fontScale})`);$('#oblique-case-name').textContent=reverse?`${name()} → 空氣`:`空氣 → ${name()}`;
  $('#oblique-air-label').setAttribute('transform',`translate(${1030-110*fontScale} 440) scale(${fontScale})`);$('#oblique-material-label').setAttribute('transform',`translate(230 740) scale(${fontScale})`);$('#oblique-air-label text').textContent=reverse?name():'空氣';$('#oblique-material-label text').textContent=reverse?'空氣':name();
@@ -76,7 +76,7 @@ scene.onpointerdown=e=>{if(!e.target.closest('.oblique-source')||input.disabled|
 scene.addEventListener('touchstart',e=>{if(!input.disabled&&e.target.closest('.oblique-source'))e.preventDefault();},{passive:false});
 scene.onpointermove=e=>{if(!drag||e.pointerId!==drag.pointerId)return;if(!drag.moved&&Math.hypot(e.clientX-drag.downX,e.clientY-drag.downY)<=clickSlop)return;drag.moved=true;const p=point(e);setAngle(Math.atan2(Math.max(0,layout.axis-p.x+drag.offsetX),Math.max(0,layout.boundary-p.y+drag.offsetY))*180/Math.PI);};
 scene.onpointerup=e=>{const released=drag;drag=null;if(released&&e.pointerId===released.pointerId&&!released.moved&&Math.hypot(e.clientX-released.downX,e.clientY-released.downY)<=clickSlop)play(true);};scene.onpointercancel=scene.onlostpointercapture=()=>{drag=null;};scene.onclick=e=>{if(e.target.closest('.oblique-source')&&e.detail===0&&!input.disabled)play(true);};
-scene.onkeydown=e=>{if(!e.target.closest('.oblique-source')||input.disabled)return;if(e.key==='Enter'||e.key===' '){e.preventDefault();if(!e.repeat)play(true);return;}const step={ArrowLeft:-1,ArrowDown:-1,ArrowRight:1,ArrowUp:1}[e.key];if(step!==undefined||e.key==='Home'||e.key==='End'){e.preventDefault();setAngle(e.key==='Home'?0:e.key==='End'?90:angle+step);}};
+scene.onkeydown=e=>{if(!e.target.closest('.oblique-source')||input.disabled)return;if(e.key==='Enter'||e.key===' '){e.preventDefault();if(!e.repeat)play(true);return;}const step={ArrowLeft:-1,ArrowDown:-1,ArrowRight:1,ArrowUp:1}[e.key];if(step!==undefined||e.key==='Home'||e.key==='End'){e.preventDefault();setAngle(e.key==='Home'?0:e.key==='End'?40:angle+step);}};
 document.addEventListener('visibilitychange',()=>{if(document.hidden){freeze();drag=null;}});if('IntersectionObserver'in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting){freeze();drag=null;}},{threshold:0}).observe($('.oblique-experiment'));
 async function prepare(target,reload=false){
  const id=++loadId;restoreLight=state==='loading'?restoreLight:elapsed>0||state==='running';requestedMedium=target;stop();drag=null;elapsed=0;state='loading';render();controls();retry.hidden=true;

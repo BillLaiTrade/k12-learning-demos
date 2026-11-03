@@ -80,7 +80,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
     const d=require('./helpers/unit23-desk.cjs').desk(page),feedback=d.f.locator('#gas-report-feedback');
     assert.equal(await d.f.getAttribute('data-state'),'operate');assert.equal(await d.f.locator('[data-desk-action=begin]').count(),0);
     await d.select();await d.prepare();await d.charge();await d.collect();await d.seal();
-    assert.equal(await feedback.getAttribute('data-result'),'correct');await d.click('reset');assert.equal(await d.f.getAttribute('data-state'),'operate');assert.equal(await d.f.locator('[data-desk-material][data-present=true]').count(),0);assert.equal(await page.locator('#cup-comparison').isVisible(),true);
+    assert.equal(await feedback.getAttribute('data-result'),'correct');await d.clear();assert.equal(await d.f.getAttribute('data-state'),'operate');assert.equal(await d.f.locator('[data-desk-material][data-present=true]').count(),0);assert.equal(await page.locator('#cup-comparison').isVisible(),true);
   });
   await t.test('seven widths keep full-width teaching bodies below their headers without overflow', async () => {
     for (const width of [1440,1280,1024,800,768,390,320]) {
