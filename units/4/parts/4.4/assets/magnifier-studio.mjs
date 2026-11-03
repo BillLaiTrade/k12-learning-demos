@@ -1,4 +1,4 @@
-import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261103-mag-observations1';
+import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261103-mag-rays2';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays} from './magnifier-optics.mjs?v=20261102-mag1';
 const root=document.querySelector('[data-magnifier-lab]');
@@ -7,7 +7,7 @@ function initialise(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],canvas=$('#magnifier-canvas');
  let state={object:30,screen:95,screenIn:false},showRays=false,extensions=false,point='both',front=false,selected='object',studio=null;
  const distanceLabel=value=>`${Number((value/G.f).toFixed(3))}F`;
- const workspace=createMagnifierWorkspace(root,{f:G.f,move,observe(preset){state={object:preset.object,screen:95,screenIn:preset.screenIn};showRays=preset.rays;extensions=preset.extensions;point='both';front=false;selected='object';update();studio?.frameObservation();}});
+ const workspace=createMagnifierWorkspace(root,{f:G.f,move,observe(preset){state={object:preset.object,screen:95,screenIn:preset.screenIn};if(preset.rays)showRays=true;extensions=preset.extensions;point='both';front=false;selected='object';update();studio?.frameObservation();}});
  const art=document.createElement('canvas');art.width=350;art.height=600;const a=art.getContext('2d');
  a.fillStyle='#dd684f';a.beginPath();a.moveTo(175,80);a.lineTo(133,170);a.lineTo(217,170);a.closePath();a.fill();a.strokeStyle='#688d65';a.lineWidth=13;a.lineCap='round';a.beginPath();a.moveTo(175,190);a.lineTo(175,442);a.stroke();a.fillStyle='#438dbb';a.beginPath();a.arc(175,500,35,0,Math.PI*2);a.fill();
  const eyeCanvas=$('[data-mag-eye]'),reference=$('[data-mag-reference]'),paper=$('[data-mag-paper]');
@@ -123,7 +123,7 @@ function initialise(root){
    }
   }
   function draw(){pending=0;renderer.render(scene,camera);labels();}
-  function requestDraw(){if(!pending)pending=requestAnimationFrame(draw);}
+  function requestDraw(){labels();if(!pending)pending=requestAnimationFrame(draw);}
   function syncScene(){const g=magnifierState(state);virtualImage.visible=extensions&&!front;virtualImage.position.set(g.v*G.scale,G.axis,0);virtualImage.scale.set(g.m,g.m,1);source.position.x=-state.object*G.scale;screen.position.x=state.screen*G.scale;screen.visible=state.screenIn;projectedTexture.needsUpdate=true;updateRays();updateCamera();scene.updateMatrixWorld(true);highlight.update();requestDraw();}
   const devices={object:source,screen},pointers=new Map(),raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2(),planeDrag=new THREE.Plane(new THREE.Vector3(0,1,0),-G.axis),intersection=new THREE.Vector3();let gesture=null;
   function ray(e){const r=canvas.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,1-(e.clientY-r.top)/r.height*2);raycaster.setFromCamera(pointer,camera);}
