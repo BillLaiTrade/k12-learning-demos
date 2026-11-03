@@ -7,6 +7,14 @@ function initialise(root){
  let state={object:320,screen:240},showRays=true,point='both',front=false,selected='screen',studio=null;
  state=moveImaging(state,'screen',imagingState(state).v);
  const distanceLabel=value=>{const n=Number((value/G.f).toFixed(3));return n===1?'F':`${n}F`;};
+ const dialog=document.querySelector('#imaging-workspace-dialog'),expand=$('[data-imaging-expand]'),comparison=$('[data-imaging-comparison]'),compact=matchMedia('(max-width:999px)'),home=document.createComment('imaging-workspace-home');root.before(home);let returnScroll=null;
+ function syncWorkspaceLayout(){comparison.open=!(dialog.open&&compact.matches);}
+ function openWorkspace(){if(dialog.open)return;returnScroll={left:scrollX,top:scrollY};root.classList.add('imaging-expanded');dialog.querySelector('[data-imaging-workspace-slot]').append(root);dialog.showModal();document.documentElement.classList.add('imaging-is-expanded');syncWorkspaceLayout();clearGestureNotice();requestAnimationFrame(()=>{if(!canvas.hidden)canvas.focus({preventScroll:true});});}
+ if(typeof dialog.showModal==='function')expand.addEventListener('click',openWorkspace);else expand.hidden=true;
+ dialog.querySelector('[data-imaging-close]').addEventListener('click',()=>dialog.close());
+ dialog.addEventListener('close',()=>{root.classList.remove('imaging-expanded');home.after(root);document.documentElement.classList.remove('imaging-is-expanded');const url=new URL(location.href);if(url.searchParams.has('workspace')){url.searchParams.delete('workspace');history.replaceState(null,'',url);}syncWorkspaceLayout();requestAnimationFrame(()=>{if(returnScroll)window.scrollTo({...returnScroll,behavior:'instant'});expand.focus({preventScroll:true});});});
+ compact.addEventListener('change',syncWorkspaceLayout);
+
  const art=document.createElement('canvas');art.width=350;art.height=600;const a=art.getContext('2d');
  a.fillStyle='#dd684f';a.beginPath();a.moveTo(175,80);a.lineTo(133,170);a.lineTo(217,170);a.closePath();a.fill();
  a.strokeStyle='#688d65';a.lineWidth=13;a.lineCap='round';a.beginPath();a.moveTo(175,190);a.lineTo(175,442);a.stroke();a.fillStyle='#438dbb';a.beginPath();a.arc(175,500,35,0,Math.PI*2);a.fill();
@@ -45,6 +53,9 @@ function initialise(root){
   $('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=!g.finite?'物體位於焦點':g.unreachable?'清楚像超出軌道':g.clear?`已對焦・倒立${g.sizeLabel}${g.clipped?'・部分超出屏幕':''}`:'屏幕尚未對焦';
   const keypoint=!g.finite?'focus':!g.clear?'':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between';
   $$('[data-imaging-keypoint]').forEach(row=>{const active=row.dataset.imagingKeypoint===keypoint;row.dataset.active=String(active);row.querySelector('button').setAttribute('aria-pressed',String(active));});
+  $$('[data-imaging-quick]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.imagingQuick===keypoint)));
+  const region=!g.finite?'focus':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between',cells=$(`[data-imaging-keypoint=${region}]`).cells;
+  $('[data-imaging-quick-summary]').textContent=(g.unreachable?'清楚像超出軌道。':!g.clear&&g.finite?'屏幕尚未對焦。':'')+(g.finite?`清楚像在${cells[1].textContent}，${cells[2].textContent}。`:`${cells[1].textContent}，${cells[2].textContent}。`);
   root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.clear=String(g.clear);root.dataset.magnification=g.finite?String(g.m):'';root.dataset.projectionScale=g.projectionScale;root.dataset.spread=g.spread;root.dataset.rays=showRays;root.dataset.view=front?'screen':'orbit';root.dataset.point=point;
   canvas.setAttribute('aria-label',`旋轉與縮放觀察的立體凸透鏡成像台，使用下方位置尺調整距離，物距${distanceLabel(state.object)}，屏幕距離${distanceLabel(state.screen)}，${$('[data-imaging-badge]').textContent}`);
   studio?.update();
@@ -63,12 +74,14 @@ function initialise(root){
  $('[data-imaging-rays]').addEventListener('click',()=>{showRays=!showRays;update();});$('[data-imaging-view]').addEventListener('click',()=>{clearGestureNotice();front=!front;update();});
  $$('[data-imaging-point]').forEach(b=>b.addEventListener('click',()=>{point=b.dataset.imagingPoint;update();}));
  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.addEventListener('click',()=>{selected=key;update();});b.addEventListener('keydown',e=>{let value=state[key];if(e.key==='Home')value=G[key+'Min'];else if(e.key==='End')value=G[key+'Max'];else if(['ArrowLeft','ArrowRight','ArrowDown','ArrowUp'].includes(e.key)){const direction=['ArrowLeft','ArrowDown'].includes(e.key)?-1:1;value+=(key==='object'?-direction:direction)*(e.shiftKey?.2:1);}else return;e.preventDefault();move(key,value);});});
- $$('[data-imaging-keypoint]').forEach(b=>b.addEventListener('click',()=>{
-  const next=imagingKeypointState(b.dataset.imagingKeypoint);if(!next)return;clearGestureNotice();state=next;selected='screen';front=false;update();
+ $$('[data-imaging-keypoint],[data-imaging-quick]').forEach(b=>b.addEventListener('click',()=>{
+  const next=imagingKeypointState(b.dataset.imagingKeypoint||b.dataset.imagingQuick);if(!next)return;clearGestureNotice();state=next;selected='screen';front=false;update();
+  if(dialog.open){if(b.dataset.imagingQuick&&compact.matches)comparison.open=false;return;}
   requestAnimationFrame(()=>{const r=$('.imaging-stage').getBoundingClientRect(),nav=document.querySelector('.route'),top=innerWidth<=760?(nav?.getBoundingClientRect().height||0)+8:12;window.scrollBy({top:r.top-top,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});if(!canvas.hidden)canvas.focus({preventScroll:true});});
  }));
  try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-imaging-fallback]').hidden=false;$('[data-imaging-view]').hidden=true;root.dataset.webgl='unavailable';console.warn('Imaging 3D:',error.message);}
  update();root.dataset.ready='true';
+ if(new URL(location.href).searchParams.get('workspace')==='1'&&typeof dialog.showModal==='function')requestAnimationFrame(openWorkspace);
  function createStudio(){
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   const scene=new THREE.Scene();scene.background=new THREE.Color('#566b5b');scene.fog=new THREE.Fog('#566b5b',35,80);
