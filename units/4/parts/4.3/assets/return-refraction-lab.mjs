@@ -150,5 +150,4 @@ if(!dual&&'IntersectionObserver' in window)new IntersectionObserver(entries=>{if
 render();prepare('water');
 
 }
-mountReturnLab('#exit-lab','exit',false);
 mountReturnLab('#return-lab','return',true);

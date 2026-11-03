@@ -1,6 +1,8 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {exitGeometry,angleFromExitSource,exitSnapshot,exitDurationMs} from '../units/4/parts/4.3/assets/exit-refraction-model.mjs';
+import {geometry as entryGeometry} from '../units/4/parts/4.3/assets/oblique-incidence-model.mjs';
+import {visibleInterval} from '../units/4/parts/4.3/assets/light-beam.mjs';
 
 test('upper water or glass emits downward into air with the independently measured larger refracted angle',()=>{
  for(const [medium,n]of [['water',4/3],['glass',1.5]])for(let angle=0;angle<=35;angle++){
@@ -38,4 +40,22 @@ test('exit light advances continuously using the same air speed and material-rel
   assert.ok(distance(exitSnapshot(medium,angle,g.entryMs-.001).front,at.front)<.001);
   assert.deepEqual(end.front,g.end);assert.equal(end.arrived,true);assert.equal(exitDurationMs(medium,angle),g.arrivalMs);
  }
+});
+
+test('entry and exit use exactly the same source location at equal angles and terminate at the apparatus boundary',()=>{
+ for(const medium of ['water','glass'])for(let angle=0;angle<=35;angle++){
+  const entry=entryGeometry(medium,angle),exit=exitGeometry(medium,angle);assert.deepEqual(entry.source,exit.source);
+  assert.ok(Math.abs(exit.end[1]-850)<1e-9||Math.abs(exit.end[0]-1010)<1e-9);assert.ok(exit.end[0]<=1010&&exit.end[1]<=850);
+ }
+});
+
+test('detail arrows are positioned on the visible part of each ray rather than outside the common crop',()=>{
+ const box=[530,480,240,180];
+ for(const medium of ['water','glass'])for(const angle of [0,1,30,35])for(const g of [entryGeometry(medium,angle),exitGeometry(medium,angle)]){
+  for(const [index,from,to]of [[0,g.source,g.hit],[1,g.hit,g.end]]){
+   const [start,end]=visibleInterval(from,to,box),fraction=start+(end-start)*(index===0?.18:.82),p=from.map((n,i)=>n+(to[i]-n)*fraction);
+   assert.ok(p[0]>=530&&p[0]<=770&&p[1]>=480&&p[1]<=660);assert.ok(Math.hypot(p[0]-650,p[1]-570)>70);
+  }
+ }
+ assert.equal(visibleInterval([0,0],[20,0],box),null);
 });

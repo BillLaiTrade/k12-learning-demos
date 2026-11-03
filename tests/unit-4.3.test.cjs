@@ -28,10 +28,10 @@ test('4.3 complete basic lesson works on desktop and mobile',{timeout:90000},asy
  await page.locator('#normal-start').click();await page.clock.runFor(350);const normal=page.locator('#normal-lab');const y=Number(await normal.locator('.normal-lane').first().getAttribute('data-front-y'));assert.ok(y>240&&y<484);await page.locator('#normal-pause').click();const pausedY=Number(await normal.locator('.normal-lane').first().getAttribute('data-front-y'));await page.clock.runFor(1000);assert.equal(Number(await normal.locator('.normal-lane').first().getAttribute('data-front-y')),pausedY);
 
  for(const id of ['leave']){
-  const lab=page.locator(`[data-ray-lab=${id}]`);await lab.locator('#exit-medium-toggle [data-lab-medium=glass]').click();await page.waitForFunction(()=>document.querySelector('#exit-lab')?.dataset.state==='ready'&&document.querySelector('#exit-lab').dataset.medium==='glass');
-  const input=lab.locator('.angle-input');await input.fill('35');await input.dispatchEvent('input');
-  const out=Number((await lab.locator('.refracted-readout').textContent()).replace('°',''));assert.ok(id==='enter'?out<35:out>35);
-  await lab.locator('.source').focus();await page.keyboard.press('ArrowLeft');assert.equal(await input.inputValue(),'34');await page.keyboard.press('Home');assert.equal(await input.inputValue(),'0');assert.equal(await lab.locator('.refracted-readout').textContent(),'0.0°');
+  const lab=page.locator('#exit-lab');await lab.locator('#exit-medium-toggle [data-lab-medium=glass]').click();await page.waitForFunction(()=>['idle','preview'].includes(document.querySelector('#exit-lab')?.dataset.state)&&document.querySelector('#exit-lab').dataset.medium==='glass');
+  const input=lab.locator('#exit-angle');await input.fill('35');await input.dispatchEvent('input');
+  const out=Number((await lab.locator('#exit-out-value').textContent()).replace('°',''));assert.ok(id==='enter'?out<35:out>35);
+  await lab.locator('.oblique-source').focus();await page.keyboard.press('ArrowLeft');assert.equal(await input.inputValue(),'34');await page.keyboard.press('Home');assert.equal(await input.inputValue(),'0');assert.equal(await lab.locator('#exit-out-value').textContent(),'0.0°');
  }
  // The overview and entry-point detail share a single selectable optical case.
  await page.waitForFunction(()=>document.querySelector('#oblique-lab')?.dataset.state==='idle');

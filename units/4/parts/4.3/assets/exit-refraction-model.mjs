@@ -6,8 +6,9 @@ import {materials} from './optics.mjs';
 const turn=([x,y])=>[2*layout.axis-x,2*layout.boundary-y];
 export function exitGeometry(medium,angle){
  const g=geometry(medium,angle),radians=g.waterAngle*Math.PI/180,radius=Math.min(layout.radius,230/Math.cos(radians));
- const sourceA=turn(g.sourceA),sourceB=[layout.axis-radius*Math.sin(radians),layout.boundary-radius*Math.cos(radians)];
- return {...g,sourceA,sourceB,forward:[sourceA,g.hit,sourceB],backward:[sourceB,g.hit,sourceA]};
+ const outgoing=g.airAngle,slope=Math.tan(outgoing*Math.PI/180),depth=Math.min(280,slope?(1010-layout.axis)/slope:280);
+ const sourceA=[layout.axis+depth*slope,layout.boundary+depth],sourceB=[layout.axis-radius*Math.sin(radians),layout.boundary-radius*Math.cos(radians)];
+ return {...g,degrees:g.waterAngle,outgoing,source:sourceB,end:sourceA,sourceRadius:radius,sourceA,sourceB,forward:[sourceA,g.hit,sourceB],backward:[sourceB,g.hit,sourceA]};
 }
 export function angleFromExitSource(medium,x,y){
  return angleFromSource(medium,'b',...turn([x,y]));

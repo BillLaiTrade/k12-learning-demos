@@ -28,12 +28,12 @@
   <script type="module" src="assets/light-speed-lab.mjs?v=20261101-controls2"></script>
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
   <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-compact1"></script>
-  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-beam1">
-  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261103-beam1"></script>
-  <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-beam1">
-  <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-beam1"></script>
-  <link rel="stylesheet" href="assets/light-beam.css?v=20261103-beam1">
-  <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-beam1">
+  <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-shared1">
+  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261103-shared1"></script>
+  <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-shared1">
+  <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-shared1"></script>
+  <link rel="stylesheet" href="assets/light-beam.css?v=20261103-shared1">
+  <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-shared1">
   <script type="module" src="assets/lesson.mjs?v=20261102-return1">
 </script>
 </head>
@@ -213,20 +213,22 @@
           <div class="oblique-detail-heading"><h3 id="oblique-detail-title" class="visually-hidden"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg>入射點放大</h3><button id="oblique-close" type="button" aria-label="關閉入射點放大">×</button></div>
           <svg id="oblique-zoom" viewBox="530 480 240 180" role="img" aria-label="同一入射點的放大光路，角度從法線量起。"></svg>
         </aside>
+            <svg class="apparatus-dock" viewBox="0 887 1254 62" preserveAspectRatio="none" aria-hidden="true"><image id="oblique-dock-background" width="1254" height="1254" href="assets/oblique-entry-water.png"/></svg>
           </div>
         </figure>
         <div class="oblique-console">
         <div class="oblique-actions" role="group" aria-label="發射與暫停光束">
           <button id="oblique-start" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>發射光束</span></button>
           <button id="oblique-pause" type="button" data-action="pause" disabled><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zm8 0h4v16h-4z" fill="currentColor"/></svg><svg class="resume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>暫停觀察</span></button>
+          <button id="oblique-reset" type="button">↻ 重設</button>
         </div>
 
       </div>
       <div class="oblique-settings">
-        <label class="oblique-angle-control" for="oblique-angle"><span>調整入射角<output id="oblique-angle-value" class="visually-hidden" for="oblique-angle">45°</output></span><span class="oblique-slider"><input id="oblique-angle" type="range" min="0" max="60" value="45" step="1" aria-label="入射角，從法線量起" disabled><span>0°</span><span>60°</span></span></label>
+        <label class="oblique-angle-control" for="oblique-angle"><span>調整入射角<output id="oblique-angle-value" class="visually-hidden" for="oblique-angle">30°</output></span><span class="oblique-slider"><input id="oblique-angle" type="range" min="0" max="60" value="30" step="1" aria-label="入射角，從法線量起" disabled><span>0°</span><span>60°</span></span></label>
           <div class="oblique-angle-readouts" role="group" aria-label="讀值對應圖中同色扇形，角度皆從法線量起">
-            <div class="oblique-angle-reading oblique-incident-color"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M17 18V2A16 16 0 0 0 5.7 6.7Z"/></svg>入射角</span><output id="oblique-in-value" class="oblique-in-value">45°</output></div>
-            <div class="oblique-angle-reading oblique-refracted-color"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 2V18A16 16 0 0 0 11 15.9Z"/></svg>折射角</span><output id="oblique-out-value" class="oblique-out-value">32.0°</output></div>
+            <div class="oblique-angle-reading oblique-incident-color"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M17 18V2A16 16 0 0 0 5.7 6.7Z"/></svg>入射角</span><output id="oblique-in-value" class="oblique-in-value">30°</output></div>
+            <div class="oblique-angle-reading oblique-refracted-color"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 2V18A16 16 0 0 0 11 15.9Z"/></svg>折射角</span><output id="oblique-out-value" class="oblique-out-value">22.0°</output></div>
           </div>
         </div>
         <p class="oblique-status" id="oblique-status" role="status">正在準備實驗場景……</p>
@@ -235,13 +237,9 @@
       <noscript><p>光由空氣斜射入水或代表玻璃時偏向法線；入射角45°時，折射角分別約32.0°、28.1°。角度皆從法線量起，垂直入射時方向不偏折。啟用JavaScript後可切換介質、發射及同步觀察入射點放大畫面。</p></noscript>
 
       <section class="refraction-concept" id="oblique-concept" aria-labelledby="oblique-concept-title">
-        <p class="concept-eyebrow">實驗重點 · 光速與折射方向</p>
-        <h3 id="oblique-concept-title">光速由快變慢，斜射時偏向法線</h3>
-        <div class="concept-flow"><span>空氣</span><b aria-hidden="true">→</b><span><span data-concept-medium>水</span></span></div>
-        <div class="concept-discussion"><div class="concept-result"><h4>對照你現在的實驗</h4>        <div class="finding oblique-finding">
-          <div class="oblique-rule-head"><strong id="oblique-finding-text">空氣 → 水，光速由快變慢</strong></div>
-          <div class="oblique-rule-caption"><p id="oblique-relation"><span class="oblique-refracted-color">折射角</span><span id="oblique-angle-comparison"> &lt; </span><span class="oblique-incident-color">入射角</span></p><span class="oblique-rule-divider" aria-hidden="true">｜</span><p id="oblique-zoom-note">斜射時偏向法線</p></div>
-        </div><p class="concept-live">入射角 <output data-concept-in>45°</output><span aria-hidden="true"> → </span>折射角 <output data-concept-out>32.0°</output></p><p class="concept-measure">兩個角都從法線量起。</p></div></div>
+        <h3 id="oblique-concept-title">介質光速與折射方向</h3>
+        <div class="concept-flow"><span><b data-concept-upper>空氣</b><small data-speed-upper>光速較快</small></span><b aria-hidden="true">→</b><span><b data-concept-lower>水</b><small data-speed-lower>光速較慢</small></span></div>
+        <div class="concept-discussion"><div class="concept-result"><div class="finding oblique-finding"><div class="oblique-rule-head"><strong id="oblique-finding-text">斜射時偏向法線</strong></div><p id="oblique-relation"><span class="oblique-refracted-color">折射角</span><span id="oblique-angle-comparison"> &lt; </span><span class="oblique-incident-color">入射角</span></p></div><p class="concept-live">入射角 <output data-concept-in>30°</output><span aria-hidden="true"> → </span>折射角 <output data-concept-out>22.0°</output></p><p id="oblique-zoom-note" class="concept-measure">兩個角都從法線量起。</p></div></div>
       </section>
     </div>
     <details class="oblique-explanation" id="oblique-explanation">
@@ -286,43 +284,50 @@
 <p>把水或玻璃放在上方、空氣放在下方。光仍由上往下照，看看從較慢介質進入較快介質時，方向怎麼變。</p>
 </div>
 </div>
-<div class="lab" id="exit-lab" data-ray-lab="leave" data-return-lab data-flow="exit" data-detail-open="false" aria-busy="true">
-  <figure class="return-overview">
-    <div class="return-table" id="exit-viewport">
+    <div class="lab" id="exit-lab" data-state="loading" data-detail-open="false" aria-label="單一折射實驗與同步入射點放大畫面">
+      <div class="oblique-experiment">
+        <figure class="oblique-overview">
+          <div class="oblique-table" id="exit-viewport">
             <div id="exit-medium-toggle" class="lab-medium-toggle" role="group" data-current="water" aria-label="切換介質，目前為水"><span class="medium-toggle-icon" aria-hidden="true">⇄</span><span class="medium-toggle-caption" aria-hidden="true">介質</span><button type="button" data-lab-medium="water" aria-pressed="true">水</button><button type="button" data-lab-medium="glass" aria-pressed="false">玻璃</button></div>
-      <img id="exit-background" src="assets/oblique-entry-water.png" width="1254" height="1254" alt="上方水、下方空氣的介質剖面。">
-      <svg id="exit-scene" class="return-view" viewBox="0 0 1254 1254" role="img" aria-label="光由下方介質射回空氣的折射光路。"></svg>
-      <svg id="exit-devices" class="return-view" viewBox="0 0 1254 1254" role="group" aria-label="點擊開關光源；拖曳調整入射角。"></svg>
-      <button type="button" id="exit-magnify" aria-label="放大中央介面交點" aria-expanded="false" aria-controls="exit-detail" disabled></button><span class="return-magnify-hint" aria-hidden="true">⌕ 放大</span>
-      <aside id="exit-detail" class="return-detail" role="region" aria-labelledby="exit-detail-title" hidden>
-        <h3 id="exit-detail-title" class="visually-hidden">射回空氣的折射角度放大</h3><button type="button" id="exit-close" aria-label="關閉中央放大">×</button>
-        <svg id="exit-zoom" class="return-view" viewBox="350 340 600 460" role="group" aria-label="同一介面交點的局部放大。"></svg>
-      </aside>
-    </div>
-  </figure>
-  <div class="return-controls">
-    <div class="return-switches" role="group" aria-label="射回空氣的光源開關">
-      <button type="button" id="exit-toggle-b" class="return-switch" aria-pressed="false" disabled><span class="return-switch-indicator" aria-hidden="true"></span><span class="return-switch-label">光源<small>關閉</small></span></button>
-      <button type="button" id="exit-pause" disabled aria-label="暫停光束">Ⅱ 暫停</button>
-    </div>
-    <button type="button" id="exit-reset" aria-label="重設角度並關閉光源" disabled>↻ 重設</button>
-  </div>
-  <div class="return-console">
-    <label class="return-angle-control" for="exit-angle"><span><span id="exit-angle-caption">水中入射角</span><output id="exit-angle-value" class="angle-output" for="exit-angle">30°</output></span><span class="return-slider"><input id="exit-angle" class="angle-input" type="range" min="0" max="35" value="30" step="1" aria-label="水中入射角，從法線量起" disabled><span>0°</span><span>35°</span></span></label>
+            <img id="exit-background" src="assets/oblique-entry-water.png" width="1254" height="1254" alt="寫實木桌上的單槽光路剖面：上方水，下方為空氣。">
+            <svg id="exit-scene" viewBox="0 0 1254 1254" role="group" aria-label="點燈發射，拖曳光源調整入射角。"></svg>
+            <button id="exit-magnify" type="button" aria-label="放大中央入射點" aria-expanded="false" aria-controls="exit-detail" disabled></button><span class="oblique-magnify-label" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5M10 7v6M7 10h6"/></svg>放大</span>
+        <aside class="oblique-detail" id="exit-detail" role="region" aria-labelledby="exit-detail-title" hidden>
+          <div class="oblique-detail-heading"><h3 id="exit-detail-title" class="visually-hidden"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg>入射點放大</h3><button id="exit-close" type="button" aria-label="關閉入射點放大">×</button></div>
+          <svg id="exit-zoom" viewBox="530 480 240 180" role="img" aria-label="同一入射點的放大光路，角度從法線量起。"></svg>
+        </aside>
+            <svg class="apparatus-dock" viewBox="0 887 1254 62" preserveAspectRatio="none" aria-hidden="true"><image id="exit-dock-background" width="1254" height="1254" href="assets/oblique-entry-water.png"/></svg>
+          </div>
+        </figure>
+        <div class="oblique-console">
+        <div class="oblique-actions" role="group" aria-label="發射與暫停光束">
+          <button id="exit-start" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>發射光束</span></button>
+          <button id="exit-pause" type="button" data-action="pause" disabled><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zm8 0h4v16h-4z" fill="currentColor"/></svg><svg class="resume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>暫停觀察</span></button>
+          <button id="exit-reset" type="button">↻ 重設</button>
+        </div>
 
-  </div>
-  <p id="exit-status" role="status">正在準備實驗場景……</p><button type="button" id="exit-retry" hidden>重新載入場景</button>
-  <span class="visually-hidden">水／玻璃側角度 <span id="exit-water-value" class="incident-readout">30°</span>，空氣側角度 <span id="exit-air-value" class="refracted-readout">41.8°</span>。</span>
+      </div>
+      <div class="oblique-settings">
+        <label class="oblique-angle-control" for="exit-angle"><span>調整入射角<output id="exit-angle-value" class="visually-hidden" for="exit-angle">30°</output></span><span class="oblique-slider"><input id="exit-angle" type="range" min="0" max="35" value="30" step="1" aria-label="入射角，從法線量起" disabled><span>0°</span><span>35°</span></span></label>
+          <div class="oblique-angle-readouts" role="group" aria-label="讀值對應圖中同色扇形，角度皆從法線量起">
+            <div class="oblique-angle-reading oblique-incident-color"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M17 18V2A16 16 0 0 0 5.7 6.7Z"/></svg>入射角</span><output id="exit-in-value" class="oblique-in-value">30°</output></div>
+            <div class="oblique-angle-reading oblique-refracted-color"><span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 2V18A16 16 0 0 0 11 15.9Z"/></svg>折射角</span><output id="exit-out-value" class="oblique-out-value">41.8°</output></div>
+          </div>
+        </div>
+        <p class="oblique-status" id="exit-status" role="status">正在準備實驗場景……</p>
+      </div>
+      <button id="exit-retry" type="button" hidden>重新載入場景</button>
+      <noscript><p>光由水或玻璃斜射入空氣時，從較慢介質進入較快介質，偏離法線。入射角30°時，折射角分別約41.8°、48.6°；沿法線入射時不偏折。啟用JavaScript後可發射、調角、切換介質及局部放大。</p></noscript>
+
 
       <section class="refraction-concept" id="exit-concept" aria-labelledby="exit-concept-title">
-        <p class="concept-eyebrow">實驗重點 · 光速與折射方向</p>
-        <h3 id="exit-concept-title">光速由慢變快，斜射時偏離法線</h3>
-        <div class="concept-flow"><span><span data-concept-medium>水</span></span><b aria-hidden="true">→</b><span>空氣</span></div>
-        <div class="concept-discussion"><div class="concept-result"><h4>對照你現在的實驗</h4>    <div class="return-finding"><strong id="exit-finding">水 → 空氣，光速由慢變快</strong><span id="exit-route">空氣側 41.8°｜水側 30°</span></div><p class="concept-live">入射角 <output data-concept-in>30°</output><span aria-hidden="true"> → </span>折射角 <output data-concept-out>41.8°</output></p><p class="concept-measure">兩個角都從法線量起。</p></div></div>
+        <h3 id="exit-concept-title">介質光速與折射方向</h3>
+        <div class="concept-flow"><span><b data-concept-upper>水</b><small data-speed-upper>光速較慢</small></span><b aria-hidden="true">→</b><span><b data-concept-lower>空氣</b><small data-speed-lower>光速較快</small></span></div>
+        <div class="concept-discussion"><div class="concept-result"><div class="finding oblique-finding"><div class="oblique-rule-head"><strong id="exit-finding-text">斜射時偏離法線</strong></div><p id="exit-relation"><span class="oblique-refracted-color">折射角</span><span id="exit-angle-comparison"> &gt; </span><span class="oblique-incident-color">入射角</span></p></div><p class="concept-live">入射角 <output data-concept-in>30°</output><span aria-hidden="true"> → </span>折射角 <output data-concept-out>41.8°</output></p><p id="exit-zoom-note" class="concept-measure">兩個角都從法線量起。</p></div></div>
       </section>
-  <details class="return-explanation"><summary>為什麼從水或玻璃射回空氣，會偏離法線？</summary><p>光在水或玻璃中的傳播速度較慢，在空氣中較快。波前斜著抵達介面時，一側先進入空氣、速度先增加，另一側仍在水或玻璃中，還比較慢；波前因而轉向，使光的前進方向偏離法線。所以斜向進入較快介質時，折射角比入射角大。</p><p>沿法線入射（0°）時，波前各處同時進入新介質，速度仍會改變，但方向不偏折，兩個角都是0°。角度都從法線量起；本區只比較可射出介面的角度範圍。</p></details>
-  <noscript><p>水中入射角30°時，射回空氣的折射角約41.8°；代表玻璃約48.6°。光偏離法線，沿這條光路反向射入則可返回。啟用 JavaScript 後可開關光源、調角及局部放大。</p></noscript>
-</div>
+    </div>
+  <details class="return-explanation oblique-explanation"><summary>為什麼從水或玻璃射回空氣，會偏離法線？</summary><p>光在水或玻璃中的傳播速度較慢，在空氣中較快。波前斜著抵達介面時，一側先進入空氣、速度先增加，另一側仍在水或玻璃中，還比較慢；波前因而轉向，使光的前進方向偏離法線。所以斜向進入較快介質時，折射角比入射角大。</p><p>沿法線入射（0°）時，波前各處同時進入新介質，速度仍會改變，但方向不偏折，兩個角都是0°。角度都從法線量起；本區只比較可射出介面的角度範圍。</p></details>
+
 </div>
 </section>
 <section class="lesson-card" id="s5" aria-labelledby="heading-5">
