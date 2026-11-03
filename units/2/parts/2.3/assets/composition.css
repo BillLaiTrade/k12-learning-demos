@@ -88,4 +88,12 @@
 /* 選取圖例時同步突出對應區域；混合模式則突出同類粒子。 */
 [data-arrangement=proportion][data-emphasis=nitrogen] .air-region[data-region=nitrogen]{fill:#c9e2ce;stroke:#42825e;stroke-width:.8}
 [data-arrangement=proportion][data-emphasis=oxygen] .air-region[data-region=oxygen]{fill:#f7dda7;stroke:#b67b24;stroke-width:.8}
-[data-arrangement=proportion]:is([data-emphasis=argon],[data-emphasis=other],[data-emphasis=minor]) .air-region[data-region=minor]{fill:#d9cff0;stroke:#7869a1;stroke-width:1}
+[data-arrangement=proportion]:is([data-emphasis=argon],[data-emphasis=minor]) .air-region[data-region=minor]{fill:#d9cff0;stroke:#7869a1;stroke-width:1}
+
+/* 其餘氣體使用灰色選取面，與氬氣的紫色清楚區分。 */
+[data-arrangement=proportion][data-emphasis=other] .air-region[data-region=minor]{fill:#d4ddda;stroke:#667b73;stroke-width:1}
+[data-emphasis=other] .air-other-detail{background:#edf0ef;border-color:#a9b8b1}
+[data-emphasis=other] .air-detail-backdrop{fill:#e0e6e3}
+[data-emphasis=other] .air-other-heading h3,[data-emphasis=other] .air-zoom-labels b{color:#405c50}
+[data-emphasis=other] .air-other-heading>span,[data-emphasis=other] .air-zoom-labels p,[data-emphasis=other] .air-detail-note{color:#5b7066}
+[data-emphasis=other] .air-zoom-link path{stroke:#768c80}
