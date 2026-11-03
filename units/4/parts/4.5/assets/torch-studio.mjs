@@ -21,7 +21,7 @@ export function createTorchStudio(canvas,index,{unavailable,ready}={}){
  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});
  renderer.setSize(360,260,false);renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setClearColor(0x000000,0);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
  const scene=new THREE.Scene();scene.environment=studioEnvironment();
- const camera=new THREE.OrthographicCamera(-1.83,1.83,1.32,-1.32,.1,30);camera.position.set(0,2.8,6.5);camera.lookAt(0,0,-.05);
+ const camera=new THREE.OrthographicCamera(-1.83,1.83,1.32,-1.32,.1,30);camera.position.set(0,2.8,6.5);camera.lookAt(0,0,-.05);camera.updateMatrixWorld(true);
  scene.add(new THREE.HemisphereLight('#f4f6ff','#5b5147',1.2));
  const key=new THREE.DirectionalLight('#fff8ed',4);key.position.set(-3,5,4);key.castShadow=true;key.shadow.mapSize.set(1024,1024);Object.assign(key.shadow.camera,{left:-3,right:3,top:3,bottom:-3,near:.1,far:15});key.shadow.bias=-.0003;key.shadow.normalBias=.02;key.shadow.radius=3;scene.add(key);
  const fill=new THREE.DirectionalLight('#dce8ff',2);fill.position.set(3,2,-4);scene.add(fill);
@@ -56,12 +56,27 @@ export function createTorchStudio(canvas,index,{unavailable,ready}={}){
  const seam=new THREE.Mesh(new THREE.TorusGeometry(.245,.008,8,64),satin);seam.position.z=1.279;torch.add(seam);
  // The lens faces the screen, away from the learner, and never glows at them.
  const lens=new THREE.Mesh(new THREE.CircleGeometry(.355,64),new THREE.MeshPhysicalMaterial({color:'#30363b',metalness:.15,roughness:.16,transparent:true,opacity:.65}));lens.position.z=-1.585;lens.rotation.y=Math.PI;torch.add(lens);
- let frame=0,disposed=false;
+ let frame=0,disposed=false,lastPose='';
  function draw(){frame=0;if(!disposed){renderer.render(scene,camera);if(canvas.dataset.ready!=='true'){canvas.dataset.ready='true';ready?.();}}}
  function update(spot){
-  const aim=torchAim(index,spot);torch.rotation.y=Math.atan2(-aim.direction[0],-aim.direction[2]);torch.rotation.x=.035+(.5-spot.y)*.08;
+  const pitch=.035+(.5-spot.y)*.08,aim=torchAim(index,spot),screen=canvas.closest('.mix-scene')?.querySelector('[data-mix]'),bounds=canvas.parentElement.getBoundingClientRect();
+  let yaw=Math.atan2(-aim.direction[0],-aim.direction[2]);camera.zoom=1;camera.updateProjectionMatrix();
+  if(screen&&bounds.width&&bounds.height){
+   const r=screen.getBoundingClientRect(),target={x:r.left+spot.x*r.width,y:r.top+spot.y*r.height},up=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,1),vertical=Math.sin(pitch)*up.y-Math.cos(pitch)*up.z;
+   const align=()=>{const pivot=torch.position.clone().project(camera),x=bounds.left+(pivot.x+1)*bounds.width/2,y=bounds.top+(1-pivot.y)*bounds.height/2,dx=(target.x-x)*(camera.right-camera.left)/bounds.width,dy=(y-target.y)*(camera.top-camera.bottom)/bounds.height;return-Math.atan2(dx*vertical,Math.max(1e-6,dy));};
+   yaw=align();torch.rotation.set(pitch,yaw,0);torch.updateMatrixWorld(true);
+   // Keep the full barrel in its own frame at the most sideways aiming angles.
+   const ends=[-1.59,1.31].map(z=>new THREE.Vector3(0,0,z).applyMatrix4(torch.matrixWorld).project(camera)),mx=.437*2/(camera.right-camera.left),my=.437*2/(camera.top-camera.bottom),extent=Math.max(...ends.flatMap(p=>[Math.abs(p.x)+mx,Math.abs(p.y)+my]));
+   camera.zoom=Math.min(1,.94/extent);camera.updateProjectionMatrix();yaw=align();
+  }
+  torch.rotation.set(pitch,yaw,0);const pose=[pitch,yaw,camera.zoom].join(',');if(pose===lastPose)return;lastPose=pose;
   canvas.dataset.orientation=JSON.stringify(torch.rotation.toArray().slice(0,3));if(!frame)frame=requestAnimationFrame(draw);
  }
+ function getLensPosition(){
+  scene.updateMatrixWorld(true);camera.updateMatrixWorld(true);
+  const point=lens.getWorldPosition(new THREE.Vector3()).project(camera);
+  return{x:(point.x+1)/2,y:(1-point.y)/2};
+ }
  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();disposed=true;unavailable?.();});
- return{update,dispose(){disposed=true;cancelAnimationFrame(frame);renderer.dispose();scene.traverse(n=>{n.geometry?.dispose();if(n.material)for(const m of(Array.isArray(n.material)?n.material:[n.material]))m.dispose();});scene.environment.dispose();grip.bumpMap.dispose();}};
+ return{update,getLensPosition,dispose(){disposed=true;cancelAnimationFrame(frame);renderer.dispose();scene.traverse(n=>{n.geometry?.dispose();if(n.material)for(const m of(Array.isArray(n.material)?n.material:[n.material]))m.dispose();});scene.environment.dispose();grip.bumpMap.dispose();}};
 }

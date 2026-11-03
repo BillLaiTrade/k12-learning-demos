@@ -1,6 +1,10 @@
 import {MIX_SETUP,MIX_KEYS,MIX_SOURCES,SOURCE_LINEAR,arrangeMix,mixSample,mixtureRegions,torchAim} from './mix-optics.mjs?v=mix-front-20261102';
 
 const NAMES=['紅','綠','藍'];
+const GUIDE_COLORS=['#ff8072','#8bedaa','#a5caff'];
+// Lens centres projected from the same camera/poses used to export the fallback PNGs.
+const IMAGE_PIVOT={x:.5,y:.533566923133767};
+const IMAGE_LENSES=[{x:.6569610174673752,y:.2900937051775024},{x:.5711946434095605,y:.2758852718060382},{x:.2896874191480514,y:.31584680182345587}];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const srgb=v=>{v=clamp(v,0,1);return v<=.0031308?v*12.92:1.055*v**(1/2.4)-.055;};
 
@@ -17,22 +21,53 @@ function observation(spots,regions){
 export function initialiseFrontMix(root){
  const canvas=root.querySelector('[data-mix]'),ctx=canvas.getContext('2d'),torchButtons=[...root.querySelectorAll('[data-torch]')];
  let spots=arrangeMix(),preset='pairs',drag=null,frame=0;
- const studios=[],defaultAim=arrangeMix().map((spot,i)=>torchAim(i,spot));let loadingTorches=false;
+ const scene=root.querySelector('.mix-scene'),guide=document.createElementNS('http://www.w3.org/2000/svg','svg');
+ guide.classList.add('mix-drag-guide');guide.setAttribute('aria-hidden','true');guide.setAttribute('hidden','');
+ guide.innerHTML='<defs><marker id="mix-drag-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="currentColor"/></marker><clipPath id="mix-drag-screen"><rect data-guide-clip/></clipPath></defs><path class="mix-guide-halo" data-guide-halo/><path class="mix-guide-axis" data-guide-ray marker-end="url(#mix-drag-arrow)"/><circle class="mix-guide-source" data-guide-source r="3"/><g clip-path="url(#mix-drag-screen)"><circle class="mix-guide-footprint" data-guide-footprint/><circle class="mix-guide-target" data-guide-target r="4"/></g>';
+ scene.append(guide);
+ const studios=[];let loadingTorches=false;
  torchButtons.forEach((button,i)=>{
   const image=new URL(`./torch-${MIX_KEYS[i]}.png?v=torch-metal-20261103`,import.meta.url).href;
   button.querySelector('[data-torch-drawing]').innerHTML=`<img src="${image}" width="360" height="260" alt="" aria-hidden="true" data-torch-image><canvas width="360" height="260" aria-hidden="true" data-torch-canvas hidden></canvas>`;
   button.dataset.torchRenderer='image';
  });
- function fallbackTorch(i){const button=torchButtons[i];button.querySelector('[data-torch-image]').hidden=false;button.querySelector('[data-torch-canvas]').hidden=true;button.dataset.torchRenderer='image';}
+ function fallbackTorch(i){const button=torchButtons[i];button.querySelector('[data-torch-image]').hidden=false;button.querySelector('[data-torch-canvas]').hidden=true;button.dataset.torchRenderer='image';refreshTorchPoses();updateGuide();}
  async function loadTorches(){
   if(loadingTorches)return;loadingTorches=true;
   try{
-   const module=await import('./torch-studio.mjs?v=torch-metal-20261103');
+   const module=await import('./torch-studio.mjs?v=mix-drag-guide-20261103');
    torchButtons.forEach((button,i)=>{
-    try{const canvas=button.querySelector('[data-torch-canvas]');studios[i]=module.createTorchStudio(canvas,i,{unavailable(){studios[i]?.dispose();studios[i]=null;fallbackTorch(i);},ready(){canvas.hidden=false;button.querySelector('[data-torch-image]').hidden=true;button.dataset.torchRenderer='three';}});studios[i].update(spots[i]);}
+    try{const canvas=button.querySelector('[data-torch-canvas]');studios[i]=module.createTorchStudio(canvas,i,{unavailable(){studios[i]?.dispose();studios[i]=null;fallbackTorch(i);},ready(){canvas.hidden=false;button.querySelector('[data-torch-image]').hidden=true;button.dataset.torchRenderer='three';refreshTorchPoses();updateGuide();}});studios[i].update(spots[i]);}
     catch{fallbackTorch(i);}
    });
   }catch{torchButtons.forEach((_,i)=>fallbackTorch(i));}
+ }
+
+ function imagePose(i,frame,screen){
+  const pivot=IMAGE_PIVOT,lens=IMAGE_LENSES[i],spot=spots[i],x=frame.left+pivot.x*frame.width,y=frame.top+pivot.y*frame.height;
+  return Math.atan2(screen.top+spot.y*screen.height-y,screen.left+spot.x*screen.width-x)-Math.atan2((lens.y-pivot.y)*frame.height,(lens.x-pivot.x)*frame.width);
+ }
+ function refreshTorchPoses(){
+  const screen=canvas.getBoundingClientRect();
+  torchButtons.forEach((button,i)=>{const image=button.querySelector('[data-torch-image]'),frame=button.querySelector('[data-torch-drawing]').getBoundingClientRect();image.style.transformOrigin=`${IMAGE_PIVOT.x*100}% ${IMAGE_PIVOT.y*100}%`;image.style.transform=`rotate(${imagePose(i,frame,screen)}rad)`;studios[i]?.update(spots[i]);});
+ }
+ function updateGuide(){
+  if(!drag?.moved){guide.setAttribute('hidden','');return;}
+  const i=drag.i,spot=spots[i],button=torchButtons[i],frame=button.querySelector('[data-torch-drawing]').getBoundingClientRect();
+  if(!frame.width||!frame.height){guide.setAttribute('hidden','');return;}
+  guide.removeAttribute('hidden');const bounds=guide.getBoundingClientRect(),screen=canvas.getBoundingClientRect();
+  guide.setAttribute('viewBox',`0 0 ${bounds.width} ${bounds.height}`);guide.dataset.source=MIX_KEYS[i];guide.dataset.lightOn=String(spot.on);guide.style.color=spot.on?GUIDE_COLORS[i]:'#d5dfd4';
+  let source;
+  if(button.dataset.torchRenderer==='three'&&studios[i]){const lens=studios[i].getLensPosition();source={x:frame.left+lens.x*frame.width,y:frame.top+lens.y*frame.height};}
+  else{
+   const lens=IMAGE_LENSES[i],pivot=IMAGE_PIVOT,angle=imagePose(i,frame,screen),dx=(lens.x-pivot.x)*frame.width,dy=(lens.y-pivot.y)*frame.height;
+   source={x:frame.left+pivot.x*frame.width+dx*Math.cos(angle)-dy*Math.sin(angle),y:frame.top+pivot.y*frame.height+dx*Math.sin(angle)+dy*Math.cos(angle)};
+  }
+  const sx=source.x-bounds.left,sy=source.y-bounds.top,tx=screen.left-bounds.left+spot.x*screen.width,ty=screen.top-bounds.top+spot.y*screen.height,path=`M${sx} ${sy}L${tx} ${ty}`;
+  for(const node of guide.querySelectorAll('[data-guide-halo],[data-guide-ray]'))node.setAttribute('d',path);
+  for(const [selector,x,y]of[['[data-guide-source]',sx,sy],['[data-guide-target]',tx,ty],['[data-guide-footprint]',tx,ty]]){const circle=guide.querySelector(selector);circle.setAttribute('cx',x);circle.setAttribute('cy',y);}
+  guide.querySelector('[data-guide-footprint]').setAttribute('r',MIX_SETUP.radius/MIX_SETUP.width*screen.width);
+  const clip=guide.querySelector('[data-guide-clip]');for(const[name,value]of Object.entries({x:screen.left-bounds.left,y:screen.top-bounds.top,width:screen.width,height:screen.height}))clip.setAttribute(name,value);
  }
 
  const pixels=ctx.createImageData(canvas.width,canvas.height),{width,height,radius,edge,ambient,exposure}=MIX_SETUP;
@@ -54,16 +89,16 @@ export function initialiseFrontMix(root){
   const regions=mixtureRegions(spots),message=observation(spots,regions);
   root.dataset.spots=JSON.stringify(spots);root.dataset.preset=preset;root.dataset.center=JSON.stringify(mixSample(.5,.5,spots).linear);root.dataset.regions=JSON.stringify(regions);
   root.dataset.aim=JSON.stringify(spots.map((s,i)=>torchAim(i,s)));
+  refreshTorchPoses();
   torchButtons.forEach((b,i)=>{
-   const aim=torchAim(i,spots[i]);b.querySelector('[data-torch-image]').style.transform=`rotate(${((aim.angle-defaultAim[i].angle)*.28).toFixed(2)}deg)`;
-   studios[i]?.update(spots[i]);b.dataset.on=String(spots[i].on);b.setAttribute('aria-label',`${NAMES[i]}色手電筒：拖曳或用方向鍵調整照射位置，目前${spots[i].on?'開啟':'關閉'}，落點橫向${Math.round(spots[i].x*100)}%、縱向${Math.round(spots[i].y*100)}%`);
+   b.dataset.on=String(spots[i].on);b.setAttribute('aria-label',`${NAMES[i]}色手電筒：拖曳或用方向鍵調整照射位置，目前${spots[i].on?'開啟':'關閉'}，落點橫向${Math.round(spots[i].x*100)}%、縱向${Math.round(spots[i].y*100)}%`);
   });
   for(const b of root.querySelectorAll('[data-lamp]')){const i=MIX_KEYS.indexOf(b.dataset.lamp);b.setAttribute('aria-pressed',String(spots[i].on));b.querySelector('[data-lamp-label]').textContent=`${NAMES[i]}光 ${spots[i].on?'開':'關'}`;}
   for(const b of root.querySelectorAll('[data-preset]'))b.setAttribute('aria-pressed',String(b.dataset.preset===preset));
   const condition=root.querySelector('[data-conditions]');condition.textContent=`紅光：${spots[0].on?'開':'關'}　綠光：${spots[1].on?'開':'關'}　藍光：${spots[2].on?'開':'關'}　白幕：正面觀察`;
   root.closest('section').querySelector('[data-mix-observation]').textContent=message;
   if(announce)root.querySelector('[data-result]').textContent=message;
-  canvas.setAttribute('aria-label','同一片白幕的正面：'+message);requestPaint();
+  canvas.setAttribute('aria-label','同一片白幕的正面：'+message);requestPaint();updateGuide();
  }
  function end(cancel=false){
   if(!drag)return;const current=drag;drag=null;
@@ -95,6 +130,9 @@ export function initialiseFrontMix(root){
   if(b.hasAttribute('data-preset')){preset=b.dataset.preset;spots=arrangeMix(preset,spots);}
   else{const i=MIX_KEYS.indexOf(b.dataset.lamp);spots[i].on=!spots[i].on;}update();
  });
+ window.addEventListener('blur',()=>end(true));
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)end(true);});
+ const guideResize=new ResizeObserver(()=>{refreshTorchPoses();updateGuide();});guideResize.observe(scene);guideResize.observe(canvas);for(const button of torchButtons)guideResize.observe(button.querySelector('[data-torch-drawing]'));
  for(const b of root.querySelectorAll('[data-pending],[data-torch]'))b.disabled=false;
  root.querySelector('[data-load-note]').hidden=true;root.dataset.ready='true';root.dataset.dragging='false';root.dataset.renderer='front';
  root.dataset.sources=JSON.stringify(MIX_SOURCES);update();

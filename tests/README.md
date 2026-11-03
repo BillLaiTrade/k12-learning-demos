@@ -1,5 +1,15 @@
 # 5.1 瀏覽器操作檢查
 
+## 4.5 第三區拖曳限定光路（2026-11-03）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5-mix-guide.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5-mix-compact.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+光路專項8項（含外層）：三色的真實燈頭／光斑端點、筒身共線及大側向瞄準、預設／點按／鍵盤不常駐、放開／Escape／擷取遺失／失焦清除、關燈無發光帶、尺寸變更、圖片備援及手機原生放開／取消。測試才加入唯讀模型投影觀察，正式程式不含全域測試API。搭配15項視窗高度及34項真立體整頁回歸；純光學未改不重跑。COLOR_URL與COLOR_CAPTURE_DIR沿用。
+
 ## 4.5 第三區視窗高度與操作範圍（2026-11-03）
 
 ```sh
