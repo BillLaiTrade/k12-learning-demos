@@ -11,14 +11,14 @@ test('4.3 reciprocal sources show live side angles directly in the main scene',{
  await t.test('initially dark with no magnifier and one accessible lamp at each end',async()=>{
   assert.equal(await root.getAttribute('data-light-a'),'false');assert.equal(await root.getAttribute('data-light-b'),'false');assert.equal(await input.inputValue(),'30');assert.equal(await p.locator('#return-magnify,#return-detail,#return-zoom,#return-close,.return-magnify-hint').count(),0);assert.equal(await root.locator('.return-angle-marks').getAttribute('visibility'),'hidden');assert.equal(await root.locator('.return-source').count(),2);assert.equal(await p.locator('#return-air-value').textContent(),'41.8°');
  });
- await t.test('four light combinations retain neutral side names, correct paths and opposite arrows',async()=>{
+ await t.test('four light combinations switch angle roles, colors and side names while keeping reciprocal paths',async()=>{
   for(const[a,b]of [[true,false],[false,true],[true,true],[false,false]]){
-   await combo(a,b);assert.equal(await root.locator('.return-light[visibility=visible]').count(),Number(a)+Number(b));assert.equal(await root.locator('.return-angle-marks').getAttribute('visibility'),a||b?'visible':'hidden');assert.equal(await root.locator('.return-upper-label .return-angle-name').textContent(),'空氣側');assert.equal(await root.locator('.return-lower-label .return-angle-name').textContent(),'水側');
+   await combo(a,b);assert.equal(await root.locator('.return-light[visibility=visible]').count(),Number(a)+Number(b));assert.equal(await root.locator('.return-angle-marks').getAttribute('visibility'),a||b?'visible':'hidden');if(a||b){assert.equal(await root.locator('.return-upper-label .return-angle-name').textContent(),a&&b?'空氣側':a?'入射角':'折射角');assert.equal(await root.locator('.return-lower-label .return-angle-name').textContent(),a&&b?'水側':b?'入射角':'折射角');const colors=await root.locator('.return-angle-label text').evaluateAll(es=>es.map(e=>e.style.fill));assert.deepEqual(colors,a&&!b?['rgb(22, 95, 194)','rgb(36, 120, 58)']:['rgb(36, 120, 58)','rgb(22, 95, 194)']);const route=await p.locator('#return-route').textContent();if(!(a&&b))assert.match(route,/入射角.*折射角/);}
    if(a&&b){const paths=await root.locator('.return-beam').evaluateAll(es=>es.map(e=>e.getAttribute('d').slice(1).split('L')));assert.deepEqual(paths[0],[...paths[1]].reverse());assert.equal(await p.locator('#return-finding').textContent(),'往返光路重合，方向相反');}
    if(capture)await root.screenshot({path:path.join(capture,`1440-${Number(a)}${Number(b)}.png`)});
   }
  });
- await t.test('both media and 0–35 degrees update main arcs, numbers and leader origins without changing roles',async()=>{
+ await t.test('both media and 0–35 degrees update main arcs, numbers and leader origins while both lights use side names',async()=>{
   await combo(true,true);
   for(const medium of ['water','glass']){await select(medium);for(const angle of [0,1,5,30,34,35]){
    await input.fill(String(angle));const g=geometry(medium,angle);assert.equal(await root.locator('.return-upper-label .return-angle-number').textContent(),`${g.airAngle.toFixed(1)}°`);assert.equal(await root.locator('.return-lower-label .return-angle-number').textContent(),`${angle}°`);assert.equal(await root.locator('.return-lower-label .return-angle-name').textContent(),`${g.name}側`);

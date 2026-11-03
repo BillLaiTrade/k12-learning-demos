@@ -1,6 +1,6 @@
 import {mediumSelector} from './medium-selector.mjs?v=20261103-concept1';
 import {geometry,clampAngle,angleFromSource,arrow} from './return-refraction-model.mjs?v=20261103-refine1';
-import {createReciprocalView} from './return-refraction-view.mjs?v=20261103-inline1';
+import {createReciprocalView} from './return-refraction-view.mjs?v=20261103-roles1';
 const root=document.querySelector('#return-lab');
 const $=s=>root.querySelector(s),scene=$('#return-scene'),devices=$('#return-devices'),picture=$('#return-background'),input=$('#return-angle');
 const keys=['a','b'],lights={a:false,b:false},photos=new Map();
@@ -40,7 +40,7 @@ function render(){
  input.value=String(angle);$('#return-angle-value').value=`${angle}°`;$('#return-air-value').textContent=`${g.airAngle.toFixed(1)}°`;$('#return-water-value').textContent=`${angle}°`;$('#return-angle-caption').textContent=`${g.name}側角度`;input.setAttribute('aria-label',`${g.name}側角度，從法線量起`);
  const matrix=scene.getScreenCTM(),ratio=Math.max(.05,Math.hypot(matrix.a,matrix.b)),scale=Math.max(.8,30/(70*ratio));
  scene.querySelectorAll('[data-sized]').forEach(e=>e.style.fontSize=`${Math.max(22,15/ratio)}px`);scene.querySelector('.return-medium-name').textContent=g.name;
- presentation.labels(ratio);presentation.angles(g,active,ratio);
+ presentation.labels(ratio);presentation.angles(g,active,ratio,lights);
  for(const key of keys){
   const path=key==='a'?g.forward:g.backward,group=scene.querySelector(`.return-light-${key}`),d=`M${path.map(p=>p.join(' ')).join('L')}`;
   group.setAttribute('visibility',lights[key]&&state==='ready'?'visible':'hidden');group.querySelectorAll('.return-beam,.return-beam-halo,.return-beam-core').forEach(p=>p.setAttribute('d',d));
@@ -51,10 +51,11 @@ function render(){
   const button=$(`#return-toggle-${key}`);button.disabled=state!=='ready';button.setAttribute('aria-pressed',String(lights[key]));button.querySelector('small').textContent=lights[key]?'開啟':'關閉';
  }
  for(const badge of scene.querySelectorAll('.return-medium-badge')){const boxes=[...badge.querySelectorAll('text')].map(e=>e.getBBox()),x=Math.min(...boxes.map(b=>b.x)),y=Math.min(...boxes.map(b=>b.y)),pad=5/ratio;for(const[k,v]of Object.entries({x:x-pad,y:y-pad*.6,width:Math.max(...boxes.map(b=>b.x+b.width))-x+2*pad,height:Math.max(...boxes.map(b=>b.y+b.height))-y+1.2*pad,rx:7/ratio}))badge.querySelector('rect').setAttribute(k,String(v));}
- scene.setAttribute('aria-label',`空氣在上方，${g.name}在下方。空氣側${g.airAngle.toFixed(1)}度，${g.name}側${angle}度，皆從法線量起。A紅光${lights.a?'開啟':'關閉'}，B藍光${lights.b?'開啟':'關閉'}。`);
+ const angleDescription=both?`空氣側${g.airAngle.toFixed(1)}度，${g.name}側${angle}度`:lights.a?`入射角${g.airAngle.toFixed(1)}度，折射角${angle}度`:lights.b?`入射角${angle}度，折射角${g.airAngle.toFixed(1)}度`:'兩支光源關閉';
+ scene.setAttribute('aria-label',`空氣在上方，${g.name}在下方。${angleDescription}，角度皆從法線量起。A紅光${lights.a?'開啟':'關閉'}，B藍光${lights.b?'開啟':'關閉'}。`);
  input.disabled=state!=='ready';$('#return-reset').disabled=state!=='ready';selectorControl.render(requested);
  $('#return-finding').textContent=both?'往返光路重合，方向相反':!active?'分別開啟 A、B，再比較兩個方向':lights.b?'B → M → A：從下方射回空氣':'A → M → B：從空氣射入下方';
- $('#return-route').textContent=both?'A → M → B　／　B → M → A':lights.b?`光速慢 → 快；${g.name}側 ${angle}° → 空氣側 ${g.airAngle.toFixed(1)}°`:lights.a?`光速快 → 慢；空氣側 ${g.airAngle.toFixed(1)}° → ${g.name}側 ${angle}°`:`空氣側 ${g.airAngle.toFixed(1)}°｜${g.name}側 ${angle}°`;
+ $('#return-route').textContent=both?'A → M → B　／　B → M → A':lights.b?`光速慢 → 快；入射角 ${angle}° → 折射角 ${g.airAngle.toFixed(1)}°`:lights.a?`光速快 → 慢；入射角 ${g.airAngle.toFixed(1)}° → 折射角 ${angle}°`:`空氣側 ${g.airAngle.toFixed(1)}°｜${g.name}側 ${angle}°`;
  $('#return-status').classList.toggle('visually-hidden',state!=='error');$('#return-status').textContent=state==='loading'?'正在準備實驗場景……':state==='error'?'場景未能載入，請重試或切換介質。':'點擊開關光源；拖動 A 或 B 調角，另一端自動對準。';
 }
 function toggle(key){if(state!=='ready')return;lights[key]=!lights[key];render();}
