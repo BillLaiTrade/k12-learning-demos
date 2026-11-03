@@ -38,6 +38,7 @@ test('4.5第四區：內嵌預覽、色卡與反射／吸收對照',{timeout:240
    const preview=await rect(lab.locator('.surface-preview')),stage=await rect(lab.locator('.stage')),canvas=await rect(lab.locator('[data-studio]')),tools=await rect(lab.locator('.scene-tools')),a=await audit();
    assert.ok(preview.x>=stage.x&&preview.right<=stage.right&&preview.y>=stage.y&&preview.bottom<=stage.bottom,`preview inside ${width}`);assert.ok(!overlap(preview,tools),`tools clear ${width}`);
    for(const key of ['card','lamp']){assert.ok(!overlap(preview,a[key]),`${key} clear of preview ${width}`);assert.ok(!overlap(tools,a[key]),`${key} clear of tools ${width}`);assert.ok(a[key].x>=canvas.x-2&&a[key].right<=canvas.right+2&&a[key].y>=canvas.y-2&&a[key].bottom<=canvas.bottom+2,`${key} stays visible ${width}: ${JSON.stringify(a[key])} vs ${JSON.stringify(canvas)}`);}
+   if(width<=650)for(const material of ['white','black','red']){await lab.locator(`[data-material=${material}]`).click();const current=await rect(lab.locator('.surface-preview'));for(const key of ['card','lamp'])assert.ok(!overlap(current,a[key]),`${material} preview stays clear of ${key} ${width}`);}
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`no horizontal overflow ${width}`);
    await page.locator('.route a[href="#s4"]').click();await page.screenshot({path:path.join(capture,`viewport-${width}.png`)});
   }

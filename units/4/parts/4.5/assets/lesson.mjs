@@ -57,7 +57,7 @@ function initialiseLab(root,index){
     condition(root,[['照明','白光固定'],['物體',MATERIALS[state.material].name],['觀察位置','固定']]);
     text($('[data-result]'),state.material==='black'?'黑色色卡吸收較多可見光，反射較少，所以在這個白光照明下看起來很暗。':state.material==='white'?'白色色卡反射較多種類的可見光，因此在白光下看起來接近白色。':`同樣的白光照到${MATERIALS[state.material].name}，主要反射${channelsText(signal.outgoing)}光；其他部分較多被吸收。`);
     text($('[data-surface-name]'),`白光下的${MATERIALS[state.material].name}`);
-    text($('[data-receiver-label]'),state.material==='black'?'反射較少，看起來很暗':state.material==='white'?'反射多種色光，接近白色':`主要反射${channelsText(output)}色光`);
+    text($('[data-receiver-label]'),state.material==='black'?'反射少，外觀很暗':state.material==='white'?'多種色光反射較多':`主要反射${channelsText(output)}色光`);
    }else if(kind==='lighting'){
     condition(root,[['同一物體',MATERIALS[state.material].name],['目前照明',LIGHTS[state.light].name],['左側參照','白光下的同一色卡']]);
     text($('[data-result]'),`物體仍是${MATERIALS[state.material].name}。在${LIGHTS[state.light].name}下，這次反射的光讓它看起來${colorName(output)}。外觀由照明與材料的反射特性共同決定。`);
