@@ -100,3 +100,6 @@
 .air-zoom-labels p{padding:6px 9px;border:1px solid transparent;border-left-width:4px;border-radius:7px}
 [data-emphasis=other] .air-zoom-labels p:has(.air-dot.other){background:#d4dfd9;border-color:#738b7d;color:#284d3b;font-weight:700}
 [data-emphasis=argon] .air-zoom-labels p:has(.air-dot.argon){background:#e0d9f1;border-color:#8c7cab;color:#51406e;font-weight:700}
+
+.air-legend .air-knowledge-heading{grid-column:1/-1;margin-top:6px}
+.air-legend .air-knowledge-hint{margin-bottom:0}
