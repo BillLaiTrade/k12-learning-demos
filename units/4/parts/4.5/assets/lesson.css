@@ -100,3 +100,66 @@ h1 { margin: 6px 0 12px; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.2;
 .mix-torch[data-dragging=true]{cursor:grabbing}
 .mix-torch[data-on=false] .torch-drawing{filter:saturate(.3);opacity:.74}
 @media(max-width:650px){.mix-scene{padding:8px 8px 0;border-radius:13px}.mix-screen{border-width:5px;border-radius:7px}.mix-torch-deck{margin:0 -8px;padding:0 7px 7px;gap:3px}.mix-torch{padding:0 0 5px;border-radius:9px}.mix-torch .torch-name{font-size:.64rem;padding:3px 5px}.mix-torch .torch-drawing{max-width:116px}}
+
+/* Keep section 3 and its complete workspace within ordinary laptop viewports. */
+#s3{--mix-nav-space:0px}
+#s3 .lesson-head{grid-template-columns:44px minmax(0,1fr);gap:12px;padding:13px 18px 11px}
+#s3 .lesson-number{width:40px;height:40px;border-radius:12px}
+#s3 .lesson-head h2{font-size:1.4rem}
+#s3 .lesson-head p{margin:4px 0 0;font-size:.83rem}
+#s3 .lesson-body{padding:10px 16px 14px}
+#s3 .mix-intro{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#s3 .dialogue{margin:6px 0;padding:8px 10px;gap:8px;font-size:.84rem;line-height:1.55}
+#s3 .mix-intro .dialogue{margin:0}
+#s3 .dialogue p{font-size:inherit}
+#s3 .speaker::before{width:34px;height:34px}
+#s3 .lab{margin:9px 0 8px}
+#s3 .mix-workspace{display:grid;grid-template-columns:minmax(0,1fr) 168px;gap:10px;align-items:start}
+#s3 .mix-scene{height:clamp(220px,calc(100svh - var(--mix-nav-space) - 356px),500px);display:grid;grid-template-rows:minmax(0,1fr) auto;padding:7px 7px 0}
+#s3 .mix-screen{container-type:size;display:grid;place-items:center;min-width:0;min-height:0;border-width:5px;border-radius:8px}
+#s3 .mix-screen canvas{width:min(100cqw,calc(100cqh * 25 / 14));height:auto;max-width:100%;aspect-ratio:25/14}
+#s3 .mix-torch-deck{margin:0 -7px;padding:0 7px 5px;gap:4px}
+#s3 .mix-torch{padding:0 1px 4px}
+#s3 .mix-torch .torch-drawing{width:min(100%,130px)}
+#s3 .mix-torch .torch-name{font-size:.68rem;padding:2px 5px}
+#s3 .lab-controls{display:flex;flex-direction:column;gap:13px;margin:0;padding:8px;border:1px solid #d6e0d0;border-radius:12px;background:#f5f8ef}
+#s3 .control-group{gap:5px}
+#s3 .control-label{font-size:.72rem}
+#s3 .choice-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+#s3 .choice-row button{min-height:44px;padding:6px 4px;font-size:.71rem;gap:4px}
+#s3 .choice-row button:last-child{grid-column:1/-1}
+#s3 .swatch-dot{width:10px;height:10px}
+#s3 .interaction-hint{margin:6px 0 0;font-size:.72rem;line-height:1.5}
+#s3 .model-notes{padding-top:3px;font-size:.74rem}
+@media(max-width:900px){#s3{--mix-nav-space:100px}}
+@media(max-width:650px){
+ #s3 .lesson-head{grid-template-columns:38px minmax(0,1fr);gap:8px;padding:10px 12px}
+ #s3 .lesson-head h2{font-size:1.13rem}#s3 .lesson-head p{font-size:.75rem;line-height:1.5}
+ #s3 .lesson-number{width:34px;height:34px;font-size:.9rem}
+ #s3 .lesson-body{padding:9px 12px 8px}
+ #s3 .mix-intro{grid-template-columns:1fr;gap:5px}
+ #s3 .dialogue{margin:4px 0;padding:7px 8px;font-size:.82rem;line-height:1.5}
+ #s3 .mix-intro .dialogue{margin:0}
+ #s3 .lab{margin:8px 0 6px}
+ #s3 .speaker::before{width:32px;height:32px}
+ #s3 .mix-workspace{grid-template-columns:1fr;gap:7px}
+ #s3 .mix-scene{height:auto;display:block;padding:5px 5px 0}
+ #s3 .mix-screen{container-type:normal;display:block;border-width:4px}
+ #s3 .mix-screen canvas{width:100%;height:auto}
+ #s3 .mix-torch-deck{margin:0 -5px;padding:0 4px 4px;gap:3px}
+ #s3 .mix-torch .torch-drawing{max-width:90px}
+ #s3 .mix-torch .torch-name{font-size:.61rem;padding:2px 3px}
+ #s3 .lab-controls{gap:6px;padding:6px;flex-direction:column}
+ #s3 .control-label{display:none}
+ #s3 .choice-row{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+ #s3 .choice-row button{min-height:44px;font-size:.7rem;padding:5px 3px}
+ #s3 .choice-row button:last-child{grid-column:auto}
+ #s3 .interaction-hint{font-size:.68rem}
+}
+
+@media(max-width:650px) and (max-height:600px){
+ #s3 .mix-scene{height:clamp(180px,calc(100svh - 260px),260px);display:grid;grid-template-rows:minmax(0,1fr) auto}
+ #s3 .mix-screen{container-type:size;display:grid;place-items:center}
+ #s3 .mix-screen canvas{width:min(100cqw,calc(100cqh * 25 / 14));height:auto}
+ #s3 .mix-torch .torch-drawing{max-width:78px}
+}

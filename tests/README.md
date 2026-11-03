@@ -1,5 +1,14 @@
 # 5.1 瀏覽器操作檢查
 
+## 4.5 第三區視窗高度與操作範圍（2026-11-03）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5-mix-compact.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+專項13種視窗加說明展開，共15項（含外層）。量測一般筆電／大手機整卡可見、所有視窗操作區對齊後白幕／三燈／六按鈕同畫面可用、每一按鈕點按及拖曳不引起頁面捲動、白幕1000×560比例、觸控範圍與無內部捲軸。專項阻擋立體模組，使用同尺寸同模型圖片隔離CSS；既有整頁34項保持真立體／手機及其他區回歸。COLOR_URL與COLOR_CAPTURE_DIR沿用。純模型未改，本輪不重跑。
+
 ## 4.5 第三區手電筒金屬材質（2026-11-03）
 
 ```sh
