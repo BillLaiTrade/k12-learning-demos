@@ -9,11 +9,11 @@ function woodTexture(){
 }
 function basic(rgb){return new THREE.MeshBasicMaterial({color:new THREE.Color().setRGB(...rgb),toneMapped:false,side:THREE.DoubleSide});}
 export function createStudio(root,callbacks){
- const canvas=root.querySelector('[data-studio]');
+ const canvas=root.querySelector('[data-studio]'),surface=root.dataset.lab==='surface';
  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
  const scene=new THREE.Scene();scene.background=new THREE.Color('#91a190');scene.fog=new THREE.Fog('#91a190',23,50);
- const camera=new THREE.PerspectiveCamera(40,1,.05,70),target=new THREE.Vector3(0,1.1,-.65);
- const orbit={azimuth:-.85,polar:1.08,radius:12.6};let topView=false,frame=0,state=null,signal=null,drag=null,canvasWidth=0,fit=1;
+ const camera=new THREE.PerspectiveCamera(40,1,.05,70),target=surface?new THREE.Vector3(-1.6,1.05,.1):new THREE.Vector3(0,1.1,-.65);
+ const orbit=surface?{azimuth:-1.05,polar:1.16,radius:7.0}:{azimuth:-.85,polar:1.08,radius:12.6};let topView=false,frame=0,state=null,signal=null,drag=null,canvasWidth=0,fit=1;
  scene.add(new THREE.HemisphereLight('#fff7e2','#6a7a60',2.2));const sun=new THREE.DirectionalLight('#fff4dc',3.3);sun.position.set(-4,8,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-7,right:7,top:7,bottom:-7});sun.shadow.bias=-.0006;scene.add(sun);
  const fill=new THREE.DirectionalLight('#d6f0f7',1.3);fill.position.set(6,4,-3);scene.add(fill);
  const metal=new THREE.MeshStandardMaterial({color:'#82928b',metalness:.8,roughness:.28}),dark=new THREE.MeshStandardMaterial({color:'#293d36',metalness:.5,roughness:.35}),brass=new THREE.MeshStandardMaterial({color:'#bd9a63',metalness:.75,roughness:.3}),paper=new THREE.MeshStandardMaterial({color:'#e8e9de',roughness:.92,side:THREE.DoubleSide});
@@ -50,8 +50,16 @@ export function createStudio(root,callbacks){
  const blocker=new THREE.Group();scene.add(blocker);mount(blocker,0,0,.65);box(blocker,[1.15,1.65,.07],[0,AXIS,0],new THREE.MeshStandardMaterial({color:'#263830',roughness:.9}));
  const rays=new THREE.Group();scene.add(rays);
  function clearRays(){for(const node of [...rays.children]){rays.remove(node);node.geometry?.dispose();node.material?.dispose();}}
- function line(points,color,opacity=.9){const m=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:new THREE.Color().setRGB(...color),transparent:true,opacity,depthWrite:false,toneMapped:false}));rays.add(m);}
- function arrow(a,b,color,at=.55){const material=basic(color),cone=new THREE.Mesh(new THREE.ConeGeometry(.035,.12,10),material);const dir=b.clone().sub(a).normalize();cone.position.copy(a).lerp(b,at);cone.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);rays.add(cone);}
+ function line(points,color,opacity=.9){
+  if(surface){
+   for(let i=1;i<points.length;i++){
+    const a=points[i-1],b=points[i],direction=b.clone().sub(a);
+    const m=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,direction.length(),8),new THREE.MeshBasicMaterial({color:new THREE.Color().setRGB(...color),transparent:true,opacity,depthWrite:false,toneMapped:false}));
+    m.position.copy(a).add(b).multiplyScalar(.5);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),direction.normalize());rays.add(m);
+   }return;
+  }
+  const m=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:new THREE.Color().setRGB(...color),transparent:true,opacity,depthWrite:false,toneMapped:false}));rays.add(m);}
+ function arrow(a,b,color,at=.55){const material=basic(color),cone=new THREE.Mesh(new THREE.ConeGeometry(surface?.045:.035,surface?.16:.12,10),material);const dir=b.clone().sub(a).normalize();cone.position.copy(a).lerp(b,at);cone.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);rays.add(cone);}
  const v=([x,z],y=AXIS)=>new THREE.Vector3(x,y,z);
  function update(next,modelSignal){
   state=next;signal=modelSignal;const isPrism=state.kind==='prism',isFilter=state.kind==='filter'||state.kind==='eye'&&state.mode==='transmission';
@@ -76,7 +84,7 @@ export function createStudio(root,callbacks){
     arrow(v(SOURCE),v(state.inserted?trace[0].points[1]:[SCREEN_X,0]),LIGHTS[state.light].rgb,.45);
     if(state.inserted)for(const wavelength of[450,550,650]){const ray=trace.reduce((a,b)=>Math.abs(a.wavelength-wavelength)<Math.abs(b.wavelength-wavelength)?a:b);arrow(v(ray.points[2]),v(ray.points[3]),state.light==='white'?ray.rgb:LIGHTS[state.light].rgb,.55);}
    }else{
-    const source=v([-3.2,0]),origin=v([0,0]);line([source,origin],signal.incoming);arrow(source,origin,signal.incoming);
+    const source=v([-3.2,0]),origin=v([surface?-.02:0,0]);line([source,origin],signal.incoming);arrow(source,origin,signal.incoming);
     const output=signal.outgoing;
     if(Math.max(...output)>.008){
      if(isFilter){const end=state.kind==='eye'?new THREE.Vector3(eyeTarget.x,AXIS,eyeTarget.z):v([SCREEN_X,0]);if(blocker.visible)end.lerp(origin,.48);line([origin,end],output);arrow(origin,end,output);}
@@ -88,7 +96,7 @@ export function createStudio(root,callbacks){
   }
   requestDraw();
  }
- function updateCamera(){if(topView){camera.position.set(-.1,12.7,-.4);camera.lookAt(0,.5,-.7);}else{camera.position.set(target.x+Math.sin(orbit.azimuth)*Math.sin(orbit.polar)*orbit.radius*fit,target.y+Math.cos(orbit.polar)*orbit.radius*fit,target.z+Math.cos(orbit.azimuth)*Math.sin(orbit.polar)*orbit.radius*fit);camera.lookAt(target);}camera.updateProjectionMatrix();}
+ function updateCamera(){if(topView){if(surface){camera.position.set(-1.35,9.2,.05);camera.lookAt(-1.35,.5,0);}else{camera.position.set(-.1,12.7,-.4);camera.lookAt(0,.5,-.7);}}else{camera.position.set(target.x+Math.sin(orbit.azimuth)*Math.sin(orbit.polar)*orbit.radius*fit,target.y+Math.cos(orbit.polar)*orbit.radius*fit,target.z+Math.cos(orbit.azimuth)*Math.sin(orbit.polar)*orbit.radius*fit);camera.lookAt(target);}camera.updateProjectionMatrix();}
  function requestDraw(){if(frame)return;frame=requestAnimationFrame(()=>{frame=0;updateCamera();renderer.render(scene,camera);root.dataset.orbit=JSON.stringify({radius:orbit.radius,azimuth:orbit.azimuth,polar:orbit.polar});});}
  function resize(){const width=canvas.clientWidth,height=canvas.clientHeight;if(!width||!height)return;if(canvasWidth!==width){canvasWidth=width;fit=Math.max(1,1.33/(width/height));}renderer.setSize(width,height,false);camera.aspect=width/height;requestDraw();}
  new ResizeObserver(resize).observe(canvas);
@@ -106,7 +114,7 @@ export function createStudio(root,callbacks){
   if(!pointers.has(event.pointerId)||!drag)return;pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});
   if(drag.kind==='prism'){
    const point=world(event);if(!point)return;const moved=Math.hypot(event.clientX-drag.x,event.clientY-drag.y)>7;if(!moved&&!drag.moved)return;drag.moved=true;prism.position.z=THREE.MathUtils.clamp(point.z,0,2.1);rays.visible=false;root.dataset.dragging='true';requestDraw();
-  }else if(drag.kind==='pinch')orbit.radius=THREE.MathUtils.clamp(drag.radius*drag.distance/Math.max(10,pinch()),8.5,18);
+  }else if(drag.kind==='pinch')orbit.radius=THREE.MathUtils.clamp(drag.radius*drag.distance/Math.max(10,pinch()),surface?5.8:8.5,surface?14:18);
   else if(!topView){orbit.azimuth=THREE.MathUtils.clamp(drag.azimuth-(event.clientX-drag.x)*.004,-1.35,.7);orbit.polar=THREE.MathUtils.clamp(drag.polar+(event.clientY-drag.y)*.003,.65,1.45);}requestDraw();
  });
  function end(event){
@@ -114,7 +122,7 @@ export function createStudio(root,callbacks){
   pointers.delete(event.pointerId);drag=null;
  }
  for(const type of['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(type,end);
- canvas.addEventListener('wheel',event=>{event.preventDefault();orbit.radius=THREE.MathUtils.clamp(orbit.radius+event.deltaY*.008,8.5,18);requestDraw();},{passive:false});
+ canvas.addEventListener('wheel',event=>{event.preventDefault();orbit.radius=THREE.MathUtils.clamp(orbit.radius+event.deltaY*.008,surface?5.8:8.5,surface?14:18);requestDraw();},{passive:false});
  canvas.addEventListener('keydown',event=>{const delta={ArrowLeft:[-.075,0],ArrowRight:[.075,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]}[event.key];if(!delta)return;event.preventDefault();if(topView)return;orbit.azimuth=THREE.MathUtils.clamp(orbit.azimuth+delta[0],-1.35,.7);orbit.polar=THREE.MathUtils.clamp(orbit.polar+delta[1],.65,1.45);requestDraw();});
  canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();callbacks.unavailable?.();});
  resize();

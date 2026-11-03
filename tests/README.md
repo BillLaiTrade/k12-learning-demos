@@ -1,5 +1,16 @@
 ## 4.5 指標焦點與拖曳綠框（2026-11-03）
 
+
+## 4.5 第四區內嵌觀察與反射／吸收（2026-11-03）
+
+```sh
+node --test tests/unit-4.5-surface-inset.test.cjs
+node --test tests/unit-4.5.test.cjs
+node --test tests/unit-4.5-color-model.test.mjs tests/unit-4.5-prism-optics.test.mjs tests/unit-4.5-mix-optics.test.mjs
+```
+
+專項驗證五種色卡的主畫面材質／預覽／定性文字／逐色條長同步，反射與吸收逐色相加等於入射，遮隱光路及旋轉／俯看／方向鍵不改結果。用測試限定的唯讀觀察核對真實3D色卡為不透明、教學光路均留在入射側、不新增眼睛；七種寬度的預覽／工具不遮住預設器材且無水平溢出；手機可直接點選全部材料，WebGL失效時平面圖與結果仍可用。正式程式不新增測試API。支援`COLOR_URL`、`COLOR_CAPTURE_DIR`及`CHROMIUM_PATH`。
+
 `node --test tests/unit-4.5-torch-focus.test.cjs`：5項含外層，三色開關後移開無框且保留方向鍵焦點、拖曳可見／放開及各種取消清除、Tab與鍵盤提示、手機原生點按及touchEnd／touchCancel。使用圖片備援隔離焦點事件；另跑真立體金邊5與快速比較4項。光束8／版面15／整頁34與純模型本輪未重跑。COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH沿用。
 
 ## 4.5 手電筒金色輪廓（2026-11-03）
@@ -1067,6 +1078,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.1-
 沿用房間13項、整課10項共23項。房間原「控制在場景下方」預期改為核可配置：操作→提問→場景→圖例／狀態；10種寬度、各有／無材料共20組版面，檢查44px操作區、文字不溢出、詳細提示在工作區外且角色對話不收合。1440／1366／1280px下確認房間圖766×490.23px、工作區671.81px，從工作區起可同屏，沒有把整區含標頭與對話都算入。
 
 原聲音、暫停、同時刻切換、結尾清空、背景取消、錯誤重試與觸控／鍵盤回歸保留。`ROOM_URL`可指向公開正式課程，`ROOM_CAPTURE_DIR`保存截圖及 `compact-layouts.json`；公開另跑房間13項。控制器、模型及音檔未改，不重跑未受影響的純模型／PCM檢查。
+
+## 4.4 一般課程預設對照及六種成像（2026-11-03）
+
+`node tests/unit-4.4-imaging-studio.test.cjs`：一般網址不帶workspace、dialog未開啟時，五組桌機左圖右表與兩把尺同窗；四組手機／平板直接六點位與摘要、表格可展開。一般頁及展開工作區實際切換六種情況並核對無捲動、器材／尺／模型一致；另核對無窮遠平行光、焦點點像像素、有限圖卡隱藏／返回、F內正立放大虛像及六條反向延長線，屏幕不會對焦。保留F刻度、金框、原生手勢與返回狀態。IMAGING_URL及IMAGING_CAPTURE_DIR指定公開頁與證據目錄。模型9項、整課專項亦檢查；實際結果見本輪交付紀錄。
+
 
 ## 4.4 十區透鏡成像基本版
 
