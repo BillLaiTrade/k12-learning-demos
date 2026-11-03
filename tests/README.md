@@ -1,3 +1,12 @@
+## 4.5 第一、二區色散教學分工（2026-11-03）
+
+```sh
+node tests/unit-4.5-prism-explanations.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+圖解4項核對靜態產物與正式模型、均勻比例、折點／法線、紅藍偏折順序與局部近看不改角差。整課保留真實3D／白幕像素、第一區滑軌與鍵盤、第二區固定器材與各色落點、七寬度器材避讓、手機觸控／取消、WebGL備援及無JS；新增教學分工、原生details與圖像載入、同一幕面白光參照固定不變。支援COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH。模型未改，不重跑未受影響的純模型套件；新增圖解檢查以node直接執行，確認列出4項子測試。
+
 ## 4.5 第五區精簡下拉選單（2026-11-03）
 
 ```sh
