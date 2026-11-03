@@ -1326,3 +1326,7 @@ node --test --test-reporter=tap --test-concurrency=1 tests/unit-2.3-reaudit.test
 ## 4.4 第四區跨F與預設光路（2026-11-03）
 
 沿用magnifier-optics、magnifier-studio及unit-4.4三支專項指令，模型5＋立體12＋整課23＝40項（瀏覽器含主項）。新增F前後0.001F／F／1.5F／2F的真實像距、反向線與平行出射、角度投影有限極限、會聚光進入固定眼睛的未解析狀態、遠像位置標籤及相機範圍；七寬度×四種成像共28組。原生觸控與鍵盤可跨F，確認預設已開光路、切列偏好及返回F內恢復原像素。`MAGNIFIER_URL`／`MAGNIFIER_CAPTURE_DIR`與整課`LENS_URL`／`LENS_CAPTURE_DIR`沿用；正式程式沒有測試API。
+
+## 2.3 空氣組成主圖粒子減半（2026-11-03）
+
+`unit-2.3-composition-particles-model.test.mjs`與`unit-2.3-composition.test.cjs`改驗主圖500顆（390／105／4／1）；放大圖仍93／7。沿用模型邊界、連續切換／身分、移動、點選、暫停、手機觸控、減少動態偏好、七寬度與無JS檢查，不新增鏡像測試。討論整合套件的主圖數量預期同步。
