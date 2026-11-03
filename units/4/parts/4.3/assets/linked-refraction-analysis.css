@@ -1,0 +1,67 @@
+/* Permanent, linked optical explanation below the apparatus. */
+.linked-analysis{padding:14px;overflow:hidden}
+.linked-analysis .concept-flow{gap:18px;padding:10px 14px;flex-wrap:wrap}
+.linked-analysis .concept-flow>strong{font-size:.95rem;color:#315a40}
+.analysis-layout{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(180px,1fr);gap:18px;align-items:center;margin-top:12px}
+.analysis-figure{min-width:0;overflow:hidden;border:4px solid #fffef6;border-radius:10px;box-shadow:0 0 0 1px #bdcdb8}
+.analysis-svg{display:block;width:100%;height:auto;aspect-ratio:720 / 520;overflow:hidden;background:#ecdec5}
+.analysis-svg *{transition:none!important}
+.analysis-svg text{font-family:ui-sans-serif,system-ui,"Noto Sans TC",sans-serif;font-weight:750;fill:#284a3e;paint-order:stroke;stroke:#fffdf1;stroke-width:2;stroke-opacity:.95;stroke-linejoin:round}
+.analysis-interface{fill:none;stroke:#f4ffff;stroke-width:3}
+.analysis-normal-base{fill:none;stroke:#fffef5;stroke-width:5;stroke-opacity:.8}
+.analysis-normal{fill:none;stroke:#627c70;stroke-width:2.4;stroke-dasharray:12 9}
+.analysis-sector{stroke:none;fill-opacity:.34}
+.analysis-sector-in{fill:#165fc2}
+.analysis-sector-secondary{fill:#24783a}
+.analysis-arc{fill:none;stroke-width:4}
+.analysis-arc-in{stroke:#165fc2}
+.analysis-arc-secondary{stroke:#24783a}
+.analysis-svg .analysis-in-label text{fill:#165fc2}
+.analysis-svg .analysis-secondary-label text{fill:#24783a}
+.analysis-leader{fill:none;stroke-width:1.6}
+.analysis-in-label .analysis-leader{stroke:#165fc2}
+.analysis-secondary-label .analysis-leader{stroke:#24783a}
+.analysis-medium rect{fill:#fffdf2;fill-opacity:.93;stroke:#dbd9bc;stroke-width:1}
+.analysis-reference{fill:none;stroke:#596b6b;stroke-width:3;stroke-dasharray:10 8;opacity:.85}
+.analysis-bend{fill:none;stroke:#24783a;stroke-width:3}
+.analysis-beam path{stroke-linecap:butt;stroke-linejoin:miter}
+.analysis-svg[data-kind=tir] .analysis-sector-secondary{fill:#7546a0}
+.analysis-svg[data-kind=tir] .analysis-arc-secondary,.analysis-svg[data-kind=tir] .analysis-secondary-label .analysis-leader{stroke:#7546a0}
+.analysis-svg[data-kind=tir] .analysis-secondary-label text{fill:#7546a0}
+.analysis-callout{min-width:0;padding:16px 12px;border-left:3px solid #9bb98c}
+.linked-analysis .analysis-callout h4{font-size:1.25rem;color:#215b3b;margin:0 0 12px}
+.analysis-callout p{margin:6px 0;font-size:.9rem;line-height:1.7}
+.analysis-equation{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;font-size:clamp(1.15rem,2.6cqw,1.6rem)!important;font-weight:800;line-height:1.3!important;font-variant-numeric:tabular-nums}
+.angle-in{color:#165fc2}.angle-out{color:#24783a}.angle-reflection{color:#7546a0}
+.analysis-compare{color:#536c50}
+.analysis-callout .analysis-reason{margin-top:14px;color:#305b40;font-weight:700}
+.analysis-callout .analysis-threshold{color:#65765e;font-size:.78rem}
+.analysis-threshold:empty{display:none}
+.analysis-note{display:flex;gap:4px 14px;flex-wrap:wrap;margin:12px 0 0!important;color:#60715a;font-size:.77rem!important;line-height:1.6}
+.analysis-note span{display:inline-flex;align-items:center;gap:7px}
+.analysis-note [hidden]{display:none}
+.analysis-note i{display:inline-block;width:25px;border-top:2px dashed #6f7d7a}
+@container oblique-card (max-width:620px){
+ .linked-analysis{padding:11px}
+ .linked-analysis .concept-flow{gap:9px;padding:8px 6px}
+ .linked-analysis .concept-flow>span{min-width:55px}
+ .linked-analysis .concept-flow>strong{flex-basis:100%;font-size:.86rem}
+ .linked-analysis .concept-flow>b:nth-of-type(2){display:none}
+ .analysis-layout{grid-template-columns:1fr;gap:10px}
+ .analysis-callout{display:grid;grid-template-columns:1fr auto;gap:3px 12px;padding:10px 12px;border:1px solid #cddfc2;border-left:3px solid #9bb98c;border-radius:7px;background:#fffef9}
+ .linked-analysis .analysis-callout h4{font-size:1.05rem;align-self:center;margin:0}
+ .analysis-callout p{margin:0;font-size:.84rem}
+ .analysis-callout [data-analysis-equation-label]{grid-column:2;grid-row:1;font-size:.73rem}
+ .analysis-callout .analysis-equation{grid-column:2;grid-row:2;font-size:1.15rem!important;gap:6px}
+ .analysis-callout .analysis-reason{grid-column:1;grid-row:2;margin:0;font-size:.82rem}
+ .analysis-callout .analysis-threshold{grid-column:1 / -1;margin-top:4px}
+}
+/* A cutout in the lower rail, with the rail's lips occluding the recessed control. */
+:is(#oblique-medium-toggle,#exit-medium-toggle){bottom:5px;gap:2px;padding:0 9px;min-height:44px;border:1px solid #30271c;border-radius:3px;background:linear-gradient(#3d3021,#63513b 50%,#483925);box-shadow:inset 0 4px 6px #130f0bc9,inset 3px 0 4px #1c160da6,inset -3px 0 4px #1c160da6,inset 0 -2px #c8a66d;isolation:isolate}
+:is(#oblique-medium-toggle,#exit-medium-toggle)::before,:is(#oblique-medium-toggle,#exit-medium-toggle)::after{content:"";position:absolute;z-index:2;left:-2px;right:-2px;height:3px;pointer-events:none}
+:is(#oblique-medium-toggle,#exit-medium-toggle)::before{top:-1px;background:linear-gradient(#ecce95,#795a32);box-shadow:0 2px 2px #1d160ba3}
+:is(#oblique-medium-toggle,#exit-medium-toggle)::after{bottom:-1px;background:linear-gradient(#50391d,#c9a571);border-bottom:1px solid #302115}
+:is(#oblique-medium-toggle,#exit-medium-toggle) button{min-width:52px;min-height:44px;font-size:.83rem;padding:4px 8px}
+:is(#oblique-medium-toggle,#exit-medium-toggle) button::before{inset:5px 0;border:1px solid #211f17;background:linear-gradient(#344034,#46523f);box-shadow:inset 0 3px 4px #141c10b3,inset 1px 0 2px #192315b3,inset 0 -1px #8b916970}
+:is(#oblique-medium-toggle,#exit-medium-toggle) button[aria-pressed=true]::before{background:linear-gradient(#b9cda7,#d1dfbb);box-shadow:inset 0 3px 4px #40533599,inset 2px 0 3px #52614466,inset 0 -1px #eef0cb80}
+:is(#oblique-medium-toggle,#exit-medium-toggle) button[data-lab-medium=glass][aria-pressed=true]::before{background:linear-gradient(#bbc8bf,#dce2d6)}

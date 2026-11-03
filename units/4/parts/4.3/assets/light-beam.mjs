@@ -14,6 +14,7 @@ export function drawDirections(group,points,drawnLength,ratio,active=true,box=nu
  let before=0;
  group.querySelectorAll('.lesson-beam-direction').forEach((head,i)=>{
   const from=points[i],to=points[i+1],length=Math.hypot(to[0]-from[0],to[1]-from[1]),size=8/Math.max(.05,ratio);
+  if(length<1e-8){head.setAttribute('d','');head.setAttribute('visibility','hidden');return;}
   const visible=box?visibleInterval(from,to,box):[0,1],fraction=visible?visible[0]+(visible[1]-visible[0])*(box?(i===0?.18:.4):.36):0;
   head.setAttribute('d',arrow(from,to,fraction,size));
   head.setAttribute('visibility',active&&visible&&drawnLength>=before+length*fraction+size?'visible':'hidden');
