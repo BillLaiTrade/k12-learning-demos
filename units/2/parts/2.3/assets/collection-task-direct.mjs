@@ -1,8 +1,10 @@
-import {jarPose,jarMouth,outletPose,clamp,rigPosition,heldMaterial,usedMarbleIds} from './collection-task-model.mjs?v=eight-2';
-import {contactRegions,contains} from './collection-task-contact.mjs?v=eight-2';
+import {BODY_HOME,bodyOffset,bodyPoint} from './collection-task-layout.mjs?v=move-1';
+import {jarPose,jarMouth,outletPose,clamp,rigPosition,heldMaterial,usedMarbleIds} from './collection-task-model.mjs?v=move-1';
+import {contactRegions,contains} from './collection-task-contact.mjs?v=move-1';
 export const TOOL_HOME={forceps:{x:485,y:305},water:{x:660,y:130},acid:{x:440,y:65},rig:{x:500,y:50},funnel:{x:535,y:550},plate:{x:605,y:-20},peroxide:{x:680,y:65},catalyst:{x:490,y:450}};
 export function directPosition(s,id){
  if(s.dragging?.id===id)return s.dragging.position;
+ if(BODY_HOME[id])return bodyPoint(s,id,BODY_HOME[id].x,BODY_HOME[id].y);
  if(id==='jar'){const p=jarPose(s);return{x:870+p.x,y:330+p.y};}
  if(id==='outlet'){const p=outletPose(s);return{x:p.x+260,y:p.y+10};}
  if(id==='rig')return rigPosition(s);
@@ -10,27 +12,40 @@ export function directPosition(s,id){
  if(id==='plate'&&s.jarCovered)return jarMouth(s);
  return s.positions[id]||TOOL_HOME[id];
 }
+function connectedBodyLimit(s,id,q){
+ if(!s.rig)return q;
+ const a=bodyPoint(s,'flask',446,135),out=outletPose(s),b={x:out.x,y:out.y-140};
+ if(id==='flask'){a.x=q.x+146;a.y=q.y-275;}else{const t=bodyPoint(s,'tank',1000,480);b.x+=q.x-t.x;b.y+=q.y-t.y;}
+ const dx=b.x-a.x,dy=b.y-a.y,distance=Math.hypot(dx,dy);if(distance<=420)return q;
+ const ratio=420/distance;
+ return id==='flask'?{x:b.x-dx*ratio-146,y:b.y-dy*ratio+275}:{x:q.x+(a.x+dx*ratio-b.x),y:q.y+(a.y+dy*ratio-b.y)};
+}
 export function limitPosition(s,id,p){
  const q={x:clamp(p.x,65,1035),y:clamp(p.y,-25,590)};
- if(id==='funnel'){q.x=clamp(q.x,65,650);q.y=clamp(q.y,140,590);}
- if(id==='rig'&&s.rig){q.x=300;q.y=Math.min(205,q.y);}
+ if(id==='flask')return connectedBodyLimit(s,id,{x:clamp(p.x,160,940),y:clamp(p.y,210,420)});
+ if(id==='tank')return connectedBodyLimit(s,id,{x:clamp(p.x,440,1040),y:clamp(p.y,170,485)});
+ if(id==='marble')return{x:clamp(p.x,115,985),y:clamp(p.y,0,565)};
+ if(id==='funnel'){q.x=clamp(q.x,65,1035);q.y=clamp(q.y,140,590);}
+ if(id==='rig'&&s.rig){const a=bodyPoint(s,'flask',300,205);q.x=a.x;q.y=Math.min(a.y,q.y);}
  if(id==='outlet'){
-  // 固定長度玻璃管：先退出瓶口下方，再能橫移。不得自由穿過瓶壁。
-  q.x=clamp(q.x,620,1000);q.y=clamp(q.y,210,495);
-  if(s.outlet==='jar'&&s.dragging?.position.y<459&&q.y<460)q.x=870;
-  else if(q.x>795)q.y=Math.max(460,q.y);
-  const dx=q.x-706,dy=q.y-285,d=Math.hypot(dx,dy);if(d>385){q.x=706+dx*385/d;q.y=285+dy*385/d;}
+  const t=bodyOffset(s,'tank'),mouth=jarMouth(s),under=s.jarPlace>.5&&s.jarAngle>90?mouth.y+28:460+t.y;
+  q.x=clamp(q.x,620+t.x,1000+t.x);q.y=clamp(q.y,210+t.y,495+t.y);
+  if(s.outlet==='jar'&&s.dragging?.position.y<under&&q.y<under)q.x=mouth.x;
+  else if(q.x>mouth.x-75)q.y=Math.max(under,q.y);
+  const f=bodyOffset(s,'flask'),dx=q.x-(706+f.x),dy=q.y-(285+f.y),distance=Math.hypot(dx,dy);if(distance>385){q.x=706+f.x+dx*385/distance;q.y=285+f.y+dy*385/distance;}
  }
+
  if(id==='jar'){q.x=clamp(q.x,150,1000);q.y=clamp(q.y,120,500);}
  return q;
 }
 const intent=(action,value,label,target,region,extra={})=>({action,value,label,target,region,...extra});
 export function approach(s,id,p,origin){
+ const tank=bodyOffset(s,'tank');
  const has=id=>s.selected.includes(id),r=contactRegions(s),mouth=jarMouth(s);
  const hit=(region,point=p)=>contains(region,point);
  const use=(value,label,target,region,extra)=>intent('target',value,label,target,region,extra);
  if(id==='jar'){
-  if(s.jarPlace>.5&&p.y<(origin?.y??330)-60&&hit(r.extract,{x:p.x,y:p.y+102}))return intent('extract',null,s.outlet==='jar'?'先撤出導管，再取出集氣瓶':'向上取出，保持封口並扶正','jar',r.extract);
+  if(s.jarPlace>.5&&p.y<(origin?.y??330+tank.y)-60&&hit(r.extract,{x:p.x,y:p.y+102}))return intent('extract',null,s.outlet==='jar'?'先撤出導管，再取出集氣瓶':'向上取出，保持封口並扶正','jar',r.extract);
   if(s.jarPlace<.5&&has('tank')&&hit(r.immerse,{x:p.x,y:p.y+119}))return intent('immerse',null,'瓶底已到槽口：保持蓋片、倒置入水','tank',r.immerse);
   return null;
  }
@@ -65,7 +80,7 @@ export function approach(s,id,p,origin){
  }
  if(id==='plate'&&has('jar')&&hit(r.jarSeal))return use('jar',s.outlet==='jar'?'先撤出導管，再蓋玻璃片':'玻璃片貼合瓶口','jar',r.jarSeal);
  // 塞子以下緣對瓶口；漏斗以細長管整段對空孔（p 是可見管尖）。
- if(id==='rig'&&s.rig){if(p.y<(origin?.y??205)-12)return intent('remove-rig',null,'向上拔出雙孔塞與整組器材','flask',r.flask);return null;}
+ if(id==='rig'&&s.rig){if(p.y<(origin?.y??205+bodyOffset(s,'flask').y)-12)return intent('remove-rig',null,'向上拔出雙孔塞與整組器材','flask',r.flask);return null;}
  if(id==='rig'&&has('flask')&&hit(r.flask,{x:p.x,y:p.y+59}))return use('flask','塞子下緣已對準瓶口：裝入','flask',r.flask);
  if(id==='funnel'&&has('rig')&&!s.funnel){
   // 長管全部有效，排除上端球狀膨大部；以長管輪廓對空孔。
