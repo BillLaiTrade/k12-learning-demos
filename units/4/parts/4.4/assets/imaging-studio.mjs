@@ -1,4 +1,4 @@
-import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261103-imaging-refine1';
+import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261103-imaging-portrait1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261103-imaging-six1';
 const root=document.querySelector('[data-imaging-lab]');
@@ -49,7 +49,7 @@ function initialise(root){
   else if(g.unreachable)message='清楚像的位置已超出軌道，屏幕移到最遠仍無法對焦。請把圖卡移遠透鏡一些，再重新找像。';
   if(g.clipped&&g.type==='real'&&!state.atInfinity)message+=' 部分投影超出屏幕；保留實際比例，不縮小圖案填入。';
   if(showRays&&g.finite&&g.type==='real'&&!state.atInfinity)message+=point==='top'?' 紅線追蹤圖卡上端，在清楚像的下方會聚。':point==='bottom'?' 藍線追蹤圖卡下端，在清楚像的上方會聚。':' 紅、藍線來自不同物點，分別形成對應的像點。';
-  $('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=state.atInfinity?(g.clear?'另一側 F・點像':'移動屏幕至 F 觀察點像'):g.type==='virtual'?'正立放大虛像・屏幕接不到':!g.finite?'物體位於焦點':g.unreachable?'清楚像超出軌道':g.clear?`已對焦・倒立${g.sizeLabel}${g.clipped?'・部分超出屏幕':''}`:'屏幕尚未對焦';
+  $('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=state.atInfinity?(g.clear?'點像':'屏幕尚未對焦'):g.type==='virtual'?'正立、放大的虛像':!g.finite?'屏幕接不到清楚像':g.unreachable?'清楚像超出軌道':g.clear?`倒立、${g.sizeLabel}的實像`:'屏幕尚未對焦';
   const keypoint=state.atInfinity?'infinity':g.type==='virtual'?'inside':!g.finite?'focus':!g.clear?'':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between';
   $$('[data-imaging-keypoint]').forEach(row=>{const active=row.dataset.imagingKeypoint===keypoint;row.dataset.active=String(active);row.querySelector('button').setAttribute('aria-pressed',String(active));});
   root.dataset.atInfinity=String(!!state.atInfinity);root.dataset.imageType=g.type;root.dataset.imagePosition=g.finite?g.v:'';root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.clear=String(g.clear);root.dataset.magnification=g.finite?String(g.m):'';root.dataset.projectionScale=g.projectionScale;root.dataset.spread=g.spread;root.dataset.rays=showRays;root.dataset.view=front?'screen':'orbit';root.dataset.point=point;

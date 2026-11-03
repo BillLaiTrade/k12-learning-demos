@@ -1,24 +1,22 @@
 .imaging-operating { display:grid; gap:8px; }
 .imaging-hud .imaging-stage { height:clamp(220px,calc(var(--imaging-window-height,100svh) - var(--hud-dock-height,150px) - 8px),600px); isolation:isolate; }
 .imaging-lab.imaging-hud .imaging-stage>#imaging-canvas { position:absolute; inset:0; width:100%; height:100%; }
-.imaging-hud .imaging-tools { top:12px; left:12px; right:296px; flex-wrap:wrap; }
+.imaging-hud .imaging-tools { top:12px; left:12px; right:184px; flex-wrap:wrap; }
 .imaging-hud .imaging-limit-note { top:110px; max-width:240px; }
-.imaging-hud .imaging-floating-panel { position:absolute; z-index:3; right:auto; bottom:auto; margin:0; padding:0; width:268px; height:auto; max-height:calc(100% - 16px); border:1px solid #b6c5a7; border-radius:10px; background:#fafbf0f5; color:#264d37; box-shadow:0 3px 12px #172e2840; overflow:hidden; }
+.imaging-hud .imaging-floating-panel { position:absolute; z-index:3; right:auto; bottom:auto; margin:0; padding:0; width:160px; height:auto; max-height:calc(100% - 16px); border:1px solid #b6c5a7; border-radius:10px; background:#fafbf0f5; color:#264d37; box-shadow:0 3px 12px #172e2840; overflow:hidden; }
 .imaging-panel-header { display:flex; align-items:center; gap:4px; padding:3px 5px; background:#eff4e5; border-bottom:1px solid #d3ddc7; }
 .imaging-panel-grip { display:flex; flex:1; min-width:0; align-items:center; gap:4px; padding:2px; cursor:grab; touch-action:none; user-select:none; }
 .imaging-panel-grip:focus-visible { outline:2px solid #bf952c; outline-offset:-2px; border-radius:4px; }
 .imaging-hud .imaging-panel-header h3 { margin:0; font-size:.8rem; line-height:1.3; color:#244f36; white-space:nowrap; }
 .imaging-panel-grip>span { color:#477252; line-height:1; }
-.imaging-panel-grip small { margin-left:auto; font-size:.6rem; color:#617357; white-space:nowrap; }
-.imaging-hud .imaging-panel-header button { width:26px; min-width:26px; min-height:26px; height:26px; padding:1px; border-radius:5px; background:#fffef5; color:#315d40; line-height:1; font-size:1rem; }
 .imaging-floating-panel[data-dragging] .imaging-panel-grip { cursor:grabbing; }
 .imaging-panel-body { padding:6px; }
-.imaging-hud .imaging-preview-content { display:grid; grid-template-columns:64px minmax(0,1fr); align-items:start; gap:7px; }
-.imaging-hud .imaging-preview canvas,.imaging-hud[data-view=screen] .imaging-preview canvas { display:block; width:64px; height:auto; border:2px solid #435344; }
-.imaging-preview-actions { min-width:0; display:flex; flex-direction:column; gap:5px; }
+.imaging-hud .imaging-preview-content { display:grid; grid-template-columns:minmax(0,1fr); justify-items:center; gap:6px; }
+.imaging-hud .imaging-preview canvas,.imaging-hud[data-view=screen] .imaging-preview canvas { display:block; width:var(--preview-paper-width,104px); height:auto; border:2px solid #435344; }
+.imaging-preview-actions { width:100%; min-width:0; display:flex; flex-direction:column; gap:6px; }
 .imaging-hud .imaging-current { display:block; min-width:0; padding:0; margin:0; border:0; background:transparent; }
-.imaging-hud .imaging-badge { position:static; transform:none; max-width:none; margin:0 0 4px; padding:0; border:0; border-radius:0; background:transparent; color:#215438; font-size:.73rem; font-weight:750; white-space:normal; line-height:1.4; }
-.imaging-hud .imaging-current .imaging-result { max-height:60px; overflow:auto; margin:0; padding:0; border:0; font-size:.68rem; line-height:1.45; }
+.imaging-hud .imaging-badge { position:static; transform:none; max-width:none; margin:0; padding:0; border:0; border-radius:0; background:transparent; color:#215438; font-size:.73rem; font-weight:750; white-space:nowrap; text-align:center; line-height:1.4; }
+.imaging-hud .imaging-current .imaging-result { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
 .imaging-hud .imaging-preview .imaging-view-button { margin:0; min-height:30px; padding:3px; font-size:.7rem; }
 .imaging-hud .imaging-gesture-note { bottom:8px; }
 .imaging-hud .imaging-fallback { min-height:0; position:absolute; left:12px; bottom:12px; width:calc(100% - 24px); padding:12px; background:#314f3dd9; border-radius:10px; }
@@ -36,15 +34,17 @@
 .imaging-hud[data-narrow=true] .imaging-rulers { grid-template-columns:minmax(0,1fr); gap:6px; }
 .imaging-hud[data-narrow=true] .imaging-ruler { min-height:116px; padding:4px 8px; }
 .imaging-hud[data-narrow=true] #imaging-focus-key { font-size:.64rem; }
-.imaging-hud[data-narrow=true] .imaging-preview { width:210px; }
-.imaging-hud[data-narrow=true] .imaging-panel-grip small { display:none; }
-.imaging-hud[data-narrow=true] .imaging-preview-content { grid-template-columns:48px minmax(0,1fr); gap:5px; }
-.imaging-hud[data-narrow=true] .imaging-preview canvas { width:48px; }
+.imaging-hud[data-narrow=true] .imaging-preview { width:128px; }
+.imaging-hud[data-narrow=true] .imaging-preview-content { gap:5px; }
+.imaging-hud[data-narrow=true] .imaging-preview canvas { width:var(--preview-paper-width,80px); }
+.imaging-hud[data-narrow=true] .imaging-badge { font-size:.65rem; }
 .imaging-hud[data-narrow=true] .imaging-tools { left:8px; right:8px; top:8px; gap:5px; }
 .imaging-hud[data-narrow=true] .imaging-tools button { min-height:32px; padding:5px 6px; font-size:.7rem; }
 .imaging-hud[data-narrow=true] .imaging-trace { gap:5px; }
 .imaging-hud[data-narrow=true] .imaging-limit-note { top:52px; left:8px; max-width:calc(100% - 16px); font-size:.65rem; }
 .imaging-hud[data-narrow=true] .imaging-keypoint-table th,.imaging-hud[data-narrow=true] .imaging-keypoint-table td { padding:6px 4px; font-size:.72rem; }
-.imaging-hud[data-narrow=true] .imaging-current .imaging-result { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 .imaging-hud>.imaging-prompt { margin:7px 0 0!important; }
 .imaging-hud[data-gesture-help=true] .imaging-badge { visibility:visible; }
+
+.imaging-hud .imaging-keypoint-table button,.imaging-hud .imaging-keypoint-table button[aria-pressed=true] { padding:0; border:0; border-radius:0; background:transparent; box-shadow:none; }
+.imaging-hud .imaging-keypoint-table button:hover,.imaging-hud .imaging-keypoint-table button:active { background:transparent; box-shadow:none; }
