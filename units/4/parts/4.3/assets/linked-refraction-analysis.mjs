@@ -1,4 +1,4 @@
-import {drawDirections} from './light-beam.mjs?v=20261103-inline1';
+import {drawDirections} from './light-beam.mjs?v=20261103-angle40';
 const H=[360,270],R=62;
 const point=(angle,r,upper=false,left=false)=>{const a=angle*Math.PI/180;return[360+(left?-1:1)*r*Math.sin(a),270+(upper?-1:1)*r*Math.cos(a)];};
 const endpoint=angle=>{const a=angle*Math.PI/180,s=Math.sin(a),c=Math.cos(a),r=Math.min(s>1e-12?330/s:Infinity,c>1e-12?225/c:Infinity);return[360+r*s,270+r*c];};
@@ -54,7 +54,6 @@ export function mountAnalysis(root,prefix){
   $('[data-analysis-equation-label]').textContent=grazing?'入射角':tir?'反射角與入射角':'折射角與入射角';
   $('[data-analysis-equation]').innerHTML=grazing?'<span class="angle-in">90°</span>':`<span class="${tir?'angle-reflection':'angle-out'}">${tir?num(g.degrees):g.outgoing.toFixed(1)}°</span><span class="analysis-compare">${tir||zero?'=':g.reverse?'&gt;':'&lt;'}</span><span class="angle-in">${num(g.degrees)}°</span>`;
   $('[data-speed-result]').textContent=grazing?'沿介面，不穿越':tir?'未進入空氣':g.reverse?'光速由慢變快':'光速由快變慢';
-  $('[data-analysis-threshold]').textContent=g.reverse?`${g.medium==='water'?'水':'玻璃'} → 空氣的臨界角約 ${g.critical.toFixed(1)}°。`:'';
   $('[data-reference-note]').hidden=!reference;
   const description=`${g.from==='air'?'空氣':g.medium==='water'?'水':'玻璃'}射向${g.to==='air'?'空氣':g.medium==='water'?'水':'玻璃'}。入射角${num(g.degrees)}度。${g.outgoing===null?(tir?`反射角${num(g.reflected)}度。`:``):`折射角${g.outgoing.toFixed(1)}度。`}${title}。${reason}`;svg.setAttribute('aria-label',description);
  }};

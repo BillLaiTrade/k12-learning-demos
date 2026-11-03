@@ -35,8 +35,6 @@
 .angle-in{color:#165fc2}.angle-out{color:#24783a}.angle-reflection{color:#7546a0}
 .analysis-compare{color:#536c50}
 .analysis-callout .analysis-reason{margin-top:14px;color:#305b40;font-weight:700}
-.analysis-callout .analysis-threshold{color:#65765e;font-size:.78rem}
-.analysis-threshold:empty{display:none}
 .analysis-note{display:flex;gap:4px 14px;flex-wrap:wrap;margin:12px 0 0!important;color:#60715a;font-size:.77rem!important;line-height:1.6}
 .analysis-note span{display:inline-flex;align-items:center;gap:7px}
 .analysis-note [hidden]{display:none}
@@ -54,7 +52,6 @@
  .analysis-callout [data-analysis-equation-label]{grid-column:2;grid-row:1;font-size:.73rem}
  .analysis-callout .analysis-equation{grid-column:2;grid-row:2;font-size:1.15rem!important;gap:6px}
  .analysis-callout .analysis-reason{grid-column:1;grid-row:2;margin:0;font-size:.82rem}
- .analysis-callout .analysis-threshold{grid-column:1 / -1;margin-top:4px}
 }
 /* A cutout in the lower rail, with the rail's lips occluding the recessed control. */
 :is(#oblique-medium-toggle,#exit-medium-toggle){bottom:5px;gap:2px;padding:0 9px;min-height:44px;border:1px solid #30271c;border-radius:3px;background:linear-gradient(#3d3021,#63513b 50%,#483925);box-shadow:inset 0 4px 6px #130f0bc9,inset 3px 0 4px #1c160da6,inset -3px 0 4px #1c160da6,inset 0 -2px #c8a66d;isolation:isolate}
