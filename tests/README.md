@@ -1079,6 +1079,10 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.1-
 
 原聲音、暫停、同時刻切換、結尾清空、背景取消、錯誤重試與觸控／鍵盤回歸保留。`ROOM_URL`可指向公開正式課程，`ROOM_CAPTURE_DIR`保存截圖及 `compact-layouts.json`；公開另跑房間13項。控制器、模型及音檔未改，不重跑未受影響的純模型／PCM檢查。
 
+## 4.4 滿視窗浮動操作（2026-11-03）
+
+`node --test tests/unit-4.4-imaging-studio.test.cjs`：以新滿視窗版型取代已被取代的左右欄尺寸檢查，保留投影、F刻度、光路、六種成像、手勢及WebGL備援回歸。新增五組桌機／四組窄螢幕同窗、平面面板原生拖移／取消／鍵盤／復位／收合、面板拖移不動相機、3D旋轉縮放不動介面、預設進入及返回不反覆開啟、同一canvas與狀態保留。包含螢幕映射後實際器材投影角點、面板與位置尺無遮擋。IMAGING_URL／IMAGING_CAPTURE_DIR沿用；IMAGING_ONLY_HUD=1只跑新版介面檢查。IMAGING_ONLY_ENTRY=1及IMAGING_ONLY_PANELS=1可分別補驗入口與面板；LENS_ONLY_RECHECK=1補驗排版基準及跨章節觸控。排版參考頁僅讀HTML／CSS，不執行不相關的實驗。整課檢查補上原生dialog的返回操作，維持課程導覽與其餘區塊檢查。
+
 ## 4.4 一般課程預設對照及六種成像（2026-11-03）
 
 `node tests/unit-4.4-imaging-studio.test.cjs`：一般網址不帶workspace、dialog未開啟時，五組桌機左圖右表與兩把尺同窗；四組手機／平板直接六點位與摘要、表格可展開。一般頁及展開工作區實際切換六種情況並核對無捲動、器材／尺／模型一致；另核對無窮遠平行光、焦點點像像素、有限圖卡隱藏／返回、F內正立放大虛像及六條反向延長線，屏幕不會對焦。保留F刻度、金框、原生手勢與返回狀態。IMAGING_URL及IMAGING_CAPTURE_DIR指定公開頁與證據目錄。模型9項、整課專項亦檢查；實際結果見本輪交付紀錄。

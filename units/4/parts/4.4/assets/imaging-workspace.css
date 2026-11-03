@@ -1,0 +1,85 @@
+.imaging-workspace-home { height:1px; }
+.imaging-hud .imaging-stage { height:clamp(560px,calc(100svh - 80px),760px); isolation:isolate; }
+.imaging-hud #imaging-canvas { width:100%; height:100%; }
+.imaging-hud .imaging-tools { top:16px; left:16px; right:90px; }
+.imaging-hud .imaging-limit-note { top:66px; max-width:260px; }
+.imaging-hud .imaging-floating-panel { position:absolute; z-index:5; right:auto; bottom:auto; margin:0; padding:0; display:flex; flex-direction:column; min-width:0; max-height:calc(100% - var(--hud-dock-height,155px) - 80px); border:1px solid #b6c5a7; border-radius:13px; background:#fafbf0f5; color:#264d37; box-shadow:0 7px 20px #172e2840; overflow:hidden; }
+.imaging-hud .imaging-observations { width:clamp(300px,27vw,370px); }
+.imaging-hud .imaging-preview { width:280px; height:192px; }
+.imaging-panel-header { flex:0 0 auto; display:flex; align-items:center; gap:4px; min-height:34px; padding:3px 5px; background:#eff4e5; border-bottom:1px solid #d3ddc7; }
+.imaging-panel-grip { display:flex; flex:1; min-width:0; align-items:center; gap:5px; padding:3px; cursor:grab; touch-action:none; user-select:none; }
+.imaging-panel-grip:focus-visible { outline:2px solid #bf952c; outline-offset:-2px; border-radius:4px; }
+.imaging-hud .imaging-panel-header h3 { margin:0; font-size:.94rem; line-height:1.3; color:#244f36; white-space:nowrap; }
+.imaging-panel-grip>span { color:#477252; font-size:1rem; line-height:1; }
+.imaging-panel-grip small { margin-left:auto; font-size:.62rem; color:#617357; white-space:nowrap; }
+.imaging-hud .imaging-panel-header button { width:28px; min-width:28px; min-height:28px; height:28px; padding:1px; border-radius:6px; background:#fffef5; color:#315d40; line-height:1; font-size:1rem; }
+.imaging-floating-panel[data-active-panel] { z-index:8; }
+.imaging-floating-panel[data-dragging] { z-index:9; box-shadow:0 9px 24px #172e2855; }
+.imaging-floating-panel[data-dragging] .imaging-panel-grip { cursor:grabbing; }
+.imaging-hud .imaging-floating-panel[data-collapsed=true] { height:auto; }
+.imaging-panel-body { min-height:0; padding:8px; overflow:auto; overscroll-behavior:contain; }
+.imaging-observations .imaging-panel-body { scrollbar-width:thin; }
+.imaging-hud .imaging-keypoints { margin:0; }
+.imaging-hud .imaging-keypoints>p { margin:0 0 7px; font-size:.7rem; }
+.imaging-hud .imaging-keypoint-table th,.imaging-hud .imaging-keypoint-table td { padding:6px; font-size:.76rem; line-height:1.45; }
+.imaging-hud .imaging-keypoint-table button { min-height:32px; padding:4px 5px; }
+.imaging-hud .imaging-preview-content { display:grid; grid-template-columns:76px minmax(0,1fr); align-items:start; gap:9px; }
+.imaging-hud .imaging-preview canvas,.imaging-hud[data-view=screen] .imaging-preview canvas { display:block; width:76px; height:auto; border:3px solid #435344; }
+.imaging-preview-actions { min-width:0; display:flex; flex-direction:column; gap:5px; }
+.imaging-hud .imaging-current { display:block; min-width:0; padding:0; margin:0; border:0; background:transparent; }
+.imaging-hud .imaging-current h4 { margin:0 0 3px; font-size:.74rem; line-height:1.3; }
+.imaging-hud .imaging-current .imaging-result { max-height:80px; overflow:auto; margin:0; padding:0; border:0; font-size:.69rem; line-height:1.45; }
+.imaging-hud .imaging-preview .imaging-view-button { margin:0; min-height:32px; padding:4px; font-size:.71rem; }
+.imaging-hud-dock { position:absolute; z-index:4; left:12px; right:12px; bottom:12px; max-height:45%; overflow:auto; padding:5px; border-radius:12px; }
+.imaging-hud #imaging-focus-key { margin:0 0 7px; padding:2px 6px; border-radius:5px; color:#fffdf0; background:#34533ed9; font-size:.71rem; line-height:1.4; }
+.imaging-hud .imaging-rulers { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.imaging-hud .imaging-ruler { height:128px; min-height:128px; padding:5px 10px; background:#f5f8eef5; box-shadow:0 3px 9px #172e2824; }
+.imaging-hud .imaging-target-status { margin:0; font-size:.66rem; line-height:1.3; }
+.imaging-hud .imaging-badge { left:18px; bottom:calc(var(--hud-dock-height,155px) + 25px); max-width:calc(100% - 36px); transform:none; }
+.imaging-hud .imaging-gesture-note { bottom:calc(var(--hud-dock-height,155px) + 22px); }
+.imaging-hud .imaging-fallback { min-height:0; position:absolute; left:18px; top:260px; width:55%; padding:16px; background:#314f3dd9; border-radius:12px; }
+.imaging-dialog { inset:0; width:100%; height:100svh; max-width:none; max-height:none; margin:0; padding:0; border:0; border-radius:0; overflow:hidden; }
+.imaging-dialog[open] { display:block; }
+.imaging-dialog-header { position:absolute; z-index:12; left:16px; right:16px; top:12px; margin:0; padding:0; border:0; pointer-events:none; }
+.imaging-dialog-header h2 { color:#fffdf0; font-size:1.55rem; text-shadow:0 1px 5px #263c32; }
+.imaging-dialog-header span { display:none; }
+.imaging-dialog-header button { pointer-events:auto; box-shadow:0 2px 7px #15271b33; }
+.imaging-dialog-body { width:100%; height:100%; margin:0; padding:0; overflow:hidden; }
+.imaging-dialog .imaging-expanded { width:100%; height:100%; margin:0; }
+.imaging-dialog .imaging-stage { width:100%; height:100%; border:0; border-radius:0; }
+.imaging-expanded.imaging-hud .imaging-tools { top:66px; }
+.imaging-expanded.imaging-hud .imaging-limit-note { top:116px; }
+.imaging-hud[data-compact=true] .imaging-observations { width:min(360px,calc(100% - 16px)); }
+.imaging-hud[data-compact=true] .imaging-observations[data-collapsed=true] { width:240px; }
+.imaging-hud[data-compact=true] .imaging-panel-grip small { display:none; }
+.imaging-hud[data-compact=true] .imaging-preview { width:230px; height:176px; }
+.imaging-hud[data-compact=true] .imaging-current { display:none; }
+.imaging-hud[data-compact=true] .imaging-quick-observations { display:block; }
+.imaging-hud[data-compact=true] .imaging-keypoints>p { display:none; }
+.imaging-hud[data-compact=true] .imaging-comparison>summary { display:block; margin-top:6px; color:#286c4d; font-size:.72rem; text-decoration:underline; cursor:pointer; }
+.imaging-hud[data-compact=false] .imaging-comparison>summary,.imaging-hud[data-compact=false] .imaging-quick-observations { display:none; }
+.imaging-hud[data-narrow=true] .imaging-rulers { grid-template-columns:minmax(0,1fr); gap:7px; }
+.imaging-hud[data-narrow=true] .imaging-ruler { height:119px; min-height:119px; padding:4px 8px; }
+.imaging-hud[data-narrow=true] .imaging-hud-dock { left:4px; right:4px; bottom:5px; padding:4px; }
+.imaging-hud[data-narrow=true] #imaging-focus-key { font-size:.62rem; margin-bottom:4px; }
+.imaging-hud[data-narrow=true] .imaging-preview { width:106px; height:198px; }
+.imaging-hud[data-narrow=true] .imaging-preview-content { display:flex; flex-direction:column; align-items:center; gap:4px; }
+.imaging-hud[data-narrow=true] .imaging-preview canvas { width:68px; }
+.imaging-hud[data-narrow=true] .imaging-preview-actions { width:100%; }
+.imaging-hud[data-narrow=true] .imaging-preview .imaging-panel-header [data-imaging-panel-reset] { display:none; }
+.imaging-hud[data-narrow=true] .imaging-panel-header h3 { font-size:.78rem; }
+.imaging-hud[data-narrow=true] .imaging-preview .imaging-panel-header h3 { font-size:.64rem; }
+.imaging-hud[data-narrow=true] .imaging-panel-header button { width:24px; min-width:24px; height:24px; min-height:24px; }
+.imaging-hud[data-narrow=true] .imaging-preview .imaging-panel-header { padding:2px; gap:0; }
+.imaging-hud[data-narrow=true] .imaging-preview .imaging-panel-grip { padding:1px; gap:1px; }
+.imaging-hud[data-narrow=true] .imaging-preview .imaging-panel-grip>span { font-size:.66rem; }
+.imaging-hud[data-narrow=true] .imaging-observations[data-collapsed=true] { width:180px; }
+.imaging-hud[data-narrow=true] .imaging-tools { left:8px; right:124px; flex-wrap:wrap; gap:5px; }
+.imaging-hud[data-narrow=true] .imaging-limit-note { max-width:180px; top:102px; left:8px; font-size:.63rem; }
+.imaging-hud[data-narrow=true] .imaging-badge { left:12px; font-size:.68rem; padding:4px 8px; }
+@media(max-width:600px) {
+ .imaging-dialog-header { left:10px; right:10px; top:10px; }
+ .imaging-dialog-header h2 { font-size:1.1rem; }
+ .imaging-dialog-header button { min-height:32px; padding:4px 8px; font-size:.73rem; }
+ .imaging-expanded.imaging-hud .imaging-tools { top:52px; }
+}
