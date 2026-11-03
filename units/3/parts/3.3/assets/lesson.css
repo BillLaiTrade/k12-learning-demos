@@ -69,9 +69,9 @@ h1{margin:8px 0 14px;font-size:clamp(2rem,4.4vw,3.7rem);line-height:1.18;letter-
 .slider output{text-align:right;font-variant-numeric:tabular-nums;color:var(--green)}
 .slider input{grid-column:1/-1;width:100%;accent-color:var(--green);min-height:30px}
 .card-main>.model-note{font-size:.84rem;color:var(--muted);margin:12px 0}
-.pitch-notes{margin:12px 0;color:var(--muted);font-size:.84rem}
-.pitch-notes summary{width:fit-content;cursor:pointer}
-.pitch-notes p{margin:8px 0}
+.pitch-notes,.decibel-notes{margin:12px 0;color:var(--muted);font-size:.84rem}
+.pitch-notes summary,.decibel-notes summary{width:fit-content;cursor:pointer}
+.pitch-notes p,.decibel-notes p{margin:8px 0}
 .lab-tools,.button-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:14px 0}
 .play-state{font-size:.87rem;color:var(--muted)}
 .instrument-panel{margin:17px 0;padding:16px;border:1px solid var(--line);border-radius:16px;background:#f4f6ef}

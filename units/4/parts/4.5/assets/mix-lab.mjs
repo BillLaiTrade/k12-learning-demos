@@ -141,7 +141,7 @@ export function initialiseFrontMix(root){
    // Ignore the compatibility click following a drag/cancel; native keyboard activation has detail=0.
    if(e.detail!==0&&suppressTorchClick===button){suppressTorchClick=null;return;}
    end(true);const i=MIX_KEYS.indexOf(button.dataset.torch);spots[i].on=!spots[i].on;
-  }else{end(true);preset=button.dataset.preset;spots=arrangeMix(preset,spots);}
+  }else{end(true);preset=button.dataset.preset;spots=arrangeMix(preset);}
   update();
  });
  window.addEventListener('blur',()=>end(true));
