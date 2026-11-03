@@ -1,5 +1,5 @@
 // 第六區的實物接觸幾何；場景提示與判定共用輪廓，座標來自器材繪圖。
-import {jarMouth,waterSurface,rigPosition} from './collection-task-model.mjs?v=open-1';
+import {jarMouth,waterSurface,rigPosition} from './collection-task-model.mjs?v=eight-1';
 export const STONE_OFFSETS=[[-48,-12],[0,-22],[48,-10],[-27,17],[27,19]];
 const polygon=points=>({kind:'polygon',points});
 const ellipse=(x,y,rx,ry)=>({kind:'ellipse',x,y,rx,ry});
@@ -22,7 +22,7 @@ export function contactRegions(s){
   flask:opening(300,205,47),
   pourFlask:{...opening(300,205,95,180),points:[[205,230],[215,25],[385,25],[395,230]],outline:ellipse(300,205,47,10)},
   pourJar:{...opening(m.x,m.y,95,150),points:[[m.x-95,m.y+25],[m.x-85,m.y-150],[m.x+85,m.y-150],[m.x+95,m.y+25]],outline:ellipse(m.x,m.y,69,10)},
-  funnel:opening(274,65,30),
+  funnel:{...opening(274,65,30),points:[[204,88],[204,-90],[344,-90],[344,88]]},
   stopper:opening(rig.x-26,rig.y-7,15,34),
   jar:opening(m.x,m.y,69,34,s.jarAngle>90),
   jarSeal:ellipse(m.x,m.y,70,23),
