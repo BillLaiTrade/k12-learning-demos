@@ -71,7 +71,7 @@
  #s6 .desk-feedback{padding:8px 14px;min-height:0}
 }
 @media(min-width:1000px){
- #s6 .desk-scroll{max-width:570px;margin-inline:auto}
+ #s6 .desk-scroll{max-width:none;margin-inline:0}
  #s6 .desk-bottom{padding:6px 14px}
 }
 @media(min-width:1000px){

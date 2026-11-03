@@ -99,6 +99,8 @@ h1 { margin: 6px 0 12px; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.2;
 .mix-torch:hover{background:#f7faec38;filter:none}
 .mix-torch:focus-visible,.mix-torch[data-dragging=true]{outline:2px solid #548060;outline-offset:-3px;background:#f3f9df55}
 .mix-torch[data-dragging=true]{cursor:grabbing}
+.mix-torch-filters{position:absolute;width:0;height:0;overflow:visible;pointer-events:none}
+.mix-torch[data-on=true] .torch-drawing{filter:url(#mix-torch-gold)}
 .mix-torch[data-on=false] .torch-drawing{filter:saturate(.3);opacity:.74}
 @media(max-width:650px){.mix-scene{padding:8px 8px 0;border-radius:13px}.mix-screen{border-width:5px;border-radius:7px}.mix-torch-deck{margin:0 -8px;padding:0 7px 7px;gap:3px}.mix-torch{padding:0 0 5px;border-radius:9px}.mix-torch .torch-name{font-size:.64rem;padding:3px 5px}.mix-torch .torch-drawing{max-width:116px}}
 

@@ -1,3 +1,7 @@
+## 4.5 手電筒金色輪廓（2026-11-03）
+
+`node --test tests/unit-4.5-torch-gold.test.cjs`：5項含外層。真立體三色靜置輪廓、點按／鍵盤、快速比較恢復、拖曳／取消、WebGL失效備援與手機原生觸控；以PNG像素核對金色跟隨透明外形、金屬內部保持、四角沒有矩形框、白幕保持。小數位置按截圖包絡對齊，PNG先decode。軟體GPU檢查採依序執行，避免兩組立體場景並行耗盡資源。搭配既有快速比較4及光束8項；COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH沿用。
+
 ## 4.5 快速比較開啟三燈（2026-11-03）
 
 `node --test tests/unit-4.5-mix-presets.test.cjs`：4項含外層，桌機24組與手機9組實際開關／比較操作，核對全開、落點、aria-pressed、選取狀態與渲染像素；含重按同一比較、Enter／Space及單燈仍可再關。COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH沿用。另跑既有光束8項；整頁主測試的舊保留開關斷言同步更新，本輪整頁34、版面15與純模型未重跑。
