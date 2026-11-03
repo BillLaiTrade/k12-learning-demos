@@ -1,4 +1,4 @@
-import {drawDirections} from './light-beam.mjs?v=20261103-fit1';
+import {drawDirections} from './light-beam.mjs?v=20261103-fit2';
 const path=points=>`M${points.map(p=>p.join(' ')).join('L')}`;
 export function mountScene(svg,prefix){
  svg.innerHTML=`<defs>

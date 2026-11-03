@@ -96,3 +96,7 @@
 }
 /* Height and SVG coordinates must settle together, including reduced-motion styles. */
 :is(#oblique-lab,#exit-lab),:is(#oblique-lab,#exit-lab) *{transition:none!important}
+
+/* Native focus uses the visible route height while operating these two scenes. */
+html:has(:is(#oblique-lab,#exit-lab):focus-within){scroll-padding-top:var(--optics-scroll-inset,8px)}
+:is(#oblique-lab,#exit-lab) :is(.integrated-copy,.integrated-legend)[hidden]{display:none!important}

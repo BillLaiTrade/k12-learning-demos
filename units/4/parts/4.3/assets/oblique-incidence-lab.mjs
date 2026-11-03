@@ -1,6 +1,6 @@
-import {geometry,snapshot,durationMs,clampAngle} from './single-refraction-model.mjs?v=20261103-fit1';
+import {geometry,snapshot,durationMs,clampAngle} from './single-refraction-model.mjs?v=20261103-fit2';
 import {mediumSelector} from './medium-selector.mjs?v=20261103-concept1';
-import {mountScene} from './integrated-refraction-scene.mjs?v=20261103-fit1';
+import {mountScene} from './integrated-refraction-scene.mjs?v=20261103-fit2';
 function mountSingleLab(prefix,reverse){
  const root=document.querySelector(`#${prefix}-lab`),$=s=>root.querySelector(s),scene=$(`#${prefix}-scene`),stage=$('.integrated-stage'),input=$(`#${prefix}-angle`),start=$(`#${prefix}-start`),reset=$(`#${prefix}-reset`),retry=$(`#${prefix}-retry`),status=$(`#${prefix}-status`);
  const view=mountScene(scene,prefix),source=view.source,photos=new Map(),model=()=>geometry(medium,angle,reverse),duration=()=>durationMs(medium,angle,reverse);
@@ -44,6 +44,7 @@ function mountSingleLab(prefix,reverse){
  function fitViewport(){
   const width=stage.getBoundingClientRect().width,mode=getComputedStyle(root).getPropertyValue('--scene-mode').trim();root.dataset.layout=mode;
   const route=document.querySelector('.route'),routeHeight=innerWidth<=760?route.getBoundingClientRect().height:0,controlHeight=$('.integrated-controls').getBoundingClientRect().height,viewportHeight=Math.min(innerHeight,window.visualViewport?.height||innerHeight);
+  document.documentElement.style.setProperty('--optics-scroll-inset',`${routeHeight+8}px`);
   const height=Math.min(width*(mode==='tall'?1400/900:820/1200),Math.max(160,viewportHeight-routeHeight-controlHeight-16)),key=`${width}/${height}/${mode}`;
   if(key===lastSize)return;lastSize=key;stage.style.height=`${height}px`;configure();render();
  }
