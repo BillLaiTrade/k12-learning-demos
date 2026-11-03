@@ -1,6 +1,16 @@
 ## 4.5 指標焦點與拖曳綠框（2026-11-03）
 
 
+## 4.5 合併第四／五區、共六區（2026-11-03）
+
+```sh
+node --test tests/unit-4.5-surface-model.test.mjs tests/unit-4.5-color-model.test.mjs tests/unit-4.5-prism-optics.test.mjs tests/unit-4.5-mix-optics.test.mjs
+node --test tests/unit-4.5-surface-inset.test.cjs
+node --test tests/unit-4.5.test.cjs
+```
+
+專項核對預設綠光照白紙，桌機及手機備援實際操作四種燈色×五種色卡，切換其中一組保留另一組，逐色守恆、主圖材質／實際燈光顏色／預覽像素／三欄／說明同步；沒有入射的色光不會被錯列為反射或吸收。保留紙面非自發光、同側漫反射、多寬度避讓及光路隱藏後仍可換燈色的檢查。整頁改驗六區、導覽標題／編號、無舊lighting場景、小測回看指向合併後第四區及新第五區，原透明色片／入眼光實驗與前三區回歸保持。
+
 ## 4.5 第四區內嵌觀察與反射／吸收（2026-11-03）
 
 ```sh

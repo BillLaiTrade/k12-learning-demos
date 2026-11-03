@@ -24,10 +24,10 @@ function beamTexture(){
  }ctx.putImageData(image,0,0);
  const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;return texture;
 }
-function incomingBeam(texture){
- const group=new THREE.Group();group.name='surface-white-light-path';
+function incomingBeam(texture,color){
+ const group=new THREE.Group();group.name='surface-incident-light-path';
  const from=new THREE.Vector3(-3.19,AXIS,0),to=new THREE.Vector3(-.035,AXIS,0);
- const material=new THREE.MeshBasicMaterial({color:'#ffffff',map:texture,transparent:true,opacity:.26,side:THREE.DoubleSide,depthWrite:false,toneMapped:false,forceSinglePass:true});
+ const material=new THREE.MeshBasicMaterial({color,map:texture,transparent:true,opacity:.26,side:THREE.DoubleSide,depthWrite:false,toneMapped:false,forceSinglePass:true});
  // Crossed soft ribbons preserve the illumination volume while orbiting.
  for(let i=0;i<3;i++){
   const angle=i*Math.PI/3,across=new THREE.Vector3(0,Math.cos(angle),Math.sin(angle));
@@ -57,8 +57,8 @@ export function createSurfaceAppearance(scene,card){
  const light=new THREE.SpotLight('#ffffff',8,5,.18,1,2);light.position.set(-3.19,AXIS,0);
  light.target.position.set(0,AXIS,0);light.castShadow=true;light.shadow.mapSize.set(512,512);light.shadow.bias=-.0002;light.shadow.normalBias=.001;
  scene.add(light,light.target);
- return {update(signal,group){
-  group.add(incomingBeam(beamMap));
+ return {illuminate(signal){light.color.setRGB(...signal.incoming);},update(signal,group){
+  group.add(incomingBeam(beamMap,new THREE.Color().setRGB(...signal.incoming)));
   const peak=Math.max(...signal.outgoing),color=new THREE.Color().setRGB(...signal.outgoing);
   // Different starts within the illuminated area, all leaving the same front side.
   const paths=[

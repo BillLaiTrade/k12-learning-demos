@@ -1,7 +1,7 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {PRISM,SOURCE,SCREEN_X,SCREEN_RANGE,prismRays,LIGHTS,MATERIALS,FILTERS,rgbCss} from './color-model.mjs';
 import {drawScreen} from './rendering.mjs';
-import {createSurfaceAppearance} from './surface-appearance.mjs?v=surface-diffuse-20261103';
+import {createSurfaceAppearance} from './surface-appearance.mjs?v=merged-surface-20261103';
 const AXIS=1.65;
 function woodTexture(){
  const c=document.createElement('canvas');c.width=512;c.height=256;const x=c.getContext('2d');x.fillStyle='#b38a59';x.fillRect(0,0,512,256);
@@ -12,11 +12,11 @@ function basic(rgb){return new THREE.MeshBasicMaterial({color:new THREE.Color().
 export function createStudio(root,callbacks){
  const canvas=root.querySelector('[data-studio]'),surface=root.dataset.lab==='surface';
  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
- const scene=new THREE.Scene();scene.background=new THREE.Color('#91a190');scene.fog=new THREE.Fog('#91a190',23,50);
+ const scene=new THREE.Scene();scene.background=new THREE.Color(surface?'#283126':'#91a190');scene.fog=new THREE.Fog(surface?'#283126':'#91a190',23,50);
  const camera=new THREE.PerspectiveCamera(40,1,.05,70),target=surface?new THREE.Vector3(-1.6,1.05,.1):new THREE.Vector3(0,1.1,-.65);
  const orbit=surface?{azimuth:-1.05,polar:1.16,radius:7.0}:{azimuth:-.85,polar:1.08,radius:12.6};let topView=false,frame=0,state=null,signal=null,drag=null,canvasWidth=0,fit=1;
- scene.add(new THREE.HemisphereLight('#fff7e2','#6a7a60',surface?1.15:2.2));const sun=new THREE.DirectionalLight('#fff4dc',surface?2.1:3.3);sun.position.set(-4,8,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-7,right:7,top:7,bottom:-7});sun.shadow.bias=-.0006;scene.add(sun);
- const fill=new THREE.DirectionalLight('#d6f0f7',surface?.65:1.3);fill.position.set(6,4,-3);scene.add(fill);
+ scene.add(new THREE.HemisphereLight('#fff7e2','#6a7a60',surface?.08:2.2));const sun=new THREE.DirectionalLight('#fff4dc',surface?.28:3.3);sun.position.set(-4,8,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-7,right:7,top:7,bottom:-7});sun.shadow.bias=-.0006;scene.add(sun);
+ const fill=new THREE.DirectionalLight('#d6f0f7',surface?.1:1.3);fill.position.set(6,4,-3);scene.add(fill);
  const metal=new THREE.MeshStandardMaterial({color:'#82928b',metalness:.8,roughness:.28}),dark=new THREE.MeshStandardMaterial({color:'#293d36',metalness:.5,roughness:.35}),brass=new THREE.MeshStandardMaterial({color:'#bd9a63',metalness:.75,roughness:.3}),paper=new THREE.MeshStandardMaterial({color:'#e8e9de',roughness:.92,side:THREE.DoubleSide});
  const box=(parent,size,position,material,shadow=true)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(...size),material);m.position.set(...position);m.castShadow=shadow;m.receiveShadow=true;parent.add(m);return m;};
  const cylinder=(parent,radius,height,position,material)=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,height,48),material);m.position.set(...position);m.castShadow=true;parent.add(m);return m;};
@@ -69,6 +69,7 @@ export function createStudio(root,callbacks){
   }
   const eyeTarget=new THREE.Vector3(...(state.mode==='transmission'?[2.8,0,0]:[-1.8,0,2.7]));observer.position.copy(eyeTarget);observer.rotation.y=state.mode==='transmission'?-Math.PI/2:-.6;
   blocker.position.copy(eyeTarget).multiplyScalar(.52);blocker.rotation.y=state.mode==='transmission'?Math.PI/2:-.6;
+  if(surface)surfaceAppearance.illuminate(signal);
   clearRays();rays.visible=state.rays;
   if(state.rays){
    if(surface)surfaceAppearance.update(signal,rays);
