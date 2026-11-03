@@ -2,9 +2,7 @@
 .imaging-operating { display:grid; gap:8px; }
 .imaging-hud .imaging-stage { height:clamp(var(--imaging-stage-min),min(calc(100svh - 340px),55cqw),440px); max-height:calc(var(--imaging-window-height,100svh) - var(--hud-dock-height,150px) - 8px); min-height:220px; isolation:isolate; }
 .imaging-lab.imaging-hud .imaging-stage>#imaging-canvas { position:absolute; inset:0; width:100%; height:100%; }
-.imaging-stage-title { position:absolute; z-index:2; left:12px; right:calc(var(--observer-width) + 24px); top:10px; margin:0; padding:4px 8px; border-radius:6px; color:#fffbea; background:#233e2dd4; font-size:.88rem; }
-.imaging-hud .imaging-tools { top:48px; left:10px; right:calc(var(--observer-width) + 24px); flex-wrap:wrap; }
-.imaging-hud .imaging-limit-note { top:auto; bottom:44px; left:12px; right:calc(var(--observer-width) + 24px); max-width:none; text-align:center; }
+.imaging-hud .imaging-tools { top:12px; left:10px; right:calc(var(--observer-width) + 24px); flex-wrap:wrap; }
 .imaging-hud .imaging-preview { position:absolute; z-index:3; top:10px; right:10px; bottom:auto; left:auto; margin:0; padding:7px; width:var(--observer-width); height:auto; max-height:calc(100% - 20px); border:1px solid #ccdcc0; border-radius:11px; background:linear-gradient(140deg,#f1f6e9,#e5eddc); color:#264d37; box-shadow:0 2px 9px #15271b25; overflow:hidden; }
 .imaging-panel-header { margin:0 0 5px; }
 .imaging-hud .imaging-panel-header h3 { margin:0; font-size:.78rem; line-height:1.3; color:#244f36; }
@@ -16,9 +14,8 @@
 .imaging-hud .imaging-badge { position:static; transform:none; max-width:none; margin:0; padding:0; border:0; border-radius:0; background:transparent; color:#215438; font-size:.7rem; font-weight:750; white-space:normal; text-align:center; line-height:1.4; }
 .imaging-hud .imaging-current .imaging-result { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
 .imaging-hud .imaging-preview .imaging-view-button { margin:0; min-height:30px; padding:3px; font-size:.7rem; }
-.imaging-orbit { position:absolute; left:8px; right:8px; bottom:8px; margin:0; padding:5px 9px; border-radius:8px; background:#233d30bf; color:#f9f5e6; font-size:.68rem; text-align:center; }
-.imaging-hud .imaging-gesture-note { bottom:44px; }
-.imaging-hud .imaging-fallback { min-height:0; position:absolute; left:12px; bottom:44px; width:calc(100% - var(--observer-width) - 40px); padding:12px; background:#314f3dd9; border-radius:10px; }
+.imaging-hud .imaging-gesture-note { bottom:8px; }
+.imaging-hud .imaging-fallback { min-height:0; position:absolute; left:12px; bottom:12px; width:calc(100% - var(--observer-width) - 40px); padding:12px; background:#314f3dd9; border-radius:10px; }
 .imaging-hud-dock { min-width:0; }
 .imaging-hud #imaging-focus-key { margin:0 0 5px; color:#4f6c59; font-size:.71rem; line-height:1.4; }
 .imaging-hud .imaging-rulers { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
@@ -38,7 +35,6 @@
 .imaging-hud[data-narrow=true] .imaging-tools { left:8px; gap:5px; }
 .imaging-hud[data-narrow=true] .imaging-tools button { min-height:32px; padding:5px 6px; font-size:.7rem; }
 .imaging-hud[data-narrow=true] .imaging-trace { gap:5px; }
-.imaging-hud[data-narrow=true] .imaging-limit-note { font-size:.65rem; }
 .imaging-hud[data-narrow=true] .imaging-keypoint-table th,.imaging-hud[data-narrow=true] .imaging-keypoint-table td { padding:6px 4px; font-size:.72rem; }
 .imaging-hud>.imaging-prompt { margin:7px 0 0!important; }
 .imaging-hud[data-gesture-help=true] .imaging-badge { visibility:visible; }
@@ -46,10 +42,8 @@
 .imaging-hud .imaging-keypoint-table button:hover,.imaging-hud .imaging-keypoint-table button:active { background:transparent; box-shadow:none; }
 @media(max-width:760px) {
  .imaging-hud { --observer-width:96px; }
- .imaging-stage-title { padding:4px 7px; font-size:.82rem; }
- .imaging-hud .imaging-tools { top:44px; right:calc(var(--observer-width) + 20px); }
+ .imaging-hud .imaging-tools { top:8px; right:calc(var(--observer-width) + 20px); }
  .imaging-hud .imaging-preview .imaging-view-button { font-size:.62rem; }
- .imaging-orbit { font-size:.62rem; }
 }
 @container imaging (min-width:420px) and (max-width:599px) { .imaging-stage { --imaging-stage-min:310px; --observer-width:136px; } }
 @container imaging (max-width:419px) { .imaging-stage { --imaging-stage-min:380px; } }
