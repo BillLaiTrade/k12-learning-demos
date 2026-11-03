@@ -1321,3 +1321,7 @@ node --test --test-reporter=tap --test-concurrency=1 tests/unit-2.3-reaudit.test
 ## 4.4 第四區圖卡尺與五列觀察（2026-11-03）
 
 沿用 `node tests/unit-4.4-magnifier-optics.test.mjs`、`node tests/unit-4.4-magnifier-studio.test.cjs`、`node tests/unit-4.4.test.cjs`。本輪4＋11＋23＝38項（瀏覽器含主項）。第四區新增整列／鍵盤切換、實際條件選取、尺拖曳／鍵盤／觸控、五倍縮放、0.6F虛像真交點與透明圖案；保留同尺度實際像素、屏幕遮擋／取下復原、七寬度、原生觸控及WebGL失敗備援。`MAGNIFIER_URL`／`MAGNIFIER_CAPTURE_DIR`可指定公開頁及獨立證據；正式程式無測試API。
+
+## 2.3 空氣組成主圖粒子減半（2026-11-03）
+
+`unit-2.3-composition-particles-model.test.mjs`與`unit-2.3-composition.test.cjs`改驗主圖500顆（390／105／4／1）；放大圖仍93／7。沿用模型邊界、連續切換／身分、移動、點選、暫停、手機觸控、減少動態偏好、七寬度與無JS檢查，不新增鏡像測試。討論整合套件的主圖數量預期同步。
