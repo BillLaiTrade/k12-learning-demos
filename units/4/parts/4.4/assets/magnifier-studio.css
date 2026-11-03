@@ -69,7 +69,7 @@
 .magnifier-ruler-heading output { font-size:.74rem; color:#54715b; }
 .magnifier-ruler-track { position:relative; flex:1; min-width:0; padding-top:3px; }
 .magnifier-ruler-track::before { content:""; position:absolute; top:23px; left:0; right:0; height:4px; background:#839778; border-radius:3px; }
-.magnifier-ruler-track input[type=range] { position:relative; display:block; width:calc(85.714% + 22px); height:44px; margin:0 0 0 -11px; padding:0; background:transparent; appearance:none; touch-action:pan-y; cursor:ew-resize; }
+.magnifier-ruler-track input[type=range] { position:relative; display:block; width:calc(100% + 22px); height:44px; margin:0 0 0 -11px; padding:0; background:transparent; appearance:none; touch-action:pan-y; cursor:ew-resize; }
 .magnifier-ruler-track input::-webkit-slider-runnable-track { height:4px; background:transparent; }
 .magnifier-ruler-track input::-moz-range-track { height:4px; background:transparent; }
 .magnifier-ruler-track input::-webkit-slider-thumb { appearance:none; width:22px; height:22px; margin-top:-9px; border:2px solid #f8fbee; border-radius:50%; background:#2e7648; box-shadow:0 1px 4px #24473350; }
@@ -103,3 +103,8 @@
  .magnifier-ruler-ticks button,.magnifier-ruler-ticks span { font-size:.66rem; }
  .magnifier-observation-table th,.magnifier-observation-table td { padding:7px 5px; font-size:.7rem; }
 }
+
+.magnifier-ruler-track::before { background:linear-gradient(to right,#6b8c63 0 41.176%,#b2ba9f 41.176% 100%); }
+.magnifier-ruler-ticks .magnifier-ruler-f { color:#775a23; font-weight:800; }
+.magnifier-ruler-ticks .magnifier-ruler-f::before { height:9px; border-color:#a78138; }
+.magnifier-condition { margin:6px 0 0; color:#31593f; font-size:.8rem; line-height:1.5; }
