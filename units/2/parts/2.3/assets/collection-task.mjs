@@ -1,6 +1,6 @@
-import {TOOL_HOME,directPosition,limitPosition,approach,parkPosition} from './collection-task-direct.mjs?v=retry-1';
-import {DESK_MATERIALS,createDesk,actDesk,advanceDesk,reacting,deskFrame,liquidSeal} from './collection-task-model.mjs?v=feedback-1';
-import {createCollectionScene,materialArt} from './collection-task-scene.mjs?v=retry-1';
+import {TOOL_HOME,directPosition,limitPosition,approach,parkPosition} from './collection-task-direct.mjs?v=open-1';
+import {DESK_MATERIALS,createDesk,actDesk,advanceDesk,reacting,deskFrame,liquidSeal,heldMaterial,vesselReaction} from './collection-task-model.mjs?v=open-1';
+import {createCollectionScene,materialArt} from './collection-task-scene.mjs?v=open-1';
 const form=document.querySelector('#gas-report-form'),svg=form.querySelector('.task-scene'),scene=createCollectionScene(svg),operation=form.querySelector('[data-desk-operate]'),feedback=form.querySelector('#gas-report-feedback');
 let state=createDesk(),raf=0,last=0,suspended=false,drag=null;
 const scroller=form.querySelector('.desk-scroll'),hint=form.querySelector('[data-desk-hint]');
@@ -9,16 +9,17 @@ const targets=[...form.querySelectorAll('[data-desk-target]')];
 function materialButton(m){const b=document.createElement('button');b.type='button';b.className='desk-material';b.dataset.deskMaterial=m.id;if(tools.includes(m.id))b.dataset.deskTool=m.id;b.setAttribute('aria-label','取用'+m.name);b.append(materialArt(m.id));const span=document.createElement('span');span.textContent=m.name;b.append(span);return b;}
 DESK_MATERIALS.forEach(m=>form.querySelector('.desk-materials').append(materialButton(m)));
 function render(){
- form.dataset.state=state.phase;form.dataset.ready='true';form.dataset.paused=String(suspended);form.dataset.marbleCount=String(state.flaskMarbles);form.dataset.held=String(state.heldMarble);form.dataset.autoFill=String(!!state.motion?.autoFill);form.dataset.reactionUsed=String(state.reactionUsed);form.dataset.reactionEnded=String(state.acid>0&&state.reactionUsed>=state.acid-.00001);form.dataset.acid=state.acid.toFixed(4);form.dataset.flaskWater=state.flaskWater.toFixed(4);form.dataset.tankWater=state.tankWater.toFixed(4);form.dataset.purged=String(state.airRemaining===0);form.dataset.rig=String(state.rig);form.dataset.funnel=String(state.funnel);form.dataset.elapsed=String(state.time);form.dataset.dragging=drag?.entity||'';
- operation.hidden=false;form.querySelector('[data-desk-phase]').textContent=state.phase==='complete'?'完成：已封存二氧化碳':'動手完成排水集氣';form.querySelector('[data-desk-count]').textContent=state.heldMarble?'鑷子夾著 1 塊大理石':`桌上 ${state.selected.length} 件物品`;
+ form.dataset.state=state.phase;form.dataset.ready='true';form.dataset.paused=String(suspended);form.dataset.marbleCount=String(state.flaskMarbles);form.dataset.held=String(!!heldMaterial(state));form.dataset.heldMaterial=heldMaterial(state)||'';form.dataset.autoFill=String(!!state.motion?.autoFill);form.dataset.reactionUsed=String(state.reactionUsed);form.dataset.reactionEnded=String(state.acid>0&&state.reactionUsed>=state.acid-.00001);form.dataset.acid=state.acid.toFixed(4);form.dataset.flaskWater=state.flaskWater.toFixed(4);form.dataset.tankWater=state.tankWater.toFixed(4);form.dataset.purged=String(state.airRemaining===0);form.dataset.rig=String(state.rig);form.dataset.funnel=String(state.funnel);form.dataset.elapsed=String(state.time);form.dataset.dragging=drag?.entity||'';
+ for(const target of ['flask','jar','tank']){const c=state.contents[target];for(const key of ['peroxide','catalyst',...(target==='flask'?[]:['acid'])])form.dataset[target+key[0].toUpperCase()+key.slice(1)]=String(c[key]);if(c.stones)form.dataset[target+'Marbles']=String(c.stones.length);}
+ operation.hidden=false;form.querySelector('[data-desk-phase]').textContent=state.phase==='complete'?'完成：已封存二氧化碳':'動手完成排水集氣';form.querySelector('[data-desk-count]').textContent=heldMaterial(state)?'鑷子夾著'+(heldMaterial(state)==='marble'?' 1 塊大理石':'少量二氧化錳'):`桌上 ${state.selected.length} 件物品`;
  for(const b of form.querySelectorAll('[data-desk-material]')){const id=b.dataset.deskMaterial,present=state.selected.includes(id);b.dataset.present=String(present);b.dataset.active=String(state.tool===id);b.disabled=!!state.motion;b.setAttribute('aria-pressed',String(present));b.setAttribute('aria-label',(present?'收回':'取用')+DESK_MATERIALS.find(m=>m.id===id).name);}
  for(const b of form.querySelectorAll('[data-desk-tool]')){if(!b.dataset.deskMaterial)b.setAttribute('aria-pressed',String(state.tool===b.dataset.deskTool));b.disabled=!!state.motion||(!b.dataset.deskMaterial&&state.phase==='complete');b.dataset.installed=String(b.dataset.deskTool==='rig'&&state.rig||b.dataset.deskTool==='funnel'&&state.funnel||b.dataset.deskTool==='plate'&&state.jarCovered);}
- form.querySelector('[data-desk-action=stop]').hidden=!['water','acid'].includes(state.motion?.kind);
+ form.querySelector('[data-desk-action=stop]').hidden=!['water','acid','peroxide'].includes(state.motion?.kind);
  form.querySelector('[data-desk-action=inspect]').disabled=!!state.motion||state.phase==='complete';
  form.querySelector('.desk-instruction').textContent=state.phase==='complete'?'氣體已封存在瓶中。可重做實驗，嘗試不同操作。':'點材料上桌 → 拖曳器材對準開口 → 看提示後放開。';
  if(feedback.textContent!==state.feedback)feedback.textContent=state.feedback;feedback.hidden=!state.feedback;feedback.dataset.kind=state.feedbackKind;feedback.dataset.result=state.result||'';
  {
-  const frame=deskFrame(state),observation=state.phase==='complete'?'已在水下蓋片，氣體封存在集氣瓶中。':!frame.reaction&&state.acid>0&&state.reactionUsed>=state.acid-.00001?'這一份反應物已反應完，氣泡已停止；未導入瓶內的氣體已逸散。':!frame.reaction&&state.flaskWater>0?'反應瓶內已有清水；單加清水不會產生二氧化碳。':!frame.reaction?'尚未反應；移動或加水都不會產生氣體。':!liquidSeal(state)?state.rig&&state.funnel?'反應瓶有氣泡；液面尚未蓋過漏斗末端，氣體會從漏斗逸出。':'反應瓶有氣泡；瓶口未密合，氣體直接逸出。':frame.collecting&&state.airRemaining>0?'正在收進裝置原有的空氣；應先在集氣瓶外排氣。':frame.collecting?state.jarWater>.015?'反應瓶與瓶內冒泡，集氣瓶的水位逐漸下降。':'瓶內的水已排出，多餘氣體由瓶口逸入水中。':frame.outlet.y+10>524-119*state.tankWater?'出口在瓶外水中冒泡，集氣瓶水位不變。':'導管出口在水面上方，氣體直接逸入空氣。';
+  const frame=deskFrame(state),observation=frame.oxygen?'反應瓶中產生氧氣或混合氣體，不能當作本次要收集的純二氧化碳。':vesselReaction(state,'jar')||vesselReaction(state,'tank')?'集氣瓶或水槽內的材料正在反應冒泡；這不是由導管送入的二氧化碳集氣。':state.phase==='complete'?'已在水下蓋片，氣體封存在集氣瓶中。':!frame.reaction&&state.contents.flask.peroxide>0&&state.contents.flask.peroxideUsed>=state.contents.flask.peroxide-.00001?'這一份雙氧水已反應完，氣泡停止；產生的氣體並非二氧化碳。':!frame.reaction&&state.acid>0&&state.reactionUsed>=state.acid-.00001?'這一份反應物已反應完，氣泡已停止；未導入瓶內的氣體已逸散。':!frame.reaction&&state.flaskWater>0?'反應瓶內已有清水；單加清水不會產生二氧化碳。':!frame.reaction?'尚未反應；移動或加水都不會產生氣體。':!liquidSeal(state)?state.rig&&state.funnel?'反應瓶有氣泡；液面尚未蓋過漏斗末端，氣體會從漏斗逸出。':'反應瓶有氣泡；瓶口未密合，氣體直接逸出。':frame.collecting&&state.airRemaining>0?'正在收進裝置原有的空氣；應先在集氣瓶外排氣。':frame.collecting?state.jarWater>.015?'反應瓶與瓶內冒泡，集氣瓶的水位逐漸下降。':'瓶內的水已排出，多餘氣體由瓶口逸入水中。':frame.outlet.y+10>524-119*state.tankWater?'出口在瓶外水中冒泡，集氣瓶水位不變。':'導管出口在水面上方，氣體直接逸入空氣。';
   const readout=form.querySelector('[data-desk-observation]');if(readout.textContent!==observation)readout.textContent=observation;
   const coords=scene.render(state);for(const b of targets){const id=b.dataset.deskTarget,c=coords[id];b.style.left=c.x/1100*100+'%';b.style.top=(c.y+100)/750*100+'%';b.hidden=id==='outlet'?!state.rig:id==='funnel'?!state.funnel:!state.selected.includes(id);b.disabled=!!state.motion||state.phase==='complete';b.dataset.active=String(state.focus===id);b.dataset.available=String(!!state.tool);}
  }
@@ -63,7 +64,7 @@ function finishDrag(runAction){
   // 保留當下的真正器材位置作為動畫起點，之後才清除拖曳狀態。
   if(tools.includes(d.entity)&&!(d.entity==='plate'&&state.jarCovered))state.positions[d.entity]={...state.dragging.position};
   perform(d.intent.action,d.intent.value);
-  if(state.motion){state.motion.contact=true;state.motion.pourAt=d.intent.pourAt;if(d.intent.stoneIndex!==undefined)state.motion.index=d.intent.stoneIndex;}
+  if(state.motion){state.motion.contact=true;state.motion.pourAt=d.intent.pourAt;state.motion.dropAt=d.intent.dropAt;if(d.intent.stoneIndex!==undefined)state.motion.index=d.intent.stoneIndex;}
   if(!state.motion&&tools.includes(d.entity)&&!(d.entity==='plate'&&state.jarCovered)){state.positions[d.entity]=parkPosition(state,d.entity,d.intent.value);state.tool=null;camera(state.positions[d.entity]);}
  }else if(d.moved&&runAction&&d.entity==='jar'&&state.jarPlace<.5)state.positions.jar={...state.dragging.position};
  else if(d.moved&&runAction&&tools.includes(d.entity)&&!(d.entity==='plate'&&state.jarCovered))state.positions[d.entity]={...state.dragging.position};
@@ -84,12 +85,12 @@ function updateDrag(now,auto=false){
 svg.addEventListener('pointerdown',e=>{
  const b=e.target.closest('[data-desk-drag],[data-desk-drag-proxy]');if(!b||state.phase!=='operate'||state.motion||e.button!==0||!e.isPrimary)return;
  const entity=b.dataset.deskDrag||b.dataset.deskDragProxy;if(entity==='funnel'&&state.funnel)return;
- if(state.heldMarble&&tools.includes(entity)&&entity!=='forceps'){state.feedback='鑷子還夾著大理石，先放進瓶口或放回盤中。';render();return;}
+ if(heldMaterial(state)&&tools.includes(entity)&&entity!=='forceps'){state.feedback='鑷子還夾著材料，先放入容器或放回原碟。';render();return;}
  e.preventDefault();const origin=directPosition(state,entity);drag={id:e.pointerId,b,entity,origin:{...origin},start:world(e.clientX,e.clientY),clientX:e.clientX,clientY:e.clientY,moved:false,key:'',since:performance.now(),still:{...origin}};b.setPointerCapture(e.pointerId);resume();
 });
 svg.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;e.preventDefault();const d=drag;d.clientX=e.clientX;d.clientY=e.clientY;const p=world(e.clientX,e.clientY);if(!d.moved&&Math.hypot(p.x-d.start.x,p.y-d.start.y)<8)return;d.moved=true;updateDrag(performance.now());render();},{passive:false});
 svg.addEventListener('pointerup',e=>{if(drag?.id===e.pointerId){if(drag.moved)updateDrag(performance.now());finishDrag(true);}});
 svg.addEventListener('pointercancel',cancelDrag);svg.addEventListener('lostpointercapture',()=>{if(drag)cancelDrag();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});window.addEventListener('pagehide',pause);document.addEventListener('air-experiment-play',e=>{if(e.detail!=='collection-task')pause();});new IntersectionObserver(entries=>{if(!entries[0].isIntersecting&&state.phase==='operate')pause();},{rootMargin:'100px'}).observe(form);
-form.addEventListener('keydown',e=>{if(e.key==='Escape'){if(drag){cancelDrag();return;}if(['water','acid'].includes(state.motion?.kind))perform('stop');else if(state.tool)perform('tool',state.tool);}});
+form.addEventListener('keydown',e=>{if(e.key==='Escape'){if(drag){cancelDrag();return;}if(['water','acid','peroxide'].includes(state.motion?.kind))perform('stop');else if(state.tool)perform('tool',state.tool);}});
 render();

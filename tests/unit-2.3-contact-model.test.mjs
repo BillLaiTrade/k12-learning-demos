@@ -17,7 +17,7 @@ for(const [name,id,good,bad,setup,value] of [
  ['forceps tips to mouth, not body','forceps',{x:300,y:190},{x:300,y:280},{heldMarble:true},'flask'],
  ['glass plate to upright mouth','plate',{x:885,y:72},{x:870,y:150},{},'jar'],
  ['glass plate to inverted mouth','plate',{x:885,y:437},{x:870,y:340},{jarPlace:1,jarAngle:180},'jar'],
- ['distractor bottle uses its lip','peroxide',{x:300,y:248},{x:300,y:205},{},'flask'],
+ ['peroxide bottle uses its open lip','peroxide',{x:300,y:190},{x:300,y:300},{},'flask'],
  ['distractor dish uses its edge','catalyst',{x:245,y:200},{x:300,y:300},{},'flask']
 ])test(name,()=>{const s=Object.assign(ready(),setup);assert.equal(approach(s,id,good)?.value,value);assert.equal(approach(s,id,bad),null);});
 test('tank accepts the entire sloping upper rim; front wall, outside and old lower box reject',()=>{const s=ready();for(const p of [{x:620,y:350},{x:730,y:330},{x:870,y:350},{x:1020,y:345}]){const a=approach(s,'water',p);assert.equal(a?.value,'tank');assert.deepEqual(a.pourAt,p);assert.ok(contains(a.region,p));}for(const p of [{x:1000,y:480},{x:600,y:500},{x:1080,y:350},{x:590,y:330}])assert.equal(approach(s,'water',p),null);});

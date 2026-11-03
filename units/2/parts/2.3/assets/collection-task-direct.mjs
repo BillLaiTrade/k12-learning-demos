@@ -1,5 +1,5 @@
-import {jarPose,jarMouth,outletPose,clamp,rigPosition} from './collection-task-model.mjs?v=retry-1';
-import {contactRegions,contains} from './collection-task-contact.mjs?v=retry-1';
+import {jarPose,jarMouth,outletPose,clamp,rigPosition,heldMaterial,usedMarbleIds} from './collection-task-model.mjs?v=open-1';
+import {contactRegions,contains} from './collection-task-contact.mjs?v=open-1';
 export const TOOL_HOME={forceps:{x:485,y:305},water:{x:660,y:130},acid:{x:440,y:65},rig:{x:500,y:50},funnel:{x:535,y:550},plate:{x:605,y:-20},peroxide:{x:680,y:65},catalyst:{x:490,y:450}};
 export function directPosition(s,id){
  if(s.dragging?.id===id)return s.dragging.position;
@@ -41,20 +41,22 @@ export function approach(s,id,p,origin){
   return null;
  }
  if(id==='forceps'){
+  const held=heldMaterial(s);
+  if(has('catalyst')&&hit(r.catalyst))return use('catalyst',held==='catalyst'?'將二氧化錳放回碟中':held?'先放下鑷子夾著的大理石':'鑷尖夾取少量二氧化錳','catalyst',r.catalyst);
   if(s.heldMarble&&has('marble')&&hit(r.bowl))return use('marble','將大理石放回盤中','marble',r.bowl);
-  const index=s.heldMarble?(s.heldStoneId??s.flaskMarbles):r.stones.findIndex((q,i)=>!(s.flaskStoneIds||[]).includes(i)&&hit(q));
+  const index=s.heldMarble?(s.heldStoneId??s.flaskMarbles):r.stones.findIndex((q,i)=>!usedMarbleIds(s).includes(i)&&hit(q));
   if(has('marble')&&index>=0&&hit(r.stones[index]))return use('marble',s.heldMarble?'將大理石放回盤中':'鑷尖夾起這塊大理石','marble',r.stones[index],{stoneIndex:index});
-  if(has('flask')&&hit(r.flask))return use('flask',s.rig?'瓶口已被塞子擋住：先移開塞子':!s.heldMarble?'先用鑷尖夾取大理石':'鑷尖由瓶口放入大理石','flask',r.flask);
+  const name=held==='catalyst'?'二氧化錳':'大理石';
+  if(has('flask')&&hit(r.flask))return use('flask',s.rig?'瓶口已被塞子擋住：先移開塞子':!held?'先用鑷尖夾取材料':`由反應瓶口放入${name}`,'flask',r.flask);
+  if(held&&has('jar')&&s.jarAngle<1&&s.jarPlace<.01&&hit(r.jar))return use('jar',s.jarCovered?'瓶口已蓋住：先移開玻璃片':`由集氣瓶口放入${name}`,'jar',r.jar);
+  if(held&&has('tank')&&hit(r.tankDrop))return use('tank',`由水槽上方放入${name}`,'tank',r.tankDrop,{dropAt:{x:p.x,y:p.y}});
  }
  if(id==='water'||id==='acid'||id==='peroxide'){
-  // 瓶嘴對開口；裝好漏斗後只有漏斗口可加液，瓶身或塞子側面不觸發。
-  const source=id==='peroxide'?{x:p.x,y:p.y-58}:p;
-  const target=s.rig&&s.funnel?r.funnel:id==='peroxide'?r.flask:r.pourFlask;
-  if(has('flask')&&hit(target,source))return use(s.rig&&s.funnel?'funnel':'flask',s.rig&&!s.funnel?'瓶口被塞子擋住：先插入漏斗':id==='water'?'清水由開口倒入反應瓶':id==='acid'?'稀鹽酸由開口流入反應瓶':'嘗試加入雙氧水','flask',target);
-  if(id==='water'){
-   if(has('jar')&&s.jarAngle<1&&s.jarPlace<.01&&hit(r.pourJar))return use('jar',s.jarCovered?'瓶口已蓋住：先移開玻璃片':'瓶嘴對準集氣瓶口：加水','jar',r.pourJar);
-   if(has('tank')&&hit(r.tank))return use('tank','瓶嘴對準槽口：加水','tank',r.tank,{pourAt:{x:p.x,y:p.y}});
-  }
+  const target=s.rig&&s.funnel?r.funnel:r.pourFlask,name=id==='water'?'清水':id==='acid'?'稀鹽酸':'雙氧水';
+  if(has('flask')&&hit(target))return use(s.rig&&s.funnel?'funnel':'flask',s.rig&&!s.funnel?'瓶口被塞子擋住：先插入漏斗':`${name}由開口倒入反應瓶`,'flask',target);
+  if(has('jar')&&s.jarAngle<1&&s.jarPlace<.01&&hit(r.pourJar))return use('jar',s.jarCovered?'瓶口已蓋住：先移開玻璃片':`${name}由瓶口倒入集氣瓶`,'jar',r.pourJar);
+  const jarBlocks=has('jar')&&s.jarAngle<1&&s.jarPlace<.01&&Math.abs(p.x-mouth.x)<69&&p.y>mouth.y+20&&p.y<mouth.y+211;
+  if(has('tank')&&!jarBlocks&&hit(r.tank))return use('tank',`${name}由槽口倒入水槽`,'tank',r.tank,{pourAt:{x:p.x,y:p.y}});
  }
  if(id==='plate'&&s.jarCovered){
   // 接觸面已移離瓶口才移開，不因在瓶口內微調就解除封口。
@@ -75,8 +77,8 @@ export function approach(s,id,p,origin){
 }
 export function parkPosition(s,id,target){
  const mouth=jarMouth(s);
- if(id==='forceps')return target==='marble'?{x:520,y:305}:{x:445,y:310};
- if(id==='water'||id==='acid')return target==='jar'?{x:715,y:90}:target==='tank'?{x:945,y:170}:{x:435,y:40};
+ if(id==='forceps')return target==='marble'?{x:520,y:305}:target==='catalyst'?{x:610,y:290}:target==='jar'?{x:715,y:120}:target==='tank'?{x:945,y:190}:{x:445,y:310};
+ if(id==='water'||id==='acid'||id==='peroxide')return target==='jar'?{x:715,y:90}:target==='tank'?{x:945,y:170}:{x:435,y:40};
  if(id==='plate')return{x:Math.min(1020,mouth.x+140),y:mouth.y-75};
  return TOOL_HOME[id];
 }
