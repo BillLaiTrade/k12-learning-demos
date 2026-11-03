@@ -23,7 +23,12 @@ export function initialiseFrontMix(root){
  let spots=arrangeMix(),preset='pairs',drag=null,frame=0;
  const scene=root.querySelector('.mix-scene'),guide=document.createElementNS('http://www.w3.org/2000/svg','svg');
  guide.classList.add('mix-drag-guide');guide.setAttribute('aria-hidden','true');guide.setAttribute('hidden','');
- guide.innerHTML='<defs><marker id="mix-drag-arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7Z" fill="currentColor"/></marker><clipPath id="mix-drag-screen"><rect data-guide-clip/></clipPath></defs><path class="mix-guide-halo" data-guide-halo/><path class="mix-guide-axis" data-guide-ray marker-end="url(#mix-drag-arrow)"/><circle class="mix-guide-source" data-guide-source r="3"/><g clip-path="url(#mix-drag-screen)"><circle class="mix-guide-footprint" data-guide-footprint/><circle class="mix-guide-target" data-guide-target r="4"/></g>';
+ guide.innerHTML=`<defs>
+  <linearGradient id="mix-beam-color"><stop stop-color="currentColor" stop-opacity=".85"/><stop offset=".55" stop-color="currentColor" stop-opacity=".5"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient>
+  <linearGradient id="mix-beam-light"><stop stop-color="#fff" stop-opacity=".95"/><stop offset=".3" stop-color="currentColor" stop-opacity=".8"/><stop offset=".85" stop-color="currentColor" stop-opacity=".25"/><stop offset="1" stop-color="currentColor" stop-opacity="0"/></linearGradient>
+  <filter id="mix-beam-soft" x="-50%" y="-100%" width="200%" height="300%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="3"/></filter>
+  <filter id="mix-beam-bloom" x="-50%" y="-100%" width="200%" height="300%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="6"/></filter>
+ </defs><g data-guide-beam><path class="mix-beam-bloom" data-beam-layer="outer"/><path class="mix-beam-body" data-beam-layer="body"/><path class="mix-beam-core" data-beam-layer="core"/><ellipse class="mix-beam-emitter" data-beam-emitter cx="0" cy="0"/></g>`;
  scene.append(guide);
  const studios=[];let loadingTorches=false;
  torchButtons.forEach((button,i)=>{
@@ -35,7 +40,7 @@ export function initialiseFrontMix(root){
  async function loadTorches(){
   if(loadingTorches)return;loadingTorches=true;
   try{
-   const module=await import('./torch-studio.mjs?v=mix-drag-guide-20261103');
+   const module=await import('./torch-studio.mjs?v=mix-soft-beam-20261103');
    torchButtons.forEach((button,i)=>{
     try{const canvas=button.querySelector('[data-torch-canvas]');studios[i]=module.createTorchStudio(canvas,i,{unavailable(){studios[i]?.dispose();studios[i]=null;fallbackTorch(i);},ready(){canvas.hidden=false;button.querySelector('[data-torch-image]').hidden=true;button.dataset.torchRenderer='three';refreshTorchPoses();updateGuide();}});studios[i].update(spots[i]);}
     catch{fallbackTorch(i);}
@@ -52,7 +57,8 @@ export function initialiseFrontMix(root){
   torchButtons.forEach((button,i)=>{const image=button.querySelector('[data-torch-image]'),frame=button.querySelector('[data-torch-drawing]').getBoundingClientRect();image.style.transformOrigin=`${IMAGE_PIVOT.x*100}% ${IMAGE_PIVOT.y*100}%`;image.style.transform=`rotate(${imagePose(i,frame,screen)}rad)`;studios[i]?.update(spots[i]);});
  }
  function updateGuide(){
-  if(!drag?.moved){guide.setAttribute('hidden','');return;}
+  guide.dataset.lightOn=String(!!drag&&spots[drag.i].on);
+  if(!drag?.moved||!spots[drag.i].on){guide.setAttribute('hidden','');return;}
   const i=drag.i,spot=spots[i],button=torchButtons[i],frame=button.querySelector('[data-torch-drawing]').getBoundingClientRect();
   if(!frame.width||!frame.height){guide.setAttribute('hidden','');return;}
   guide.removeAttribute('hidden');const bounds=guide.getBoundingClientRect(),screen=canvas.getBoundingClientRect();
@@ -63,11 +69,15 @@ export function initialiseFrontMix(root){
    const lens=IMAGE_LENSES[i],pivot=IMAGE_PIVOT,angle=imagePose(i,frame,screen),dx=(lens.x-pivot.x)*frame.width,dy=(lens.y-pivot.y)*frame.height;
    source={x:frame.left+pivot.x*frame.width+dx*Math.cos(angle)-dy*Math.sin(angle),y:frame.top+pivot.y*frame.height+dx*Math.sin(angle)+dy*Math.cos(angle)};
   }
-  const sx=source.x-bounds.left,sy=source.y-bounds.top,tx=screen.left-bounds.left+spot.x*screen.width,ty=screen.top-bounds.top+spot.y*screen.height,path=`M${sx} ${sy}L${tx} ${ty}`;
-  for(const node of guide.querySelectorAll('[data-guide-halo],[data-guide-ray]'))node.setAttribute('d',path);
-  for(const [selector,x,y]of[['[data-guide-source]',sx,sy],['[data-guide-target]',tx,ty],['[data-guide-footprint]',tx,ty]]){const circle=guide.querySelector(selector);circle.setAttribute('cx',x);circle.setAttribute('cy',y);}
-  guide.querySelector('[data-guide-footprint]').setAttribute('r',MIX_SETUP.radius/MIX_SETUP.width*screen.width);
-  const clip=guide.querySelector('[data-guide-clip]');for(const[name,value]of Object.entries({x:screen.left-bounds.left,y:screen.top-bounds.top,width:screen.width,height:screen.height}))clip.setAttribute(name,value);
+  const sx=source.x-bounds.left,sy=source.y-bounds.top,tx=screen.left-bounds.left+spot.x*screen.width,ty=screen.top-bounds.top+spot.y*screen.height;
+  const length=Math.hypot(tx-sx,ty-sy),radius=MIX_SETUP.radius/MIX_SETUP.width*screen.width,aperture=Math.max(1.5,frame.width*.022),beam=guide.querySelector('[data-guide-beam]');
+  beam.setAttribute('transform',`translate(${sx} ${sy}) rotate(${Math.atan2(ty-sy,tx-sx)*180/Math.PI})`);
+  // Filled, feathered volumes: a broad spill, a narrower body, and a luminous core.
+  for(const [layer,spread,start]of[['outer',.68,1.5],['body',.34,1],['core',.12,.7]]){
+   const near=aperture*start,far=Math.max(near,radius*spread);
+   guide.querySelector(`[data-beam-layer=${layer}]`).setAttribute('d',`M0 ${-near}L${length} ${-far}L${length} ${far}L0 ${near}Z`);
+  }
+  const emitter=guide.querySelector('[data-beam-emitter]');emitter.setAttribute('rx',aperture*.65);emitter.setAttribute('ry',aperture);
  }
 
  const pixels=ctx.createImageData(canvas.width,canvas.height),{width,height,radius,edge,ambient,exposure}=MIX_SETUP;

@@ -163,13 +163,11 @@ h1 { margin: 6px 0 12px; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.2;
  #s3 .mix-screen canvas{width:min(100cqw,calc(100cqh * 25 / 14));height:auto}
  #s3 .mix-torch .torch-drawing{max-width:78px}
 }
-/* Aiming aids are transient, ignore pointer input, and take no layout space. */
-.mix-scene{position:relative}
-.mix-drag-guide{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;overflow:hidden}
-.mix-guide-halo,.mix-guide-axis{fill:none;stroke:currentColor;stroke-linecap:round}
-.mix-guide-halo{stroke-width:9;opacity:.13}
-.mix-guide-axis{stroke-width:1.8;stroke-dasharray:7 5;opacity:.95}
-.mix-guide-source,.mix-guide-target{fill:none;stroke:currentColor;stroke-width:1.5}
-.mix-guide-footprint{fill:none;stroke:currentColor;stroke-width:1.2;stroke-dasharray:4 7;opacity:.6}
-.mix-drag-guide[data-light-on=false] .mix-guide-halo{display:none}
-.mix-drag-guide[data-light-on=false] .mix-guide-axis{stroke-width:1.4;stroke-dasharray:3 6;opacity:.8}
+/* Temporary soft beam volumes do not affect layout or intercept input. */
+.mix-scene{position:relative;isolation:isolate}
+.mix-drag-guide{position:absolute;inset:0;width:100%;height:100%;z-index:3;pointer-events:none;overflow:hidden;mix-blend-mode:screen}
+.mix-drag-guide path{stroke:none}
+.mix-beam-bloom{fill:url(#mix-beam-color);opacity:.32;filter:url(#mix-beam-bloom)}
+.mix-beam-body{fill:url(#mix-beam-color);opacity:.5;filter:url(#mix-beam-soft)}
+.mix-beam-core{fill:url(#mix-beam-light);opacity:.85;filter:url(#mix-beam-soft)}
+.mix-beam-emitter{fill:#fff;opacity:.9;filter:url(#mix-beam-soft)}
