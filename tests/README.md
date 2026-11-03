@@ -1,3 +1,12 @@
+## 4.5 第五區三組獨立選項（2026-11-03）
+
+```sh
+node tests/unit-4.5-filter-paper-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.5-path-lessons.test.cjs tests/unit-4.5.test.cjs
+```
+
+純模型4項檢查80種條件、色片／紙張各自吸收及逐色守恆、沒有入射就沒有輸出、無色片與黑紙。第五六區專項核對80種實際點選、三組選項獨立、入射／透射／紙張反射的色條與預覽像素、真實3D紙張為霧面非自發光材質／燈色採透射光、紙張漫反射線不穿透、八種視窗三欄直向按鈕／44px觸控／器材避讓、手機原生操作與備援，以及第六區回歸。整課保留六區及唯一小測。使用COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH指定公開頁及證據位置，GPU檢查依序執行。
+
 ## 4.5 第四區檢視與第五、六區集中操作（2026-11-03）
 
 ```sh
