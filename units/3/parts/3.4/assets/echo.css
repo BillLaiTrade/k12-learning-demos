@@ -55,3 +55,6 @@
 .lesson-head{display:grid;grid-template-columns:74px minmax(0,1fr);gap:16px;align-items:start;padding:25px 28px 21px;border-bottom:1px solid #e7ece5}.lesson-number{display:grid;place-items:center;width:50px;height:50px;border-radius:15px;background:#e9f0e3;color:#416c39;font-weight:850;font-size:1.1rem}.lesson-head h2{margin:0;font-size:clamp(1.22rem,2vw,1.65rem);line-height:1.35}.lesson-head p{margin:8px 0 0;color:#5b6a65;font-size:.94rem}.lesson-body{padding:23px 28px 28px;min-width:0}.lesson-body .card-main{min-width:0}.lesson-body .card-main>p:first-child{margin-top:0}
 @media(max-width:900px){.lesson-head,.lesson-body{padding-left:21px;padding-right:21px}}
 @media(max-width:700px){.lesson-head{grid-template-columns:48px minmax(0,1fr);gap:10px;padding:18px}.lesson-number{width:40px;height:40px;border-radius:12px}.lesson-body{padding:18px}}
+
+/* 雙欄桌機採3.3的側欄留白；單欄模式沿用原間距。 */
+@media(min-width:1051px){.lesson-layout{gap:34px}}
