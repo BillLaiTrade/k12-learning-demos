@@ -1424,3 +1424,9 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.1-scene-failure.test.cj
 ## 4.3 第六區眼睛與視野窗連線（2026-11-04）
 
 depth-lab新增視野歸屬／焦點專項，15項（含外層）；加format及整課為21項，五檔完整組合31項。新增鍵盤移動後兩線起點跟隨、末端留在視野框、隱藏光路仍保留連結、焦點配對；九尺寸×近／中／遠共27組，取樣曲線確認留在區域內、不遮SVG文字、眼睛框不壓字、端點貼框、無箭頭且pointer-events為none。保留原生觸控與完整水位行為。初輪21項後，局部框線／標籤微調以既有起始／連線／版面4項補驗；DEPTH_CAPTURE_DIR的measurements.json包含connections，公開參數沿用。
+
+## 4.3 第六區三十項畫面整理（2026-11-04）
+
+depth-lab現在16項（含外層）：增加同名前側槽壁、實際擋光點、空槽／靠近／加水原因及等比例高解析繪圖的核對。版面由27組擴至9尺寸×5水位×3位置共135組，檢查文字互不重疊、水位把手及眼睛框不遮字、標籤不蓋真正光路、曲線避字及不越界。保留持續加放水、反向、接管、離屏續播、鍵盤／原生觸控、減少動態、材質備援與無JS。
+
+完整命令為`node --test --test-concurrency=1 tests/unit-4.3-depth-model.test.mjs tests/unit-4.3-depth-lab.test.cjs tests/unit-4.3-optics.test.mjs tests/unit-4.3-format.test.cjs tests/unit-4.3.test.cjs`，32項（含外層）。固定鏡頭模型仍驗證全域可見幣面不裁切、各水位方向／倍率固定及遠離單調縮小；公開網址、代理及DEPTH_CAPTURE_DIR沿用。本輪沒有擴充外部依賴。

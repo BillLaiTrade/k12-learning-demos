@@ -1,5 +1,5 @@
 // Shared vector artwork: the draggable eye and the view's heading use one iris.
-export const EYE_LINK_ANCHOR = Object.freeze({ x: 40, y: 21 });
+export const EYE_LINK_ANCHOR = Object.freeze({ x: 40, y: 13 });
 export function eyeArtwork() {
   const filaments = Array.from({length:88},(_,i)=>{
     const angle=i*Math.PI*2/88, inner=5.9+(i%7)*.21, outer=12.1+(i%5)*.18;
@@ -12,18 +12,18 @@ export function eyeArtwork() {
   <linearGradient id="depth-eye-lid" x2="0" y2="1"><stop stop-color="#665f46"/><stop offset=".65" stop-color="#999376"/><stop offset="1" stop-color="#d5c9a7"/></linearGradient>
   <linearGradient id="depth-eye-bezel" x2=".3" y2="1"><stop stop-color="#fff9de"/><stop offset=".28" stop-color="#e5ce95"/><stop offset=".62" stop-color="#b79856"/><stop offset="1" stop-color="#f4e4b5"/></linearGradient>
   <linearGradient id="depth-eye-pad" x2=".25" y2="1"><stop stop-color="#fffcf0"/><stop offset=".6" stop-color="#f5edd4"/><stop offset="1" stop-color="#e5d6ad"/></linearGradient>
-  <linearGradient id="depth-rail-metal" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="75" y2="82"><stop stop-color="#fff7d8"/><stop offset=".42" stop-color="#e2d7b4"/><stop offset=".65" stop-color="#9a9d86"/><stop offset="1" stop-color="#d5d3b6"/></linearGradient>
+  <linearGradient id="depth-rail-metal" gradientUnits="userSpaceOnUse" x1="0" x2="0" y1="90" y2="100"><stop stop-color="#fff7d8"/><stop offset=".42" stop-color="#e2d7b4"/><stop offset=".65" stop-color="#9a9d86"/><stop offset="1" stop-color="#d5d3b6"/></linearGradient>
   <clipPath id="depth-eye-opening"><path d="M-35 0C-17-24 16-25 35 0C17 22-17 21-35 0Z"/></clipPath>
   <filter id="depth-eye-soft-shadow" x="-30%" y="-55%" width="160%" height="230%"><feDropShadow dx="0" dy="2" stdDeviation="1.6" flood-color="#473d25" flood-opacity=".25"/></filter>
   <g id="depth-eye-art">
     <path d="M-36 1C-18-26 17-26 36 1C17 25-18 24-36 1Z" fill="#c5bc9c" opacity=".5" transform="translate(0 1.2)"/>
     <g clip-path="url(#depth-eye-opening)">
       <rect x="-36" y="-23" width="72" height="46" fill="url(#depth-eye-sclera)"/>
-      <circle r="13.7" fill="#435641"/><circle r="13.1" fill="url(#depth-eye-iris)"/>
+      <g transform="translate(-6 3)"><circle r="13.7" fill="#435641"/><circle r="13.1" fill="url(#depth-eye-iris)"/>
       ${filaments}
       <circle r="8.1" fill="none" stroke="#b5b16c" stroke-width=".7" opacity=".45"/>
       <circle r="5.8" fill="url(#depth-eye-pupil)"/>
-      <path d="M-36-1C-16-27 15-27 36-1" fill="none" stroke="#3e3e2b" stroke-width="7" opacity=".16"/>
+      </g><path d="M-36-1C-16-27 15-27 36-1" fill="none" stroke="#3e3e2b" stroke-width="7" opacity=".16"/>
       <ellipse cx="-3.8" cy="-5.4" rx="3.7" ry="2.2" transform="rotate(-25)" fill="#fffef4" opacity=".87"/>
       <circle cx="4.4" cy="3.3" r="1.1" fill="#fffef0" opacity=".62"/>
       <path d="M-11 7Q0 14 11 7" fill="none" stroke="#fffde9" stroke-width=".7" opacity=".25"/>

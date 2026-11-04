@@ -1,4 +1,4 @@
-import { TANK, observerCamera, cameraDirection, traceViewRay } from './depth-model.mjs?v=20261104-fixed1';
+import { TANK, observerCamera, cameraDirection, traceViewRay } from './depth-model.mjs?v=20261104-review1';
 
 export function createTextures(photo) {
   const texture = (sx, sy, sw, sh, width = 256, height = 128) => {
@@ -44,13 +44,14 @@ const norm = v => {const d=Math.hypot(...v);return v.map(x=>x/d);};
 // Real surface normals, a shared light, textured frames and contact shadows.
 // These change only the finish: the coin still comes from traceViewRay hits.
 export function renderObserver(canvas, geometry, textures, {preview=false}={}) {
-  const quality = preview ? 1 : 1.55;
-  const width = Math.max(400, Math.min(preview?560:850, Math.round(canvas.clientWidth * quality)));
-  const height = Math.round(width * 500 / 720);
+  const quality = preview ? 1.05 : 2;
+  const width = Math.max(400, Math.min(preview?560:1100, Math.round(canvas.clientWidth * quality)));
+  const height = Math.round(width * 530 / 720);
   canvas.width = width; canvas.height = height;
   const ctx = canvas.getContext('2d', { alpha: false });
   const frame = ctx.createImageData(width, height), pixels = frame.data;
   const camera = observerCamera(geometry, width / height), L=TANK.length,Z=TANK.width/2,H=TANK.height;
+  let wallMinX=width,wallMaxX=0,wallMinY=height,wallMaxY=0;
   let coinPixels = 0, minX = width, maxX = 0, minY = height, maxY = 0;
   for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
     const direction = cameraDirection(camera, 2 * (x + .5) / width - 1, 1 - 2 * (y + .5) / height);
@@ -62,10 +63,10 @@ export function renderObserver(canvas, geometry, textures, {preview=false}={}) {
       color=sample(textures.wood,tz/180,tx/280);
       const dx=Math.max(0,-tx,tx-L-9),dz=Math.max(0,Math.abs(tz+3)-Z-7);
       const shadow=1-.38*Math.exp(-(dx*dx+dz*dz)/160);
-      color=color.map(v=>v*shadow);
+      color=color.map((v,i)=>v*shadow*.78+[239,222,201][i]*.22);
     } else {
       const p=hit.point,n=hit.normal||[0,1,0],view=direction.map(v=>-v);
-      const diffuse=.53+.47*Math.max(0,dot(n,light));
+      const diffuse=.66+.34*Math.max(0,dot(n,light));
       const half=norm([view[0]+light[0],view[1]+light[1],view[2]+light[2]]);
       const spec=Math.pow(Math.max(0,dot(n,half)),45);
       if(hit.kind==='rim') {
@@ -75,6 +76,7 @@ export function renderObserver(canvas, geometry, textures, {preview=false}={}) {
         color=metal.map((v,i)=>(v*.62+[102,109,103][i])*bevel+spec*125);
         if(edge<.20||edge>TANK.rim-.20)color=mix(color,[232,243,224],.75);
       } else if(hit.kind==='outside') {
+        if(hit.face==='end'&&p[0]>L/2){wallMinX=Math.min(wallMinX,x);wallMaxX=Math.max(wallMaxX,x);wallMinY=Math.min(wallMinY,y);wallMaxY=Math.max(wallMaxY,y);}
         const faceU=hit.face==='end'?(p[2]+Z)/TANK.width:p[0]/L;
         const edge=Math.min(faceU,1-faceU),h=p[1]/H;
         const grain=sample(textures.wood,faceU*1.3,h*.32);
@@ -102,7 +104,7 @@ export function renderObserver(canvas, geometry, textures, {preview=false}={}) {
         } else {
           const u=hit.kind==='floor'?p[2]/160:p[2]/120+p[0]/160;
           const v=hit.kind==='floor'?p[0]/220:p[1]/180;
-          color=sample(textures.wood,u,v).map(v=>v*diffuse*(hit.kind==='wall'?.76:1));
+          color=sample(textures.wood,u,v).map(v=>v*diffuse*(hit.kind==='wall'?.94:1));
           const edge=Math.min(p[0],L-p[0],Z-Math.abs(p[2]));
           const contact=hit.kind==='floor'?1-.35*Math.exp(-Math.max(0,edge)/7):1-.30*Math.exp(-Math.max(0,p[1])/7);
           color=color.map(v=>v*contact);
@@ -128,5 +130,6 @@ export function renderObserver(canvas, geometry, textures, {preview=false}={}) {
   }
   ctx.putImageData(frame,0,0);
   const bounds=coinPixels?{x:minX/width,y:minY/height,width:(maxX-minX+1)/width,height:(maxY-minY+1)/height}:null;
-  return {coinPixels,bounds,width,height};
+  const frontWallBounds=wallMinX<=wallMaxX?{x:wallMinX/width,y:wallMinY/height,width:(wallMaxX-wallMinX+1)/width,height:(wallMaxY-wallMinY+1)/height}:null;
+  return {coinPixels,bounds,width,height,frontWallBounds};
 }

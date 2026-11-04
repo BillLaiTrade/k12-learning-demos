@@ -1,0 +1,45 @@
+{
+  "baseline": "3871765c",
+  "checks": [
+    {
+      "part": "s1",
+      "match": true
+    },
+    {
+      "part": "s2",
+      "match": true
+    },
+    {
+      "part": "s3",
+      "match": true
+    },
+    {
+      "part": "s4",
+      "match": true
+    },
+    {
+      "part": "s5",
+      "match": true
+    },
+    {
+      "part": "s7",
+      "match": true
+    },
+    {
+      "file": "units/4/parts/4.3/assets/lesson.mjs",
+      "match": true
+    },
+    {
+      "file": "units/4/parts/4.3/assets/optics.mjs",
+      "match": true
+    },
+    {
+      "file": "units/4/parts/4.3/assets/oblique-entry-water.png",
+      "match": true
+    },
+    {
+      "part": "depth geometry and physical ray tracer",
+      "match": true
+    }
+  ]
+}

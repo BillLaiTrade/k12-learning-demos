@@ -37,8 +37,8 @@
   <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-fit2">
 <link rel="stylesheet" href="assets/integrated-refraction.css?v=20261103-fit2">
   <link rel="stylesheet" href="assets/return-refraction-refresh.css?v=20261103-inline1">
-  <link rel="stylesheet" href="assets/depth-lab.css?v=20261104-eyeview1">
-  <script type="module" src="assets/depth-lab.mjs?v=20261104-eyeview1"></script>
+  <link rel="stylesheet" href="assets/depth-lab.css?v=20261104-review1">
+  <script type="module" src="assets/depth-lab.mjs?v=20261104-review1"></script>
   <script type="module" src="assets/lesson.mjs?v=20261103-depth1">
 </script>
 </head>
@@ -458,36 +458,35 @@
 </div>
 </div>
 <div id="depth-lab" data-state="ready" data-depth="0" data-eye-x="300">
-<p class="depth-intro">移動眼睛，觀察這個位置看到的畫面。</p>
+<p class="depth-intro">先保持眼睛不動，按「加水觀察」，比較光路與眼前所見。</p>
 <div class="depth-views">
 <figure class="depth-view depth-explanation">
-<figcaption>光怎麼進入眼睛<small>側面剖面</small></figcaption>
-<div class="depth-local-tools" role="group" aria-label="左圖光路顯示">
-<label><input id="show-rays" type="checkbox" checked>顯示光路與輔助線</label>
-</div>
+<figcaption>從側面看光路<small>同一座水槽</small></figcaption>
 <div class="depth-stage">
-<svg id="depth-scene" viewBox="0 0 720 500" role="group" aria-label="硬幣固定，折射光進入目前觀看位置">
+<svg id="depth-scene" viewBox="0 0 720 530" role="group" aria-label="硬幣固定，折射光進入目前觀看位置">
 </svg>
 <div class="depth-water-control">
 <label for="depth-input" class="visually-hidden">上下拖曳水位</label>
 <input id="depth-input" type="range" min="0" max="100" value="0" step="1" aria-label="上下拖曳水位" aria-orientation="vertical" aria-describedby="depth-control-help" title="上下拖曳水位">
 </div>
 </div>
-<div class="depth-view-note depth-side-note"><span id="depth-control-help" class="depth-control-hint">↕ 拖曳水面　↔ 拖曳眼睛</span><span><i></i>真正的光路</span><span><i class="dashed"></i>位置判斷的輔助線</span></div>
+<div class="depth-view-note depth-side-note"><label class="depth-ray-toggle"><input id="show-rays" type="checkbox" checked>顯示光路與輔助線</label><span><i></i>光真正走的路</span><span><i class="dashed"></i>沿入眼方向往回找位置</span></div>
+<span id="depth-control-help" class="visually-hidden">上下拖曳水面或水位把手；沿軌道拖曳眼睛，靠近或遠離水槽。兩圖同步更新。</span>
 </figure>
 <figure class="depth-view depth-observation">
 <figcaption id="depth-observer-heading"><svg class="depth-eye-key" viewBox="-40 -26 80 52" aria-hidden="true" focusable="false"><use href="#depth-eye-art"/></svg>這隻眼睛看到的畫面</figcaption>
-<div class="depth-observer-tools"><span class="depth-observer-state" id="depth-visibility">空槽：硬幣被槽壁遮住</span></div>
 <div class="depth-stage">
 <canvas id="depth-observer" width="640" height="444" role="img" aria-label="目前觀看位置所見的水槽與硬幣">硬幣固定在槽底。光出水時折射，讓硬幣看起來較淺。</canvas>
+<span class="depth-front-wall" aria-hidden="true">前側槽壁</span>
 </div>
-<div class="depth-view-note"><span class="depth-view-origin">這裡呈現的，就是圖中眼睛所見。</span><span id="depth-view-result">空槽時，硬幣的光被槽壁遮住。</span></div>
+<div class="depth-view-note"><span class="depth-observer-state" id="depth-visibility">空槽・看不到硬幣</span><span id="depth-view-result">前側槽壁擋住硬幣的光，光還沒進入眼睛。</span></div>
 </figure>
-<svg class="depth-view-links" aria-hidden="true" focusable="false"><defs><linearGradient id="depth-link-wash"><stop stop-color="#e3cb8c" stop-opacity=".05"/><stop offset="1" stop-color="#ddc88c" stop-opacity=".12"/></linearGradient></defs><path class="depth-link-area" fill="url(#depth-link-wash)"/><path class="depth-link-line" data-depth-link="top"/><path class="depth-link-line" data-depth-link="bottom"/></svg>
+<svg class="depth-view-links" aria-hidden="true" focusable="false"><defs><linearGradient id="depth-link-wash"><stop stop-color="#d6c49a" stop-opacity=".08"/><stop offset="1" stop-color="#d6c49a" stop-opacity=".30"/></linearGradient></defs><path class="depth-link-area" fill="url(#depth-link-wash)"/><path class="depth-link-line" data-depth-link="top"/><path class="depth-link-line" data-depth-link="bottom"/></svg>
 </div>
 <p id="depth-view-relationship" class="visually-hidden">這隻眼睛的觀看位置，對應「這隻眼睛看到的畫面」。拖曳眼睛，兩個畫面會同步更新。</p>
 <div class="depth-controls" role="group" aria-label="加水與放水觀察">
 <div class="depth-actions"><button id="depth-fill" type="button" title="持續加水至滿槽">↑ 加水觀察</button><button id="depth-drain" type="button" title="持續放水至空槽" disabled>↓ 放水觀察</button></div>
+<span class="depth-action-note">加水或放水都會持續到滿槽／空槽；也能直接拉動水位。</span>
 </div>
 <p id="depth-live" class="visually-hidden" role="status" aria-live="polite"></p>
 <p id="depth-fallback" class="depth-fallback"></p>

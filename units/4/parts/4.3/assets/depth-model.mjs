@@ -50,7 +50,7 @@ export function observerCamera(g, aspect = 1.4) {
   const origin = [g.eyeX, TANK.eyeHeight, 0];
   // Translate the pupil only. A fixed direction and field preserve distance
   // cues: moving away must not zoom the tank back up to fill the opening.
-  const halfField = 28 * Math.PI / 180, pitch = 29 * Math.PI / 180;
+  const halfField = 25 * Math.PI / 180, pitch = 32 * Math.PI / 180;
   const forward = [-Math.cos(pitch), -Math.sin(pitch), 0];
   const up = [forward[1], -forward[0], 0], lens = Math.tan(halfField);
   return { origin, forward, up, lens, aspect };
