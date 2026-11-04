@@ -3,7 +3,7 @@ import {createLayerDeck, layerSnapshot, placeLayer, compareLayers, LAYER_NAMES} 
 const root=document.querySelector('#rank-lab');
 if(root){
   const q=selector=>root.querySelector(selector), svg=q('#rank-scene');
-  const play=q('#rank-play'), check=q('#rank-check'), form=q('#quiz');
+  const play=q('#rank-play'), sourceTrigger=q('#rank-source-trigger'), check=q('#rank-check'), form=q('#quiz');
   const next=document.querySelector('#rank-new'), result=q('#quiz-result'), help=q('#rank-sort-help');
   const slots=[...root.querySelectorAll('[data-rank-slot]')], tokens=[...root.querySelectorAll('[data-rank-medium]')];
   const deck=createLayerDeck(), names=LAYER_NAMES.map(name=>`介質${name}`);
@@ -112,6 +112,8 @@ if(root){
           <ellipse class="rank-source-lens" cx="0" cy="0" rx="26" ry="6.5" fill="url(#rank-lens-on)" opacity="0"/>
         </g>
       </g>`;
+    const lampBox=svg.querySelector('.rank-source-photo').getBoundingClientRect(),stageBox=svg.parentElement.getBoundingClientRect();
+    Object.assign(sourceTrigger.style,{left:`${lampBox.left-stageBox.left}px`,top:`${lampBox.top-stageBox.top}px`,width:`${lampBox.width}px`,height:`${lampBox.height}px`});
     draw();
   }
 
@@ -142,6 +144,9 @@ if(root){
   function controls(){
     root.dataset.state=state;root.dataset.observed=String(observed);
     play.disabled=state==='running'||state==='suspended';
+    sourceTrigger.disabled=play.disabled;
+    sourceTrigger.setAttribute('aria-label',play.disabled?'光束前進中（照射燈）':elapsed>0?'重播光束（照射燈）':'發射光束（照射燈）');
+    sourceTrigger.title=elapsed>0?'點擊照射燈重播光束':'點擊照射燈發射光束';
     play.textContent=state==='running'?'光束前進中…':state==='suspended'?'回到畫面後續播':elapsed>0?'▶ 重播光束':'▶ 發射光束';
     check.disabled=!observed||state==='running'||state==='suspended';
     q('#rank-play-state').textContent=state==='running'?'觀察光通過每一層時的方向。':state==='suspended'?'保留目前進度，回到畫面後繼續。':observed?'光路已保留，可直接比較。':'先發射光束，再比較三層光路。';
@@ -168,6 +173,7 @@ if(root){
   }
   function resume(){if(state==='suspended'&&inView&&!document.hidden)start(false);}
   play.addEventListener('click',()=>start(true));
+  sourceTrigger.addEventListener('click',()=>{if(!sourceTrigger.disabled)start(true);});
   new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;if(inView)resume();else suspend();},{threshold:0}).observe(root);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)suspend();else resume();});
 
