@@ -113,3 +113,11 @@
 
 .tv-workbench>.tv-view{order:0}.tv-workbench>.tv-control-panel{order:1}.tv-workbench>.tv-palette{grid-column:1/-1;order:2;margin-top:0}
 @media(max-width:1100px){.tv-workbench>.tv-palette{order:1}.tv-workbench>.tv-control-panel{order:2}}
+
+/* Keep the live preview, light controls and apply action in one panel. */
+.tv-tuner .tv-selection-compare{margin:12px 0 14px;padding:10px;gap:10px;background:#edf3e6;border-color:#d3dfcb}
+.tv-tuner .tv-selection-compare>div{min-width:0;gap:8px;font-size:.76rem;line-height:1.6}.tv-tuner .tv-selection-compare span{min-width:0;overflow-wrap:anywhere}
+.tv-tuner .tv-pixel-anatomy{margin:12px 0 0;padding:10px 0 0;border:0;border-top:1px solid #d4decb;border-radius:0;background:transparent}
+.tv-tuner .tv-actions{margin-top:12px}.tv-tuner .tv-interaction-hint{margin-bottom:0}
+@media(max-width:650px){.tv-tuner .tv-selection-compare{padding:8px;gap:8px}.tv-tuner .tv-selection-compare>div{gap:6px;font-size:.73rem}.tv-tuner .tv-selection-compare i{width:30px;height:30px}}
+.tv-tuner .tv-channel[data-tv-channel="2"]{margin-bottom:0}
