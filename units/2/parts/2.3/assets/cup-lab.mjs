@@ -2,7 +2,7 @@ import { CUP, freshCup, moveCup, advanceCup, cupGeometry } from './cup-lab-model
 import { cupSVG, cupEntryDetail } from './cup-lab-view.mjs?v=real-water-entry-20261104';
 const $ = s => document.querySelector(s);
 const scene = $('#cup-scene'), reduced = matchMedia('(prefers-reduced-motion: reduce)');
-let cup = freshCup(), before = null, after = null, preview = null, bubbles = [], drag = null;
+let cup = freshCup(), before = null, after = null, preview = null, bubbles = [], recordBubbles = [], previewBubbles = [], drag = null;
 const exampleBefore = moveCup(freshCup(), 12, 0);
 const exampleAfter = moveCup(exampleBefore, 12, 115);
 let rotationUnlocked = false;
@@ -10,15 +10,11 @@ let frame = 0, previousTime = 0, lastPaint = 0, lastBubble = 0;
 const snapshot = () => ({ ...cup, bubbles: bubbles.map(b => ({ ...b })) });
 const displayed = () => preview === 'before' ? before || exampleBefore : preview === 'after' ? after || exampleAfter : cup;
 const geometry = (state = cup) => cupGeometry(state.depth, state.angle, state.escaped, state.waterArea);
-const needsFrame = () => geometry().draining || (bubbles.length && !reduced.matches);
+const needsFrame = () => geometry().draining || bubbles.length || recordBubbles.length || previewBubbles.length;
 const ensureTick = () => { if (!frame && needsFrame()) frame = requestAnimationFrame(tick); };
 const cancelTick = () => { if (frame) cancelAnimationFrame(frame); frame = 0; previousTime = 0; };
-function staticTrace(g) {
-  if (g.mouthExposed) return [];
-  return [1, 2, 3, 4].map(i => ({ x: 500 + g.outlet.x * 24 + Math.sin(i) * 6, y: 210 + g.outlet.y * 24 * i / 5, r: 8 + i, age: 0 }));
-}
 function emit(oldVent, g) {
-  if (g.vent - oldVent < .001 || reduced.matches || g.mouthExposed) return;
+  if (g.vent - oldVent < .001 || g.mouthExposed) return;
   const now = performance.now();
   if (now - lastBubble < 85) return;
   lastBubble = now;
@@ -32,12 +28,10 @@ function update(depth, angle, { capture = true, elapsed = 0 } = {}) {
   const g = geometry();
   if (g.mouthExposed) bubbles = [];
   emit(old, g);
-  if (reduced.matches && cup.escaped > old + .001) bubbles = staticTrace(g);
   if (capture && !drag && !before && !cup.wet && g.submerged && g.paperBelowOutside && Math.abs(cup.angle) < .5) before = snapshot();
   if (capture && !drag && before && cup.wet && !after) {
     after = snapshot();
-    // In reduced motion, a static transition trace replaces moving bubbles.
-    if (reduced.matches) after.bubbles = staticTrace(g);
+    recordBubbles = after.bubbles.map(b => ({ ...b }));
   }
 }
 function status(g) {
@@ -54,7 +48,7 @@ function render() {
   const state = displayed(), g = geometry(state);
   if (!drag && !preview && geometry().submerged && geometry().paperBelowOutside) rotationUnlocked = true;
   const canRotate = rotationUnlocked;
-  scene.innerHTML = cupSVG(state, { id: 'cup-main', bubbles: preview ? state.bubbles || [] : bubbles }) + cupEntryDetail(state);
+  scene.innerHTML = cupSVG(state, { id: 'cup-main', bubbles: preview ? previewBubbles : bubbles }) + cupEntryDetail(state);
   Object.assign(scene.dataset, { depth: cup.depth, angle: cup.angle, escaped: cup.escaped, wet: cup.wet, preview: preview || '',
     submerged: g.submerged, paperBelow: g.paperBelowOutside, withinTank: g.withinTank, water: g.water,
     paperY: g.paper.y, waterArea: g.waterArea, targetWaterArea: g.equilibriumWaterArea,
@@ -69,7 +63,7 @@ function render() {
   $('#cup-conclusion').hidden = !showComparison;
   if (showComparison) {
     $('#cup-before-scene').innerHTML = cupSVG(before || exampleBefore, { id: 'cup-before', mini: true }) + cupEntryDetail(before || exampleBefore);
-    $('#cup-after-scene').innerHTML = cupSVG(after || exampleAfter, { id: 'cup-after', mini: true, bubbles: after?.bubbles || [] });
+    $('#cup-after-scene').innerHTML = cupSVG(after || exampleAfter, { id: 'cup-after', mini: true, bubbles: recordBubbles });
     document.querySelectorAll('[data-cup-preview]').forEach(b => b.setAttribute('aria-pressed', String(preview === b.dataset.cupPreview)));
   }
 }
@@ -78,20 +72,26 @@ function tick(now) {
   const dt = previousTime ? Math.min(.05, (now - previousTime) / 1000) : 0;
   previousTime = now;
   if (geometry().draining) update(cup.depth, cup.angle, { elapsed: dt });
-  if (!reduced.matches) {
-    for (const bubble of bubbles) { bubble.age += dt; bubble.y -= dt * 80; bubble.x += Math.sin(bubble.age * 6) * dt * 14; }
-    bubbles = bubbles.filter(b => b.y > 211 && b.age < 4);
-  }
+  // Upward travel conveys escaped air even with reduced motion; omit the sway
+  // and slow it down there. Stored observations replay independent particles.
+  const rise = particles => particles.filter(bubble => {
+    bubble.age += dt; bubble.y -= dt * (reduced.matches ? 65 : 80);
+    if (!reduced.matches) bubble.x += Math.sin(bubble.age * 6) * dt * 14;
+    return bubble.y > 211 && bubble.age < 8;
+  });
+  bubbles = rise(bubbles); recordBubbles = rise(recordBubbles); previewBubbles = rise(previewBubbles);
   if (now - lastPaint > 45 || !needsFrame()) { render(); lastPaint = now; }
   if (needsFrame()) frame = requestAnimationFrame(tick);
   else previousTime = 0;
 }
 $('#cup-reset').addEventListener('click', () => {
-  cancelTick(); drag = null; rotationUnlocked = false; cup = freshCup(); before = after = preview = null; bubbles = []; lastBubble = 0;
+  cancelTick(); drag = null; rotationUnlocked = false; cup = freshCup(); before = after = preview = null; bubbles = []; recordBubbles = []; previewBubbles = []; lastBubble = 0;
   render();
 });
 document.querySelectorAll('[data-cup-preview]').forEach(button => button.addEventListener('click', () => {
-  preview = preview === button.dataset.cupPreview ? null : button.dataset.cupPreview; render();
+  preview = preview === button.dataset.cupPreview ? null : button.dataset.cupPreview;
+  previewBubbles = preview === 'after' ? (after?.bubbles || []).map(b => ({ ...b })) : [];
+  render(); ensureTick();
 }));
 function manual(depth, angle) { cancelTick(); preview = null; update(depth, angle); render(); ensureTick(); }
 scene.addEventListener('keydown', e => {
@@ -133,18 +133,15 @@ scene.addEventListener('pointermove', e => {
 });
 function finishDrag(e) {
   if (!drag || drag.id !== e.pointerId) return;
-  const escaped = drag.escaped;
   drag = null;
   if (scene.hasPointerCapture(e.pointerId)) scene.releasePointerCapture(e.pointerId);
   update(cup.depth, cup.angle);
-  if (reduced.matches && cup.escaped > escaped + .001) bubbles = staticTrace(geometry());
   render();
   ensureTick();
 }
 for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) scene.addEventListener(event, finishDrag);
 document.addEventListener('visibilitychange', () => { previousTime = 0; });
 reduced.addEventListener('change', () => {
-  if (reduced.matches) bubbles = [];
-  render();
+  previousTime = 0; render(); ensureTick();
 });
 render();
