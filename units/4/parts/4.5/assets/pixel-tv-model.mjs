@@ -11,10 +11,10 @@ const encode=v=>Math.round(255*(v<=.0031308?12.92*v:1.055*v**(1/2.4)-.055));
 export function displayChannels(levels){return linearChannels(levels).map(encode);}
 export function colourCss(levels){return `rgb(${displayChannels(levels).join(', ')})`;}
 export function subpixelCss(levels,index){if(!Number.isInteger(index)||index<0||index>2)throw new RangeError('色光通道不存在');return colourCss(validateLevels(levels).map((n,i)=>i===index?n:0));}
-export const PALETTE=Object.freeze({N:Object.freeze([0,0,1]),O:Object.freeze([4,1,0]),C:Object.freeze([4,4,1]),K:Object.freeze([0,0,0]),G:Object.freeze([0,4,0])});
-const NAMES={N:'深藍色',O:'橙色',C:'米白色',K:'黑色',G:'綠色'};
+export const PALETTE=Object.freeze({N:Object.freeze([0,0,1]),O:Object.freeze([4,1,0]),C:Object.freeze([4,4,1]),K:Object.freeze([0,0,0]),G:Object.freeze([0,4,0]),P:Object.freeze([1,0,4])});
+const NAMES={N:'深藍色',O:'橙色',C:'米白色',K:'黑色',G:'綠色',P:'紫色'};
 export function paletteName(levels){const key=Object.keys(PALETTE).find(key=>sameColour(PALETTE[key],levels));return NAMES[key]||COLOUR_TARGETS.find(t=>sameColour(t.levels,levels))?.name||'自調色';}
-export const COLOUR_TARGETS=Object.freeze([{name:'橙色',levels:PALETTE.O},{name:'黃色',levels:Object.freeze([4,4,0])},{name:'青色',levels:Object.freeze([0,4,4])},{name:'洋紅色',levels:Object.freeze([4,0,4])},{name:'紫色',levels:Object.freeze([1,0,4])},{name:'灰色',levels:Object.freeze([1,1,1])},{name:'粉紅色',levels:Object.freeze([4,1,1])},{name:'黃綠色',levels:Object.freeze([1,4,0])}].map(Object.freeze));
+export const COLOUR_TARGETS=Object.freeze([{name:'橙色',levels:PALETTE.O},{name:'黃色',levels:Object.freeze([4,4,0])},{name:'青色',levels:Object.freeze([0,4,4])},{name:'洋紅色',levels:Object.freeze([4,0,4])},{name:'紫色',levels:PALETTE.P},{name:'灰色',levels:Object.freeze([1,1,1])},{name:'粉紅色',levels:Object.freeze([4,1,1])},{name:'黃綠色',levels:Object.freeze([1,4,0])}].map(Object.freeze));
 export function colourHint(current,target){
  validateLevels(current);validateLevels(target);
  if(sameColour(current,target))return{title:'顏色調對了！',message:'已加入我的色盤，補格與組圖時可以直接選用。',channel:null,direction:0};
@@ -28,7 +28,7 @@ export function colourHint(current,target){
  return{title:'色光搭配對了，再比較強弱',message:`${target.filter(n=>n>0).length>1?active+'都需要':'需要的色光已選對'}；試著把${names[channel]}調${direction<0?'弱':'強'}，觀察是否更接近目標顏色。`,channel,direction};
 }
 export const REPAIR_SIZE=4,REPAIR_HOLE=6;
-export const REPAIR_TARGET=Object.freeze(['NOON','OCOO','OCKO','NGGN'].join('').split('').map(key=>PALETTE[key]));
+export const REPAIR_TARGET=Object.freeze(['NOON','OCPO','OCKO','NGGN'].join('').split('').map(key=>PALETTE[key]));
 export const PICTURE_SIZE=8;
 export const PICTURE_TARGET=Object.freeze(['NNNNNNNN','NONNNNON','NCONNOCN','NOOOOOON','NOOOOOON','OOKOOKOO','NCOOOOCN','NNCKKCNN'].join('').split('').map(key=>PALETTE[key]));
 export const initialRepair=()=>REPAIR_TARGET.map((value,i)=>i===REPAIR_HOLE?null:[...value]);

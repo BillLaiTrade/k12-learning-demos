@@ -1,4 +1,4 @@
-import {COLOUR_TARGETS,REPAIR_SIZE,REPAIR_HOLE,REPAIR_TARGET,PICTURE_SIZE,PICTURE_TARGET,initialRepair,blankPicture,fillPixel,evaluatePixels,coordinate,nextEmpty,sameColour,colourCss,subpixelCss,paletteName,levelName,colourHint} from './pixel-tv-model.mjs?v=tv-three-20261104';
+import {COLOUR_TARGETS,REPAIR_SIZE,REPAIR_HOLE,REPAIR_TARGET,PICTURE_SIZE,PICTURE_TARGET,initialRepair,blankPicture,fillPixel,evaluatePixels,coordinate,nextEmpty,sameColour,colourCss,subpixelCss,paletteName,levelName,colourHint} from './pixel-tv-model.mjs?v=tv-targets-20261104';
 
 export function initialisePixelTv(root){
  if(root.dataset.ready==='true')return;

@@ -1,7 +1,7 @@
 // Air → glass → air at two spherical surfaces. Coordinates are model units.
 export function parallelModel(kind){
  if(!['convex','concave'].includes(kind))throw new RangeError('Unknown lens');
- const sign=kind==='convex'?1:-1,radius=8,thickness=kind==='concave'?.28:.9,halfHeight=2.2,index=1.5;
+ const sign=kind==='convex'?1:-1,radius=8,thickness=kind==='concave'?.28:.9,halfHeight=kind==='concave'?2.6:2.2,index=1.5;
  const left=y=>sign*(radius-Math.sqrt(radius*radius-y*y));
  const right=y=>thickness-left(y);
  const refract=(d,N,n1,n2)=>{
