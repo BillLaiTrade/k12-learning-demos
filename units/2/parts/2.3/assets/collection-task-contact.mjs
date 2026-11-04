@@ -1,10 +1,12 @@
-import {bodyOffset} from './collection-task-layout.mjs?v=reaudit-20261103-2';
+import {tankWaterRegion,inTankWater} from './collection-task-water.mjs';
+import {bodyOffset} from './collection-task-layout.mjs?v=b-decisions-20261104';
 // 第六區的實物接觸幾何；場景提示與判定共用輪廓，座標來自器材繪圖。
-import {jarMouth,waterSurface,rigPosition} from './collection-task-model.mjs?v=reaudit-20261103-2';
+import {jarMouth,waterSurface,rigPosition} from './collection-task-model.mjs?v=b-decisions-20261104';
 export const STONE_OFFSETS=[[-48,-12],[0,-22],[48,-10],[-27,17],[27,19]];
 const polygon=points=>({kind:'polygon',points});
 const ellipse=(x,y,rx,ry)=>({kind:'ellipse',x,y,rx,ry});
 export function contains(region,p){
+ if(region.kind==='tank-water')return inTankWater(region,p);
  if(region.kind==='ellipse')return ((p.x-region.x)/region.rx)**2+((p.y-region.y)/region.ry)**2<=1;
  let inside=false;const a=region.points;
  for(let i=0,j=a.length-1;i<a.length;j=i++){
@@ -31,7 +33,7 @@ export function contactRegions(s){
   tank:{...polygon([[597,377],[597,267],[655,226],[1050,246],[1050,356],[1010,397]]),outline:polygon([[597,377],[655,336],[1050,356],[1010,397]])},
   tankDrop:polygon([[597,377],[655,301],[1050,321],[1050,356],[1010,397]]),
   catalyst:ellipse(c.x,c.y-4,52,30),
-  tankWater:polygon([[605,sy+8],[655,sy-30],[1045,sy-10],[1038,517],[1006,540],[610,519]]),
+  tankWater:tankWaterRegion(s,{local:true}),
   tankAir:polygon([[605,280],[1045,280],[1045,sy-24],[655,sy-44],[605,sy-6]]),
   // 瓶身下緣先到槽口，才能進行倒置入水；不以瓶身中心撞槽壁判定。
   immerse:polygon([[675,310],[1030,330],[1000,401],[640,380]]),
@@ -39,7 +41,7 @@ export function contactRegions(s){
   bowl:ellipse(520,560,100,48),
   stones:STONE_OFFSETS.map(([x,y])=>ellipse(520+x,560+y,25,21))
  };
- const shift=(r,d)=>({...r,...(r.kind==='ellipse'?{x:r.x+d.x,y:r.y+d.y}:{points:r.points.map(([x,y])=>[x+d.x,y+d.y])}),...(r.outline?{outline:shift(r.outline,d)}:{})});
+ const shift=(r,d)=>({...r,...(r.kind==='ellipse'?{x:r.x+d.x,y:r.y+d.y}:{points:r.points.map(([x,y])=>[x+d.x,y+d.y])}),...(r.boundary?{boundary:r.boundary.map(([x,y])=>[x+d.x,y+d.y])}:{}),...(r.outline?{outline:shift(r.outline,d)}:{})});
  for(const [id,keys]of Object.entries({flask:['flask','pourFlask','funnel'],tank:['tank','tankDrop','tankWater','tankAir','immerse','extract'],marble:['bowl']}))for(const key of keys)regions[key]=shift(regions[key],bodyOffset(s,id));
  regions.stones=regions.stones.map(r=>shift(r,bodyOffset(s,'marble')));
  return regions;

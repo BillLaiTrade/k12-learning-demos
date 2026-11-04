@@ -1,4 +1,4 @@
-import { SETUP_DURATION } from './oxygen-setup.mjs?v=reaudit-20261103-2';
+import { SETUP_DURATION } from './oxygen-setup.mjs?v=b-decisions-20261104';
 export const PREPARATION_DURATION = 12600;
 export const COMPARISON_DURATION = 6200;
 export const PREPARATION_STAGES = [0, 2000, 4800, 10000];

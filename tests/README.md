@@ -1360,3 +1360,13 @@ DEPTH_CAPTURE_DIR保存畫面與measurements.json；LESSON_BASE_URL／LESSON_USE
 ## 4.3 第六區空槽加水與材質精修（2026-11-04）
 
 depth-model新增無水純空氣／遮擋與固定世界檢查，濕態擴至1–100公分，現在6項；depth-lab改驗初始0公分不可見、新增手動加水與離屏續播／固定觀看位置／重設回空槽，現在12子項加外層共13項。文字下限只量必要標示，不將硬幣上的微小裝飾壓字當成教學標籤。其餘輸入、部分幣面共線、九尺寸／觸控區、減少動態、材質復原及無JavaScript閱讀仍保留。原整課／格式與optics一同執行共27項，DEPTH_CAPTURE_DIR／LESSON_BASE_URL／LESSON_USE_PROXY沿用。
+
+## 2.3 第三輪重審 B1–B9（2026-11-04）
+
+```sh
+node --test --test-reporter=tap tests/*2.3*model*.mjs
+node --test --test-reporter=tap tests/unit-2.3-b.test.cjs tests/unit-2.3-captions.test.cjs tests/unit-2.3-move.test.cjs tests/unit-2.3-reaudit.test.cjs
+node --test --test-reporter=tap tests/unit-2.3-nine-details.test.cjs tests/unit-2.3-full.test.cjs tests/unit-2.3-eight.test.cjs tests/unit-2.3-feedback.test.cjs tests/unit-2.3-properties.test.cjs tests/unit-2.3-discussion.test.cjs
+```
+
+新增11項模型邊界與6項實際瀏覽器情境：兩段玻璃各自形狀／長度固定、橡皮管固定可用長度、真實時間暫停字幕、八張無JS代表圖、重新集氣後立即提示封存、液體與已反應量轉移、污染提示、移動水槽與透視水域共用判斷、耗盡後器材前提及下一步順序。字幕原本的「暫停保留舊淡出文字」斷言改為立即同步當前畫面；播放中的停留／淡出／淡入及連續播放仍驗證。原有模型期待同步更新為實際排水流入水槽及先裝漏斗再補酸。新瀏覽器套件支援 `UNIT23_B_URL`／`UNIT23_B_ARTIFACT_DIR` 以核對公開版與保存獨立證據。B10、B11未新增教學，預設觀察紀錄維持。

@@ -22,7 +22,7 @@ export function createEquipmentExplorer({panel,panels,getStage,onOpen,onBackgrou
   const materialsCatalog=Object.fromEntries([...panels[0].querySelectorAll('[data-material-info]')].map(info=>[info.dataset.materialInfo,{name:info.querySelector('h4').textContent,identity:info.querySelectorAll('dd')[0].textContent,role:info.querySelectorAll('dd')[1].textContent}]));
   const catalog={...materialsCatalog};
   catalog.source={name:'雙氧水試藥瓶',identity:'盛裝雙氧水的玻璃試藥瓶；瓶內的雙氧水是過氧化氫的水溶液。',role:'先裝好薊頭漏斗與雙孔塞，再由漏斗加入雙氧水，作為氧氣來源。'};
-  catalog.tube={name:'玻璃導管',identity:'讓氣體沿固定路徑通過的中空玻璃管。',role:'將錐形瓶產生的氣體送到出口，再導入集氣瓶收集。'};
+  catalog.tube={name:'玻璃導管與橡皮管',identity:'兩段玻璃導管保持固定長度與形狀，中間以可彎曲的橡皮管連接。',role:'將錐形瓶產生的氣體送到出口，再導入集氣瓶收集。'};
   catalog.stopper={name:'雙孔塞',identity:'具有兩個孔，分別固定薊頭漏斗與導管的塞子。',role:'塞緊錐形瓶口，讓產生的氣體沿導管送出。'};
   catalog.spoon={name:'藥匙',identity:'用來取用與加入少量固體藥品的工具。',role:'先把少量二氧化錳加入空錐形瓶，之後才組裝並從漏斗加入雙氧水。'};
   let trigger=null;

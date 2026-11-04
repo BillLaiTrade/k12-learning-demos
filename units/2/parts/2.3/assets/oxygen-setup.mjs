@@ -1,4 +1,5 @@
-import {createThistleFunnel,createDoubleStopper} from './thistle-apparatus.mjs?v=reaudit-20261103-2';
+import {oxygenTubeFrame,OXYGEN_SOURCE_GLASS,OXYGEN_COLLECTOR_GLASS} from './oxygen-tube-model.mjs';
+import {createThistleFunnel,createDoubleStopper} from './thistle-apparatus.mjs?v=b-decisions-20261104';
 // The preparation is one bounded instructional clock. All water is clear water;
 // no peroxide, catalyst or gas has entered the apparatus at this point.
 export const SETUP_DURATION = 20800;
@@ -79,16 +80,13 @@ export function createSetupScene(view,panels) {
   const platePhoto=sprite('plate',-20,-10,265,40);platePhoto.setAttribute('transform','translate(0 24) skewY(-3)');platePhoto.setAttribute('data-photographic-equipment','plate');lid.append(platePhoto);art.append(jar);art.append(lid);
   const plate=lid;
   const frontTint=svg('g',{'clip-path':'url(#setup-tank-inside)'});frontTint.append(svg('path',{d:'M933 587L1137 596V685H933Z',fill:'#bbdce0','fill-opacity':'.14'}));art.insertBefore(frontTint,lid);
-  const tube=svg('g',{'data-setup-body':'tube'}),pipeOuter=svg('path',{fill:'none',stroke:'#759aa2','stroke-width':19,'stroke-linecap':'round','stroke-linejoin':'round','data-shared-tube-path':''}),pipeInner=svg('path',{fill:'none',stroke:'#d4ecee','stroke-width':12,'stroke-linecap':'round','stroke-linejoin':'round'}),pipeShine=svg('path',{fill:'none',stroke:'#fff','stroke-opacity':'.9','stroke-width':3,'stroke-linecap':'round'});
-  tube.append(pipeOuter,pipeInner,pipeShine);art.append(tube);
-  const restingTube=svg('g',{'data-photographic-equipment':'tube'});
-  // Exclude the adjacent plate corner in the atlas, below the bent tube.
-  const restClip=svg('clipPath',{id:'oxygen-rest-glass'});restClip.append(svg('path',{d:'M90 -110H620V0H540V60H90Z'}));defs.append(restClip);
-  const restGlass=svg('g',{'clip-path':'url(#oxygen-rest-glass)'});restGlass.append(sprite('tube',-27.3,-105.3,612.3,152.1));restingTube.append(restGlass);
-  for(const[stroke,width]of[['#759aa2',15],['#d4ecee',10],['#fff',2]])restingTube.append(svg('path',{d:'M20 -11H96',fill:'none',stroke,'stroke-width':width}));
-  const restStopper=createDoubleStopper();restStopper.setAttribute('transform','translate(20 15) rotate(-90)');restingTube.append(restStopper);art.append(restingTube);
-  const stopper=svg('g',{'data-setup-body':'stopper'}),corkPhoto=createDoubleStopper();corkPhoto.setAttribute('transform','translate(-26 0)');corkPhoto.setAttribute('data-photographic-equipment','stopper');stopper.append(corkPhoto);art.append(stopper);
-  const funnel=createThistleFunnel('oxygen',{top:-155,tip:400,port:-26});art.insertBefore(funnel.group,stopper);
+  const restingTube=svg('g',{'data-photographic-equipment':'tube'}),tube=svg('g',{'data-setup-body':'tube'}),firstGlass=svg('g',{'data-oxygen-glass':'source'}),collectorGlass=svg('g',{'data-oxygen-glass':'collector'});
+  const tubeCenter=svg('path',{'data-shared-tube-path':'',fill:'none',stroke:'none'});tube.append(tubeCenter);
+  for(const [group,d]of [[firstGlass,OXYGEN_SOURCE_GLASS],[collectorGlass,OXYGEN_COLLECTOR_GLASS]])for(const[stroke,width]of [['#759aa2',16],['#d4ecee',10],['#fff',2.5]])group.append(svg('path',{d,fill:'none',stroke,'stroke-width':width,'stroke-linecap':'round','stroke-linejoin':'round'}));
+  const hose=svg('path',{'data-oxygen-hose':'',fill:'none',stroke:'#cba35e','stroke-width':13,'stroke-linecap':'round'}),hoseLight=svg('path',{fill:'none',stroke:'#f7d68e','stroke-width':5,'stroke-opacity':.7,'stroke-linecap':'round'});
+  tube.append(hose,hoseLight,firstGlass,collectorGlass);restingTube.append(tube);art.append(restingTube);
+  const stopper=svg('g',{'data-setup-body':'stopper'}),corkPhoto=createDoubleStopper();corkPhoto.setAttribute('transform','translate(-26 0)');corkPhoto.setAttribute('data-photographic-equipment','stopper');stopper.append(corkPhoto);restingTube.append(stopper);
+  const funnel=createThistleFunnel('oxygen',{top:-155,tip:400,port:-26});art.insertBefore(funnel.group,restingTube);
 
   const stream=svg('path',{fill:'none',stroke:'#a8e4ee','stroke-width':12,'stroke-linecap':'round','data-setup-stream':''});
   const highlight=svg('path',{fill:'none',stroke:'#fff','stroke-opacity':'.85','stroke-width':3});art.append(stream,highlight);
@@ -147,22 +145,12 @@ export function createSetupScene(view,panels) {
     for(const key of['--hit-y','--hit-h'])button.style.setProperty(key,`${parseFloat(button.style.getPropertyValue(key))*850/900}%`);
   });
   let activeView=view,operationStage=1;
-  let tubePath='',restingTubePath='',restingTubeBounds=[],tubePhotoOpacity=1;
-  function route(capX,capY,tipX,tipY){return `M${capX} ${capY+95}V205Q${capX} 185 ${capX+20} 185H700Q720 185 720 205V${tipY+35}Q720 ${tipY+55} 740 ${tipY+55}H${tipX-20}Q${tipX} ${tipY+55} ${tipX} ${tipY+35}V${tipY}`;}
-  function positionPipe(capX,capY,tipX,progress=1,layout=1){
-    const parkedX=mix(430,550,layout),parkedY=mix(625,839,layout);
-    const lift=between(progress,0,.45),across=between(progress,.45,.8),lower=between(progress,.8,1);
-    const x=mix(parkedX,capX,across),y=mix(mix(parkedY,110,lift),capY,lower);
-    // Interpolate the centreline, never squash the glass cross-section.
-    const spread=between(progress,0,.45),tip=mix(x+630,tipX,spread),top=mix(y,185,spread),right=mix(x+550,720,spread),startX=x+25*(1-spread),firstY=mix(y,205,spread),bottom=mix(y+20,720,spread),bend=mix(y+20,700,spread);
-    tubePath=progress===1?route(capX,capY,tipX,665):`M${startX} ${y+95*spread}V${firstY}Q${startX} ${top} ${mix(startX,x+20,spread)} ${top}H${right-20}Q${right} ${top} ${right} ${firstY}V${bend}Q${right} ${bottom} ${right+20} ${bottom}H${tip-20}Q${tip} ${bottom} ${tip} ${bend}V${mix(y+35,665,spread)}`;
-    for(const n of[pipeOuter,pipeInner,pipeShine])n.setAttribute('d',tubePath);
-    tube.setAttribute('transform','');
-    tubePhotoOpacity=1-between(progress,0,.3);restingTube.setAttribute('transform',`translate(${x} ${y})`);restingTube.setAttribute('opacity',tubePhotoOpacity);
-    tube.setAttribute('opacity',1-tubePhotoOpacity);stopper.setAttribute('opacity',1-tubePhotoOpacity);
-    restingTubePath=`M${x+72} ${y-16}L${x+520} ${y-83}Q${x+550} ${y-90} ${x+560} ${y-60}L${x+565} ${y-32}`;restingTubeBounds=[x-30,y-110,620,160];
-    stopper.setAttribute('transform',`translate(${x} ${y}) rotate(${-90*(1-progress)}) scale(${mix(mix(1,.8,layout),1,lift)})`);
-    return tubePath;
+  let tubePath='';
+  function positionPipe(capX,capY,tipX,progress=1,layout=1,seal=0,tipY=665){
+    const frame=oxygenTubeFrame({capX,capY,tipX,progress,layout,seal,tipY}),pose=p=>`translate(${p.x} ${p.y}) rotate(${p.angle})`;
+    firstGlass.setAttribute('transform',pose(frame.first));collectorGlass.setAttribute('transform',pose(frame.collector));stopper.setAttribute('transform',pose(frame.first));
+    for(const n of [hose,hoseLight])n.setAttribute('d',frame.hose.dPath);hose.dataset.arcLength=String(frame.hose.length);
+    tubePath=frame.path;tubeCenter.setAttribute('d',tubePath);tube.setAttribute('opacity','1');stopper.setAttribute('opacity','1');return tubePath;
   }
   const parkedPlate='translate(1300 764.8) scale(.8 2.3)';
   function preparePlate(f,jarTransform){
@@ -184,11 +172,9 @@ export function createSetupScene(view,panels) {
         return n&&Number(n.getAttribute('opacity'))>.01?{bounds:key==='source'?[-52,0,104,210]:[-27,-18,245,55],transform:n.getAttribute('transform')||''}:null;
       }
       if(operationStage>1&&key==='catalyst')return Number(powder.getAttribute('opacity'))>.01?{bounds:[228,750,175,46],transform:''}:null;
-      if(key==='tube'&&tubePhotoOpacity>.5)return {bounds:restingTubeBounds,d:restingTubePath,stroke:true,transform:''};
-      if(key==='stopper'&&tubePhotoOpacity>.5)return {bounds:[-30,-45,130,90],d:'M-14 -35Q-30 0 -14 36Q-2 45 16 35L87 21Q96 -3 84 -28L14 -40Q-3 -44 -14 -35Z',transform:restingTube.getAttribute('transform')};
       const n=bodies[key];
       if(!n||Number(n.getAttribute('opacity')??1)<=.05)return null;
-      const outlines={flask:flaskOutline,tank:'M622 540L729 482L1462 510L1448 737L1380 780L641 746Z',jar:'M43 18Q112 0 180 18V60Q203 80 203 108V378Q112 419 20 378V108Q20 80 43 60Z',plate:'M47 18L237 14L176 42L-10 42Z',stopper:'M-57 -28H57V35H-57Z'};
+      const outlines={flask:flaskOutline,tank:'M622 540L729 482L1462 510L1448 737L1380 780L641 746Z',jar:'M43 18Q112 0 180 18V60Q203 80 203 108V378Q112 419 20 378V108Q20 80 43 60Z',plate:'M47 18L237 14L176 42L-10 42Z',stopper:'M-78 -11H26V59H-78Z'};
       return {bounds:bounds[key],d:key==='tube'?tubePath:outlines[key],stroke:key==='tube',transform:n.getAttribute('transform')||''};
     },
     operation(stage,frame,assembly,operationView){
@@ -205,9 +191,9 @@ export function createSetupScene(view,panels) {
       powder.setAttribute('opacity',chemical.catalyst);powder.setAttribute('transform',`translate(310 790) scale(1 ${chemical.catalyst}) translate(-310 -790)`);
       const seal=chemical.sealed,lift=ease(seal/.4),across=ease((seal-.4)/.4),lower=ease((seal-.8)/.2);
       // The inlet clears the mouth before crossing above it, then lowers vertically.
-      const capX=mix(250,341,across),capY=mix(mix(350,100,lift),335,lower);
+      const capX=mix(550,341,across),capY=mix(mix(839,110,lift),335,lower);
       const tipX=stage<5?800:800+235*frame.tube;
-      positionPipe(capX,capY,tipX);
+      positionPipe(capX,capY,tipX,1,1,seal,665+(stage>=6?45*Math.sin(Math.PI*frame.tube):0));
       const fp={x:mix(800,315,across),y:mix(mix(825,-170,lift),335,lower),angle:90*(1-lift)};
       funnel.render(fp,!!chemical.liquidFlow);operationView.closest('.oxygen-preparation').dataset.liquidSeal=String(!!chemical.liquidSeal);
       jarWater.setAttribute('opacity','1');jarWater.setAttribute('y','30');jarWater.setAttribute('height',360*(1-frame.collected));jarSurface.setAttribute('cy',30+360*(1-frame.collected));jarSurface.setAttribute('opacity',frame.collected<1?1:0);
@@ -253,7 +239,7 @@ export function createSetupScene(view,panels) {
       for(const n of[stream,highlight]){n.setAttribute('d',d);n.setAttribute('opacity',pouringTank||pouringJar?1:0);}
       label.textContent=pouringTank||pouringJar?'清水':'';
       label.setAttribute('x',pouringTank?800:950);label.setAttribute('y',pouringTank?410:250);
-      positionPipe(250,350,800,f.outlet,f.arrangement);flaskName.setAttribute('opacity',f.arrangement);tankName.setAttribute('opacity',f.arrangement);flaskName.textContent='錐形瓶（空）';jarName.textContent=f.immersion===1?'瓶內裝滿清水':'';
+      positionPipe(mix(430,550,f.arrangement),mix(625,839,f.arrangement),800,f.outlet,f.arrangement,0);flaskName.setAttribute('opacity',f.arrangement);tankName.setAttribute('opacity',f.arrangement);flaskName.textContent='錐形瓶（空）';jarName.textContent=f.immersion===1?'瓶內裝滿清水':'';
       const tankLabelOpacity=f.cover>0&&f.plateReturn<1?0:f.arrangement;tankName.setAttribute('opacity',tankLabelOpacity);tankLeader.setAttribute('opacity',tankLabelOpacity);
       jarName.setAttribute('x','1035');jarName.setAttribute('y','390');
       view.dataset.sharedScene='oxygen-setup-art';
