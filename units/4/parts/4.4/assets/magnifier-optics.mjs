@@ -1,7 +1,7 @@
 import {imagingState} from './imaging-optics.mjs?v=20261104-convex-unified1';
 import {imageFor,rayAt} from './optics.mjs';
 import {CONVEX_BENCH,convexRays} from './convex-bench-model.mjs?v=20261104-convex-unified1';
-export const MAGNIFIER=Object.freeze({...CONVEX_BENCH,eye:80,pupilRadius:.045,nearPoint:25,fov:40,screenAperture:CONVEX_BENCH.aperture});
+export const MAGNIFIER=Object.freeze({...CONVEX_BENCH,objectMin:10,objectMax:150,eye:80,pupilRadius:.045,nearPoint:25,fov:40,screenAperture:CONVEX_BENCH.aperture});
 export function moveMagnifier(state,key,value){
  if(!['object','screen'].includes(key)||!Number.isFinite(value))return state;
  return {...state,[key]:Math.round(Math.max(MAGNIFIER[key+'Min'],Math.min(MAGNIFIER[key+'Max'],value))*10)/10};

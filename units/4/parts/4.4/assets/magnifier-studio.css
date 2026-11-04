@@ -104,25 +104,12 @@
 
 .magnifier-condition { margin:6px 0 0; color:#31593f; font-size:.8rem; line-height:1.5; }
 
-/* A separate strip keeps the local direction diagram clear of the 3D apparatus. */
+/* Keep the experiment compact after removing the incoming-ray strip. */
 .magnifier-lab.convex-bench .magnifier-stage { height:auto; }
-.magnifier-optical-column { position:relative; min-width:0; }
+.magnifier-optical-column { min-width:0; }
 .magnifier-lab.convex-bench .magnifier-viewport { height:340px; }
 .magnifier-lab.convex-bench .magnifier-observer { align-self:start; }
-.magnifier-bundle { position:relative; z-index:2; margin-top:7px; padding:6px 9px 3px; border:1px solid #bacaaf; border-radius:8px; background:#f1f6e9; color:#31543c; }
-.magnifier-bundle-heading { display:flex; flex-wrap:wrap; align-items:center; gap:3px 8px; }
-.magnifier-bundle-heading h4 { margin:0; font-size:.74rem; }
-.magnifier-bundle-heading>span { padding:1px 6px; border-radius:5px; background:#d8e8ca; font-size:.7rem; font-weight:700; }
-.magnifier-bundle-heading small { margin-left:auto; font-size:.61rem; color:#5b735f; }
-.magnifier-bundle>svg { display:block; width:100%; height:92px; overflow:visible; }
-.magnifier-bundle-ray,.magnifier-bundle-arrow { fill:none; stroke:currentColor; stroke-width:1.7; vector-effect:non-scaling-stroke; }
-.magnifier-bundle-fill { fill:currentColor; opacity:.08; }
-.magnifier-bundle-top { color:#ba5e48; }
-.magnifier-bundle-bottom { color:#2f7da7; }
-.magnifier-bundle-eye { fill:none; stroke:#72846c; stroke-dasharray:3 4; vector-effect:non-scaling-stroke; }
-.magnifier-bundle-label { fill:currentColor; font:12px system-ui,sans-serif; }
-.magnifier-bundle-link { position:absolute; z-index:1; inset:0; width:100%; height:100%; overflow:hidden; pointer-events:none; }
-.magnifier-bundle-link path,.magnifier-bundle-link circle { fill:none; stroke:#ecf1d7; stroke-width:1.5; }
-.magnifier-bundle-link path { stroke-dasharray:2 5; }
+.magnifier-review-link { margin:12px 0; font-size:.78rem; color:#58705b; }
+.magnifier-lab .magnifier-ruler-focus { left:33.3333%; right:0; }
 @container convex-bench (max-width:679px) { .magnifier-lab.convex-bench .magnifier-viewport { height:330px; } }
-@container convex-bench (max-width:419px) { .magnifier-lab.convex-bench .magnifier-viewport { height:310px; } .magnifier-bundle-heading small { font-size:.57rem; } }
+@container convex-bench (max-width:419px) { .magnifier-lab.convex-bench .magnifier-viewport { height:310px; } }
