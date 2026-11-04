@@ -1,6 +1,5 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {SETUP,TRIANGLE,MONOCHROMATIC,trace,drawProjection,measurements} from './prism-optics.mjs?v=prism-source-comparison-20261102';
-import {wavelengthRgb} from './color-model.mjs';
+import {SETUP,TRIANGLE,MONOCHROMATIC,trace,drawProjection,measurements,prismRayRgb} from './prism-optics.mjs?v=prism-clarity-20261104';
 const AXIS=SETUP.axisHeight/100,S=.01;
 const p=([x,z],y=AXIS)=>new THREE.Vector3(x*S,y,z*S);
 export function createStudio(root,callbacks){
@@ -31,8 +30,8 @@ export function createStudio(root,callbacks){
  function line(points,color){const m=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:new THREE.Color().setRGB(...color),transparent:true,opacity:.9,depthWrite:false,toneMapped:false}));rays.add(m);}
  function screenTexture(moving=false){const c=screenCanvas.getContext('2d');if(!moving)drawProjection(screenCanvas,state.inserted,{whole:true,scales:false,light:state.light});if(moving){c.fillStyle='#3c3d3a';c.fillRect(0,0,screenCanvas.width,screenCanvas.height);}else{const m=measurements(state.inserted,state.light),x=(m.crop[0]-SETUP.screenZ[0])/(SETUP.screenZ[1]-SETUP.screenZ[0])*screenCanvas.width,y=(SETUP.screenY[1]-(SETUP.axisHeight+SETUP.cropHeight/2))/(SETUP.screenY[1]-SETUP.screenY[0])*screenCanvas.height,w=SETUP.cropWidth/(SETUP.screenZ[1]-SETUP.screenZ[0])*screenCanvas.width,h=SETUP.cropHeight/(SETUP.screenY[1]-SETUP.screenY[0])*screenCanvas.height;c.strokeStyle='#a5d5b3';c.lineWidth=10;c.setLineDash([18,12]);c.strokeRect(x,y,w,h);c.setLineDash([]);}texture.needsUpdate=true;}
  function update(next){state=next;carriage.position.z=(state.inserted?0:SETUP.railOut)*S;screenTexture();clearRays();rays.visible=state.rays;
-  const mono=MONOCHROMATIC[state.light],color=mono?wavelengthRgb(mono):[1,1,1];if(mono)glassLamp.material.color.setRGB(...color);else glassLamp.material.color.set('#fff8d9');
-  if(state.rays){if(state.inserted){line([p([SETUP.slitX,0]),p(trace(mono||550).points[1])],color);for(const w of(mono?[mono]:[400,430,460,490,520,550,580,610,640,670,700,740,780]))line(trace(w).points.slice(1).map(q=>p(q)),wavelengthRgb(w));}else line([p([SETUP.slitX,0]),p([SETUP.screenX,0])],color);}requestDraw();}
+  const mono=MONOCHROMATIC[state.light],color=mono?prismRayRgb(mono):[1,1,1];if(mono)glassLamp.material.color.setRGB(...color);else glassLamp.material.color.set('#fff8d9');
+  if(state.rays){if(state.inserted){line([p([SETUP.slitX,0]),p(trace(mono||550).points[1])],color);for(const w of(mono?[mono]:[400,430,460,490,520,550,580,610,640,670,700,740,780]))line(trace(w).points.slice(1).map(q=>p(q)),prismRayRgb(w));}else line([p([SETUP.slitX,0]),p([SETUP.screenX,0])],color);}requestDraw();}
  function updateCamera(){if(topView){camera.position.set(1.15,8,.02);camera.lookAt(1.15,0,.02);}else{camera.position.set(target.x+Math.sin(orbit.azimuth)*Math.sin(orbit.polar)*orbit.radius*fit,target.y+Math.cos(orbit.polar)*orbit.radius*fit,target.z+Math.cos(orbit.azimuth)*Math.sin(orbit.polar)*orbit.radius*fit);camera.lookAt(target);}camera.updateProjectionMatrix();}
  // Enlarged invisible picking volume keeps the unlabelled carriage easy to grab.
  const dragVolume=new THREE.Mesh(new THREE.BoxGeometry(.72,1.18,.72),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));dragVolume.position.set(0,.82,0);carriage.add(dragVolume);

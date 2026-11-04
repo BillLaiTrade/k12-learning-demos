@@ -1,5 +1,5 @@
 import {initialiseFrontMix} from './mix-lab.mjs?v=mix-drag-focus-20261103';
-import {initialisePrecisionPrism} from './precision-prism.mjs?v=dispersion-lessons-20261103';
+import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-clarity-20261104';
 import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays,QUIZ} from './color-model.mjs?v=merged-surface-20261103';
 import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs?v=filter-paper-20261103';
 import {surfaceObservation} from './surface-model.mjs?v=merged-surface-20261103';
