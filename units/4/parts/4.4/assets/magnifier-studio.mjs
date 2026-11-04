@@ -120,18 +120,36 @@ function initialise(root){
    if(viewport){const r=canvas.getBoundingClientRect(),p=camera.projectionMatrix.elements;p[0]*=viewport.width/r.width;p[5]*=viewport.height/r.height;p[8]=1-2*(viewport.left+viewport.width/2)/r.width;p[9]=2*(viewport.top+viewport.height/2)/r.height-1;camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();}
    camera.updateMatrixWorld();virtualImage.rotation.y=Math.atan2(camera.position.x-virtualImage.position.x,camera.position.z-virtualImage.position.z);virtualImage.updateMatrixWorld(true);
   }
-  function labels(){const rect=canvas.getBoundingClientRect(),g=magnifierState(state),positions={virtual:[(g.v??0)*G.scale,G.axis+(g.m??0)*G.cardHeight/2+.08,0],real:[(g.v??0)*G.scale,G.axis+Math.abs(g.m??0)*.44+.08,0]};
+  function imageBounds(rect,content=false){
+   if(!virtualImage.visible)return null;
+   const points=[];for(const x of content?[-.12*G.cardWidth,.12*G.cardWidth]:[-G.cardWidth/2,G.cardWidth/2])for(const y of content?[-.392*G.cardHeight,.367*G.cardHeight]:[-G.cardHeight/2,G.cardHeight/2])points.push(new THREE.Vector3(x,y,0).applyMatrix4(virtualImage.matrixWorld).project(camera));
+   if(points.some(p=>p.z< -1||p.z>1))return null;
+   return {left:Math.min(...points.map(p=>(p.x+1)*rect.width/2)),right:Math.max(...points.map(p=>(p.x+1)*rect.width/2)),top:Math.min(...points.map(p=>(1-p.y)*rect.height/2)),bottom:Math.max(...points.map(p=>(1-p.y)*rect.height/2))};
+  }
+  function labels(){const rect=canvas.getBoundingClientRect(),g=magnifierState(state),outline=imageBounds(rect),content=imageBounds(rect,true),positions={virtual:[(g.v??0)*G.scale,G.axis+(g.m??0)*G.cardHeight/2+.08,0],real:[(g.v??0)*G.scale,G.axis+Math.abs(g.m??0)*.44+.08,0]};
    for(const e of $$('.magnifier-anchor,.magnifier-focus')){
     const name=e.dataset.magLabel,imageTag=name==='virtual'||name==='real',p=e.hasAttribute('data-mag-focus')?[Number(e.dataset.magFocus)*G.scale,.38,.95]:positions[name],v=new THREE.Vector3(...p).project(camera),x=(v.x+1)*rect.width/2,y=(1-v.y)*rect.height/2;
     const outside=x<viewport.left||x>viewport.left+viewport.width||y<viewport.top||y>rect.height-10||v.z< -1||v.z>1;
     e.hidden=front||(name==='virtual'?(!extensions||g.type!=='virtual'):name==='real'?(!showRays||g.type!=='real'):outside);
     if(e.hidden)continue;
     if(imageTag){e.textContent=`${name==='virtual'?'虛像':'實像'}${outside?'在視野外':''}・${name==='virtual'?'圖卡':'屏幕'}側${distanceLabel(Math.abs(g.v))}`;e.style.maxWidth=(viewport.width-4)+'px';e.style.whiteSpace='normal';}
-    e.style.left=Math.max(viewport.left+e.offsetWidth/2,Math.min(viewport.left+viewport.width-e.offsetWidth/2,x))+'px';e.style.top=Math.max(viewport.top,Math.min(rect.height-12,y+15))+'px';
+    e.style.left=Math.max(viewport.left+e.offsetWidth/2,Math.min(viewport.left+viewport.width-e.offsetWidth/2,x))+'px';e.style.top=Math.max(viewport.top,Math.min(rect.height-12,name==='virtual'&&outline&&!outside?outline.top-e.offsetHeight/2-8:y+15))+'px';
    }
    const placed=[],minTop=$('.magnifier-tools').offsetTop+$('.magnifier-tools').offsetHeight+8,maxBottom=rect.height-8;
-   for(const e of $$('.magnifier-anchor,.magnifier-focus')){if(e.hidden)continue;const left=parseFloat(e.style.left),initial=parseFloat(e.style.top),h=e.offsetHeight,w=e.offsetWidth,candidates=[initial];for(let i=1;i<=12;i++)candidates.push(initial-i*(h+6),initial+i*(h+6));for(let y=minTop+h/2;y<=maxBottom-h/2;y+=2)candidates.push(y);
-    for(const y of candidates){if(y-h/2<minTop||y+h/2>maxBottom)continue;const c={left:left-w/2,right:left+w/2,top:y-h/2,bottom:y+h/2};if(placed.some(p=>c.left<p.right+5&&c.right>p.left-5&&c.top<p.bottom+5&&c.bottom>p.top-5))continue;e.style.top=y+'px';placed.push(c);break;}
+   const overlaps=(a,b,gap=5)=>b&&a.left<b.right+gap&&a.right>b.left-gap&&a.top<b.bottom+gap&&a.bottom>b.top-gap;
+   for(const e of $$('.magnifier-anchor,.magnifier-focus')){
+    if(e.hidden)continue;
+    const left=parseFloat(e.style.left),initial=parseFloat(e.style.top),h=e.offsetHeight,w=e.offsetWidth,virtual=e.dataset.magLabel==='virtual'&&outline,candidates=[{x:left,y:initial}];
+    if(virtual)candidates.push({x:left,y:outline.top-h/2-8},{x:outline.right+w/2+8,y:outline.top+h/2},{x:outline.left-w/2-8,y:outline.top+h/2},{x:left,y:outline.bottom+h/2+8});
+    for(let i=1;i<=12;i++)candidates.push({x:left,y:initial-i*(h+6)},{x:left,y:initial+i*(h+6)});
+    for(let y=minTop+h/2;y<=maxBottom-h/2;y+=2)candidates.push({x:left,y});
+    let chosen=null;
+    // Prefer the outside of the complete frame; in tight views protect the actual arrow and dot.
+    for(const obstacle of virtual?[outline,content]:[null]){
+     chosen=candidates.map(p=>({left:p.x-w/2,right:p.x+w/2,top:p.y-h/2,bottom:p.y+h/2})).find(c=>c.left>=viewport.left&&c.right<=viewport.left+viewport.width&&c.top>=minTop&&c.bottom<=maxBottom&&!placed.some(p=>overlaps(c,p))&&!overlaps(c,obstacle,7));
+     if(chosen)break;
+    }
+    if(chosen){e.style.left=(chosen.left+w/2)+'px';e.style.top=(chosen.top+h/2)+'px';placed.push(chosen);}
    }
   }
   function draw(){pending=0;renderer.render(scene,camera);labels();}
