@@ -1,3 +1,4 @@
+import {createConcaveSection} from './concave-section.mjs?v=20261104-concave-section3';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {parallelModel} from './parallel-optics.mjs?v=20261104-concave-shape2';
 const root=document.querySelector('[data-concave-lab]');
@@ -41,7 +42,7 @@ function initialise(root){
   root.querySelectorAll('[data-concave-step]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.concaveStep===step)));
   $('[data-concave-explain]').textContent=step==='enter'?'先看第一個表面：光從空氣進入玻璃，偏向這個表面的法線，與法線的夾角變小。':'再看第二個表面：光從玻璃進入空氣，偏離這個表面的法線，與法線的夾角變大。';
   $('[data-result]').textContent=showRays?(extensions?'平行光通過凹透鏡後發散；出射光的反向延長線交於入射側的虛焦點 F，出射光沒有在 F 實際會聚。':'凹透鏡中間薄、邊緣厚。這組平行光通過後向外發散。'):'先觀察鏡片厚薄，再顯示輔助光路，追蹤入射、玻璃內部與出射的方向。';
-  canvas.setAttribute('aria-label',`立體凹透鏡實驗台，平行光向外發散，光路${showRays?'顯示':'隱藏'}`);
+  canvas.setAttribute('aria-label',`凹透鏡中央剖面觀察台，平行光向外發散，光路${showRays?'顯示':'隱藏'}`);
   root.dataset.view='overall';root.dataset.rays=String(showRays);root.dataset.step=step;root.dataset.extensions=String(showRays&&extensions);
   $('[data-parallel-extensions]').hidden=!showRays;$('[data-parallel-extensions]').textContent=extensions?'隱藏反向延長線':'顯示反向延長線';$('[data-parallel-extensions]').setAttribute('aria-pressed',String(showRays&&extensions));
   studio?.update();
@@ -78,12 +79,11 @@ function initialise(root){
   mount(sourceX-.3,AXIS-.99);const source=box(scene,[.64,1.95,.78],[sourceX-.33,AXIS,0],dark);box(scene,[.025,2.02,.84],[sourceX-.02,AXIS,0],steel);
   for(const r of g.rays)box(scene,[.008,.055,.43],[sourceX-.004,AXIS-r.from[1]*SCALE,0],new THREE.MeshBasicMaterial({color:'#ffe6a0',toneMapped:false}),false);
   for(const y of [AXIS-.87,AXIS+.87])for(const z of [-.33,.33]){const bolt=new THREE.Mesh(new THREE.SphereGeometry(.025,12,8),brass);bolt.position.set(sourceX+.02,y,z);scene.add(bolt);}
-  const centerX=g.thickness*SCALE/2,R=g.halfHeight*SCALE,profile=[];
-  for(let i=0;i<=72;i++){const r=g.halfHeight*i/72;profile.push(new THREE.Vector2(r*SCALE,g.left(r)*SCALE));}
-  for(let i=72;i>=0;i--){const r=g.halfHeight*i/72;profile.push(new THREE.Vector2(r*SCALE,g.right(r)*SCALE));}
-  const lensGeometry=new THREE.LatheGeometry(profile,96),glass=new THREE.MeshPhysicalMaterial({color:'#d8f2ee',metalness:0,roughness:.06,transparent:true,opacity:.55,transmission:.12,ior:g.index,thickness:g.thickness*SCALE,depthWrite:false,side:THREE.DoubleSide});
-  const lens=new THREE.Mesh(lensGeometry,glass);lens.rotation.z=-Math.PI/2;lens.position.y=AXIS;scene.add(lens);
-  for(const edge of ['left','right']){const points=[];for(let i=0;i<=96;i++){const y=-g.halfHeight+2*g.halfHeight*i/96;points.push(world([g[edge](y),y]));}const outline=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:'#def6ee',transparent:true,opacity:.95,depthWrite:false,depthTest:false,toneMapped:false}));outline.renderOrder=3;scene.add(outline);}
+  const centerX=g.thickness*SCALE/2,R=g.halfHeight*SCALE,depth=.16;
+  const lensGeometry=createConcaveSection(THREE,{halfHeight:R,depth,halfThickness:r=>(g.thickness/2-g.left(r/SCALE))*SCALE}),glass=new THREE.MeshPhysicalMaterial({color:'#c6e6dd',metalness:0,roughness:.13,transparent:true,opacity:.62,transmission:.04,ior:g.index,thickness:g.thickness*SCALE,depthWrite:false,side:THREE.DoubleSide});
+  const lens=new THREE.Mesh(lensGeometry,glass);lens.position.set(centerX,AXIS,0);scene.add(lens);
+  const contour=[];for(let i=0;i<=96;i++){const y=-g.halfHeight+2*g.halfHeight*i/96;const p=world([g.left(y),y]);p.z=depth/2+.003;contour.push(p);}for(let i=96;i>=0;i--){const y=-g.halfHeight+2*g.halfHeight*i/96;const p=world([g.right(y),y]);p.z=depth/2+.003;contour.push(p);}contour.push(contour[0].clone());
+  const outline=new THREE.Line(new THREE.BufferGeometry().setFromPoints(contour),new THREE.LineBasicMaterial({color:'#e5f5df',transparent:true,opacity:.95,depthWrite:false,depthTest:false,toneMapped:false}));outline.renderOrder=3;scene.add(outline);
   // A low cradle supports the glass without obscuring its concave silhouette.
   mount(centerX,AXIS-R-.08);box(scene,[.4,.11,.28],[centerX,AXIS-R-.065,0],steel);
   const axisGeo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(sourceX-.05,AXIS,0),new THREE.Vector3(g.rays[0].end[0]*SCALE+.35,AXIS,0)]),axis=new THREE.Line(axisGeo,new THREE.LineDashedMaterial({color:'#e9eee2',dashSize:.12,gapSize:.08,transparent:true,opacity:.8}));axis.computeLineDistances();scene.add(axis);
