@@ -43,3 +43,5 @@
 2026-11-04續修精簡：第二區兩張SVG將偏折說明併入紅／藍光標籤，移除圖內大註記，統一由HTML圖說聲明代表色與非實際角度。prism-lessons.css改三格等高流程，手機直排。第一區圖解與全部執行模型保持；以unit-4.5-dispersion-concise決策為準。
 
 2026-11-04整合：移除第六區頁面與導覽，第四／五區的surface-model及filter-paper-model觀察句接到反射光入眼；計算函式不變。lesson.mjs更新文案模組與小測版本，path-lessons.css保留舊#s6零高度原生錨點於第五區。3D、接收預覽與材質不改，無新圖片或依賴。舊eye分支保留相容，頁面不再建立eye實驗。
+
+2026-11-04雙色光小測：duo-quiz-model.mjs共用72題的色光選擇／判定與上方混光；duo-quiz.mjs控制相互獨立的查證／作答與平面備援，duo-quiz-studio.mjs建立兩燈／色片／金框紙張的3D場景，duo-quiz.css只作用於小測。上方沿用現有torch三張PNG與SOURCE_LINEAR，下方紙面獨立受光，不新增素材／套件。五區及舊模型保持。核可概念圖只供構圖參考，未整張貼入網頁。
