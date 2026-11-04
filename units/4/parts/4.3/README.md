@@ -376,3 +376,9 @@ node --test --test-concurrency=1 tests/unit-4.3-depth-model.test.mjs tests/unit-
 依使用者澄清，取消前節分段停止：按加水後從目前水位持續加到滿，按放水後持續放到空。完整行程約5秒，中間不停止；同向重按不重播，反向由當前水位接續。空／滿停用、手動拖曳接管、離屏續播與減少動態保持。左圖下緣提示、無重設、固定鏡頭及物理模型不變。
 
 五檔組合仍31項（10模型／21瀏覽器，含外層），公開參數與第六區15項專項沿用；改驗一次點按通過中間水位到端點、途中改向不跳位、手機完整加滿／放空與減少動態端點。DEPTH_CAPTURE_DIR另存water-filling.png及water-draining.png。前輪分段是已修正的理解，最新規格見`docs/decisions/unit-4.3-depth-water-flow.md`，本機證據見`docs/reviews/unit-4.3-depth-water-flow/`。
+
+## 第六區移除重播光路（2026-11-04）
+
+依使用者指示刪除重播按鈕及專用事件／進度／部分裁切；光路直接隨水位與眼睛位置完整更新。左圖上方僅留光路開關，底部加水／放水、持續到端點、途中改向、離屏續播及手機拖曳保持。固定鏡頭、物理模型與右側繪圖不變。
+
+移除過時的重播專項，既有預設檢查改驗按鈕不存在；第六區專項14項，五檔組合30項（10模型／20瀏覽器，含外層）。本輪執行depth-lab與format兩檔共19項；原參數沿用。決策見`docs/decisions/unit-4.3-depth-no-replay.md`，本機證據見`docs/reviews/unit-4.3-depth-no-replay/`。

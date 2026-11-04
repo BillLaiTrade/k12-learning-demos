@@ -24,9 +24,9 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   assert.equal(await page.locator('#depth-lab form').count(),0);
   assert.equal(await page.locator('#depth-lab input[type=range]').count(),1);
   assert.equal(await page.locator('#depth-input').getAttribute('aria-orientation'),'vertical');
-  assert.equal(await page.locator('#depth-lab button').count(),3);
+  assert.equal(await page.locator('#depth-lab button').count(),2);
   assert.equal(await page.locator('.depth-explanation #show-rays').count(),1);
-  assert.equal(await page.locator('.depth-explanation #depth-replay').count(),1);
+  assert.equal(await page.locator('#depth-replay').count(),0);
   assert.deepEqual(await page.locator('.depth-controls button').evaluateAll(es=>es.map(e=>e.id)),['depth-fill','depth-drain']);
   assert.equal(await page.locator('.depth-eye-rail').count(),1);
   assert.equal(await page.locator('#depth-reset').count(),0);
@@ -154,16 +154,6 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   await page.keyboard.press('End');assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'340');
   await set(70,250);await eye.scrollIntoViewIfNeeded();const b=await eye.boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2+35,b.y+b.height/2,{steps:6});await page.mouse.up();assert.ok(+await page.locator('#depth-eye').getAttribute('aria-valuenow')>250);
   await set(0,300);
- });
- await t.test('replay traces coin to eye before revealing auxiliary lines, pauses offscreen, and can restart',async()=>{
-  await set(100,300);await page.locator('#depth-lab').scrollIntoViewIfNeeded();await page.waitForTimeout(150);await page.locator('#depth-replay').click();
-  await page.waitForTimeout(120);assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'playing');assert.equal(await page.locator('#depth-scene .extension').count(),0);
-  await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(150);
-  assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'paused');
-  const stopped=await page.locator('#depth-scene .depth-core').first().getAttribute('d');await page.waitForTimeout(180);assert.equal(await page.locator('#depth-scene .depth-core').first().getAttribute('d'),stopped);
-  await page.locator('#depth-lab').scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('#depth-lab').dataset.state==='ready');
-  assert.equal(await page.locator('#depth-scene .extension').count(),2);
-  await page.locator('#depth-replay').click();await page.waitForTimeout(100);await page.locator('#depth-input').fill('80');assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'ready');
  });
  await t.test('desktop and phone keep panels, labels and controls readable without horizontal page scrolling',async()=>{
   for(const [width,height] of [[1536,1000],[1440,900],[1366,768],[1280,650],[1024,768],[820,900],[760,844],[390,844],[320,740]]){

@@ -37,8 +37,8 @@
   <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-fit2">
 <link rel="stylesheet" href="assets/integrated-refraction.css?v=20261103-fit2">
   <link rel="stylesheet" href="assets/return-refraction-refresh.css?v=20261103-inline1">
-  <link rel="stylesheet" href="assets/depth-lab.css?v=20261104-waterflow1">
-  <script type="module" src="assets/depth-lab.mjs?v=20261104-waterflow1"></script>
+  <link rel="stylesheet" href="assets/depth-lab.css?v=20261104-noreplay1">
+  <script type="module" src="assets/depth-lab.mjs?v=20261104-noreplay1"></script>
   <script type="module" src="assets/lesson.mjs?v=20261103-depth1">
 </script>
 </head>
@@ -464,7 +464,6 @@
 <figcaption>光怎麼進入眼睛<small>側面剖面</small></figcaption>
 <div class="depth-local-tools" role="group" aria-label="左圖光路顯示">
 <label><input id="show-rays" type="checkbox" checked>顯示光路與輔助線</label>
-<button id="depth-replay" type="button">↻ 重播光路</button>
 </div>
 <div class="depth-stage">
 <svg id="depth-scene" viewBox="0 0 720 500" role="group" aria-label="硬幣固定，折射光進入目前觀看位置">
@@ -495,7 +494,7 @@
 <p>硬幣反射的光從水進入空氣，斜射時偏離法線。眼睛依入眼光線的方向往回判斷，得到比硬幣更靠近水面的視位置。左邊的橘色虛線只用來說明這個判斷，光並沒有沿虛線傳播。</p>
 <p>右邊是左側觀看位置的視野。觀看位置太遠、水位較低時，前側槽壁可能遮住硬幣的光；靠近或加水，便能觀察可見範圍如何改變。即使暫時看不到硬幣，它仍固定在槽底。</p>
 <p>生活中，池底或水中物體也常看起來較淺；看見的深度不能直接當作實際水深。</p>
-<p class="note">模型：平坦水面、代表水折射率4/3，小瞳孔附近的光估計局部視位置。右側以相同場景的光線追跡繪製，從槽口觀看，前側槽壁設為不透光以呈現遮擋；未模擬透過槽壁的另一組折射、波浪與部分反射。光路重播是慢動作示意。</p>
+<p class="note">模型：平坦水面、代表水折射率4/3，小瞳孔附近的光估計局部視位置。右側以相同場景的光線追跡繪製，從槽口觀看，前側槽壁設為不透光以呈現遮擋；未模擬透過槽壁的另一組折射、波浪與部分反射。</p>
 </div></details>
 <noscript><p class="depth-fallback">水底硬幣沒有移動。光出水時折射，眼睛沿入眼方向往回判斷，因此看起來較淺；啟用JavaScript後可同步調整水位與觀看位置。</p></noscript>
 </div>
