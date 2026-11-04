@@ -370,3 +370,9 @@ node --test --test-concurrency=1 tests/unit-4.3-depth-model.test.mjs tests/unit-
 拖曳提示移至左圖下緣、光路圖例旁；共用列只留加水／放水，手機提示跟隨左圖。固定鏡頭、光學模型及材質不變。原重設及一鍵加滿屬歷史功能，由本節取代。
 
 五檔組合及環境變數沿用，目前31項（10模型／21瀏覽器，含外層）；第六區專項15項，包含分段停止、連按／改向、加水與放水離屏續播、觸控及減少動態。九尺寸新增提示位於左圖下方且不越界的核對。詳見`docs/decisions/unit-4.3-depth-water-steps.md`及`docs/reviews/unit-4.3-depth-water-steps/`。
+
+## 第六區持續加滿／放空（2026-11-04）
+
+依使用者澄清，取消前節分段停止：按加水後從目前水位持續加到滿，按放水後持續放到空。完整行程約5秒，中間不停止；同向重按不重播，反向由當前水位接續。空／滿停用、手動拖曳接管、離屏續播與減少動態保持。左圖下緣提示、無重設、固定鏡頭及物理模型不變。
+
+五檔組合仍31項（10模型／21瀏覽器，含外層），公開參數與第六區15項專項沿用；改驗一次點按通過中間水位到端點、途中改向不跳位、手機完整加滿／放空與減少動態端點。DEPTH_CAPTURE_DIR另存water-filling.png及water-draining.png。前輪分段是已修正的理解，最新規格見`docs/decisions/unit-4.3-depth-water-flow.md`，本機證據見`docs/reviews/unit-4.3-depth-water-flow/`。

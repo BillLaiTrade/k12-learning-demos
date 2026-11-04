@@ -1,0 +1,53 @@
+{
+  "baseline": "acbc4e812b86cd71717962c6ed9b0e23f9206737",
+  "checks": [
+    {
+      "name": "section 1 HTML unchanged",
+      "pass": true
+    },
+    {
+      "name": "section 2 HTML unchanged",
+      "pass": true
+    },
+    {
+      "name": "section 3 HTML unchanged",
+      "pass": true
+    },
+    {
+      "name": "section 4 HTML unchanged",
+      "pass": true
+    },
+    {
+      "name": "section 5 HTML unchanged",
+      "pass": true
+    },
+    {
+      "name": "section 7 HTML unchanged",
+      "pass": true
+    },
+    {
+      "name": "unchanged assets/depth-model.mjs",
+      "pass": true
+    },
+    {
+      "name": "unchanged assets/depth-observer.mjs",
+      "pass": true
+    },
+    {
+      "name": "unchanged assets/depth-lab.css",
+      "pass": true
+    },
+    {
+      "name": "unchanged assets/lesson.mjs",
+      "pass": true
+    },
+    {
+      "name": "unchanged assets/optics.mjs",
+      "pass": true
+    },
+    {
+      "name": "unchanged assets/oblique-entry-water.png",
+      "pass": true
+    }
+  ]
+}

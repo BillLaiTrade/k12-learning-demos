@@ -45,38 +45,41 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   const before=await page.locator('#depth-observer').evaluate(e=>e.toDataURL());await page.waitForTimeout(150);
   assert.equal(await page.locator('#depth-observer').evaluate(e=>e.toDataURL()),before);
  });
- await t.test('water buttons stop after each step, reveal the coin and drain without moving the eye',async()=>{
+ await t.test('one press continuously fills or drains to its endpoint with synchronized views',async()=>{
   await page.locator('#depth-fill').click();await page.waitForTimeout(150);assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'filling');
-  const depth=+await page.locator('#depth-input').inputValue();assert.ok(depth>0&&depth<20);
+  const depth=+await page.locator('#depth-input').inputValue();assert.ok(depth>0&&depth<100);
   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(180);assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'paused');
   const stopped=await page.locator('#depth-input').inputValue();await page.waitForTimeout(200);assert.equal(await page.locator('#depth-input').inputValue(),stopped);
   await page.locator('#depth-lab').scrollIntoViewIfNeeded();
-  const settled=async n=>page.waitForFunction(n=>document.querySelector('#depth-observer').dataset.depth===String(n)&&document.querySelector('#depth-lab').dataset.state==='ready',n);
-  await settled(20);await page.waitForTimeout(200);assert.equal(await page.locator('#depth-input').inputValue(),'20');
-  if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,'first-water-step.png')});
-  for(const n of [40,60,80,100]){await page.locator('#depth-fill').click();await settled(n);}
+  await page.waitForFunction(()=>+document.querySelector('#depth-observer').dataset.depth>=30&&document.querySelector('#depth-lab').dataset.state==='filling');
+  if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,'water-filling.png')});
+  await page.waitForFunction(()=>+document.querySelector('#depth-observer').dataset.depth>=65&&document.querySelector('#depth-lab').dataset.state==='filling');
+  await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='100'&&document.querySelector('#depth-lab').dataset.state==='ready');
   assert.equal(await page.locator('#depth-fill').isDisabled(),true);
   assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'300');assert.ok(+await page.locator('#depth-observer').getAttribute('data-coin-pixels')>50);
   if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,'filled-default-view.png')});
   await page.locator('#depth-drain').click();await page.waitForTimeout(150);assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'draining');
-  assert.ok(+await page.locator('#depth-input').inputValue()<100&&+await page.locator('#depth-input').inputValue()>80);
+  assert.ok(+await page.locator('#depth-input').inputValue()<100&&+await page.locator('#depth-input').inputValue()>0);
+  await page.waitForFunction(()=>+document.querySelector('#depth-observer').dataset.depth<=65&&+document.querySelector('#depth-observer').dataset.depth>0&&document.querySelector('#depth-lab').dataset.state==='draining');
+  if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,'water-draining.png')});
   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(180);assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'paused');
   const paused=await page.locator('#depth-input').inputValue();await page.waitForTimeout(180);assert.equal(await page.locator('#depth-input').inputValue(),paused);
-  await page.locator('#depth-lab').scrollIntoViewIfNeeded();await settled(80);
-  if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,'drained-one-step.png')});
-  for(const n of [60,40,20,0]){await page.locator('#depth-drain').click();await settled(n);}
+  await page.locator('#depth-lab').scrollIntoViewIfNeeded();
+  await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='0'&&document.querySelector('#depth-lab').dataset.state==='ready');
   assert.equal(await page.locator('#depth-drain').isDisabled(),true);assert.equal(await page.locator('#depth-fill').isEnabled(),true);
   assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'300');assert.equal(+await page.locator('#depth-observer').getAttribute('data-coin-pixels'),0);
  });
- await t.test('repeated presses queue steps, opposite presses reverse and direct manipulation takes over',async()=>{
+ await t.test('same-direction presses continue, opposite presses reverse and direct manipulation takes over',async()=>{
   await set(0,250);await page.locator('#show-rays').uncheck();
-  await page.locator('#depth-fill').click();await page.locator('#depth-fill').click();
-  await page.waitForFunction(()=>document.querySelector('#depth-lab').dataset.state==='ready'&&document.querySelector('#depth-observer').dataset.depth==='40');
+  await page.locator('#depth-fill').click();
+  await page.waitForFunction(()=>+document.querySelector('#depth-input').value>=25);
+  const beforeRepeat=+await page.locator('#depth-input').inputValue();await page.locator('#depth-fill').click();
+  assert.ok(+await page.locator('#depth-input').inputValue()>=beforeRepeat,'repeated fill does not restart');
   assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'250');assert.equal(await page.locator('#show-rays').isChecked(),false);
-  await page.locator('#depth-fill').click();await page.waitForTimeout(150);
+  await page.waitForFunction(()=>+document.querySelector('#depth-input').value>=40&&document.querySelector('#depth-lab').dataset.state==='filling');
   const before=await page.evaluate(()=>{const depth=+document.querySelector('#depth-input').value;document.querySelector('#depth-drain').click();return depth;});
   assert.equal(await page.locator('#depth-input').inputValue(),String(before));assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'draining');
-  await page.waitForFunction(n=>document.querySelector('#depth-lab').dataset.state==='ready'&&document.querySelector('#depth-observer').dataset.depth===String(n),before-20);
+  await page.waitForFunction(()=>document.querySelector('#depth-lab').dataset.state==='ready'&&document.querySelector('#depth-observer').dataset.depth==='0');
   assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'250');assert.equal(await page.locator('#show-rays').isChecked(),false);
   await set(50,250);await page.locator('#depth-drain').click();await page.waitForTimeout(150);
   const handle=await page.locator('#depth-input').evaluate(e=>{const b=e.getBoundingClientRect();return{x:b.x+b.width/2,y:b.y+22+(b.height-44)*(1-Number(e.value)/100)};});
@@ -197,7 +200,7 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:wx,y:wb.y+22}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
   assert.equal(await water.inputValue(),'100');assert.ok(Math.abs(await p.evaluate(()=>scrollY)-scroll)<3);
   await p.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='100');
-  await p.locator('#depth-drain').tap();await p.waitForFunction(()=>document.querySelector('#depth-lab').dataset.state==='ready'&&document.querySelector('#depth-observer').dataset.depth==='80');
+  await p.locator('#depth-drain').tap();await p.waitForFunction(()=>document.querySelector('#depth-lab').dataset.state==='ready'&&document.querySelector('#depth-observer').dataset.depth==='0');
   await p.locator('#depth-fill').tap();await p.waitForFunction(()=>document.querySelector('#depth-lab').dataset.state==='ready'&&document.querySelector('#depth-observer').dataset.depth==='100');
   const view=p.locator('#depth-observer');await view.scrollIntoViewIfNeeded();const vb=await view.boundingBox(),sx=vb.x+vb.width/2,sy=vb.y+vb.height*.7;
   const before=await p.evaluate(()=>scrollY);
@@ -206,13 +209,13 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   assert.ok(await p.evaluate(()=>scrollY)>before+20,'page still scrolls outside the handles');
   await context.close();
  });
- await t.test('reduced motion completes only the requested step in either direction',async()=>{
+ await t.test('reduced motion reaches the requested endpoint in either direction',async()=>{
   await page.emulateMedia({reducedMotion:'reduce'});await set(0,300);
-  for(const n of [20,40,60,80,100]){await page.locator('#depth-fill').click();await page.waitForFunction(n=>document.querySelector('#depth-observer').dataset.depth===String(n),n);assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'ready');}
-  assert.equal(await page.locator('#depth-scene .extension').count(),2);
-  for(const n of [80,60,40,20,0]){await page.locator('#depth-drain').click();await page.waitForFunction(n=>document.querySelector('#depth-observer').dataset.depth===String(n),n);}
+  await page.locator('#depth-fill').click();await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='100');
+  assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'ready');assert.equal(await page.locator('#depth-scene .extension').count(),2);
+  await page.locator('#depth-drain').click();await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='0');
   assert.equal(await page.locator('#depth-drain').isDisabled(),true);
-  for(const [button,start,target] of [['#depth-drain',60,40],['#depth-fill',40,60]]){
+  for(const [button,start,target] of [['#depth-drain',60,0],['#depth-fill',40,100]]){
    await page.emulateMedia({reducedMotion:'no-preference'});await set(start,300);await page.locator(button).click();await page.waitForTimeout(150);await page.emulateMedia({reducedMotion:'reduce'});
    await page.waitForFunction(n=>document.querySelector('#depth-observer').dataset.depth===String(n)&&document.querySelector('#depth-lab').dataset.state==='ready',target);
   }
