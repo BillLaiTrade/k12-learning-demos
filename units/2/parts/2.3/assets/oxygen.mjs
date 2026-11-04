@@ -1,8 +1,8 @@
 import { createExperimentPlayerFooter } from './experiment-player.mjs?v=b-decisions-20261104';
 import { createSceneCaptions } from './oxygen-captions.mjs?v=b-decisions-20261104';
 import { createEquipmentExplorer } from './oxygen-equipment.mjs?v=standby-desk-20261104';
-import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=materials-space-20261104';
-import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=standby-desk-20261104';
+import { OXYGEN_OPERATIONS, oxygenOperationFrame, assemblyFrame } from './oxygen-model.mjs?v=step-equipment-20261104';
+import { createSetupScene, SETUP_DURATION } from './oxygen-setup.mjs?v=step-equipment-20261104';
 const section = document.querySelector('.oxygen-lesson');
 const panel = section.querySelector('.oxygen-preparation');
 const steps = [...panel.querySelectorAll('.oxygen-steps [data-stage]')];

@@ -2,7 +2,7 @@ import { createExperimentPlayerFooter } from './experiment-player.mjs?v=b-decisi
 import {createSceneCaptions} from './oxygen-captions.mjs?v=b-decisions-20261104';
 import {createCO2Explorer} from './co2-equipment.mjs?v=standby-desk-20261104';
 import {CO2_OPERATIONS,co2OperationFrame} from './co2-model.mjs?v=standby-desk-20261104';
-import {createCO2Bench} from './co2-setup.mjs?v=standby-desk-20261104';
+import {createCO2Bench} from './co2-setup.mjs?v=step-equipment-20261104';
 const section=document.querySelector('#s4'),root=section.querySelector('.co2-preparation'),panel=root;
 const steps=[...root.querySelectorAll('[data-co2-step]')],panels=[...root.querySelectorAll('[data-co2-panel]')],players=[];
 const materialButtons=[...panels[0].querySelectorAll('[data-co2-material]')],materialInfo=[...panels[0].querySelectorAll('[data-co2-info]')];

@@ -63,15 +63,18 @@ export function createCO2Bench(panel,panels){
   view.querySelector(`#co2-scene-${index}`).style.display='none';
   for(const canvas of view.querySelectorAll('.co2-main-scene,.co2-closeup svg'))canvas.append(node('use',{href:'#co2-shared-bench','data-shared-bench-use':'','aria-hidden':'true'}));
  }
- let current,frame,stage=0,lastHoseKey='',hoseShape=null;
+ let current,frame,stage=0,lastHoseKey='',hoseShape=null,shown={};
+ const visible=(node,yes)=>node.setAttribute('visibility',yes?'visible':'hidden');
  function render(index,elapsed,f){
   stage=index;frame=f;current=co2BenchFrame(index,elapsed,f);const {bodies:state,bowl:bp,glass,plate:pp}=current;
+  shown={flask:index>=1,jar:index>=4,acid:index===3&&f.localTime<4800,marble:index===1&&bp.x+110>0,
+    forceps:current.tool.visible,funnel:index>=2,tube:index>=2,stopper:index>=2,plate:index===6&&f.cover>0};
   panel.dataset.bench='shared';panel.dataset.setup=f.placement.toFixed(4);panel.dataset.setupCaption='true';panel.style.setProperty('--co2-bench-ratio','1100 / 650');
   const active=index>=2,before=active?lip:flask;if(standbyRig.nextSibling!==before)art.insertBefore(standbyRig,before);standbyRig.dataset.active=String(active);
   art.insertBefore(acid,index===3?stream:flask);
   art.insertBefore(plate,index===6&&f.cover>0?air:jar);
   for(const key of ['flask','jar','acid']){
-   const p=state[key],body=bodies[key];setBox(body.image,p.box);body.group.setAttribute('transform',`rotate(${p.angle} ${p.cx} ${p.cy})`);body.group.setAttribute('opacity',p.visible?'1':'0');
+   const p=state[key],body=bodies[key];setBox(body.image,p.box);body.group.setAttribute('transform',`rotate(${p.angle} ${p.cx} ${p.cy})`);body.group.setAttribute('opacity',p.visible&&shown[key]?'1':'0');
   }
   setBox(flaskFront.firstChild,state.flask.box);const flaskRotation=`rotate(${state.flask.angle} ${state.flask.cx} ${state.flask.cy})`;flaskFront.setAttribute('transform',flaskRotation);flaskClip.firstChild.setAttribute('transform',flaskRotation);lip.setAttribute('opacity',f.seal===1?'.75':'0');
   forceps.setAttribute('transform',matrix(current.tool));forceps.setAttribute('opacity',current.tool.visible?'1':'0');forceps.dataset.gripping=String(current.tool.gripping);
@@ -90,17 +93,19 @@ export function createCO2Bench(panel,panels){
   for(const h of [hose,flowPaths[1]])h.setAttribute('d',hoseShape.dPath);hose.dataset.arcLength=hoseShape.length.toFixed(3);
   for(const path of flowPaths){path.setAttribute('opacity',f.flow?'1':'0');path.style.strokeDashoffset=String(-time/35);}
   setBox(plateImage,plateBox(pp));plate.dataset.cover=String(f.cover);air.setAttribute('opacity',f.collecting?'1':'0');air.setAttribute('transform',`translate(0 ${-6*((time%1000)/1000)})`);sample.setAttribute('opacity',f.labeled?'1':'0');
-  labels.flask.textContent=f.flaskCount===0&&f.dishCount===5?'錐形瓶（空）':f.acid===0?'錐形瓶：大理石':'錐形瓶：大理石＋稀鹽酸';labels.jar.textContent='集氣瓶：瓶口朝上';for(const label of Object.values(labels))label.setAttribute('opacity',index===0?'0':String(f.placement));
-  if(index){panels[index].querySelector('.co2-main-scene').setAttribute('viewBox','0 -100 1100 750');panels[index].querySelector('.co2-closeup svg').setAttribute('viewBox',index<=3?'100 -80 500 700':'555 195 520 420');}
-  if(index===1)return f.localTime<4000?'把錐形瓶與直立集氣瓶移到工作位置，接著加入大理石':f.flaskCount<5?'錐形瓶略微傾斜，用鑷子逐塊輕放，讓大理石沿內壁滑入':dishVisible?'大理石已加入，將不再使用的空碟移開':'大理石已加入，接著裝好薊頭漏斗與雙孔塞';
+  visible(standbyRig,shown.tube);visible(plate,shown.plate);
+  labels.flask.textContent=f.flaskCount===0&&f.dishCount===5?'錐形瓶（空）':f.acid===0?'錐形瓶：大理石':'錐形瓶：大理石＋稀鹽酸';labels.jar.textContent='集氣瓶：瓶口朝上';for(const [key,label]of Object.entries(labels))label.setAttribute('opacity',shown[key]?String(f.placement):'0');
+  if(index){const left=index===1?-150:0;panels[index].querySelector('.co2-main-scene').setAttribute('viewBox',`${left} -100 1100 750`);art.querySelector('[data-bench-background]').setAttribute('x',left);panels[index].querySelector('.co2-closeup svg').setAttribute('viewBox',index<=3?'100 -80 500 700':'555 195 520 420');}
+  if(index===1)return f.localTime<4000?'取出錐形瓶移到工作位置，接著加入大理石':f.flaskCount<5?'錐形瓶略微傾斜，用鑷子逐塊輕放，讓大理石沿內壁滑入':dishVisible?'大理石已加入，將不再使用的空碟移開':'大理石已加入，接著裝好薊頭漏斗與雙孔塞';
   if(index===2)return f.seal<1?'把薊頭漏斗與導管穿過雙孔塞，對準瓶口裝好':'雙孔塞已塞緊；接著由薊頭漏斗加入稀鹽酸';
-  if(index===3)return f.acid<1?'由薊頭漏斗加入稀鹽酸；液面淹過漏斗下端後形成液封':state.acid.visible?'液封已形成，移開試藥瓶；先不收集起始氣體':'液封已形成，接著先排除原有空氣';
+  if(index===3)return f.acid<1?'由薊頭漏斗加入稀鹽酸；液面淹過漏斗下端後形成液封':shown.acid?'液封已形成，移開試藥瓶；先不收集起始氣體':'液封已形成，試藥瓶已收起；接著先排除原有空氣';
   if(index===4)return '先在集氣瓶外排出裝置原有空氣與起始混合氣';
   if(index===5)return f.collecting?'二氧化碳由瓶底附近進入，原有空氣由瓶口向上離開':'先抬起固定長度的集氣玻璃管，越過瓶口，再放到瓶底附近';
   if(index===6)return f.localTime<4300?'將玻璃管整根抬起移出瓶口，保持出口暢通':f.cover<1?'導管已移出，將玻璃片平放並完整蓋住瓶口':'玻璃片已貼合並完整覆蓋瓶口，標示二氧化碳，保持直立';
   return null;
  }
  function target(key){
+  if(!shown[key])return {visible:false,d:'M0 0',bounds:[0,0,0,0],transform:''};
   if(key==='funnel')return {visible:true,...funnel.geometry()};
   if(stage===0&&key!=='tube')return null;
   if(key==='forceps')return {visible:current.tool.visible,bounds:[-20,-314,40,300],d:'M-20 -314H20V-14H-20Z',transform:matrix(current.tool),stroke:false};

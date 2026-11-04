@@ -18,7 +18,7 @@ export function setupFrame(elapsed) {
     angle:180*inversion,mouthY:mix(mix(250,330,arrangement),465,immersion)-215*Math.cos(Math.PI*inversion),
     covered:cover===1&&uncover===0};
 }
-const messages={arrange:'從材料桌面開始，把錐形瓶、水槽與集氣瓶移到操作位置',tank:'先將清水注入空水槽，建立排水集氣的水中環境',jar:'把清水注入直立的集氣瓶，直到瓶內裝滿水',cover:'用薄玻璃片遮住裝滿水的集氣瓶口',invert:'玻璃片貼住瓶口，將裝滿水的集氣瓶連續倒置',immerse:'保持瓶口被遮住，將倒置瓶的瓶口移入水面下',uncover:'瓶口已在水下，再把遮住瓶口的玻璃片移開',plate:'把移開的玻璃片取出，暫放在桌面上',outlet:'將導管出口放進瓶外的水中，現在先不接入集氣瓶',ready:'集氣位置已備好；瓶內裝滿水，導管出口留在瓶外水中'};
+const messages={arrange:'取出水槽與集氣瓶，移到操作位置',tank:'先將清水注入空水槽，建立排水集氣的水中環境',jar:'把清水注入直立的集氣瓶，直到瓶內裝滿水',cover:'用薄玻璃片遮住裝滿水的集氣瓶口',invert:'玻璃片貼住瓶口，將裝滿水的集氣瓶連續倒置',immerse:'保持瓶口被遮住，將倒置瓶的瓶口移入水面下',uncover:'瓶口已在水下，再把遮住瓶口的玻璃片移開',plate:'把移開的玻璃片取出並收起，封存時再取用',outlet:'取出導管，把出口放進瓶外水中，先不接入集氣瓶',ready:'集氣位置已備好；瓶內裝滿水，導管出口留在瓶外水中'};
 const NS='http://www.w3.org/2000/svg';
 function svg(tag,attrs={}) {const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,v);return n;}
 // Sprite coordinates refer to the generated transparent sheet, not the source
@@ -34,7 +34,7 @@ export function createSetupScene(view,panels) {
   // Clip definitions must remain outside hidden step panels. Chromium drops
   // clips referenced by another SVG when their defining panel is display:none.
   const art=svg('g',{id:'oxygen-setup-art'}),defs=view.closest('.oxygen-preparation').querySelector('.oxygen-paint-resources defs');defs.append(art);
-  art.append(svg('image',{href:'assets/oxygen-setup-table.png',width:1536,height:900,preserveAspectRatio:'none','data-shared-background':''}));
+  const background=svg('image',{href:'assets/oxygen-setup-table.png',width:1536,height:900,preserveAspectRatio:'none','data-shared-background':''});art.append(background);
   const shadowGradient=svg('radialGradient',{id:'oxygen-contact-shadow'});shadowGradient.append(svg('stop',{offset:0,'stop-color':'#544c40','stop-opacity':'.2'}),svg('stop',{offset:1,'stop-color':'#544c40','stop-opacity':0}));defs.append(shadowGradient);
   const source=svg('g',{'data-setup-body':'source'});source.append(sprite('source',75,70,165,350));art.append(source);
   const catalyst=svg('g',{'data-setup-body':'catalyst'});catalyst.append(sprite('catalyst',90,530,275,145));art.append(catalyst);
@@ -136,7 +136,7 @@ export function createSetupScene(view,panels) {
   const worldClip=svg('clipPath',{id:'shared-jar-world'});
   worldClip.append(svg('path',{d:clip.firstChild.getAttribute('d'),transform:'translate(1035 465) rotate(180) translate(-111.5 -215)'}));defs.append(worldClip);
   // Material identification has a separate, spacious desk; operation geometry stays shared.
-  let activeView=view,operationStage=1;
+  let activeView=view,operationStage=1,shown={};
   function rigDepth(active){const before=active?stream:flask;if(standbyRig.nextSibling!==before)art.insertBefore(standbyRig,before);standbyRig.dataset.active=String(active);}
   let tubePath='';
   function positionPipe(capX,capY,tipX,progress=1,layout=1,seal=0,tipY=665){
@@ -159,14 +159,25 @@ export function createSetupScene(view,panels) {
   const setTransform=(n,a,b,t)=>n.setAttribute('transform',`translate(${mix(a[0],b[0],t)} ${mix(a[1],b[1],t)}) scale(${mix(a[2],b[2],t)} ${mix(a[3],b[3],t)})`);
   const bodies={source,catalyst,flask,tank,jar,plate,tube,stopper};
   const bounds={source:[75,70,165,350],catalyst:[90,530,275,145],flask:[140,290,350,530],tank:[590,445,890,380],jar:[0,0,223,430],plate:[-20,10,265,50],tube:[200,150,900,590],stopper:[-57,-35,114,70]};
+  const visible=(node,yes)=>node.setAttribute('visibility',yes?'visible':'hidden');
+  function showEquipment(next){
+    shown=next;
+    for(const key of['flask','tank','jar','plate','tube','stopper'])visible(bodies[key],!!next[key]);
+    visible(source,false);visible(catalyst,!!next.dish);visible(funnel.group,!!next.funnel);
+    visible(standbyRig,!!(next.tube||next.funnel));
+    visible(flaskName,!!next.flask);visible(tankName,!!next.tank);visible(tankLeader,!!next.tank);visible(jarName,!!next.jar);
+    visible(frontTint,!!next.tank);visible(jarShadow,!!next.jar);
+  }
+  function frameView(canvas,box){canvas.setAttribute('viewBox',box.join(' '));['x','y','width','height'].forEach((key,i)=>background.setAttribute(key,box[i]));}
   return {
     geometry(key) {
+      if(!shown[key])return null;
       if(key==='funnel')return funnel.geometry();
       if(operationStage>1&&(key==='spoon'||key==='source'&&operationStage>=4)){
         const n=activeView.querySelector(`[data-part="${key==='source'?'reagent-bottle':'catalyst-spoon'}"]`);
         return n&&Number(n.getAttribute('opacity'))>.01?{bounds:key==='source'?[-52,0,104,210]:[-27,-18,245,55],transform:n.getAttribute('transform')||''}:null;
       }
-      if(operationStage>1&&key==='catalyst')return Number(powder.getAttribute('opacity'))>.01?{bounds:[228,750,175,46],transform:''}:null;
+      if(operationStage>1&&key==='catalyst'&&Number(powder.getAttribute('opacity'))>.01)return {bounds:[228,750,175,46],transform:''};
       const n=bodies[key];
       if(!n||Number(n.getAttribute('opacity')??1)<=.05)return null;
       const outlines={flask:flaskOutline,tank:'M622 540L729 482L1462 510L1448 737L1380 780L641 746Z',jar:'M43 18Q112 0 180 18V60Q203 80 203 108V378Q112 419 20 378V108Q20 80 43 60Z',plate:'M47 18L237 14L176 42L-10 42Z',stopper:'M-78 -11H26V59H-78Z'};
@@ -211,9 +222,11 @@ export function createSetupScene(view,panels) {
       const showTankLabel=stage===7&&frame.cover>0&&frame.cover<1?'0':'1';tankName.setAttribute('opacity',showTankLabel);tankLeader.setAttribute('opacity',showTankLabel);
       label.textContent='';flaskName.textContent=chemical.peroxide===0?(chemical.catalyst>0?'二氧化錳':'錐形瓶（空）'):'雙氧水＋二氧化錳';jarName.textContent=frame.collected===0?'瓶內裝滿清水':frame.collected>.3?'氧氣（無色）':'';
       jarName.setAttribute('x',jarX);jarName.setAttribute('y',jarY-75);
+      showEquipment({flask:true,tank:stage>=3,jar:stage>=3,tube:stage>=3,stopper:stage>=3,funnel:stage>=3,
+        source:stage===4,spoon:stage===2,catalyst:stage>=2,dish:stage===2&&frame.localTime<3000,plate:stage===7&&frame.cover>0});
 
-      operationView.querySelector('.oxygen-main-scene').setAttribute('viewBox','0 0 1536 900');
-      operationView.querySelector('.oxygen-mobile-zoom svg').setAttribute('viewBox',stage<5?'90 110 570 790':stage===7?'740 25 620 865':'740 235 520 550');
+      frameView(operationView.querySelector('.oxygen-main-scene'),stage===2?[-368,100,1365.3333333333,800]:[0,0,1536,900]);
+      operationView.querySelector('.oxygen-mobile-zoom svg').setAttribute('viewBox',stage===2?'40 110 570 790':stage<5?'90 110 570 790':stage===7?'740 25 620 865':'740 235 520 550');
       operationView.dataset.sharedScene='oxygen-setup-art';
     },
     render(elapsed) {
@@ -241,8 +254,10 @@ export function createSetupScene(view,panels) {
       positionPipe(OXYGEN_STANDBY.cap.x,OXYGEN_STANDBY.cap.y,800,f.outlet,f.arrangement,0);flaskName.setAttribute('opacity',f.arrangement);tankName.setAttribute('opacity',f.arrangement);flaskName.textContent='錐形瓶（空）';jarName.textContent=f.immersion===1?'瓶內裝滿清水':'';
       const tankLabelOpacity=f.cover>0&&f.plateReturn<1?0:f.arrangement;tankName.setAttribute('opacity',tankLabelOpacity);tankLeader.setAttribute('opacity',tankLabelOpacity);
       jarName.setAttribute('x','1035');jarName.setAttribute('y','390');
+      showEquipment({flask:false,tank:true,jar:true,tube:f.outlet>0,stopper:f.outlet>0,funnel:false,
+        source:false,catalyst:false,spoon:false,dish:false,plate:f.cover>0&&f.plateReturn<1});
       view.dataset.sharedScene='oxygen-setup-art';
-      main.setAttribute('viewBox','0 0 1536 900');
+      frameView(main,[267,0,1536,900]);
       // Follow the jar without leaving the shared background; the main view
       // always retains the complete apparatus.
       zoom.setAttribute('viewBox',`${Math.min(760,Math.max(40,f.jarX-375))} 60 750 840`);
