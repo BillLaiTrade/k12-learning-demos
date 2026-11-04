@@ -1,5 +1,5 @@
-import { depthGeometry, clamp, TANK, DEPTH_INITIAL } from './depth-model.mjs?v=20261104-finish1';
-import { createTextures, renderObserver } from './depth-observer.mjs?v=20261104-finish1';
+import { depthGeometry, clamp, TANK, DEPTH_INITIAL } from './depth-model.mjs?v=20261104-layout1';
+import { createTextures, renderObserver } from './depth-observer.mjs?v=20261104-layout1';
 
 const root = document.querySelector('#depth-lab');
 if (root) {
@@ -8,6 +8,8 @@ if (root) {
   const X = x => 45 + x * 1.85, Y = y => 430 - y * 1.85;
   const point = p => [X(p[0]), Y(p[1])];
   const path = points => `M${points.map(p => point(p).join(' ')).join('L')}`;
+  const waterState=depth=>depth===0?'空槽':depth<34?'水位較低':depth<67?'水位中等':'水位較高';
+  const eyeState=x=>x<254?'靠近水槽':x<296?'中間位置':'遠離水槽';
   let geometry = depthGeometry(), textures = createTextures(null);
   let drawFrame = 0, animation = 0, progress = 1, playing = false, lastTime = 0, inView = false;
   let eyeX = DEPTH_INITIAL.eyeX;
@@ -40,6 +42,11 @@ if (root) {
   <rect x="49" y="${Y(TANK.height)}" width="${X(TANK.length)-56}" height="202" fill="url(#depth-reflection)" pointer-events="none"/>
   <path class="depth-meniscus" stroke="#a9ffff" stroke-width="7" opacity=".5" fill="none"/>
   <path class="depth-waterline"/>
+  <g class="depth-eye-rail" aria-hidden="true">
+    <path class="depth-rail-shadow" d="M${X(210)} ${Y(TANK.eyeHeight)+3}H${X(340)}"/>
+    <path class="depth-rail-line" d="M${X(210)} ${Y(TANK.eyeHeight)}H${X(340)}"/>
+    <path class="depth-rail-stops" d="M${X(210)} ${Y(TANK.eyeHeight)-8}V${Y(TANK.eyeHeight)+8} M${X(340)} ${Y(TANK.eyeHeight)-8}V${Y(TANK.eyeHeight)+8}"/>
+  </g>
   <g class="depth-construction" aria-hidden="true"></g>
   <g class="depth-coin" transform="translate(${X(TANK.coinX)} ${Y(0)})" filter="url(#depth-object-shadow)" aria-hidden="true">
     <ellipse cy="3" rx="23" ry="8" fill="#5a3a21"/><ellipse rx="23" ry="8" fill="url(#depth-coin)" stroke="#fce8ab" stroke-width="1.5"/>
@@ -50,12 +57,11 @@ if (root) {
   <g class="depth-annotations" aria-hidden="true"></g>
   <path class="depth-water-hit" stroke="transparent" fill="none" aria-hidden="true"/>
   <g id="depth-eye" class="depth-eye" tabindex="0" role="slider" aria-label="前後拖曳眼睛調整觀看位置" aria-orientation="horizontal" aria-describedby="depth-control-help" aria-valuemin="210" aria-valuemax="340" aria-valuenow="300">
-    <title>拖曳眼睛靠近或遠離；方向鍵微調，PageUp／PageDown調整10，Home／End到兩端</title>
+    <title>沿導軌拖曳眼睛靠近或遠離；方向鍵微調，PageUp／PageDown加快，Home／End到兩端</title>
     <rect class="depth-eye-hit" x="-48" y="-45" width="96" height="90" rx="16" fill="transparent"/>
     <g filter="url(#depth-object-shadow)"><path d="M-34 0Q0-33 34 0Q0 33-34 0Z" fill="url(#depth-eye-white)" stroke="#526747" stroke-width="3"/>
     <circle r="14" fill="url(#depth-iris)"/><circle r="5.5" fill="#13251f"/><circle cx="-4" cy="-5" r="3.5" fill="#fff"/>
     <path d="M-34 0Q0-33 34 0" stroke="#6a694d" stroke-width="3" fill="none"/></g>
-    <path class="depth-eye-grip" d="M-28 32H28M-20 26L-28 32L-20 38M20 26L28 32L20 38"/>
     <ellipse class="depth-eye-focus" rx="40" ry="24"/>
   </g>`;
   const eye = q('.depth-eye');
@@ -116,8 +122,7 @@ if (root) {
       html+=badge('水面 ↕',53,s-18,font);
       if(430-s>font*1.4+8/ratio)html+=badge('水',53,(s+430)/2+font*.3,font);
     }
-    html += badge('拖曳眼睛', Math.min(520, X(g.eyeX)-2*font), 42, font);
-    html += badge(`距槽前${g.eyeX-TANK.length}cm`,53,42,font);
+    html += `<text class="depth-rail-label" x="${X(210)}" y="42" font-size="${font}">靠近</text><text class="depth-rail-label" x="${X(340)}" y="42" text-anchor="end" font-size="${font}">遠離</text>`;
     html += `<path d="M${X(g.coin[0])+15} 433L200 474" fill="none" stroke="#fffbe7" stroke-width="2"/>` + badge('實際位置', 205, 483, font);
     if (g.depth>0 && q('#show-rays').checked && g.status !== 'hidden' && progress >= .76) {
       const below=s+38/ratio;
@@ -145,14 +150,13 @@ if (root) {
     q('.depth-water-hit').setAttribute('stroke-width',44/ratio);
     const waterControl=q('.depth-water-control'),handleX=(X(TANK.length)+60)*ratio;
     Object.assign(waterControl.style,{left:`${handleX-22}px`,top:`${Y(100)*ratio-22}px`,height:`${(Y(0)-Y(100))*ratio+44}px`});
-    Object.assign(q('#depth-output').style,{left:`${handleX+28}px`,top:`${s*ratio}px`});
-    q('#depth-input').setAttribute('aria-valuetext',g.depth===0?'0公分，空槽':`${g.depth}公分`);
+    q('#depth-input').setAttribute('aria-valuetext',waterState(g.depth));
     root.dataset.directReady='true';
     eye.setAttribute('transform',`translate(${X(g.eyeX)} ${Y(TANK.eyeHeight)})`);
-    eye.setAttribute('aria-valuenow',g.eyeX); eye.setAttribute('aria-valuetext',`離槽前側${g.eyeX-TANK.length}公分`);
+    eye.setAttribute('aria-valuenow',g.eyeX); eye.setAttribute('aria-valuetext',eyeState(g.eyeX));
     drawConstruction();
     const observation=g.status==='hidden'?'槽壁遮住硬幣的光。':g.depth===0?'未加水，光在空氣中直線傳播到觀看位置。':'出水折射後的光進入觀看位置，硬幣看起來較淺。';
-    svg.setAttribute('aria-label',`實際水深${g.depth}公分，硬幣固定在槽底，觀看位置離槽前側${g.eyeX-TANK.length}公分。${observation}${q('#show-rays').checked?(g.depth>0?'顯示光路與反向延長線。':'顯示直線傳播的光。'):'光路與輔助線已隱藏。'}`);
+    svg.setAttribute('aria-label',`${waterState(g.depth)}，硬幣固定在槽底，眼睛${eyeState(g.eyeX)}。${observation}${q('#show-rays').checked?(g.depth>0?'顯示光路與反向延長線。':'顯示直線傳播的光。'):'光路與輔助線已隱藏。'}`);
     root.dataset.depth=g.depth; root.dataset.eyeX=g.eyeX; root.dataset.visible=g.status;
   }
   function drawObserver() {
@@ -163,16 +167,15 @@ if (root) {
     const state=visible?(geometry.depth===0?'空槽：此位置可直接看見硬幣':geometry.status==='partial'?'硬幣逐漸出現':'目前可以看見硬幣'):geometry.depth===0?'空槽：硬幣被槽壁遮住':'目前被前側槽壁遮住';
     q('#depth-visibility').textContent=state; q('#depth-visibility').dataset.visible=visible?'visible':'hidden';
     q('#depth-view-result').textContent=visible?(geometry.depth>0?'光經過水面折射後，進入目前的觀看位置。':'觀看位置較近，光可直接越過槽緣進入眼睛。'):geometry.depth===0?'還沒加水，硬幣的光被槽壁遮住。按「加水觀察」比較。':'硬幣仍在槽底；繼續加水，觀察可見範圍的變化。';
-    canvas.setAttribute('aria-label',`目前水深${geometry.depth}公分，離槽前側${geometry.eyeX-TANK.length}公分的視野。${state}。`);
+    canvas.setAttribute('aria-label',`${waterState(geometry.depth)}、眼睛${eyeState(geometry.eyeX)}的視野。${state}。`);
     canvas.dataset.coinPixels=observerResult.coinPixels; canvas.dataset.depth=geometry.depth;canvas.dataset.eyeX=geometry.eyeX;
     canvas.dataset.coinBounds=JSON.stringify(observerResult.bounds);
-    q('#depth-live').textContent=`實際水深${geometry.depth}公分，${state}；硬幣實際位置不變。`;
+    q('#depth-live').textContent=`${waterState(geometry.depth)}，${state}；硬幣實際位置不變。`;
   }
   function scheduleObserver() { if(!drawFrame)drawFrame=requestAnimationFrame(drawObserver); }
   function stopAnimation() { if(animation)cancelAnimationFrame(animation);animation=0;lastTime=0; }
   function syncGeometry() {
     geometry=depthGeometry(Number(q('#depth-input').value),eyeX);
-    q('#depth-output').textContent=`${geometry.depth} 公分`;
     drawSide();scheduleObserver();
   }
   function finishAnimation() {

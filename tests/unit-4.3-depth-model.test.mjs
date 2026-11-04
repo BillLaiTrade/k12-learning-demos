@@ -67,3 +67,37 @@ test('the default is a dry hidden coin; direct dry rays and filling use the same
  for(const eyeX of [210,250,300,340]){const g=depthGeometry(0,eyeX),r=g.center;const raw=[55-eyeX,-190,0],d=Math.hypot(...raw),hit=traceViewRay(g,[eyeX,190,0],raw.map(v=>v/d));if(r.visible){assert.equal(hit.kind,'coin');assert.equal(hit.wet,false);}else assert.ok(['outside','rim'].includes(hit.kind));}
  const filled=depthGeometry(100,initial.eyeX);assert.equal(filled.status,'visible');assert.deepEqual(filled.coin,initial.coin);assert.deepEqual(filled.eye,initial.eye);
 });
+
+test('opening framing includes visible coin rays without moving the pupil or following water level',()=>{
+ for(let eyeX=210;eyeX<=340;eyeX+=5){
+  const initial=observerCamera(depthGeometry(0,eyeX));
+  for(const depth of [0,1,25,50,75,100]){
+   const g=depthGeometry(depth,eyeX),camera=observerCamera(g);
+   assert.deepEqual(camera.origin,[eyeX,190,0]);assert.deepEqual(camera.forward,initial.forward);
+   for(const r of [g.center,g.representative]){
+    if(!r.visible)continue;
+    const d=[r.hit[0]-eyeX,depth-190],forward=d[0]*camera.forward[0]+d[1]*camera.forward[1];
+    const v=(d[0]*camera.up[0]+d[1]*camera.up[1])/forward/camera.lens;
+    assert.ok(Math.abs(v)<.97,`visible coin clipped at ${depth}/${eyeX}`);
+   }
+   // Independently solve rays from points around the finite coin, including
+   // the transverse axis; any physically visible edge must remain in frame.
+   for(let a=0;a<2*Math.PI;a+=Math.PI/4){
+    const p=[TANK.coinX+12*Math.cos(a),0,12*Math.sin(a)];
+    const h=Math.hypot(eyeX-p[0],p[2]);let low=0,high=h;
+    if(depth>0)for(let i=0;i<56;i++){
+     const q=(low+high)/2;
+     if(TANK.n*q/Math.hypot(q,depth)>(h-q)/Math.hypot(h-q,TANK.eyeHeight-depth))high=q;else low=q;
+    }
+    const f=depth>0?(low+high)/2/h:0;
+    const hit=[p[0]+f*(eyeX-p[0]),depth,p[2]*(1-f)];
+    const raw=hit.map((n,i)=>n-camera.origin[i]),length=Math.hypot(...raw),direction=raw.map(n=>n/length);
+    if(traceViewRay(g,camera.origin,direction)?.kind!=='coin')continue;
+    const forward=direction[0]*camera.forward[0]+direction[1]*camera.forward[1];
+    const u=direction[2]/forward/camera.lens/camera.aspect;
+    const v=(direction[0]*camera.up[0]+direction[1]*camera.up[1])/forward/camera.lens;
+    assert.ok(Math.abs(u)<.97&&Math.abs(v)<.97,`visible edge clipped at ${depth}/${eyeX}/${a}`);
+   }
+  }
+ }
+});

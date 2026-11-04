@@ -1,0 +1,43 @@
+{
+  "result": "passed",
+  "checks": [
+    "images and unique IDs",
+    "calorie choices",
+    "pause and resume",
+    "independent experiments",
+    "Q doubling",
+    "mass 100/200/300 g",
+    "aluminum/iron/copper",
+    "equal energy",
+    "records persist across changes",
+    "reset",
+    "application choices",
+    "quiz correct and incorrect feedback",
+    "quiz reset",
+    "blur pauses",
+    "no viewport overflow"
+  ],
+  "viewportChecks": [
+    {
+      "viewport": 320,
+      "scroll": 320
+    },
+    {
+      "viewport": 390,
+      "scroll": 390
+    },
+    {
+      "viewport": 768,
+      "scroll": 768
+    },
+    {
+      "viewport": 1024,
+      "scroll": 1024
+    },
+    {
+      "viewport": 1440,
+      "scroll": 1440
+    }
+  ],
+  "pageErrors": []
+}

@@ -25,6 +25,12 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   assert.equal(await page.locator('#depth-lab input[type=range]').count(),1);
   assert.equal(await page.locator('#depth-input').getAttribute('aria-orientation'),'vertical');
   assert.equal(await page.locator('#depth-lab button').count(),3);
+  assert.equal(await page.locator('.depth-explanation #show-rays').count(),1);
+  assert.equal(await page.locator('.depth-explanation #depth-replay').count(),1);
+  assert.deepEqual(await page.locator('.depth-controls button').evaluateAll(es=>es.map(e=>e.id)),['depth-fill','depth-reset']);
+  assert.equal(await page.locator('.depth-eye-rail').count(),1);
+  assert.doesNotMatch(await page.locator('#depth-lab').innerText(),/公分|\bcm\b|距槽前\d/);
+  assert.equal(await page.locator('#depth-output').count(),0);
   assert.equal(await page.locator('#depth-scene .extension').count(),0);
   assert.equal(+await page.locator('#depth-observer').getAttribute('data-coin-pixels'),0);
   assert.equal(await page.locator('#depth-input').inputValue(),'0');
@@ -44,8 +50,8 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'300');assert.ok(+await page.locator('#depth-observer').getAttribute('data-coin-pixels')>50);
   if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,'filled-default-view.png')});
   await page.locator('#depth-fill').click();await page.waitForTimeout(300);
-  const handle=await page.locator('#depth-input').boundingBox(),readout=await page.locator('#depth-output').boundingBox();
-  await page.mouse.move(handle.x+handle.width/2,readout.y+readout.height/2);await page.mouse.down();
+  const handle=await page.locator('#depth-input').evaluate(e=>{const b=e.getBoundingClientRect();return{x:b.x+b.width/2,y:b.y+22+(b.height-44)*(1-Number(e.value)/100)};});
+  await page.mouse.move(handle.x,handle.y);await page.mouse.down();
   assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'ready');const frozen=await page.locator('#depth-input').inputValue();
   await page.waitForTimeout(180);assert.equal(await page.locator('#depth-input').inputValue(),frozen);await page.mouse.up();
   await page.locator('#depth-reset').click();await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='0');assert.equal(+await page.locator('#depth-observer').getAttribute('data-coin-pixels'),0);
@@ -125,7 +131,7 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
     const views=[...el.querySelectorAll('figure')].map(e=>e.getBoundingClientRect().toJSON());
     const texts=[...el.querySelectorAll('#depth-scene .depth-annotations text')].map(e=>({font:parseFloat(getComputedStyle(e).fontSize)*e.getScreenCTM().a,box:e.getBoundingClientRect().toJSON()}));
     const svg=el.querySelector('svg').getBoundingClientRect();
-    return{overflow:document.documentElement.scrollWidth>innerWidth,views,texts,svg:svg.toJSON(),eyeHit:el.querySelector('.depth-eye-hit').getBoundingClientRect().toJSON(),water:el.querySelector('#depth-input').getBoundingClientRect().toJSON(),readout:el.querySelector('#depth-output').getBoundingClientRect().toJSON(),buttons:[...el.querySelectorAll('button')].map(e=>({height:e.getBoundingClientRect().height,clipped:e.scrollWidth>e.clientWidth+1})),controls:el.querySelector('.depth-controls').getBoundingClientRect().toJSON()};
+    return{overflow:document.documentElement.scrollWidth>innerWidth,views,texts,svg:svg.toJSON(),eyeHit:el.querySelector('.depth-eye-hit').getBoundingClientRect().toJSON(),water:el.querySelector('#depth-input').getBoundingClientRect().toJSON(),rail:el.querySelector('.depth-eye-rail').getBoundingClientRect().toJSON(),buttons:[...el.querySelectorAll('button')].map(e=>({height:e.getBoundingClientRect().height,clipped:e.scrollWidth>e.clientWidth+1})),controls:el.querySelector('.depth-controls').getBoundingClientRect().toJSON()};
    });
    assert.equal(m.overflow,false,`${width} page overflow`);
    assert.ok(m.texts.every(t=>t.font>=13.4&&t.box.left>=m.svg.left-1&&t.box.right<=m.svg.right+1),`${width} diagram labels`);
@@ -134,7 +140,7 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
    assert.ok(m.controls.left>=0&&m.controls.right<=width+1);
    assert.ok(m.water.height>m.water.width&&m.water.width>=44);
    assert.ok(m.water.left>=m.svg.left-1&&m.water.right<=m.svg.right+1);
-   assert.ok(m.readout.left>=m.svg.left-1&&m.readout.right<=m.svg.right+1);
+   assert.ok(m.rail.left>=m.svg.left-1&&m.rail.right<=m.svg.right+1);
    if(width>=1280)assert.ok(Math.abs(m.views[0].top-m.views[1].top)<1);
    if(width<=390)assert.ok(m.views[1].top>m.views[0].bottom);
    results.push({width,height,...m});

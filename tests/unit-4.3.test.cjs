@@ -48,7 +48,7 @@ test('4.3 complete basic lesson works on desktop and mobile',{timeout:90000},asy
  for(const width of [390,320]){
   await page.setViewportSize({width,height:844});await page.locator('#s1').scrollIntoViewIfNeeded();
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),`page overflow at ${width}`);
-  await page.locator('#depth-input').fill('40');await page.locator('#depth-input').dispatchEvent('input');await page.locator('#s6').scrollIntoViewIfNeeded();assert.ok(await page.locator('#depth-output').isVisible());
+  await page.locator('#depth-input').fill('40');await page.locator('#depth-input').dispatchEvent('input');await page.locator('#s6').scrollIntoViewIfNeeded();assert.ok(await page.locator('#depth-input').isVisible());
   if(width===390)await page.screenshot({path:'/tmp/unit43-mobile.png'});
  }
  // Internal anchor targets and local assets must remain valid.

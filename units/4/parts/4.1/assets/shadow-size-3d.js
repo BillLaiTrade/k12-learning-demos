@@ -327,22 +327,18 @@ if (canvas) {
     const maxPosition = 100;
     const zFromPosition = (position) => THREE.MathUtils.lerp(nearLightZ, nearScreenZ, position / maxPosition);
     const positionFromZ = (z) => THREE.MathUtils.mapLinear(z, nearLightZ, nearScreenZ, minPosition, maxPosition);
-    let hasMovedSphere = false;
     const updateReadout = (position, dragging = false) => {
-      if (dragging) hasMovedSphere = true;
       const value = THREE.MathUtils.clamp(position, minPosition, maxPosition);
       const nearLight = value <= 28;
       const nearScreen = value >= 72;
-      xiaokuiObservation.textContent = !hasMovedSphere
-        ? '遮擋物靠近光源時，影子會變大；遠離光源時，影子會變小。'
-        : nearLight
-          ? '球和光源的距離變近，影子反而變大了！'
-          : nearScreen
-            ? '球靠近屏幕後，影子縮小了。'
-            : '物體大小不變，移動位置也會改變影子的大小。';
+      xiaokuiObservation.textContent = nearLight
+        ? '球目前靠近光源，屏幕上的影子較大。'
+        : nearScreen
+          ? '球目前靠近屏幕，屏幕上的影子較小。'
+          : '球目前位於光源與屏幕之間，可以前後移動，比較影子的大小。';
       if (dragging) status.textContent = '拖曳球體前後移動，屏幕影子會即時改變。';
-      else if (nearLight) status.textContent = '球體靠近光源，屏幕上的影子較大。';
-      else if (nearScreen) status.textContent = '球體靠近屏幕，影子縮小。';
+      else if (nearLight) status.textContent = '球體目前靠近光源，屏幕上的影子較大。';
+      else if (nearScreen) status.textContent = '球體目前靠近屏幕，影子較小。';
       else status.textContent = '球體在光源與屏幕之間，影子大小隨位置改變。';
     };
     blocker.position.z = zFromPosition(minPosition);
