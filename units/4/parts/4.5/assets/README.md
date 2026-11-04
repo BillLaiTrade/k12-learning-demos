@@ -59,3 +59,5 @@
 2026-11-04依核可示意加入像素概念導入。pixel-tv-picture.svg、pixel-tv-rgb.svg、pixel-tv-compose.svg由scripts/build-pixel-tv-concepts.mjs讀取pixel-tv-model的實際8×8目標及顯色函數產生，含真實3×3局部、RGB子像素和逐格組圖。參考圖exec-ae7277bf-ab83-47ea-adfd-928b3b399fe9.png僅作布局討論，未貼為網頁背景；圖解可在無JS時閱讀，沒有外部素材或依賴。
 
 2026-11-04像素圖解因果續修：沿用三個SVG檔名與建置腳本，改為單一像素直接放大、紅藍固定只調綠的前後對照、0／32／64格組圖進程。金框尺寸等於單一格；同一設定的兩種觀看方式以等號區別於時間變化。圖像顏色共用既有模型，未新增圖檔或外部素材。
+
+2026-11-04補強送光與觀看距離：pixel-tv-picture.svg加入紅／綠送光符號及藍關閉標示；pixel-tv-rgb.svg加入固定螢幕與近遠眼睛／距離線；pixel-tv-compose.svg標出相鄰A／B，與HTML各自RGB狀態例子對應。沿用原三檔及建置腳本，色彩來自原模型，非實測距離或面板結構；沒有新增外部素材。
