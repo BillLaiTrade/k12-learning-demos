@@ -1,0 +1,32 @@
+export function createBenchApparatus(THREE,scene,G,art,paper,{withEye=false}={}){
+  scene.add(new THREE.HemisphereLight('#f2f3df','#3a503e',2.1));const light=new THREE.DirectionalLight('#fff0cf',3.1);light.position.set(-3,8,6);light.castShadow=true;light.shadow.mapSize.set(1024,1024);Object.assign(light.shadow.camera,{left:-8,right:10,top:7,bottom:-5});light.shadow.bias=-.0004;scene.add(light);const rim=new THREE.DirectionalLight('#d3e9e0',1.6);rim.position.set(5,4,-4);scene.add(rim);
+  const mat=(color,options={})=>new THREE.MeshStandardMaterial({color,roughness:.5,metalness:.15,...options}),dark=mat('#283e30',{metalness:.5,roughness:.36}),steel=mat('#a2b4a4',{metalness:.7,roughness:.27}),brass=mat('#bba267',{metalness:.7,roughness:.3});
+  function box(parent,size,pos,material){const mesh=new THREE.Mesh(new THREE.BoxGeometry(...size),material);mesh.position.set(...pos);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;}
+  function cylinder(parent,radius,height,pos,material){const mesh=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius,height,24),material);mesh.position.set(...pos);mesh.castShadow=true;parent.add(mesh);return mesh;}
+  const wc=document.createElement('canvas');wc.width=1024;wc.height=128;const w=wc.getContext('2d');w.fillStyle='#aa8050';w.fillRect(0,0,1024,128);let seed=72;for(let i=0;i<130;i++){seed=(1664525*seed+1013904223)>>>0;const y=seed/2**32*128;w.beginPath();w.moveTo(0,y);w.bezierCurveTo(250,y-4,650,y+4,1024,y);w.strokeStyle=i%3?'#51331135':'#ffe1a145';w.lineWidth=.7;w.stroke();}
+  const railMin=-G.objectMax*G.scale-.6,railMax=G.screenMax*G.scale+.6,railLength=railMax-railMin,railCenter=(railMin+railMax)/2;
+  const texture=new THREE.CanvasTexture(wc);texture.colorSpace=THREE.SRGBColorSpace;box(scene,[railLength,.23,2],[railCenter,.0,0],mat('#ddc192',{map:texture,roughness:.65}));box(scene,[railLength,.09,2],[railCenter,-.15,0],mat('#725331'));
+  for(const z of [-.70,.70]){box(scene,[railLength-.4,.08,.11],[railCenter,.17,z],steel);box(scene,[railLength-.4,.025,.035],[railCenter,.225,z],dark);}
+  for(let i=-25;i<=35;i++){box(scene,[.015,.012,i%5===0?.14:.07],[i*.3,.242,.76],dark);}
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(120,120),mat('#526653',{roughness:.99}));floor.rotation.x=-Math.PI/2;floor.position.y=-.28;floor.receiveShadow=true;scene.add(floor);
+  function mount(group,top){box(group,[.57,.15,1.7],[0,.34,0],dark);box(group,[.43,.06,1.45],[0,.445,0],steel);cylinder(group,.06,Math.max(.05,top-.49),[0,(top+.49)/2,0],steel);for(const z of [-.74,.74])cylinder(group,.055,.035,[0,.48,z],brass);}
+  function frame(group,width,height){box(group,[.12,height+.14,width+.14],[.045,G.axis,0],dark);for(const z of [-width/2-.02,width/2+.02])box(group,[.045,height+.08,.035],[-.03,G.axis,z],steel);for(const y of [G.axis-height/2-.02,G.axis+height/2+.02])box(group,[.045,.035,width+.08],[-.03,y,0],steel);}
+  const source=new THREE.Group();scene.add(source);mount(source,G.axis-G.cardHeight/2);frame(source,G.cardWidth,G.cardHeight);
+  const artTex=new THREE.CanvasTexture(art);artTex.colorSpace=THREE.SRGBColorSpace;
+  function plane(parent,width,height,x,material,rotation){const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width,height),material);mesh.rotation.y=rotation;mesh.position.set(x,G.axis,0);parent.add(mesh);return mesh;}
+  plane(source,G.cardWidth,G.cardHeight,-.026,new THREE.MeshBasicMaterial({color:'#fff5d5',toneMapped:false}),-Math.PI/2);plane(source,G.cardWidth,G.cardHeight,.112,new THREE.MeshBasicMaterial({color:'#fff5d5',toneMapped:false}),Math.PI/2);
+  for(const [x,rot]of [[-.03,-Math.PI/2],[.116,Math.PI/2]])plane(source,G.cardWidth,G.cardHeight,x,new THREE.MeshBasicMaterial({map:artTex,transparent:true,toneMapped:false}),rot);
+  const lensGroup=new THREE.Group();scene.add(lensGroup);mount(lensGroup,G.axis-.91);const profile=[];for(let i=0;i<=64;i++){const r=.88*i/64;profile.push(new THREE.Vector2(r,-(.018+.095*(1-(r/.88)**2))));}for(let i=64;i>=0;i--){const r=.88*i/64;profile.push(new THREE.Vector2(r,.018+.095*(1-(r/.88)**2)));}
+  const lens=new THREE.Mesh(new THREE.LatheGeometry(profile,80),new THREE.MeshPhysicalMaterial({color:'#d4ede6',transparent:true,opacity:.5,transmission:.09,roughness:.05,metalness:0,depthWrite:false,side:THREE.DoubleSide}));lens.rotation.z=-Math.PI/2;lens.position.y=G.axis;lensGroup.add(lens);
+  for(const x of [-.02,.02]){const ring=new THREE.Mesh(new THREE.TorusGeometry(.92,.037,12,80),steel);ring.rotation.y=Math.PI/2;ring.position.set(x,G.axis,0);ring.castShadow=true;lensGroup.add(ring);}box(lensGroup,[.45,.12,.24],[0,G.axis-.94,0],steel);cylinder(lensGroup,.10,.12,[0,G.axis+.99,0],brass);
+  const screen=new THREE.Group();scene.add(screen);mount(screen,.50);frame(screen,G.screenWidth,G.screenHeight);
+  const projectedTexture=new THREE.CanvasTexture(paper);projectedTexture.colorSpace=THREE.SRGBColorSpace;const screenPlane=plane(screen,G.screenWidth,G.screenHeight,-.025,new THREE.MeshBasicMaterial({map:projectedTexture,toneMapped:false}),-Math.PI/2);
+  for(const group of [source,screen]){box(group,[.34,.18,.36],[0,.54,.84],brass);for(let i=0;i<4;i++)box(group,[.35,.014,.27],[0,.49+i*.033,.84],dark);}
+  for(const n of [-200,-100,100,200])box(scene,[.025,.10,.12],[n*G.scale,.3,.87],brass);
+  const eye=new THREE.Group();eye.position.x=(G.eye??G.f*2)*G.scale;scene.add(eye);mount(eye,G.axis-.18);
+  const eyeArt=document.createElement('canvas');eyeArt.width=256;eyeArt.height=128;const ec=eyeArt.getContext('2d');ec.fillStyle='#fbf5e4';ec.strokeStyle='#586f59';ec.lineWidth=5;ec.beginPath();ec.moveTo(16,64);ec.quadraticCurveTo(128,-18,240,64);ec.quadraticCurveTo(128,146,16,64);ec.fill();ec.stroke();ec.fillStyle='#78977d';ec.beginPath();ec.ellipse(85,64,25,37,0,0,Math.PI*2);ec.fill();ec.fillStyle='#213a2c';ec.beginPath();ec.ellipse(78,64,12,25,0,0,Math.PI*2);ec.fill();ec.fillStyle='#fff';ec.beginPath();ec.arc(71,52,6,0,Math.PI*2);ec.fill();
+  const eyeTexture=new THREE.CanvasTexture(eyeArt);eyeTexture.colorSpace=THREE.SRGBColorSpace;const eyeMarker=new THREE.Mesh(new THREE.PlaneGeometry(.72,.36),new THREE.MeshBasicMaterial({map:eyeTexture,transparent:true,side:THREE.DoubleSide,toneMapped:false}));eyeMarker.position.set(0,G.axis,0);eye.add(eyeMarker);
+
+  eye.visible=withEye;box(eye,[.34,.18,.36],[0,.54,.84],brass);
+  return {source,lens,lensGroup,screen,screenPlane,projectedTexture,artTex,eye};
+}
