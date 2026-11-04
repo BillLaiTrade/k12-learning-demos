@@ -1,0 +1,7 @@
+{
+  "index_only_removes_intro_and_updates_css_version": true,
+  "depth-lab.mjs": true,
+  "depth-model.mjs": true,
+  "depth-observer.mjs": true,
+  "depth-eye-art.mjs": true
+}
