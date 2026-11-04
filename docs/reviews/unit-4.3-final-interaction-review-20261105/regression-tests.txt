@@ -1,0 +1,26 @@
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (529.272186ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (1964.241671ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (16560.277878ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (2601.322344ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (28054.558658ms)
+▶ 4.3 reciprocal sources show live side angles directly in the main scene
+  ✔ initially dark with no magnifier and one accessible lamp at each end (138.795206ms)
+  ✔ four light combinations switch angle roles, colors and side names while keeping reciprocal paths (1378.379361ms)
+  ✔ both media and 0–35 degrees update main arcs, numbers and leader origins while both lights use side names (3027.117391ms)
+  ✔ keyboard activation, limits and lamp clicks preserve independent switches (1517.172372ms)
+  ✔ A and B both drag in water and glass without toggling or offsetting the return path (2177.321911ms)
+  ✔ beam endpoints remain at the visible lamp apertures and all three layers share each path (3894.922522ms)
+  ✔ material changes keep lights, reset turns both off and clears main annotations (135.836636ms)
+  ✔ late and failed images never replace a newer choice and retry restores operation (5890.170036ms)
+  ✔ native phone touch taps both lamps and drags each while main side labels stay visible (3376.609991ms)
+✔ 4.3 reciprocal sources show live side angles directly in the main scene (24592.567328ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (19261.405372ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 74827.132356

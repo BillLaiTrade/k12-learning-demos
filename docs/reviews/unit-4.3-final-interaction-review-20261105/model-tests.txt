@@ -1,0 +1,42 @@
+✔ depth construction conserves Snell direction and uses the backward intersection, with a fixed floor coin (285.886316ms)
+✔ side visibility and independently traced reverse camera rays agree at the rim (18.382691ms)
+✔ first person view has a fixed target and finds the same coin through air-to-water refraction (3.07668ms)
+✔ every submerged camera ray conserves tangential direction in both horizontal axes (2.239465ms)
+✔ controls stay finite across boundaries and the apparent point depends on observation position (1.610767ms)
+✔ the default is a dry hidden coin; direct dry rays and filling use the same fixed world (0.463849ms)
+✔ opening framing includes visible coin rays without moving the pupil or following water level (113.935757ms)
+✔ moving the eye translates a fixed camera and the tank edges shrink monotonically with distance (58.531338ms)
+✔ reciprocal fronts start at the enabled source, conserve speed ratios and finish on the same reversed path (15.643887ms)
+✔ one actual inverted adjacent pair is returned across the whole deck without disclosing an entire answer (6.761769ms)
+✔ cached observer directions preserve identical frame pixels when camera and resolution alternate (182.576465ms)
+✔ all 24 speed orders obey Snell invariance, continuous parallel-layer geometry and visible angle differences (18.652989ms)
+✔ deck renews indefinitely without adjacent identical rankings or a fixed fastest layer (22.016405ms)
+✔ animation advances by geometric distance and actual relative speed, including intermediate frames and exact endpoints (24.963461ms)
+✔ placement supports pool replacement, swapping existing cards and keeps a unique set (0.296073ms)
+✔ grading rejects partial, duplicate and invalid submissions, and accepts exactly the speed order (2.61903ms)
+✔ gas, liquid and solid appearances move with the same refractive indices through every layer permutation (1.307821ms)
+✔ three normal rays share a distance scale and common air speed before the real interfaces (3.649441ms)
+✔ the air reference continues unchanged while water and glass slow without bending (0.330919ms)
+✔ the shared air-arrival instant gives a visible, physically proportionate comparison (2.083083ms)
+✔ 1500000 km mixed paths use the time of each segment, not a full route of water or glass (0.441316ms)
+✔ one second and the shared air-arrival instant represent physical kilometres at normal speed (0.264421ms)
+✔ all selectable outgoing rays obey refraction and retrace the independently calculated reverse direction (13.935532ms)
+✔ zero, bounds and angle sectors retain a single optical plane (1.53954ms)
+✔ arrow tips point along their own forward and backward segments (2.704127ms)
+✔ dragging either source recovers the shared angle without changing the reciprocal geometry (4.061829ms)
+✔ full 0–90° domain has finite bounded paths, Snell transmission or equal-angle reflection (43.427927ms)
+✔ exact critical angle and either side remain distinct from TIR and grazing (1.159053ms)
+✔ front is continuous through entry and reaches exact reflected, refracted or grazing endpoint (6.300551ms)
+✔ equal inputs keep both source placements identical; invalid angles are clamped (4.080571ms)
+✔ both water and glass transmit throughout the 0–40° teaching domain in either direction (2.786386ms)
+✔ single-source animation is exactly twice its former rate while medium speed ratios stay intact (0.560076ms)
+✔ million-kilometre model uses the agreed representative speeds and travel times (14.69939ms)
+✔ a shared physical time gives independent distances and the same endpoint (2.175007ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1274.029602

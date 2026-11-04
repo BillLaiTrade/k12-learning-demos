@@ -1,6 +1,7 @@
 import { depthGeometry, clamp, TANK, DEPTH_INITIAL } from './depth-model.mjs?v=20261104-review1';
 import { eyeArtwork } from './depth-eye-art.mjs?v=20261104-review1';
-import { createTextures, renderObserver } from './depth-observer.mjs?v=20261104-review1';
+import { createTextures } from './depth-observer.mjs?v=20261105-review1';
+import { createObserverRenderer } from './depth-observer-client.mjs?v=20261105-review1';
 
 const root = document.querySelector('#depth-lab');
 if (root) {
@@ -18,7 +19,9 @@ if (root) {
   // Water-level change is the lesson: keep it gradual under either motion
   // preference. Decorative transitions still respect reduced motion in CSS.
   const waterDurationMs = 2000;
-  let observerResult = null;
+  let observerResult = null, paintedGeometry=geometry, interacting=false, detailTimer=0;
+  const observer=createObserverRenderer(canvas,paintObserver);
+  observer.setTextures(textures);
 
   svg.innerHTML = `<defs>
     <filter id="depth-eye-cue-glow" x="-40%" y="-70%" width="180%" height="240%"><feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#dfbd70" flood-opacity=".65"/></filter>
@@ -69,7 +72,7 @@ if (root) {
   const eye = q('.depth-eye');
   eye.addEventListener('focus',()=>{root.dataset.eyeActive='true';});
   eye.addEventListener('blur',()=>{root.dataset.eyeActive='false';});
-  document.fonts.ready.then(drawSide);
+  document.fonts.ready.then(()=>drawSide());
 
   function badge(text, x, y, font, anchor = 'start') {
     const width = text.length * font + font * .65, left = anchor === 'end' ? x - width : x;
@@ -88,8 +91,8 @@ if (root) {
     }
     return '';
   }
-  function drawConstruction() {
-    const g = geometry, show = q('#show-rays').checked;
+  function drawConstruction(g=paintedGeometry) {
+    const show = q('#show-rays').checked;
     const representative = g.representative, blocked = !representative.visible;
     const traces = g.rays;
     let content = '';
@@ -107,10 +110,10 @@ if (root) {
       }
     }
     q('.depth-construction').innerHTML = content;
-    drawLabels();
+    drawLabels(g);
   }
-  function drawLabels() {
-    const g=geometry,ratio=Math.max(.2,svg.clientWidth/720),font=Math.max(21,13.5/ratio),s=Y(g.depth);
+  function drawLabels(g=paintedGeometry) {
+    const ratio=Math.max(.2,svg.clientWidth/720),font=Math.max(21,13.5/ratio),s=Y(g.depth);
     const show=q('#show-rays').checked,blocked=!g.representative.visible;
     let html=badge(g.depth>0?'空氣':'空槽',30,110,font);
     html+=`<text class="depth-eye-endpoint" x="${X(210)-10}" y="${Y(TANK.eyeHeight)-44}" font-size="${font}">靠近</text><text class="depth-eye-endpoint" x="${X(340)+10}" y="${Y(TANK.eyeHeight)-44}" text-anchor="end" font-size="${font}">遠離</text>`;
@@ -144,8 +147,8 @@ if (root) {
     }
     q('.depth-annotations').innerHTML=html;
   }
-  function drawSide() {
-    const g = geometry, s = Y(g.depth);
+  function drawSide(g=paintedGeometry) {
+    const s = Y(g.depth);
     const ratio=Math.max(.2,svg.clientWidth/720),hitSize = Math.max(112, 46 / ratio);
     const hitLeft=Math.min(-hitSize/2,720-X(g.eyeX)-hitSize);
     for (const [key,value] of Object.entries({x:hitLeft,y:-hitSize/2,width:hitSize,height:hitSize}))
@@ -163,43 +166,54 @@ if (root) {
     root.dataset.directReady='true';
     eye.setAttribute('transform',`translate(${X(g.eyeX)} ${Y(TANK.eyeHeight)})`);
     eye.setAttribute('aria-valuenow',g.eyeX); eye.setAttribute('aria-valuetext',eyeState(g.eyeX));
-    drawConstruction();
+    drawConstruction(g);
     const observation=g.status==='hidden'?'槽壁遮住硬幣的光。':g.depth===0?'未加水，光在空氣中直線傳播到觀看位置。':'出水折射後的光進入觀看位置，硬幣看起來較淺。';
     svg.setAttribute('aria-label',`${waterState(g.depth)}，硬幣固定在槽底，眼睛${eyeState(g.eyeX)}。${observation}${q('#show-rays').checked?(g.depth>0?'顯示光路與反向延長線。':'顯示直線傳播的光。'):'光路與輔助線已隱藏。'}`);
     root.dataset.depth=g.depth; root.dataset.eyeX=g.eyeX; root.dataset.visible=g.status;
   }
-  function drawObserver() {
-    drawFrame=0;
-    try { observerResult=renderObserver(canvas,geometry,textures,{preview:playing}); }
-    catch { q('#depth-fallback').textContent='此瀏覽器無法繪製觀看畫面；左側仍可比較實際位置與看起來的位置。'; return; }
+  function paintObserver(result,g) {
+    observerResult=result;paintedGeometry=g;drawSide(g);
     const wall=observerResult.frontWallBounds,wallLabel=q('.depth-front-wall');
     wallLabel.hidden=!wall||wall.height*canvas.clientHeight<32;
     if(!wallLabel.hidden)Object.assign(wallLabel.style,{left:`${(wall.x+wall.width/2)*100}%`,top:`${(wall.y+wall.height*.72)*100}%`,bottom:'auto',transform:'translate(-50%,-50%)'});
     const visible=observerResult.coinPixels>0;
-    const state=visible?(geometry.depth===0?'空槽・可以直接看見':geometry.status==='partial'?'硬幣正在出現':'可以看見硬幣'):geometry.depth===0?'空槽・看不到硬幣':'槽壁遮住・看不到硬幣';
+    const state=visible?(g.depth===0?'空槽・可以直接看見':g.status==='partial'?'可以看見部分硬幣':'可以看見硬幣'):g.depth===0?'空槽・看不到硬幣':'槽壁遮住・看不到硬幣';
     q('#depth-visibility').textContent=state; q('#depth-visibility').dataset.visible=visible?'visible':'hidden';
-    q('#depth-view-result').textContent=visible?(geometry.depth>0?'光出水後轉向，越過前側槽壁進入眼睛；硬幣仍在原處。':'觀看位置較近，光可直接越過槽緣進入眼睛。'):geometry.depth===0?'前側槽壁擋住硬幣的光，光還沒進入眼睛。':'光仍被前側槽壁擋住；繼續加水，比較光路是否能越過槽緣。';
-    canvas.setAttribute('aria-label',`這隻眼睛看到的畫面：${waterState(geometry.depth)}、眼睛${eyeState(geometry.eyeX)}的視野。${state}。`);
-    canvas.dataset.coinPixels=observerResult.coinPixels; canvas.dataset.depth=geometry.depth;canvas.dataset.eyeX=geometry.eyeX;
+    q('#depth-view-result').textContent=visible?(g.depth>0?'光出水後轉向，越過前側槽壁進入眼睛；硬幣仍在原處。':'觀看位置較近，光可直接越過槽緣進入眼睛。'):g.depth===0?'前側槽壁擋住硬幣的光，光還沒進入眼睛。':'光仍被前側槽壁擋住；繼續加水，比較光路是否能越過槽緣。';
+    canvas.setAttribute('aria-label',`這隻眼睛看到的畫面：${waterState(g.depth)}、眼睛${eyeState(g.eyeX)}的視野。${state}。`);
+    canvas.dataset.coinPixels=observerResult.coinPixels; canvas.dataset.depth=g.depth;canvas.dataset.eyeX=g.eyeX;
     canvas.dataset.coinBounds=JSON.stringify(observerResult.bounds);
-    q('#depth-live').textContent=`${waterState(geometry.depth)}，${state}；硬幣實際位置不變。`;
+    q('#depth-live').textContent=`${waterState(g.depth)}，${state}；硬幣實際位置不變。`;
+  }
+  function drawObserver() {
+    drawFrame=0;
+    try{observer.request(geometry,{preview:playing||interacting||!inView});}
+    catch{q('#depth-fallback').textContent='此瀏覽器無法繪製觀看畫面；左側仍可比較光路。';}
   }
   function scheduleObserver() { if(!drawFrame)drawFrame=requestAnimationFrame(drawObserver); }
+  function settleDetail(){
+    clearTimeout(detailTimer);
+    detailTimer=setTimeout(()=>{interacting=false;if(!playing&&inView)scheduleObserver();},160);
+  }
   function stopAnimation() { if(animation)cancelAnimationFrame(animation);animation=0;lastTime=0; }
   function syncGeometry() {
     geometry=depthGeometry(Number(q('#depth-input').value),eyeX);
     q('#depth-fill').disabled=geometry.depth>=100;
     q('#depth-drain').disabled=geometry.depth<=0;
-    drawSide();scheduleObserver();
+    scheduleObserver();
   }
   function finishAnimation() {
     playing=false;stopAnimation();root.dataset.state='ready';
   }
   function update() {
-    finishAnimation();syncGeometry();
+    finishAnimation();interacting=true;syncGeometry();settleDetail();
   }
-  function beginManual() {
-    finishAnimation();drawConstruction();scheduleObserver();
+  function updateEye(){
+    interacting=true;syncGeometry();settleDetail();
+  }
+  function beginManual(kind='water') {
+    if(kind==='water')finishAnimation();
+    clearTimeout(detailTimer);interacting=true;scheduleObserver();
   }
   function tick(time) {
     animation=0;
@@ -209,30 +223,30 @@ if (root) {
     const depth=Math.round(waterStart+(waterTarget-waterStart)*Math.min(1,waterElapsed/duration));
     if(depth!==geometry.depth){q('#depth-input').value=depth;syncGeometry();}
     if(waterElapsed<duration)animation=requestAnimationFrame(tick);
-    else {finishAnimation();scheduleObserver();}
+    else {finishAnimation();interacting=true;scheduleObserver();settleDetail();}
   }
   q('#depth-input').addEventListener('input',update);
-  q('#depth-input').addEventListener('pointerdown',beginManual);
+  q('#depth-input').addEventListener('pointerdown',()=>beginManual('water'));
   q('#show-rays').addEventListener('change',()=>{drawConstruction();drawSide();});
   function changeWater(direction) {
     const target=direction>0?100:0;
     if(target===geometry.depth||(playing&&target===waterTarget))return;
     finishAnimation();
     waterStart=geometry.depth;waterTarget=target;waterElapsed=0;
-    syncGeometry();playing=true;root.dataset.state=direction>0?'filling':'draining';
+    clearTimeout(detailTimer);interacting=false;syncGeometry();playing=true;root.dataset.state=direction>0?'filling':'draining';
     if(inView&&!document.hidden)animation=requestAnimationFrame(tick);
   }
   q('#depth-fill').addEventListener('click',()=>changeWater(1));
   q('#depth-drain').addEventListener('click',()=>changeWater(-1));
   eye.addEventListener('keydown',e=>{
     const step={ArrowLeft:-2,ArrowDown:-2,ArrowRight:2,ArrowUp:2,PageDown:-10,PageUp:10}[e.key];
-    if(step!==undefined||e.key==='Home'||e.key==='End'){e.preventDefault();eyeX=e.key==='Home'?210:e.key==='End'?340:clamp(geometry.eyeX+step,210,340);update();}
+    if(step!==undefined||e.key==='Home'||e.key==='End'){e.preventDefault();eyeX=e.key==='Home'?210:e.key==='End'?340:clamp(geometry.eyeX+step,210,340);updateEye();}
   });
   function bindDrag(target,kind) {
     let start=null;
     const local=e=>new DOMPoint(e.clientX,e.clientY).matrixTransform(svg.getScreenCTM().inverse());
     target.addEventListener('pointerdown',e=>{
-      if(e.button!==0)return;e.preventDefault();beginManual();
+      if(e.button!==0)return;e.preventDefault();beginManual(kind);
       start={point:local(e),value:kind==='eye'?eyeX:geometry.depth,id:e.pointerId};
       target.setPointerCapture(e.pointerId);
       (kind==='eye'?eye:q('#depth-input')).focus({preventScroll:true});
@@ -241,20 +255,20 @@ if (root) {
       if(!start||start.id!==e.pointerId)return;e.preventDefault();const p=local(e);
       if(kind==='eye')eyeX=clamp(Math.round(start.value+(p.x-start.point.x)/1.92),210,340);
       else q('#depth-input').value=clamp(Math.round(start.value+(start.point.y-p.y)/1.92),0,100);
-      update();
+      if(kind==='eye')updateEye();else update();
     });
-    const end=()=>{start=null;};target.addEventListener('pointerup',end);target.addEventListener('pointercancel',end);target.addEventListener('lostpointercapture',end);
+    const end=()=>{start=null;settleDetail();};target.addEventListener('pointerup',end);target.addEventListener('pointercancel',end);target.addEventListener('lostpointercapture',end);
   }
   bindDrag(eye,'eye');bindDrag(q('.depth-water-hit'),'water');
   const resume=()=>{stopAnimation();if(playing&&inView&&!document.hidden){root.dataset.state=waterTarget>waterStart?'filling':'draining';animation=requestAnimationFrame(tick);}else if(playing)root.dataset.state='paused';};
-  new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;resume();},{threshold:.05}).observe(root);
+  new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;resume();if(inView)scheduleObserver();},{threshold:.05}).observe(root);
   document.addEventListener('visibilitychange',resume);
   new ResizeObserver(()=>{drawSide();scheduleObserver();}).observe(canvas);
   function loadPhoto() {
     const photo=new Image();photo.decoding='async';
-    photo.onload=()=>{textures=createTextures(photo);for(const image of svg.querySelectorAll('image'))image.setAttribute('href',photoURL);q('#depth-fallback').replaceChildren();scheduleObserver();root.dataset.texture='ready';};
+    photo.onload=()=>{textures=createTextures(photo);observer.setTextures(textures);for(const image of svg.querySelectorAll('image'))image.setAttribute('href',photoURL);q('#depth-fallback').replaceChildren();scheduleObserver();root.dataset.texture='ready';};
     photo.onerror=()=>{root.dataset.texture='fallback';const note=q('#depth-fallback');note.textContent='材質圖片未載入，目前以簡化材質呈現。';const retry=document.createElement('button');retry.type='button';retry.textContent='重新載入材質';retry.onclick=loadPhoto;note.append(' ',retry);};
     photo.src=photoURL;
   }
-  update();loadPhoto();
+  drawSide();update();loadPhoto();
 }

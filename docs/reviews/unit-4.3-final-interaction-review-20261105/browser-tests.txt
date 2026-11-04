@@ -1,0 +1,16 @@
+▶ 4.3 approved desktop and laptop interactions, captions and four-layer evidence
+  ✔ 1 and 2 auto resume only automatic pauses and keep manual/comparison freezes (5835.229994ms)
+  ✔ 3 and 4 distinguish preview from playing without altering selected settings (2480.411956ms)
+  ✔ 5 independent reciprocal fronts, correct slider roles, pause and reset (6562.365093ms)
+  ✔ four-layer pool remains a real mouse return target; only Left/Right reorders; feedback gives one measured pair (3661.847296ms)
+  ✔ desktop/laptop bounds and final presentation at 1440,1366,1280,1024 (9237.910441ms)
+✔ 4.3 approved desktop and laptop interactions, captions and four-layer evidence (30886.773027ms)
+✔ 6 real two-second paired water frames, eye co-control, takeover, full detail and worker fallback (13976.446523ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 45821.109425

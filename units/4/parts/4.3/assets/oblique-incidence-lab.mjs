@@ -21,7 +21,8 @@ function mountSingleLab(prefix,reverse){
  }
  function controls(){
   root.dataset.state=state;root.dataset.playback=state;status.classList.toggle('visually-hidden',state!=='error');root.setAttribute('aria-busy',String(state==='loading'));const disabled=state==='loading'||state==='error';start.disabled=input.disabled=reset.disabled=disabled;source.setAttribute('aria-disabled',disabled);source.setAttribute('tabindex',disabled?'-1':'0');selector.render(requested);
-  start.querySelector('span:last-child').textContent=state==='complete'||state==='preview'?'再次發射':state==='running'?'重新發射':'發射光束';status.textContent={loading:'正在準備實驗場景……',error:`${requested==='water'?'水':'玻璃'}場景未能載入，請重試或切換介質。`,idle:'調整入射角，再點燈發射；角度與說明會直接出現在光路上。',running:'光束正在前進。',suspended:'回到實驗畫面後會繼續發射。',preview:'光路與角度已更新，可直接比較或再次發射。',complete:'光路已展開，角度與說明顯示在同一場景內。'}[state];
+  $( `#${prefix}-preview`).hidden=state!=='preview';
+  start.querySelector('span:last-child').textContent=state==='preview'?'播放此設定':state==='complete'?'再次發射':state==='running'?'重新發射':'發射光束';status.textContent={loading:'正在準備實驗場景……',error:`${requested==='water'?'水':'玻璃'}場景未能載入，請重試或切換介質。`,idle:'調整入射角，再點燈發射；角度與說明會直接出現在光路上。',running:'光束正在前進。',suspended:'回到實驗畫面後會繼續發射。',preview:'光路與角度已更新，可直接比較或再次發射。',complete:'光路已展開，角度與說明顯示在同一場景內。'}[state];
  }
  function stop(){cancelAnimationFrame(frame);frame=0;}
  function tick(now){if(state!=='running')return;elapsed=Math.min(duration(),Math.max(0,now-startTime));render();if(elapsed>=duration()){state='complete';frame=0;controls();}else frame=requestAnimationFrame(tick);}

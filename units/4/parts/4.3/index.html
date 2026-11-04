@@ -23,24 +23,24 @@
   <link rel="canonical" href="https://billlaitrade.github.io/k12-learning-demos/units/4/parts/4.3/">
   <link rel="icon" href="data:,">
   <title>光進入不同介質會怎樣？</title>
-  <link rel="stylesheet" href="assets/lesson.css?v=20261101-controls2">
+  <link rel="stylesheet" href="assets/lesson.css?v=20261105-review1">
   <link rel="stylesheet" href="assets/light-speed-lab.css?v=20261101-controls2">
-  <script type="module" src="assets/light-speed-lab.mjs?v=20261101-controls2"></script>
+  <script type="module" src="assets/light-speed-lab.mjs?v=20261105-review1"></script>
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
-  <script type="module" src="assets/normal-incidence-lab.mjs?v=20261102-compact1"></script>
+  <script type="module" src="assets/normal-incidence-lab.mjs?v=20261105-review1"></script>
   <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-cart1">
   <script type="module" src="assets/oblique-cart.mjs?v=20261103-cart2"></script>
-  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261103-fit2"></script>
+  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261105-review1"></script>
   <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-inline1">
-  <script type="module" src="assets/return-refraction-lab.mjs?v=20261103-roles1"></script>
+  <script type="module" src="assets/return-refraction-lab.mjs?v=20261105-review1"></script>
   <link rel="stylesheet" href="assets/light-beam.css?v=20261103-fit2">
   <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-fit2">
 <link rel="stylesheet" href="assets/integrated-refraction.css?v=20261103-fit2">
   <link rel="stylesheet" href="assets/return-refraction-refresh.css?v=20261103-inline1">
   <link rel="stylesheet" href="assets/depth-lab.css?v=20261104-water-guide1">
-  <script type="module" src="assets/depth-lab.mjs?v=20261104-water2s1"></script>
-  <link rel="stylesheet" href="assets/layer-speed-quiz.css?v=20261104-four1">
-  <script type="module" src="assets/layer-speed-quiz.mjs?v=20261104-four1"></script>
+  <script type="module" src="assets/depth-lab.mjs?v=20261105-review1"></script>
+  <link rel="stylesheet" href="assets/layer-speed-quiz.css?v=20261105-review1">
+  <script type="module" src="assets/layer-speed-quiz.mjs?v=20261105-review1"></script>
   <script type="module" src="assets/lesson.mjs?v=20261104-rank1">
 </script>
 </head>
@@ -111,7 +111,7 @@
       <p class="race-pan-hint">↔ 左右滑動，查看完整實驗桌。</p>
       <div class="race-viewport" role="region" tabindex="0" aria-label="三排光速比較桌，窄螢幕可左右滑動"><div class="race-table" role="group" aria-label="空氣、水、玻璃三排固定介質，同起點、同終點">
         <img id="race-background" src="assets/light-speed-bench.png" width="2022" height="778" alt="木質實驗桌上，三排等長的空氣觀察窗、水槽與實心透明玻璃，兩端各有金屬光源和接收器。">
-        <div class="race-distance">三段路程皆為 <strong>100 萬公里</strong></div>
+        <div class="race-distance">模型路程：每段 <strong>100 萬公里</strong></div>
         <span class="race-state" id="race-state">準備實驗桌</span>
         <svg id="race-scene" viewBox="0 0 2022 778" role="img" aria-label="尚未發光的三排光速比較"></svg>
         <div class="race-arrivals" role="group" aria-label="各排接收器右側的到達時間">
@@ -125,7 +125,7 @@
           <button id="race-start" class="primary" type="button" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>同時發光</span></button>
           <button id="race-pause" type="button" data-action="pause" disabled><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zm8 0h4v16h-4z" fill="currentColor"/></svg><svg class="resume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>暫停觀察</span></button>
         </div>
-        <div class="race-clock" aria-label="三道光的共同計時"><span>共同計時</span><strong><output id="race-time">0.00</output><small>秒</small></strong></div>
+        <div class="race-clock" aria-label="三道光的共同計時"><span>共同計時<small class="model-clock-note">依模型路程計時</small></span><strong><output id="race-time">0.00</output><small>秒</small></strong></div>
       </div>
       <p id="race-status" class="race-status" role="status">正在準備實驗桌……</p>
       <button id="race-retry" type="button" hidden>重新載入實驗桌</button>
@@ -143,7 +143,7 @@
     </div>
     <div class="lab" id="normal-lab" data-state="loading" aria-label="全程空氣對照與垂直射入水、玻璃的三組光路示意">
       <ol class="normal-steps" aria-label="光束穿越的觀察步驟"><li data-normal-stage="1"><b>1</b>發射光束</li><li data-normal-stage="2"><b>2</b>跨越介面</li><li data-normal-stage="3"><b>3</b>比較同一瞬間</li></ol>
-      <p class="normal-distance-summary"><span>光源 → 終點</span><strong><output id="normal-distance">150 萬公里</output></strong><small id="normal-route-split">水／玻璃組：空氣 75 萬公里 ＋ 介質 75 萬公里</small></p>
+      <p class="normal-distance-summary"><span>模型總路程</span><strong><output id="normal-distance">150 萬公里</output></strong><small id="normal-route-split">水／玻璃組：空氣 75 萬公里 ＋ 介質 75 萬公里</small></p>
       <p class="normal-pan-hint">↔ 左右滑動，對照空氣、水與玻璃的光路。</p>
       <div class="normal-viewport" id="normal-viewport" role="region" tabindex="0" aria-label="垂直入射實驗桌，窄螢幕可左右滑動">
         <div class="normal-table">
@@ -159,7 +159,7 @@
           <button id="normal-pause" type="button" disabled data-action="pause"><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h4v16H6zm8 0h4v16h-4z" fill="currentColor"/></svg><svg class="resume-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>暫停觀察</span></button>
         </div>
         <p class="normal-status" id="normal-status" role="status">正在準備實驗桌……</p>
-        <div class="normal-clock" aria-label="三束光的共同計時"><span>共同計時</span><strong><output id="normal-time" aria-live="off">0.00</output><small>秒</small></strong></div>
+        <div class="normal-clock" aria-label="三束光的共同計時"><span>共同計時<small class="model-clock-note">依模型路程計時</small></span><strong><output id="normal-time" aria-live="off">0.00</output><small>秒</small></strong></div>
       </div>
       <button id="normal-retry" type="button" hidden>重新載入實驗桌</button>
       <noscript><p>總路程150萬公里，全程空氣約需5秒；前半空氣、後半水約需5.83秒；前半空氣、後半玻璃約需6.25秒。垂直入射時方向不偏折。啟用JavaScript後可發射與暫停比較。</p></noscript>
@@ -223,7 +223,7 @@
           </div>
           <div class="integrated-controls">
             <div class="oblique-actions" role="group" aria-label="發射與重設光束"><button id="oblique-start" type="button" class="primary" disabled><span aria-hidden="true">▶</span><span>發射光束</span></button><button id="oblique-reset" type="button" disabled>↻ 重設</button></div>
-            <label class="oblique-angle-control" for="oblique-angle"><span>入射角 <output id="oblique-angle-value" for="oblique-angle">30°</output></span><span class="oblique-slider"><input id="oblique-angle" type="range" min="0" max="40" value="30" step="1" aria-label="入射角，從法線量起" disabled><span>0°</span><span>40°</span></span></label>
+            <label class="oblique-angle-control" for="oblique-angle"><span><small class="integrated-preview" id="oblique-preview" hidden>光路預覽</small>入射角 <output id="oblique-angle-value" for="oblique-angle">30°</output></span><span class="oblique-slider"><input id="oblique-angle" type="range" min="0" max="40" value="30" step="1" aria-label="入射角，從法線量起" disabled><span>0°</span><span>40°</span></span></label>
             <button id="oblique-retry" type="button" hidden>重新載入場景</button>
           </div>
         </div>
@@ -310,7 +310,7 @@
           </div>
           <div class="integrated-controls">
             <div class="oblique-actions" role="group" aria-label="發射與重設光束"><button id="exit-start" type="button" class="primary" disabled><span aria-hidden="true">▶</span><span>發射光束</span></button><button id="exit-reset" type="button" disabled>↻ 重設</button></div>
-            <label class="oblique-angle-control" for="exit-angle"><span>入射角 <output id="exit-angle-value" for="exit-angle">30°</output></span><span class="oblique-slider"><input id="exit-angle" type="range" min="0" max="40" value="30" step="1" aria-label="入射角，從法線量起" disabled><span>0°</span><span>40°</span></span></label>
+            <label class="oblique-angle-control" for="exit-angle"><span><small class="integrated-preview" id="exit-preview" hidden>光路預覽</small>入射角 <output id="exit-angle-value" for="exit-angle">30°</output></span><span class="oblique-slider"><input id="exit-angle" type="range" min="0" max="40" value="30" step="1" aria-label="入射角，從法線量起" disabled><span>0°</span><span>40°</span></span></label>
             <button id="exit-retry" type="button" hidden>重新載入場景</button>
           </div>
         </div>
@@ -406,6 +406,7 @@
     <div class="return-finding"><strong id="return-finding">分別開啟 A、B，再比較兩個方向</strong><span id="return-route">空氣側 41.8°｜水側 30°</span></div>
   </div>
   </div>
+  <p class="return-alignment-note">拖動一端，另一端會自動對準對應光路。</p>
   <p id="return-status" class="visually-hidden" role="status">正在準備實驗場景……</p><button type="button" id="return-retry" hidden>重新載入場景</button>
   <span class="visually-hidden">水／玻璃側角度 <span id="return-water-value" class="incident-readout">30°</span>，空氣側角度 <span id="return-air-value" class="refracted-readout">41.8°</span>。</span>
   <details class="return-explanation"><summary>光路反向時，兩個角的角色怎麼交換？</summary><p>光沿原光路反向射入，會沿原路返回。原本的折射角會成為反向的入射角，原本的入射角會成為反向的折射角；兩個角通常不相等。只開一支光源時標示入射角與折射角；兩支同時開啟時改以空氣側及水／玻璃側命名。角度皆從法線量起。</p><p>拖曳 A 或 B 時，另一端會自動對準對應光路。分別開燈，再同時開啟，比較路徑與箭頭；兩種光色只用來區分方向，不比較色散。</p></details>
@@ -462,7 +463,7 @@
 <div id="depth-lab" data-state="ready" data-depth="0" data-eye-x="300">
 <div class="depth-views">
 <figure class="depth-view depth-explanation">
-<figcaption>從側面看光路<small>同一座水槽</small></figcaption>
+<figcaption>側面剖面：看光路<small>同一座水槽</small></figcaption>
 <div class="depth-stage">
 <svg id="depth-scene" viewBox="0 0 720 530" role="group" aria-label="硬幣固定，折射光進入目前觀看位置">
 </svg>
@@ -500,7 +501,7 @@
 <section class="unit-quiz rank-quiz" id="s7" aria-labelledby="heading-7">
 <header class="quiz-head" id="unit-quiz">
 <span class="quiz-mark" aria-hidden="true">?</span>
-<div><p class="quiz-kicker">單元小測</p><h2 id="heading-7">哪一層的光速最快？</h2><p class="quiz-subtitle">發射光束，觀察光路，再排出四層介質的快慢。</p></div>
+<div><p class="quiz-kicker">單元小測</p><h2 id="heading-7">哪一層的光速最快？</h2><p class="quiz-subtitle">利用光線與法線的夾角，比較四種不同透明介質的光速。</p></div>
 <button id="rank-new" class="rank-new" type="button" disabled>↻ 換一題</button>
 </header>
 <div class="quiz-body rank-body">
@@ -514,7 +515,7 @@
 <div class="rank-playback"><button id="rank-play" class="rank-play" type="button" disabled>▶ 發射光束</button><span id="rank-play-state" role="status" aria-live="polite">正在準備光路……</span></div>
 </figure>
 <form id="quiz" class="rank-answer" aria-label="介質光速排序" novalidate>
-<div class="rank-answer-intro"><h3>將介質排成光速由快到慢</h3><p id="rank-sort-help" class="rank-answer-help" role="status" aria-live="polite">拖曳卡片；也可點選卡片，再選位置。</p><p id="rank-key-help" class="visually-hidden">卡片與位置都可用Tab、Enter或空白鍵操作。已放入的位置可用方向鍵移動卡片，Delete或Backspace取回；Escape取消選取。只比較甲、乙、丙、丁，不包括光源所在的空氣。</p></div>
+<div class="rank-answer-intro"><h3>將介質排成光速由快到慢</h3><p id="rank-sort-help" class="rank-answer-help" role="status" aria-live="polite">拖曳卡片；也可點選卡片，再選位置。</p><p id="rank-key-help" class="visually-hidden">卡片與位置都可用Tab、Enter或空白鍵操作。已放入的位置可用左右方向鍵移動卡片，Delete或Backspace取回；Escape取消選取。只比較甲、乙、丙、丁，不包括光源所在的空氣。</p></div>
 <div class="rank-order" role="group" aria-label="光速由快到慢" aria-describedby="rank-key-help"><span class="rank-endpoint">最快</span><ol class="rank-slots"><li><button class="rank-slot" data-rank-slot="0" type="button" aria-label="第1個位置，最快，尚未放入介質" disabled><span class="rank-slot-placeholder" aria-hidden="true">⇩</span></button></li><li><button class="rank-slot" data-rank-slot="1" type="button" aria-label="第2個位置，尚未放入介質" disabled><span class="rank-slot-placeholder" aria-hidden="true">⇩</span></button></li><li><button class="rank-slot" data-rank-slot="2" type="button" aria-label="第3個位置，尚未放入介質" disabled><span class="rank-slot-placeholder" aria-hidden="true">⇩</span></button></li><li><button class="rank-slot" data-rank-slot="3" type="button" aria-label="第4個位置，最慢，尚未放入介質" disabled><span class="rank-slot-placeholder" aria-hidden="true">⇩</span></button></li></ol><span class="rank-endpoint">最慢</span></div>
 <div class="rank-answer-actions"><ul class="rank-pool" aria-label="可選介質"><li><button class="rank-token" data-rank-medium="0" type="button" aria-pressed="false" disabled><span class="rank-grip" aria-hidden="true">⠿</span><span>介質甲</span></button></li><li><button class="rank-token" data-rank-medium="1" type="button" aria-pressed="false" disabled><span class="rank-grip" aria-hidden="true">⠿</span><span>介質乙</span></button></li><li><button class="rank-token" data-rank-medium="2" type="button" aria-pressed="false" disabled><span class="rank-grip" aria-hidden="true">⠿</span><span>介質丙</span></button></li><li><button class="rank-token" data-rank-medium="3" type="button" aria-pressed="false" disabled><span class="rank-grip" aria-hidden="true">⠿</span><span>介質丁</span></button></li></ul><button id="rank-check" class="rank-check" type="submit" disabled>確認排序</button></div>
 <p id="quiz-result" role="status" aria-live="polite"></p>

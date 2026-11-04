@@ -1,4 +1,4 @@
-import {createLayerDeck, layerSnapshot, placeLayer, compareLayers, LAYER_NAMES} from './layer-speed-model.mjs?v=20261104-four1';
+import {createLayerDeck, layerSnapshot, placeLayer, compareLayers, invertedLayerPair, LAYER_NAMES} from './layer-speed-model.mjs?v=20261105-review1';
 
 const root=document.querySelector('#rank-lab');
 if(root){
@@ -70,13 +70,14 @@ if(root){
       </g>
       <image class="rank-bench-photo" x="0" y="0" width="${width}" height="${height}" href="${photoURLs[backgroundKey]}" preserveAspectRatio="none" aria-hidden="true"/>
       ${question.geometry.layers.map((layer,i)=>{
-        const cy=top+(i+.5)*h,plateX=left+18,plateWidth=190,kind=question.materials[i].kind,texture=materialRows[kind];
+        const cy=top+(i+.5)*h,plateX=left+18,plateWidth=190,kind=question.materials[i].kind,finish=question.materials[i].finish||kind,texture=materialRows[kind];
         const cropWidth=narrow?Math.min(texture.width,texture.height*(right-left)/h):texture.width;
         const cropX=texture.x+(texture.width-cropWidth)*(kind==='solid'?.67:.5);
         const crop=`${cropX} ${texture.y} ${cropWidth} ${texture.height}`;
-        return `<g class="rank-medium" data-layer="${i}" data-material-kind="${kind}">
+        return `<g class="rank-medium" data-layer="${i}" data-material-kind="${kind}" data-material-finish="${finish}">
         <rect class="rank-layer" x="${left}" y="${top+i*h}" width="${right-left}" height="${h}" fill="url(#rank-medium-fill-${kind})"/>
         <svg class="rank-material-photo" x="${left}" y="${top+i*h}" width="${right-left}" height="${h}" viewBox="${crop}" preserveAspectRatio="none" aria-hidden="true"><image class="rank-material-image" href="${photoURLs.materials}" width="2022" height="778"/></svg>
+        ${kind==='solid'?`<rect x="${left}" y="${top+i*h}" width="${right-left}" height="${h}" fill="${finish==='cool'?'#91bfcc':'#fff3cb'}" opacity="${finish==='cool'?'.19':'.08'}"/><path d="M${left+(finish==='cool'?480:580)} ${top+i*h}l-${h} ${h}h${finish==='cool'?18:9}l${h}-${h}Z" fill="#fff" opacity=".2"/>`:''}
         ${i>0?`<path class="rank-interface" d="M${left} ${top+i*h}H${right}"/>`:''}
         <g class="rank-nameplate" filter="url(#rank-label-shadow)" aria-hidden="true">
           <path d="M${plateX+8} ${cy-26}H${plateX+plateWidth-8}L${plateX+plateWidth} ${cy-18}V${cy+18}L${plateX+plateWidth-8} ${cy+26}H${plateX+8}L${plateX} ${cy+18}V${cy-18}Z" fill="url(#rank-ivory)" stroke="#b2985c" stroke-width="1.2"/>
@@ -192,6 +193,7 @@ if(root){
       delete button.dataset.result;
     });
     tokens.forEach((button,i)=>{button.hidden=order.includes(i);button.setAttribute('aria-pressed',String(selected===i));});
+    q('.rank-pool').dataset.empty=String(order.every(id=>id!==null));
     help.textContent=selected===null?defaultHelp:`已選取${names[selected]}，點選排序位置放入。`;
     if(focusSlot!==null)slots[focusSlot].focus({preventScroll:true});
   }
@@ -209,8 +211,7 @@ if(root){
     activate(button);
   });
   slots.forEach((slot,index)=>slot.addEventListener('keydown',event=>{
-    const columns=getComputedStyle(slot.closest('.rank-slots')).gridTemplateColumns.split(' ').length;
-    const step=event.key==='ArrowLeft'?-1:event.key==='ArrowRight'?1:event.key==='ArrowUp'?-columns:event.key==='ArrowDown'?columns:0;
+    const step=event.key==='ArrowLeft'?-1:event.key==='ArrowRight'?1:0;
     if(step){event.preventDefault();const target=Math.max(0,Math.min(names.length-1,index+step));if(order[index]!==null)place(order[index],target);else slots[target].focus();}
     if(event.key==='Delete'||event.key==='Backspace'){event.preventDefault();returnLayer(index);}
   }));
@@ -225,6 +226,8 @@ if(root){
   }
   root.addEventListener('pointerdown',event=>{
     if(event.button!==0||drag)return;
+    // A new deliberate gesture must not be mistaken for the prior drag's click.
+    suppressClickUntil=0;suppressClickTarget=null;
     const button=event.target.closest('[data-rank-medium],[data-rank-slot]');if(!button)return;
     const id=button.hasAttribute('data-rank-medium')?Number(button.dataset.rankMedium):order[Number(button.dataset.rankSlot)];
     drag={pointerId:event.pointerId,button,id,x:event.clientX,y:event.clientY,moved:false};button.setPointerCapture(event.pointerId);
@@ -264,7 +267,8 @@ if(root){
     const comparison=compareLayers(question.geometry,order);
     if(!comparison.complete){result.textContent='還有位置未放入介質，排好四個位置後再確認。';return;}
     revealed=true;result.dataset.result=comparison.correct?'correct':'retry';
-    result.textContent=comparison.correct?`排序正確。光速由快到慢為${question.geometry.order.map(id=>LAYER_NAMES[id]).join('、')}；夾角越大，光速越快。`:'再比較一下：四層介面平行，光線與法線的夾角越大，光速越快。';
+    const pair=invertedLayerPair(question.geometry,order);
+    result.textContent=comparison.correct?`排序正確。光速由快到慢為${question.geometry.order.map(id=>LAYER_NAMES[id]).join('、')}；夾角越大，光速越快。`:`比較${pair.map(id=>`${names[id]} ${question.geometry.layers[id].angle.toFixed(1)}°`).join('與')}：哪一層應排在前面？夾角越大，光速越快。`;
     slots.forEach((slot,i)=>slot.dataset.result=comparison.positions[i]?'correct':'retry');draw();
   });
   next.addEventListener('click',()=>{

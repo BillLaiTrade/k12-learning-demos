@@ -8,14 +8,14 @@ const status=$('#normal-status'), badge=$('#normal-state'), timer=$('#normal-tim
 $('#normal-distance').textContent=`${distanceKm/10000} 萬公里`;
 $('#normal-route-split').textContent=`水／玻璃組：空氣 ${airDistanceKm/10000} 萬公里 ＋ 介質 ${mediumDistanceKm/10000} 萬公里`;
 let state='loading', elapsed=0, startTime=0, frame=0, previousStage=-1;
-let comparisonPending=true, pauseReason='';
+let comparisonPending=true, pauseReason='',inView=true;
 const tag=(x,y,text,width=104)=>`<g><rect x="${x}" y="${y-35}" width="${width}" height="54" rx="10" fill="#fffef4" fill-opacity=".94"/><text x="${x+width/2}" y="${y}" text-anchor="middle" font-size="30">${text}</text></g>`;
 scene.innerHTML=`<defs><filter id="normal-glow" filterUnits="userSpaceOnUse" x="310" y="200" width="920" height="560"><feGaussianBlur stdDeviation="6"/></filter></defs>
 <g class="normal-distance-guide" aria-hidden="true"><path d="M110 ${layout.source}V${layout.end} M98 ${layout.source}H122 M98 ${layout.end}H122" fill="none" stroke="#3f735c" stroke-width="2.5"/><rect x="24" y="${layout.boundary-26}" width="132" height="52" rx="9" fill="#fffef4" stroke="#b7cbb1"/><text x="90" y="${layout.boundary+9}" text-anchor="middle" font-size="24">${distanceKm/10000}萬公里</text></g>
 ${media.map((medium,i)=>{
  const x=layout.axes[i], inAir=medium==='air';
  return `<g class="normal-lane" data-medium="${medium}">
- ${inAir?'':`<path class="normal-interface" d="M${x-151} ${layout.boundary}H${x+151}"/>${tag(x-226,layout.boundary+10,'介面',90)}<path class="normal-reference" d="M${x} 266V925"/><g class="normal-reference-label"><rect x="${x-61}" y="934" width="122" height="54" rx="12" fill="#fffef7" stroke="#aac2a9" stroke-width="2"/><text x="${x}" y="971" text-anchor="middle" font-size="30">法線</text></g>`}
+ ${inAir?'':`<path class="normal-interface" d="M${x-151} ${layout.boundary}H${x+151}"/>${tag(x-226,layout.boundary+10,'介面',90)}<path class="normal-reference" d="M${x} 266V925"/><path class="normal-right-angle" d="M${x+24} ${layout.boundary}v24h-24" fill="none" stroke="#476d59" stroke-width="3"/><g class="normal-reference-label"><rect x="${x-130}" y="934" width="260" height="54" rx="12" fill="#fffef7" stroke="#aac2a9" stroke-width="2"/><text x="${x}" y="971" text-anchor="middle" font-size="28">法線：垂直介面</text></g>`}
  ${tag(x-137,inAir?424:380,'空氣',100)}
  ${inAir?'':tag(x-137,590,medium==='water'?'水':'玻璃',medium==='water'?80:100)}
  <g class="normal-beam" visibility="hidden">${['normal-halo','normal-ray','normal-core'].map(cls=>`<line class="${cls}" x1="${x}" y1="${layout.source}" x2="${x}" y2="${layout.source}"/>`).join('')}</g>
@@ -93,13 +93,14 @@ function play(fromBeginning=false){
  stop();if(fromBeginning){elapsed=0;comparisonPending=true;}
  state='running';pauseReason='';startTime=performance.now()-elapsed;render();controls();explainStage();frame=requestAnimationFrame(tick);
 }
-function freeze(){
+function freeze(reason='manual'){
  if(state!=='running')return;
- stop();const compare=advance(performance.now());state=elapsed>=durationMs?'complete':'paused';pauseReason=compare?'comparison':state==='paused'?'manual':'';render();controls();explainStage();
+ stop();const compare=advance(performance.now());state=elapsed>=durationMs?'complete':'paused';pauseReason=compare?'comparison':state==='paused'?reason:'';render();controls();explainStage();
 }
 start.onclick=()=>play(true);pause.onclick=()=>state==='paused'?play():freeze();
-document.addEventListener('visibilitychange',()=>{if(document.hidden)freeze();});
-if('IntersectionObserver' in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)freeze();},{threshold:0}).observe($('#normal-viewport'));
+const resumeAutomatic=()=>{if(state==='paused'&&pauseReason==='automatic'&&inView&&!document.hidden)play();};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)freeze('automatic');else resumeAutomatic();});
+if('IntersectionObserver' in window)new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;if(inView)resumeAutomatic();else freeze('automatic');},{threshold:0}).observe($('#normal-viewport'));
 async function prepare(){
  stop();state='loading';elapsed=0;comparisonPending=true;pauseReason='';render();controls();retry.hidden=true;
  try{await picture.decode();state='idle';controls();explainStage();}

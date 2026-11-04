@@ -92,3 +92,8 @@
 }
 @container(max-width:340px){.rank-quiz .rank-body{padding-inline:8px}.rank-answer{padding-inline:8px}.rank-quiz .rank-slot{gap:3px}.rank-legend p{flex-basis:100%;text-align:center}}
 @media(prefers-reduced-motion:reduce){.rank-beam-halo{filter:none;opacity:.15}.rank-bench-photo{transition:none}}
+
+/* A persistent return target even when all material cards are in the answer. */
+.rank-pool{min-height:44px;position:relative}
+.rank-pool[data-empty="true"]{border:1px dashed #a5b390;border-radius:7px;background:#f4f5e9}
+.rank-pool[data-empty="true"]::after{content:"拖回這裡取回";position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;color:#62705a;font-size:.8rem}

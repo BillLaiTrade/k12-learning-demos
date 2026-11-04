@@ -132,3 +132,8 @@ footer.shell { padding: 28px 0 36px; border-top: 1px solid var(--line); color: v
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: .01ms !important; }
 }
+/* Short context labels approved in the whole-lesson interaction review. */
+.race-clock .model-clock-note,.normal-clock .model-clock-note{display:block;margin:2px 0 0;font:500 .68rem/1.35 system-ui,sans-serif;color:#637468;white-space:nowrap}
+.integrated-preview{display:inline-block;margin-right:8px;padding:2px 6px;border:1px solid #9bad83;border-radius:5px;color:#385d3b;background:#f5f8e8;font-size:.72rem;font-weight:650;vertical-align:middle}
+.integrated-preview[hidden]{display:none}
+.return-alignment-note{margin:7px 14px 0;color:#516c59;font-size:.8rem;line-height:1.55}

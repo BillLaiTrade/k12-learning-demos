@@ -7,7 +7,7 @@ const stateLabel = $('#race-state'), status = $('#race-status'), timer = $('#rac
 const image = $('#race-background'), retry = $('#race-retry');
 const scene = $('#race-scene');
 const position = {start:448, end:1590, rows:[177,337,506]};
-let state = 'loading', elapsed = 0, startTime = 0, frame = 0;
+let state = 'loading', elapsed = 0, startTime = 0, frame = 0, pauseReason='',inView=true;
 
 // SVG is a transparent live overlay on the approved-quality table rendering.
 // Every row uses the same start/end coordinates and the same physical clock.
@@ -36,7 +36,7 @@ const lanes = media.map(key => ({
   result:$(`[data-arrival="${key}"]`)
 }));
 function controls() {
-  root.dataset.state = state;
+  root.dataset.state = state;root.dataset.pauseReason=pauseReason;
   const unavailable = state === 'loading' || state === 'error';
   start.disabled = unavailable || state === 'running' || state === 'paused';
   pause.disabled = unavailable || state === 'idle' || state === 'complete';
@@ -79,25 +79,26 @@ function play(fromBeginning = false) {
   if (state==='loading' || state==='error') return;
   stopFrame();
   if(fromBeginning || state==='complete' || state==='idle')elapsed=0;
-  state='running';startTime=performance.now()-elapsed;render();controls();
+  state='running';pauseReason='';startTime=performance.now()-elapsed;render();controls();
   status.textContent='三道光同時前進；按「暫停觀察」，比較同一瞬間走過的距離。';
   frame=requestAnimationFrame(tick);
 }
-function freeze() {
+function freeze(reason='manual') {
   if(state!=='running')return;
   stopFrame();elapsed=Math.min(durationMs,Math.max(0,performance.now()-startTime));
-  state=elapsed>=durationMs?'complete':'paused';render();controls();
+  state=elapsed>=durationMs?'complete':'paused';pauseReason=state==='paused'?reason:'';render();controls();
   status.textContent=state==='complete'?'三道光皆已到達，再按「同時發光」可重新比較。':'三道光定格在同一瞬間。按「繼續觀察」接著看，不計入暫停的時間。';
 }
 start.onclick=()=>play(true);
 pause.onclick=()=>state==='paused'?play():freeze();
-document.addEventListener('visibilitychange',()=>{if(document.hidden)freeze();});
-if('IntersectionObserver' in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)freeze();},{threshold:0}).observe(root);
+const resumeAutomatic=()=>{if(state==='paused'&&pauseReason==='automatic'&&inView&&!document.hidden)play();};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)freeze('automatic');else resumeAutomatic();});
+if('IntersectionObserver' in window)new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;if(inView)resumeAutomatic();else freeze('automatic');},{threshold:0}).observe(root);
 async function prepare() {
-  state='loading';elapsed=0;stopFrame();render();controls();retry.hidden=true;
+  state='loading';pauseReason='';elapsed=0;stopFrame();render();controls();retry.hidden=true;
   try {
     await image.decode();
-    state='idle';controls();status.textContent='三段路程皆為 100 萬公里。按「同時發光」開始比較。';
+    state='idle';controls();status.textContent='模型路程每段100萬公里。按「同時發光」開始比較。';
   } catch {
     state='error';controls();retry.hidden=false;status.textContent='實驗桌圖片暫時無法載入，請重新載入實驗桌。';
   }

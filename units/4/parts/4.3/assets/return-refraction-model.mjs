@@ -26,3 +26,12 @@ export function arrow(from,to,fraction,size){
  const point=(along,across)=>[center[0]+dx*along-dy*across,center[1]+dy*along+dx*across].join(' ');
  return `M${point(size,0)}L${point(-size*.7,size*.55)}L${point(-size*.35,0)}L${point(-size*.7,-size*.55)}Z`;
 }
+
+// Deliberately slowed optical travel time; both directions use identical media.
+export function reciprocalSnapshot(g,key,elapsed=0){
+ if(!['a','b'].includes(key))throw new RangeError('Unknown source');
+ const points=key==='a'?g.forward:g.backward,indices=key==='a'?[1,materials[g.medium].n]:[materials[g.medium].n,1];
+ let time=0;
+ const segments=indices.map((n,i)=>{const from=points[i],to=points[i+1],durationMs=Math.hypot(to[0]-from[0],to[1]-from[1])*n*2.3,startMs=time;time+=durationMs;const fraction=Math.max(0,Math.min(1,(elapsed-startMs)/durationMs));return {from,to,startMs,durationMs,fraction,end:from.map((v,j)=>v+(to[j]-v)*fraction)};});
+ return {segments,durationMs:time,complete:elapsed>=time};
+}

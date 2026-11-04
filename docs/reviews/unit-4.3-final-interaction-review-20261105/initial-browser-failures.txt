@@ -1,0 +1,45 @@
+▶ 4.3 approved desktop and laptop interactions, captions and four-layer evidence
+  ✔ 1 and 2 auto resume only automatic pauses and keep manual/comparison freezes (6149.323384ms)
+  ✔ 3 and 4 distinguish preview from playing without altering selected settings (3005.324121ms)
+  ✔ 5 independent reciprocal fronts, correct slider roles, pause and reset (3415.911112ms)
+  ✖ four-layer pool remains a real mouse return target; only Left/Right reorders; feedback gives one measured pair (3852.711711ms)
+  ✔ desktop/laptop bounds and final presentation at 1440,1366,1280,1024 (9964.429916ms)
+✖ 4.3 approved desktop and laptop interactions, captions and four-layer evidence (33249.625353ms)
+✖ 6 real two-second paired water frames, eye co-control, takeover, full detail and worker fallback (11607.052451ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 4
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 55025.79543
+
+✖ failing tests:
+
+test at tests/unit-4.3-final-review.test.cjs:40:10
+✖ four-layer pool remains a real mouse return target; only Left/Right reorders; feedback gives one measured pair (3852.711711ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  null !== 'correct'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-final-review.test.cjs:47:219)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-final-review.test.cjs:40:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'correct',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-4.3-final-review.test.cjs:61:1
+✖ 6 real two-second paired water frames, eye co-control, takeover, full detail and worker fallback (11607.052451ms)
+  Error: Please use browser.newContext()
+      at _BrowserContext.newPage (/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/lib/coreBundle.js:62018:17)
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-final-review.test.cjs:74:35)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)

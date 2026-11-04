@@ -4,8 +4,8 @@ export const LAYER_NAMES = Object.freeze(['甲', '乙', '丙', '丁']);
 export const LAYER_MATERIALS = Object.freeze([
   Object.freeze({kind:'gas', n:1.00045}),
   Object.freeze({kind:'liquid', n:1.4}),
-  Object.freeze({kind:'solid', n:1.78}),
-  Object.freeze({kind:'solid', n:1.55}),
+  Object.freeze({kind:'solid', finish:'cool', n:1.78}),
+  Object.freeze({kind:'solid', finish:'clear', n:1.55}),
 ]);
 const permutations = values => values.length ? values.flatMap((value,i) =>
   permutations(values.filter((_,j)=>j!==i)).map(rest=>[value,...rest])) : [[]];
@@ -84,4 +84,11 @@ export function compareLayers(geometry, order) {
   if(!Array.isArray(order)||order.length!==LAYER_NAMES.length||order.some(x=>!Number.isInteger(x)||x<0||x>=LAYER_NAMES.length)||new Set(order).size!==LAYER_NAMES.length)return {complete:false, correct:false, positions:[]};
   const positions=order.map((id,i)=>id===geometry.order[i]);
   return {complete:true, correct:positions.every(Boolean), positions};
+}
+
+// A single adjacent inversion is sufficient evidence for the next comparison.
+export function invertedLayerPair(geometry,order){
+ if(!compareLayers(geometry,order).complete)return null;
+ for(let i=0;i<order.length-1;i++)if(geometry.layers[order[i]].angle<geometry.layers[order[i+1]].angle)return [order[i],order[i+1]];
+ return null;
 }

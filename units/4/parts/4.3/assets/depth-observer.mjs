@@ -40,21 +40,29 @@ const mix = (a,b,t) => a.map((v,i) => v*(1-t)+b[i]*t);
 const dot = (a,b) => a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
 const light = [-.32,.86,.40];
 const norm = v => {const d=Math.hypot(...v);return v.map(x=>x/d);};
+const directionCache=new Map();
+function directions(camera,width,height){
+  const key=[width,height,...camera.forward,...camera.up,camera.lens,camera.aspect].join('/');
+  if(directionCache.has(key))return directionCache.get(key);
+  const rays=new Float64Array(width*height*3);
+  for(let y=0;y<height;y++)for(let x=0;x<width;x++){
+    rays.set(cameraDirection(camera,2*(x+.5)/width-1,1-2*(y+.5)/height),(y*width+x)*3);
+  }
+  // Bounded by resolution, not by the number of eye or water positions.
+  if(directionCache.size>=2)directionCache.delete(directionCache.keys().next().value);
+  directionCache.set(key,rays);return rays;
+}
 
 // Real surface normals, a shared light, textured frames and contact shadows.
 // These change only the finish: the coin still comes from traceViewRay hits.
-export function renderObserver(canvas, geometry, textures, {preview=false}={}) {
-  const quality = preview ? 1.05 : 2;
-  const width = Math.max(400, Math.min(preview?560:1100, Math.round(canvas.clientWidth * quality)));
-  const height = Math.round(width * 530 / 720);
-  canvas.width = width; canvas.height = height;
-  const ctx = canvas.getContext('2d', { alpha: false });
-  const frame = ctx.createImageData(width, height), pixels = frame.data;
+export function renderObserverPixels(geometry, textures, width, height) {
+  const pixels = new Uint8ClampedArray(width * height * 4);
   const camera = observerCamera(geometry, width / height), L=TANK.length,Z=TANK.width/2,H=TANK.height;
+  const rays=directions(camera,width,height);
   let wallMinX=width,wallMaxX=0,wallMinY=height,wallMaxY=0;
   let coinPixels = 0, minX = width, maxX = 0, minY = height, maxY = 0;
   for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
-    const direction = cameraDirection(camera, 2 * (x + .5) / width - 1, 1 - 2 * (y + .5) / height);
+    const offset=(y*width+x)*3,direction=[rays[offset],rays[offset+1],rays[offset+2]];
     const hit = traceViewRay(geometry, camera.origin, direction);
     let color;
     if (!hit) {
@@ -128,8 +136,17 @@ export function renderObserver(canvas, geometry, textures, {preview=false}={}) {
     const i=(y*width+x)*4;
     pixels[i]=color[0]*vignette;pixels[i+1]=color[1]*vignette;pixels[i+2]=color[2]*vignette;pixels[i+3]=255;
   }
-  ctx.putImageData(frame,0,0);
   const bounds=coinPixels?{x:minX/width,y:minY/height,width:(maxX-minX+1)/width,height:(maxY-minY+1)/height}:null;
   const frontWallBounds=wallMinX<=wallMaxX?{x:wallMinX/width,y:wallMinY/height,width:(wallMaxX-wallMinX+1)/width,height:(wallMaxY-wallMinY+1)/height}:null;
-  return {coinPixels,bounds,width,height,frontWallBounds};
+  return {pixels,coinPixels,bounds,width,height,frontWallBounds};
+}
+
+// Synchronous entry retained for unsupported workers and renderer verification.
+export function renderObserver(canvas, geometry, textures, {preview=false}={}) {
+  const width=preview?224:Math.max(400,Math.min(1100,Math.round(canvas.clientWidth*2)));
+  const height=Math.round(width*530/720),result=renderObserverPixels(geometry,textures,width,height);
+  canvas.width=width;canvas.height=height;
+  canvas.getContext('2d',{alpha:false}).putImageData(new ImageData(result.pixels,width,height),0,0);
+  const {pixels,...metadata}=result;
+  return metadata;
 }
