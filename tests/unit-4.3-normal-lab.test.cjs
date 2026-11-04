@@ -77,7 +77,7 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.clock.runFor(100);
   await page.waitForFunction(()=>document.querySelector('#normal-lab').dataset.state==='paused');
   const stopped=await fronts();await page.clock.runFor(1000);assert.deepEqual(await fronts(),stopped);
-  await page.locator('#normal-pause').click();await page.clock.runFor(100);
+  await page.locator('#normal-pause').scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('#normal-lab').dataset.state==='running');await page.clock.runFor(100);
   await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
   assert.equal(await lab.getAttribute('data-state'),'paused');const hidden=await fronts();await page.clock.runFor(1000);assert.deepEqual(await fronts(),hidden);
   await page.evaluate(()=>{delete document.hidden;document.dispatchEvent(new Event('visibilitychange'));});await finish();
@@ -117,7 +117,7 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
   let block=true;await failed.route('**/normal-incidence-half-air-bench.png*',route=>block?route.abort():route.continue());
   await failed.goto(base);await failed.waitForFunction(()=>document.querySelector('#normal-lab').dataset.state==='error');
   assert.equal(await failed.locator('#normal-start').isDisabled(),true);assert.equal(await failed.locator('#normal-retry').isVisible(),true);
-  await failed.waitForFunction(()=>document.querySelector('#oblique-lab').dataset.state==='idle');await failed.locator('#oblique-angle').fill('45');assert.match(await failed.locator('#oblique-angle-value').innerText(),/45/);
+  await failed.waitForFunction(()=>document.querySelector('#oblique-lab').dataset.state==='idle');await failed.locator('#oblique-angle').fill('35');assert.match(await failed.locator('#oblique-angle-value').innerText(),/35/);
   block=false;await failed.locator('#normal-retry').click();await failed.waitForFunction(()=>document.querySelector('#normal-lab').dataset.state==='idle');assert.equal(await failed.locator('#normal-start').isEnabled(),true);await failed.close();
  });
  await t.test('opening the explanation starts the analogy with normal motion preferences',async()=>{

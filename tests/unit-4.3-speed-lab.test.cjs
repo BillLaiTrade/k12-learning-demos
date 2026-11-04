@@ -32,7 +32,7 @@ test('4.3 fixed-media million-kilometre desk is accurate, operable and matches i
   assert.equal(await page.locator('.race-actions button').count(),2);
   assert.equal(await page.locator('#race-reset').count(),0);
   assert.equal(await page.locator('#s1 .finding').count(),0);
-  assert.equal(await page.locator('#s3 .finding').count(),1);
+  assert.equal(await page.locator('#s3 #oblique-finding').count(),1);
   assert.equal(await page.locator('.race-table .race-arrivals').count(),1);
   assert.equal(await page.locator('#speed-lab > .race-arrivals').count(),0);
   assert.deepEqual(await positions(),[448,448,448]);
@@ -81,16 +81,16 @@ test('4.3 fixed-media million-kilometre desk is accurate, operable and matches i
   await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
   assert.equal(await state(),'paused');const saved=await elapsed();await page.clock.runFor(700);assert.equal(await elapsed(),saved);
   await page.evaluate(()=>{delete document.hidden;document.dispatchEvent(new Event('visibilitychange'));});
-  assert.equal(await state(),'paused');await page.locator('#race-pause').click();await page.clock.runFor(300);assert.ok(Math.abs((await elapsed())-saved-300)<25);
+  assert.equal(await state(),'running');await page.clock.runFor(300);assert.ok(Math.abs((await elapsed())-saved-300)<25);
   await page.locator('#race-pause').click();
  });
- await t.test('leaving the section pauses and keeps progress for an explicit resume',async()=>{
+ await t.test('leaving the section pauses and returning automatically resumes the same progress',async()=>{
   await startAgain();await page.clock.runFor(700);
   await page.locator('#s3').evaluate(e=>e.scrollIntoView({block:'start',behavior:'instant'}));await page.clock.runFor(100);
   await page.waitForFunction(()=>document.querySelector('#speed-lab').dataset.state==='paused',null,{polling:50});
   assert.equal(await state(),'paused');const saved=await elapsed();await page.clock.runFor(1000);assert.equal(await elapsed(),saved);
-  await page.locator('#s1').scrollIntoViewIfNeeded();await page.clock.runFor(100);assert.equal(await state(),'paused');
-  await page.locator('#race-pause').click();await page.clock.runFor(200);assert.ok(await elapsed()>saved);
+  await page.locator('#s1').scrollIntoViewIfNeeded();await page.clock.runFor(100);await page.waitForFunction(()=>document.querySelector('#speed-lab').dataset.state==='running');
+  await page.clock.runFor(200);assert.ok(await elapsed()>saved);
   await page.locator('#race-pause').click();
  });
  await t.test('seven screen widths retain artwork, readable controls and unclipped times',async()=>{
