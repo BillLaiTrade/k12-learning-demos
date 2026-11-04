@@ -63,3 +63,5 @@
 2026-11-04補強送光與觀看距離：pixel-tv-picture.svg加入紅／綠送光符號及藍關閉標示；pixel-tv-rgb.svg加入固定螢幕與近遠眼睛／距離線；pixel-tv-compose.svg標出相鄰A／B，與HTML各自RGB狀態例子對應。沿用原三檔及建置腳本，色彩來自原模型，非實測距離或面板結構；沒有新增外部素材。
 
 2026-11-04像素電視導入精簡：pixel-tv-overview.svg由scripts/build-pixel-tv-concepts.mjs讀取實際PICTURE_TARGET生成，64格色值及A／B索引9／10均與操作模型相同。導入改用單一總覽及HTML兩格RGB對照；原三張概念SVG保留歷史，不再使用。圖解為自行繪製，外部研究來源僅作文字觀念參考；無新增依賴。
+
+2026-11-04像素電視改三段：pixel-tv-model只允許關閉／弱／強（內部0／1／4），目標資料與pixel-tv-overview.svg同步；控制器新增一次一個方向的提示與本次瀏覽內的可重用色盤。DOM色票由已成功設定產生，未使用生成示意圖作實際介面或色值來源，無新圖片或依賴。loader／controller／model／CSS同步更新版本。
