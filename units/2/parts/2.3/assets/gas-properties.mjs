@@ -1,5 +1,5 @@
 import {PROPERTY_DURATIONS,splintPropertyFrame,limewaterPropertyFrame} from './gas-properties-model.mjs?v=reaudit-20261103-2';
-import {createSplintScene,createLimewaterScene} from './gas-properties-scene.mjs?v=remove-quiz-link-20261104';
+import {createSplintScene,createLimewaterScene} from './gas-properties-scene.mjs?v=clear-limewater-20261104';
 const section=document.querySelector('.gas-properties-lesson'),players=[];
 const definitions={splints:{name:'木條比較',frame:splintPropertyFrame,scene:createSplintScene},limewater:{name:'石灰水檢驗',frame:limewaterPropertyFrame,scene:createLimewaterScene}};
 for(const root of section.querySelectorAll('[data-property-experiment]')){
