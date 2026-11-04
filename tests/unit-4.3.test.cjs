@@ -44,9 +44,9 @@ test('4.3 complete basic lesson works on desktop and mobile',{timeout:90000},asy
  await page.waitForFunction(()=>document.querySelector('#rank-lab')?.dataset.ready==='true');
  await page.locator('#rank-play').click();await page.clock.runFor(4000);assert.equal(await page.locator('#rank-lab').getAttribute('data-state'),'complete');
  await page.locator('#rank-check').click();assert.match(await page.locator('#quiz-result').textContent(),/未放入/);
- for(const [slot,id] of [0,1,2].entries()){await page.locator(`[data-rank-medium="${id}"]`).click();await page.locator(`[data-rank-slot="${slot}"]`).click();}
+ for(const [slot,id] of [0,2,1,3].entries()){await page.locator(`[data-rank-medium="${id}"]`).click();await page.locator(`[data-rank-slot="${slot}"]`).click();}
  await page.locator('#rank-check').click();assert.equal(await page.locator('#quiz-result').getAttribute('data-result'),'retry');
- await page.locator('[data-rank-slot="1"]').focus();await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#quiz-result').textContent(),'');
+ await page.locator('[data-rank-slot="2"]').focus();await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#quiz-result').textContent(),'');
  await page.locator('#rank-check').click();assert.match(await page.locator('#quiz-result').textContent(),/排序正確/);
  await page.locator('#rank-new').click();assert.equal(await page.locator('#quiz-result').textContent(),'');assert.equal(await page.locator('.rank-slot[data-filled=true]').count(),0);assert.equal(await page.locator('#rank-check').isDisabled(),true);
  await page.locator('#s3').scrollIntoViewIfNeeded();await page.screenshot({path:'/tmp/unit43-desktop.png'});

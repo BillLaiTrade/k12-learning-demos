@@ -1,0 +1,148 @@
+TAP version 13
+# Subtest: 4.3 shared lesson format keeps navigation and content usable
+    # Subtest: six numbered teaching sections and a separate quiz keep all existing anchors
+    ok 1 - six numbered teaching sections and a separate quiz keep all existing anchors
+      ---
+      duration_ms: 541.15907
+      type: 'test'
+      ...
+    # Subtest: desktop sidebar follows each section and keeps the quiz out of the six-section count
+    ok 2 - desktop sidebar follows each section and keeps the quiz out of the six-section count
+      ---
+      duration_ms: 1534.642162
+      type: 'test'
+      ...
+    # Subtest: desktop, laptop and narrow screens retain unclipped headings and controls
+    ok 3 - desktop, laptop and narrow screens retain unclipped headings and controls
+      ---
+      duration_ms: 17280.505643
+      type: 'test'
+      ...
+    # Subtest: quiz alias and original deep links arrive below the mobile route
+    ok 4 - quiz alias and original deep links arrive below the mobile route
+      ---
+      duration_ms: 1325.733977
+      type: 'test'
+      ...
+    1..4
+ok 1 - 4.3 shared lesson format keeps navigation and content usable
+  ---
+  duration_ms: 30567.704768
+  type: 'test'
+  ...
+# Subtest: 4.3 layer-speed quiz applies refraction through one four-layer bench
+    # Subtest: initial scene awaits emission, preserves six teaching sections and withholds speed answers
+    ok 1 - initial scene awaits emission, preserves six teaching sections and withholds speed answers
+      ---
+      duration_ms: 1152.548673
+      type: 'test'
+      ...
+    # Subtest: emission draws genuine intermediate, continuous refracted segments and leaves parallel normals for comparison
+    ok 2 - emission draws genuine intermediate, continuous refracted segments and leaves parallel normals for comparison
+      ---
+      duration_ms: 4396.327454
+      type: 'test'
+      ...
+    # Subtest: displayed angles match actual rays in every material arrangement and stay clear on narrow screens
+    ok 3 - displayed angles match actual rays in every material arrangement and stay clear on narrow screens
+      ---
+      duration_ms: 201052.833246
+      type: 'test'
+      ...
+    # Subtest: photoreal bench and transparent source load, with the optical aperture aligned to the computed ray
+    ok 4 - photoreal bench and transparent source load, with the optical aperture aligned to the computed ray
+      ---
+      duration_ms: 140.719601
+      type: 'test'
+      ...
+    # Subtest: three material states use distinct real textures and follow the speed ordering when questions change
+    ok 5 - three material states use distinct real textures and follow the speed ordering when questions change
+      ---
+      duration_ms: 13423.249819
+      type: 'test'
+      ...
+    # Subtest: partial and wrong answers get actionable feedback; correction and new edits update the same diagram
+    ok 6 - partial and wrong answers get actionable feedback; correction and new edits update the same diagram
+      ---
+      duration_ms: 41142.705658
+      type: 'test'
+      ...
+    # Subtest: mouse dragging swaps occupied slots, cancels outside drops and does not leak a click or ghost
+    ok 7 - mouse dragging swaps occupied slots, cancels outside drops and does not leak a click or ghost
+      ---
+      duration_ms: 4933.958199
+      type: 'test'
+      ...
+    # Subtest: keyboard selection, arrows, deletion and Escape support the complete ranking workflow
+    ok 8 - keyboard selection, arrows, deletion and Escape support the complete ranking workflow
+      ---
+      duration_ms: 6264.63918
+      type: 'test'
+      ...
+    # Subtest: offscreen playback suspends and resumes, while changing question cancels old playback and clears answers
+    ok 9 - offscreen playback suspends and resumes, while changing question cancels old playback and clears answers
+      ---
+      duration_ms: 13181.876369
+      type: 'test'
+      ...
+    # Subtest: desktop, laptop and narrow screens preserve physical angles, readable labels and complete controls
+    ok 10 - desktop, laptop and narrow screens preserve physical angles, readable labels and complete controls
+      ---
+      duration_ms: 15664.531513
+      type: 'test'
+      ...
+    # Subtest: native phone touch drags cards without page scrolling and reduced-motion playback still reveals intermediate light
+    ok 11 - native phone touch drags cards without page scrolling and reduced-motion playback still reveals intermediate light
+      ---
+      duration_ms: 9068.601568
+      type: 'test'
+      ...
+    # Subtest: the lamp emits by mouse and keyboard, stays aligned after resize, and preserves answers on replay
+    ok 12 - the lamp emits by mouse and keyboard, stays aligned after resize, and preserves answers on replay
+      ---
+      duration_ms: 32890.783103
+      type: 'test'
+      ...
+    # Subtest: texture failure leaves a usable vector bench, and no-JavaScript explains how to continue
+    not ok 13 - texture failure leaves a usable vector bench, and no-JavaScript explains how to continue
+      ---
+      duration_ms: 8624.120605
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:123:10'
+      failureType: 'testCodeFailure'
+      error: |-
+        page.goto: Target page, context or browser has been closed
+        Call log:
+        [2m  - navigating to "http://127.0.0.1:45507/units/4/parts/4.3/#s7", waiting until "load"[22m
+
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        ready (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:14:32)
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:124:146)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:123:2)
+      ...
+    1..13
+not ok 2 - 4.3 layer-speed quiz applies refraction through one four-layer bench
+  ---
+  duration_ms: 361893.978209
+  type: 'test'
+  location: '/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:8:1'
+  failureType: 'testTimeoutFailure'
+  error: 'test timed out after 360000ms'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: 4.3 complete basic lesson works on desktop and mobile
+ok 3 - 4.3 complete basic lesson works on desktop and mobile
+  ---
+  duration_ms: 55915.962748
+  type: 'test'
+  ...
+1..3
+# tests 20
+# suites 0
+# pass 18
+# fail 1
+# cancelled 1
+# skipped 0
+# todo 0
+# duration_ms 455411.614994

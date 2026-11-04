@@ -1,22 +1,25 @@
 // Parallel interfaces conserve n sin(theta). Geometry and playback use the
 // same refractive indices. Each material's appearance and index travel together.
-export const LAYER_NAMES = Object.freeze(['甲', '乙', '丙']);
+export const LAYER_NAMES = Object.freeze(['甲', '乙', '丙', '丁']);
 export const LAYER_MATERIALS = Object.freeze([
   Object.freeze({kind:'gas', n:1.00045}),
   Object.freeze({kind:'liquid', n:1.4}),
   Object.freeze({kind:'solid', n:1.78}),
+  Object.freeze({kind:'solid', n:1.55}),
 ]);
+const permutations = values => values.length ? values.flatMap((value,i) =>
+  permutations(values.filter((_,j)=>j!==i)).map(rest=>[value,...rest])) : [[]];
 const PERMUTATIONS = Object.freeze([
-  [0, 2, 1], [0, 1, 2], [1, 0, 2],
-  [1, 2, 0], [2, 0, 1], [2, 1, 0],
+  [0, 2, 1, 3],
+  ...permutations([0,1,2,3]).filter(order=>order.join()!=='0,2,1,3'),
 ].map(Object.freeze));
 export const MS_PER_OPTICAL_UNIT = 520;
 
 export function layerGeometry(indices, incident = 40) {
-  if (!Array.isArray(indices) || indices.length !== 3 ||
-      indices.some(n => !Number.isFinite(n) || n < 1) || new Set(indices).size !== 3 ||
+  if (!Array.isArray(indices) || indices.length !== LAYER_NAMES.length ||
+      indices.some(n => !Number.isFinite(n) || n < 1) || new Set(indices).size !== LAYER_NAMES.length ||
       !Number.isFinite(incident) || incident <= 0 || incident >= 90) {
-    throw new RangeError('Three distinct transparent media and oblique incidence are required');
+    throw new RangeError('Four distinct transparent media and oblique incidence are required');
   }
   const radians = incident * Math.PI / 180, invariant = Math.sin(radians);
   const points = [[-.5 * Math.tan(radians), -.5], [0, 0]];
@@ -60,7 +63,7 @@ export function createLayerDeck(random = Math.random) {
       if(remaining[0]===last)remaining.push(remaining.shift());
     }
     const key = remaining.shift();
-    if(serial===0)remaining=shuffle([1,2,3,4,5]);
+    if(serial===0)remaining=shuffle(PERMUTATIONS.map((_,i)=>i).slice(1));
     const incident = serial===0||random()>=.5 ? 40 : 36;
     last=key;serial++;
     const materials=PERMUTATIONS[key].map(i=>LAYER_MATERIALS[i]);
@@ -69,7 +72,7 @@ export function createLayerDeck(random = Math.random) {
 }
 
 export function placeLayer(order, medium, slot) {
-  if(!Array.isArray(order)||order.length!==3||!Number.isInteger(medium)||medium<0||medium>2||!Number.isInteger(slot)||slot<0||slot>2)throw new RangeError('Invalid layer placement');
+  if(!Array.isArray(order)||order.length!==LAYER_NAMES.length||!Number.isInteger(medium)||medium<0||medium>=LAYER_NAMES.length||!Number.isInteger(slot)||slot<0||slot>=LAYER_NAMES.length)throw new RangeError('Invalid layer placement');
   const next=[...order], previous=next.indexOf(medium), displaced=next[slot];
   if(previous===slot)return next;
   if(previous>=0)next[previous]=displaced;
@@ -78,7 +81,7 @@ export function placeLayer(order, medium, slot) {
 }
 
 export function compareLayers(geometry, order) {
-  if(!Array.isArray(order)||order.length!==3||order.some(x=>!Number.isInteger(x)||x<0||x>2)||new Set(order).size!==3)return {complete:false, correct:false, positions:[]};
+  if(!Array.isArray(order)||order.length!==LAYER_NAMES.length||order.some(x=>!Number.isInteger(x)||x<0||x>=LAYER_NAMES.length)||new Set(order).size!==LAYER_NAMES.length)return {complete:false, correct:false, positions:[]};
   const positions=order.map((id,i)=>id===geometry.order[i]);
   return {complete:true, correct:positions.every(Boolean), positions};
 }

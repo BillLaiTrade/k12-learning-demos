@@ -1,4 +1,4 @@
-import {createLayerDeck, layerSnapshot, placeLayer, compareLayers, LAYER_NAMES} from './layer-speed-model.mjs?v=20261104-states1';
+import {createLayerDeck, layerSnapshot, placeLayer, compareLayers, LAYER_NAMES} from './layer-speed-model.mjs?v=20261104-four1';
 
 const root=document.querySelector('#rank-lab');
 if(root){
@@ -8,7 +8,7 @@ if(root){
   const slots=[...root.querySelectorAll('[data-rank-slot]')], tokens=[...root.querySelectorAll('[data-rank-medium]')];
   const deck=createLayerDeck(), names=LAYER_NAMES.map(name=>`介質${name}`);
   const defaultHelp='拖曳卡片；也可點選卡片，再選位置。';
-  let question=deck.next(), order=[null,null,null], selected=null, revealed=false;
+  let question=deck.next(), order=names.map(()=>null), selected=null, revealed=false;
   let state='idle', elapsed=0, startTime=0, frame=0, observed=false, inView=true;
   let drag=null, suppressClickUntil=0, suppressClickTarget=null, project, pixelRatio=1, lastLayout='';
   const photoURLs=Object.fromEntries(['wide','tall','source'].map(key=>[key,new URL(`./layer-quiz-${key==='source'?'source':`bench-${key}`}.png`,import.meta.url).href]));
@@ -41,15 +41,15 @@ if(root){
 
   function buildScene(){
     const narrow=root.closest('.rank-quiz').clientWidth<=650, width=narrow?660:1200, height=narrow?720:600;
-    const top=narrow?199:190,bottom=narrow?609:494,h=(bottom-top)/3,entry=narrow?280:400;
+    const top=narrow?199:190,bottom=narrow?609:494,h=(bottom-top)/names.length,entry=narrow?280:400;
     const left=narrow?59:70,right=narrow?600:915,font=narrow?35:26;
     backgroundKey=narrow?'tall':'wide';loadPhoto(backgroundKey);loadPhoto('source');loadPhoto('materials');updateTextures();
     pixelRatio=svg.clientWidth/width;
     project=p=>[entry+p[0]*h,top+p[1]*h];
     svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
     const source=project(question.geometry.points[0]), lampScale=1;
-    svg.innerHTML=`<title id="rank-scene-title">三層透明介質中的折射光路</title>
-      <desc id="rank-scene-desc">尚未發射光束。三層介面互相平行，只比較介質甲、乙、丙。</desc>
+    svg.innerHTML=`<title id="rank-scene-title">四層透明介質中的折射光路</title>
+      <desc id="rank-scene-desc">尚未發射光束。四層介面互相平行，只比較介質甲、乙、丙、丁。</desc>
       <defs>
         <filter id="rank-object-shadow" x="-35%" y="-35%" width="170%" height="180%"><feDropShadow dx="1" dy="4" stdDeviation="3" flood-color="#44301b" flood-opacity=".32"/></filter>
         <filter id="rank-label-shadow" x="-15%" y="-25%" width="135%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="1.6" flood-color="#67502b" flood-opacity=".28"/></filter>
@@ -65,12 +65,12 @@ if(root){
       <g class="rank-bench-fallback" aria-hidden="true">
         <rect width="${width}" height="${height}" rx="16" fill="#d7ac72"/>
         <path d="M8 12H${width-8}M8 30H${width-8}M8 ${height-28}H${width-8}" stroke="#f8d79f" stroke-width="2" opacity=".5"/>
-        <rect x="${left}" y="${top}" width="${right-left}" height="${3*h}" fill="#f4f7dc" opacity=".18"/>
+        <rect x="${left}" y="${top}" width="${right-left}" height="${bottom-top}" fill="#f4f7dc" opacity=".18"/>
         <path d="M${left-4} ${top-4}V${bottom+6}H${right+4}V${top-4}Z" fill="none" stroke="url(#rank-frame)" stroke-width="9"/>
       </g>
       <image class="rank-bench-photo" x="0" y="0" width="${width}" height="${height}" href="${photoURLs[backgroundKey]}" preserveAspectRatio="none" aria-hidden="true"/>
       ${question.geometry.layers.map((layer,i)=>{
-        const cy=top+(i+.5)*h,plateX=left+18,plateWidth=166,kind=question.materials[i].kind,texture=materialRows[kind];
+        const cy=top+(i+.5)*h,plateX=left+18,plateWidth=190,kind=question.materials[i].kind,texture=materialRows[kind];
         const cropWidth=narrow?Math.min(texture.width,texture.height*(right-left)/h):texture.width;
         const cropX=texture.x+(texture.width-cropWidth)*(kind==='solid'?.67:.5);
         const crop=`${cropX} ${texture.y} ${cropWidth} ${texture.height}`;
@@ -83,15 +83,15 @@ if(root){
           <path d="M${plateX+10} ${cy-23}H${plateX+plateWidth-10}" stroke="#fffef5" stroke-width="1.7"/>
           ${[plateX+9,plateX+plateWidth-9].map(x=>`<circle cx="${x}" cy="${cy}" r="3.1" fill="url(#rank-rim)" stroke="#a58c4e" stroke-width=".5"/><path d="M${x-1.6} ${cy}h3.2" stroke="#8f753c" stroke-width=".7"/>`).join('')}
         </g>
-        <text x="${left+101}" y="${cy+font*.35}" text-anchor="middle" font-size="${font}">${names[i]}</text>
-        <g class="rank-speed-badge" visibility="hidden"><text x="${left+101}" y="${cy+58}" text-anchor="middle" font-size="${font*.82}"></text></g>
+        <text class="rank-medium-name" data-center-x="${left+113}" data-compact-x="${left+77}" x="${left+113}" y="${cy+font*.35}" text-anchor="middle" font-size="${font}">${names[i]}</text>
+        <g class="rank-speed-badge" visibility="hidden"><text x="${left+174}" y="${cy+font*.27}" text-anchor="middle" font-size="${font*.72}"></text></g>
       </g>`;}).join('')}
       <g class="rank-construction" aria-hidden="true">${question.geometry.layers.map(layer=>{
-        const p=project(layer.from),theta=layer.angle*Math.PI/180,r=narrow?65:44;
-        return `<g data-rank-construction="${layer.id}" visibility="hidden"><path class="rank-normal" d="M${p[0]} ${p[1]-46}V${p[1]+Math.min(h-8,narrow?114:88)}"/>
+        const p=project(layer.from),theta=layer.angle*Math.PI/180,r=Math.min(narrow?65:44,h*.54);
+        return `<g data-rank-construction="${layer.id}" visibility="hidden"><path class="rank-normal" d="M${p[0]} ${p[1]-Math.min(h*.2,20)}V${p[1]+Math.min(h-8,narrow?114:88)}"/>
           <path class="rank-angle" data-layer="${layer.id}" d="M${p[0]} ${p[1]+r}A${r} ${r} 0 0 0 ${p[0]+r*Math.sin(theta)} ${p[1]+r*Math.cos(theta)}"/>
           <text class="rank-angle-value" data-layer="${layer.id}" x="${p[0]+r*Math.sin(theta)+18}" y="${p[1]+r*Math.cos(theta)}" font-size="${font}" visibility="hidden">${layer.angle.toFixed(1)}°</text>
-          ${layer.id===0?`<text x="${p[0]+18}" y="${p[1]-54}" font-size="${font}">法線</text>`:''}</g>`;
+          ${layer.id===0?`<text x="${p[0]+18}" y="${p[1]-28}" font-size="${font}">法線</text>`:''}</g>`;
       }).join('')}</g>
       <g aria-hidden="true">${question.geometry.segments.map((segment,i)=>`<g class="rank-light-segment" data-segment="${i}"><path class="rank-beam-halo"/><path class="rank-beam"/><path class="rank-beam-core"/><path class="rank-direction"/></g>`).join('')}</g>
       <g class="rank-source-device" aria-hidden="true">
@@ -136,8 +136,11 @@ if(root){
     svg.querySelectorAll('.rank-angle-value').forEach(label=>label.setAttribute('visibility',snapshot.complete?'visible':'hidden'));
     svg.querySelectorAll('.rank-speed-badge').forEach((badge,i)=>{
       const shown=revealed&&comparison.correct&&snapshot.complete;
-      badge.setAttribute('visibility',shown?'visible':'hidden');
-      badge.querySelector('text').textContent=i===question.geometry.order[0]?'最快':i===question.geometry.order[2]?'最慢':'';
+      const label=i===question.geometry.order[0]?'最快':i===question.geometry.order.at(-1)?'最慢':'';
+      badge.setAttribute('visibility',shown&&label?'visible':'hidden');
+      badge.querySelector('text').textContent=label;
+      const name=badge.parentElement.querySelector('.rank-medium-name');
+      name.setAttribute('x',shown&&label?name.dataset.compactX:name.dataset.centerX);
     });
     root.dataset.elapsedMs=elapsed;
     root.dataset.arrived=String(snapshot.complete);
@@ -151,9 +154,9 @@ if(root){
     sourceTrigger.title=elapsed>0?'點擊照射燈重播光束':'點擊照射燈發射光束';
     play.textContent=state==='running'?'光束前進中…':state==='suspended'?'回到畫面後續播':elapsed>0?'▶ 重播光束':'▶ 發射光束';
     check.disabled=!observed||state==='running'||state==='suspended';
-    q('#rank-play-state').textContent=state==='running'?'觀察光通過每一層時的方向。':state==='suspended'?'保留目前進度，回到畫面後繼續。':observed?'光路已保留，可直接比較。':'先發射光束，再比較三層光路。';
+    q('#rank-play-state').textContent=state==='running'?'觀察光通過每一層時的方向。':state==='suspended'?'保留目前進度，回到畫面後繼續。':observed?'光路已保留，可直接比較。':'先發射光束，再比較四層光路。';
     const description=q('#rank-scene-desc');
-    description.textContent=observed?`三層介面互相平行。${question.geometry.layers.map(layer=>`${names[layer.id]}為${kindNames[question.materials[layer.id].kind]}，其中光線與法線夾角約${layer.angle.toFixed(1)}度`).join('；')}。只比較甲、乙、丙，不包括光源所在的空氣。`:'尚未完成發射。三層介面互相平行，只比較介質甲、乙、丙。';
+    description.textContent=observed?`四層介面互相平行。${question.geometry.layers.map(layer=>`${names[layer.id]}為${kindNames[question.materials[layer.id].kind]}，其中光線與法線夾角約${layer.angle.toFixed(1)}度`).join('；')}。只比較甲、乙、丙、丁，不包括光源所在的空氣。`:'尚未完成發射。四層介面互相平行，只比較介質甲、乙、丙、丁。';
   }
   function stop(){cancelAnimationFrame(frame);frame=0;}
   function tick(now){
@@ -183,8 +186,9 @@ if(root){
     slots.forEach((button,i)=>{
       const id=order[i];button.dataset.filled=String(id!==null);
       button.setAttribute('aria-pressed',String(id!==null&&selected===id));
-      button.setAttribute('aria-label',`第${i+1}個位置${i===0?'，最快':i===2?'，最慢':''}，${id===null?'尚未放入介質':names[id]}`);
-      button.innerHTML=id===null?'<span class="rank-slot-placeholder" aria-hidden="true">⇩</span>':`<span class="rank-grip" aria-hidden="true">⠿</span><span>${names[id]}</span>`;
+      button.setAttribute('aria-label',`第${i+1}個位置${i===0?'，最快':i===names.length-1?'，最慢':''}，${id===null?'尚未放入介質':names[id]}`);
+      const position=`<span class="rank-slot-position" aria-hidden="true">${i+1}${i===0?' · 最快':i===names.length-1?' · 最慢':''}</span>`;
+      button.innerHTML=position+`<span class="rank-slot-content">${id===null?'<span class="rank-slot-placeholder" aria-hidden="true">⇩</span>':`<span class="rank-grip" aria-hidden="true">⠿</span><span>${names[id]}</span>`}</span>`;
       delete button.dataset.result;
     });
     tokens.forEach((button,i)=>{button.hidden=order.includes(i);button.setAttribute('aria-pressed',String(selected===i));});
@@ -205,8 +209,9 @@ if(root){
     activate(button);
   });
   slots.forEach((slot,index)=>slot.addEventListener('keydown',event=>{
-    const step=event.key==='ArrowLeft'?-1:event.key==='ArrowRight'?1:0;
-    if(step){event.preventDefault();const target=Math.max(0,Math.min(2,index+step));if(order[index]!==null)place(order[index],target);else slots[target].focus();}
+    const columns=getComputedStyle(slot.closest('.rank-slots')).gridTemplateColumns.split(' ').length;
+    const step=event.key==='ArrowLeft'?-1:event.key==='ArrowRight'?1:event.key==='ArrowUp'?-columns:event.key==='ArrowDown'?columns:0;
+    if(step){event.preventDefault();const target=Math.max(0,Math.min(names.length-1,index+step));if(order[index]!==null)place(order[index],target);else slots[target].focus();}
     if(event.key==='Delete'||event.key==='Backspace'){event.preventDefault();returnLayer(index);}
   }));
   root.addEventListener('keydown',event=>{if(event.key==='Escape'){cancelDrag();selected=null;renderOrder();}});
@@ -257,13 +262,13 @@ if(root){
     event.preventDefault();
     if(!observed||state==='running'||state==='suspended'){result.textContent='先發射光束，觀察完整光路後再確認。';return;}
     const comparison=compareLayers(question.geometry,order);
-    if(!comparison.complete){result.textContent='還有位置未放入介質，排好三個位置後再確認。';return;}
+    if(!comparison.complete){result.textContent='還有位置未放入介質，排好四個位置後再確認。';return;}
     revealed=true;result.dataset.result=comparison.correct?'correct':'retry';
-    result.textContent=comparison.correct?`排序正確。光速由快到慢為${question.geometry.order.map(id=>LAYER_NAMES[id]).join('、')}；夾角越大，光速越快。`:'再比較一下：三層介面平行，光線與法線的夾角越大，光速越快。';
+    result.textContent=comparison.correct?`排序正確。光速由快到慢為${question.geometry.order.map(id=>LAYER_NAMES[id]).join('、')}；夾角越大，光速越快。`:'再比較一下：四層介面平行，光線與法線的夾角越大，光速越快。';
     slots.forEach((slot,i)=>slot.dataset.result=comparison.positions[i]?'correct':'retry');draw();
   });
   next.addEventListener('click',()=>{
-    cancelDrag();stop();question=deck.next();order=[null,null,null];selected=null;revealed=false;
+    cancelDrag();stop();question=deck.next();order=names.map(()=>null);selected=null;revealed=false;
     state='idle';elapsed=0;observed=false;result.textContent='';delete result.dataset.result;
     root.dataset.question=question.id;renderOrder();buildScene();controls();
   });

@@ -41,7 +41,9 @@
 .rank-answer-help{margin:0;font-size:.78rem;line-height:1.7;color:#5c6b55}
 .rank-order{display:flex;align-items:center;gap:9px;min-width:0}
 .rank-endpoint{font-size:.87rem;white-space:nowrap;color:#315137;font-weight:750}
-.rank-slots,.rank-pool{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;min-width:0;flex:1}
+.rank-slots,.rank-pool{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;min-width:0;flex:1}
+.rank-slot-position{display:none}
+.rank-slot-content{display:flex;align-items:center;justify-content:center;gap:7px}
 .rank-slots li,.rank-pool li{min-width:0}
 .rank-quiz .rank-slot,.rank-quiz .rank-token{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;min-height:48px;padding:8px 6px;border:1px solid #b6a273;border-radius:9px;background:linear-gradient(#fffcf4,#f5ecd9);color:#274b35;font-size:.96rem;font-weight:750;white-space:nowrap;touch-action:none;user-select:none;cursor:grab}
 .rank-quiz .rank-slot{min-height:54px;border-style:dashed;background:#faf7ee;color:#7b7c68}
@@ -81,6 +83,12 @@
  .rank-quiz .rank-slot,.rank-quiz .rank-token{font-size:.88rem;padding:8px 4px;gap:3px}
  .rank-grip{font-size:.7em;margin-right:0}
  .rank-order{gap:6px}.rank-slots,.rank-pool{gap:6px}.rank-endpoint{font-size:.76rem}
+ .rank-order{display:block}
+ .rank-endpoint{display:none}
+ .rank-slots,.rank-pool{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .rank-quiz .rank-slot{flex-direction:column;align-items:stretch;min-height:68px;padding:7px 9px;font-size:.9rem}
+ .rank-slot-position{display:block;align-self:flex-start;color:#64715a;font-size:.7rem;line-height:1.2;font-weight:600}
+ .rank-slot-content{gap:5px;min-height:27px}
 }
-@container(max-width:340px){.rank-quiz .rank-body{padding-inline:8px}.rank-answer{padding-inline:8px}.rank-quiz .rank-slot{font-size:.8rem;gap:1px;padding-inline:2px}.rank-slot .rank-grip{display:none}.rank-legend p{flex-basis:100%;text-align:center}}
+@container(max-width:340px){.rank-quiz .rank-body{padding-inline:8px}.rank-answer{padding-inline:8px}.rank-quiz .rank-slot{gap:3px}.rank-legend p{flex-basis:100%;text-align:center}}
 @media(prefers-reduced-motion:reduce){.rank-beam-halo{filter:none;opacity:.15}.rank-bench-photo{transition:none}}

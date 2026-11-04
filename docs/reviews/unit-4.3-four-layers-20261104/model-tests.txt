@@ -1,0 +1,14 @@
+✔ all 24 speed orders obey Snell invariance, continuous parallel-layer geometry and visible angle differences (10.069934ms)
+✔ deck renews indefinitely without adjacent identical rankings or a fixed fastest layer (9.475103ms)
+✔ animation advances by geometric distance and actual relative speed, including intermediate frames and exact endpoints (1.04613ms)
+✔ placement supports pool replacement, swapping existing cards and keeps a unique set (0.719016ms)
+✔ grading rejects partial, duplicate and invalid submissions, and accepts exactly the speed order (1.623373ms)
+✔ gas, liquid and solid appearances move with the same refractive indices through every layer permutation (1.213288ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 175.625012
