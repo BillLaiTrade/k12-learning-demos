@@ -1,0 +1,39 @@
+{
+  "result": "passed",
+  "checks": [
+    "initial 20°C and zero heat",
+    "heat/liquid/readings synchronized",
+    "pause and resume",
+    "one-cal definition",
+    "repeat up to three",
+    "reset during animation",
+    "blur pauses",
+    "mobile and desktop zoom",
+    "unit supplement collapsed",
+    "card 02 regression",
+    "no resource errors"
+  ],
+  "widths": [
+    {
+      "width": 320,
+      "scroll": 320
+    },
+    {
+      "width": 390,
+      "scroll": 390
+    },
+    {
+      "width": 768,
+      "scroll": 768
+    },
+    {
+      "width": 1024,
+      "scroll": 1024
+    },
+    {
+      "width": 1440,
+      "scroll": 1440
+    }
+  ],
+  "errors": []
+}
