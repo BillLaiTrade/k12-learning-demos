@@ -1,22 +1,22 @@
+import {paintBenchProjection} from './screen-projection.mjs?v=20261104-view-conditions1';
 import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-mag-fixed-eye1';
-import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-convex-unified1';
+import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-view-conditions1';
 import {BENCH_HOME,createBenchArt} from './convex-bench-model.mjs?v=20261104-convex-unified1';
-import {fitBench} from './convex-bench-workspace.mjs?v=20261104-convex-unified1';
-import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261104-mag-fixed-eye1';
+import {fitBench} from './convex-bench-workspace.mjs?v=20261104-view-conditions1';
+import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261104-view-conditions1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,eyeRays} from './magnifier-optics.mjs?v=20261104-mag-fixed-eye1';
+import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,eyeRays} from './magnifier-optics.mjs?v=20261104-view-conditions1';
 const root=document.querySelector('[data-magnifier-lab]');
 if(root) initialise(root);
 function initialise(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],canvas=$('#magnifier-canvas');
- let state={object:30,screen:95,eye:G.eye,screenIn:false},showRays=true,extensions=false,point='top',front=false,selected='object',studio=null;
+ let state={object:30,screen:50,eye:G.eye,screenIn:false},showRays=true,extensions=false,point='top',front=false,selected='object',studio=null;
  const distanceLabel=value=>`${Number((value/G.f).toFixed(3))}F`;
- const workspace=createMagnifierWorkspace(root,{G,move,observe(preset){state={object:preset.object,eye:G.eye,screen:95,screenIn:preset.screenIn};if(preset.rays)showRays=true;extensions=false;point=preset.point||'both';front=false;selected='object';update();studio?.frameObservation();}});
- const art=createBenchArt(),a=art.getContext('2d');
+ const workspace=createMagnifierWorkspace(root,{G,move,observe(preset){state={object:preset.object,eye:G.eye,screen:50,screenIn:preset.screenIn};if(preset.rays)showRays=true;extensions=false;point=preset.point||'both';front=false;selected='object';update();studio?.frameObservation();}});
+ const art=createBenchArt();
  const eyeCanvas=$('[data-mag-eye]'),reference=$('[data-mag-reference]'),paper=$('[data-mag-paper]');
  eyeCanvas.getContext('2d',{willReadFrequently:true});reference.getContext('2d',{willReadFrequently:true});
  let observerKey='',paperKey='';
- const luminous=[],sourcePixels=a.getImageData(0,0,art.width,art.height).data;for(let y=5;y<art.height;y+=10)for(let x=5;x<art.width;x+=10){const i=(y*art.width+x)*4;if(sourcePixels[i+3]>200)luminous.push({y:(.5-y/art.height)*G.cardHeight,z:(x/art.width-.5)*G.cardWidth,color:sourcePixels.slice(i,i+3)});}
  function drawArt(ctx,width,height,factor){ctx.save();ctx.translate(width/2,height/2);ctx.scale(factor*G.cardWidth/art.width,factor*G.cardHeight/art.height);ctx.drawImage(art,-art.width/2,-art.height/2);ctx.restore();}
  function paintObserver(){
   const g=magnifierState(state),key=state.object+'|'+state.eye+'|'+state.screenIn+'|'+state.screen;if(key===observerKey)return g;observerKey=key;const W=eyeCanvas.width,H=eyeCanvas.height,c=eyeCanvas.getContext('2d'),pixels=W/(2*Math.tan(G.fov*Math.PI/360)),r=pixels*G.aperture/(g.eye*G.scale);
@@ -30,36 +30,48 @@ function initialise(root){
   const rc=reference.getContext('2d');rc.clearRect(0,0,reference.width,reference.height);drawArt(rc,reference.width,reference.height,pixels*g.referenceScale);
   eyeCanvas.setAttribute('aria-label',g.blocked?'屏幕擋住眼睛視線':!g.resolved?'此眼睛位置無法清楚對焦':g.eyeMode==='parallel'?'同一物點的平行光進入眼睛，眼睛放鬆可看見像在無窮遠':`${g.eyeMode==='real'?'倒立實像':'正立虛像'}，與同一眼睛位置的原物參照比較視角大小`);return g;
  }
- function paintPaper(){
-  const key=state.object+'|'+state.screen;if(key===paperKey)return;paperKey=key;const g=magnifierState(state),c=paper.getContext('2d'),W=paper.width,H=paper.height;c.fillStyle='#f1f1e5';c.fillRect(0,0,W,H);
-  // Each luminous source sample spreads into the disk bounded by the same pupil rays.
-  // Soft disk edges and exposure aid observation; this is not a photometry simulation.
-  const radius=g.spread*W/G.screenWidth;c.save();c.globalAlpha=.045;
-  for(const p of luminous){const x=W/2+g.projectionScale*p.z*W/G.screenWidth,y=H/2-g.projectionScale*p.y*H/G.screenHeight,gradient=c.createRadialGradient(x,y,0,x,y,radius),rgb=p.color.join(',');gradient.addColorStop(0,`rgba(${rgb},1)`);gradient.addColorStop(.82,`rgba(${rgb},.85)`);gradient.addColorStop(1,`rgba(${rgb},0)`);c.fillStyle=gradient;c.beginPath();c.arc(x,y,radius,0,Math.PI*2);c.fill();}c.restore();
- }
+ function paintPaper(){const key=state.object+'|'+state.screen;if(key===paperKey)return;paperKey=key;paintBenchProjection(paper,art,G,state);}
  function update(){
   const g=paintObserver();if(state.screenIn)paintPaper();$('[data-mag-extensions]').disabled=g.type!=='virtual';
-  $('[data-mag-paper-description]').textContent=g.type==='virtual'?'有光到達，但無法直接接到這個正立放大的虛像。':g.type==='infinity'?'各物點出射平行光，有限距離的屏幕接不到清楚像。':`實像在屏幕側${distanceLabel(g.v)}，目前屏幕${distanceLabel(state.screen)}未在清楚像位置。`;
+  $('[data-mag-paper-description]').textContent=g.type==='virtual'?'有光到達，但無法直接接到這個正立放大的虛像。':g.type==='infinity'?'各物點出射平行光，有限距離的屏幕接不到清楚像。':g.screenClear?`屏幕已在 ${distanceLabel(g.v)} 接到清楚倒立實像；前方固定眼位能否看清仍要另行判斷。`:`實像在屏幕側${distanceLabel(g.v)}，目前屏幕${distanceLabel(state.screen)}未在清楚像位置。`;
   $('[data-mag-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-mag-rays]').setAttribute('aria-pressed',String(showRays));$('[data-mag-extensions]').textContent=extensions?'隱藏反向延長線':'顯示反向延長線';$('[data-mag-extensions]').setAttribute('aria-pressed',String(extensions));$('[data-mag-trace]').hidden=!showRays;
   $$('[data-mag-point]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.magPoint===point)));
   $('[data-mag-screen]').textContent=state.screenIn?'取下屏幕':'放入屏幕';$('[data-mag-screen]').setAttribute('aria-pressed',String(state.screenIn));$('[data-mag-front]').hidden=!state.screenIn||root.dataset.webgl==='unavailable';$('[data-mag-front]').textContent=front?'返回整體觀察':'正面看屏幕';$('[data-mag-front]').setAttribute('aria-pressed',String(front));
   $('[data-mag-screen-controls]').hidden=!state.screenIn;$('[data-mag-paper-detail]').hidden=!state.screenIn;$('[data-mag-legend]').hidden=!showRays;
-  $$('[data-mag-distance]').forEach(e=>e.textContent=distanceLabel(state[e.dataset.magDistance]));$('[data-mag-eye-position]').textContent='固定眼位';
+  $$('[data-mag-distance]').forEach(e=>e.textContent=distanceLabel(state[e.dataset.magDistance]));$('[data-mag-eye-position]').textContent='靠近鏡片・固定';
   $$('[data-mag-device]').forEach(b=>{if(b.getAttribute('role')!=='slider')b.setAttribute('aria-pressed',String(selected===b.dataset.magDevice));b.setAttribute('aria-label',`${b.dataset.magDevice==='object'?'圖卡':b.dataset.magDevice==='eye'?'眼睛':'屏幕'}，${distanceLabel(state[b.dataset.magDevice])}，方向鍵可沿軌道移動`);});
   $$('[data-mag-nudge]').forEach(b=>{const key=b.dataset.magNudge;b.disabled=Number(b.dataset.direction)<0?state[key]<=G[key+'Min']:state[key]>=G[key+'Max'];});
   const size=g.angularGain===null?'':Math.abs(g.angularGain-1)<.02?'視角相近':g.angularGain>1?'比原物大':'比原物小';
   const viewMessage=g.blocked?'屏幕擋住視線':g.eyeMode==='at-image'?'眼睛在實像位置':g.eyeMode==='too-close'?'離實像太近':g.eyeMode==='converging'?'此眼位無法看清':g.eyeMode==='parallel'?'平行光・像在無窮遠':`${g.eyeMode==='real'?'倒立':'正立'}・${size}`;
   $('[data-mag-eye-badge]').textContent=viewMessage;
-  let condition=g.blocked?'屏幕擋住入眼光線；取下屏幕可恢復原本的觀看結果。':g.eyeMode==='virtual'?'F內：出射光發散；眼睛在原位看見正立、放大的虛像。對照同一眼位的原物，比較放大效果。':g.eyeMode==='parallel'?'恰好 F：同一物點的出射光彼此平行，沒有在有限距離交會；眼睛留在原位、放鬆觀看像在無窮遠。':`F外：出射光會聚，仍在透鏡另一側 ${distanceLabel(g.v)} 形成倒立實像；這個固定眼位無法清楚對焦，無法延續正立放大的觀看。`;
+  let condition=g.blocked?'屏幕擋住入眼光線；取下屏幕可恢復原本的觀看結果。':g.eyeMode==='virtual'?'F內：光線沒有在透鏡另一側實際交會，屏幕接不到清楚虛像；眼睛在這裡仍可看清正立虛像。請與直接看原物比較放大效果。':g.eyeMode==='parallel'?'恰好 F：同一物點的出射光彼此平行，沒有在有限距離交會；有限距離的屏幕接不到清楚圖案；眼睛留在原位、放鬆仍可看清。':`F外：出射光會聚，仍在透鏡另一側 ${distanceLabel(g.v)} 形成倒立實像；這個固定眼位無法清楚對焦，無法延續正立放大的觀看。`;
+  updateComparison(g);
   if(extensions&&g.type==='virtual')condition+=` 反向延長線交於圖卡側 ${distanceLabel(Math.abs(g.v))}；不必到虛像位置觀看。`;
   if(g.resolved&&g.clipped&&!g.blocked)condition+=' 部分圖案超出透鏡視野。';
-  $('[data-mag-condition]').textContent=condition;$('[data-mag-eye-note]').textContent='眼睛固定在透鏡另一側；上下畫面用相同觀看尺度比較，不追隨虛像。';
+  $('[data-mag-condition]').textContent=condition;$('[data-mag-eye-note]').textContent=g.blocked?'光線被屏幕擋住，無法入眼。':g.eyeMode==='virtual'?'看見虛像，不要求光先在空中交會。':g.eyeMode==='parallel'?'平行光入眼，也可以看清。':'有實像，此眼位仍無法看清。';
   let message=condition;if(g.type==='virtual')message+=' 這是正立放大虛像，屏幕無法直接接到清楚像。';
   if(extensions&&g.type==='virtual')message+=` 虛線往回交於圖卡同側${distanceLabel(Math.abs(g.v))}，正立放大的透明圖案標示虛像；光沒有真的在那裡會聚。`;
   if(showRays&&point!=='both')message+=point==='top'?' 紅線來自圖卡上端。':' 藍線來自圖卡下端。';$('[data-result]').textContent=message;
   $('[data-mag-label=virtual]').textContent=g.type==='virtual'?`虛像・圖卡側${distanceLabel(Math.abs(g.v))}`:'';
-  root.dataset.rayRegime=g.type==='virtual'?'diverging':g.type==='infinity'?'parallel':'converging';root.dataset.eye=G.eye;root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.screenIn=state.screenIn;root.dataset.rays=showRays;root.dataset.extensions=extensions;root.dataset.point=point;root.dataset.view=front?'screen':'orbit';root.dataset.imageType=g.type;root.dataset.eyeMode=g.eyeMode;root.dataset.imageScale=g.imageScale??'';root.dataset.referenceScale=g.referenceScale;root.dataset.angularGain=g.angularGain??'';root.dataset.virtualX=g.type==='virtual'?g.v*G.scale:'';
+  root.dataset.screenClear=g.screenClear;root.dataset.rayRegime=g.type==='virtual'?'diverging':g.type==='infinity'?'parallel':'converging';root.dataset.eye=G.eye;root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.screenIn=state.screenIn;root.dataset.rays=showRays;root.dataset.extensions=extensions;root.dataset.point=point;root.dataset.view=front?'screen':'orbit';root.dataset.imageType=g.type;root.dataset.eyeMode=g.eyeMode;root.dataset.imageScale=g.imageScale??'';root.dataset.referenceScale=g.referenceScale;root.dataset.angularGain=g.angularGain??'';root.dataset.virtualX=g.type==='virtual'?g.v*G.scale:'';
   canvas.setAttribute('aria-label',`立體放大鏡觀察台，物距${distanceLabel(state.object)}，固定透鏡與眼睛，只移動圖卡，${state.screenIn?'屏幕已插入光路':condition}，右側同步顯示眼睛視角`);workspace.update(state,showRays,extensions);studio?.update();
+ }
+ function updateComparison(g){
+  const blocked=g.blocked?'屏幕擋住入眼光線，目前看不到原本的影像。':null;
+  const entries=g.type==='virtual'?[
+   'F內：形成圖卡同側的正立、放大虛像；實際光線沒有在那裡交會。',
+   '不能直接接到這個虛像；有光落到屏幕，不等於能接到清楚圖案。',
+   blocked||'目前眼位可以看清虛像；不要求光線入眼前先聚成一點。'
+  ]:g.type==='infinity'?[
+   '恰好F：同一物點的出射光平行，像在無窮遠。',
+   '有限距離的屏幕接不到清楚圖案。',
+   blocked||'目前眼位可放鬆觀看；平行光不等於只能看見模糊影像。'
+  ]:[
+   `F外：仍在另一側 ${distanceLabel(g.v)} 形成倒立實像。`,
+   state.screenIn&&g.screenClear?`屏幕已在 ${distanceLabel(g.v)} 接到清楚實像；眼睛能否看清仍要分開判斷。`:`屏幕放到 ${distanceLabel(g.v)} 的成像位置可接像；放在別處則不清楚。`,
+   blocked||'這個固定眼位無法清楚對焦；有實像不代表眼睛放在任何位置都看得清。'
+  ];
+  $$('[data-mag-judgment]').forEach((e,i)=>e.textContent=entries[i]);
  }
  function clearGestureNotice(){$('[data-mag-gesture-note]').hidden=true;$$('[data-mag-ruler]').forEach(r=>r.removeAttribute('data-guided'));}
  function showGestureNotice(key){const note=$('[data-mag-gesture-note]');note.textContent=key==='eye'?'眼睛固定，請移動圖卡比較光路與大小。':key==='lens'?'凸透鏡是固定的。':`請使用下方${key==='object'?'圖卡':key==='eye'?'眼睛':'比較屏幕'}位置尺調整。`;note.hidden=false;$$('[data-mag-ruler]').forEach(r=>r.toggleAttribute('data-guided',r.dataset.magRuler===key));}

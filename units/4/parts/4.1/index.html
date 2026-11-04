@@ -489,6 +489,7 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>現在中間板偏高，屏幕沒有亮點；光會不會自己轉彎，繞過中間板呢？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先把中間板往下調，直到屏幕出現亮點；再慢慢往上移，觀察亮點如何變化。</p></div>
             <div class="aperture-lab">
+              <p class="visual-caption" id="aperture-operation-hint">點選下方孔板名稱，再用滑桿調整高度；也可直接拖曳孔板前後或上下移動。</p>
               <div class="aperture-scene-with-height">
                 <div class="aperture-scene-frame">
                   <canvas id="aperture-3d-scene" tabindex="0" aria-label="3D 小孔實驗台"></canvas>
@@ -621,7 +622,8 @@
                 <div class="booklet-stage-actions"><button class="booklet-stage-button" id="shadow-theatre-reset" type="button">重設舞台</button><button class="booklet-stage-button" id="shadow-theatre-view" type="button">轉動舞台</button></div>
                 <div class="booklet-stage-badge"><span class="booklet-live-dot"></span><span id="shadow-theatre-status" aria-live="polite">月亮、兔子、樹影，等你上場</span></div>
               </div>
-              <p class="sr-only" id="shadow-theatre-help">選取道具後拖動尺軌調整前後距離，再拖動舞台道具對齊描邊。影子大小與位置都接近才會吸附。拖曳空白處轉動舞台，方向鍵移動選中道具。</p>
+              <p class="visual-caption" id="shadow-theatre-view-hint">滾輪可縮放視角；道具前後位置請用尺軌調整。</p>
+              <p class="sr-only" id="shadow-theatre-help">選取道具後拖動尺軌調整前後距離，再拖動舞台道具對齊描邊。影子大小與位置都接近才會吸附。拖曳空白處轉動舞台，方向鍵移動選中道具，滾輪縮放視角。</p>
               <div class="booklet-depth-controls" id="shadow-theatre-depth-controls" hidden>
                 <div class="booklet-depth-header"><label id="shadow-theatre-depth-label" for="shadow-theatre-depth">前後位置</label><span class="booklet-depth-meta"><output id="shadow-theatre-depth-readout" for="shadow-theatre-depth">位置 0.0</output><span aria-hidden="true">左右拖動</span></span></div>
                 <div class="booklet-depth-row">
@@ -743,7 +745,7 @@
       }
     })();
   </script>
-  <script type="module" src="assets/scene-loader.js?v=all-scenes-unavailable-20261104"></script>
+  <script type="module" src="assets/scene-loader.js?v=theatre-wheel-zoom-20261104"></script>
   <script type="module" src="assets/light-speed-timer.js?v=clear-results-on-start-20261029"></script>
 </body>
 </html>
