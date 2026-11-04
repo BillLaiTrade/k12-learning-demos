@@ -9,27 +9,41 @@ export function challengeDiagram(q,signal,lit){
  <defs><linearGradient id="duo-wood" x2="0" y2="1"><stop stop-color="#8b653f"/><stop offset="1" stop-color="#3c2b1d"/></linearGradient><linearGradient id="duo-metal"><stop stop-color="#1a2420"/><stop offset=".45" stop-color="#65716a"/><stop offset="1" stop-color="#17221d"/></linearGradient></defs>
  <path d="M0 0H760V420H0Z" fill="#283126"/><path d="M20 230L630 160L760 345L140 420Z" fill="url(#duo-wood)"/>
  <path d="M105 348L652 294M111 359L657 305" stroke="#89958b" stroke-width="3"/>
- ${[0,1].map((i)=>`<g transform="translate(${85+i*120} ${255+i*45})"><path d="M0 30h65v12H0Z" fill="#20342b"/><path d="M32 30V-38" stroke="#87938c" stroke-width="7"/><rect x="-7" y="-75" width="88" height="42" rx="12" fill="url(#duo-metal)"/><ellipse cx="82" cy="-54" rx="7" ry="19" fill="${lit?rgbCss(LIGHTS[q.lights[i]].rgb):'#37423b'}"/><text x="27" y="67" fill="#e1eadd" text-anchor="middle" font-size="18">${LIGHTS[q.lights[i]].name}燈</text></g>`).join('')}
+ ${[0,1].map((i)=>`<g transform="translate(${85+i*120} ${255+i*45})"><path d="M0 30h65v12H0Z" fill="#20342b"/><path d="M32 30V-38" stroke="#87938c" stroke-width="7"/><rect x="-7" y="-75" width="88" height="42" rx="12" fill="url(#duo-metal)"/><ellipse cx="82" cy="-54" rx="7" ry="19" fill="${lit?rgbCss(LIGHTS[q.lights[i]].rgb):'#37423b'}"/><text x="27" y="67" fill="#e1eadd" text-anchor="middle" font-size="18">${i?'B':'A'} ${LIGHTS[q.lights[i]].name}燈</text></g>`).join('')}
  ${lit?[0,1].map(i=>`<path d="M${167+i*120} ${201+i*45}L${q.filter==='clear'?600:405} 215" stroke="${rgbCss(LIGHTS[q.lights[i]].rgb)}" stroke-width="2"/>`).join('')+(q.filter==='clear'?'':`<path d="M414 215L600 181" stroke="${rgbCss(signal.transmitted)}" stroke-width="2"/>`):''}
- ${q.filter==='clear'?'':`<path d="M390 115L450 134V300L390 282Z" fill="${FILTERS[q.filter].css}" fill-opacity=".33" stroke="#a0b8a5" stroke-width="4"/><path d="M420 292V330" stroke="#85948a" stroke-width="7"/><path d="M390 330h61v11h-61Z" fill="#35473b"/><text x="378" y="94" fill="#e0eadf" font-size="19">${FILTERS[q.filter].name}</text>`}
+ ${q.filter==='clear'?'':`<path d="M390 115L450 134V300L390 282Z" fill="${FILTERS[q.filter].css}" fill-opacity=".33" stroke="#a0b8a5" stroke-width="4"/><path d="M420 292V330" stroke="#85948a" stroke-width="7"/><path d="M390 330h61v11h-61Z" fill="#35473b"/><text x="378" y="94" fill="#e0eadf" font-size="19">② ${FILTERS[q.filter].name}</text>`}
  <path d="M575 77L685 105V286L575 258Z" fill="${shade}" stroke="#f1d28b" stroke-width="5"/><path d="M630 274V313" stroke="#8c9c90" stroke-width="7"/><path d="M598 313h63v12h-63Z" fill="#35473b"/>
- <text x="485" y="45" fill="#fff1ba" font-size="20">本題觀察這張紙</text><path d="M580 51L615 122" stroke="#efd592" stroke-width="2"/><text x="586" y="362" fill="#e0eadf" font-size="20">${paper.name}</text></svg>`;
+ <text x="586" y="362" fill="#e0eadf" font-size="20">③ ${paper.name}</text></svg>`;
 }
 
 export function initialiseDuoQuiz(root){
  const $=s=>root.querySelector(s),form=$('[data-quiz]'),feedback=$('[data-duo-feedback]');
  const probe=initialiseDuoProbe(root);
  let question=INITIAL_QUESTION,deck=shuffledQuestions().filter(q=>q.id!==question.id),lit=false,studio=null,studioLoading=false,threeFailed=false;
- function updateScene(){const signal=challengeSignal(question);root.dataset.lit=String(lit);$('[data-challenge-state]').textContent=lit?'題目照明已開啟':'尚未開燈';$('[data-paper-reference]').textContent=`${PAPER_TYPES[question.paper].name}（${lit?'題目照明下':'白光下的外觀'}）`;
+ function placeLabels(points){
+  const layer=$('[data-scene-labels]'),stage=$('[data-challenge-stage]'),width=stage.clientWidth,height=stage.clientHeight,boxes=[],leaders=[];
+  layer.hidden=false;const top=$('.duo-stage-state').offsetHeight+8;
+  for(const key of['a','b','filter','paper']){const label=$(`[data-scene-label="${key}"]`),point=points[key];label.hidden=!point;if(!point)continue;
+   const w=label.offsetWidth,h=label.offsetHeight,ax=point.x*width,ay=point.y*height,x=Math.max(5,Math.min(width-w-5,ax-w/2));
+   const candidates=[-h-12,12,-h-42,42,-h-72,72].map(d=>Math.max(top,Math.min(height-h-6,ay+d)));
+   const overlap=(y,b)=>x<b.x+b.w+5&&x+w+5>b.x&&y<b.y+b.h+5&&y+h+5>b.y;
+   const y=candidates.find(y=>!boxes.some(b=>overlap(y,b)))??candidates[0];boxes.push({x,y,w,h});label.style.left=x+'px';label.style.top=y+'px';
+   leaders.push(`<line x1="${ax}" y1="${ay}" x2="${x+w/2}" y2="${y+h/2}"/>`);
+  }
+  const svg=$('[data-label-leaders]');svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.innerHTML=leaders.join('');
+ }
+ function updateScene(){const signal=challengeSignal(question),paper=PAPER_TYPES[question.paper].name;root.dataset.lit=String(lit);$('[data-challenge-state]').textContent=lit?'已開燈｜本題照明結果':'作答前｜白光參照';$('[data-reference-note]').textContent=lit?'現在請觀察金框內紙面的顏色。':'紙面原色供辨認，尚未顯示本題照明結果。';$('[data-paper-reference]').textContent=`觀察目標：③ 金框內的${paper}`;
+  $('[data-challenge-canvas]').setAttribute('aria-label',`題目立體實驗台：A ${LIGHTS[question.lights[0]].name}、B ${LIGHTS[question.lights[1]].name}同時${question.filter==='clear'?'直接照向':`經② ${FILTERS[question.filter].name}照向`}③ 金框${paper}。${lit?'已開燈，顯示本題結果':'作答前以白光下原色供辨認，尚未顯示本題結果'}。拖曳或方向鍵轉動，Home復原。`);
   $('[data-duo-fallback]').innerHTML=challengeDiagram(question,signal,lit);studio?.update(question,signal,lit);
   if(lit)root.dataset.signal=JSON.stringify(signal);else delete root.dataset.signal;
  }
- function fallback(){threeFailed=true;studio?.dispose();studio=null;$('[data-challenge-canvas]').hidden=true;$('[data-duo-fallback]').hidden=false;$('[data-scene-help]').textContent='目前以平面光路示意顯示；可繼續作答、開燈與換題。';root.dataset.renderer='diagram';}
- async function loadStudio(){if(studioLoading||threeFailed||studio)return;studioLoading=true;try{const module=await import('./duo-quiz-studio.mjs?v=duo-quiz-20261104');studio=module.createChallengeStudio($('[data-challenge-canvas]'),{unavailable:fallback});$('[data-challenge-canvas]').hidden=false;$('[data-duo-fallback]').hidden=true;root.dataset.renderer='three';studio.update(question,challengeSignal(question),lit);dispatchEvent(new Event('resize'));}catch{fallback();}}
+ function fallback(){threeFailed=true;studio?.dispose();studio=null;$('[data-challenge-canvas]').hidden=true;$('[data-duo-fallback]').hidden=false;$('[data-scene-help]').textContent='目前以平面光路示意顯示；可繼續作答、開燈與換題。';root.dataset.renderer='diagram';$('[data-scene-labels]').hidden=true;}
+ async function loadStudio(){if(studioLoading||threeFailed||studio)return;studioLoading=true;try{const module=await import('./duo-quiz-studio.mjs?v=duo-conditions-20261104');studio=module.createChallengeStudio($('[data-challenge-canvas]'),{unavailable:fallback,onLabels:placeLabels});$('[data-challenge-canvas]').hidden=false;$('[data-duo-fallback]').hidden=true;root.dataset.renderer='three';studio.update(question,challengeSignal(question),lit);dispatchEvent(new Event('resize'));}catch{fallback();}}
  function invalidate(){feedback.hidden=true;feedback.replaceChildren();delete form.dataset.correct;form.querySelectorAll('[aria-invalid]').forEach(e=>e.removeAttribute('aria-invalid'));lit=false;updateScene();}
  function renderQuestion(){
-  root.dataset.question=JSON.stringify(question);$('[data-question-lights]').textContent=question.lights.map(key=>LIGHTS[key].name).join(' ＋ ');$('[data-question-filter]').textContent=FILTERS[question.filter].name;$('[data-question-paper]').textContent=PAPER_TYPES[question.paper].name;
-  $('[data-prediction-title]').textContent=`開燈後，金框標示的${PAPER_TYPES[question.paper].name}會看起來如何？`;
+  root.dataset.question=JSON.stringify(question);$('[data-question-lights]').textContent=question.lights.map(key=>LIGHTS[key].name).join(' ＋ ');$('[data-question-filter]').textContent=question.filter==='clear'?'不放色片':FILTERS[question.filter].name;$('[data-filter-route]').textContent=question.filter==='clear'?'兩束光直接照到紙張':'兩束光都先通過這片色片';question.lights.forEach((key,i)=>{$(`[data-question-lamp="${i}"]`).textContent=LIGHTS[key].name;$(`[data-scene-label="${i?'b':'a'}"]`).textContent=`${i?'B':'A'} ${LIGHTS[key].name}`;});$('[data-scene-label=filter]').textContent=`② ${FILTERS[question.filter].name}`;$('[data-scene-label=paper]').textContent=`③ ${PAPER_TYPES[question.paper].name}`;$('[data-question-paper]').textContent=PAPER_TYPES[question.paper].name;
+  $('[data-challenge-question]').textContent=`同時開啟兩盞燈後，金框中的${PAPER_TYPES[question.paper].name}會看起來是什麼顏色？`;
+  $('[data-prediction-title]').textContent='你預測的紙面顏色';
   form.reset();invalidate();
  }
  const colours=$('[data-colour-options]');COLOUR_OPTIONS.forEach(([key,name,swatch])=>{const label=document.createElement('label');label.className='duo-answer';const input=document.createElement('input');input.type='radio';input.name='appearance';input.value=key;input.required=true;const dot=document.createElement('i');dot.style.backgroundColor=swatch;dot.setAttribute('aria-hidden','true');label.append(input,dot,document.createTextNode(name));colours.append(label);});

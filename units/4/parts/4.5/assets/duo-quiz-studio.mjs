@@ -2,7 +2,7 @@ import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {LIGHTS,FILTERS} from './color-model.mjs';
 import {PAPER_TYPES,CHALLENGE_LAYOUT as L,filterIntersection} from './duo-quiz-model.mjs';
 
-export function createChallengeStudio(canvas,{unavailable}={}){
+export function createChallengeStudio(canvas,{unavailable,onLabels}={}){
  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'low-power'});
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.6));renderer.outputColorSpace=THREE.SRGBColorSpace;
  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;
@@ -42,6 +42,7 @@ export function createChallengeStudio(canvas,{unavailable}={}){
  function line(a,b,rgb){const strength=Math.max(...rgb);if(strength<.045)return;const mesh=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a),new THREE.Vector3(...b)]),new THREE.LineBasicMaterial({color:new THREE.Color().setRGB(...rgb),transparent:true,opacity:.85,toneMapped:false}));rays.add(mesh);}
  function draw(){frame=0;if(disposed)return;camera.position.set(target.x+Math.sin(orbit.yaw)*Math.sin(orbit.pitch)*orbit.radius,target.y+Math.cos(orbit.pitch)*orbit.radius,target.z+Math.cos(orbit.yaw)*Math.sin(orbit.pitch)*orbit.radius);camera.lookAt(target);
   renderer.autoClear=true;renderer.render(scene,camera);renderer.autoClear=false;renderer.render(paperScene,camera);renderer.render(filterScene,camera);renderer.autoClear=true;
+  if(question&&onLabels){camera.updateMatrixWorld(true);const project=point=>{const p=new THREE.Vector3(...point).project(camera);return{x:(p.x+1)/2,y:(1-p.y)/2};};onLabels({a:project(L.sources[0]),b:project(L.sources[1]),filter:question.filter==='clear'?null:project([0,L.axis+.65,0]),paper:project([L.paperX,L.axis+.65,0])});}
  }
  function request(){if(!frame&&!disposed)frame=requestAnimationFrame(draw);}
  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();request();}

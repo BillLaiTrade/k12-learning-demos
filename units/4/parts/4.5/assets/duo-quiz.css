@@ -63,3 +63,40 @@
 .duo-probe,#duo-probe-title{scroll-margin-top:115px}
 
 .duo-quiz .duo-torch[data-dragging=true]{cursor:grabbing}
+
+/* Read the fixed conditions in the same order as the apparatus. */
+.duo-task{display:flex;flex-direction:column;gap:5px;margin:0 0 12px;padding:12px 14px;background:#f7f1df;border-left:4px solid #c3a25a;border-radius:0 10px 10px 0;color:#3f503a;font-size:.92rem;line-height:1.65}
+.duo-task>span{font-size:.72rem;color:#7a683e;font-weight:700}
+.duo-conditions{display:block;padding:12px;margin-bottom:14px}
+.duo-conditions-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;font-size:.79rem}
+.duo-conditions button{margin:0;flex-shrink:0}
+.duo-condition-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin:0;padding:0;list-style:none}
+.duo-condition-flow>li{position:relative;min-width:0;padding:11px 12px;border:1px solid #cfdbbf;border-radius:10px;background:#fffefa}
+.duo-condition-flow>li:not(:last-child)::after{content:'→';position:absolute;right:-20px;top:40%;font-size:1rem;color:#6a8565}
+.duo-condition-flow h4{margin:0 0 7px;font-size:.76rem;color:#5a7351;font-weight:600}
+.duo-condition-flow b{font-size:.95rem;color:#244c3b}
+.duo-condition-flow small{display:block;margin-top:7px;font-size:.71rem;line-height:1.6;color:#63765e}
+.duo-source-pair{display:flex;gap:9px;flex-wrap:wrap}.duo-source-pair>span{display:inline-flex;align-items:center;gap:6px}
+.duo-source-pair i{display:inline-flex;align-items:center;justify-content:center;width:21px;height:21px;border-radius:5px;background:#e4ecda;font-size:.72rem;font-style:normal;font-weight:700;color:#496047}
+.duo-stage-state{display:flex;flex-direction:column;gap:3px;top:9px;left:9px;right:9px;z-index:3;padding:7px 9px;background:#f7f3e4f5;border:1px solid #c8c5a3;color:#4d593c;font-size:.71rem}
+.duo-stage-state>span{font-size:.66rem;line-height:1.5}
+.duo-quiz[data-lit=true] .duo-stage-state{background:#e4eedff5;border-color:#acbea1}
+.duo-scene-labels{position:absolute;inset:0;pointer-events:none;z-index:2}
+.duo-scene-labels>svg{position:absolute;inset:0;width:100%;height:100%}
+.duo-scene-labels line{stroke:#d4e0ce;stroke-width:1.2}
+.duo-scene-labels>span{position:absolute;display:block;padding:4px 7px;border:1px solid #d0dccb;border-radius:6px;background:#f7fbf0f5;color:#254837;font-size:.72rem;font-weight:700;line-height:1.4;white-space:nowrap;box-shadow:0 2px 5px #1116}
+.duo-scene-labels>[data-scene-label=paper]{background:#fff1c9f5;border-color:#e2c778;color:#655324}
+@media(max-width:650px){
+ .duo-task{padding:10px 11px;font-size:.85rem}
+ .duo-conditions{padding:9px}.duo-conditions-head{font-size:.73rem;gap:6px}
+ .duo-condition-flow{grid-template-columns:1fr;gap:17px}
+ .duo-condition-flow>li{padding:9px 11px;display:grid;grid-template-columns:110px minmax(0,1fr);align-items:start;column-gap:7px}
+ .duo-condition-flow h4{grid-row:1/3;margin:2px 0;font-size:.74rem}
+ .duo-condition-flow small{grid-column:2;font-size:.68rem;margin-top:4px}
+ .duo-condition-flow>li:not(:last-child)::after{content:'↓';right:50%;top:auto;bottom:-20px;font-size:.85rem}
+ .duo-condition-flow b{font-size:.84rem}.duo-source-pair{gap:5px}.duo-source-pair i{width:18px;height:18px;font-size:.65rem}
+ .duo-stage-state{top:6px;left:6px;right:6px;padding:6px;font-size:.67rem}.duo-stage-state>span{font-size:.61rem}
+ .duo-scene-labels>span{padding:3px 5px;font-size:.65rem}
+}
+.duo-next{flex-shrink:0;white-space:nowrap}
+@media(max-width:650px){.duo-condition-flow>li{grid-template-columns:80px minmax(0,1fr)}}
