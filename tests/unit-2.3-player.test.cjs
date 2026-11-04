@@ -27,9 +27,9 @@ test('experiments share a persistent video-style footer and concise summaries', 
    const baseline=await footer.boundingBox(),baselineY=baseline.y-(await root.locator(`.${gas}-stage-area`).boundingBox()).y,initialScene=root.locator(gas==='oxygen'?'.oxygen-materials-photo':'.co2-material-scene'),initialPicture=await initialScene.boundingBox();
    assert.ok(baseline.y>=initialPicture.y+initialPicture.height-1);
    const hint=footer.locator('[data-continuous-status]');assert.equal(await hint.innerText(),'點畫面空白處，也可暫停／繼續。');
-   const summary=page.locator(gas==='oxygen'?'#s3 .oxygen-summary':'.co2-summary');assert.equal(await summary.locator('dt').count(),gas==='oxygen'?7:6);
+   const summary=page.locator(gas==='oxygen'?'#s3 .oxygen-summary':'.co2-summary');assert.equal(await summary.locator('dt').count(),5);
    const rows=await summary.locator('dd').allTextContents();assert.ok(rows.every(s=>s.length<60));
-   if(width===1440){assert.ok((await summary.boundingBox()).height<550);assert.equal(await summary.locator('dd').evaluateAll(ns=>ns.every(n=>parseFloat(getComputedStyle(n).fontSize)>=16)),true);}
+   if(width===1440){assert.ok((await summary.boundingBox()).height<400);assert.equal(await summary.locator('dd').evaluateAll(ns=>ns.every(n=>parseFloat(getComputedStyle(n).fontSize)>=16)),true);}
    if([1440,390].includes(width))await root.locator(`.${gas}-stage-area`).screenshot({path:path.join(out,`${gas}-initial-${width}.png`)});
    for(let i=1;i<(gas==='co2'?7:8);i++){
     const tab=root.locator(`#${gas}-tab-${i}`);if(!await tab.isVisible())await root.locator('[data-step-menu]').click();await tab.click();
