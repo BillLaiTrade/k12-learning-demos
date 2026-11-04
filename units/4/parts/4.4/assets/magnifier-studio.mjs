@@ -1,4 +1,4 @@
-import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261103-mag-cross-f1';
+import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261104-mag-ruler-view1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays} from './magnifier-optics.mjs?v=20261103-mag-cross-f1';
 const root=document.querySelector('[data-magnifier-lab]');
@@ -7,7 +7,7 @@ function initialise(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],canvas=$('#magnifier-canvas');
  let state={object:30,screen:95,screenIn:false},showRays=true,extensions=false,point='both',front=false,selected='object',studio=null;
  const distanceLabel=value=>`${Number((value/G.f).toFixed(3))}F`;
- const workspace=createMagnifierWorkspace(root,{f:G.f,move,observe(preset){state={object:preset.object,screen:95,screenIn:preset.screenIn};if(preset.rays)showRays=true;extensions=preset.extensions;point='both';front=false;selected='object';update();studio?.frameObservation();}});
+ const workspace=createMagnifierWorkspace(root,{f:G.f,min:G.objectMin,max:G.objectMax,move,observe(preset){state={object:preset.object,screen:95,screenIn:preset.screenIn};if(preset.rays)showRays=true;extensions=preset.extensions;point='both';front=false;selected='object';update();studio?.frameObservation();}});
  const art=document.createElement('canvas');art.width=350;art.height=600;const a=art.getContext('2d');
  a.fillStyle='#dd684f';a.beginPath();a.moveTo(175,80);a.lineTo(133,170);a.lineTo(217,170);a.closePath();a.fill();a.strokeStyle='#688d65';a.lineWidth=13;a.lineCap='round';a.beginPath();a.moveTo(175,190);a.lineTo(175,442);a.stroke();a.fillStyle='#438dbb';a.beginPath();a.arc(175,500,35,0,Math.PI*2);a.fill();
  const eyeCanvas=$('[data-mag-eye]'),reference=$('[data-mag-reference]'),paper=$('[data-mag-paper]');
@@ -42,7 +42,7 @@ function initialise(root){
   $('[data-mag-screen]').textContent=state.screenIn?'取下屏幕':'放入屏幕';$('[data-mag-screen]').setAttribute('aria-pressed',String(state.screenIn));$('[data-mag-front]').hidden=!state.screenIn||root.dataset.webgl==='unavailable';$('[data-mag-front]').textContent=front?'返回整體觀察':'正面看屏幕';$('[data-mag-front]').setAttribute('aria-pressed',String(front));
   $('[data-mag-screen-controls]').hidden=!state.screenIn;$('[data-mag-paper-detail]').hidden=!state.screenIn;$('[data-mag-legend]').hidden=!showRays;
   $$('[data-mag-distance]').forEach(e=>e.textContent=`${e.dataset.magDistance==='object'?'':'屏幕距離 '}${distanceLabel(state[e.dataset.magDistance])}`);
-  $$('[data-mag-device]').forEach(b=>{if(b.type!=='range')b.setAttribute('aria-pressed',String(selected===b.dataset.magDevice));b.setAttribute('aria-label',`${b.dataset.magDevice==='object'?'圖卡':'屏幕'}，${distanceLabel(state[b.dataset.magDevice])}，方向鍵可沿軌道移動`);});
+  $$('[data-mag-device]').forEach(b=>{if(b.getAttribute('role')!=='slider')b.setAttribute('aria-pressed',String(selected===b.dataset.magDevice));b.setAttribute('aria-label',`${b.dataset.magDevice==='object'?'圖卡':'屏幕'}，${distanceLabel(state[b.dataset.magDevice])}，方向鍵可沿軌道移動`);});
   $$('[data-mag-nudge]').forEach(b=>{const key=b.dataset.magNudge;b.disabled=Number(b.dataset.direction)<0?state[key]<=G[key+'Min']:state[key]>=G[key+'Max'];});
   $('[data-mag-eye-badge]').textContent=state.screenIn?'屏幕擋住視線':g.eyeMode==='converging'?'F外・此處看不清':g.eyeMode==='parallel'?'平行光・無窮遠':'正立・放大';
   const condition=g.type==='virtual'?'F內：正立、放大的虛像，可當放大鏡。':g.type==='infinity'?'剛好F：出射平行光，像在無窮遠，眼睛放鬆可觀察。':'F外：形成倒立實像；目前眼睛位於會聚點前，無法清楚對焦。';$('[data-mag-condition]').textContent=condition;$('[data-mag-eye-note]').textContent=state.screenIn?'取下屏幕後，恢復透鏡中的觀察。':'旋轉主圖不改變眼睛位置。';
@@ -57,14 +57,14 @@ function initialise(root){
  $('[data-mag-rays]').addEventListener('click',()=>{showRays=!showRays;if(!showRays)extensions=false;update();});$('[data-mag-extensions]').addEventListener('click',()=>{extensions=!extensions;if(extensions)showRays=true;update();studio?.frameObservation();});
  $('[data-mag-screen]').addEventListener('click',()=>{state={...state,screenIn:!state.screenIn};front=false;if(!state.screenIn)selected='object';update();});$('[data-mag-front]').addEventListener('click',()=>{front=!front;update();});
  $$('[data-mag-point]').forEach(b=>b.addEventListener('click',()=>{point=b.dataset.magPoint;update();}));
- $$('[data-mag-device]').forEach(b=>{const key=b.dataset.magDevice;b.addEventListener('click',()=>{selected=key;update();});b.addEventListener('keydown',e=>{let v=state[key];if(e.key==='Home')v=G[key+'Min'];else if(e.key==='End')v=G[key+'Max'];else if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))v+=(['ArrowLeft','ArrowDown'].includes(e.key)?-1:1)*(e.shiftKey?.2:1);else return;e.preventDefault();move(key,v);});});
+ $$('[data-mag-device]').forEach(b=>{const key=b.dataset.magDevice;b.addEventListener('click',()=>{selected=key;update();});b.addEventListener('keydown',e=>{let v=state[key];if(e.key==='Home')v=G[key+'Min'];else if(e.key==='End')v=G[key+'Max'];else if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))v+=(['ArrowLeft','ArrowDown'].includes(e.key)?-1:1)*(key==='object'?-1:1)*(e.shiftKey?.2:1);else return;e.preventDefault();move(key,v);});});
  $$('[data-mag-nudge]').forEach(b=>b.addEventListener('click',()=>move(b.dataset.magNudge,state[b.dataset.magNudge]+Number(b.dataset.direction))));
  try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-mag-fallback]').hidden=false;$$('.magnifier-anchor,.magnifier-focus').forEach(e=>e.hidden=true);root.dataset.webgl='unavailable';console.warn('Magnifier 3D:',error.message);}
  update();root.dataset.ready='true';
  function createStudio(){
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   const scene=new THREE.Scene();scene.background=new THREE.Color('#566b5b');scene.fog=new THREE.Fog('#566b5b',35,80);
-  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3( .7,1.6,0);let orbit={azimuth:-.62,polar:1.33,zoom:1},fitRadius=6,pending=0,viewport=null;
+  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3( .7,1.6,0);let orbit={azimuth:-.04,polar:1.43,zoom:1},fitRadius=6,pending=0,viewport=null;
   scene.add(new THREE.HemisphereLight('#f2f3df','#3a503e',2.1));const light=new THREE.DirectionalLight('#fff0cf',3.1);light.position.set(-3,8,6);light.castShadow=true;light.shadow.mapSize.set(1024,1024);Object.assign(light.shadow.camera,{left:-8,right:10,top:7,bottom:-5});light.shadow.bias=-.0004;scene.add(light);const rim=new THREE.DirectionalLight('#d3e9e0',1.6);rim.position.set(5,4,-4);scene.add(rim);
   const mat=(color,options={})=>new THREE.MeshStandardMaterial({color,roughness:.5,metalness:.15,...options}),dark=mat('#283e30',{metalness:.5,roughness:.36}),steel=mat('#a2b4a4',{metalness:.7,roughness:.27}),brass=mat('#bba267',{metalness:.7,roughness:.3});
   function box(parent,size,pos,material){const mesh=new THREE.Mesh(new THREE.BoxGeometry(...size),material);mesh.position.set(...pos);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;}
@@ -104,11 +104,10 @@ function initialise(root){
   }
   function fitToViewport(){
    // Fit on resize or an explicit observation/view change, never during a drag or orbit.
-   camera.fov=39;let radius=6;const home=new THREE.Vector3(Math.sin(1.33)*Math.sin(-.62),Math.cos(1.33),Math.sin(1.33)*Math.cos(-.62));
-   const g=magnifierState(state),virtual=extensions&&g.type==='virtual'&&Math.abs(g.v)<=8*G.f,left=virtual?Math.min(-4.5,g.v*G.scale-G.cardWidth*g.m/2-.2):-4.5,right=4.2,bottom=virtual?Math.min(-.25,G.axis-G.cardHeight*g.m/2-.2):-.25,top=virtual?Math.max(3.6,G.axis+G.cardHeight*g.m/2+.2):3.6;
-   if(virtual)target.set((left+right)/2,(bottom+top)/2,0);else target.set(-.15,1.6,0);
-   const boxes=[[[-4,-.6],[.3,2.7],[-.9,.9]],[[.9,2.8],[.3,state.screenIn?3.6:.4],[-1,1]],[[3.3,3.7],[.3,2.3],[-1,1]],[[-4.5,4.2],[-.25,.25],[-1,1]]];
-   if(virtual)boxes.push([[g.v*G.scale-G.cardWidth*g.m/2,g.v*G.scale+G.cardWidth*g.m/2],[G.axis-G.cardHeight*g.m/2,G.axis+G.cardHeight*g.m/2],[-G.cardWidth*g.m/2,G.cardWidth*g.m/2]]);
+   camera.fov=39;let radius=6;const home=new THREE.Vector3(Math.sin(1.43)*Math.sin(-.04),Math.cos(1.43),Math.sin(1.43)*Math.cos(-.04));
+   // One common framing for all observation rows keeps the apparatus at the loaded scale.
+   target.set(-.15,1.6,0);
+   const boxes=[[[-4,-.6],[.3,2.7],[-.9,.9]],[[.9,2.8],[.3,3.6],[-1,1]],[[3.3,3.7],[.3,2.3],[-1,1]],[[-4.5,4.2],[-.25,.25],[-1,1]],[[-3.875,-2.125],[.5,3.5],[-.875,.875]]];
    const bounds=[];for(const [xs,ys,zs]of boxes)for(const x of xs)for(const y of ys)for(const z of zs)bounds.push(new THREE.Vector3(x,y,z));
    for(let i=0;i<80;i++){camera.position.copy(target).addScaledVector(home,radius);camera.lookAt(target);camera.updateProjectionMatrix();camera.updateMatrixWorld();if(bounds.every(p=>{const q=p.clone().project(camera);return Math.abs(q.x)<.9&&Math.abs(q.y)<.86;}))break;radius*=1.06;}
    fitRadius=radius;
@@ -172,7 +171,7 @@ function initialise(root){
   for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,stop);
   canvas.addEventListener('wheel',e=>{e.preventDefault();if(front)return;orbit.zoom=THREE.MathUtils.clamp(orbit.zoom+e.deltaY*.001,.2,2.2);update();},{passive:false});
   canvas.addEventListener('keydown',e=>{const steps={ArrowLeft:[.06,0],ArrowRight:[-.06,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!steps[e.key])return;e.preventDefault();front=false;orbit.azimuth=orbit.azimuth+steps[e.key][0];orbit.polar=THREE.MathUtils.clamp(orbit.polar+steps[e.key][1],.45,1.48);update();});
-  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);const tools=$('.magnifier-tools'),observer=$('.magnifier-observer'),top=tools.offsetTop+tools.offsetHeight+8;viewport={left:12,top,width:Math.max(60,r.width-observer.offsetWidth-36),height:Math.max(60,r.height-top-10)};camera.aspect=viewport.width/viewport.height;fitToViewport();updateCamera();requestDraw();}new ResizeObserver(resize).observe(canvas);resize();
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);const tools=$('.magnifier-tools'),observer=$('.magnifier-observer'),frontButton=$('[data-mag-front]'),trace=$('[data-mag-trace]'),frontHidden=frontButton.hidden,traceHidden=trace.hidden,frontText=frontButton.textContent;frontButton.hidden=false;trace.hidden=false;frontButton.textContent='返回整體觀察';const top=tools.offsetTop+tools.offsetHeight+8;frontButton.hidden=frontHidden;trace.hidden=traceHidden;frontButton.textContent=frontText;viewport={left:12,top,width:Math.max(60,r.width-observer.offsetWidth-36),height:Math.max(60,r.height-top-10)};camera.aspect=viewport.width/viewport.height;fitToViewport();updateCamera();requestDraw();}new ResizeObserver(resize).observe(canvas);resize();
   function frameObservation(){orbit.zoom=1;resize();}
   return {update:syncScene,frameObservation,target,virtualImage,virtualArt,virtualOutline,scene,camera,renderer,source,lens,screen,screenPlane,rays,extensionGroup,devices,eye};
  }
