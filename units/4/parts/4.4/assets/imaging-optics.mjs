@@ -1,5 +1,5 @@
 import {imageFor,rayAt} from './optics.mjs';
-import {CONVEX_BENCH,convexRays} from './convex-bench-model.mjs?v=20261104-convex-unified1';
+import {CONVEX_BENCH,convexRays} from './convex-bench-model.mjs?v=20261104-bench-proportion1';
 export const IMAGING=CONVEX_BENCH;
 export function moveImaging(state,key,value){
  if(!['object','screen'].includes(key)||!Number.isFinite(value))return state;

@@ -1,4 +1,4 @@
-import {distanceLabel} from './convex-bench-model.mjs?v=20261104-convex-unified1';
+import {distanceLabel} from './convex-bench-model.mjs?v=20261104-bench-proportion1';
 export function createBenchLabels({THREE,root,canvas,camera,virtualImage,G,state,viewport,front,rays,receiver,receiverName,lightPaths=()=>[]}){
  const elements=[...root.querySelectorAll('.convex-image-tag,.convex-focus')];
  function box(rect,content=false){

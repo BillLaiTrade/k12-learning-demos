@@ -1,12 +1,11 @@
 import {imageFor,rayAt} from './optics.mjs';
 
-// Both experiments use the same object, lens, distance scale and representative rays.
-export const CONVEX_BENCH=Object.freeze({f:100,scale:.021,axis:2,aperture:.82,cardWidth:.7,cardHeight:1.2,pointTop:.44,pointBottom:-.4,artExtentY:.47,screenWidth:1.9,screenHeight:3,objectMin:30,objectMax:350,screenMin:50,screenMax:500});
-export const BENCH_HOME=Object.freeze({azimuth:-.04,polar:1.43,zoom:1});
+// Shared optical model; axial drawing scale can be stretched without changing observer optics.
+export const CONVEX_BENCH=Object.freeze({f:100,scale:.026,opticalScale:.021,axis:2,aperture:.82,cardWidth:.7,cardHeight:1.2,pointTop:.44,pointBottom:-.4,artExtentY:.47,screenWidth:1.9,screenHeight:3,objectMin:30,objectMax:350,screenMin:50,screenMax:500});
+export const BENCH_HOME=Object.freeze({azimuth:-.09,polar:1.43,zoom:1});
 export const distanceLabel=value=>{const n=Number((value/CONVEX_BENCH.f).toFixed(3));return n===1?'F':`${n}F`;};
 
-export function convexRays(state,point='both',end=CONVEX_BENCH.screenMax){
- const G=CONVEX_BENCH;
+export function convexRays(state,point='both',end=CONVEX_BENCH.screenMax,G=CONVEX_BENCH){
  if(state.atInfinity)return [-G.aperture,0,G.aperture].map(h=>({name:'top',from:[-G.objectMax*G.scale,G.axis+h,0],lens:[0,G.axis+h,0],end:[end*G.scale,G.axis+h*(1-end/G.f),0]}));
  const g=imageFor(G.f,state.object),paths=[];
  for(const [name,y]of [['top',G.pointTop],['bottom',G.pointBottom]]){

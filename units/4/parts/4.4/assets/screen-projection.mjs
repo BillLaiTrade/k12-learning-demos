@@ -1,4 +1,4 @@
-import {imagingState} from './imaging-optics.mjs?v=20261104-convex-unified1';
+import {imagingState} from './imaging-optics.mjs?v=20261104-bench-proportion1';
 export function paintBenchProjection(paper,art,G,state){
  const pc=paper.getContext('2d');
 

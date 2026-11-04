@@ -1,12 +1,12 @@
-import {paintBenchProjection} from './screen-projection.mjs?v=20261104-view-conditions1';
-import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-mag-fixed-eye1';
-import {bindBenchRuler} from './convex-bench-workspace.mjs?v=20261104-view-conditions1';
-import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-view-conditions1';
-import {BENCH_HOME,createBenchArt} from './convex-bench-model.mjs?v=20261104-convex-unified1';
-import {fitBench} from './convex-bench-workspace.mjs?v=20261104-view-conditions1';
-import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261104-convex-unified1';
+import {paintBenchProjection} from './screen-projection.mjs?v=20261104-bench-proportion1';
+import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-bench-proportion1';
+import {bindBenchRuler} from './convex-bench-workspace.mjs?v=20261104-bench-proportion1';
+import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-bench-proportion1';
+import {BENCH_HOME,createBenchArt} from './convex-bench-model.mjs?v=20261104-bench-proportion1';
+import {fitBench} from './convex-bench-workspace.mjs?v=20261104-bench-proportion1';
+import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261104-bench-proportion1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261104-convex-unified1';
+import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261104-bench-proportion1';
 const root=document.querySelector('[data-imaging-lab]');
 if(root) initialise(root);
 function initialise(root){
@@ -69,7 +69,7 @@ function initialise(root){
   const {source,lens,lensGroup,screen,screenPlane,projectedTexture,artTex}=createBenchApparatus(THREE,scene,G,art,paper);
   const virtualImage=new THREE.Group();virtualImage.name='imaging-virtual-image';virtualImage.visible=false;scene.add(virtualImage);
   const virtualArt=new THREE.Mesh(new THREE.PlaneGeometry(G.cardWidth,G.cardHeight),new THREE.MeshBasicMaterial({map:artTex,transparent:true,opacity:.72,depthWrite:false,depthTest:false,side:THREE.DoubleSide,toneMapped:false}));virtualArt.renderOrder=8;virtualImage.add(virtualArt);
-  const virtualOutline=new THREE.Line(new THREE.BufferGeometry().setFromPoints([[-G.cardWidth/2,-G.cardHeight/2,0],[-G.cardWidth/2,G.cardHeight/2,0],[G.cardWidth/2,G.cardHeight/2,0],[G.cardWidth/2,-G.cardHeight/2,0],[-G.cardWidth/2,-G.cardHeight/2,0]].map(p=>new THREE.Vector3(...p))),new THREE.LineDashedMaterial({color:'#eaf2d8',dashSize:.055,gapSize:.035,transparent:true,opacity:.85,depthWrite:false,depthTest:false,toneMapped:false}));virtualOutline.computeLineDistances();virtualOutline.renderOrder=9;virtualImage.add(virtualOutline);
+  const virtualOutline=new THREE.Line(new THREE.BufferGeometry().setFromPoints([[-.2*G.cardWidth,-G.cardHeight/2,0],[-.2*G.cardWidth,G.cardHeight/2,0],[.2*G.cardWidth,G.cardHeight/2,0],[.2*G.cardWidth,-G.cardHeight/2,0],[-.2*G.cardWidth,-G.cardHeight/2,0]].map(p=>new THREE.Vector3(...p))),new THREE.LineDashedMaterial({color:'#eaf2d8',dashSize:.055,gapSize:.035,transparent:true,opacity:.85,depthWrite:false,depthTest:false,toneMapped:false}));virtualOutline.computeLineDistances();virtualOutline.renderOrder=9;virtualImage.add(virtualOutline);
   const rays=new THREE.Group();scene.add(rays);
   function updateRays(){for(const m of [...rays.children]){m.geometry.dispose();m.material.dispose();rays.remove(m);}rays.visible=showRays&&!front;if(!showRays)return;for(const r of imagingRays(state,point)){const color=r.name==='top'?'#f4a17e':'#88c7ee';for(const [from,to]of [[r.from,r.lens],[r.lens,r.end]]){const A=new THREE.Vector3(...from),B=new THREE.Vector3(...to),tube=new THREE.Mesh(new THREE.TubeGeometry(new THREE.LineCurve3(A,B),1,.009,6,false),new THREE.MeshBasicMaterial({color,toneMapped:false}));tube.userData={name:r.name,from,to};rays.add(tube);const arrow=new THREE.Mesh(new THREE.ConeGeometry(.036,.13,10),new THREE.MeshBasicMaterial({color,toneMapped:false}));arrow.position.copy(A).lerp(B,.64);arrow.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),B.clone().sub(A).normalize());rays.add(arrow);}if(r.virtual&&extensions){const A=new THREE.Vector3(...r.lens),B=new THREE.Vector3(...r.virtual),line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([A,B]),new THREE.LineDashedMaterial({color,dashSize:.07,gapSize:.05,transparent:true,opacity:.85,depthTest:false,depthWrite:false}));line.computeLineDistances();line.renderOrder=10;line.userData={name:r.name,from:r.lens,to:r.virtual,virtual:true};rays.add(line);}}}
   function directionFor(azimuth,polar){return new THREE.Vector3(Math.sin(polar)*Math.sin(azimuth),Math.cos(polar),Math.sin(polar)*Math.cos(azimuth));}

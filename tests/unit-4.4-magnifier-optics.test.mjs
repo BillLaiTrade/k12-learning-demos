@@ -4,8 +4,8 @@ import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,magnifierDispl
 import {IMAGING,imagingRays} from '../units/4/parts/4.4/assets/imaging-optics.mjs';
 import {observations} from '../units/4/parts/4.4/assets/magnifier-workspace.mjs';
 test('保留兩區共同器材與同條件的代表光路',()=>{
- for(const key of ['f','scale','axis','aperture','cardWidth','cardHeight','pointTop','pointBottom','screenMin','screenMax'])assert.equal(G[key],IMAGING[key]);
- for(const object of [30,90,100,100.1,150,200,320,350])for(const point of ['top','bottom','both'])assert.deepEqual(magnifierRays({object,screen:500},point),imagingRays({object,screen:500},point));
+ for(const key of ['f','opticalScale','axis','aperture','cardWidth','cardHeight','pointTop','pointBottom','screenMin','screenMax'])assert.equal(G[key],IMAGING[key]);
+ for(const object of [30,90,100,100.1,150,200,320,350])for(const point of ['top','bottom','both']){const normalized=(rays,scale)=>rays.map(r=>Object.fromEntries(Object.entries(r).map(([k,v])=>[k,Array.isArray(v)?[Math.round(v[0]/scale*1e6)/1e6,...v.slice(1)]:v])));assert.deepEqual(normalized(magnifierRays({object,screen:500},point),G.scale),normalized(imagingRays({object,screen:500},point),IMAGING.scale));}
 });
 test('眼睛在模型層固定，移動操作僅接受圖卡與比較屏幕',()=>{
  assert.ok(G.eye>0&&G.eye<G.f);
@@ -18,13 +18,13 @@ test('三個主觀察條件依序向外，只改圖卡，沒有移眼或屏幕�
  for(const p of Object.values(observations)){assert.equal(p.eye,undefined);assert.equal(p.screenIn,false);assert.equal(p.point,undefined);}
 });
 test('F內正立虛像，固定眼位的透鏡影像與原物採相同角度尺度',()=>{
- let previous=0;for(const object of [30,50,60,90,99.9]){const g=magnifierState({object,screen:95});assert.equal(g.eyeMode,'virtual');assert.ok(g.v<0&&g.m>1&&g.imageScale>0);assert.ok(Math.abs(g.imageScale-g.m/((G.eye-g.v)*G.scale))<1e-10);assert.ok(Math.abs(g.referenceScale-1/((G.eye+object)*G.scale))<1e-10);assert.ok(g.angularGain>previous&&g.angularGain>1);previous=g.angularGain;}
+ let previous=0;for(const object of [30,50,60,90,99.9]){const g=magnifierState({object,screen:95});assert.equal(g.eyeMode,'virtual');assert.ok(g.v<0&&g.m>1&&g.imageScale>0);assert.ok(Math.abs(g.imageScale-g.m/((G.eye-g.v)*G.opticalScale))<1e-10);assert.ok(Math.abs(g.referenceScale-1/((G.eye+object)*G.opticalScale))<1e-10);assert.ok(g.angularGain>previous&&g.angularGain>1);previous=g.angularGain;}
 });
 test('逐漸靠近F，出射束發散程度減少，F時同色束平行',()=>{
  let previous=Infinity;for(const object of [30,60,90,100]){const paths=magnifierRays({object,screen:500},'top'),slopes=paths.map(r=>(r.end[1]-r.lens[1])/r.end[0]),spread=Math.max(...slopes)-Math.min(...slopes);assert.ok(spread<previous);previous=spread;if(object===100){assert.ok(spread<1e-10);assert.equal(paths.length,3);assert.ok(paths.every(r=>r.end[0]>G.eye*G.scale&&!r.virtual));}}
 });
 test('恰好F仍在原地放鬆觀看，角度有限，沒有有限虛像位置',()=>{
- const g=magnifierState({object:100,screen:95});assert.equal(g.eyeMode,'parallel');assert.equal(g.v,null);assert.equal(g.resolved,true);assert.ok(Math.abs(g.imageScale-1/(G.f*G.scale))<1e-10);assert.ok(!g.clipped);assert.ok(eyeRays({object:100,screen:95},'top').length>0);
+ const g=magnifierState({object:100,screen:95});assert.equal(g.eyeMode,'parallel');assert.equal(g.v,null);assert.equal(g.resolved,true);assert.ok(Math.abs(g.imageScale-1/(G.f*G.opticalScale))<1e-10);assert.ok(!g.clipped);assert.ok(eyeRays({object:100,screen:95},'top').length>0);
 });
 test('F外仍有倒立實像，固定眼位不冒充清晰正立放大像',()=>{
  for(const object of [100.1,110,150,200,300,320,350]){const g=magnifierState({object,screen:95});assert.equal(g.type,'real');assert.ok(g.v>0&&g.m<0);assert.equal(g.resolved,false);assert.equal(g.imageScale,null);assert.equal(g.angularGain,null);assert.ok(['converging','at-image','too-close'].includes(g.eyeMode));}

@@ -1,4 +1,4 @@
-import {bindBenchRuler} from './convex-bench-workspace.mjs?v=20261104-view-conditions1';
+import {bindBenchRuler} from './convex-bench-workspace.mjs?v=20261104-bench-proportion1';
 // Keep the observer fixed while the object moves outward through the focal point.
 export const observations=Object.freeze({
  near:{object:50,screenIn:false},

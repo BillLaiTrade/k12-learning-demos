@@ -1,10 +1,10 @@
-import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-mag-fixed-eye1';
-import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-mag-simple1';
-import {createBenchArt} from './convex-bench-model.mjs?v=20261104-convex-unified1';
-import {MAGNIFIER_HOME,fitMagnifier,clipProjectedRay} from './magnifier-framing.mjs?v=20261104-mag-overview1';
-import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261104-mag-simple1';
+import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-bench-proportion1';
+import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-bench-proportion1';
+import {createBenchArt} from './convex-bench-model.mjs?v=20261104-bench-proportion1';
+import {MAGNIFIER_HOME,fitMagnifier,clipProjectedRay} from './magnifier-framing.mjs?v=20261104-bench-proportion1';
+import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261104-bench-proportion1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,magnifierDisplayRays,eyeRays} from './magnifier-optics.mjs?v=20261104-mag-simple1';
+import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,magnifierDisplayRays,eyeRays} from './magnifier-optics.mjs?v=20261104-bench-proportion1';
 const root=document.querySelector('[data-magnifier-lab]');
 if(root) initialise(root);
 function initialise(root){
@@ -18,7 +18,7 @@ function initialise(root){
  let observerKey='';
  function drawArt(ctx,width,height,factor){ctx.save();ctx.translate(width/2,height/2);ctx.scale(factor*G.cardWidth/art.width,factor*G.cardHeight/art.height);ctx.drawImage(art,-art.width/2,-art.height/2);ctx.restore();}
  function paintObserver(){
-  const g=magnifierState(state),key=state.object+'|'+state.eye+'|'+state.screenIn+'|'+state.screen;if(key===observerKey)return g;observerKey=key;const W=eyeCanvas.width,H=eyeCanvas.height,c=eyeCanvas.getContext('2d'),pixels=W/(2*Math.tan(G.fov*Math.PI/360)),r=pixels*G.aperture/(g.eye*G.scale);
+  const g=magnifierState(state),key=state.object+'|'+state.eye+'|'+state.screenIn+'|'+state.screen;if(key===observerKey)return g;observerKey=key;const W=eyeCanvas.width,H=eyeCanvas.height,c=eyeCanvas.getContext('2d'),pixels=W/(2*Math.tan(G.fov*Math.PI/360)),r=pixels*G.aperture/(g.eye*G.opticalScale);
   c.clearRect(0,0,W,H);c.fillStyle='#fffdf3';c.fillRect(0,0,W,H);c.save();c.beginPath();c.arc(W/2,H/2,r,0,Math.PI*2);c.clip();c.fillStyle='#fffdf3';c.fillRect(0,0,W,H);
   if(g.blocked){c.fillStyle='#657260';c.fillRect(0,0,W,H);c.strokeStyle='#aebaa4';c.lineWidth=10;c.strokeRect(W*.15,H*.12,W*.7,H*.76);c.fillStyle='#f5f5e5';c.font='24px system-ui';c.textAlign='center';c.fillText('屏幕背面',W/2,H*.48);c.font='20px system-ui';c.fillText('視線被擋住',W/2,H*.56);}
   else if(!g.resolved){

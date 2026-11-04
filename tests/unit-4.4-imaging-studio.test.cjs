@@ -2,12 +2,12 @@ const {test}=require('node:test'),assert=require('node:assert/strict'),{openBenc
 test('4.4 第三／四區統一器材、光路與操作格式',{timeout:480000},async t=>{
  const f=await openBench(t,{url:process.env.IMAGING_URL,out:process.env.IMAGING_CAPTURE_DIR||'/tmp/convex-alignment'}),{p,root,read,move,row,mark,handle,drag,pixels,frame,shot}=f;
  await t.test('兩區器材比例、圖卡尺與觀察表格式一致',async()=>{
-  const a=await read('screen'),b=await read('eye');for(const key of ['f','scale','axis','cardWidth','cardHeight','aperture','screenMin','screenMax'])assert.equal(a.G[key],b.G[key],key);assert.deepEqual(a.sourceGeometry,b.sourceGeometry);assert.deepEqual(a.lensPosition,b.lensPosition);
+  const a=await read('screen'),b=await read('eye');for(const key of ['f','opticalScale','axis','cardWidth','cardHeight','aperture','screenMin','screenMax'])assert.equal(a.G[key],b.G[key],key);assert.deepEqual(a.sourceGeometry,b.sourceGeometry);assert.deepEqual(a.lensPosition,b.lensPosition);
   for(const mode of ['screen','eye']){assert.equal(await root(mode).getAttribute('data-webgl'),'ready');assert.equal(await root(mode).locator('.convex-rulers>.convex-ruler').count(),mode==='screen'?2:1);assert.equal(await root(mode).locator('input[type=range]').count(),0);assert.deepEqual(await root(mode).locator('thead th').allTextContents(),mode==='screen'?['圖卡的位置','成像的位置','成像情形','圖卡向透鏡移動']:['觀察重點','操作條件','觀察結果']);assert.equal(await root(mode).getAttribute('data-rays'),String(mode==='screen'));await shot('initial-'+mode,mode);}
  });
  await t.test('同一物距與接收位置的光路遵循同一模型；眼睛額外標示收到的光',async()=>{
   await root('screen').locator('[data-imaging-point=top]').click();await root('eye').locator('[data-mag-rays]').click();
-  for(const object of [50,90,100,125,150]){await move('screen','object',object);await move('screen','screen',500);await move('eye','object',object);const a=await read('screen'),b=await read('eye');for(const r of b.paths.filter(r=>r.from[0]===0)){const h=r.from[1]-b.G.axis,y=r.name==='top'?b.G.pointTop:b.G.pointBottom,d=r.to[0]/b.G.scale;assert.ok(Math.abs(r.to[1]-(b.G.axis+h+((h-y)/object-h/b.G.f)*d))<1e-8);}assert.deepEqual(a.source,b.source);}
+  for(const object of [50,90,100,125,150]){await move('screen','object',object);await move('screen','screen',500);await move('eye','object',object);const a=await read('screen'),b=await read('eye');for(const r of b.paths.filter(r=>r.from[0]===0)){const h=r.from[1]-b.G.axis,y=r.name==='top'?b.G.pointTop:b.G.pointBottom,d=r.to[0]/b.G.scale;assert.ok(Math.abs(r.to[1]-(b.G.axis+h+((h-y)/object-h/b.G.f)*d))<1e-8);}assert.ok(Math.abs(a.source[0]/a.G.scale-b.source[0]/b.G.scale)<1e-8);assert.deepEqual(a.source.slice(1),b.source.slice(1));}
   await move('eye','object',60);const b=await read('eye');assert.ok(b.received.length>0);assert.ok(b.received.every(r=>Math.abs(r.to[0]-b.G.eye*b.G.scale)<1e-9));
  });
  await t.test('F列同色出射線平行，第四區維持上、下端全貌',async()=>{

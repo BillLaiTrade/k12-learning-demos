@@ -1,7 +1,7 @@
-import {imagingState} from './imaging-optics.mjs?v=20261104-convex-unified1';
+import {imagingState} from './imaging-optics.mjs?v=20261104-bench-proportion1';
 import {imageFor,rayAt} from './optics.mjs';
-import {CONVEX_BENCH,convexRays} from './convex-bench-model.mjs?v=20261104-convex-unified1';
-export const MAGNIFIER=Object.freeze({...CONVEX_BENCH,objectMin:10,objectMax:150,eye:80,pupilRadius:.045,nearPoint:25,fov:40,screenAperture:CONVEX_BENCH.aperture});
+import {CONVEX_BENCH,convexRays} from './convex-bench-model.mjs?v=20261104-bench-proportion1';
+export const MAGNIFIER=Object.freeze({...CONVEX_BENCH,scale:CONVEX_BENCH.opticalScale,objectMin:10,objectMax:150,eye:80,pupilRadius:.045,nearPoint:25,fov:40,screenAperture:CONVEX_BENCH.aperture});
 export function moveMagnifier(state,key,value){
  if(!['object','screen'].includes(key)||!Number.isFinite(value))return state;
  return {...state,[key]:Math.round(Math.max(MAGNIFIER[key+'Min'],Math.min(MAGNIFIER[key+'Max'],value))*10)/10};
@@ -9,16 +9,16 @@ export function moveMagnifier(state,key,value){
 export function magnifierState(state){
  const G=MAGNIFIER,eye=G.eye,g=imageFor(G.f,state.object),separation=g.finite?eye-g.v:null;
  const eyeMode=g.type==='virtual'?'virtual':g.type==='infinity'?'parallel':Math.abs(separation)<.05?'at-image':separation<0?'converging':separation<G.nearPoint?'too-close':'real';
- const resolved=['virtual','parallel','real'].includes(eyeMode),previewScale=1/(G.scale*(eye+state.object-eye*state.object/G.f)),imageScale=resolved?previewScale:null,referenceScale=1/((eye+state.object)*G.scale);
+ const resolved=['virtual','parallel','real'].includes(eyeMode),previewScale=1/(G.opticalScale*(eye+state.object-eye*state.object/G.f)),imageScale=resolved?previewScale:null,referenceScale=1/((eye+state.object)*G.opticalScale);
  // Signed vergence of one object point's bundle at the fixed eye: positive converges.
  const eyeVergence=g.finite?1/(g.v-eye):0;
  // Illustrative defocus, not a physiological acuity model. It approaches zero at F.
  const blurRadius=eyeMode==='converging'?36*(-Math.expm1(-3*G.f*eyeVergence)):resolved?0:36;
- const field=Math.min(Math.tan(G.fov*Math.PI/360),G.aperture/(eye*G.scale));
- return {...g,screenClear:imagingState(state).clear,eye,eyeMode,resolved,eyeVergence,blurRadius,previewScale,distance:separation===null?null:separation*G.scale,imageScale,referenceScale,angularGain:imageScale===null?null:Math.abs(imageScale)/referenceScale,clipped:imageScale!==null&&G.artExtentY*Math.abs(imageScale)>field,projectionScale:-state.screen/state.object,spread:Math.abs(G.aperture*(1+state.screen/state.object-state.screen/G.f)),blocked:!!state.screenIn&&state.screen<=eye,virtualOutside:g.type==='virtual'&&g.v*G.scale< -2.6};
+ const field=Math.min(Math.tan(G.fov*Math.PI/360),G.aperture/(eye*G.opticalScale));
+ return {...g,screenClear:imagingState(state).clear,eye,eyeMode,resolved,eyeVergence,blurRadius,previewScale,distance:separation===null?null:separation*G.opticalScale,imageScale,referenceScale,angularGain:imageScale===null?null:Math.abs(imageScale)/referenceScale,clipped:imageScale!==null&&G.artExtentY*Math.abs(imageScale)>field,projectionScale:-state.screen/state.object,spread:Math.abs(G.aperture*(1+state.screen/state.object-state.screen/G.f)),blocked:!!state.screenIn&&state.screen<=eye,virtualOutside:g.type==='virtual'&&g.v*G.scale< -2.6};
 }
 export function magnifierRays(state,point='both'){
- return convexRays(state,point,state.screenIn?state.screen:MAGNIFIER.screenMax);
+ return convexRays(state,point,state.screenIn?state.screen:MAGNIFIER.screenMax,MAGNIFIER);
 }
 export function eyeRays(state,point='both'){
  const G=MAGNIFIER,eye=G.eye,den=1+eye*(1/state.object-1/G.f),paths=[];
@@ -35,7 +35,7 @@ export function eyeRays(state,point='both'){
 
 // Select visible pupil samples without changing the thin-lens path or image position.
 export function magnifierDisplayRays(state,point='both'){
- const G=MAGNIFIER,end=state.screenIn?state.screen:330,geometry=convexRays(state,point,end),groups=[];
+ const G=MAGNIFIER,end=state.screenIn?state.screen:330,geometry=convexRays(state,point,end,G),groups=[];
  for(const name of ['top','bottom']){
   const rays=geometry.filter(r=>r.name===name);if(!rays.length)continue;
   const y=name==='top'?G.pointTop:G.pointBottom,g=magnifierState(state),den=1+end*(1/state.object-1/G.f);
