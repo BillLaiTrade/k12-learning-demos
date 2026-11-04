@@ -128,7 +128,7 @@ export function setupGuidance(state,{includeWater=true}={}){
  if(exhausted(s))return (s.escapedUnstoppered>0?'反應開始時未裝好雙孔塞，二氧化碳已從瓶口逸散；':'')+'這份反應物已反應完，已沒有新的氣體可排出或收集。'+remakeGas(s);
  if(reacting(s)&&!s.rig)return '錐形瓶尚未裝上雙孔塞，二氧化碳正從瓶口逸散，無法由導管收集。請盡快裝好雙孔塞與漏斗。';
  if(s.selected.includes('flask')&&s.flaskMarbles===0&&(s.rig||s.acid>0)&&!s.motion)return '錐形瓶內還沒有大理石，無法產生二氧化碳。請先移開雙孔塞（若已裝上），用鑷子加入大理石，再裝好器材並加入稀鹽酸。';
- if(includeWater&&s.flaskWater>0&&!reacting(s))return '錐形瓶內已有清水；單加清水不會產生二氧化碳。清水不能代替稀鹽酸，也會稀釋後加入的酸。若已有大理石，可裝好器材後加入稀鹽酸，不必只因加水就清空。';
+ if(includeWater&&s.flaskWater>0&&!reacting(s))return '錐形瓶內已有清水；單加清水不會產生二氧化碳。清水不能代替稀鹽酸，也會稀釋後加入的酸。';
  return '';
 }
 export function currentGuidance(state){
@@ -151,7 +151,7 @@ export function currentGuidance(state){
  if(!s.rig)return null;
  if(!reacting(s))return{text:'目前沒有產生新的二氧化碳，移動導管不會開始集氣。請確認錐形瓶內有大理石與稀鹽酸。',kind:'hint'};
  if(!liquidSeal(s))return{text:'目前雖有反應，但裝置未形成液封，氣體正逸散；請確認雙孔塞、漏斗及液面位置。',kind:'error'};
- const dilution=s.flaskWater>0?'錐形瓶內另有清水，會稀釋酸，但不必因此清空；仍依實際收集成果判定。':'';
+ const dilution=s.flaskWater>0?'錐形瓶內另有清水，會稀釋酸；清水應用於準備水槽與集氣瓶。':'';
  if(s.outlet==='jar')return{text:(s.airVolume>.01?'集氣瓶內仍混有原本的空氣，尚未達成本次二氧化碳集氣目標。'+recoveryStep(s):s.otherVolume>.01?'瓶內混入其他氣體，請重新準備集氣瓶後再收集。':'正在收集二氧化碳，集氣瓶內水位下降。收集完成後，先撤管、在水下蓋片，再取出。')+dilution,kind:s.airVolume>.01||s.otherVolume>.01?'error':'hint'};
  if(s.airRemaining<=0)return{text:'裝置內原有的空氣已排出，現在排出的是二氧化碳。可將導管移入倒置集氣瓶的瓶口收集。'+dilution,kind:'hint'};
  return{text:'正在集氣瓶外排出裝置內原有的空氣；先等待排氣完成，再將導管移入瓶口。'+dilution,kind:'hint'};
@@ -252,7 +252,7 @@ function applyAction(s,action,value){
    const to=target==='flask'&&tool!=='water'?from+1:1;
    move(s,tool,tool==='acid'?1750:1600,{target,from,to,contentFrom:tool==='water'?0:c[tool],viaFunnel:target==='flask'&&s.rig&&s.funnel});
    const container=target==='flask'?'錐形瓶':target==='jar'?'集氣瓶':'水槽';
-   tell(s,tool==='peroxide'?`用錯藥品：雙氧水是製氧材料，不是本次製備二氧化碳所需的稀鹽酸。請從材料區收回${container}清空後重試。`:tool==='acid'&&target!=='flask'?`稀鹽酸倒錯容器：${container}應裝清水，不應加入稀鹽酸。請從材料區收回${container}，清空後再裝清水。`:tool==='acid'?s.rig&&s.funnel?'稀鹽酸由試藥瓶口流入漏斗，再沿長管進入錐形瓶。':'由試藥瓶口倒入開口的錐形瓶；此時生成的氣體會直接逸出。':target==='flask'?'清水加入錐形瓶不會自行產生二氧化碳，也不能代替稀鹽酸；會稀釋酸，但不必因此清空。請觀察是否已有大理石與稀鹽酸。':'清水由瓶口流入容器；可在倒滿前放下工具。',tool==='peroxide'||tool==='acid'&&target!=='flask'?'error':'hint');return s;
+   tell(s,tool==='peroxide'?`用錯藥品：雙氧水是製氧材料，不是本次製備二氧化碳所需的稀鹽酸。請從材料區收回${container}清空後重試。`:tool==='acid'&&target!=='flask'?`稀鹽酸倒錯容器：${container}應裝清水，不應加入稀鹽酸。請從材料區收回${container}，清空後再裝清水。`:tool==='acid'?s.rig&&s.funnel?'稀鹽酸由試藥瓶口流入漏斗，再沿長管進入錐形瓶。':'由試藥瓶口倒入開口的錐形瓶；此時生成的氣體會直接逸出。':target==='flask'?'清水加入錐形瓶不會自行產生二氧化碳，也不能代替稀鹽酸，還會稀釋酸。清水應用於準備水槽與集氣瓶。':'清水由瓶口流入容器；可在倒滿前放下工具。',tool==='peroxide'||tool==='acid'&&target!=='flask'?'error':'hint');return s;
   }
   if(tool==='forceps'){
    const solid=heldMaterial(s);

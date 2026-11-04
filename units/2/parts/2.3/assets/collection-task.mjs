@@ -1,6 +1,6 @@
-import {TOOL_HOME,directPosition,limitPosition,approach,parkPosition,safeParkPosition} from './collection-task-direct.mjs?v=b-decisions-20261104';
-import {DESK_MATERIALS,createDesk,actDesk,advanceDesk,reacting,deskFrame,liquidSeal,heldMaterial,vesselReaction,setupGuidance,currentGuidance,deskObservation,waterSurface,jarMouth} from './collection-task-model.mjs?v=b-decisions-20261104';
-import {createCollectionScene,materialArt} from './collection-task-scene.mjs?v=b-decisions-20261104';
+import {TOOL_HOME,directPosition,limitPosition,approach,parkPosition,safeParkPosition} from './collection-task-direct.mjs?v=water-guidance-20261104';
+import {DESK_MATERIALS,createDesk,actDesk,advanceDesk,reacting,deskFrame,liquidSeal,heldMaterial,vesselReaction,setupGuidance,currentGuidance,deskObservation,waterSurface,jarMouth} from './collection-task-model.mjs?v=water-guidance-20261104';
+import {createCollectionScene,materialArt} from './collection-task-scene.mjs?v=water-guidance-20261104';
 const form=document.querySelector('#gas-report-form'),svg=form.querySelector('.task-scene'),scene=createCollectionScene(svg),operation=form.querySelector('[data-desk-operate]'),feedback=form.querySelector('#gas-report-feedback');
 let state=createDesk(),raf=0,last=0,suspended=false,drag=null,feedbackKey=null;
 const scroller=form.querySelector('.desk-scroll'),hint=form.querySelector('[data-desk-hint]');

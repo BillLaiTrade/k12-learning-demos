@@ -1,9 +1,9 @@
 import {tankWaterRegion} from './collection-task-water.mjs';
 import {bodyOffset,bodyPoint} from './collection-task-layout.mjs?v=b-decisions-20261104';
-import {regionPath,looseFunnelPose,STONE_OFFSETS} from './collection-task-contact.mjs?v=b-decisions-20261104';
-import {directPosition,parkPosition} from './collection-task-direct.mjs?v=b-decisions-20261104';
+import {regionPath,looseFunnelPose,STONE_OFFSETS} from './collection-task-contact.mjs?v=water-guidance-20261104';
+import {directPosition,parkPosition} from './collection-task-direct.mjs?v=water-guidance-20261104';
 import {createThistleFunnel,createDoubleStopper,svgNode as n} from './thistle-apparatus.mjs?v=b-decisions-20261104';
-import {taskHosePoints,deskFrame,overflowPoint,liquidReceiver,outletPose,jarPose,jarMouth,waterSurface,flaskSurface,ease,mix,clamp,rigPosition,heldMaterial,usedMarbleIds,vesselReaction,marbleFraction} from './collection-task-model.mjs?v=b-decisions-20261104';
+import {taskHosePoints,deskFrame,overflowPoint,liquidReceiver,outletPose,jarPose,jarMouth,waterSurface,flaskSurface,ease,mix,clamp,rigPosition,heldMaterial,usedMarbleIds,vesselReaction,marbleFraction} from './collection-task-model.mjs?v=water-guidance-20261104';
 import {liquidGeometry} from './co2-model.mjs?v=b-decisions-20261104';
 const image=(file,box)=>{const el=n('image',{href:'assets/'+file,preserveAspectRatio:'none'});['x','y','width','height'].forEach((key,i)=>el.setAttribute(key,box[i]));return el;};
 const box=(el,b)=>['x','y','width','height'].forEach((k,i)=>el.setAttribute(k,b[i]));
