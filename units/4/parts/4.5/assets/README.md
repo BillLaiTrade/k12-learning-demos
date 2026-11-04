@@ -65,3 +65,5 @@
 2026-11-04像素電視導入精簡：pixel-tv-overview.svg由scripts/build-pixel-tv-concepts.mjs讀取實際PICTURE_TARGET生成，64格色值及A／B索引9／10均與操作模型相同。導入改用單一總覽及HTML兩格RGB對照；原三張概念SVG保留歷史，不再使用。圖解為自行繪製，外部研究來源僅作文字觀念參考；無新增依賴。
 
 2026-11-04像素電視改三段：pixel-tv-model只允許關閉／弱／強（內部0／1／4），目標資料與pixel-tv-overview.svg同步；控制器新增一次一個方向的提示與本次瀏覽內的可重用色盤。DOM色票由已成功設定產生，未使用生成示意圖作實際介面或色值來源，無新圖片或依賴。loader／controller／model／CSS同步更新版本。
+
+2026-11-04兩任務初始目標分開：像素電視模型新增共用紫色PALETTE.P，4×4只改問號格目標；所有UI由同資料顯示。loader／controller／model快取版本同步，沒有新增圖片、依賴或版面修改。
