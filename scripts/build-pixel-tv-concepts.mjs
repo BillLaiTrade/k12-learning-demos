@@ -1,35 +1,20 @@
-// Teaching diagrams share the actual pixel activity's colours and image.
+// Ideal RGB display diagrams use the same colours and pixels as the activity.
 import {writeFile} from 'node:fs/promises';
-import {PICTURE_TARGET,PICTURE_SIZE,colourCss,subpixelCss} from '../units/4/parts/4.5/assets/pixel-tv-model.mjs';
-
-const directory=new URL('../units/4/parts/4.5/assets/',import.meta.url),sample=9;
+import {PICTURE_TARGET,colourCss,subpixelCss} from '../units/4/parts/4.5/assets/pixel-tv-model.mjs';
+const directory=new URL('../units/4/parts/4.5/assets/',import.meta.url),sample=9,levels=PICTURE_TARGET[sample];
 const rect=(x,y,w,h,fill,extra='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" ${extra}/>`;
-const label=(x,y,value,extra='')=>`<text x="${x}" y="${y}" text-anchor="middle" ${extra}>${value}</text>`;
-const outline=(x,y,w,h,extra='')=>rect(x,y,w,h,'none',`stroke="#efbe49" stroke-width="2.5" ${extra}`);
-function picture(x,y,cell,filled=64){
- return PICTURE_TARGET.map((colour,i)=>rect(x+i%PICTURE_SIZE*cell,y+Math.floor(i/PICTURE_SIZE)*cell,cell,cell,i<filled?colourCss(colour):'#d2d9ca',`data-pixel="${i}" data-filled="${i<filled}" stroke="#8b9b83" stroke-width=".45"`)).join('');
-}
-function svg(title,description,body){
- return `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="220" viewBox="0 0 300 220" role="img" aria-labelledby="title desc"><title id="title">${title}</title><desc id="desc">${description}</desc><style>text{font:14px system-ui,sans-serif;fill:#36573e}path{fill:none;stroke-linecap:round;stroke-linejoin:round}.small{font-size:12px}.em{font-weight:700}</style>${body}</svg>\n`;
-}
-const before=PICTURE_TARGET[sample],after=[before[0],4,before[2]];
-const bars=(levels,x,y,width,height)=>[0,1,2].map(i=>rect(x+i*(width+1),y,width,height,subpixelCss(levels,i),`data-subpixel="${i}"`)).join('');
+const text=(x,y,s,extra='')=>`<text x="${x}" y="${y}" text-anchor="middle" ${extra}>${s}</text>`;
+const frame=(x,y,w,h,extra='')=>rect(x,y,w,h,'none',`stroke="#e7b443" stroke-width="2.5" ${extra}`);
+const bars=(x,y,w,h)=>[0,1,2].map(i=>rect(x+i*(w+1),y,w,h,subpixelCss(levels,i),`data-subpixel="${i}"`)).join('');
+function image(x,y,cell){return PICTURE_TARGET.map((c,i)=>rect(x+i%8*cell,y+Math.floor(i/8)*cell,cell,cell,colourCss(c),`data-pixel="${i}" stroke="#788e71" stroke-width=".4"`)).join('');}
+function svg(title,desc,height,body){return `<svg xmlns="http://www.w3.org/2000/svg" width="360" height="${height}" viewBox="0 0 360 ${height}" role="img" aria-labelledby="title desc"><title id="title">${title}</title><desc id="desc">${desc}</desc><style>text{font:18px system-ui,sans-serif;fill:#36573e}path{fill:none;stroke-linecap:round;stroke-linejoin:round}.small{font-size:16px}.strong{font-weight:700}.channel{font-size:15px}</style>${body}</svg>\n`;}
+const lightR='<path data-light="0" d="M220 70 V48 M215 54 L220 48 L225 54" stroke="#d34a3c" stroke-width="2.5"/>';
+const lightG='<path data-light="1" d="M251 70 V58 M247 63 L251 58 L255 63" stroke="#509642" stroke-width="2"/>';
+await writeFile(new URL('pixel-tv-picture.svg',directory),svg('子像素送出色光，關閉時不送光','只框選實際8×8畫面第2列第2格這一個像素，放大其中的RGB子像素。紅光較亮、綠光較弱；藍光關閉，所以藍通道用黑色表示。紅綠有向外送光的符號，關閉的藍通道沒有光箭頭。',260,`${text(64,36,'畫面（8×8）')}${text(252,36,'同一格放大')}${image(8,75,14)}<path d="M36 89 L198 77 M36 103 L198 172" stroke="#cba749" stroke-width="1.2"/>${frame(22,89,14,14,'data-focus="9"')}${rect(198,77,110,95,'#26382b','rx="6"')}${bars(205,84,30,81)}${frame(198,77,110,95,'rx="6" data-expanded-pixel="9"')}${lightR}${lightG}${text(220,198,'紅 R','class="channel"')}${text(251,198,'綠 G','class="channel"')}${text(282,198,'藍 B','class="channel"')}${text(220,221,'亮','class="small"')}${text(251,221,'弱','class="small"')}${text(282,221,'關閉','class="small"')}${text(64,211,'一格＝一個像素','class="small"')}${text(250,250,'亮起的部分送出色光','class="small"')}`));
 
-// The selected gold box has exactly one cell's width and height.
-const sourceX=24,sourceY=69,cell=14;
-await writeFile(new URL('pixel-tv-picture.svg',directory),svg('一個像素內有RGB子像素','左邊是實際8×8畫面，金框只選第2列第2格這一個橙色像素。右邊只放大同一格，顯示其中緊密排列的紅、綠、藍三個子像素；整個三色框合起來仍是一個像素。',`${label(66,29,'8 × 8 畫面')}${label(225,29,'只放大這一格')}${picture(10,55,cell)}<path d="M38 69 L174 65 M38 83 L174 157" stroke="#cba749" stroke-width="1.3"/>${outline(sourceX,sourceY,cell,cell,`data-focus="${sample}"`)}${rect(174,65,106,92,'#26392b','rx="6"')}${bars(before,180,71,30,80)}${outline(174,65,106,92,'rx="6" data-expanded-pixel="9"')}${label(195,180,'紅 R')}${label(226,180,'綠 G')}${label(257,180,'藍 B')}${label(66,199,'一格＝一個像素')}`));
+function eye(x,y,name){return `<g data-observer="${name}" data-eye-x="${x}" data-screen-edge="72"><path d="M${x-14} ${y} Q${x} ${y-15} ${x+14} ${y} Q${x} ${y+15} ${x-14} ${y}" fill="#fff" stroke="#567250" stroke-width="1.8"/><circle cx="${x}" cy="${y}" r="5" fill="#36573e"/></g>`;}
+function screen(y){let pixels='';for(let r=0;r<3;r++)for(let c=0;c<6;c++)for(let i=0;i<3;i++)pixels+=rect(25+c*6+i*2,y+10+r*12,2,11,subpixelCss(levels,i));return `${rect(15,y,57,58,'#293b2e','rx="4"')}${pixels}`;}
+await writeFile(new URL('pixel-tv-rgb.svg',directory),svg('設定相同，觀看距離改變可分辨的細節','上下兩景使用同一個螢幕區域、相同的RGB亮度設定。上景眼睛靠近或放大觀察，可分辨子像素；下景眼睛離螢幕較遠，在一般觀看距離難以分開密集的小色光，合看為橙色。距離線下景比上景長，沒有等號或時間變化箭頭。',300,`${text(44,25,'螢幕','class="small"')}${text(244,25,'看到的細節','class="small"')}${screen(45)}${eye(112,74,'near')}<path d="M72 113 H112 M72 108 V118 M112 108 V118" stroke="#a3b39b" stroke-width="1.2"/>${text(93,138,'近／放大觀察','class="small"')}<path d="M129 74 L179 57 M129 74 L179 108" stroke="#a3b39b" stroke-width="1.2"/><g data-view="near">${rect(180,48,105,65,'#26382b','rx="5"')}${bars(185,53,30,55)}</g>${text(232,138,'能分辨子像素','class="small"')}${screen(181)}${eye(220,210,'far')}<path d="M72 250 H220 M72 245 V255 M220 245 V255" stroke="#a3b39b" stroke-width="1.2"/>${text(146,275,'一般觀看距離','class="small"')}<path d="M236 210 L281 188 M236 210 L281 234" stroke="#a3b39b" stroke-width="1.2"/><g data-view="far">${rect(282,184,53,53,colourCss(levels),'rx="5" stroke="#8da27e" data-combined="true"')}</g>${text(291,264,'合看為橙色','class="small"')}`));
 
-function comparison(levels,y,state){
- return `<g data-state="${state}">${label(35,y+16,state==='before'?'調整前':'調整後','class="em"')}${label(35,y+36,state==='before'?'綠光較暗':'綠光調亮','class="small"')}${rect(76,y-4,96,56,'#26392b','rx="5"')}${bars(levels,80,y,29,48)}${label(94,y+68,'紅 R','class="small"')}${label(124,y+68,'綠 G','class="small"')}${label(154,y+68,'藍 B','class="small"')}${label(195,y+31,'＝')}${rect(228,y,50,48,colourCss(levels),'rx="5" stroke="#809775" data-combined="true"')}${label(253,y+68,state==='before'?'橙色':'黃色')}</g>`;
-}
-await writeFile(new URL('pixel-tv-rgb.svg',directory),svg('只調亮綠光，同一像素由橙變黃','每一列橫向都是同一個像素的兩種觀看方式：左邊放大子像素，右邊是一般觀看距離合看的顏色，不是先後步驟。上列為調整前，下列為調整後；紅光與藍光保持不變，只提高綠光亮度，顏色由橙色變黃色。',`${label(123,19,'近看子像素')}${label(252,19,'一般觀看')}${comparison(before,41,'before')}<path d="M124 116 V135 M119 129 L124 135 L129 129" stroke="#4d9760" stroke-width="2.5"/>${comparison(after,146,'after')}`));
-
-// A real progression: no values assigned, first 32 assigned, all 64 assigned.
-let stages='';
-for(const [i,stage]of[{name:'blank',count:0,label:'空白'},{name:'partial',count:32,label:'逐格設定'},{name:'complete',count:64,label:'完整圖片'}].entries()){
- const x=8+i*102;
- stages+=`<g data-stage="${stage.name}">${label(x+40,40,stage.label,'class="em"')}${picture(x,69,10,stage.count)}${label(x+40,178,`已填 ${stage.count} 格`,'class="small"')}${stage.count?outline(x+10,79,10,10,`data-focus="${sample}"`):''}</g>`;
- if(i<2)stages+=`<path d="M${x+84} 108 H${x+98} M${x+94} 104 L${x+98} 108 L${x+94} 112" stroke="#7d9d73" stroke-width="1.7"/>`;
-}
-await writeFile(new URL('pixel-tv-compose.svg',directory),svg('從空白逐格設定到完整圖片','同一張8×8畫面的三個階段。先是64格都未設定的灰色空白，再依序填入前32格，最後填完64格，形成實作任務的小狐狸。已填顏色都使用實際模型，灰色空白與已設定的黑色不同；金框始終只標同一個像素。',stages));
-console.log('Built single-pixel, controlled-brightness and image-progress diagrams.');
+await writeFile(new URL('pixel-tv-compose.svg',directory),svg('相鄰像素各有自己的RGB設定','同一張實際8×8小狐狸，A是第2列第2格的橙色，B是第2列第3格的深藍色。兩格相鄰但使用不同RGB亮度設定，並各以單格金框標示。這些格子的設定一起形成完整畫面。',210,`${image(108,32,18)}${frame(126,50,18,18,'data-focus="9" data-guide-cell="A"')}${frame(144,50,18,18,'data-focus="10" data-guide-cell="B"')}<path d="M117 20 L135 49 M171 20 L153 49" stroke="#a78b44" stroke-width="1.3"/>${text(113,18,'A','class="strong"')}${text(175,18,'B','class="strong"')}${text(180,198,'A、B 是畫面中的兩個相鄰像素','class="small"')}`));
+console.log('Built colour-light, viewing-distance and independently-set neighbouring pixels.');

@@ -12,6 +12,7 @@ export function initialisePixelTv(root){
  function renderTuner(){
   root.dataset.levels=JSON.stringify(levels);$('[data-tv-current-colour]').style.backgroundColor=colourCss(levels);$('[data-tv-combined]').style.backgroundColor=colourCss(levels);
   root.querySelectorAll('[data-tv-channel]').forEach(group=>{const i=Number(group.dataset.tvChannel),n=levels[i];group.querySelector('[data-tv-level-value]').textContent=`目前 ${n} 級`;group.querySelectorAll('[data-tv-level]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.tvLevel)===n)));$(`[data-tv-subpixel="${i}"]`).style.backgroundColor=subpixelCss(levels,i);$(`[data-tv-sublevel="${i}"]`).textContent=`${['R','G','B'][i]} ${n}`;});
+  const off=levels.flatMap((n,i)=>n===0?[['紅光','綠光','藍光'][i]]:[]);$('[data-tv-emission-note]').textContent=off.length===3?'三色光都關閉，這個像素呈黑色。':off.length?`黑色的子像素：${off.join('、')}關閉，沒有送出對應色光。`:'紅、綠、藍通道都有送出色光。';
   $('[data-tv-current-values]').textContent=`目前設定：R ${levels[0]}・G ${levels[1]}・B ${levels[2]}`;
   $('[data-tv-work-solid]').style.backgroundColor=colourCss(levels);
   $('[data-tv-live-swatch]').style.backgroundColor=colourCss(levels);$('[data-tv-live-values]').textContent=`紅 ${levels[0]}・綠 ${levels[1]}・藍 ${levels[2]}`;
@@ -36,7 +37,7 @@ export function initialisePixelTv(root){
   const matching=task===0;$('[data-tv-work-solid]').hidden=!matching;$('[data-tv-target-solid]').hidden=!matching;$('[data-tv-work-grid]').hidden=matching;$('[data-tv-target-grid]').hidden=matching;
   $('[data-tv-work-heading]').textContent=['我調出的像素','待修復畫面','我的空白畫布'][task];$('[data-tv-target-heading]').textContent=matching?'目標像素':'完整目標';$('[data-tv-tuner-heading]').textContent='在這裡調整三種色光';
   $('[data-tv-purpose]').textContent=['你看到的兩個色塊，是單一像素的放大畫面；調整的是這個像素內的 RGB 子像素亮度。','畫面中的每個像素各有自己的顏色；這次只修復缺少的一格。','許多像素一起組成畫面。對照目標，替每格調色並填入，完成一個 8×8 的簡化螢幕。'][task];
-  $('[data-tv-anatomy-heading]').textContent=matching?'同一個像素，兩種觀看方式':'準備填入的像素：兩種觀看方式';
+  $('[data-tv-anatomy-heading]').textContent=matching?'同一個像素：放大與一般觀看':'準備填入的像素：放大與一般觀看';
   $('[data-tv-tuner-how]').textContent=matching?'點下方任一亮度，左邊像素的顏色就會改變。':'先點下方亮度調色，再按「填入」更新左圖的金框格。';
   $('[data-tv-step-first]').textContent=['看右邊的目標色','看右圖缺格對應的顏色','在左圖點選要填的一格'][task];$('[data-tv-step-last]').textContent=['按「檢查顏色」','按「填入缺格」','按「填入這一格」'][task];
   $('[data-tv-live-hint]').textContent=matching?'同步更新左圖':'準備填入金框格';
