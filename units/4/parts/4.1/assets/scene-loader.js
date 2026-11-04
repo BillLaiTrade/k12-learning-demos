@@ -19,6 +19,31 @@ const scenes = [
     }
   },
   {
+    canvas: '#shadow-3d-scene',
+    root: '#card-04 .lesson-body',
+    notice: '#shadow-load-failure',
+    load: () => import('./shadow-3d.js?v=unavailable-state-20261104'),
+    showUnavailable(root) {
+      root.querySelector('#shadow-scene-status').textContent = failureMessage;
+      root.querySelector('#shadow-toggle-label').textContent = '無法操作';
+      root.querySelector('#shadow-block-toggle').setAttribute('aria-label', '遮擋物暫時無法操作');
+      root.querySelector('#shadow-view-hint').textContent = '立體畫面暫時無法操作，請重新整理頁面後再試。';
+      root.querySelector('#shadow-xiaokui-observation').textContent = '目前無法顯示立體畫面，暫時無法觀察影子。';
+      root.querySelector('#shadow-grandpa-explanation').textContent = '請重新整理頁面後再試。';
+    }
+  },
+  {
+    canvas: '#shadow-size-3d-scene',
+    root: '#card-05 .visual',
+    notice: '#shadow-size-load-failure',
+    load: () => import('./shadow-size-3d.js?v=unavailable-state-20261104'),
+    showUnavailable(root) {
+      root.querySelector('#shadow-size-scene-status').textContent = failureMessage;
+      root.querySelector('#shadow-size-feedback').textContent = '立體畫面暫時無法操作，請重新整理頁面後再試。';
+      root.querySelector('#shadow-size-xiaokui-observation').textContent = '目前無法顯示立體畫面，暫時無法比較影子大小。';
+    }
+  },
+  {
     canvas: '#shadow-theatre-scene',
     root: '#unit-booklet',
     notice: '#shadow-theatre-load-failure',
@@ -44,6 +69,7 @@ for (const scene of scenes) {
   const showFailure = (error) => {
     if (failed) return;
     failed = true;
+    const hadFocus = root.contains(document.activeElement);
     root.dataset.sceneFailed = 'true';
     notice.textContent = failureMessage;
     notice.hidden = false;
@@ -52,7 +78,7 @@ for (const scene of scenes) {
     canvas.tabIndex = -1;
     root.querySelectorAll('button, input').forEach((control) => { control.disabled = true; });
     scene.showUnavailable(root);
-    if (root.contains(document.activeElement)) notice.focus();
+    if (hadFocus) notice.focus({ preventScroll: true });
     console.error('立體場景無法載入：', scene.canvas, error);
   };
 

@@ -5,6 +5,8 @@ if (canvas) {
   const status = document.querySelector('#shadow-size-scene-status');
   const xiaokuiObservation = document.querySelector('#shadow-size-xiaokui-observation');
   const resetButton = document.querySelector('#shadow-size-view-reset');
+  let sceneUnavailable = false;
+  canvas.addEventListener('webglcontextlost', () => { sceneUnavailable = true; });
 
   try {
     const scene = new THREE.Scene();
@@ -448,14 +450,13 @@ if (canvas) {
     }, { passive: false });
 
     const animate = () => {
+      if (sceneUnavailable) return;
       requestAnimationFrame(animate);
       renderer.render(scene, camera);
     };
     animate();
   } catch (error) {
-    console.error('Shadow size 3D scene failed to initialize:', error);
-    const reason = error instanceof Error ? error.message : String(error);
-    status.textContent = `立體場景初始化失敗：${reason.slice(0, 110) || '請重新載入頁面再試。'}`;
-    canvas.setAttribute('aria-label', '影子大小實驗場景無法載入');
+    sceneUnavailable = true;
+    throw error;
   }
 }
