@@ -35,3 +35,9 @@
 
 
 .convex-focal-distance { position:absolute; left:0; top:0; width:100%; pointer-events:none; overflow:visible; }
+
+/* Surface callouts use projected leaders, not decorative label tails. */
+.lens-label-leaders { position:absolute; inset:0; width:100%; pointer-events:none; overflow:hidden; }
+.lens-label-leaders path { fill:none; stroke:#eef4e8; stroke-width:1.15; stroke-linejoin:round; }
+.convex-anchor.lens-surface-label,.concave-anchor.lens-surface-label { transform:translate(-50%,-50%); }
+.convex-anchor.lens-surface-label::after,.concave-anchor.lens-surface-label::after { display:none; }

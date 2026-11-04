@@ -1,4 +1,4 @@
-export const CONCAVE_HOME=Object.freeze({azimuth:-.38,polar:1.44,zoom:1});
+export const CONCAVE_HOME=Object.freeze({azimuth:.55,polar:1.46,zoom:1});
 export function fitConcave(THREE,camera,target){
  target.set(-2.55,1.65,0);camera.fov=38;camera.updateProjectionMatrix();const h=CONCAVE_HOME,direction=new THREE.Vector3(Math.sin(h.polar)*Math.sin(h.azimuth),Math.cos(h.polar),Math.sin(h.polar)*Math.cos(h.azimuth)),bounds=[];
  for(const x of [-7.7,2.5])for(const y of [.25,2.85])for(const z of [-.36,.36])bounds.push(new THREE.Vector3(x,y,z));

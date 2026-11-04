@@ -1,5 +1,5 @@
 import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-bench-proportion1';
-import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-lens-solid4';
+import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-lens-clear5';
 import {createBenchArt} from './convex-bench-model.mjs?v=20261104-bench-proportion1';
 import {MAGNIFIER_HOME,fitMagnifier,clipProjectedRay} from './magnifier-framing.mjs?v=20261104-bench-proportion1';
 import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261104-mag-virtual1';
