@@ -5,6 +5,9 @@
 .rank-quiz .rank-body{padding:16px 12px 18px}
 .rank-bench{margin:0;border:1px solid #bc9d60;border-radius:12px;overflow:hidden;background:#f8f4e7;box-shadow:0 2px 5px #4e3e2514}
 .rank-stage{position:relative;background:#fcfaf4;overflow:hidden}
+.rank-quiz .rank-source-trigger{position:absolute;min-width:44px;min-height:44px;margin:0;padding:0;border:0;border-radius:16px;background:transparent;box-shadow:none;cursor:pointer;touch-action:manipulation}
+.rank-quiz .rank-source-trigger:disabled{opacity:1;cursor:default}
+@media(hover:hover){.rank-quiz .rank-source-trigger:hover:not(:disabled){background:#ffed9c12;box-shadow:inset 0 0 0 1px #b99b5780}}
 .rank-quiz [data-texture=loading] .rank-stage::after{content:'準備操作台…';position:absolute;top:12px;right:14px;padding:5px 10px;border:1px solid #d1bd8b;border-radius:6px;background:#fff9e9e8;color:#526246;font-size:.78rem;pointer-events:none}
 .rank-bench-photo{transition:opacity .15s}
 .rank-quiz [data-background-ready=false] .rank-bench-photo,.rank-quiz [data-source-ready=false] .rank-source-photo{opacity:0}
