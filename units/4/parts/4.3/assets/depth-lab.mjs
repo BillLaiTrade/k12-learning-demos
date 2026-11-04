@@ -14,7 +14,7 @@ if (root) {
   let drawFrame = 0, animation = 0, progress = 1, playing = false, lastTime = 0, inView = false;
   let eyeX = DEPTH_INITIAL.eyeX;
   let mode = 'ray', waterElapsed = 0, waterStart = 0, waterTarget = 0;
-  const waterStep = 20, waterMillisecondsPerUnit = 50;
+  const waterMillisecondsPerUnit = 50;
   let observerResult = null;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -167,7 +167,7 @@ if (root) {
     const visible=observerResult.coinPixels>0;
     const state=visible?(geometry.depth===0?'空槽：此位置可直接看見硬幣':geometry.status==='partial'?'硬幣逐漸出現':'目前可以看見硬幣'):geometry.depth===0?'空槽：硬幣被槽壁遮住':'目前被前側槽壁遮住';
     q('#depth-visibility').textContent=state; q('#depth-visibility').dataset.visible=visible?'visible':'hidden';
-    q('#depth-view-result').textContent=visible?(geometry.depth>0?'光經過水面折射後，進入目前的觀看位置。':'觀看位置較近，光可直接越過槽緣進入眼睛。'):geometry.depth===0?'空槽時，硬幣的光被槽壁遮住。按「加水觀察」逐步比較。':'硬幣仍在槽底；調整水位，觀察可見範圍的變化。';
+    q('#depth-view-result').textContent=visible?(geometry.depth>0?'光經過水面折射後，進入目前的觀看位置。':'觀看位置較近，光可直接越過槽緣進入眼睛。'):geometry.depth===0?'空槽時，硬幣的光被槽壁遮住。按「加水觀察」比較。':'硬幣仍在槽底；調整水位，觀察可見範圍的變化。';
     canvas.setAttribute('aria-label',`${waterState(geometry.depth)}、眼睛${eyeState(geometry.eyeX)}的視野。${state}。`);
     canvas.dataset.coinPixels=observerResult.coinPixels; canvas.dataset.depth=geometry.depth;canvas.dataset.eyeX=geometry.eyeX;
     canvas.dataset.coinBounds=JSON.stringify(observerResult.bounds);
@@ -216,9 +216,8 @@ if (root) {
     q('#depth-replay').textContent=playing?'↻ 從頭觀看':'▶ 重播光路';drawConstruction();if(playing&&inView&&!document.hidden)animation=requestAnimationFrame(tick);
   });
   function changeWater(direction) {
-    const extending=playing&&mode==='water'&&Math.sign(waterTarget-geometry.depth)===direction;
-    const target=clamp((extending?waterTarget:geometry.depth)+direction*waterStep,0,100);
-    if(target===geometry.depth||(extending&&target===waterTarget))return;
+    const target=direction>0?100:0;
+    if(target===geometry.depth||(playing&&mode==='water'&&target===waterTarget))return;
     finishAnimation();mode='water';progress=1;
     waterStart=geometry.depth;waterTarget=target;waterElapsed=0;
     if(reduced.matches){q('#depth-input').value=target;syncGeometry();return;}
