@@ -422,3 +422,7 @@ node --test --test-concurrency=1 tests/unit-4.3-depth-model.test.mjs tests/unit-
 ## 第六區視深圖解（2026-11-04）
 
 「為什麼看到的位置與實際位置不同？」改以實線／虛線位置對照圖及三句重點說明，生活提醒縮成一句，模型細節收進次層補充。桌機並排、窄容器上下排列；同款眼睛與既有綠／金色系保持。圖解不是操作台即時畫面，不新增動畫，不改任何操作或物理。見`docs/decisions/unit-4.3-depth-visual-explanation.md`及`docs/reviews/unit-4.3-depth-visual-explanation-20261104/review.md`。
+
+## 第六區移除重複說明（2026-11-04）
+
+使用者指出靜態圖解重複上方互動台，核可移除整個下方說明區（圖解、三步驟及模型展開），只保留一句池底生活提醒，不另立說明卡。移除專屬且不再使用的CSS，操作台、兩秒加放水與物理保持。取代前輪圖解方案，見`docs/decisions/unit-4.3-depth-remove-duplicate.md`。

@@ -1,0 +1,13 @@
+{
+  "section1": true,
+  "section2": true,
+  "section3": true,
+  "section4": true,
+  "section5": true,
+  "section7": true,
+  "depth-lab.mjs": true,
+  "depth-model.mjs": true,
+  "depth-observer.mjs": true,
+  "depth-eye-art.mjs": true,
+  "operation_before_supplement": true
+}
