@@ -4,7 +4,7 @@ export function initialisePixelTv(root){
  if(root.dataset.ready==='true')return;
  const $=s=>root.querySelector(s);let task=0,levels=[4,4,0],colourIndex=0,helper=null;
  const boards=[null,{size:REPAIR_SIZE,target:REPAIR_TARGET,pixels:initialRepair(),selected:REPAIR_HOLE,reviewed:false},{size:PICTURE_SIZE,target:PICTURE_TARGET,pixels:blankPicture(),selected:9,reviewed:false}],feedback=[null,null,null];
- const description=['把左邊的顏色，調成右邊的目標色。','把左圖的問號缺格，補成右圖相同位置的顏色。','在左圖選一格，對照右圖調色，再填入，逐格重建畫面。'];
+ const description=['改變 RGB 亮度，讓左邊這個像素呈現右邊的目標色。','為左圖的問號格調色，補成右圖相同位置的顏色。','逐格設定像素的顏色，用空白畫布組出右邊的圖片。'];
  const goal=()=>helper?{name:paletteName(helper.target),levels:helper.target}:COLOUR_TARGETS[colourIndex];
  function say(kind,message){feedback[task]={kind,message};renderFeedback();}
  function renderFeedback(){const value=feedback[task];$('[data-tv-feedback]').hidden=!value;if(value){$('[data-tv-feedback]').dataset.kind=value.kind;$('[data-tv-feedback]').textContent=value.message;}}
@@ -34,8 +34,10 @@ export function initialisePixelTv(root){
  function render(){
   root.dataset.task=String(task+1);root.querySelectorAll('[data-tv-task]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.tvTask)===task)));$('[data-tv-instruction]').textContent=`任務 ${task+1}｜${description[task]}`;
   const matching=task===0;$('[data-tv-work-solid]').hidden=!matching;$('[data-tv-target-solid]').hidden=!matching;$('[data-tv-work-grid]').hidden=matching;$('[data-tv-target-grid]').hidden=matching;
-  $('[data-tv-work-heading]').textContent=['我的調色','待修復畫面','我的空白畫布'][task];$('[data-tv-target-heading]').textContent=matching?'目標顏色':'完整目標';$('[data-tv-tuner-heading]').textContent='在這裡調色';
-  $('[data-tv-tuner-how]').textContent=matching?'點下方任一亮度，左邊的顏色就會改變。':'先點下方亮度調色，再按「填入」更新左圖的金框格。';
+  $('[data-tv-work-heading]').textContent=['我調出的像素','待修復畫面','我的空白畫布'][task];$('[data-tv-target-heading]').textContent=matching?'目標像素':'完整目標';$('[data-tv-tuner-heading]').textContent='在這裡調整三種色光';
+  $('[data-tv-purpose]').textContent=['你看到的兩個色塊，是單一像素的放大畫面；調整的是這個像素內的 RGB 子像素亮度。','畫面中的每個像素各有自己的顏色；這次只修復缺少的一格。','許多像素一起組成畫面。對照目標，替每格調色並填入，完成一個 8×8 的簡化螢幕。'][task];
+  $('[data-tv-anatomy-heading]').textContent=matching?'同一個像素，兩種視角':'準備填入的像素：近看與合看';
+  $('[data-tv-tuner-how]').textContent=matching?'點下方任一亮度，左邊像素的顏色就會改變。':'先點下方亮度調色，再按「填入」更新左圖的金框格。';
   $('[data-tv-step-first]').textContent=['看右邊的目標色','看右圖缺格對應的顏色','在左圖點選要填的一格'][task];$('[data-tv-step-last]').textContent=['按「檢查顏色」','按「填入缺格」','按「填入這一格」'][task];
   $('[data-tv-live-hint]').textContent=matching?'同步更新左圖':'準備填入金框格';
   $('[data-tv-interaction-hint]').textContent=matching?'先點上方亮度按鈕調色，再按「檢查顏色」。':task===1?'問號格已選好；調出右圖相同位置的顏色，按「填入缺格」。':'點左圖選格 → 點亮度調色 → 按「填入這一格」。灰點格尚未填色；也可用列／格選單、方向鍵選格，Enter 填色。';
