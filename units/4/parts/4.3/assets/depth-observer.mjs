@@ -1,4 +1,4 @@
-import { TANK, observerCamera, cameraDirection, traceViewRay } from './depth-model.mjs?v=20261104-layout1';
+import { TANK, observerCamera, cameraDirection, traceViewRay } from './depth-model.mjs?v=20261104-fixed1';
 
 export function createTextures(photo) {
   const texture = (sx, sy, sw, sh, width = 256, height = 128) => {

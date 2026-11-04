@@ -81,6 +81,15 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   assert.equal(await page.locator('#depth-scene .depth-coin').getAttribute('transform'),fixed);
   await set(70,210);const near=await page.locator('#depth-observer').evaluate(e=>e.toDataURL());
   await set(70,280);assert.notEqual(await page.locator('#depth-observer').evaluate(e=>e.toDataURL()),near);
+  const distances=[];let previous=Infinity;
+  for(const depth of [0,100])for(const eye of [210,300,340]){
+   await set(depth,eye);
+   const bounds=JSON.parse(await page.locator('#depth-observer').getAttribute('data-coin-bounds'));
+   if(depth===100){assert.ok(bounds&&bounds.width<previous,`rendered coin grows when moving away to ${eye}`);previous=bounds.width;}
+   distances.push({depth,eye,bounds});
+   if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,`distance-${depth}-${eye}.png`)});
+  }
+  if(capture)await fs.writeFile(path.join(capture,'distance-comparison.json'),JSON.stringify(distances,null,2));
  });
  await t.test('occlusion changes actual rendered pixels, and adding water at the same viewpoint reveals the coin',async()=>{
   await set(40,300);assert.equal(+await page.locator('#depth-observer').getAttribute('data-coin-pixels'),0);

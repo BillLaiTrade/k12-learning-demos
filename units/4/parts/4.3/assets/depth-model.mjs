@@ -48,12 +48,9 @@ export function depthGeometry(depth = DEPTH_INITIAL.depth, eyeX = DEPTH_INITIAL.
 
 export function observerCamera(g, aspect = 1.4) {
   const origin = [g.eyeX, TANK.eyeHeight, 0];
-  // Frame the opening from the same pupil. The near rim remains visible at
-  // the bottom; framing depends only on observer position, never water level.
-  const farRim = Math.atan2(TANK.eyeHeight - TANK.height, g.eyeX - TANK.rim);
-  const nearRim = Math.atan2(TANK.eyeHeight - TANK.height, g.eyeX - (TANK.length - TANK.rim));
-  const top = farRim - 2 * Math.PI / 180, bottom = nearRim + 4 * Math.PI / 180;
-  const halfField = (bottom - top) / 2, pitch = (top + bottom) / 2;
+  // Translate the pupil only. A fixed direction and field preserve distance
+  // cues: moving away must not zoom the tank back up to fill the opening.
+  const halfField = 28 * Math.PI / 180, pitch = 29 * Math.PI / 180;
   const forward = [-Math.cos(pitch), -Math.sin(pitch), 0];
   const up = [forward[1], -forward[0], 0], lens = Math.tan(halfField);
   return { origin, forward, up, lens, aspect };
