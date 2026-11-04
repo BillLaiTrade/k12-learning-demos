@@ -117,8 +117,11 @@
 .magnifier-lab.convex-bench .magnifier-tools { flex-wrap:nowrap; overflow-x:auto; overflow-y:hidden; padding-bottom:5px; pointer-events:auto; scrollbar-width:thin; }
 .magnifier-lab.convex-bench .magnifier-tools button { flex:0 0 auto; white-space:nowrap; }
 .magnifier-lab.convex-bench .magnifier-trace { flex:0 0 auto; flex-wrap:nowrap; align-items:stretch; }
-.magnifier-takeaway { margin:14px 0 10px; padding:10px 12px; border-radius:10px; background:#e5efda; color:#28553a; font-size:.86rem; line-height:1.6; font-weight:650; }
-.magnifier-takeaway .magnifier-review-link { display:block; margin:4px 0 0; font-size:.73rem; font-weight:400; }
+.magnifier-takeaway { margin:14px 0 10px; padding:14px 16px; border-radius:10px; background:#e5efda; color:#28553a; font-size:.82rem; line-height:1.75; }
+.magnifier-lab .magnifier-takeaway h3 { margin:0 0 7px; font-size:.88rem; font-weight:650; }
+.magnifier-lab .magnifier-takeaway p { margin:0; padding:0; font-size:inherit; font-weight:400; line-height:inherit; }
+.magnifier-lab .magnifier-takeaway .magnifier-review-link { margin-top:7px; color:#50694d; }
+.magnifier-takeaway strong { font-weight:600; }
 .magnifier-lab .magnifier-why { margin:12px 0 0; border:1px solid #c2d1b7; border-radius:15px; background:#f6f8f0; color:#31543c; font-size:.82rem; overflow:hidden; }
 .magnifier-lab .magnifier-why summary { display:flex; align-items:center; gap:11px; width:auto; padding:15px 18px; list-style:none; cursor:pointer; font-size:.88rem; font-weight:650; }
 .magnifier-why summary::-webkit-details-marker { display:none; }
