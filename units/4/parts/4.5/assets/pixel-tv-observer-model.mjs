@@ -1,0 +1,16 @@
+import {WIDTH,HEIGHT,RGB_BASE64,QUICK_POINTS} from './pixel-tv-picture.mjs?v=tv-observer-20261104';
+export {WIDTH,HEIGHT,QUICK_POINTS};
+export const MODES=Object.freeze(['inspect','pixel','screen']);
+export const DEFAULT_INDEX=QUICK_POINTS.find(p=>p.id==='wall').index;
+export function sourcePixels(){return Uint8ClampedArray.from(atob(RGB_BASE64),c=>c.charCodeAt(0));}
+export function validateIndex(index){if(!Number.isInteger(index)||index<0||index>=WIDTH*HEIGHT)throw new RangeError('像素位置超出圖片');return index;}
+export function validateMask(mask){if(!Array.isArray(mask)||mask.length!==3||!mask.every(n=>typeof n==='boolean'))throw new RangeError('色光開關必須是三個布林值');return mask;}
+export function pixelAt(source,index){validateIndex(index);if(source.length!==WIDTH*HEIGHT*3)throw new RangeError('圖片RGB資料不完整');return Array.from(source.slice(index*3,index*3+3));}
+export const colourCss=rgb=>`rgb(${rgb.join(', ')})`;
+export function currentPixel(source,index,{mode,selected,mask}){if(!MODES.includes(mode))throw new RangeError('未知觀察模式');validateIndex(selected);validateMask(mask);return pixelAt(source,index).map((n,c)=>(mode==='screen'||mode==='pixel'&&index===selected)&&!mask[c]?0:n);}
+export function renderPixels(source,state){const result=new Uint8ClampedArray(source);currentPixel(source,state.selected,state);if(state.mode==='inspect')return result;const first=state.mode==='pixel'?state.selected:0,last=state.mode==='pixel'?first+1:WIDTH*HEIGHT;for(let i=first;i<last;i++)for(let c=0;c<3;c++)if(!state.mask[c])result[i*3+c]=0;return result;}
+export function rgbaPixels(rgb){if(rgb.length!==WIDTH*HEIGHT*3)throw new RangeError('圖片RGB資料不完整');const rgba=new Uint8ClampedArray(WIDTH*HEIGHT*4);for(let i=0;i<WIDTH*HEIGHT;i++){rgba.set(rgb.subarray(i*3,i*3+3),i*4);rgba[i*4+3]=255;}return rgba;}
+export function neighbourhood(index){validateIndex(index);const x=index%WIDTH,y=Math.floor(index/WIDTH);return Array.from({length:9},(_,i)=>{const nx=x+i%3-1,ny=y+Math.floor(i/3)-1;return nx<0||nx>=WIDTH||ny<0||ny>=HEIGHT?null:ny*WIDTH+nx;});}
+export function pointerIndex(clientX,clientY,rect){if(![clientX,clientY,rect.left,rect.top,rect.width,rect.height].every(Number.isFinite)||rect.width<=0||rect.height<=0)throw new RangeError('無效的圖片位置');const x=Math.max(0,Math.min(WIDTH-1,Math.floor((clientX-rect.left)/rect.width*WIDTH))),y=Math.max(0,Math.min(HEIGHT-1,Math.floor((clientY-rect.top)/rect.height*HEIGHT)));return y*WIDTH+x;}
+export function moveSelection(index,key){validateIndex(index);if(key==='Home')return 0;if(key==='End')return WIDTH*HEIGHT-1;let x=index%WIDTH,y=Math.floor(index/WIDTH);if(key==='ArrowLeft')x--;else if(key==='ArrowRight')x++;else if(key==='ArrowUp')y--;else if(key==='ArrowDown')y++;return Math.max(0,Math.min(HEIGHT-1,y))*WIDTH+Math.max(0,Math.min(WIDTH-1,x));}
+export function observationText(original,current,{mode,mask}){if(mode==='inspect')return'每個像素都有自己的 RGB 設定。點選不同位置，比較它們的數值。';const off=mask.flatMap((on,c)=>on?[]:[c]),names=['R','G','B'];if(!off.length)return'三種色光都保留原值，原圖與目前畫面相同。';if(original.every((n,c)=>n===current[c]))return'這格原本沒有使用已關閉的色光，因此顏色保持原樣。';const change=off.map(c=>`${names[c]} ${original[c]} → 0`).join('；');return`${change}。${off.length===3?'三色都關閉，這格呈黑色。':'其餘通道保留原值。'}`;}
