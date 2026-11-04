@@ -23,7 +23,7 @@ test('各界面的原方向延長線與弧箭頭取自實際光路：入射靠�
  }
 });
 test('色散原理圖明列分離放大，三色不重疊且都穿越兩面，原始數值保留',async()=>{
- for(const mobile of[false,true]){const svg=await readFile(asset('dispersion',mobile),'utf8'),L=diagramLayout('dispersion',mobile),reference=trace(),angles=[],ends=[];assert.match(svg,/色光分離放大示意，非實際角度/);
+ for(const mobile of[false,true]){const svg=await readFile(asset('dispersion',mobile),'utf8'),L=diagramLayout('dispersion',mobile),reference=trace(),angles=[],ends=[];assert.match(svg,/非實際角度/);assert.match(svg,/data-ray-label="red"[^>]*>[\s\S]*?偏折較小/);assert.match(svg,/data-ray-label="blue"[^>]*>[\s\S]*?偏折較大/);
   for(const m of svg.matchAll(/data-light="(red|green|blue)" data-wavelength="([^"]+)" points="([^"]+)" data-source-path="([^"]+)"/g)){
    const actual=trace(Number(m[2]),{screenX:L.end}),raw=points(m[4]),ps=points(m[3]).map(([x,y])=>[(x-L.ox)/L.scale,(L.oy-y)/L.scale]);
    for(let i=0;i<4;i++)assert.ok(length(sub(raw[i],L.project(actual.points[i])))<1e-3);
