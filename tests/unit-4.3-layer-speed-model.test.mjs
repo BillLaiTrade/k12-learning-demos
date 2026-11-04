@@ -1,0 +1,37 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {layerGeometry,layerSnapshot,createLayerDeck,placeLayer,compareLayers,MS_PER_OPTICAL_UNIT} from '../units/4/parts/4.3/assets/layer-speed-model.mjs';
+const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-10,`${a} != ${b}`);
+test('all six speed orders obey Snell invariance, continuous parallel-layer geometry and visible angle differences',()=>{
+ const deck=createLayerDeck(()=>.37),orders=new Set();
+ for(let i=0;i<6;i++){
+  const {geometry:g}=deck.next();orders.add(g.order.join(''));close(g.segments[0].n,1);
+  for(const [j,l] of g.layers.entries()){
+   close(l.n*Math.sin(l.angle*Math.PI/180),g.invariant);
+   close(l.to[1]-l.from[1],1);close(Math.atan2(l.to[0]-l.from[0],l.to[1]-l.from[1])*180/Math.PI,l.angle);
+   assert.deepEqual(l.from,g.points[j+1]);assert.deepEqual(l.to,g.points[j+2]);
+   if(j>0)assert.deepEqual(l.from,g.layers[j-1].to);
+  }
+  const angles=g.layers.map(x=>x.angle).sort((a,b)=>a-b);assert.ok(angles[1]-angles[0]>5&&angles[2]-angles[1]>5);
+  assert.deepEqual(g.order,g.layers.toSorted((a,b)=>b.angle-a.angle).map(x=>x.id));
+  assert.deepEqual(g.order,g.layers.toSorted((a,b)=>a.n-b.n).map(x=>x.id));
+ }
+ assert.equal(orders.size,6);
+});
+test('deck renews indefinitely without adjacent identical rankings or a fixed fastest layer',()=>{
+ const deck=createLayerDeck(()=>.2);let last;const winners=new Set();
+ for(let i=0;i<60;i++){const q=deck.next();assert.equal(q.id,i+1);const rank=q.geometry.order.join('');assert.notEqual(rank,last);last=rank;winners.add(q.geometry.order[0]);}
+ assert.equal(winners.size,3);
+});
+test('animation advances by geometric distance and actual relative speed, including intermediate frames and exact endpoints',()=>{
+ const g=layerGeometry([1.12,1.78,1.4]);let before=0;
+ for(const s of g.segments){close(s.startMs,before);close(s.durationMs,s.length*s.n*MS_PER_OPTICAL_UNIT);const middle=layerSnapshot(g,s.startMs+s.durationMs/2).segments[s.layer+1];close(middle.fraction,.5);close(Math.hypot(middle.end[0]-s.from[0],middle.end[1]-s.from[1]),s.length/2);before+=s.durationMs;}
+ close(before,g.durationMs);assert.ok(layerSnapshot(g,0).segments.every(s=>s.fraction===0));assert.ok(layerSnapshot(g,g.durationMs).segments.every(s=>s.fraction===1));assert.equal(layerSnapshot(g,g.durationMs).complete,true);
+});
+test('placement supports pool replacement, swapping existing cards and keeps a unique set',()=>{
+ let order=[null,null,null];order=placeLayer(order,0,0);order=placeLayer(order,1,1);order=placeLayer(order,2,2);assert.deepEqual(order,[0,1,2]);assert.deepEqual(placeLayer(order,0,2),[2,1,0]);assert.deepEqual(order,[0,1,2]);assert.deepEqual(placeLayer([0,null,null],1,0),[1,null,null]);assert.deepEqual(placeLayer([0,1,null],0,1),[1,0,null]);
+});
+test('grading rejects partial, duplicate and invalid submissions, and accepts exactly the speed order',()=>{
+ const g=layerGeometry([1.12,1.78,1.4]);assert.equal(compareLayers(g,[0,2,1]).correct,true);assert.deepEqual(compareLayers(g,[0,1,2]).positions,[true,false,false]);for(const order of [[0,null,1],[0,0,1],[-1,1,2],[0,1,3],[]])assert.equal(compareLayers(g,order).complete,false);
+ for(const indices of [[1,1,1],[1,2],[-1,1,2],[1,2,Infinity]])assert.throws(()=>layerGeometry(indices),RangeError);assert.throws(()=>layerGeometry([1.2,1.4,1.6],0),RangeError);
+});

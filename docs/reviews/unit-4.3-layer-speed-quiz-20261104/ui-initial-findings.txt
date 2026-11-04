@@ -1,0 +1,97 @@
+▶ 4.3 layer-speed quiz applies refraction through one three-layer bench
+  ✔ initial scene awaits emission, preserves six teaching sections and withholds speed answers (729.656328ms)
+  ✖ emission draws genuine intermediate, continuous refracted segments and leaves parallel normals for comparison (2994.72632ms)
+  ✔ partial and wrong answers get actionable feedback; correction and new edits update the same diagram (1199.773941ms)
+  ✖ mouse dragging swaps occupied slots, cancels outside drops and does not leak a click or ghost (652.433216ms)
+  ✖ keyboard selection, arrows, deletion and Escape support the complete ranking workflow (126.469895ms)
+  ✔ offscreen playback suspends and resumes, while changing question cancels old playback and clears answers (10547.485888ms)
+  ✔ desktop, laptop and narrow screens preserve physical angles, readable labels and complete controls (5944.999663ms)
+  ✖ native phone touch drags cards without page scrolling and reduced-motion playback still reveals intermediate light (6384.327446ms)
+  ✔ texture failure leaves a usable vector bench, and no-JavaScript explains how to continue (6295.281555ms)
+✖ 4.3 layer-speed quiz applies refraction through one three-layer bench (42205.338536ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 5
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44695.128849
+
+✖ failing tests:
+
+test at tests/unit-4.3-layer-speed-quiz.test.cjs:28:10
+✖ emission draws genuine intermediate, continuous refracted segments and leaves parallel normals for comparison (2994.72632ms)
+  locator.evaluate: TypeError: p.getPointAtLength(...).toJSON is not a function
+      at eval (eval at evaluate (:311:30), <anonymous>:1:96)
+      at Array.map (<anonymous>)
+      at eval (eval at evaluate (:311:30), <anonymous>:1:59)
+      at UtilityScript.evaluate (<anonymous>:313:16)
+      at UtilityScript.<anonymous> (<anonymous>:1:44)
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:31:52)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:28:2) {
+    log: []
+  }
+
+test at tests/unit-4.3-layer-speed-quiz.test.cjs:42:10
+✖ mouse dragging swaps occupied slots, cancels outside drops and does not leak a click or ghost (652.433216ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+    [
+      '介質甲',
+  -   '介質乙',
+      null,
+  +   null
+    ]
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:45:362)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:42:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ '介質甲', null, null ],
+    expected: [ '介質甲', '介質乙', null ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-4.3-layer-speed-quiz.test.cjs:48:10
+✖ keyboard selection, arrows, deletion and Escape support the complete ranking workflow (126.469895ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /介質丙/. Input:
+
+  '拖曳卡片；也可點選卡片，再選位置。'
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:49:112)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:48:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '拖曳卡片；也可點選卡片，再選位置。',
+    expected: /介質丙/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/unit-4.3-layer-speed-quiz.test.cjs:66:10
+✖ native phone touch drags cards without page scrolling and reduced-motion playback still reveals intermediate light (6384.327446ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  null !== 'correct'
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:68:235)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:66:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'correct',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

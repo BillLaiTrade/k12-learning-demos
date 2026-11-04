@@ -1,3 +1,12 @@
+## 4.3 三層介質光速排序（2026-11-04）
+
+```sh
+node --test tests/unit-4.3-layer-speed-model.test.mjs
+NODE_PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules node --test --test-concurrency=1 tests/unit-4.3-layer-speed-quiz.test.cjs tests/unit-4.3-format.test.cjs tests/unit-4.3.test.cjs
+```
+
+模型5項確認六種順序、司乃耳不變量、連續光路、角度與速度排序、依路程及光速推進、無重複排序輪換、移卡與判定。瀏覽器10項（含外層）驗證真實中間光前緣、觀察後作答、不完整／錯誤／修正、拖曳交換／外放取消、完整鍵盤、離屏續播／換題取消、九尺寸均勻縮放、原生手機拖曳後立即點選、減少動態仍逐段發射、材質備援與無JS。沿用格式及整課6項，替換原三題單選檢查。支援LESSON_BASE_URL、LESSON_USE_PROXY及LAYER_CAPTURE_DIR。未變更的六區模型及動畫時長組合不在本輪擴大重跑。
+
 ## 4.5 兩處偏轉與主圖分色（2026-11-04）
 
 ```sh

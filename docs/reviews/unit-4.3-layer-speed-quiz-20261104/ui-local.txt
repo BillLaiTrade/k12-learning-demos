@@ -1,0 +1,19 @@
+▶ 4.3 layer-speed quiz applies refraction through one three-layer bench
+  ✔ initial scene awaits emission, preserves six teaching sections and withholds speed answers (769.147363ms)
+  ✔ emission draws genuine intermediate, continuous refracted segments and leaves parallel normals for comparison (3373.78015ms)
+  ✔ partial and wrong answers get actionable feedback; correction and new edits update the same diagram (1004.914934ms)
+  ✔ mouse dragging swaps occupied slots, cancels outside drops and does not leak a click or ghost (834.589651ms)
+  ✔ keyboard selection, arrows, deletion and Escape support the complete ranking workflow (3205.446157ms)
+  ✔ offscreen playback suspends and resumes, while changing question cancels old playback and clears answers (10624.735558ms)
+  ✔ desktop, laptop and narrow screens preserve physical angles, readable labels and complete controls (5059.084004ms)
+  ✔ native phone touch drags cards without page scrolling and reduced-motion playback still reveals intermediate light (6773.254882ms)
+  ✔ texture failure leaves a usable vector bench, and no-JavaScript explains how to continue (9615.162005ms)
+✔ 4.3 layer-speed quiz applies refraction through one three-layer bench (45930.736844ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 46782.350147

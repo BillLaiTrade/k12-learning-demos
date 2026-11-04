@@ -36,11 +36,6 @@ function drawPaths(){
   $('#reverse-path').textContent=reversed?'恢復由 A 前往 B':'反向沿原路走';$('#reverse-path').setAttribute('aria-pressed',String(reversed));
 }
 $('#reverse-path').onclick=()=>{reversed=!reversed;drawPaths();};drawPaths();
-const quiz=$('#quiz'), result=$('#quiz-result');
-const answers=['toward','speed','apparent'];
-const explanations=['光由空氣進入水中會偏向法線，折射角較小。','沿法線入射時，速度改變，方向不偏折。','光由水中進入空氣時折射，眼睛沿入眼光線反向延伸，判斷出較淺的位置。'];
-quiz.onsubmit=e=>{e.preventDefault();const data=new FormData(quiz);const missing=answers.map((_,i)=>i+1).filter(i=>!data.has(`q${i}`));if(missing.length){result.textContent=`還有第 ${missing.join('、')} 題未作答，完成後再送出。`;return;}const wrong=answers.map((answer,i)=>data.get(`q${i+1}`)===answer?null:i).filter(i=>i!==null);result.innerHTML=wrong.length?`<strong>再觀察一下，有 ${wrong.length} 題可以修正。</strong>`+wrong.map(i=>`<p>第 ${i+1} 題：${explanations[i]} <a href="#s${[3,2,6][i]}">回到相關探索</a></p>`).join(''):'<strong>三題都答對了！</strong><p>你已能比較折射方向，並用光路解釋水底物體看起來較淺的原因。</p>';};
-quiz.onchange=()=>{result.textContent='';};quiz.onreset=()=>{result.textContent='';};
 const links=$$('.route-inner a');
 const sections=links.map(a=>$(a.hash));
 const route=$('.route'), routeInner=$('.route-inner');

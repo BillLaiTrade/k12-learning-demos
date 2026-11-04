@@ -39,7 +39,9 @@
   <link rel="stylesheet" href="assets/return-refraction-refresh.css?v=20261103-inline1">
   <link rel="stylesheet" href="assets/depth-lab.css?v=20261104-water-guide1">
   <script type="module" src="assets/depth-lab.mjs?v=20261104-water2s1"></script>
-  <script type="module" src="assets/lesson.mjs?v=20261103-depth1">
+  <link rel="stylesheet" href="assets/layer-speed-quiz.css?v=20261104-rank1">
+  <script type="module" src="assets/layer-speed-quiz.mjs?v=20261104-rank1"></script>
+  <script type="module" src="assets/lesson.mjs?v=20261104-rank1">
 </script>
 </head>
 <body>
@@ -495,84 +497,30 @@
 </div>
 </div>
 </section>
-<section class="unit-quiz" id="s7" aria-labelledby="heading-7">
+<section class="unit-quiz rank-quiz" id="s7" aria-labelledby="heading-7">
 <header class="quiz-head" id="unit-quiz">
 <span class="quiz-mark" aria-hidden="true">?</span>
-<div>
-<p class="quiz-kicker">單元小測</p>
-<h2 id="heading-7">用光路解釋水中物體的位置</h2>
-<p class="quiz-subtitle">整理折射方向、垂直入射與視深的觀察，完成三個問題。</p>
-</div>
+<div><p class="quiz-kicker">單元小測</p><h2 id="heading-7">哪一層的光速最快？</h2><p class="quiz-subtitle">發射光束，觀察光路，再排出三層介質的快慢。</p></div>
+<button id="rank-new" class="rank-new" type="button" disabled>↻ 換一題</button>
 </header>
-<div class="quiz-body card-main">
-<div class="dialogue-sequence">
-<div class="dialogue dialogue--xiaokui">
-<span class="speaker">
-<span class="visually-hidden">小葵</span>
-</span>
-<p>我能用光路來解釋剛才的現象了嗎？</p>
+<div class="quiz-body rank-body">
+<div id="rank-lab" data-state="idle" data-ready="false" data-observed="false">
+<figure class="rank-bench">
+<div class="rank-stage">
+<svg id="rank-scene" viewBox="0 0 1200 580" role="img" aria-labelledby="rank-scene-title rank-scene-desc"><title id="rank-scene-title">三層透明介質中的折射光路</title><desc id="rank-scene-desc">準備三層介質光路。三層介面互相平行。</desc></svg>
+<figcaption class="rank-legend"><span><i aria-hidden="true"></i>光路</span><span><i class="rank-normal-key" aria-hidden="true"></i>法線</span><p>比較光線與法線的夾角</p></figcaption>
 </div>
-<div class="dialogue">
-<span class="speaker">
-<span class="visually-hidden">阿公</span>
-</span>
-<p>用三個問題整理觀察；需要時也可以回到前面的實驗。</p>
-</div>
-</div>
-<form id="quiz" novalidate>
-<fieldset>
-<legend>1. 光從空氣斜射入水中，折射光相對於法線會怎樣？</legend>
-<label>
-<input type="radio" name="q1" value="toward">
-<span>偏向法線，和法線的夾角變小。</span>
-</label>
-<label>
-<input type="radio" name="q1" value="away">
-<span>偏離法線，和法線的夾角變大。</span>
-</label>
-<label>
-<input type="radio" name="q1" value="same">
-<span>一定沿原方向前進。</span>
-</label>
-</fieldset>
-<fieldset>
-<legend>2. 光沿法線從空氣進入玻璃，下列何者正確？</legend>
-<label>
-<input type="radio" name="q2" value="turn">
-<span>速度改變，方向也一定偏折。</span>
-</label>
-<label>
-<input type="radio" name="q2" value="speed">
-<span>速度改變，方向不偏折。</span>
-</label>
-<label>
-<input type="radio" name="q2" value="unchanged">
-<span>速度和方向都不變。</span>
-</label>
-</fieldset>
-<fieldset>
-<legend>3. 水底硬幣看起來比較淺，主要原因是什麼？</legend>
-<label>
-<input type="radio" name="q3" value="float">
-<span>加水使硬幣向上浮起。</span>
-</label>
-<label>
-<input type="radio" name="q3" value="eye">
-<span>眼睛發出的光把硬幣往上推。</span>
-</label>
-<label>
-<input type="radio" name="q3" value="apparent">
-<span>來自硬幣的光在水面折射，眼睛沿入眼光線往回判斷位置。</span>
-</label>
-</fieldset>
-<div class="controls">
-<button type="submit" class="primary">送出答案</button>
-<button type="reset">重新作答</button>
-</div>
-<div id="quiz-result" role="status" aria-live="polite">
-</div>
+<div class="rank-playback"><button id="rank-play" class="rank-play" type="button" disabled>▶ 發射光束</button><span id="rank-play-state" role="status" aria-live="polite">正在準備光路……</span></div>
+</figure>
+<form id="quiz" class="rank-answer" aria-label="介質光速排序" novalidate>
+<div class="rank-answer-intro"><h3>將介質排成光速由快到慢</h3><p id="rank-sort-help" class="rank-answer-help" role="status" aria-live="polite">拖曳卡片；也可點選卡片，再選位置。</p><p id="rank-key-help" class="visually-hidden">卡片與位置都可用Tab、Enter或空白鍵操作。已放入的位置可用左右方向鍵移動卡片，Delete或Backspace取回；Escape取消選取。只比較甲、乙、丙，不包括光源所在的空氣。</p></div>
+<div class="rank-order" role="group" aria-label="光速由快到慢" aria-describedby="rank-key-help"><span class="rank-endpoint">最快</span><ol class="rank-slots"><li><button class="rank-slot" data-rank-slot="0" type="button" aria-label="第1個位置，最快，尚未放入介質" disabled><span class="rank-slot-placeholder" aria-hidden="true">⇩</span></button></li><li><button class="rank-slot" data-rank-slot="1" type="button" aria-label="第2個位置，尚未放入介質" disabled><span class="rank-slot-placeholder" aria-hidden="true">⇩</span></button></li><li><button class="rank-slot" data-rank-slot="2" type="button" aria-label="第3個位置，最慢，尚未放入介質" disabled><span class="rank-slot-placeholder" aria-hidden="true">⇩</span></button></li></ol><span class="rank-endpoint">最慢</span></div>
+<div class="rank-answer-actions"><ul class="rank-pool" aria-label="可選介質"><li><button class="rank-token" data-rank-medium="0" type="button" aria-pressed="false" disabled><span class="rank-grip" aria-hidden="true">⠿</span><span>介質甲</span></button></li><li><button class="rank-token" data-rank-medium="1" type="button" aria-pressed="false" disabled><span class="rank-grip" aria-hidden="true">⠿</span><span>介質乙</span></button></li><li><button class="rank-token" data-rank-medium="2" type="button" aria-pressed="false" disabled><span class="rank-grip" aria-hidden="true">⠿</span><span>介質丙</span></button></li></ul><button id="rank-check" class="rank-check" type="submit" disabled>確認排序</button></div>
+<p id="quiz-result" role="status" aria-live="polite"></p>
 </form>
-<p class="note">接下來，透鏡也會利用折射改變光路，讓我們看見不同的像。</p>
+<p id="rank-fallback" class="rank-fallback">小測尚未載入；若無法操作，請重新整理頁面。</p>
+</div>
+<noscript><p class="rank-fallback">這個小測需啟用JavaScript才能發射光束與排序。三層介面平行時，光線與法線的夾角越大，光速越快；可先回看前面的折射探索。</p></noscript>
 </div>
 </section>
     </div>
