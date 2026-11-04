@@ -1356,3 +1356,7 @@ node --test --test-reporter=tap --test-concurrency=1 tests/unit-2.3-reaudit.test
 unit-4.3-depth-model.test.mjs五項檢查水深／觀看位置全域的Snell關係、局部視位置共線、獨立相機光線與側面槽緣遮擋一致、三維切向折射及固定觀看目標。unit-4.3-depth-lab.test.cjs十一子項加外層，涵蓋初始無作答教學、實際Canvas像素與幣像位置變化、固定硬幣、槽壁遮擋及同位置加水可見、輔助線開關、鍵盤／拖曳／原生觸控、重設、離屏續播、九種視窗與44px觸控區、減少動態偏好、材質失敗重試及無JavaScript閱讀。
 
 DEPTH_CAPTURE_DIR保存畫面與measurements.json；LESSON_BASE_URL／LESSON_USE_PROXY沿用既有公開測試設定。整課回歸的固定硬幣斷言改讀新實體幣與視位置的語意節點，不再假設前兩個circle就是硬幣。與原optics、整課及format組合共25項（含外層）。
+
+## 4.3 第六區空槽加水與材質精修（2026-11-04）
+
+depth-model新增無水純空氣／遮擋與固定世界檢查，濕態擴至1–100公分，現在6項；depth-lab改驗初始0公分不可見、新增手動加水與離屏續播／固定觀看位置／重設回空槽，現在12子項加外層共13項。文字下限只量必要標示，不將硬幣上的微小裝飾壓字當成教學標籤。其餘輸入、部分幣面共線、九尺寸／觸控區、減少動態、材質復原及無JavaScript閱讀仍保留。原整課／格式與optics一同執行共27項，DEPTH_CAPTURE_DIR／LESSON_BASE_URL／LESSON_USE_PROXY沿用。

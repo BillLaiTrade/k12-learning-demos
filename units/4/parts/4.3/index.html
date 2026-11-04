@@ -37,8 +37,8 @@
   <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-fit2">
 <link rel="stylesheet" href="assets/integrated-refraction.css?v=20261103-fit2">
   <link rel="stylesheet" href="assets/return-refraction-refresh.css?v=20261103-inline1">
-  <link rel="stylesheet" href="assets/depth-lab.css?v=20261103-dual1">
-  <script type="module" src="assets/depth-lab.mjs?v=20261103-dual2"></script>
+  <link rel="stylesheet" href="assets/depth-lab.css?v=20261104-finish1">
+  <script type="module" src="assets/depth-lab.mjs?v=20261104-finish1"></script>
   <script type="module" src="assets/lesson.mjs?v=20261103-depth1">
 </script>
 </head>
@@ -454,11 +454,11 @@
 <span class="speaker">
 <span class="visually-hidden">阿公</span>
 </span>
-<p>硬幣留在原處。把光路和從這裡看見的畫面放在一起，比較水面下的位置。</p>
+<p>先固定觀看位置，再往槽裡加水。硬幣不動，看看光路與眼前的畫面怎麼改變。</p>
 </div>
 </div>
-<div id="depth-lab" data-state="ready" data-depth="70" data-eye-x="250">
-<p class="depth-intro">左邊看光怎麼走，右邊看從這個位置會看見什麼。硬幣固定，兩個視角同步。</p>
+<div id="depth-lab" data-state="ready" data-depth="0" data-eye-x="300">
+<p class="depth-intro">先看空槽，再加水觀察。硬幣與觀看位置保持不動，左右兩個視角同步。</p>
 <div class="depth-views">
 <figure class="depth-view">
 <figcaption>光怎麼進入眼睛<small>側面剖面</small></figcaption>
@@ -472,24 +472,24 @@
 <figcaption>從這個位置看進去<small>與左側觀看位置同步</small></figcaption>
 <div class="depth-stage">
 <canvas id="depth-observer" width="640" height="444" role="img" aria-label="目前觀看位置所見的水槽與硬幣">硬幣固定在槽底。光出水時折射，讓硬幣看起來較淺。</canvas>
-<span class="depth-observer-state" id="depth-visibility">目前可以看見硬幣</span>
+<span class="depth-observer-state" id="depth-visibility">空槽：硬幣被槽壁遮住</span>
 </div>
-<div class="depth-view-note" id="depth-view-result">光經過水面折射後，進入目前的觀看位置。</div>
+<div class="depth-view-note" id="depth-view-result">還沒加水，硬幣的光被槽壁遮住。按「加水觀察」比較。</div>
 </figure>
 </div>
 <div class="depth-controls" role="group" aria-label="同步調整兩個視角">
-<label class="depth-control" for="depth-input"><span>調整水位</span><output id="depth-output">70 公分</output>
-<input id="depth-input" type="range" min="40" max="100" value="70" step="1" aria-label="硬幣上方的實際水深" aria-describedby="depth-control-help">
-<span class="depth-range-ends"><span>40 公分</span><span>100 公分</span></span></label>
-<label class="depth-control" for="depth-eye"><span>觀看位置</span><output id="depth-eye-output">較近</output>
-<input id="depth-eye" type="range" min="210" max="340" value="250" step="1" aria-label="觀看位置，數值越大離水槽越遠" aria-describedby="depth-control-help">
+<label class="depth-control" for="depth-input"><span>調整水位</span><output id="depth-output">0 公分</output>
+<input id="depth-input" type="range" min="0" max="100" value="0" step="1" aria-label="硬幣上方的實際水深" aria-describedby="depth-control-help">
+<span class="depth-range-ends"><span>0 · 空槽</span><span>100 公分</span></span></label>
+<label class="depth-control" for="depth-eye"><span>觀看位置</span><output id="depth-eye-output">距槽前 130 cm</output>
+<input id="depth-eye" type="range" min="210" max="340" value="300" step="1" aria-label="觀看位置，數值越大離水槽越遠" aria-describedby="depth-control-help">
 <span class="depth-range-ends"><span>靠近</span><span>遠離</span></span></label>
-<div class="depth-actions"><button id="depth-replay" type="button">▶ 重播光路</button><button id="depth-reset" type="button">↻ 重設</button></div>
+<div class="depth-actions"><button id="depth-fill" type="button">▶ 加水觀察</button><button id="depth-replay" type="button">▶ 重播光路</button><button id="depth-reset" type="button">↻ 重設</button></div>
 </div>
 <div class="depth-options"><span id="depth-control-help">調整水位或觀看位置，左右畫面一起改變；也可拖曳左側眼睛。</span><label><input id="show-rays" type="checkbox" checked>顯示光路與輔助線</label></div>
 <p id="depth-live" class="visually-hidden" role="status" aria-live="polite"></p>
 <p id="depth-fallback" class="depth-fallback"></p>
-<p class="depth-takeaway">硬幣沒有移動，改變的是光進入眼睛的方向。<small>出水折射 → 沿入眼方向判斷 → 水中硬幣看起來較淺。</small></p>
+<p class="depth-takeaway">硬幣沒有移動；加水後，折射讓光進入原本的觀看位置。<small>空槽：槽壁遮住光 → 加水：光出水時轉向 → 從同一位置看見硬幣。</small></p>
 <details class="depth-more"><summary>為什麼看到的位置與實際位置不同？</summary><div>
 <p>硬幣反射的光從水進入空氣，斜射時偏離法線。眼睛依入眼光線的方向往回判斷，得到比硬幣更靠近水面的視位置。左邊的橘色虛線只用來說明這個判斷，光並沒有沿虛線傳播。</p>
 <p>右邊是左側觀看位置的視野。觀看位置太遠、水位較低時，前側槽壁可能遮住硬幣的光；靠近或加水，便能觀察可見範圍如何改變。即使暫時看不到硬幣，它仍固定在槽底。</p>
