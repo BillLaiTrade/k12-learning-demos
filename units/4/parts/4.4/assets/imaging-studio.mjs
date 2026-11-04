@@ -1,4 +1,4 @@
-import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-convex-unified1';
+import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-mag-fixed-eye1';
 import {bindBenchRuler} from './convex-bench-workspace.mjs?v=20261104-convex-unified1';
 import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-convex-unified1';
 import {BENCH_HOME,createBenchArt} from './convex-bench-model.mjs?v=20261104-convex-unified1';
@@ -52,7 +52,7 @@ function initialise(root){
   else if(g.unreachable)message='清楚像的位置已超出軌道，屏幕移到最遠仍無法對焦。請把圖卡移遠透鏡一些，再重新找像。';
   if(g.clipped&&g.type==='real'&&!state.atInfinity)message+=' 部分投影超出屏幕；保留實際比例，不縮小圖案填入。';
   if(showRays&&g.finite&&g.type==='real'&&!state.atInfinity)message+=point==='top'?' 紅線追蹤圖卡上端，在清楚像的下方會聚。':point==='bottom'?' 藍線追蹤圖卡下端，在清楚像的上方會聚。':' 紅、藍線來自不同物點，分別形成對應的像點。';
-  $('[data-imaging-condition]').textContent=state.atInfinity?'無窮遠物點以平行光入射，在另一側F形成點像。':g.type==='infinity'?'同一物點的出射光彼此平行，像在無窮遠；屏幕接不到清楚像。':g.type==='virtual'?'F內：正立、放大虛像；屏幕接不到清楚像。':g.clear?`屏幕已對焦：倒立、${g.sizeLabel}的實像。`:`實像在${distanceLabel(g.v)}，移動屏幕找清楚像。`;$('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=state.atInfinity?(g.clear?'點像':'屏幕尚未對焦'):g.type==='virtual'?'屏幕接不到清楚像':!g.finite?'屏幕接不到清楚像':g.unreachable?'清楚像超出軌道':g.clear?`倒立、${g.sizeLabel}的實像`:'屏幕尚未對焦';
+  $('[data-imaging-condition]').textContent=state.atInfinity?'無窮遠物點以平行光入射，在另一側F形成點像。':g.type==='infinity'?'同一物點的出射光彼此平行，像在無窮遠；屏幕接不到清楚像。':g.type==='virtual'?`F內：正立、放大虛像，在圖卡側 ${distanceLabel(Math.abs(g.v))}；屏幕接不到清楚像。`:g.clear?`屏幕已對焦：倒立、${g.sizeLabel}的實像。`:`實像在${distanceLabel(g.v)}，移動屏幕找清楚像。`;$('[data-result]').textContent=message;$('[data-imaging-badge]').textContent=state.atInfinity?(g.clear?'點像':'屏幕尚未對焦'):g.type==='virtual'?'屏幕接不到清楚像':!g.finite?'屏幕接不到清楚像':g.unreachable?'清楚像超出軌道':g.clear?`倒立、${g.sizeLabel}的實像`:'屏幕尚未對焦';
   const keypoint=state.atInfinity?'infinity':g.type==='virtual'?'inside':!g.finite?'focus':!g.clear?'':Math.abs(state.object-G.f*2)<.05?'double':state.object>G.f*2?'beyond':'between';
   $$('[data-imaging-keypoint]').forEach(row=>{const active=row.dataset.imagingKeypoint===keypoint;row.dataset.active=String(active);row.querySelector('button').setAttribute('aria-pressed',String(active));});
   root.dataset.extensions=extensions;root.dataset.atInfinity=String(!!state.atInfinity);root.dataset.imageType=g.type;root.dataset.imagePosition=g.finite?g.v:'';root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.clear=String(g.clear);root.dataset.magnification=g.finite?String(g.m):'';root.dataset.projectionScale=g.projectionScale;root.dataset.spread=g.spread;root.dataset.rays=showRays;root.dataset.view=front?'screen':'orbit';root.dataset.point=point;
@@ -92,7 +92,7 @@ function initialise(root){
    if(viewport){const r=canvas.getBoundingClientRect(),p=camera.projectionMatrix.elements;p[0]*=viewport.width/r.width;p[5]*=viewport.height/r.height;p[8]=1-2*(viewport.left+viewport.width/2)/r.width;p[9]=2*(viewport.top+viewport.height/2)/r.height-1;camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();}
    camera.updateMatrixWorld();virtualImage.rotation.y=Math.atan2(camera.position.x-virtualImage.position.x,camera.position.z-virtualImage.position.z);virtualImage.updateMatrixWorld(true);
   }
-  const updateImageLabels=createBenchLabels({THREE,root,canvas,camera,virtualImage,G,state:()=>imagingState(state),viewport:()=>viewport,front:()=>front,rays:()=>showRays,receiver:()=>state.screen,receiverName:'屏幕'});
+  const updateImageLabels=createBenchLabels({THREE,root,canvas,camera,virtualImage,G,state:()=>imagingState(state),viewport:()=>viewport,front:()=>front,rays:()=>showRays,receiver:()=>state.screen,receiverName:'屏幕',lightPaths:()=>showRays?imagingRays(state,point):[]});
   function draw(){pending=0;renderer.render(scene,camera);updateImageLabels();}
   function requestDraw(){updateImageLabels();if(!pending)pending=requestAnimationFrame(draw);}
   function syncScene(){const g=imagingState(state);virtualImage.visible=g.type==='virtual'&&!front;if(g.type==='virtual'){virtualImage.position.set(g.v*G.scale,G.axis,0);virtualImage.scale.set(g.m,g.m,1);}source.visible=!state.atInfinity;source.position.x=-state.object*G.scale;screen.position.x=state.screen*G.scale;projectedTexture.needsUpdate=true;updateRays();updateCamera();scene.updateMatrixWorld(true);requestDraw();}

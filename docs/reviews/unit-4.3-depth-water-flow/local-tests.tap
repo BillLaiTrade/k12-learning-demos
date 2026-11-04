@@ -1,0 +1,41 @@
+▶ sixth section teaches apparent depth with synchronized side and rendered observer views
+  ✔ the default is dry and physically occluded, with readable teaching and no automatic motion (768.180262ms)
+  ✔ one press continuously fills or drains to its endpoint with synchronized views (12275.97595ms)
+  ✔ same-direction presses continue, opposite presses reverse and direct manipulation takes over (9321.179914ms)
+  ✔ water can be dragged vertically by its handle or surface, with keyboard access and no initial jump (5685.528901ms)
+  ✔ water and observer changes really repaint the coin, with the physical coin remaining fixed (8093.351069ms)
+  ✔ occlusion changes actual rendered pixels, and adding water at the same viewpoint reveals the coin (2956.650983ms)
+  ✔ hiding the construction preserves the eye view and the physical scene (187.892597ms)
+  ✔ keyboard and pointer change the same viewing position without losing focus (4394.406885ms)
+  ✔ replay traces coin to eye before revealing auxiliary lines, pauses offscreen, and can restart (4148.559882ms)
+  ✔ desktop and phone keep panels, labels and controls readable without horizontal page scrolling (13912.362069ms)
+  ✔ native mobile touch moves the viewpoint and updates the eye view (14131.059754ms)
+  ✔ reduced motion reaches the requested endpoint in either direction (3779.190493ms)
+  ✔ texture failure has a usable fallback and retry restores materials without resetting controls (5675.600353ms)
+  ✔ reading remains available with JavaScript disabled (887.845732ms)
+✔ sixth section teaches apparent depth with synchronized side and rendered observer views (89508.750768ms)
+✔ depth construction conserves Snell direction and uses the backward intersection, with a fixed floor coin (53.40512ms)
+✔ side visibility and independently traced reverse camera rays agree at the rim (9.225804ms)
+✔ first person view has a fixed target and finds the same coin through air-to-water refraction (2.262468ms)
+✔ every submerged camera ray conserves tangential direction in both horizontal axes (1.936801ms)
+✔ controls stay finite across boundaries and the apparent point depends on observation position (1.334038ms)
+✔ the default is a dry hidden coin; direct dry rays and filling use the same fixed world (0.996308ms)
+✔ opening framing includes visible coin rays without moving the pupil or following water level (22.703659ms)
+✔ moving the eye translates a fixed camera and the tank edges shrink monotonically with distance (9.648952ms)
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (148.065774ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (522.637039ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (9404.954447ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (420.239019ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (13873.893591ms)
+✔ transmitted rays conserve tangential optical direction and reverse exactly (1.901052ms)
+✔ apparent coin is the backward intersection of independently refracted pupil rays (6.632069ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (12433.898564ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 118334.944257

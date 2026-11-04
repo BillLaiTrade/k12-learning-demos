@@ -189,15 +189,6 @@ function pauseAll(){experiments.forEach(experiment=>experiment.pause());}
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseAll();});
 window.addEventListener('blur',pauseAll);
 
-$$('[data-calorie]').forEach(button=>button.addEventListener('click',()=>{
-  const heat=Number(button.dataset.calorie);
-  $('#calorie-heat').textContent=heat;
-  $('#calorie-end').textContent=20+heat;
-  $('#calorie-fill').style.width=`${heat*20}%`;
-  $('.calorie-scale').setAttribute('aria-label',`1 公克水由 20°C 升到 ${20+heat}°C，吸收約 ${heat} cal。`);
-  $$('[data-calorie]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
-}));
-
 const applications={
   bottle:{title:'同樣降溫，水能放出較多熱量',body:'相同質量的水與鋁，從相同初溫降低相同的溫度，水放出的熱量較多。因此水適合用來儲存並釋放熱能。',number:'100 g 水降低 10°C，約放出 1,000 cal。',note:'實際水袋能暖多久，也和外袋隔熱、表面積及環境有關。',art:'<path d="M48 25h44v24l12 14v91q-34 16-68 0V63l12-14Z" fill="#b7644b" stroke="#92503c" stroke-width="3"/><rect x="49" y="14" width="42" height="16" rx="4" fill="#6e836a"/><path d="M49 69h42v74H49Z" fill="#ce9175" opacity=".5"/><path d="M59 78v57m13-57v57m13-57v57" stroke="#9e5440" stroke-width="2"/>'},
   coast:{title:'水的比熱較大，溫度變化往往較小',body:'比較相同質量、吸收或放出相同熱量的水與沙土，水的溫度變化通常較小。這有助於理解海水相較陸地較不容易在晝夜間大幅變溫。',number:'先比較質量與熱量，再比較溫度變化。',note:'真實海陸還有日照、混合、蒸發與風等因素；不能只靠比熱預測實際氣溫。',art:'<circle cx="99" cy="41" r="19" fill="#e9ba63"/><path d="M8 110q36-21 65 0t59 0v47H8Z" fill="#a9c8ca"/><path d="M8 120q31-15 62 0t62 0" fill="none" stroke="#eff5e9" stroke-width="4"/><path d="M8 157q38-40 68-34l56 34Z" fill="#d7bb83"/>'},

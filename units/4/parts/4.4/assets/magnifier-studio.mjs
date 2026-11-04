@@ -1,17 +1,17 @@
-import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-convex-unified1';
+import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-mag-fixed-eye1';
 import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-convex-unified1';
 import {BENCH_HOME,createBenchArt} from './convex-bench-model.mjs?v=20261104-convex-unified1';
 import {fitBench} from './convex-bench-workspace.mjs?v=20261104-convex-unified1';
-import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261104-convex-unified1';
+import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261104-mag-fixed-eye1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,eyeRays} from './magnifier-optics.mjs?v=20261104-convex-unified1';
+import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,eyeRays} from './magnifier-optics.mjs?v=20261104-mag-fixed-eye1';
 const root=document.querySelector('[data-magnifier-lab]');
 if(root) initialise(root);
 function initialise(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],canvas=$('#magnifier-canvas');
- let state={object:30,screen:95,eye:G.eye,screenIn:false},showRays=true,extensions=false,point='both',front=false,selected='object',studio=null;
+ let state={object:30,screen:95,eye:G.eye,screenIn:false},showRays=true,extensions=false,point='top',front=false,selected='object',studio=null;
  const distanceLabel=value=>`${Number((value/G.f).toFixed(3))}F`;
- const workspace=createMagnifierWorkspace(root,{G,move,observe(preset){state={object:preset.object,eye:preset.eye,screen:95,screenIn:preset.screenIn};if(preset.rays)showRays=true;extensions=preset.extensions;point=preset.point||'both';front=false;selected='object';update();studio?.frameObservation();}});
+ const workspace=createMagnifierWorkspace(root,{G,move,observe(preset){state={object:preset.object,eye:G.eye,screen:95,screenIn:preset.screenIn};if(preset.rays)showRays=true;extensions=false;point=preset.point||'both';front=false;selected='object';update();studio?.frameObservation();}});
  const art=createBenchArt(),a=art.getContext('2d');
  const eyeCanvas=$('[data-mag-eye]'),reference=$('[data-mag-reference]'),paper=$('[data-mag-paper]');
  eyeCanvas.getContext('2d',{willReadFrequently:true});reference.getContext('2d',{willReadFrequently:true});
@@ -44,25 +44,26 @@ function initialise(root){
   $$('[data-mag-point]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.magPoint===point)));
   $('[data-mag-screen]').textContent=state.screenIn?'取下屏幕':'放入屏幕';$('[data-mag-screen]').setAttribute('aria-pressed',String(state.screenIn));$('[data-mag-front]').hidden=!state.screenIn||root.dataset.webgl==='unavailable';$('[data-mag-front]').textContent=front?'返回整體觀察':'正面看屏幕';$('[data-mag-front]').setAttribute('aria-pressed',String(front));
   $('[data-mag-screen-controls]').hidden=!state.screenIn;$('[data-mag-paper-detail]').hidden=!state.screenIn;$('[data-mag-legend]').hidden=!showRays;
-  $$('[data-mag-distance]').forEach(e=>e.textContent=distanceLabel(state[e.dataset.magDistance]));$('[data-mag-eye-position]').textContent=`眼睛 ${distanceLabel(state.eye)}`;
+  $$('[data-mag-distance]').forEach(e=>e.textContent=distanceLabel(state[e.dataset.magDistance]));$('[data-mag-eye-position]').textContent='固定眼位';
   $$('[data-mag-device]').forEach(b=>{if(b.getAttribute('role')!=='slider')b.setAttribute('aria-pressed',String(selected===b.dataset.magDevice));b.setAttribute('aria-label',`${b.dataset.magDevice==='object'?'圖卡':b.dataset.magDevice==='eye'?'眼睛':'屏幕'}，${distanceLabel(state[b.dataset.magDevice])}，方向鍵可沿軌道移動`);});
   $$('[data-mag-nudge]').forEach(b=>{const key=b.dataset.magNudge;b.disabled=Number(b.dataset.direction)<0?state[key]<=G[key+'Min']:state[key]>=G[key+'Max'];});
-  const size=g.angularGain===null?'':Math.abs(g.angularGain-1)<.02?'視角相近':g.angularGain>1?'視角較大':'視角較小';
-  const viewMessage=g.blocked?'屏幕擋住視線':g.eyeMode==='at-image'?'眼睛在實像位置':g.eyeMode==='too-close'?'離實像太近':g.eyeMode==='converging'?'尚未越過會聚點':g.eyeMode==='parallel'?'平行光・像在無窮遠':`${g.eyeMode==='real'?'倒立':'正立'}・${size}`;
+  const size=g.angularGain===null?'':Math.abs(g.angularGain-1)<.02?'視角相近':g.angularGain>1?'比原物大':'比原物小';
+  const viewMessage=g.blocked?'屏幕擋住視線':g.eyeMode==='at-image'?'眼睛在實像位置':g.eyeMode==='too-close'?'離實像太近':g.eyeMode==='converging'?'此眼位無法看清':g.eyeMode==='parallel'?'平行光・像在無窮遠':`${g.eyeMode==='real'?'倒立':'正立'}・${size}`;
   $('[data-mag-eye-badge]').textContent=viewMessage;
-  let condition=g.blocked?'屏幕位於透鏡與眼睛之間，擋住視線。':g.eyeMode==='virtual'?'F內：看見正立、放大的虛像；對照同位置的原物。':g.eyeMode==='parallel'?'同一物點的出射光彼此平行，沒有在有限距離交會；眼睛放鬆可看清。':g.eyeMode==='real'?`眼睛已越過${distanceLabel(g.v)}的會聚位置，可看見倒立實像。`:g.eyeMode==='at-image'?'眼睛剛好在實像位置，向右移遠後再觀察。':g.eyeMode==='too-close'?'眼睛離實像太近，向右移遠後可清楚對焦。':`實像在${distanceLabel(g.v)}；眼睛尚未越過會聚點，無法清楚對焦。`;
+  let condition=g.blocked?'屏幕擋住入眼光線；取下屏幕可恢復原本的觀看結果。':g.eyeMode==='virtual'?'F內：出射光發散；眼睛在原位看見正立、放大的虛像。對照同一眼位的原物，比較放大效果。':g.eyeMode==='parallel'?'恰好 F：同一物點的出射光彼此平行，沒有在有限距離交會；眼睛留在原位、放鬆觀看像在無窮遠。':`F外：出射光會聚，仍在透鏡另一側 ${distanceLabel(g.v)} 形成倒立實像；這個固定眼位無法清楚對焦，無法延續正立放大的觀看。`;
+  if(extensions&&g.type==='virtual')condition+=` 反向延長線交於圖卡側 ${distanceLabel(Math.abs(g.v))}；不必到虛像位置觀看。`;
   if(g.resolved&&g.clipped&&!g.blocked)condition+=' 部分圖案超出透鏡視野。';
-  $('[data-mag-condition]').textContent=condition;$('[data-mag-eye-note]').textContent='右側依目前眼睛位置呈現；旋轉主圖不改變眼睛位置。';
+  $('[data-mag-condition]').textContent=condition;$('[data-mag-eye-note]').textContent='眼睛固定在透鏡另一側；上下畫面用相同觀看尺度比較，不追隨虛像。';
   let message=condition;if(g.type==='virtual')message+=' 這是正立放大虛像，屏幕無法直接接到清楚像。';
   if(extensions&&g.type==='virtual')message+=` 虛線往回交於圖卡同側${distanceLabel(Math.abs(g.v))}，正立放大的透明圖案標示虛像；光沒有真的在那裡會聚。`;
   if(showRays&&point!=='both')message+=point==='top'?' 紅線來自圖卡上端。':' 藍線來自圖卡下端。';$('[data-result]').textContent=message;
-  $('[data-mag-label=virtual]').textContent=g.type==='virtual'?`虛像・圖卡側${distanceLabel(Math.abs(g.v))}`:'';$('[data-mag-label=real]').textContent=g.type==='real'?`實像・屏幕側${distanceLabel(g.v)}`:'';
-  root.dataset.eye=state.eye;root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.screenIn=state.screenIn;root.dataset.rays=showRays;root.dataset.extensions=extensions;root.dataset.point=point;root.dataset.view=front?'screen':'orbit';root.dataset.imageType=g.type;root.dataset.eyeMode=g.eyeMode;root.dataset.imageScale=g.imageScale??'';root.dataset.referenceScale=g.referenceScale;root.dataset.angularGain=g.angularGain??'';root.dataset.virtualX=g.type==='virtual'?g.v*G.scale:'';
-  canvas.setAttribute('aria-label',`立體放大鏡觀察台，物距${distanceLabel(state.object)}，固定透鏡、可移動眼睛，${state.screenIn?'屏幕已插入光路':condition}，右側同步顯示眼睛視角`);workspace.update(state,showRays,extensions);studio?.update();
+  $('[data-mag-label=virtual]').textContent=g.type==='virtual'?`虛像・圖卡側${distanceLabel(Math.abs(g.v))}`:'';
+  root.dataset.rayRegime=g.type==='virtual'?'diverging':g.type==='infinity'?'parallel':'converging';root.dataset.eye=G.eye;root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.screenIn=state.screenIn;root.dataset.rays=showRays;root.dataset.extensions=extensions;root.dataset.point=point;root.dataset.view=front?'screen':'orbit';root.dataset.imageType=g.type;root.dataset.eyeMode=g.eyeMode;root.dataset.imageScale=g.imageScale??'';root.dataset.referenceScale=g.referenceScale;root.dataset.angularGain=g.angularGain??'';root.dataset.virtualX=g.type==='virtual'?g.v*G.scale:'';
+  canvas.setAttribute('aria-label',`立體放大鏡觀察台，物距${distanceLabel(state.object)}，固定透鏡與眼睛，只移動圖卡，${state.screenIn?'屏幕已插入光路':condition}，右側同步顯示眼睛視角`);workspace.update(state,showRays,extensions);studio?.update();
  }
  function clearGestureNotice(){$('[data-mag-gesture-note]').hidden=true;$$('[data-mag-ruler]').forEach(r=>r.removeAttribute('data-guided'));}
- function showGestureNotice(key){const note=$('[data-mag-gesture-note]');note.textContent=key==='lens'?'凸透鏡是固定的。':`請使用下方${key==='object'?'圖卡':key==='eye'?'眼睛':'比較屏幕'}位置尺調整。`;note.hidden=false;$$('[data-mag-ruler]').forEach(r=>r.toggleAttribute('data-guided',r.dataset.magRuler===key));}
- function move(key,value){clearGestureNotice();const before=state.object;state=moveMagnifier(state,key,value);if(key==='object'&&state.object===G.f&&before!==G.f)point='top';if(state.object>=G.f)extensions=false;selected=key;update();}
+ function showGestureNotice(key){const note=$('[data-mag-gesture-note]');note.textContent=key==='eye'?'眼睛固定，請移動圖卡比較光路與大小。':key==='lens'?'凸透鏡是固定的。':`請使用下方${key==='object'?'圖卡':key==='eye'?'眼睛':'比較屏幕'}位置尺調整。`;note.hidden=false;$$('[data-mag-ruler]').forEach(r=>r.toggleAttribute('data-guided',r.dataset.magRuler===key));}
+ function move(key,value){if(!['object','screen'].includes(key))return;clearGestureNotice();const before=state.object;state=moveMagnifier(state,key,value);if(key==='object'&&state.object===G.f&&before!==G.f)point='top';if(state.object>=G.f)extensions=false;selected=key;update();}
  $('[data-mag-rays]').addEventListener('click',()=>{showRays=!showRays;if(!showRays)extensions=false;update();});$('[data-mag-extensions]').addEventListener('click',()=>{extensions=!extensions;if(extensions)showRays=true;update();studio?.frameObservation();});
  $('[data-mag-screen]').addEventListener('click',()=>{state={...state,screenIn:!state.screenIn};front=false;if(!state.screenIn)selected='object';update();});$('[data-mag-front]').addEventListener('click',()=>{front=!front;update();});
  $$('[data-mag-point]').forEach(b=>b.addEventListener('click',()=>{point=b.dataset.magPoint;update();}));
@@ -95,10 +96,10 @@ function initialise(root){
    if(viewport){const r=canvas.getBoundingClientRect(),p=camera.projectionMatrix.elements;p[0]*=viewport.width/r.width;p[5]*=viewport.height/r.height;p[8]=1-2*(viewport.left+viewport.width/2)/r.width;p[9]=2*(viewport.top+viewport.height/2)/r.height-1;camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();}
    camera.updateMatrixWorld();virtualImage.rotation.y=Math.atan2(camera.position.x-virtualImage.position.x,camera.position.z-virtualImage.position.z);virtualImage.updateMatrixWorld(true);
   }
-  const labels=createBenchLabels({THREE,root,canvas,camera,virtualImage,G,state:()=>magnifierState(state),viewport:()=>viewport,front:()=>front,rays:()=>showRays,receiver:()=>state.eye,receiverName:'眼睛'});
+  const labels=createBenchLabels({THREE,root,canvas,camera,virtualImage,G,state:()=>magnifierState(state),viewport:()=>viewport,front:()=>front,rays:()=>showRays,receiver:()=>state.eye,receiverName:'固定眼睛',lightPaths:()=>showRays?[...magnifierRays(state,point),...eyeRays(state,point)]:[]});
   function draw(){pending=0;renderer.render(scene,camera);labels();}
   function requestDraw(){labels();if(!pending)pending=requestAnimationFrame(draw);}
-  function syncScene(){const g=magnifierState(state);eye.position.x=state.eye*G.scale;virtualImage.visible=g.type==='virtual'&&!front;if(g.type==='virtual'){virtualImage.position.set(g.v*G.scale,G.axis,0);virtualImage.scale.set(g.m,g.m,1);}source.position.x=-state.object*G.scale;screen.position.x=state.screen*G.scale;screen.visible=state.screenIn;projectedTexture.needsUpdate=true;updateRays();if(showRays&&!front)updateReceived();updateCamera();scene.updateMatrixWorld(true);highlight.update();requestDraw();}
+  function syncScene(){const g=magnifierState(state);eye.position.x=state.eye*G.scale;virtualImage.visible=extensions&&g.type==='virtual'&&!front;if(g.type==='virtual'){virtualImage.position.set(g.v*G.scale,G.axis,0);virtualImage.scale.set(g.m,g.m,1);}source.position.x=-state.object*G.scale;screen.position.x=state.screen*G.scale;screen.visible=state.screenIn;projectedTexture.needsUpdate=true;updateRays();if(showRays&&!front)updateReceived();updateCamera();scene.updateMatrixWorld(true);highlight.update();requestDraw();}
   const devices={object:source,screen,eye,lens:lensGroup},pointers=new Map(),raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let gesture=null;
   function ray(e){const r=canvas.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,1-(e.clientY-r.top)/r.height*2);raycaster.setFromCamera(pointer,camera);}
   function hit(e){if(front)return null;ray(e);const h=raycaster.intersectObjects(Object.values(devices).filter(group=>group.visible),true)[0];if(!h)return null;let group=h.object;while(group.parent!==scene&&group.parent)group=group.parent;return {...h,key:Object.keys(devices).find(key=>devices[key]===group)};}

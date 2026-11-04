@@ -8,6 +8,8 @@ if (canvas) {
   const toggle = document.querySelector('#shadow-block-toggle');
   const toggleLabel = document.querySelector('#shadow-toggle-label');
   const resetButton = document.querySelector('#shadow-view-reset');
+  let sceneUnavailable = false;
+  canvas.addEventListener('webglcontextlost', () => { sceneUnavailable = true; });
 
   try {
     const scene = new THREE.Scene();
@@ -550,6 +552,7 @@ if (canvas) {
     }, { passive: false });
 
     const animate = () => {
+      if (sceneUnavailable) return;
       requestAnimationFrame(animate);
       if (animation) {
         const progress = THREE.MathUtils.clamp((performance.now() - animation.started) / animation.duration, 0, 1);
@@ -565,11 +568,7 @@ if (canvas) {
     };
     animate();
   } catch (error) {
-    console.error('Shadow 3D scene failed to initialize:', error);
-    const reason = error instanceof Error ? error.message : String(error);
-    status.textContent = /webgl|gpu|graphics|failed to (?:create|initialize).*context|context.*(?:webgl|gpu)/i.test(reason)
-      ? '瀏覽器無法啟動 WebGL 立體畫面；請重新載入頁面，若仍無法顯示，請回報此訊息。'
-      : `立體場景初始化失敗：${reason.slice(0, 90) || '請重新載入頁面再試。'}`;
-    canvas.setAttribute('aria-label', '影子實驗場景無法載入');
+    sceneUnavailable = true;
+    throw error;
   }
 }
