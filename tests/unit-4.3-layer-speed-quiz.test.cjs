@@ -23,6 +23,7 @@ test('4.3 layer-speed quiz applies refraction through one three-layer bench',{ti
  await t.test('initial scene awaits emission, preserves six teaching sections and withholds speed answers',async()=>{
   assert.equal(await page.locator('.lesson-card').count(),6);assert.equal(await page.locator('form').count(),1);assert.equal(await page.locator('#quiz input[type=radio]').count(),0);assert.equal(await page.locator('.rank-slot').count(),3);
   assert.equal(await page.locator('#rank-check').isDisabled(),true);assert.equal(await page.locator('.rank-speed-badge[visibility=visible]').count(),0);
+  assert.equal(await page.locator('.rank-angle-value:visible').count(),0);
   await page.waitForTimeout(180);assert.equal(await page.locator('#rank-lab').getAttribute('data-state'),'idle');assert.equal(await page.locator('.rank-beam[d]:not([d=""])').count(),0);await shot('initial.png');
  });
  await t.test('emission draws genuine intermediate, continuous refracted segments and leaves parallel normals for comparison',async()=>{
@@ -31,6 +32,25 @@ test('4.3 layer-speed quiz applies refraction through one three-layer bench',{ti
   const geometry=await page.locator('#rank-scene').evaluate(svg=>{const point=p=>({x:p.x,y:p.y});const lines=[...svg.querySelectorAll('.rank-beam')].map(p=>({start:point(p.getPointAtLength(0)),end:point(p.getPointAtLength(p.getTotalLength()))}));const normals=[...svg.querySelectorAll('.rank-normal')].map(p=>({start:point(p.getPointAtLength(0)),end:point(p.getPointAtLength(p.getTotalLength()))}));return{lines,normals};});
   for(let i=1;i<4;i++){assert.ok(Math.abs(geometry.lines[i-1].end.x-geometry.lines[i].start.x)<.01);assert.ok(Math.abs(geometry.lines[i-1].end.y-geometry.lines[i].start.y)<.01);assert.equal(geometry.normals[i-1].start.x,geometry.normals[i-1].end.x);assert.ok(Math.abs(geometry.normals[i-1].start.x-geometry.lines[i].start.x)<.01);}
   assert.deepEqual(await answer(),[0,2,1]);assert.equal(await page.locator('#rank-check').isEnabled(),true);assert.equal(await page.locator('.rank-speed-badge[visibility=visible]').count(),0);await shot('observed.png');
+ });
+ await t.test('displayed angles match actual rays in every material arrangement and stay clear on narrow screens',async()=>{
+  const records=[],arrangements=new Set();
+  for(let question=0;question<6;question++){
+   arrangements.add(await page.locator('.rank-medium').evaluateAll(es=>es.map(e=>e.dataset.materialKind).join(',')));
+   for(const width of [1440,820,390,320]){
+    await page.setViewportSize({width,height:1000});await page.waitForTimeout(80);
+    const rows=await page.locator('#rank-scene').evaluate(svg=>[...svg.querySelectorAll('.rank-angle-value')].map(label=>{
+     const id=+label.dataset.layer,ray=svg.querySelector(`.rank-light-segment[data-segment="${id+1}"] .rank-beam`),a=ray.getPointAtLength(0),b=ray.getPointAtLength(ray.getTotalLength()),box=label.getBoundingClientRect(),layer=svg.querySelector(`.rank-medium[data-layer="${id}"] .rank-layer`).getBoundingClientRect(),matrix=svg.getScreenCTM();
+     const from=a.matrixTransform(matrix),to=b.matrixTransform(matrix),rayX=y=>from.x+(to.x-from.x)*(y-from.y)/(to.y-from.y);
+     return{text:label.textContent,angle:Math.atan2(b.x-a.x,b.y-a.y)*180/Math.PI,visible:getComputedStyle(label).visibility,font:parseFloat(getComputedStyle(label).fontSize)*matrix.a,inside:box.left>=layer.left&&box.right<=layer.right&&box.top>=layer.top&&box.bottom<=layer.bottom,clear:box.left>Math.max(rayX(box.top),rayX(box.bottom))+2};
+    }));
+    for(const row of rows){assert.match(row.text,/^\d+\.\d°$/);assert.equal(row.text,`${row.angle.toFixed(1)}°`);assert.equal(row.visible,'visible');assert.ok(row.font>=13.4&&row.inside&&row.clear,`${width}: ${JSON.stringify(row)}`);}
+    records.push({question,width,rows});
+   }
+   if(question<5){await page.locator('#rank-new').click();assert.equal(await page.locator('.rank-angle-value:visible').count(),0);await complete(page);}
+  }
+  assert.equal(arrangements.size,6);if(capture)await fs.writeFile(path.join(capture,'angle-readings.json'),JSON.stringify(records,null,2));
+  await page.setViewportSize({width:1440,height:1000});await page.reload();await page.waitForFunction(()=>document.querySelector('#rank-lab')?.dataset.ready==='true'&&document.querySelector('#rank-lab').dataset.texture==='ready');await complete(page);
  });
  await t.test('photoreal bench and transparent source load, with the optical aperture aligned to the computed ray',async()=>{
   assert.equal(await page.locator('#rank-lab').getAttribute('data-texture'),'ready');

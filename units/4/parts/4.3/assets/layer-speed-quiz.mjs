@@ -90,6 +90,7 @@ if(root){
         const p=project(layer.from),theta=layer.angle*Math.PI/180,r=narrow?65:44;
         return `<g data-rank-construction="${layer.id}" visibility="hidden"><path class="rank-normal" d="M${p[0]} ${p[1]-46}V${p[1]+Math.min(h-8,narrow?114:88)}"/>
           <path class="rank-angle" data-layer="${layer.id}" d="M${p[0]} ${p[1]+r}A${r} ${r} 0 0 0 ${p[0]+r*Math.sin(theta)} ${p[1]+r*Math.cos(theta)}"/>
+          <text class="rank-angle-value" data-layer="${layer.id}" x="${p[0]+r*Math.sin(theta)+18}" y="${p[1]+r*Math.cos(theta)}" font-size="${font}" visibility="hidden">${layer.angle.toFixed(1)}°</text>
           ${layer.id===0?`<text x="${p[0]+18}" y="${p[1]-54}" font-size="${font}">法線</text>`:''}</g>`;
       }).join('')}</g>
       <g aria-hidden="true">${question.geometry.segments.map((segment,i)=>`<g class="rank-light-segment" data-segment="${i}"><path class="rank-beam-halo"/><path class="rank-beam"/><path class="rank-beam-core"/><path class="rank-direction"/></g>`).join('')}</g>
@@ -132,6 +133,7 @@ if(root){
     svg.querySelector('.rank-source-lens').setAttribute('opacity',elapsed>0?'.82':'0');
     const comparison=compareLayers(question.geometry,order);
     svg.querySelectorAll('.rank-angle').forEach(arc=>arc.dataset.emphasis=String(revealed&&snapshot.complete));
+    svg.querySelectorAll('.rank-angle-value').forEach(label=>label.setAttribute('visibility',snapshot.complete?'visible':'hidden'));
     svg.querySelectorAll('.rank-speed-badge').forEach((badge,i)=>{
       const shown=revealed&&comparison.correct&&snapshot.complete;
       badge.setAttribute('visibility',shown?'visible':'hidden');

@@ -20,6 +20,7 @@
 .rank-medium>text{fill:#183f32!important;font-weight:750;paint-order:stroke;stroke:#fff9e2;stroke-width:.35px}
 .rank-normal{fill:none;stroke:#476d59;stroke-width:1.3;stroke-dasharray:6 5;vector-effect:non-scaling-stroke}
 .rank-angle{fill:none;stroke:#365f44;stroke-width:1.6;vector-effect:non-scaling-stroke}
+.rank-angle-value{paint-order:stroke;stroke:#fff9e7;stroke-width:4px;stroke-linejoin:round;font-weight:750!important;font-variant-numeric:tabular-nums}
 .rank-beam{fill:none;stroke:#ffdc57;stroke-width:3;stroke-linecap:round;vector-effect:non-scaling-stroke}
 .rank-beam-core{fill:none;stroke:#fffce0;stroke-width:1;vector-effect:non-scaling-stroke}
 .rank-beam-halo{fill:none;stroke:#ffcd37;stroke-width:11;opacity:.35;filter:url(#rank-glow);vector-effect:non-scaling-stroke}

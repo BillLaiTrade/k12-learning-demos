@@ -1,0 +1,95 @@
+TAP version 13
+# Subtest: 4.3 layer-speed quiz applies refraction through one three-layer bench
+    # Subtest: initial scene awaits emission, preserves six teaching sections and withholds speed answers
+    ok 1 - initial scene awaits emission, preserves six teaching sections and withholds speed answers
+      ---
+      duration_ms: 854.373226
+      type: 'test'
+      ...
+    # Subtest: emission draws genuine intermediate, continuous refracted segments and leaves parallel normals for comparison
+    ok 2 - emission draws genuine intermediate, continuous refracted segments and leaves parallel normals for comparison
+      ---
+      duration_ms: 3590.877402
+      type: 'test'
+      ...
+    # Subtest: displayed angles match actual rays in every material arrangement and stay clear on narrow screens
+    ok 3 - displayed angles match actual rays in every material arrangement and stay clear on narrow screens
+      ---
+      duration_ms: 36692.329869
+      type: 'test'
+      ...
+    # Subtest: photoreal bench and transparent source load, with the optical aperture aligned to the computed ray
+    ok 4 - photoreal bench and transparent source load, with the optical aperture aligned to the computed ray
+      ---
+      duration_ms: 72.175
+      type: 'test'
+      ...
+    # Subtest: three material states use distinct real textures and follow the speed ordering when questions change
+    ok 5 - three material states use distinct real textures and follow the speed ordering when questions change
+      ---
+      duration_ms: 8009.958175
+      type: 'test'
+      ...
+    # Subtest: partial and wrong answers get actionable feedback; correction and new edits update the same diagram
+    ok 6 - partial and wrong answers get actionable feedback; correction and new edits update the same diagram
+      ---
+      duration_ms: 1034.886607
+      type: 'test'
+      ...
+    # Subtest: mouse dragging swaps occupied slots, cancels outside drops and does not leak a click or ghost
+    ok 7 - mouse dragging swaps occupied slots, cancels outside drops and does not leak a click or ghost
+      ---
+      duration_ms: 886.567365
+      type: 'test'
+      ...
+    # Subtest: keyboard selection, arrows, deletion and Escape support the complete ranking workflow
+    ok 8 - keyboard selection, arrows, deletion and Escape support the complete ranking workflow
+      ---
+      duration_ms: 3253.834749
+      type: 'test'
+      ...
+    # Subtest: offscreen playback suspends and resumes, while changing question cancels old playback and clears answers
+    ok 9 - offscreen playback suspends and resumes, while changing question cancels old playback and clears answers
+      ---
+      duration_ms: 10931.521914
+      type: 'test'
+      ...
+    # Subtest: desktop, laptop and narrow screens preserve physical angles, readable labels and complete controls
+    ok 10 - desktop, laptop and narrow screens preserve physical angles, readable labels and complete controls
+      ---
+      duration_ms: 7765.276957
+      type: 'test'
+      ...
+    # Subtest: native phone touch drags cards without page scrolling and reduced-motion playback still reveals intermediate light
+    ok 11 - native phone touch drags cards without page scrolling and reduced-motion playback still reveals intermediate light
+      ---
+      duration_ms: 6850.633244
+      type: 'test'
+      ...
+    # Subtest: the lamp emits by mouse and keyboard, stays aligned after resize, and preserves answers on replay
+    ok 12 - the lamp emits by mouse and keyboard, stays aligned after resize, and preserves answers on replay
+      ---
+      duration_ms: 17195.227039
+      type: 'test'
+      ...
+    # Subtest: texture failure leaves a usable vector bench, and no-JavaScript explains how to continue
+    ok 13 - texture failure leaves a usable vector bench, and no-JavaScript explains how to continue
+      ---
+      duration_ms: 9182.550167
+      type: 'test'
+      ...
+    1..13
+ok 1 - 4.3 layer-speed quiz applies refraction through one three-layer bench
+  ---
+  duration_ms: 110964.806292
+  type: 'test'
+  ...
+1..1
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 112260.90972

@@ -1,0 +1,60 @@
+▶ 4.3 layer-speed quiz applies refraction through one three-layer bench
+  ✔ initial scene awaits emission, preserves six teaching sections and withholds speed answers (814.734694ms)
+  ✔ emission draws genuine intermediate, continuous refracted segments and leaves parallel normals for comparison (3413.849606ms)
+  ✖ displayed angles match actual rays in every material arrangement and stay clear on narrow screens (1330.589733ms)
+  ✖ photoreal bench and transparent source load, with the optical aperture aligned to the computed ray (33.758903ms)
+  ✔ three material states use distinct real textures and follow the speed ordering when questions change (9496.011502ms)
+  ✔ partial and wrong answers get actionable feedback; correction and new edits update the same diagram (5887.907037ms)
+  ✔ mouse dragging swaps occupied slots, cancels outside drops and does not leak a click or ghost (1017.304061ms)
+  ✔ keyboard selection, arrows, deletion and Escape support the complete ranking workflow (11085.41713ms)
+  ✔ offscreen playback suspends and resumes, while changing question cancels old playback and clears answers (14864.171399ms)
+  ✔ desktop, laptop and narrow screens preserve physical angles, readable labels and complete controls (9925.635692ms)
+  ✔ native phone touch drags cards without page scrolling and reduced-motion playback still reveals intermediate light (6825.903635ms)
+  ✔ the lamp emits by mouse and keyboard, stays aligned after resize, and preserves answers on replay (21971.316003ms)
+  ✔ texture failure leaves a usable vector bench, and no-JavaScript explains how to continue (18192.877495ms)
+✖ 4.3 layer-speed quiz applies refraction through one three-layer bench (112266.118658ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 11
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 113261.306923
+
+✖ failing tests:
+
+test at tests/unit-4.3-layer-speed-quiz.test.cjs:36:10
+✖ displayed angles match actual rays in every material arrangement and stay clear on narrow screens (1330.589733ms)
+  AssertionError [ERR_ASSERTION]: 820: {"text":"40.0°","angle":39.97837789857763,"visible":"visible","font":25.030164930555557,"inside":true,"clear":false}
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:47:157)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:36:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/unit-4.3-layer-speed-quiz.test.cjs:55:10
+✖ photoreal bench and transparent source load, with the optical aperture aligned to the computed ray (33.758903ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /layer-quiz-bench-wide\.png$/. Input:
+
+  'http://127.0.0.1:32909/units/4/parts/4.3/assets/layer-quiz-bench-tall.png'
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:59:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:55:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'http://127.0.0.1:32909/units/4/parts/4.3/assets/layer-quiz-bench-tall.png',
+    expected: /layer-quiz-bench-wide\.png$/,
+    operator: 'match',
+    diff: 'simple'
+  }

@@ -1,0 +1,722 @@
+[
+  {
+    "question": 0,
+    "width": 1440,
+    "rows": [
+      {
+        "text": "40.0°",
+        "angle": 39.97837692112537,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "21.2°",
+        "angle": 21.168778212719577,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "27.3°",
+        "angle": 27.331258761280587,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 0,
+    "width": 820,
+    "rows": [
+      {
+        "text": "40.0°",
+        "angle": 39.97837789857763,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "21.2°",
+        "angle": 21.168790497462272,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "27.3°",
+        "angle": 27.331245309787345,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 0,
+    "width": 390,
+    "rows": [
+      {
+        "text": "40.0°",
+        "angle": 39.97837789857763,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "21.2°",
+        "angle": 21.168790497462272,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "27.3°",
+        "angle": 27.331245309787345,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 0,
+    "width": 320,
+    "rows": [
+      {
+        "text": "40.0°",
+        "angle": 39.97837789857763,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "21.2°",
+        "angle": 21.168790497462272,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "27.3°",
+        "angle": 27.331245309787345,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 1,
+    "width": 1440,
+    "rows": [
+      {
+        "text": "24.8°",
+        "angle": 24.824903825642167,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "36.0°",
+        "angle": 35.981279673180865,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "19.3°",
+        "angle": 19.28190089227097,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 1,
+    "width": 820,
+    "rows": [
+      {
+        "text": "24.8°",
+        "angle": 24.824909722456255,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "36.0°",
+        "angle": 35.98127125134966,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "19.3°",
+        "angle": 19.28191286355215,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 1,
+    "width": 390,
+    "rows": [
+      {
+        "text": "24.8°",
+        "angle": 24.824909722456255,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "36.0°",
+        "angle": 35.98127125134966,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "19.3°",
+        "angle": 19.28191286355215,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 1,
+    "width": 320,
+    "rows": [
+      {
+        "text": "24.8°",
+        "angle": 24.824909722456255,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "36.0°",
+        "angle": 35.98127125134966,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "19.3°",
+        "angle": 19.28191286355215,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 2,
+    "width": 1440,
+    "rows": [
+      {
+        "text": "40.0°",
+        "angle": 39.97837692112537,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "27.3°",
+        "angle": 27.331238563841772,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "21.2°",
+        "angle": 21.168802412137183,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 2,
+    "width": 820,
+    "rows": [
+      {
+        "text": "40.0°",
+        "angle": 39.97837789857763,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "27.3°",
+        "angle": 27.331240091331782,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "21.2°",
+        "angle": 21.16879480586318,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 2,
+    "width": 390,
+    "rows": [
+      {
+        "text": "40.0°",
+        "angle": 39.97837789857763,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "27.3°",
+        "angle": 27.331240091331782,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "21.2°",
+        "angle": 21.16879480586318,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 2,
+    "width": 320,
+    "rows": [
+      {
+        "text": "40.0°",
+        "angle": 39.97837789857763,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "27.3°",
+        "angle": 27.331240091331782,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "21.2°",
+        "angle": 21.16879480586318,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 3,
+    "width": 1440,
+    "rows": [
+      {
+        "text": "19.3°",
+        "angle": 19.281916265926398,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "36.0°",
+        "angle": 35.981279673180865,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "24.8°",
+        "angle": 24.824889612024233,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 3,
+    "width": 820,
+    "rows": [
+      {
+        "text": "19.3°",
+        "angle": 19.28191286355215,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "36.0°",
+        "angle": 35.98127125134966,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "24.8°",
+        "angle": 24.824909722456255,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 3,
+    "width": 390,
+    "rows": [
+      {
+        "text": "19.3°",
+        "angle": 19.28191286355215,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "36.0°",
+        "angle": 35.98127125134966,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "24.8°",
+        "angle": 24.824909722456255,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 3,
+    "width": 320,
+    "rows": [
+      {
+        "text": "19.3°",
+        "angle": 19.28191286355215,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "36.0°",
+        "angle": 35.98127125134966,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "24.8°",
+        "angle": 24.824909722456255,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 4,
+    "width": 1440,
+    "rows": [
+      {
+        "text": "21.2°",
+        "angle": 21.16878740709544,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "27.3°",
+        "angle": 27.331238563841772,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "40.0°",
+        "angle": 39.97838705331117,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 4,
+    "width": 820,
+    "rows": [
+      {
+        "text": "21.2°",
+        "angle": 21.16879480586318,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "27.3°",
+        "angle": 27.33122999427194,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "40.0°",
+        "angle": 39.9783854112241,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 4,
+    "width": 390,
+    "rows": [
+      {
+        "text": "21.2°",
+        "angle": 21.16879480586318,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "27.3°",
+        "angle": 27.33122999427194,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "40.0°",
+        "angle": 39.9783854112241,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 4,
+    "width": 320,
+    "rows": [
+      {
+        "text": "21.2°",
+        "angle": 21.16879480586318,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "27.3°",
+        "angle": 27.33122999427194,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "40.0°",
+        "angle": 39.9783854112241,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 5,
+    "width": 1440,
+    "rows": [
+      {
+        "text": "27.3°",
+        "angle": 27.331231525793868,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "21.2°",
+        "angle": 21.1687932177677,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "40.0°",
+        "angle": 39.97838705331117,
+        "visible": "visible",
+        "font": 18.373333333333335,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 5,
+    "width": 820,
+    "rows": [
+      {
+        "text": "27.3°",
+        "angle": 27.331245309787345,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "21.2°",
+        "angle": 21.16877937177183,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "40.0°",
+        "angle": 39.9783854112241,
+        "visible": "visible",
+        "font": 25.030164930555557,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 5,
+    "width": 390,
+    "rows": [
+      {
+        "text": "27.3°",
+        "angle": 27.331245309787345,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "21.2°",
+        "angle": 21.16877937177183,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "40.0°",
+        "angle": 39.9783854112241,
+        "visible": "visible",
+        "font": 17.923828125,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  },
+  {
+    "question": 5,
+    "width": 320,
+    "rows": [
+      {
+        "text": "27.3°",
+        "angle": 27.331245309787345,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "21.2°",
+        "angle": 21.16877937177183,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      },
+      {
+        "text": "40.0°",
+        "angle": 39.9783854112241,
+        "visible": "visible",
+        "font": 14.6357421875,
+        "inside": true,
+        "clear": true
+      }
+    ]
+  }
+]
