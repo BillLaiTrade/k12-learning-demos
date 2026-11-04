@@ -16,6 +16,25 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
  const ready=async p=>{await p.goto(base);await p.waitForFunction(()=>document.querySelector('#depth-lab')?.dataset.texture==='ready'&&document.querySelector('#depth-observer')?.dataset.depth==='0');};
  await ready(page);
  const set=async(depth,eye)=>{await page.locator('#depth-input').fill(String(depth));await page.locator('#depth-eye').evaluate((el,value)=>{el.dispatchEvent(new KeyboardEvent('keydown',{key:'Home',bubbles:true}));const delta=value-210;for(let n=0;n<Math.floor(delta/10);n++)el.dispatchEvent(new KeyboardEvent('keydown',{key:'PageUp',bubbles:true}));for(let n=0;n<delta%10;n+=2)el.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));},eye);await page.waitForFunction(({depth,eye})=>{const c=document.querySelector('#depth-observer');return c.dataset.depth===String(depth)&&c.dataset.eyeX===String(eye);},{depth,eye});};
+ const readLinks=async()=>page.locator('.depth-views').evaluate(el=>{
+  const box=e=>e.getBoundingClientRect().toJSON(), frame=box(el.querySelector('.depth-eye-bezel')), stage=box(el.querySelector('.depth-observation .depth-stage'));
+  const overlay=el.querySelector('.depth-view-links'), bounds=box(overlay), labels=[...el.querySelectorAll('.depth-annotations text')].map(box);
+  const curves=[...overlay.querySelectorAll('.depth-link-line')].map(path=>{
+   const matrix=path.getScreenCTM(),length=path.getTotalLength();
+   const points=Array.from({length:81},(_,i)=>{const p=path.getPointAtLength(length*i/80),q=new DOMPoint(p.x,p.y).matrixTransform(matrix);return{x:q.x,y:q.y};});
+   return{start:points[0],end:points.at(-1),inside:points.every(p=>p.x>=bounds.left-.5&&p.x<=bounds.right+.5&&p.y>=bounds.top-.5&&p.y<=bounds.bottom+.5),labelHits:points.filter(p=>labels.some(b=>p.x>b.left-1&&p.x<b.right+1&&p.y>b.top-1&&p.y<b.bottom+1)).length,arrow:getComputedStyle(path).markerEnd,stroke:parseFloat(getComputedStyle(path).strokeWidth)};
+  });
+  return{frameHits:labels.filter(b=>frame.left<b.right&&frame.right>b.left&&frame.top<b.bottom&&frame.bottom>b.top).length,layout:overlay.dataset.layout,eye:overlay.dataset.eyeX,frame,stage,curves,interactive:getComputedStyle(overlay).pointerEvents};
+ });
+ const checkLinks=m=>{
+  assert.equal(m.curves.length,2);assert.equal(m.interactive,'none');assert.equal(m.frameHits,0,'eye frame does not cover labels');
+  m.curves.forEach((p,i)=>{
+   assert.ok(p.inside,'connection stays inside the diagram group');assert.equal(p.labelHits,0,'connection does not cover explanatory text');assert.equal(p.arrow,'none');assert.ok(p.stroke<2);
+   assert.ok(p.start.x>=m.frame.right-m.frame.width*.12&&p.start.x<=m.frame.right+1&&p.start.y>=m.frame.top&&p.start.y<=m.frame.bottom,'connection starts on the eye frame');
+   const edge=m.layout==='side'?m.stage.left:m.stage.right;
+   assert.ok(Math.abs(p.end.x-edge)<4&&Math.abs(p.end.y-(i?m.stage.bottom-10:m.stage.top+10))<2,'connection reaches the viewing frame');
+  });
+ };
  const capture=process.env.DEPTH_CAPTURE_DIR;if(capture)await fs.mkdir(capture,{recursive:true});
  const results=[];
  await t.test('the default is dry and physically occluded, with readable teaching and no automatic motion',async()=>{
@@ -29,6 +48,8 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   assert.equal(await page.locator('#depth-replay').count(),0);
   assert.deepEqual(await page.locator('.depth-controls button').evaluateAll(es=>es.map(e=>e.id)),['depth-fill','depth-drain']);
   assert.equal(await page.locator('.depth-eye-rail').count(),1);
+  assert.equal(await page.locator('#depth-observer-heading').innerText(),'這隻眼睛看到的畫面');
+  assert.equal(await page.locator('#depth-eye').getAttribute('aria-controls'),'depth-observer');
   assert.equal(await page.locator('#depth-reset').count(),0);
   assert.equal(await page.locator('.depth-explanation #depth-control-help').count(),1);
   assert.equal(await page.locator('.depth-controls #depth-control-help').count(),0);
@@ -155,6 +176,20 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   await set(70,250);await eye.scrollIntoViewIfNeeded();const b=await eye.boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2+35,b.y+b.height/2,{steps:6});await page.mouse.up();assert.ok(+await page.locator('#depth-eye').getAttribute('aria-valuenow')>250);
   await set(0,300);
  });
+ await t.test('the eye owns the viewing window and its connections follow keyboard movement and focus',async()=>{
+  await page.setViewportSize({width:1440,height:900});await set(80,300);await page.locator('#depth-lab').scrollIntoViewIfNeeded();
+  await page.waitForFunction(()=>document.querySelector('.depth-view-links').dataset.eyeX==='300');
+  const before=await readLinks();checkLinks(before);
+  await page.locator('#depth-eye').focus();assert.equal(await page.locator('#depth-lab').getAttribute('data-eye-active'),'true');
+  await page.keyboard.press('Home');await page.waitForFunction(()=>document.querySelector('.depth-view-links').dataset.eyeX==='210');
+  const near=await readLinks();checkLinks(near);
+  await page.keyboard.press('End');await page.waitForFunction(()=>document.querySelector('.depth-view-links').dataset.eyeX==='340');
+  const far=await readLinks();checkLinks(far);assert.ok(far.curves[0].start.x>near.curves[0].start.x+80);
+  assert.deepEqual(near.curves.map(p=>p.end),far.curves.map(p=>p.end));
+  await page.locator('#show-rays').uncheck();const hidden=await readLinks();assert.deepEqual(hidden.curves.map(p=>p.start),far.curves.map(p=>p.start));checkLinks(hidden);
+  await page.locator('#show-rays').check();await page.locator('#depth-eye').focus();await page.keyboard.press('Tab');assert.equal(await page.locator('#depth-lab').getAttribute('data-eye-active'),'false');
+  await set(80,300);
+ });
  await t.test('desktop and phone keep panels, labels and controls readable without horizontal page scrolling',async()=>{
   for(const [width,height] of [[1536,1000],[1440,900],[1366,768],[1280,650],[1024,768],[820,900],[760,844],[390,844],[320,740]]){
    await page.setViewportSize({width,height});await set(70,250);await page.locator('#depth-lab').scrollIntoViewIfNeeded();await page.waitForTimeout(180);
@@ -175,7 +210,13 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
    assert.ok(m.rail.left>=m.svg.left-1&&m.rail.right<=m.svg.right+1);
    if(width>=1280)assert.ok(Math.abs(m.views[0].top-m.views[1].top)<1);
    if(width<=390)assert.ok(m.views[1].top>m.views[0].bottom);
-   results.push({width,height,...m});
+   const connections=[];
+   for(const position of [210,300,340]){
+    await set(70,position);await page.waitForFunction(n=>document.querySelector('.depth-view-links').dataset.eyeX===String(n),position);
+    const link=await readLinks();checkLinks(link);connections.push(link);
+   }
+   await set(70,250);
+   results.push({width,height,...m,connections});
    if(capture&&[1536,1366,390,320].includes(width))await page.locator('#depth-lab').screenshot({path:path.join(capture,`${width}-dual-views.png`)});
   }
   if(capture)await fs.writeFile(path.join(capture,'measurements.json'),JSON.stringify(results,null,2));

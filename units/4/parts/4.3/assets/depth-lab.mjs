@@ -1,9 +1,12 @@
 import { depthGeometry, clamp, TANK, DEPTH_INITIAL } from './depth-model.mjs?v=20261104-fixed1';
+import { eyeArtwork, EYE_LINK_ANCHOR } from './depth-eye-art.mjs?v=20261104-eyeview1';
 import { createTextures, renderObserver } from './depth-observer.mjs?v=20261104-fixed1';
 
 const root = document.querySelector('#depth-lab');
 if (root) {
   const q = selector => root.querySelector(selector), svg = q('#depth-scene'), canvas = q('#depth-observer');
+  const views=q('.depth-views'), links=q('.depth-view-links'), viewStage=q('.depth-observation .depth-stage');
+  let linkFrame=0, linkedEye=null;
   const photoURL = new URL('./oblique-entry-water.png', import.meta.url).href;
   const X = x => 45 + x * 1.85, Y = y => 430 - y * 1.85;
   const point = p => [X(p[0]), Y(p[1])];
@@ -25,8 +28,7 @@ if (root) {
     <linearGradient id="depth-coin" x2=".7" y2="1"><stop stop-color="#fff0b8"/><stop offset=".35" stop-color="#c58a46"/><stop offset=".7" stop-color="#e7b46c"/><stop offset="1" stop-color="#81532a"/></linearGradient>
     <linearGradient id="depth-wet" x2="0" y2="1"><stop stop-color="#1fd5ed"/><stop offset="1" stop-color="#0087bb"/></linearGradient>
     <linearGradient id="depth-reflection"><stop stop-color="#fff" stop-opacity="0"/><stop offset=".12" stop-color="#fff" stop-opacity=".35"/><stop offset=".16" stop-color="#fff" stop-opacity=".08"/><stop offset=".65" stop-color="#fff" stop-opacity="0"/><stop offset=".82" stop-color="#fff" stop-opacity=".18"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-    <radialGradient id="depth-iris"><stop stop-color="#101d18"/><stop offset=".36" stop-color="#14251e"/><stop offset=".4" stop-color="#a4b17b"/><stop offset=".7" stop-color="#7b8d57"/><stop offset="1" stop-color="#354c39"/></radialGradient>
-    <linearGradient id="depth-eye-white" x2=".3" y2="1"><stop stop-color="#b9b9a0"/><stop offset=".4" stop-color="#ffffef"/><stop offset="1" stop-color="#d4d7bf"/></linearGradient>
+    ${eyeArtwork()}
     <clipPath id="depth-water-clip"><rect/></clipPath>
   </defs>
   <rect width="720" height="500" fill="#c69660"/>
@@ -46,7 +48,7 @@ if (root) {
   <g class="depth-eye-rail" aria-hidden="true">
     <path class="depth-rail-shadow" d="M${X(210)} ${Y(TANK.eyeHeight)+3}H${X(340)}"/>
     <path class="depth-rail-line" d="M${X(210)} ${Y(TANK.eyeHeight)}H${X(340)}"/>
-    <path class="depth-rail-stops" d="M${X(210)} ${Y(TANK.eyeHeight)-8}V${Y(TANK.eyeHeight)+8} M${X(340)} ${Y(TANK.eyeHeight)-8}V${Y(TANK.eyeHeight)+8}"/>
+    <rect class="depth-rail-stops" x="${X(210)-3}" y="${Y(TANK.eyeHeight)-8}" width="6" height="16" rx="3" fill="url(#depth-eye-bezel)"/><rect class="depth-rail-stops" x="${X(340)-3}" y="${Y(TANK.eyeHeight)-8}" width="6" height="16" rx="3" fill="url(#depth-eye-bezel)"/>
   </g>
   <g class="depth-construction" aria-hidden="true"></g>
   <g class="depth-coin" transform="translate(${X(TANK.coinX)} ${Y(0)})" filter="url(#depth-object-shadow)" aria-hidden="true">
@@ -57,15 +59,50 @@ if (root) {
   </g>
   <g class="depth-annotations" aria-hidden="true"></g>
   <path class="depth-water-hit" stroke="transparent" fill="none" aria-hidden="true"/>
-  <g id="depth-eye" class="depth-eye" tabindex="0" role="slider" aria-label="前後拖曳眼睛調整觀看位置" aria-orientation="horizontal" aria-describedby="depth-control-help" aria-valuemin="210" aria-valuemax="340" aria-valuenow="300">
+  <g id="depth-eye" class="depth-eye" tabindex="0" role="slider" aria-label="前後拖曳眼睛調整觀看位置" aria-orientation="horizontal" aria-controls="depth-observer" aria-describedby="depth-control-help depth-view-relationship" aria-valuemin="210" aria-valuemax="340" aria-valuenow="300">
     <title>沿導軌拖曳眼睛靠近或遠離；方向鍵微調，PageUp／PageDown加快，Home／End到兩端</title>
     <rect class="depth-eye-hit" x="-48" y="-45" width="96" height="90" rx="16" fill="transparent"/>
-    <g filter="url(#depth-object-shadow)"><path d="M-34 0Q0-33 34 0Q0 33-34 0Z" fill="url(#depth-eye-white)" stroke="#526747" stroke-width="3"/>
-    <circle r="14" fill="url(#depth-iris)"/><circle r="5.5" fill="#13251f"/><circle cx="-4" cy="-5" r="3.5" fill="#fff"/>
-    <path d="M-34 0Q0-33 34 0" stroke="#6a694d" stroke-width="3" fill="none"/></g>
-    <ellipse class="depth-eye-focus" rx="40" ry="24"/>
+    <g class="depth-eye-device" filter="url(#depth-eye-soft-shadow)">
+      <rect class="depth-eye-bezel" x="-44" y="-26" width="88" height="52" rx="15" fill="url(#depth-eye-bezel)" stroke="#b49658" stroke-width="1.1"/>
+      <rect x="-41.5" y="-23.5" width="83" height="47" rx="13.5" fill="url(#depth-eye-pad)" stroke="#fff9e4" stroke-width="1"/>
+      <use href="#depth-eye-art"/>
+    </g>
+    <rect class="depth-eye-focus" x="-40" y="-22" width="80" height="44" rx="12"/>
   </g>`;
   const eye = q('.depth-eye');
+  function scheduleLinks() { if(!linkFrame)linkFrame=requestAnimationFrame(drawLinks); }
+  function drawLinks() {
+    linkFrame=0;
+    const wrap=views.getBoundingClientRect(), frame=viewStage.getBoundingClientRect(), left=q('.depth-explanation').getBoundingClientRect();
+    if(wrap.width<1||frame.width<1)return;
+    const matrix=eye.getScreenCTM(), anchor=y=>{
+      const p=new DOMPoint(EYE_LINK_ANCHOR.x,y).matrixTransform(matrix);
+      return {x:p.x-wrap.left,y:p.y-wrap.top};
+    };
+    const top=anchor(-EYE_LINK_ANCHOR.y), bottom=anchor(EYE_LINK_ANCHOR.y);
+    const stacked=frame.left<left.right-1;
+    let upper,lower,area='';
+    if(stacked){
+      const x1=wrap.width-5,x2=wrap.width-2,ex=frame.right-wrap.left-2;
+      const y1=frame.top-wrap.top+10,y2=frame.bottom-wrap.top-10;
+      upper=`M${top.x} ${top.y}H${x1}V${y1}H${ex}`;
+      lower=`M${bottom.x} ${bottom.y}H${x2}V${y2}H${ex}`;
+    }else{
+      const ex=frame.left-wrap.left+2,y1=frame.top-wrap.top+10,y2=frame.bottom-wrap.top-10;
+      const gate=left.right-wrap.left+6,bend=(ex-gate)/2;
+      upper=`M${top.x} ${top.y}H${gate}C${gate+bend} ${top.y} ${ex-bend} ${y1} ${ex} ${y1}`;
+      lower=`M${bottom.x} ${bottom.y}H${gate}C${gate+bend} ${bottom.y} ${ex-bend} ${y2} ${ex} ${y2}`;
+      area=`M${gate} ${top.y}C${gate+bend} ${top.y} ${ex-bend} ${y1} ${ex} ${y1}V${y2}C${ex-bend} ${y2} ${gate+bend} ${bottom.y} ${gate} ${bottom.y}Z`;
+    }
+    links.setAttribute('viewBox',`0 0 ${wrap.width} ${wrap.height}`);
+    q('[data-depth-link=top]').setAttribute('d',upper);q('[data-depth-link=bottom]').setAttribute('d',lower);
+    q('.depth-link-area').setAttribute('d',area);links.dataset.layout=stacked?'stacked':'side';links.dataset.eyeX=geometry.eyeX;
+  }
+  eye.addEventListener('focus',()=>{root.dataset.eyeActive='true';});
+  eye.addEventListener('blur',()=>{root.dataset.eyeActive='false';});
+  const linkResize=new ResizeObserver(scheduleLinks);
+  for(const el of [views,svg,viewStage])linkResize.observe(el);
+  document.fonts.ready.then(scheduleLinks);
 
   function badge(text, x, y, font, anchor = 'start') {
     const width = text.length * font + font * .65, left = anchor === 'end' ? x - width : x;
@@ -112,7 +149,7 @@ if (root) {
       html+=badge('水面 ↕',53,s-18,font);
       if(430-s>font*1.4+8/ratio)html+=badge('水',53,(s+430)/2+font*.3,font);
     }
-    html += `<text class="depth-rail-label" x="${X(210)}" y="42" font-size="${font}">靠近</text><text class="depth-rail-label" x="${X(340)}" y="42" text-anchor="end" font-size="${font}">遠離</text>`;
+    html += `<text class="depth-rail-label" x="${X(210)}" y="39" font-size="${font}">靠近</text><text class="depth-rail-label" x="${X(340)}" y="39" text-anchor="end" font-size="${font}">遠離</text>`;
     html += `<path d="M${X(g.coin[0])+15} 433L200 474" fill="none" stroke="#fffbe7" stroke-width="2"/>` + badge('實際位置', 205, 483, font);
     if (g.depth>0 && q('#show-rays').checked && g.status !== 'hidden') {
       const below=s+38/ratio;
@@ -144,6 +181,7 @@ if (root) {
     root.dataset.directReady='true';
     eye.setAttribute('transform',`translate(${X(g.eyeX)} ${Y(TANK.eyeHeight)})`);
     eye.setAttribute('aria-valuenow',g.eyeX); eye.setAttribute('aria-valuetext',eyeState(g.eyeX));
+    if(linkedEye!==g.eyeX){linkedEye=g.eyeX;scheduleLinks();}
     drawConstruction();
     const observation=g.status==='hidden'?'槽壁遮住硬幣的光。':g.depth===0?'未加水，光在空氣中直線傳播到觀看位置。':'出水折射後的光進入觀看位置，硬幣看起來較淺。';
     svg.setAttribute('aria-label',`${waterState(g.depth)}，硬幣固定在槽底，眼睛${eyeState(g.eyeX)}。${observation}${q('#show-rays').checked?(g.depth>0?'顯示光路與反向延長線。':'顯示直線傳播的光。'):'光路與輔助線已隱藏。'}`);
@@ -157,7 +195,7 @@ if (root) {
     const state=visible?(geometry.depth===0?'空槽：此位置可直接看見硬幣':geometry.status==='partial'?'硬幣逐漸出現':'目前可以看見硬幣'):geometry.depth===0?'空槽：硬幣被槽壁遮住':'目前被前側槽壁遮住';
     q('#depth-visibility').textContent=state; q('#depth-visibility').dataset.visible=visible?'visible':'hidden';
     q('#depth-view-result').textContent=visible?(geometry.depth>0?'光經過水面折射後，進入目前的觀看位置。':'觀看位置較近，光可直接越過槽緣進入眼睛。'):geometry.depth===0?'空槽時，硬幣的光被槽壁遮住。按「加水觀察」比較。':'硬幣仍在槽底；調整水位，觀察可見範圍的變化。';
-    canvas.setAttribute('aria-label',`${waterState(geometry.depth)}、眼睛${eyeState(geometry.eyeX)}的視野。${state}。`);
+    canvas.setAttribute('aria-label',`這隻眼睛看到的畫面：${waterState(geometry.depth)}、眼睛${eyeState(geometry.eyeX)}的視野。${state}。`);
     canvas.dataset.coinPixels=observerResult.coinPixels; canvas.dataset.depth=geometry.depth;canvas.dataset.eyeX=geometry.eyeX;
     canvas.dataset.coinBounds=JSON.stringify(observerResult.bounds);
     q('#depth-live').textContent=`${waterState(geometry.depth)}，${state}；硬幣實際位置不變。`;

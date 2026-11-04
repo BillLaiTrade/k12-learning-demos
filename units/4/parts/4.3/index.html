@@ -37,8 +37,8 @@
   <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-fit2">
 <link rel="stylesheet" href="assets/integrated-refraction.css?v=20261103-fit2">
   <link rel="stylesheet" href="assets/return-refraction-refresh.css?v=20261103-inline1">
-  <link rel="stylesheet" href="assets/depth-lab.css?v=20261104-noreplay1">
-  <script type="module" src="assets/depth-lab.mjs?v=20261104-noreplay1"></script>
+  <link rel="stylesheet" href="assets/depth-lab.css?v=20261104-eyeview1">
+  <script type="module" src="assets/depth-lab.mjs?v=20261104-eyeview1"></script>
   <script type="module" src="assets/lesson.mjs?v=20261103-depth1">
 </script>
 </head>
@@ -458,7 +458,7 @@
 </div>
 </div>
 <div id="depth-lab" data-state="ready" data-depth="0" data-eye-x="300">
-<p class="depth-intro">加水或放水，觀察同一位置看到的變化。</p>
+<p class="depth-intro">移動眼睛，觀察這個位置看到的畫面。</p>
 <div class="depth-views">
 <figure class="depth-view depth-explanation">
 <figcaption>光怎麼進入眼睛<small>側面剖面</small></figcaption>
@@ -476,14 +476,16 @@
 <div class="depth-view-note depth-side-note"><span id="depth-control-help" class="depth-control-hint">↕ 拖曳水面　↔ 拖曳眼睛</span><span><i></i>真正的光路</span><span><i class="dashed"></i>位置判斷的輔助線</span></div>
 </figure>
 <figure class="depth-view depth-observation">
-<figcaption>從這個位置看進去<small>眼前所見</small></figcaption>
-<div class="depth-observer-tools"><span class="depth-observer-state" id="depth-visibility">空槽：硬幣被槽壁遮住</span><span class="depth-same-view">與左側位置相同</span></div>
+<figcaption id="depth-observer-heading"><svg class="depth-eye-key" viewBox="-40 -26 80 52" aria-hidden="true" focusable="false"><use href="#depth-eye-art"/></svg>這隻眼睛看到的畫面</figcaption>
+<div class="depth-observer-tools"><span class="depth-observer-state" id="depth-visibility">空槽：硬幣被槽壁遮住</span></div>
 <div class="depth-stage">
 <canvas id="depth-observer" width="640" height="444" role="img" aria-label="目前觀看位置所見的水槽與硬幣">硬幣固定在槽底。光出水時折射，讓硬幣看起來較淺。</canvas>
 </div>
-<div class="depth-view-note" id="depth-view-result">還沒加水，硬幣的光被槽壁遮住。按「加水觀察」比較。</div>
+<div class="depth-view-note"><span class="depth-view-origin">這裡呈現的，就是圖中眼睛所見。</span><span id="depth-view-result">空槽時，硬幣的光被槽壁遮住。</span></div>
 </figure>
+<svg class="depth-view-links" aria-hidden="true" focusable="false"><defs><linearGradient id="depth-link-wash"><stop stop-color="#e3cb8c" stop-opacity=".05"/><stop offset="1" stop-color="#ddc88c" stop-opacity=".12"/></linearGradient></defs><path class="depth-link-area" fill="url(#depth-link-wash)"/><path class="depth-link-line" data-depth-link="top"/><path class="depth-link-line" data-depth-link="bottom"/></svg>
 </div>
+<p id="depth-view-relationship" class="visually-hidden">這隻眼睛的觀看位置，對應「這隻眼睛看到的畫面」。拖曳眼睛，兩個畫面會同步更新。</p>
 <div class="depth-controls" role="group" aria-label="加水與放水觀察">
 <div class="depth-actions"><button id="depth-fill" type="button" title="持續加水至滿槽">↑ 加水觀察</button><button id="depth-drain" type="button" title="持續放水至空槽" disabled>↓ 放水觀察</button></div>
 </div>
