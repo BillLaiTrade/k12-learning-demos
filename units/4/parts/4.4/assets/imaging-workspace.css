@@ -52,3 +52,15 @@
 .imaging-image-tag { position:absolute; z-index:2; padding:3px 6px; border:1px solid #b6c7a3; border-radius:6px; background:#faf9e9ed; color:#315438; font-size:.67rem; line-height:1.4; white-space:nowrap; pointer-events:none; }
 .imaging-image-tag--virtual { border-style:dashed; font-weight:700; }
 @media(max-width:760px) { .imaging-image-tag { padding:2px 4px; font-size:.6rem; } }
+
+/* Keep tool order in one row, with backward extensions after the point selectors. */
+.imaging-hud.convex-bench .imaging-tools { flex-wrap:nowrap; align-items:stretch; overflow-x:auto; overflow-y:hidden; pointer-events:auto; padding-bottom:5px; scrollbar-width:thin; }
+.imaging-hud.convex-bench .imaging-tools .imaging-trace { flex:0 0 auto; flex-wrap:nowrap; align-items:stretch; }
+.imaging-hud.convex-bench .imaging-tools button { flex:0 0 auto; white-space:nowrap; min-height:38px; }
+.imaging-hud.convex-bench[data-narrow=true] .imaging-tools button { min-height:32px; }
+
+.imaging-hud.convex-bench .imaging-observation-table thead th:first-child { width:21%; }
+.imaging-hud.convex-bench .imaging-observation-table thead th:nth-child(2) { width:28%; }
+.imaging-hud.convex-bench .imaging-observation-table thead th:nth-child(3) { width:31%; }
+.imaging-hud.convex-bench .imaging-observation-table thead th:last-child { width:20%; }
+.imaging-hud .imaging-trend-note { margin:6px 0 0; font-size:.72rem; color:#58705b; }
