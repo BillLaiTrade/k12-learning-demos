@@ -1,4 +1,4 @@
-import { TANK, observerCamera, cameraDirection, traceViewRay } from './depth-model.mjs?v=20261104-finish1';
+import { TANK, observerCamera, cameraDirection, traceViewRay } from './depth-model.mjs?v=20261104-layout1';
 
 export function createTextures(photo) {
   const texture = (sx, sy, sw, sh, width = 256, height = 128) => {
@@ -106,11 +106,16 @@ export function renderObserver(canvas, geometry, textures, {preview=false}={}) {
           const edge=Math.min(p[0],L-p[0],Z-Math.abs(p[2]));
           const contact=hit.kind==='floor'?1-.35*Math.exp(-Math.max(0,edge)/7):1-.30*Math.exp(-Math.max(0,p[1])/7);
           color=color.map(v=>v*contact);
+          if(hit.kind==='floor') {
+            const coinEdge=Math.max(0,Math.hypot(p[0]-TANK.coinX,p[2])-TANK.coinRadius);
+            color=color.map(v=>v*(1-.22*Math.exp(-coinEdge/2)));
+          }
           if(hit.kind==='wall'&&Math.min(p[0],L-p[0],Z-Math.abs(p[2]))<1)color=mix(color,[151,181,159],.18);
         }
         if(hit.wet) {
           const caustic=sample(textures.water,p[2]/180+.2,p[0]/210+p[1]/140);
-          color=mix(color,caustic,hit.kind==='coin'?.06:hit.kind==='floor'?.53:.32);
+          const softened=mix([10,170,210],caustic,.45);
+          color=mix(color,softened,hit.kind==='coin'?.04:hit.kind==='floor'?.64:.32);
           color[0]*=Math.exp(-hit.distance*.0015);color[1]*=Math.exp(-hit.distance*.00025);color[2]+=6;
           // A narrow meniscus joins the water to the wall; the fill itself stays planar.
           if(hit.kind==='wall'&&Math.abs(p[1]-geometry.depth)<1.3)color=mix(color,[191,249,243],.55);
