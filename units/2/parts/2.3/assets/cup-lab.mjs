@@ -1,5 +1,5 @@
 import { CUP, freshCup, moveCup, advanceCup, cupGeometry } from './cup-lab-model.mjs?v=reaudit-20261103-2';
-import { cupSVG } from './cup-lab-view.mjs?v=reaudit-20261103-2';
+import { cupSVG } from './cup-lab-view.mjs?v=clear-bubbles-20261104';
 const $ = s => document.querySelector(s);
 const scene = $('#cup-scene'), reduced = matchMedia('(prefers-reduced-motion: reduce)');
 let cup = freshCup(), before = null, after = null, preview = null, bubbles = [], drag = null;
@@ -15,14 +15,14 @@ const ensureTick = () => { if (!frame && needsFrame()) frame = requestAnimationF
 const cancelTick = () => { if (frame) cancelAnimationFrame(frame); frame = 0; previousTime = 0; };
 function staticTrace(g) {
   if (g.mouthExposed) return [];
-  return [1, 2, 3].map(i => ({ x: 500 + g.outlet.x * 24 + Math.sin(i) * 3, y: 210 + g.outlet.y * 24 * i / 4, r: 2 + i, age: 0 }));
+  return [1, 2, 3, 4].map(i => ({ x: 500 + g.outlet.x * 24 + Math.sin(i) * 6, y: 210 + g.outlet.y * 24 * i / 5, r: 8 + i, age: 0 }));
 }
 function emit(oldVent, g) {
   if (g.vent - oldVent < .001 || reduced.matches || g.mouthExposed) return;
   const now = performance.now();
   if (now - lastBubble < 85) return;
   lastBubble = now;
-  bubbles.push({ x: 500 + g.outlet.x * 24, y: 210 + g.outlet.y * 24, r: 4 + (bubbles.length % 3) * 1.5, age: 0 });
+  bubbles.push({ x: 500 + g.outlet.x * 24, y: 210 + g.outlet.y * 24, r: 8 + (bubbles.length % 3) * 2, age: 0 });
   if (bubbles.length > 16) bubbles.shift();
 }
 function update(depth, angle, { capture = true, elapsed = 0 } = {}) {
@@ -32,6 +32,7 @@ function update(depth, angle, { capture = true, elapsed = 0 } = {}) {
   const g = geometry();
   if (g.mouthExposed) bubbles = [];
   emit(old, g);
+  if (reduced.matches && cup.escaped > old + .001) bubbles = staticTrace(g);
   if (capture && !drag && !before && !cup.wet && g.submerged && g.paperBelowOutside && Math.abs(cup.angle) < .5) before = snapshot();
   if (capture && !drag && before && cup.wet && !after) {
     after = snapshot();
@@ -78,7 +79,7 @@ function tick(now) {
   previousTime = now;
   if (geometry().draining) update(cup.depth, cup.angle, { elapsed: dt });
   if (!reduced.matches) {
-    for (const bubble of bubbles) { bubble.age += dt; bubble.y -= dt * 95; bubble.x += Math.sin(bubble.age * 8) * dt * 6; }
+    for (const bubble of bubbles) { bubble.age += dt; bubble.y -= dt * 80; bubble.x += Math.sin(bubble.age * 6) * dt * 14; }
     bubbles = bubbles.filter(b => b.y > 211 && b.age < 4);
   }
   if (now - lastPaint > 45 || !needsFrame()) { render(); lastPaint = now; }

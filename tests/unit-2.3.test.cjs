@@ -113,7 +113,7 @@ test('2.3: complete learning page preserves cup dragging, water retention and re
       assert.equal(await page.locator('#cup-conclusion').isVisible(), true);
       await captureCup(`drag-reset-${width}.png`);
       await page.locator('[data-cup-preview="before"]').click();
-      assert.match(await page.locator('#cup-status').innerText(), /回看直立入水/);
+      assert.match(await page.locator('#cup-status').innerText(), /回看杯口朝下入水/);
       assert.equal(await page.locator('#cup-scene').getAttribute('data-wet'), 'true');
       await page.locator('[data-cup-preview="before"]').click();
       await rotateRim(-125);
