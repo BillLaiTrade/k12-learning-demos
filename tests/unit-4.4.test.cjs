@@ -46,7 +46,7 @@ test('4.4 十區整合版：獨立透鏡、共用成像台及跨尺寸導覽',{t
   assert.equal(await lab(6).locator('[data-value=convex],input[type=range]').count(),0);assert.match(await result(6).innerText(),/正立.*縮小.*虛像/);await lab(6).locator('[data-ci-observation=near] button').click();assert.equal(await lab(6).getAttribute('data-object'),'50');assert.match(await result(6).innerText(),/透鏡與 F 之間/);await lab(6).locator('[data-ci-observation=far] button').click();assert.equal(await lab(6).getAttribute('data-object'),'300');assert.match(await result(6).innerText(),/正立.*縮小/);
  });
  await scenario('遠近切換保留視網膜，調節後恢復清楚像',async()=>{
-  const before=await lab(7).locator('[data-scene]').innerHTML();await lab(7).locator('[data-value=near]').click();assert.match(await result(7).innerText(),/視網膜後/);await lab(7).locator('[data-action=accommodate]').click();assert.match(await result(7).innerText(),/清楚/);assert.match(await lab(7).locator('[data-adjust]').innerText(),/較厚/);assert.notEqual(await lab(7).locator('[data-scene]').innerHTML(),before);await shot(7,'near-accommodation');
+  const before=await lab(7).locator('[data-scene]').innerHTML();await lab(7).locator('[data-eye-distance=near]').click();assert.match(await result(7).innerText(),/視網膜後/);await lab(7).locator('[data-eye-accommodation]').fill('83');await lab(7).locator('[data-eye-accommodation]').dispatchEvent('input');assert.match(await result(7).innerText(),/清楚/);assert.match(await lab(7).locator('[data-eye-adjust]').innerText(),/較厚/);assert.notEqual(await lab(7).locator('[data-scene]').innerHTML(),before);await shot(7,'near-accommodation');
  });
  await scenario('近視／遠視與眼鏡矯正共用同一眼睛，切模型撤除舊鏡片',async()=>{
   assert.equal(await page.locator('#lab9').count(),0);assert.equal(await lab(8).locator('[data-action=correct]').isDisabled(),true);
