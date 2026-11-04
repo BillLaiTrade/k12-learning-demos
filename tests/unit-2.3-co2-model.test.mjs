@@ -22,7 +22,7 @@ test('five individual textured stones transfer once, through the neck, and never
   }
  }
  assert.deepEqual(bench(1,21000).stones.map(s=>s.location),Array(5).fill('flask'));
- assert.ok(bench(1,21000).bowl.x+110<0);assert.equal(bench(3,5000).bodies.acid.visible,false);
+ assert.ok(bench(1,21000).bowl.x+110<0);const parked=bench(3,5000).bodies.acid;assert.equal(parked.visible,true);assert.ok(parked.box[1]+parked.box[3]<145,'used bottle returns to the rear, above the working flask');
 });
 test('every operation meets the next without a position, angle, liquid or quantity jump',()=>{
  for(let i=1;i<6;i++){

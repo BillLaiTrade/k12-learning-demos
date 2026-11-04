@@ -1,4 +1,4 @@
-import {oxygenTubeFrame,OXYGEN_SOURCE_GLASS,OXYGEN_COLLECTOR_GLASS} from './oxygen-tube-model.mjs';
+import {oxygenTubeFrame,OXYGEN_SOURCE_GLASS,OXYGEN_COLLECTOR_GLASS,OXYGEN_STANDBY} from './oxygen-tube-model.mjs?v=standby-desk-20261104';
 import {createThistleFunnel,createDoubleStopper} from './thistle-apparatus.mjs?v=b-decisions-20261104';
 // The preparation is one bounded instructional clock. All water is clear water;
 // no peroxide, catalyst or gas has entered the apparatus at this point.
@@ -87,6 +87,7 @@ export function createSetupScene(view,panels) {
   tube.append(hose,hoseLight,firstGlass,collectorGlass);restingTube.append(tube);art.append(restingTube);
   const stopper=svg('g',{'data-setup-body':'stopper'}),corkPhoto=createDoubleStopper();corkPhoto.setAttribute('transform','translate(-26 0)');corkPhoto.setAttribute('data-photographic-equipment','stopper');stopper.append(corkPhoto);restingTube.append(stopper);
   const funnel=createThistleFunnel('oxygen',{top:-155,tip:400,port:-26});art.insertBefore(funnel.group,restingTube);
+  const standbyRig=svg('g',{'data-standby-rig':'oxygen'});standbyRig.append(funnel.group,restingTube);art.insertBefore(standbyRig,flask);
 
   const stream=svg('path',{fill:'none',stroke:'#a8e4ee','stroke-width':12,'stroke-linecap':'round','data-setup-stream':''});
   const highlight=svg('path',{fill:'none',stroke:'#fff','stroke-opacity':'.85','stroke-width':3});art.append(stream,highlight);
@@ -136,19 +137,22 @@ export function createSetupScene(view,panels) {
   worldClip.append(svg('path',{d:clip.firstChild.getAttribute('d'),transform:'translate(1035 465) rotate(180) translate(-111.5 -215)'}));defs.append(worldClip);
   // Material identification has a separate, spacious desk; operation geometry stays shared.
   let activeView=view,operationStage=1;
+  function rigDepth(active){const before=active?stream:flask;if(standbyRig.nextSibling!==before)art.insertBefore(standbyRig,before);standbyRig.dataset.active=String(active);}
   let tubePath='';
   function positionPipe(capX,capY,tipX,progress=1,layout=1,seal=0,tipY=665){
-    const frame=oxygenTubeFrame({capX,capY,tipX,progress,layout,seal,tipY}),pose=p=>`translate(${p.x} ${p.y}) rotate(${p.angle})`;
+    const frame=oxygenTubeFrame({capX,capY,tipX,progress,layout,seal,tipY,standby:true}),pose=p=>`translate(${p.x} ${p.y}) rotate(${p.angle})`;
     firstGlass.setAttribute('transform',pose(frame.first));collectorGlass.setAttribute('transform',pose(frame.collector));stopper.setAttribute('transform',pose(frame.first));
     for(const n of [hose,hoseLight])n.setAttribute('d',frame.hose.dPath);hose.dataset.arcLength=String(frame.hose.length);
     tubePath=frame.path;tubeCenter.setAttribute('d',tubePath);tube.setAttribute('opacity','1');stopper.setAttribute('opacity','1');return tubePath;
   }
-  const parkedPlate='translate(1300 764.8) scale(.8 2.3)';
+  const platePark={x:1350,y:30,sx:.6,sy:1.7,cx:1416.9,cy:60.6};
+  const parkedPlate=`translate(${platePark.x} ${platePark.y}) scale(${platePark.sx} ${platePark.sy})`;
   function preparePlate(f,jarTransform){
-    if(f.cover===0)plate.setAttribute('transform',`translate(${mix(1110,1300,f.arrangement)} ${mix(484.4,764.8,f.arrangement)}) scale(${mix(1.49,.8,f.arrangement)} ${mix(4.4,2.3,f.arrangement)})`);
-    else if(f.cover<1){const c=f.cover;let cx,cy,sx;if(c<.55){cx=1389.2;cy=mix(806.2,90,c/.55);sx=mix(.8,.9,c/.55);}else if(c<.85){cx=mix(1389.2,f.jarX,(c-.55)/.3);cy=90;sx=mix(.9,1,(c-.55)/.3);}else{cx=f.jarX;cy=mix(90,f.jarY-197,(c-.85)/.15);sx=1;}plate.setAttribute('transform',`translate(${cx} ${cy}) scale(${sx} ${mix(2.3,1,Math.min(1,c/.55))}) translate(-111.5 -18)`);}
+    art.insertBefore(plate,f.cover>0&&f.plateReturn<1?stream:jar);
+    if(f.cover===0)plate.setAttribute('transform',parkedPlate);
+    else if(f.cover<1){const c=f.cover;let cx,cy,sx;if(c<.55){cx=platePark.cx;cy=mix(platePark.cy,90,c/.55);sx=mix(platePark.sx,.9,c/.55);}else if(c<.85){cx=mix(platePark.cx,f.jarX,(c-.55)/.3);cy=90;sx=mix(.9,1,(c-.55)/.3);}else{cx=f.jarX;cy=mix(90,f.jarY-197,(c-.85)/.15);sx=1;}plate.setAttribute('transform',`translate(${cx} ${cy}) scale(${sx} ${mix(platePark.sy,1,Math.min(1,c/.55))}) translate(-111.5 -18)`);}
     else if(f.uncover<1)plate.setAttribute('transform',`${jarTransform} translate(${220*f.uncover} 0)`);
-    else {const u=f.plateReturn,cx=mix(815,1389.2,u),cy=mix(662,806.2,u)-350*Math.sin(Math.PI*u);plate.setAttribute('transform',`translate(${cx} ${cy}) rotate(${180*(1-u)}) scale(${mix(1,.8,u)} ${mix(1,2.3,u)}) translate(-111.5 -18)`);}
+    else {const u=f.plateReturn,cx=mix(815,platePark.cx,between(u,.3,.8)),cy=u<.3?mix(662,60,ease(u/.3)):mix(60,platePark.cy,between(u,.8,1));plate.setAttribute('transform',`translate(${cx} ${cy}) rotate(${180*(1-u)}) scale(${mix(1,platePark.sx,u)} ${mix(1,platePark.sy,u)}) translate(-111.5 -18)`);}
     plate.setAttribute('opacity','1');
   }
 
@@ -158,7 +162,7 @@ export function createSetupScene(view,panels) {
   return {
     geometry(key) {
       if(key==='funnel')return funnel.geometry();
-      if(operationStage>1&&['source','spoon'].includes(key)){
+      if(operationStage>1&&(key==='spoon'||key==='source'&&operationStage>=4)){
         const n=activeView.querySelector(`[data-part="${key==='source'?'reagent-bottle':'catalyst-spoon'}"]`);
         return n&&Number(n.getAttribute('opacity'))>.01?{bounds:key==='source'?[-52,0,104,210]:[-27,-18,245,55],transform:n.getAttribute('transform')||''}:null;
       }
@@ -170,22 +174,26 @@ export function createSetupScene(view,panels) {
     },
     operation(stage,frame,assembly,operationView){
       operationStage=stage;activeView=operationView;
+      rigDepth(stage>=3);source.setAttribute('opacity',stage<4?'1':'0');
+      source.setAttribute('transform','translate(0 40) scale(.55)');
+      if(stage!==2)catalyst.setAttribute('transform','translate(100 -260) scale(.6)');
+      art.insertBefore(plate,stage===7&&frame.cover>0?stream:jar);
       const chemical=stage<5?assembly:{peroxide:1,catalyst:1,sealed:1,liquidSeal:true};
       const level=790-165*chemical.peroxide;
       flaskLiquid.setAttribute('y',level);flaskLiquid.setAttribute('height',chemical.peroxide?805-level:0);
       const [left,right]=liquidSpan(level);
       flaskSurface.setAttribute('cx',(left+right)/2);flaskSurface.setAttribute('rx',(right-left)/2);flaskSurface.setAttribute('cy',level);flaskSurface.setAttribute('opacity',chemical.peroxide?1:0);
       if(stage===2){const time=frame.localTime,enter=between(time,0,250),exit=between(time,2300,3000);
-        const x=mix(mix(-400,-35,enter),-400,exit),y=mix(mix(180,500,enter),180,exit),scale=mix(mix(.65,.5,enter),.65,exit);
+        const x=mix(mix(100,-35,enter),100,exit),y=mix(mix(-260,500,enter),-260,exit),scale=mix(mix(.6,.5,enter),.6,exit);
         catalyst.setAttribute('transform',`translate(${x} ${y}) scale(${scale})`);
       }
       powder.setAttribute('opacity',chemical.catalyst);powder.setAttribute('transform',`translate(310 790) scale(1 ${chemical.catalyst}) translate(-310 -790)`);
       const seal=chemical.sealed,lift=ease(seal/.4),across=ease((seal-.4)/.4),lower=ease((seal-.8)/.2);
       // The inlet clears the mouth before crossing above it, then lowers vertically.
-      const capX=mix(550,341,across),capY=mix(mix(839,110,lift),335,lower);
+      const capX=mix(OXYGEN_STANDBY.cap.x,341,across),capY=mix(mix(OXYGEN_STANDBY.cap.y,110,lift),335,lower);
       const tipX=stage<5?800:800+235*frame.tube;
       positionPipe(capX,capY,tipX,1,1,seal,665+(stage>=6?45*Math.sin(Math.PI*frame.tube):0));
-      const fp={x:mix(800,315,across),y:mix(mix(825,-170,lift),335,lower),angle:90*(1-lift)};
+      const fp={x:mix(OXYGEN_STANDBY.funnel.x,315,across),y:mix(mix(OXYGEN_STANDBY.funnel.y,-170,lift),335,lower),angle:90*(1-lift)};
       funnel.render(fp,!!chemical.liquidFlow);operationView.closest('.oxygen-preparation').dataset.liquidSeal=String(!!chemical.liquidSeal);
       jarWater.setAttribute('opacity','1');jarWater.setAttribute('y','30');jarWater.setAttribute('height',360*(1-frame.collected));jarSurface.setAttribute('cy',30+360*(1-frame.collected));jarSurface.setAttribute('opacity',frame.collected<1?1:0);
       const liquid=operationView.querySelector('[data-part="jar-water"]');
@@ -197,7 +205,7 @@ export function createSetupScene(view,panels) {
       jar.setAttribute('transform',jarTransform);frontTint.setAttribute('opacity',1-frame.lift);jarShadow.setAttribute('opacity',frame.setDown);
       if(stage===7&&frame.cover>0){
         if(frame.cover===1)plate.setAttribute('transform',jarTransform);
-        else {const c=frame.cover;let cx,cy;if(c<.35){const u=c/.35;cx=mix(1389.2,1280,u);cy=mix(806.2,480,u);}else if(c<.7){cx=1280;cy=mix(480,662,(c-.35)/.35);}else{cx=mix(1280,1035,(c-.7)/.3);cy=662;}plate.setAttribute('transform',`translate(${cx} ${cy}) rotate(${180*Math.min(1,c/.35)}) scale(${mix(.8,1,Math.min(1,c/.35))} ${mix(2.3,1,Math.min(1,c/.35))}) translate(-111.5 -18)`);}
+        else {const c=frame.cover;let cx,cy;if(c<.35){const u=c/.35;cx=mix(platePark.cx,1280,u);cy=mix(platePark.cy,480,u);}else if(c<.7){cx=1280;cy=mix(480,662,(c-.35)/.35);}else{cx=mix(1280,1035,(c-.7)/.3);cy=662;}plate.setAttribute('transform',`translate(${cx} ${cy}) rotate(${180*Math.min(1,c/.35)}) scale(${mix(platePark.sx,1,Math.min(1,c/.35))} ${mix(platePark.sy,1,Math.min(1,c/.35))}) translate(-111.5 -18)`);}
       }else plate.setAttribute('transform',parkedPlate);
       operationView.dataset.storageLift=String(frame.lift);operationView.dataset.storageUpright=String(frame.upright);operationView.dataset.storageSetDown=String(frame.setDown);
       const showTankLabel=stage===7&&frame.cover>0&&frame.cover<1?'0':'1';tankName.setAttribute('opacity',showTankLabel);tankLeader.setAttribute('opacity',showTankLabel);
@@ -209,14 +217,14 @@ export function createSetupScene(view,panels) {
       operationView.dataset.sharedScene='oxygen-setup-art';
     },
     render(elapsed) {
-      operationStage=elapsed===0?0:1;activeView=view;funnel.render({x:800,y:825,angle:90},false);flaskLiquid.setAttribute('height','0');flaskSurface.setAttribute('opacity','0');powder.setAttribute('opacity','0');jarWater.setAttribute('opacity','1');jarShadow.setAttribute('opacity','0');
+      operationStage=elapsed===0?0:1;activeView=view;rigDepth(false);funnel.render(OXYGEN_STANDBY.funnel,false);flaskLiquid.setAttribute('height','0');flaskSurface.setAttribute('opacity','0');powder.setAttribute('opacity','0');jarWater.setAttribute('opacity','1');jarShadow.setAttribute('opacity','0');
       const f=setupFrame(elapsed),a=f.arrangement;
       view.dataset.setupPhase=f.phase;view.dataset.tankFill=f.tankFill.toFixed(4);view.dataset.jarFill=f.jarFill.toFixed(4);view.dataset.setupCover=String(f.covered);view.dataset.setupMouthY=f.mouthY.toFixed(3);
       setTransform(flask,[256,-173,.671,.736],[0,0,1,1],a);
       setTransform(tank,[143,-214,.758,.75],[0,0,1,1],a);
-      // Unused reagents remain recognisable while moving to the edge of the desk.
-      setTransform(source,[0,0,1,1],[-300,400,.8,.8],a);source.setAttribute('opacity','1');
-      setTransform(catalyst,[0,0,1,1],[-400,180,.65,.65],a);catalyst.setAttribute('opacity','1');
+      // Keep standby supplies on the rear bench, clear of pouring and immersion.
+      setTransform(source,[0,40,.55,.55],[0,40,.55,.55],a);source.setAttribute('opacity','1');
+      setTransform(catalyst,[100,-260,.6,.6],[100,-260,.6,.6],a);catalyst.setAttribute('opacity','1');
       jar.setAttribute('transform',`translate(${f.jarX} ${f.jarY}) rotate(${f.angle}) scale(${mix(.762,1,a)} ${mix(.907,1,a)}) translate(-111.5 -215)`);
       jarWater.setAttribute('y',390-360*f.jarFill);jarWater.setAttribute('height',360*f.jarFill);jarSurface.setAttribute('cy',390-360*f.jarFill);jarSurface.setAttribute('opacity',f.jarFill>0?1:0);
       preparePlate(f,jar.getAttribute('transform'));frontTint.setAttribute('opacity',f.immersion);
@@ -230,7 +238,7 @@ export function createSetupScene(view,panels) {
       for(const n of[stream,highlight]){n.setAttribute('d',d);n.setAttribute('opacity',pouringTank||pouringJar?1:0);}
       label.textContent=pouringTank||pouringJar?'清水':'';
       label.setAttribute('x',pouringTank?800:950);label.setAttribute('y',pouringTank?410:250);
-      positionPipe(mix(430,550,f.arrangement),mix(625,839,f.arrangement),800,f.outlet,f.arrangement,0);flaskName.setAttribute('opacity',f.arrangement);tankName.setAttribute('opacity',f.arrangement);flaskName.textContent='錐形瓶（空）';jarName.textContent=f.immersion===1?'瓶內裝滿清水':'';
+      positionPipe(OXYGEN_STANDBY.cap.x,OXYGEN_STANDBY.cap.y,800,f.outlet,f.arrangement,0);flaskName.setAttribute('opacity',f.arrangement);tankName.setAttribute('opacity',f.arrangement);flaskName.textContent='錐形瓶（空）';jarName.textContent=f.immersion===1?'瓶內裝滿清水':'';
       const tankLabelOpacity=f.cover>0&&f.plateReturn<1?0:f.arrangement;tankName.setAttribute('opacity',tankLabelOpacity);tankLeader.setAttribute('opacity',tankLabelOpacity);
       jarName.setAttribute('x','1035');jarName.setAttribute('y','390');
       view.dataset.sharedScene='oxygen-setup-art';

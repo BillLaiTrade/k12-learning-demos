@@ -4,7 +4,7 @@ import {regionPath,looseFunnelPose,STONE_OFFSETS} from './collection-task-contac
 import {directPosition,parkPosition} from './collection-task-direct.mjs?v=water-guidance-20261104';
 import {createThistleFunnel,createDoubleStopper,svgNode as n} from './thistle-apparatus.mjs?v=b-decisions-20261104';
 import {taskHosePoints,deskFrame,overflowPoint,liquidReceiver,outletPose,jarPose,jarMouth,waterSurface,flaskSurface,ease,mix,clamp,rigPosition,heldMaterial,usedMarbleIds,vesselReaction,marbleFraction} from './collection-task-model.mjs?v=water-guidance-20261104';
-import {liquidGeometry} from './co2-model.mjs?v=b-decisions-20261104';
+import {liquidGeometry} from './co2-model.mjs?v=standby-desk-20261104';
 const image=(file,box)=>{const el=n('image',{href:'assets/'+file,preserveAspectRatio:'none'});['x','y','width','height'].forEach((key,i)=>el.setAttribute(key,box[i]));return el;};
 const box=(el,b)=>['x','y','width','height'].forEach((k,i)=>el.setAttribute(k,b[i]));
 export function sprite(file,crop,b,size){const el=n('svg',{viewBox:crop.join(' '),preserveAspectRatio:'none',overflow:'hidden'});box(el,b);el.append(image(file,[0,0,...size]));return el;}

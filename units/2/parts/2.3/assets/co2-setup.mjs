@@ -1,5 +1,5 @@
 import {createThistleFunnel,createDoubleStopper} from './thistle-apparatus.mjs?v=b-decisions-20261104';
-import {CO2_SETUP_DURATION,co2SetupFrame,CO2_OPERATIONS,co2BenchFrame,CO2_LIQUID_PROFILE,liquidGeometry,rubberGeometry,transformPoint} from './co2-model.mjs?v=b-decisions-20261104';
+import {CO2_SETUP_DURATION,co2SetupFrame,CO2_OPERATIONS,co2BenchFrame,CO2_LIQUID_PROFILE,liquidGeometry,rubberGeometry,transformPoint} from './co2-model.mjs?v=standby-desk-20261104';
 export {CO2_SETUP_DURATION,co2SetupFrame,co2BenchFrame};
 const NS='http://www.w3.org/2000/svg';
 const atlas='assets/co2-marble-atlas.png';
@@ -17,6 +17,7 @@ const plateBox=p=>[p.x-222/440*340,p.y-237/440*80,340,80];
 const plateCorners=p=>[[145,136],[405,177],[340,349],[44,291]].map(([x,y])=>({x:plateBox(p)[0]+x*340/440,y:plateBox(p)[1]+y*80/440}));
 const stopperOutline='M-50 -15Q0 -33 50 -15L40 45Q0 58 -40 45Z';
 export function createCO2Bench(panel,panels){
+ panel.querySelectorAll('[data-static-co2]').forEach(n=>n.remove());
  // Definitions live outside all hidden panels, so Chromium retains liquid clips.
  const resources=node('svg',{class:'co2-paint-resources',width:0,height:0,'aria-hidden':'true',focusable:'false'}),defs=node('defs');resources.append(defs);panel.prepend(resources);
  const art=node('g',{id:'co2-shared-bench','data-shared-bench':''});defs.append(art);
@@ -57,6 +58,7 @@ export function createCO2Bench(panel,panels){
  const air=node('g',{fill:'none',stroke:'#9c864c','stroke-width':3,'data-bench-air':''});for(const x of [804,941])air.append(node('path',{d:`M${x} 330V260m-7 10 7-10 7 10`}));art.append(air);
  const sample=node('g',{'data-bench-sample':''});sample.append(node('rect',{x:808,y:384,width:124,height:45,rx:7,fill:'#fffdf5',stroke:'#c6d2b9'}));const sampleText=node('text',{x:870,y:413,'text-anchor':'middle','font-size':21});sampleText.textContent='二氧化碳';sample.append(sampleText);art.append(sample);
  const labels={};for(const [key,x,y]of[['flask',300,623],['jar',870,608]]){const label=node('text',{x,y,'text-anchor':'middle','font-size':19,'data-bench-label':key});art.append(label);labels[key]=label;}
+ const standbyRig=node('g',{'data-standby-rig':'co2'});standbyRig.append(funnel.group,rig,hose,hoseTexture,rod,flowPaths[1]);art.insertBefore(standbyRig,flask);
  for(const [index,view]of panels.entries())if(index){
   view.querySelector(`#co2-scene-${index}`).style.display='none';
   for(const canvas of view.querySelectorAll('.co2-main-scene,.co2-closeup svg'))canvas.append(node('use',{href:'#co2-shared-bench','data-shared-bench-use':'','aria-hidden':'true'}));
@@ -65,6 +67,9 @@ export function createCO2Bench(panel,panels){
  function render(index,elapsed,f){
   stage=index;frame=f;current=co2BenchFrame(index,elapsed,f);const {bodies:state,bowl:bp,glass,plate:pp}=current;
   panel.dataset.bench='shared';panel.dataset.setup=f.placement.toFixed(4);panel.dataset.setupCaption='true';panel.style.setProperty('--co2-bench-ratio','1100 / 650');
+  const active=index>=2,before=active?lip:flask;if(standbyRig.nextSibling!==before)art.insertBefore(standbyRig,before);standbyRig.dataset.active=String(active);
+  art.insertBefore(acid,index===3?stream:flask);
+  art.insertBefore(plate,index===6&&f.cover>0?air:jar);
   for(const key of ['flask','jar','acid']){
    const p=state[key],body=bodies[key];setBox(body.image,p.box);body.group.setAttribute('transform',`rotate(${p.angle} ${p.cx} ${p.cy})`);body.group.setAttribute('opacity',p.visible?'1':'0');
   }

@@ -1,5 +1,5 @@
 import {svgNode as n,createThistleFunnel,createDoubleStopper} from './thistle-apparatus.mjs?v=b-decisions-20261104';
-import {liquidGeometry} from './co2-model.mjs?v=reaudit-20261103-2';
+import {liquidGeometry} from './co2-model.mjs?v=standby-desk-20261104';
 const image=(file,x,y,width,height)=>n('image',{href:'assets/'+file,x,y,width,height,preserveAspectRatio:'none'});
 function sprite(file,crop,box,size){const s=n('svg',{viewBox:crop.join(' '),x:box[0],y:box[1],width:box[2],height:box[3],preserveAspectRatio:'none',overflow:'hidden'});s.append(image(file,0,0,...size));return s;}
 function bench(svg){svg.replaceChildren();const defs=n('defs');svg.append(defs,image('oxygen-setup-table.png',0,0,1536,860));return defs;}

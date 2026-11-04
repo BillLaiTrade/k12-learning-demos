@@ -42,6 +42,10 @@ export function createCO2Explorer({panel,panels,getStage,onOpen,onBackgroundClic
   portrait.style.display=custom?'none':'';toolPortrait.style.display=custom?'':'none';
   toolPortrait.setAttribute('viewBox',key==='funnel'?'338 7 154 1005':key==='stopper'?'842 344 430 416':'842 35 110 1155');toolPortrait.setAttribute('aria-label',info.name);
   const img=toolPortrait.querySelector(':scope > image');img.style.display=key==='tube'?'none':'';img.setAttribute('href',atlas?'assets/thistle-apparatus-atlas.png':'assets/co2-tools-atlas.png');img.setAttribute('width',atlas?'1536':'1268');img.setAttribute('height',atlas?'1024':'1241');
+  // A portrait's wide letterbox must not reveal adjacent objects in the atlas.
+  let crop=toolPortrait.querySelector('#co2-portrait-crop rect');
+  if(!crop){const defs=node('defs',{}),clip=node('clipPath',{id:'co2-portrait-crop',clipPathUnits:'userSpaceOnUse'});crop=node('rect',{});clip.append(crop);defs.append(clip);toolPortrait.prepend(defs);}
+  toolPortrait.getAttribute('viewBox').split(' ').forEach((v,i)=>crop.setAttribute(['x','y','width','height'][i],v));img.setAttribute('clip-path','url(#co2-portrait-crop)');
   if(key==='tube'){
    const copy=panel.querySelector('.co2-double-stopper-fallback').cloneNode(true),ids=new Map([...copy.querySelectorAll('[id]')].map(n=>[n.id,n.id+'-dialog']));
    for(const n of copy.querySelectorAll('*'))for(const a of[...n.attributes])n.setAttribute(a.name,a.name==='id'?ids.get(a.value)||a.value:a.value.replace(/#([\w-]+)/g,(m,id)=>ids.has(id)?'#'+ids.get(id):m));
