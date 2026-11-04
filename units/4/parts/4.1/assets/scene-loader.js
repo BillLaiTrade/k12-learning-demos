@@ -22,7 +22,7 @@ const scenes = [
     canvas: '#shadow-theatre-scene',
     root: '#unit-booklet',
     notice: '#shadow-theatre-load-failure',
-    load: () => import('./shadow-theatre.js?v=finish-state-retry-note-20261029'),
+    load: () => import('./shadow-theatre.js?v=select-focus-20261104'),
     showUnavailable(root) {
       root.querySelector('#shadow-theatre-status').textContent = '舞台暫時無法操作';
       root.querySelector('#booklet-target-status').textContent = '舞台暫時無法操作';

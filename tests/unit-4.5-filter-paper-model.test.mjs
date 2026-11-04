@@ -4,7 +4,7 @@ import {filterPaperLight,filterPaperObservation} from '../units/4/parts/4.5/asse
 const lights=['white','red','green','blue'],filters=['clear','red','green','blue'],papers=['white','red','green','blue','black'];
 test('80種組合逐色守恆，透射與反射都不會新增光源沒有的色光',()=>{
  let count=0;for(const light of lights)for(const filter of filters)for(const paper of papers){
-  const s=filterPaperLight(light,filter,paper);count++;
+  const s=filterPaperLight(light,filter,paper);count++;assert.match(filterPaperObservation(light,filter,paper).result,/進入眼睛/);
   for(let i=0;i<3;i++){
    assert.ok(s.incoming[i]>=s.transmitted[i]&&s.transmitted[i]>=s.outgoing[i]&&s.outgoing[i]>=0);
    assert.ok(Math.abs(s.transmitted[i]+s.filterAbsorbed[i]-s.incoming[i])<1e-12);

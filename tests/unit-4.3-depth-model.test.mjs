@@ -101,3 +101,23 @@ test('opening framing includes visible coin rays without moving the pupil or fol
   }
  }
 });
+
+test('moving the eye translates a fixed camera and the tank edges shrink monotonically with distance',()=>{
+ const base=observerCamera(depthGeometry(0,210));
+ let previous=[Infinity,Infinity];
+ for(let eyeX=210;eyeX<=340;eyeX+=2){
+  for(const depth of [0,40,70,100]){
+   const camera=observerCamera(depthGeometry(depth,eyeX));
+   assert.deepEqual(camera.origin,[eyeX,TANK.eyeHeight,0]);
+   assert.deepEqual(camera.forward,base.forward);assert.deepEqual(camera.up,base.up);assert.equal(camera.lens,base.lens);
+  }
+  const camera=observerCamera(depthGeometry(0,eyeX));
+  const widths=[0,TANK.length].map(x=>{
+   const d=[x-eyeX,TANK.height-TANK.eyeHeight];
+   const forward=d[0]*camera.forward[0]+d[1]*camera.forward[1];
+   return TANK.width/(forward*camera.lens*camera.aspect);
+  });
+  widths.forEach((width,i)=>assert.ok(width<previous[i],`edge ${i} grows at ${eyeX}`));
+  previous=widths;
+ }
+});

@@ -490,6 +490,7 @@ if (canvas) {
       return;
     }
     setSelected(selectedProp === id ? null : id);
+    if (selectedProp) canvas.focus({ preventScroll: true });
   }));
 
   const setDepth = (prop, z, allowSnap = true) => {

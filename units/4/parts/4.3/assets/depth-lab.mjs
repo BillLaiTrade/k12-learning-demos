@@ -1,5 +1,5 @@
-import { depthGeometry, clamp, TANK, DEPTH_INITIAL } from './depth-model.mjs?v=20261104-layout1';
-import { createTextures, renderObserver } from './depth-observer.mjs?v=20261104-layout1';
+import { depthGeometry, clamp, TANK, DEPTH_INITIAL } from './depth-model.mjs?v=20261104-fixed1';
+import { createTextures, renderObserver } from './depth-observer.mjs?v=20261104-fixed1';
 
 const root = document.querySelector('#depth-lab');
 if (root) {
