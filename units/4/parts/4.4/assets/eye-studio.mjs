@@ -1,11 +1,13 @@
+import {createEyeModel} from './eye-model.mjs?v=20261104-eye-depth2';
 import {EYE,initialEye,changeEye,eyeState} from './eye-optics.mjs?v=20261104-eye1';
 const root=document.querySelector('[data-eye-lab]');
 if(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],svg=$('[data-eye-scene]'),preview=$('[data-eye-preview]');
  const red='#d6654c',blue='#3989b2',Y=220,SY=160,CX=302,LX=CX+353*EYE.lens;
- let state=initialEye();
+ let state=initialEye(),model=null;
+ try{model=createEyeModel($('[data-eye-model]'));root.dataset.eyeRender='3d';}catch{root.dataset.eyeRender='fallback';}
  const n=v=>Number(v.toFixed(3)),point=(x,y)=>`${n(x)} ${n(y)}`,wall=y=>655-.0025*(y-Y)**2;
- const label=(x,y,w,text,tx,ty)=>`<g><path class="eye-leader" d="M${x} ${y+23}L${x} ${ty-20}L${tx} ${ty}"/><circle cx="${tx}" cy="${ty}" r="3.5" fill="#41684b"/><rect class="eye-label-box" x="${x-w/2}" y="${y-22}" width="${w}" height="44" rx="8"/><text class="eye-label" x="${x}" y="${y+7}" text-anchor="middle">${text}</text></g>`;
+ const label=(x,y,w,text,tx,ty)=>`<g><path class="eye-leader" d="M${x} ${y+23}L${x} ${ty-20}L${tx} ${ty}"/><circle cx="${tx}" cy="${ty}" r="3.5" fill="#41684b"/><text class="eye-label" x="${x}" y="${y+7}" text-anchor="middle">${text}</text></g>`;
  function draw(g){
   const sourceX=state.distance==='far'?64:155,h=16+20*state.accommodation/100,retina=[];
   for(let y=100;y<=340;y+=4)retina.push([wall(y),y]);
@@ -17,7 +19,7 @@ if(root){
   <linearGradient id="eye7-glass"><stop stop-color="#b4e0df" stop-opacity=".75"/><stop offset=".35" stop-color="#f0ffff" stop-opacity=".9"/><stop offset=".7" stop-color="#b3deea" stop-opacity=".75"/><stop offset="1" stop-color="#82b5c5" stop-opacity=".6"/></linearGradient>
   <linearGradient id="eye7-retina"><stop stop-color="#f7dba9"/><stop offset="1" stop-color="#e6ad7e"/></linearGradient>
   ${[red,blue].map((c,i)=>`<marker id="eye7-arrow${i}" markerWidth="7" markerHeight="6" refX="6" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0L7 3L0 6Z" fill="${c}"/></marker>`).join('')}</defs>
-  <ellipse cx="481" cy="383" rx="157" ry="9" fill="#67865c" opacity=".08"/>
+  <g data-eye-anatomy><ellipse cx="481" cy="383" rx="157" ry="9" fill="#67865c" opacity=".08"/>
   <path data-eye-shell d="M320 118C364 67 445 55 509 67C573 71 615 65 637 100${back(18)}C611 385 501 402 430 375C377 358 345 345 320 322Q264 220 320 118Z" fill="url(#eye7-shell)" stroke="#91aa7a" stroke-width="2"/>
   <path d="M325 125C367 78 443 65 507 77C571 81 609 74 631 100${back(12)}C605 375 503 392 433 365C382 348 350 337 325 314Q278 220 325 125Z" fill="url(#eye7-interior)" stroke="#f8fbeb" stroke-width="3"/>
   <path data-eye-retina d="${retinaPath}" fill="url(#eye7-retina)" stroke="#d6a777" stroke-width="1.1"/>
@@ -25,8 +27,8 @@ if(root){
   <path d="M316 138C278 178 278 266 316 303" fill="none" stroke="#f5ffff" stroke-width="3" opacity=".8"/>
   <path data-eye-lens d="M${LX} 150Q${LX+2*h} 220 ${LX} 290Q${LX-2*h} 220 ${LX} 150Z" fill="url(#eye7-glass)" stroke="#81b6c6" stroke-width="1.8"/>
   <path d="M${LX-2} 159Q${LX-1.6*h} 220 ${LX-2} 281" fill="none" stroke="#f3ffff" stroke-width="2.2" opacity=".9"/>
-  <path d="M25 ${Y}H704" stroke="#82967c" stroke-width="1.2" stroke-dasharray="7 6" opacity=".7"/>
-  <rect x="${sourceX-23}" y="120" width="46" height="200" rx="8" fill="#fffdf0" stroke="#a4b38d" stroke-width="1.5"/>
+  </g><path d="M25 ${Y}H704" stroke="#82967c" stroke-width="1.2" stroke-dasharray="7 6" opacity=".7"/>
+  <rect data-eye-card x="${sourceX-23}" y="120" width="46" height="200" rx="8" fill="#fffdf0" stroke="#a4b38d" stroke-width="1.5"/>
   <path d="M${sourceX} 147V300" stroke="#6d9467" stroke-width="3.5"/><path d="M${sourceX} 140L${sourceX-11} 161H${sourceX+11}Z" fill="${red}"/><circle cx="${sourceX}" cy="300" r="8" fill="${blue}"/>
   <text class="eye-caption" x="${sourceX}" y="352" text-anchor="middle">${state.distance==='far'?'遠方':'近處'}圖卡</text>`;
   if(state.rays){
@@ -47,7 +49,7 @@ if(root){
   $('[data-result]').textContent=message;
  }
  function render(){
-  const g=eyeState(state);draw(g);
+  const g=eyeState(state);draw(g);model?.update(state);
   $$('[data-eye-distance]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.eyeDistance===state.distance)));
   $$('[data-eye-point]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.eyePoint===state.point));b.disabled=!state.rays;});
   const toggle=$('[data-eye-rays]');toggle.setAttribute('aria-pressed',String(state.rays));toggle.textContent=state.rays?'隱藏輔助光路':'顯示輔助光路';

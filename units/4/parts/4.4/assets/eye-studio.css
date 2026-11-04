@@ -1,29 +1,33 @@
 .eye-lab { container-type:inline-size; margin:18px 0; color:#294d3b; }
 .eye-workspace { display:grid; grid-template-columns:minmax(0,1fr) 218px; border:1px solid #91a587; border-radius:17px; overflow:hidden; background:#eef3e6; }
-.eye-optical { min-width:0; background:linear-gradient(135deg,#eef3df,#ccd9ba); }
+.eye-optical { min-width:0; background:#dce4d2; }
 .eye-tools { display:flex; align-items:center; gap:6px; padding:11px; flex-wrap:wrap; border-bottom:1px solid #bac9ae; background:#edf2e0c9; }
 .eye-tools button { font-size:.75rem; min-height:36px; padding:7px 10px; white-space:nowrap; background:#fffdf1; color:#31543c; }
 .eye-tools [data-eye-rays] { background:#f3d78b; border-color:#e2c578; color:#493d20; font-weight:750; }
 .eye-tools [data-eye-point][aria-pressed=true] { background:#d9e8c6; border-color:#9cba86; }
 .eye-tools [data-eye-reset] { margin-left:auto; }
 .eye-trace { display:flex; gap:5px; }
-.eye-scene { display:block; width:100%; height:auto; overflow:visible; }
+.eye-viewport { position:relative; isolation:isolate; }
+.eye-viewport canvas { position:absolute; inset:0; display:block; width:100%; height:100%; pointer-events:none; }
+.eye-scene { position:relative; z-index:1; display:block; width:100%; height:auto; overflow:visible; }
+.eye-lab[data-eye-render="3d"] [data-eye-anatomy],.eye-lab[data-eye-render="3d"] [data-eye-card] { visibility:hidden; }
+.eye-lab[data-eye-render=fallback] [data-eye-model] { display:none; }
 .eye-scene text { font-family:system-ui,sans-serif; fill:#31513e; font-weight:650; }
-.eye-scene .eye-label { font-size:19px; }
+.eye-scene .eye-label { font-size:19px; paint-order:stroke; stroke:#f5f7e7; stroke-width:3.5; stroke-linejoin:round; }
 .eye-scene .eye-caption { font-size:17px; fill:#4c6952; }
 .eye-scene .eye-ray { fill:none; stroke-width:2.2; stroke-linejoin:round; }
-.eye-scene .eye-leader { stroke:#526d51; stroke-width:1.5; fill:none; }
+.eye-scene .eye-leader { stroke:#667c62; stroke-width:1.2; fill:none; }
 .eye-scene .eye-label-box { fill:#fffdf0; stroke:#a6ba94; stroke-width:1; }
 .eye-key { margin:0; display:flex; flex-wrap:wrap; gap:14px; padding:0 13px 12px; font-size:.71rem; color:#3d5f45; }
 .eye-key span { display:inline-flex; align-items:center; gap:5px; }
 .eye-key i { display:inline-block; width:18px; border-top:2px solid #d66950; }
 .eye-key span+span i { border-color:#3f8cb6; }
-.eye-viewer { display:flex; flex-direction:column; align-items:stretch; gap:8px; padding:15px 13px; background:linear-gradient(145deg,#fffdf1,#f0f3df); border-left:1px solid #c0cfad; min-width:0; }
+.eye-viewer { display:flex; flex-direction:column; align-items:stretch; gap:9px; padding:17px 14px; background:linear-gradient(145deg,#fffdf1,#f1f3e3); border-left:1px solid #c0cfad; min-width:0; }
 .eye-viewer h3 { text-align:center; font-size:1rem; margin:0; }
 .eye-preview-note { font-size:.7rem; text-align:center; color:#667a5c; margin:0; }
 .eye-status { font-size:.73rem; text-align:center; border-radius:20px; padding:5px 8px; margin:0; color:#365438; background:#dce9c4; font-weight:700; }
 .eye-status[data-clear=false] { color:#79552c; background:#f2e2be; }
-.eye-preview { display:block; width:100%; height:auto; max-height:212px; aspect-ratio:1; background:#fffdf3; border:1px solid #b8c7a3; border-radius:10px; }
+.eye-preview { display:block; width:100%; height:auto; max-height:212px; aspect-ratio:1; background:radial-gradient(ellipse at 35% 25%,#fffef8,#f4f2e4); border:1px solid #c5ceb1; border-radius:12px; box-shadow:inset 0 2px 6px #fffffff0,0 3px 9px #5c6b3e0a; }
 .eye-image-badge { margin:0; padding:6px 8px; border-radius:18px; background:#2a5b37; color:#fffdf1; font-size:.75rem; text-align:center; }
 .eye-image-copy { font-size:.72rem; line-height:1.65; margin:0; text-align:center; color:#536b48; }
 .eye-dock { display:grid; grid-template-columns:minmax(150px,.38fr) minmax(0,.62fr); gap:10px; margin-top:10px; }
