@@ -718,7 +718,7 @@
           routeLinks.forEach((link) => link.removeAttribute('aria-current'));
           bookletLink.setAttribute('aria-current', 'step');
           progress.value = cards.length;
-          progressCopy.textContent = '六段學習完成・單元小測';
+          progressCopy.textContent = '目前位於單元小測';
           return;
         }
         const index = cards.findIndex((card) => card.id === id);
