@@ -7,7 +7,7 @@ export function createBenchApparatus(THREE,scene,G,art,paper,{withEye=false}={})
   const railMin=-G.objectMax*G.scale-.6,railMax=G.screenMax*G.scale+.6,railLength=railMax-railMin,railCenter=(railMin+railMax)/2;
   const texture=new THREE.CanvasTexture(wc);texture.colorSpace=THREE.SRGBColorSpace;box(scene,[railLength,.23,2],[railCenter,.0,0],mat('#ddc192',{map:texture,roughness:.65}));box(scene,[railLength,.09,2],[railCenter,-.15,0],mat('#725331'));
   for(const z of [-.70,.70]){box(scene,[railLength-.4,.08,.11],[railCenter,.17,z],steel);box(scene,[railLength-.4,.025,.035],[railCenter,.225,z],dark);}
-  for(let i=-25;i<=35;i++){box(scene,[.015,.012,i%5===0?.14:.07],[i*.3,.242,.76],dark);}
+  for(let i=-25;i<=35;i++){if(i*.3<railMin+.2||i*.3>railMax-.2)continue;box(scene,[.015,.012,i%5===0?.14:.07],[i*.3,.242,.76],dark);}
   const floor=new THREE.Mesh(new THREE.PlaneGeometry(120,120),mat('#526653',{roughness:.99}));floor.rotation.x=-Math.PI/2;floor.position.y=-.28;floor.receiveShadow=true;scene.add(floor);
   function mount(group,top){box(group,[.57,.15,1.7],[0,.34,0],dark);box(group,[.43,.06,1.45],[0,.445,0],steel);cylinder(group,.06,Math.max(.05,top-.49),[0,(top+.49)/2,0],steel);for(const z of [-.74,.74])cylinder(group,.055,.035,[0,.48,z],brass);}
   function frame(group,width,height){box(group,[.12,height+.14,width+.14],[.045,G.axis,0],dark);for(const z of [-width/2-.02,width/2+.02])box(group,[.045,height+.08,.035],[-.03,G.axis,z],steel);for(const y of [G.axis-height/2-.02,G.axis+height/2+.02])box(group,[.045,.035,width+.08],[-.03,y,0],steel);}
@@ -22,7 +22,7 @@ export function createBenchApparatus(THREE,scene,G,art,paper,{withEye=false}={})
   const screen=new THREE.Group();scene.add(screen);mount(screen,.50);frame(screen,G.screenWidth,G.screenHeight);
   const projectedTexture=new THREE.CanvasTexture(paper);projectedTexture.colorSpace=THREE.SRGBColorSpace;const screenPlane=plane(screen,G.screenWidth,G.screenHeight,-.025,new THREE.MeshBasicMaterial({map:projectedTexture,toneMapped:false}),-Math.PI/2);
   for(const group of [source,screen]){box(group,[.34,.18,.36],[0,.54,.84],brass);for(let i=0;i<4;i++)box(group,[.35,.014,.27],[0,.49+i*.033,.84],dark);}
-  for(const n of [-200,-100,100,200])box(scene,[.025,.10,.12],[n*G.scale,.3,.87],brass);
+  for(const n of [-200,-100,100,200])if(n*G.scale>=railMin&&n*G.scale<=railMax)box(scene,[.025,.10,.12],[n*G.scale,.3,.87],brass);
   const eye=new THREE.Group();eye.position.x=(G.eye??G.f*2)*G.scale;scene.add(eye);mount(eye,G.axis-.18);
   const eyeArt=document.createElement('canvas');eyeArt.width=256;eyeArt.height=128;const ec=eyeArt.getContext('2d');ec.fillStyle='#fbf5e4';ec.strokeStyle='#586f59';ec.lineWidth=5;ec.beginPath();ec.moveTo(16,64);ec.quadraticCurveTo(128,-18,240,64);ec.quadraticCurveTo(128,146,16,64);ec.fill();ec.stroke();ec.fillStyle='#78977d';ec.beginPath();ec.ellipse(85,64,25,37,0,0,Math.PI*2);ec.fill();ec.fillStyle='#213a2c';ec.beginPath();ec.ellipse(78,64,12,25,0,0,Math.PI*2);ec.fill();ec.fillStyle='#fff';ec.beginPath();ec.arc(71,52,6,0,Math.PI*2);ec.fill();
   const eyeTexture=new THREE.CanvasTexture(eyeArt);eyeTexture.colorSpace=THREE.SRGBColorSpace;const eyeMarker=new THREE.Mesh(new THREE.PlaneGeometry(.72,.36),new THREE.MeshBasicMaterial({map:eyeTexture,transparent:true,side:THREE.DoubleSide,toneMapped:false}));// Anchor the pupil painted at texture x=78 to the optical receiving position.

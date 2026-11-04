@@ -4,17 +4,17 @@ import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,magnifierDispl
 import {IMAGING,imagingRays} from '../units/4/parts/4.4/assets/imaging-optics.mjs';
 import {observations} from '../units/4/parts/4.4/assets/magnifier-workspace.mjs';
 test('保留兩區共同器材與同條件的代表光路',()=>{
- for(const key of ['f','scale','axis','aperture','cardWidth','cardHeight','pointTop','pointBottom','objectMin','objectMax','screenMin','screenMax'])assert.equal(G[key],IMAGING[key]);
+ for(const key of ['f','scale','axis','aperture','cardWidth','cardHeight','pointTop','pointBottom','screenMin','screenMax'])assert.equal(G[key],IMAGING[key]);
  for(const object of [30,90,100,100.1,150,200,320,350])for(const point of ['top','bottom','both'])assert.deepEqual(magnifierRays({object,screen:500},point),imagingRays({object,screen:500},point));
 });
 test('眼睛在模型層固定，移動操作僅接受圖卡與比較屏幕',()=>{
  assert.ok(G.eye>0&&G.eye<G.f);
  const state={object:30,eye:G.eye,screen:95,screenIn:false};assert.equal(moveMagnifier(state,'eye',500),state);assert.equal(moveMagnifier(state,'eye',NaN),state);
- assert.equal(moveMagnifier(state,'object',0).object,30);assert.equal(moveMagnifier(state,'object',1000).object,350);assert.equal(moveMagnifier(state,'screen',0).screen,50);assert.equal(moveMagnifier(state,'screen',1000).screen,500);
+ assert.equal(moveMagnifier(state,'object',0).object,10);assert.equal(moveMagnifier(state,'object',1000).object,150);assert.equal(moveMagnifier(state,'screen',0).screen,50);assert.equal(moveMagnifier(state,'screen',1000).screen,500);
  for(const eye of [0,50,200,500]){const g=magnifierState({...state,eye});assert.equal(g.eye,G.eye);assert.deepEqual(g,magnifierState(state));}
 });
-test('四個主觀察條件依序向外，只改圖卡，沒有移眼或屏幕變因',()=>{
- assert.deepEqual(Object.keys(observations),['near','focus','at_f','outside']);assert.deepEqual(Object.values(observations).map(p=>p.object),[50,90,100,150]);
+test('三個主觀察條件依序向外，只改圖卡，沒有移眼或屏幕變因',()=>{
+ assert.deepEqual(Object.keys(observations),['near','focus','outside']);assert.deepEqual(Object.values(observations).map(p=>p.object),[50,90,150]);
  for(const p of Object.values(observations)){assert.equal(p.eye,undefined);assert.equal(p.screenIn,false);assert.equal(p.point,undefined);}
 });
 test('F內正立虛像，固定眼位的透鏡影像與原物採相同角度尺度',()=>{

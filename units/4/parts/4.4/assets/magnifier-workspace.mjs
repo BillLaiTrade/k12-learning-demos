@@ -3,12 +3,11 @@ import {bindBenchRuler} from './convex-bench-workspace.mjs?v=20261104-view-condi
 export const observations=Object.freeze({
  near:{object:50,screenIn:false},
  focus:{object:90,screenIn:false},
- at_f:{object:100,screenIn:false},
  outside:{object:150,screenIn:false}
 });
 export function createMagnifierWorkspace(root,{G,move,observe}){
  let current={object:50,eye:G.eye,screen:50};const layout=createMagnifierLayout(root),rulers=[];
- for(const key of ['object','screen']){
+ for(const key of ['object']){
   const track=root.querySelector(`[data-mag-ruler-track=${key}]`),handle=root.querySelector(`[data-mag-device=${key}]`);
   rulers.push({key,handle,update:bindBenchRuler({track,handle,key,min:G[key+'Min'],max:G[key+'Max'],reverse:key==='object',get:()=>current[key],move})});
  }
