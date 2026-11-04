@@ -3,24 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f1e8">
+  <meta name="theme-color" content="#f4f7f1">
   <meta name="description" content="從光源與看見物體開始，探索光的直進、影子，再以光速收尾。">
   <link rel="icon" href="data:,">
   <title>光與看見：光如何傳播？｜光學單元</title>
   <style>
     :root {
       color-scheme: light;
-      --ink: #243a35;
-      --muted: #64736d;
-      --line: #d9d3c4;
-      --paper: #f4f1e8;
-      --card: #fffdf8;
+      --ink: #182326;
+      --muted: #59696b;
+      --line: #d7e1dd;
+      --paper: #f4f7f1;
+      --card: #fffefa;
       --green: #176b53;
       --green-pale: #e5f2e9;
       --orange: #bc612b;
       --orange-pale: #fff0e3;
       --sun: #e9b64c;
-      --shadow: 0 7px 20px #243a3508;
+      --shadow: 0 14px 38px rgb(21 47 38 / 8%);
       font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
     }
     * { box-sizing: border-box; }
@@ -59,7 +59,7 @@
     .route a[aria-current="step"] { border-left-color: var(--green); background: #e7eee0; color: #315a46; font-weight: 750; }
     .route b { color: var(--green); font-size: .76rem; font-weight: 700; }
     .cards { display: grid; gap: 20px; }
-    .lesson-card { position: relative; scroll-margin-top: 22px; min-width: 0; display: block; padding: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 24px; background: var(--card); box-shadow: var(--shadow); }
+    .lesson-card { position: relative; scroll-margin-top: 22px; min-width: 0; display: block; padding: 0; overflow: hidden; border: 1px solid #d8e2da; border-radius: 20px; background: var(--card); color: #1c2927; line-height: 1.72; box-shadow: 0 10px 28px rgb(24 52 40 / 7%); }
     .lesson-head { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 16px; align-items: start; padding: 25px 28px 21px; border-bottom: 1px solid #e7ece5; }
     .lesson-number { display: grid; place-items: center; width: 50px; height: 50px; border-radius: 15px; background: #e9f0e3; color: #416c39; font-weight: 850; font-size: 1.1rem; }
     .lesson-head h2 { margin: 0; font-size: clamp(1.22rem, 2vw, 1.65rem); line-height: 1.35; }
@@ -337,7 +337,7 @@
       .route-inner { display: flex; width: max-content; gap: 6px; }
       .route a { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); white-space: nowrap; }
       .route a[aria-current="step"] { border-color: var(--green); }
-      .lesson-card { border-radius: 19px; scroll-margin-top: 110px; }
+      .lesson-card { scroll-margin-top: 110px; }
       .unit-booklet { scroll-margin-top: 110px; }
       .medium-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .night-switches { grid-template-columns: 1fr; gap: 8px; }
