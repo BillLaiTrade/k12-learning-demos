@@ -12,6 +12,7 @@
 #rank-scene{display:block;width:100%;height:auto;font-family:ui-sans-serif,system-ui,"Noto Sans TC",sans-serif}
 #rank-scene text{fill:#244d37;font-weight:650}
 .rank-layer{stroke:none}
+.rank-quiz [data-materials-ready=false] .rank-material-photo{opacity:0}
 .rank-interface{fill:none;stroke:#effffa;stroke-width:1.3;vector-effect:non-scaling-stroke;opacity:.86}
 .rank-medium>text{fill:#183f32!important;font-weight:750;paint-order:stroke;stroke:#fff9e2;stroke-width:.35px}
 .rank-normal{fill:none;stroke:#476d59;stroke-width:1.3;stroke-dasharray:6 5;vector-effect:non-scaling-stroke}

@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {layerGeometry,layerSnapshot,createLayerDeck,placeLayer,compareLayers,MS_PER_OPTICAL_UNIT} from '../units/4/parts/4.3/assets/layer-speed-model.mjs';
+import {layerGeometry,layerSnapshot,createLayerDeck,placeLayer,compareLayers,MS_PER_OPTICAL_UNIT,LAYER_MATERIALS} from '../units/4/parts/4.3/assets/layer-speed-model.mjs';
 const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-10,`${a} != ${b}`);
 test('all six speed orders obey Snell invariance, continuous parallel-layer geometry and visible angle differences',()=>{
  const deck=createLayerDeck(()=>.37),orders=new Set();
@@ -34,4 +34,10 @@ test('placement supports pool replacement, swapping existing cards and keeps a u
 test('grading rejects partial, duplicate and invalid submissions, and accepts exactly the speed order',()=>{
  const g=layerGeometry([1.12,1.78,1.4]);assert.equal(compareLayers(g,[0,2,1]).correct,true);assert.deepEqual(compareLayers(g,[0,1,2]).positions,[true,false,false]);for(const order of [[0,null,1],[0,0,1],[-1,1,2],[0,1,3],[]])assert.equal(compareLayers(g,order).complete,false);
  for(const indices of [[1,1,1],[1,2],[-1,1,2],[1,2,Infinity]])assert.throws(()=>layerGeometry(indices),RangeError);assert.throws(()=>layerGeometry([1.2,1.4,1.6],0),RangeError);
+});
+
+test('gas, liquid and solid appearances move with the same refractive indices through every layer permutation',()=>{
+ const deck=createLayerDeck(()=>.37),gasPositions=new Set();
+ for(let i=0;i<12;i++){const q=deck.next();assert.equal(new Set(q.materials.map(m=>m.kind)).size,3);for(const [id,material]of q.materials.entries()){assert.equal(q.geometry.layers[id].n,material.n);assert.equal(q.geometry.layers[id].speed,1/material.n);if(material.kind==='gas'){assert.ok(material.n>1&&material.n<1.001);gasPositions.add(id);}}}
+ assert.equal(gasPositions.size,3);assert.equal(LAYER_MATERIALS.length,3);
 });

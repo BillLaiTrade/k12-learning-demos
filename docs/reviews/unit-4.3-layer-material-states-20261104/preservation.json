@@ -1,0 +1,22 @@
+{
+  "lesson.mjs": true,
+  "lesson.css": true,
+  "depth-lab.mjs": true,
+  "depth-lab.css": true,
+  "depth-model.mjs": true,
+  "depth-observer.mjs": true,
+  "single-refraction-model.mjs": true,
+  "return-refraction-lab.mjs": true,
+  "light-speed-bench.png": true,
+  "layer-quiz-bench-wide.png": true,
+  "layer-quiz-bench-tall.png": true,
+  "layer-quiz-source.png": true,
+  "teaching_section_1": true,
+  "teaching_section_2": true,
+  "teaching_section_3": true,
+  "teaching_section_4": true,
+  "teaching_section_5": true,
+  "teaching_section_6": true,
+  "quiz_html_same": true,
+  "playback_sorting_grading_handlers_same": true
+}

@@ -1,7 +1,11 @@
 // Parallel interfaces conserve n sin(theta). Geometry and playback use the
-// same refractive indices; labels and colours never encode the answer.
+// same refractive indices. Each material's appearance and index travel together.
 export const LAYER_NAMES = Object.freeze(['甲', '乙', '丙']);
-const INDICES = Object.freeze([1.12, 1.4, 1.78]);
+export const LAYER_MATERIALS = Object.freeze([
+  Object.freeze({kind:'gas', n:1.00045}),
+  Object.freeze({kind:'liquid', n:1.4}),
+  Object.freeze({kind:'solid', n:1.78}),
+]);
 const PERMUTATIONS = Object.freeze([
   [0, 2, 1], [0, 1, 2], [1, 0, 2],
   [1, 2, 0], [2, 0, 1], [2, 1, 0],
@@ -59,7 +63,8 @@ export function createLayerDeck(random = Math.random) {
     if(serial===0)remaining=shuffle([1,2,3,4,5]);
     const incident = serial===0||random()>=.5 ? 40 : 36;
     last=key;serial++;
-    return {id:serial, key, geometry:layerGeometry(PERMUTATIONS[key].map(i=>INDICES[i]),incident)};
+    const materials=PERMUTATIONS[key].map(i=>LAYER_MATERIALS[i]);
+    return {id:serial, key, materials, geometry:layerGeometry(materials.map(material=>material.n),incident)};
   }};
 }
 

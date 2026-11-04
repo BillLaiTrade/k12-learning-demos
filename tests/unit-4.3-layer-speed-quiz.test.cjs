@@ -41,6 +41,11 @@ test('4.3 layer-speed quiz applies refraction through one three-layer bench',{ti
   const alignment=await page.locator('#rank-scene').evaluate(svg=>{const optic=svg.querySelector('.rank-source-optic'),path=svg.querySelector('.rank-beam'),a=new DOMPoint(0,0).matrixTransform(optic.getScreenCTM()),b=path.getPointAtLength(0).matrixTransform(path.getScreenCTM());return{distance:Math.hypot(a.x-b.x,a.y-b.y),fallback:getComputedStyle(svg.querySelector('.rank-source-fallback')).display};});
   assert.ok(alignment.distance<.01);assert.equal(alignment.fallback,'none');
  });
+ await t.test('three material states use distinct real textures and follow the speed ordering when questions change',async()=>{
+  const verify=async()=>{const kinds=await page.locator('.rank-medium').evaluateAll(es=>es.map(e=>e.dataset.materialKind));assert.deepEqual([...kinds].sort(),['gas','liquid','solid']);assert.equal(await page.locator('#rank-lab').getAttribute('data-materials-ready'),'true');assert.equal(await page.locator('.rank-material-photo').count(),3);const views=await page.locator('.rank-material-photo').evaluateAll(es=>es.map(e=>e.getAttribute('viewBox')));assert.equal(new Set(views).size,3);const ids=await answer();assert.equal(kinds[ids[0]],'gas');assert.equal(kinds[ids[1]],'liquid');assert.equal(kinds[ids[2]],'solid');return kinds;};
+  const first=await verify();await page.locator('#rank-new').click();await complete(page);const second=await verify();assert.notDeepEqual(second,first);
+  await page.reload();await page.waitForFunction(()=>document.querySelector('#rank-lab')?.dataset.ready==='true'&&['ready','fallback'].includes(document.querySelector('#rank-lab').dataset.texture));await complete(page);
+ });
  await t.test('partial and wrong answers get actionable feedback; correction and new edits update the same diagram',async()=>{
   await page.locator('#rank-check').click();assert.match(await page.locator('#quiz-result').textContent(),/未放入/);
   await place([0,1,2]);await page.locator('#rank-check').click();assert.equal(await page.locator('#quiz-result').getAttribute('data-result'),'retry');assert.match(await page.locator('#quiz-result').textContent(),/夾角越大/);assert.equal(await page.locator('.rank-angle[data-emphasis=true]').count(),3);
@@ -77,7 +82,7 @@ test('4.3 layer-speed quiz applies refraction through one three-layer bench',{ti
   await p.locator('[data-rank-medium="1"]').tap();await p.locator('[data-rank-slot="2"]').tap();await p.locator('[data-rank-medium="2"]').tap();await p.locator('[data-rank-slot="1"]').tap();await p.locator('#rank-check').tap();assert.equal(await p.locator('#quiz-result').getAttribute('data-result'),'correct');await context.close();
  });
  await t.test('texture failure leaves a usable vector bench, and no-JavaScript explains how to continue',async()=>{
-  const p=await browser.newPage();await p.route('**/layer-quiz-*.png',r=>r.abort());await ready(p);await p.waitForFunction(()=>document.querySelector('#rank-fallback').textContent.includes('簡化底圖'));await complete(p);assert.equal(await p.locator('#rank-check').isEnabled(),true);await p.close();const context=await browser.newContext({javaScriptEnabled:false});const plain=await context.newPage();await plain.goto(base);assert.match(await plain.locator('#s7 noscript').textContent(),/啟用JavaScript/);assert.equal(await plain.locator('#rank-play').isDisabled(),true);await context.close();
+  const p=await browser.newPage();await p.route('**/layer-quiz-*.png',r=>r.abort());await p.route('**/light-speed-bench.png',r=>r.abort());await ready(p);await p.waitForFunction(()=>document.querySelector('#rank-fallback').textContent.includes('簡化底圖'));await complete(p);assert.equal(await p.locator('#rank-check').isEnabled(),true);await p.close();const context=await browser.newContext({javaScriptEnabled:false});const plain=await context.newPage();await plain.goto(base);assert.match(await plain.locator('#s7 noscript').textContent(),/啟用JavaScript/);assert.equal(await plain.locator('#rank-play').isDisabled(),true);await context.close();
  });
  assert.deepEqual(errors,[]);
 });

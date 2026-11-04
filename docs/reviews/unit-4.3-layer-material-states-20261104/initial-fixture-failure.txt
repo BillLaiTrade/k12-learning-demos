@@ -1,0 +1,49 @@
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (216.328429ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (1872.380237ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (20624.095299ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (1801.996417ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (33203.146947ms)
+▶ 4.3 layer-speed quiz applies refraction through one three-layer bench
+  ✔ initial scene awaits emission, preserves six teaching sections and withholds speed answers (916.095464ms)
+  ✔ emission draws genuine intermediate, continuous refracted segments and leaves parallel normals for comparison (3540.886148ms)
+  ✔ photoreal bench and transparent source load, with the optical aperture aligned to the computed ray (42.413741ms)
+  ✔ three material states use distinct real textures and follow the speed ordering when questions change (5962.03782ms)
+  ✖ partial and wrong answers get actionable feedback; correction and new edits update the same diagram (996.712676ms)
+  ✔ mouse dragging swaps occupied slots, cancels outside drops and does not leak a click or ghost (2136.796171ms)
+  ✔ keyboard selection, arrows, deletion and Escape support the complete ranking workflow (3822.901407ms)
+  ✔ offscreen playback suspends and resumes, while changing question cancels old playback and clears answers (10906.8967ms)
+  ✔ desktop, laptop and narrow screens preserve physical angles, readable labels and complete controls (7680.62512ms)
+  ✔ native phone touch drags cards without page scrolling and reduced-motion playback still reveals intermediate light (8894.357306ms)
+  ✔ texture failure leaves a usable vector bench, and no-JavaScript explains how to continue (16466.424949ms)
+✖ 4.3 layer-speed quiz applies refraction through one three-layer bench (67975.868214ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (27581.184319ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 16
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 132404.116091
+
+✖ failing tests:
+
+test at tests/unit-4.3-layer-speed-quiz.test.cjs:49:10
+✖ partial and wrong answers get actionable feedback; correction and new edits update the same diagram (996.712676ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  'retry' !== 'correct'
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:53:52)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-layer-speed-quiz.test.cjs:49:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'retry',
+    expected: 'correct',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

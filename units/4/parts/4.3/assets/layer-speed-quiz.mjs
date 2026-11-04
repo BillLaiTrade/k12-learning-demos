@@ -1,4 +1,4 @@
-import {createLayerDeck, layerSnapshot, placeLayer, compareLayers, LAYER_NAMES} from './layer-speed-model.mjs?v=20261104-rank1';
+import {createLayerDeck, layerSnapshot, placeLayer, compareLayers, LAYER_NAMES} from './layer-speed-model.mjs?v=20261104-states1';
 
 const root=document.querySelector('#rank-lab');
 if(root){
@@ -12,11 +12,14 @@ if(root){
   let state='idle', elapsed=0, startTime=0, frame=0, observed=false, inView=true;
   let drag=null, suppressClickUntil=0, suppressClickTarget=null, project, pixelRatio=1, lastLayout='';
   const photoURLs=Object.fromEntries(['wide','tall','source'].map(key=>[key,new URL(`./layer-quiz-${key==='source'?'source':`bench-${key}`}.png`,import.meta.url).href]));
+  photoURLs.materials=new URL('./light-speed-bench.png',import.meta.url).href;
+  const materialRows={gas:{x:560,y:141,width:980,height:88},liquid:{x:540,y:285,width:1000,height:121},solid:{x:540,y:457,width:1000,height:139}};
+  const kindNames={gas:'氣體',liquid:'液體',solid:'固體'};
   const photos=new Map();let backgroundKey='wide';
   function updateTextures(){
-    const background=photos.get(backgroundKey)?.state||'loading',source=photos.get('source')?.state||'loading';
-    root.dataset.backgroundReady=String(background==='ready');root.dataset.sourceReady=String(source==='ready');
-    root.dataset.texture=[background,source].includes('loading')?'loading':[background,source].includes('fallback')?'fallback':'ready';
+    const background=photos.get(backgroundKey)?.state||'loading',source=photos.get('source')?.state||'loading',materials=photos.get('materials')?.state||'loading';
+    root.dataset.backgroundReady=String(background==='ready');root.dataset.sourceReady=String(source==='ready');root.dataset.materialsReady=String(materials==='ready');
+    root.dataset.texture=[background,source,materials].includes('loading')?'loading':[background,source,materials].includes('fallback')?'fallback':'ready';
     q('#rank-fallback').textContent=root.dataset.texture==='fallback'?'目前使用簡化底圖，光路與排序仍可正常操作。':'';
   }
   function loadPhoto(key){
@@ -40,7 +43,7 @@ if(root){
     const narrow=root.closest('.rank-quiz').clientWidth<=650, width=narrow?660:1200, height=narrow?720:600;
     const top=narrow?199:190,bottom=narrow?609:494,h=(bottom-top)/3,entry=narrow?280:400;
     const left=narrow?59:70,right=narrow?600:915,font=narrow?35:26;
-    backgroundKey=narrow?'tall':'wide';loadPhoto(backgroundKey);loadPhoto('source');updateTextures();
+    backgroundKey=narrow?'tall':'wide';loadPhoto(backgroundKey);loadPhoto('source');loadPhoto('materials');updateTextures();
     pixelRatio=svg.clientWidth/width;
     project=p=>[entry+p[0]*h,top+p[1]*h];
     svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
@@ -51,7 +54,7 @@ if(root){
         <filter id="rank-object-shadow" x="-35%" y="-35%" width="170%" height="180%"><feDropShadow dx="1" dy="4" stdDeviation="3" flood-color="#44301b" flood-opacity=".32"/></filter>
         <filter id="rank-label-shadow" x="-15%" y="-25%" width="135%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="1.6" flood-color="#67502b" flood-opacity=".28"/></filter>
         <linearGradient id="rank-ivory" x2=".15" y2="1"><stop stop-color="#fffef4"/><stop offset=".55" stop-color="#fff8df"/><stop offset="1" stop-color="#ecdfb9"/></linearGradient>
-        ${[['#e3f4ef','#bfd5cf'],['#b6e0e6','#91bfc4'],['#fae4b9','#d9bc86']].map((colours,i)=>`<linearGradient id="rank-medium-fill-${i}" x2="0" y2="1"><stop stop-color="${colours[0]}" stop-opacity="${i===1?.46:.3}"/><stop offset=".52" stop-color="${colours[1]}" stop-opacity="${i===1?.43:.25}"/><stop offset="1" stop-color="${colours[1]}" stop-opacity="${i===1?.54:.36}"/></linearGradient>`).join('')}
+        ${[['#e3f4ef','#bfd5cf'],['#b6e0e6','#91bfc4'],['#fae4b9','#d9bc86']].map((colours,i)=>`<linearGradient id="rank-medium-fill-${['gas','liquid','solid'][i]}" x2="0" y2="1"><stop stop-color="${colours[0]}" stop-opacity="${i===1?.46:.3}"/><stop offset=".52" stop-color="${colours[1]}" stop-opacity="${i===1?.43:.25}"/><stop offset="1" stop-color="${colours[1]}" stop-opacity="${i===1?.54:.36}"/></linearGradient>`).join('')}
         <filter id="rank-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
         <linearGradient id="rank-metal"><stop stop-color="#10191b"/><stop offset=".18" stop-color="#6d7777"/><stop offset=".4" stop-color="#263033"/><stop offset=".78" stop-color="#101719"/><stop offset="1" stop-color="#414b4c"/></linearGradient>
         <linearGradient id="rank-rim"><stop stop-color="#665334"/><stop offset=".3" stop-color="#f4d58d"/><stop offset=".6" stop-color="#b18b47"/><stop offset="1" stop-color="#4b3e28"/></linearGradient>
@@ -67,9 +70,13 @@ if(root){
       </g>
       <image class="rank-bench-photo" x="0" y="0" width="${width}" height="${height}" href="${photoURLs[backgroundKey]}" preserveAspectRatio="none" aria-hidden="true"/>
       ${question.geometry.layers.map((layer,i)=>{
-        const cy=top+(i+.5)*h,plateX=left+18,plateWidth=166;
-        return `<g class="rank-medium" data-layer="${i}">
-        <rect class="rank-layer" x="${left}" y="${top+i*h}" width="${right-left}" height="${h}" fill="url(#rank-medium-fill-${i})"/>
+        const cy=top+(i+.5)*h,plateX=left+18,plateWidth=166,kind=question.materials[i].kind,texture=materialRows[kind];
+        const cropWidth=narrow?Math.min(texture.width,texture.height*(right-left)/h):texture.width;
+        const cropX=texture.x+(texture.width-cropWidth)*(kind==='solid'?.67:.5);
+        const crop=`${cropX} ${texture.y} ${cropWidth} ${texture.height}`;
+        return `<g class="rank-medium" data-layer="${i}" data-material-kind="${kind}">
+        <rect class="rank-layer" x="${left}" y="${top+i*h}" width="${right-left}" height="${h}" fill="url(#rank-medium-fill-${kind})"/>
+        <svg class="rank-material-photo" x="${left}" y="${top+i*h}" width="${right-left}" height="${h}" viewBox="${crop}" preserveAspectRatio="none" aria-hidden="true"><image class="rank-material-image" href="${photoURLs.materials}" width="2022" height="778"/></svg>
         ${i>0?`<path class="rank-interface" d="M${left} ${top+i*h}H${right}"/>`:''}
         <g class="rank-nameplate" filter="url(#rank-label-shadow)" aria-hidden="true">
           <path d="M${plateX+8} ${cy-26}H${plateX+plateWidth-8}L${plateX+plateWidth} ${cy-18}V${cy+18}L${plateX+plateWidth-8} ${cy+26}H${plateX+8}L${plateX} ${cy+18}V${cy-18}Z" fill="url(#rank-ivory)" stroke="#b2985c" stroke-width="1.2"/>
@@ -139,7 +146,7 @@ if(root){
     check.disabled=!observed||state==='running'||state==='suspended';
     q('#rank-play-state').textContent=state==='running'?'觀察光通過每一層時的方向。':state==='suspended'?'保留目前進度，回到畫面後繼續。':observed?'光路已保留，可直接比較。':'先發射光束，再比較三層光路。';
     const description=q('#rank-scene-desc');
-    description.textContent=observed?`三層介面互相平行。${question.geometry.layers.map(layer=>`${names[layer.id]}中的光線與法線夾角約${layer.angle.toFixed(1)}度`).join('；')}。只比較甲、乙、丙，不包括光源所在的空氣。`:'尚未完成發射。三層介面互相平行，只比較介質甲、乙、丙。';
+    description.textContent=observed?`三層介面互相平行。${question.geometry.layers.map(layer=>`${names[layer.id]}為${kindNames[question.materials[layer.id].kind]}，其中光線與法線夾角約${layer.angle.toFixed(1)}度`).join('；')}。只比較甲、乙、丙，不包括光源所在的空氣。`:'尚未完成發射。三層介面互相平行，只比較介質甲、乙、丙。';
   }
   function stop(){cancelAnimationFrame(frame);frame=0;}
   function tick(now){
