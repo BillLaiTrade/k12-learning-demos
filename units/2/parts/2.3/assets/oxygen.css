@@ -128,8 +128,7 @@
 .oxygen-main-scene>use,.oxygen-mobile-zoom svg>use{pointer-events:none}
 .oxygen-main-scene,.oxygen-mobile-zoom svg{pointer-events:auto;user-select:none;-webkit-user-select:none}
 
-/* 材料清單也列出示範中實際使用的取物工具。 */
-#s3 .experiment-accessory{display:flex;align-items:center;gap:12px;padding:8px 12px;border-top:1px solid #d3ddcf;background:#f6f7ef;line-height:1.5;font-size:.85rem}
-#s3 .experiment-accessory button{display:flex;align-items:center;gap:10px;min-height:44px;padding:5px 12px;border:1px solid #b7c9b0;border-radius:8px;background:#fffef5;color:#315d43;font:inherit;cursor:pointer}
-#s3 .experiment-accessory img{width:100px;height:auto;max-height:28px;object-fit:contain}
-#s3 .experiment-accessory button>span{background:#fffef5eb}
+/* 清水與藥匙直接擺在同一張材料桌，名稱與介紹入口沿用其他材料。 */
+#s3 .oxygen-materials-photo>img.oxygen-material-object{position:absolute;inset:auto;left:var(--object-x);top:var(--object-y);width:var(--object-w);height:auto;z-index:1;pointer-events:none}
+#s3 .oxygen-materials-photo>.oxygen-material-hit{z-index:2}
+#s3 .oxygen-materials-photo>.oxygen-material-hit[data-material=plate]{z-index:3}

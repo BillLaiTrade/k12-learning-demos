@@ -1,0 +1,58 @@
+.convex-bench { container:convex-bench / inline-size; --observer-width:148px; --bench-stage-min:300px; min-width:0; margin:18px 0; }
+.convex-bench .convex-stage { position:relative; width:100%; height:clamp(var(--bench-stage-min),min(calc(100svh - 340px),55cqw),440px); max-height:calc(var(--bench-window-height,100svh) - var(--bench-dock-height,158px) - 8px); min-height:220px; overflow:hidden; border:1px solid #849a85; border-radius:16px; background:#566b5b; }
+.convex-bench .convex-stage>canvas { position:absolute; inset:0; width:100%; height:100%; touch-action:none; }
+.convex-bench .convex-tools { position:absolute; z-index:3; top:12px; left:10px; right:calc(var(--observer-width) + 24px); display:flex; flex-wrap:wrap; gap:7px; pointer-events:none; }
+.convex-bench .convex-tools button { pointer-events:auto; min-height:38px; padding:7px 10px; font-size:.74rem; background:#fffdf2; color:#31513e; box-shadow:0 2px 8px #15271b22; }
+.convex-bench .convex-tools>button:first-child { background:#f5d88d; color:#42351a; border-color:#e4ca83; font-weight:750; }
+.convex-bench .convex-trace { flex-basis:100%; display:flex; flex-wrap:wrap; gap:6px; }
+.convex-bench .convex-trace button { min-height:32px; padding:4px 8px; }
+.convex-bench .convex-tools button[aria-pressed=true]:not(:first-child),.convex-bench .convex-trace button[aria-pressed=true] { background:#d8e8ca; color:#294d32; }
+.convex-bench .convex-panel { position:absolute; z-index:4; top:10px; right:10px; width:var(--observer-width); margin:0; padding:7px; min-width:0; max-height:calc(100% - 20px); border:1px solid #ccdcc0; border-radius:11px; background:linear-gradient(140deg,#f1f6e9,#e5eddc); box-shadow:0 2px 9px #15271b25; overflow:hidden; }
+.convex-bench .convex-panel h3 { margin:0; font-size:.78rem; line-height:1.3; }
+.convex-bench [data-mag-eye],.convex-bench [data-mag-reference] { width:var(--eye-art-width,100%); max-width:100%; height:auto; margin:0 auto; }
+.convex-bench .magnifier-eye-subtitle { display:block; }
+.convex-bench .magnifier-eye-badge { font-size:.66rem; line-height:1.3; }
+.convex-bench .convex-dock { margin-top:8px; }
+.convex-bench .convex-rulers { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.convex-bench .convex-ruler { container:convex-ruler / inline-size; min-width:0; min-height:112px; margin:0; padding:4px 10px; border:1px solid #cbd9bf; border-radius:10px; background:#f5f8ef; }
+.convex-bench .convex-ruler-heading { display:flex; justify-content:space-between; align-items:center; gap:5px; line-height:1.3; }
+.convex-bench .convex-ruler-heading h3 { margin:0; font-size:.8rem; color:#31543c; }
+.convex-bench .convex-ruler-heading output { font-size:.7rem; color:#54715b; }
+.convex-bench .convex-ruler-track { position:relative; height:82px; margin:0 25px; cursor:crosshair; touch-action:manipulation; }
+.convex-bench .convex-ruler-track::before { content:""; position:absolute; top:39px; left:0; right:0; height:3px; border-radius:3px; background:#819777; }
+.convex-bench .convex-ruler-major { position:absolute; z-index:2; top:13px; left:auto; transform:translateX(-50%); display:inline-flex; justify-content:center; align-items:center; width:34px; min-width:34px; height:25px; min-height:25px; padding:1px 3px; border:1px solid #75977c; border-radius:6px; background:#fffef5; color:#28563b; font-size:.68rem; box-shadow:0 1px 2px #31533d26; white-space:nowrap; }
+.convex-bench .convex-ruler-major[data-distance="0"] { width:50px; }
+.convex-bench .convex-ruler-major::after { content:""; position:absolute; top:25px; left:50%; height:10px; border-left:2px solid #345b43; }
+.convex-bench .convex-ruler-tick { position:absolute; top:34px; height:7px; border-left:1px solid #819777; pointer-events:none; }
+.convex-bench .convex-ruler-handle { position:absolute; z-index:3; top:51px; transform:translateX(-50%); width:64px; min-width:64px; max-width:64px; height:30px; min-height:30px; padding:3px 7px; border:1px solid #246d55; border-radius:8px; background:#196c54; color:#fff; font-size:.73rem; touch-action:none; cursor:ew-resize; user-select:none; transition:none; white-space:nowrap; }
+.convex-bench .convex-ruler-handle::before { content:""; position:absolute; top:-9px; left:50%; height:9px; border-left:2px solid #196c54; }
+.convex-bench .convex-ruler-handle::after { content:""; position:absolute; top:-9px; left:50%; width:10px; height:7px; transform:translateX(-50%); background:#196c54; clip-path:polygon(50% 0,100% 100%,0 100%); }
+.convex-bench .convex-condition { min-height:2.8em; margin:6px 0 0; padding:0; color:#31593f; font-size:.76rem; line-height:1.4; }
+.convex-bench .convex-observations { margin:18px 0 12px; padding:0; border:0; border-radius:0; background:transparent; }
+.convex-bench .convex-observations h3 { margin:0 0 3px; font-size:1rem; color:#31543c; }
+.convex-bench .convex-observations>p { margin:0 0 8px; font-size:.75rem; color:#58705b; }
+.convex-bench .convex-observation-table { width:100%; table-layout:fixed; border-collapse:separate; border-spacing:0; border:1px solid #b5c7a9; border-radius:12px; overflow:hidden; font-size:.8rem; line-height:1.5; }
+.convex-bench .convex-observation-table th,.convex-bench .convex-observation-table td { padding:8px; text-align:left; overflow-wrap:anywhere; }
+.convex-bench .convex-observation-table thead { background:#23583f; color:#fffdf0; }
+.convex-bench .convex-observation-table thead th:first-child { width:26%; }
+.convex-bench .convex-observation-table thead th:nth-child(2) { width:38%; }
+.convex-bench .convex-observation-table tbody tr { background:#fafbf5; cursor:pointer; }
+.convex-bench .convex-observation-table tbody tr+tr>* { border-top:1px solid #cddbc2; }
+.convex-bench .convex-observation-table tbody tr[data-active=true] { background:#e2efcd; }
+.convex-bench .convex-observation-table tbody tr[data-active=true]>:first-child { box-shadow:inset 4px 0 #3c7d4b; }
+.convex-bench .convex-observation-table button,.convex-bench .convex-observation-table button[aria-pressed=true] { width:100%; min-height:36px; padding:0; border:0; border-radius:0; background:transparent; color:inherit; box-shadow:none; text-align:left; font:inherit; font-weight:700; }
+.convex-bench .convex-focus { position:absolute; transform:translate(-50%,-50%); padding:1px 5px; border:0; border-radius:5px; background:#34543f; color:#fff8dc; font-size:.72rem; pointer-events:none; white-space:nowrap; }
+.convex-bench .convex-image-tag { position:absolute; z-index:2; transform:translate(-50%,-50%); padding:3px 6px; border:1px dashed #b6c7a3; border-radius:5px; background:#fff7dbea; color:#715d30; font-size:.67rem; line-height:1.4; pointer-events:none; }
+.convex-bench .convex-gesture-note { position:absolute; z-index:5; left:10px; right:calc(var(--observer-width) + 24px); bottom:8px; padding:6px; margin:0; border-radius:7px; background:#fff4d9; color:#4d5839; font-size:.72rem; }
+.convex-bench [hidden] { display:none!important; }
+@media(max-width:760px){.convex-bench{--observer-width:96px}.convex-bench .convex-tools{top:8px;left:8px;right:calc(var(--observer-width) + 20px);gap:6px}.convex-bench .convex-tools button{font-size:.7rem;padding:6px 8px;min-height:36px}.convex-bench .convex-trace button{min-height:30px;padding:3px 5px;font-size:.66rem}.convex-bench .convex-image-tag{font-size:.61rem;padding:2px 4px}}
+@container convex-bench (min-width:420px) and (max-width:599px){.convex-stage{--bench-stage-min:310px;--observer-width:136px}}
+@container convex-bench (max-width:599px){.convex-bench .convex-rulers{grid-template-columns:minmax(0,1fr)}}
+@container convex-bench (max-width:419px){.convex-stage{--bench-stage-min:380px}.convex-bench .convex-observation-table th,.convex-bench .convex-observation-table td{font-size:.7rem;padding:6px 4px}}
+@container convex-bench (max-width:299px){.convex-stage{--bench-stage-min:400px;--observer-width:88px}}
+@container convex-ruler (max-width:280px){.convex-bench .convex-ruler-major{width:27px;min-width:27px;font-size:.61rem}.convex-bench .convex-ruler-major[data-distance="350"],.convex-bench .convex-ruler-major[data-distance="300"]{width:24px;min-width:24px}.convex-bench .convex-ruler-major[data-distance="0"]{width:44px}}
+
+.convex-bench[data-narrow=true] .convex-ruler { min-height:112px; padding:4px 10px; }
+.convex-bench .convex-ruler[data-guided] { outline:3px solid #d5a63c; outline-offset:1px; }
+
+.convex-bench .imaging-operating { gap:0; }
