@@ -1,10 +1,10 @@
 import {paintBenchProjection} from './screen-projection.mjs?v=20261104-bench-proportion1';
 import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-bench-proportion1';
-import {bindBenchRuler} from './convex-bench-workspace.mjs?v=20261104-bench-proportion1';
+import {bindBenchRuler} from './convex-bench-workspace.mjs?v=20261104-imaging-focus1';
 import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-bench-proportion1';
 import {BENCH_HOME,createBenchArt} from './convex-bench-model.mjs?v=20261104-bench-proportion1';
-import {fitBench} from './convex-bench-workspace.mjs?v=20261104-bench-proportion1';
-import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261104-bench-proportion1';
+import {fitBench} from './convex-bench-workspace.mjs?v=20261104-imaging-focus1';
+import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261104-imaging-focus1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261104-bench-proportion1';
 const root=document.querySelector('[data-imaging-lab]');
@@ -48,7 +48,7 @@ function initialise(root){
   canvas.setAttribute('aria-label',`旋轉與縮放觀察的立體凸透鏡成像台，使用下方位置尺調整距離，物距${state.atInfinity?'無窮遠':distanceLabel(state.object)}，屏幕距離${distanceLabel(state.screen)}，${$('[data-imaging-badge]').textContent}`);
   studio?.update();
  }
- function move(key,value){clearGestureNotice();const previous=state.object;state=moveImaging(state,key,value);if(key==='object'&&state.object===G.f&&previous!==G.f)point='top';if(state.object>=G.f)extensions=false;selected=key;update();}
+ function move(key,value){clearGestureNotice();state=moveImaging(state,key,value);if(state.object>=G.f)extensions=false;selected=key;update();}
  for(const handle of $$('[data-imaging-ruler-handle]')){const key=handle.dataset.imagingRulerHandle;bindBenchRuler({track:$(`[data-imaging-ruler-track=${key}]`),handle,key,min:G[key+'Min'],max:G[key+'Max'],reverse:key==='object',get:()=>state[key],move});}
  $('[data-imaging-target-label]').addEventListener('click',e=>{e.stopPropagation();const g=imagingState(state);if(g.finite&&g.type==='real'&&!g.unreachable)move('screen',g.v);});
  $('[data-imaging-extensions]').addEventListener('click',()=>{extensions=!extensions;if(extensions)showRays=true;update();});
@@ -56,7 +56,7 @@ function initialise(root){
  $$('[data-imaging-point]').forEach(b=>b.addEventListener('click',()=>{point=b.dataset.imagingPoint;update();}));
  $$('[data-imaging-device]').forEach(b=>{const key=b.dataset.imagingDevice;b.addEventListener('click',()=>{selected=key;update();});b.addEventListener('keydown',e=>{let value=state[key];if(e.key==='Home')value=G[key+'Min'];else if(e.key==='End')value=G[key+'Max'];else if(['ArrowLeft','ArrowRight','ArrowDown','ArrowUp'].includes(e.key)){const direction=['ArrowLeft','ArrowDown'].includes(e.key)?-1:1;value+=(key==='object'?-direction:direction)*(e.shiftKey?.2:1);}else return;e.preventDefault();move(key,value);});});
  $$('[data-imaging-keypoint]').forEach(b=>b.addEventListener('click',()=>{
-  const next=imagingKeypointState(b.dataset.imagingKeypoint);if(!next)return;clearGestureNotice();state=next;point=next.object===G.f?'top':'both';extensions=imagingState(next).type==='virtual';if(extensions)showRays=true;selected='screen';front=false;update();studio?.frameCase();
+  const next=imagingKeypointState(b.dataset.imagingKeypoint);if(!next)return;clearGestureNotice();state=next;extensions=imagingState(next).type==='virtual';if(extensions)showRays=true;selected='screen';front=false;update();studio?.frameCase();
  }));
  try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-imaging-fallback]').hidden=false;$('[data-imaging-view]').hidden=true;root.dataset.webgl='unavailable';console.warn('Imaging 3D:',error.message);}
  update();root.dataset.ready='true';
@@ -64,7 +64,7 @@ function initialise(root){
  function createStudio(){
   const renderer=new THREE.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   const scene=new THREE.Scene();scene.background=new THREE.Color('#566b5b');scene.fog=new THREE.Fog('#566b5b',35,80);
-  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3(-G.f*.75*G.scale,1.75,0);let orbit={...BENCH_HOME},fitRadius=9,pending=0,viewport=null,frameMode='bench';
+  const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3(-G.f*.75*G.scale,1.75,0);let orbit={...BENCH_HOME},fitRadius=9,pending=0,viewport=null,frameMode='bench',frameState={...state};root.dataset.framing='bench';
   const clampZoom=value=>THREE.MathUtils.clamp(value,.2,2.2);
   const {source,lens,lensGroup,screen,screenPlane,projectedTexture,artTex}=createBenchApparatus(THREE,scene,G,art,paper);
   const virtualImage=new THREE.Group();virtualImage.name='imaging-virtual-image';virtualImage.visible=false;scene.add(virtualImage);
@@ -73,7 +73,21 @@ function initialise(root){
   const rays=new THREE.Group();scene.add(rays);
   function updateRays(){for(const m of [...rays.children]){m.geometry.dispose();m.material.dispose();rays.remove(m);}rays.visible=showRays&&!front;if(!showRays)return;for(const r of imagingRays(state,point)){const color=r.name==='top'?'#f4a17e':'#88c7ee';for(const [from,to]of [[r.from,r.lens],[r.lens,r.end]]){const A=new THREE.Vector3(...from),B=new THREE.Vector3(...to),tube=new THREE.Mesh(new THREE.TubeGeometry(new THREE.LineCurve3(A,B),1,.009,6,false),new THREE.MeshBasicMaterial({color,toneMapped:false}));tube.userData={name:r.name,from,to};rays.add(tube);const arrow=new THREE.Mesh(new THREE.ConeGeometry(.036,.13,10),new THREE.MeshBasicMaterial({color,toneMapped:false}));arrow.position.copy(A).lerp(B,.64);arrow.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),B.clone().sub(A).normalize());rays.add(arrow);}if(r.virtual&&extensions){const A=new THREE.Vector3(...r.lens),B=new THREE.Vector3(...r.virtual),line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([A,B]),new THREE.LineDashedMaterial({color,dashSize:.07,gapSize:.05,transparent:true,opacity:.85,depthTest:false,depthWrite:false}));line.computeLineDistances();line.renderOrder=10;line.userData={name:r.name,from:r.lens,to:r.virtual,virtual:true};rays.add(line);}}}
   function directionFor(azimuth,polar){return new THREE.Vector3(Math.sin(polar)*Math.sin(azimuth),Math.cos(polar),Math.sin(polar)*Math.cos(azimuth));}
-  function fitToViewport(){fitRadius=fitBench(THREE,camera,target);}
+  function fitToViewport(){
+   if(frameMode!=='virtual'){fitRadius=fitBench(THREE,camera,target);return;}
+   const sample={...frameState,object:Math.max(frameState.object,.6*G.f)},g=imagingState(sample),bounds=[];
+   const add=(xs,ys,zs)=>{for(const x of xs)for(const y of ys)for(const z of zs)bounds.push(new THREE.Vector3(x,y,z));};
+   // Keep the actual screen and nearby virtual images in view; the focus may crop distant rail marks.
+   add([Math.min(-G.f*G.scale,g.v*G.scale-.25*G.cardWidth*g.m),frameState.screen*G.scale+.2],[-.22,.4],[-1,1]);
+   add([g.v*G.scale-.25*G.cardWidth*g.m,g.v*G.scale+.25*G.cardWidth*g.m],[G.axis-G.cardHeight*g.m/2-.1,G.axis+G.cardHeight*g.m/2+.3],[0]);
+   add([-frameState.object*G.scale-.12,-frameState.object*G.scale+.12],[.25,G.axis+G.cardHeight/2+.12],[-.85,.85]);
+   add([-.14,.14],[.25,G.axis+1.12],[-1,1]);
+   add([frameState.screen*G.scale-.2,frameState.screen*G.scale+.2],[.25,G.axis+G.screenHeight/2+.12],[-G.screenWidth/2-.1,G.screenWidth/2+.1]);
+   target.set((Math.min(...bounds.map(p=>p.x))+Math.max(...bounds.map(p=>p.x)))/2,1.8,0);camera.fov=39;camera.updateProjectionMatrix();
+   const direction=directionFor(orbit.azimuth,orbit.polar);let radius=3;
+   for(let i=0;i<120;i++){camera.position.copy(target).addScaledVector(direction,radius);camera.lookAt(target);camera.updateMatrixWorld();if(bounds.every(p=>{const q=p.clone().project(camera);return Math.abs(q.x)<.91&&q.y>-.94&&q.y<.86;}))break;radius*=1.04;}
+   fitRadius=radius;
+  }
   function updateCamera(){
    if(front){const d=Math.min(1.1,state.screen*G.scale-.2);camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(Math.max(G.screenHeight+.65,(G.screenWidth+.6)/camera.aspect)/(2*d)));camera.position.set(state.screen*G.scale-d,G.axis,0);camera.lookAt(state.screen*G.scale,G.axis,0);}
    else{camera.fov=39;camera.position.copy(target).addScaledVector(directionFor(orbit.azimuth,orbit.polar),fitRadius*orbit.zoom);camera.lookAt(target);}
@@ -102,7 +116,7 @@ function initialise(root){
   canvas.addEventListener('wheel',e=>{e.preventDefault();clearGestureNotice();if(front)return;orbit.zoom=clampZoom(orbit.zoom+e.deltaY*.001);update();},{passive:false});
   canvas.addEventListener('keydown',e=>{const steps={ArrowLeft:[.06,0],ArrowRight:[-.06,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!steps[e.key])return;e.preventDefault();clearGestureNotice();front=false;orbit.azimuth=orbit.azimuth+steps[e.key][0];orbit.polar=THREE.MathUtils.clamp(orbit.polar+steps[e.key][1],.25,1.55);update();});
   function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);viewport=workspace.safeRect();camera.aspect=viewport.width/viewport.height;fitToViewport();updateCamera();requestDraw();}new ResizeObserver(resize).observe(canvas);resize();
-  function frameCase(){orbit.zoom=1;fitToViewport();updateCamera();requestDraw();}
+  function frameCase(){orbit.zoom=1;frameState={...state};frameMode=imagingState(state).type==='virtual'?'virtual':'bench';root.dataset.framing=frameMode;fitToViewport();updateCamera();requestDraw();}
   return {update:syncScene,target,frameCase,scene,camera,renderer,source,lens,screen,screenPlane,rays,devices,virtualImage,virtualArt,virtualOutline};
  }
 }

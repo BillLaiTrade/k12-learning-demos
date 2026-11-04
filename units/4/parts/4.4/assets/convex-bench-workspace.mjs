@@ -8,12 +8,12 @@ export function bindBenchRuler({track,handle,key,min,max,reverse,get,move}){
  return value=>{handle.style.left=`${(reverse?1-value/max:value/max)*100}%`;handle.setAttribute('aria-valuemin',String(min/G.f));handle.setAttribute('aria-valuemax',String(max/G.f));handle.setAttribute('aria-valuenow',String(Number((value/G.f).toFixed(3))));};
 }
 export function createBenchLayout(root){
- const stage=root.querySelector('.convex-stage'),panel=root.querySelector('.convex-panel');
+ const stage=root.querySelector('.convex-stage'),panel=root.querySelector('.convex-panel'),viewport=root.querySelector('[data-imaging-viewport]')||stage;
  function layout(){const width=stage.clientWidth,nav=document.querySelector('.route'),navHeight=innerWidth<=760&&nav?nav.offsetHeight:0;root.dataset.narrow=String(width<600);root.dataset.compact=String(width<1000);root.style.setProperty('--bench-window-height',Math.max(280,innerHeight-navHeight-24)+'px');root.style.setProperty('--bench-dock-height',(width<600?290:158)+'px');root.style.setProperty('--eye-art-width',Math.max(40,Math.min(panel.clientWidth-16,(stage.clientHeight-(root.hasAttribute('data-magnifier-lab')?180:148))/2))+'px');root.style.setProperty('--preview-paper-width',Math.min(panel.clientWidth-16,Math.max(38,(stage.clientHeight-115)*380/600))+'px');}
  new ResizeObserver(layout).observe(stage);window.addEventListener('resize',layout);layout();
  return {layout,safeRect(){
   const tools=root.querySelector('.convex-tools'),top=tools.offsetTop+tools.offsetHeight+10;
-  return {left:12,top,width:Math.max(60,stage.clientWidth-panel.offsetWidth-40),height:Math.max(60,stage.clientHeight-top-12)};
+  return {left:12,top,width:Math.max(60,viewport.clientWidth-24),height:Math.max(60,viewport.clientHeight-top-12)};
  }};
 }
 export function fitBench(THREE,camera,target){

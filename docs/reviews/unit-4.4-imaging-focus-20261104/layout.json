@@ -1,0 +1,34 @@
+[
+  {
+    "width": 1440,
+    "separate": true,
+    "hits": [],
+    "overflow": false,
+    "panelHeight": 295.828125,
+    "canvasHeight": 418
+  },
+  {
+    "width": 820,
+    "separate": true,
+    "hits": [],
+    "overflow": false,
+    "panelHeight": 165.515625,
+    "canvasHeight": 300
+  },
+  {
+    "width": 390,
+    "separate": true,
+    "hits": [],
+    "overflow": false,
+    "panelHeight": 165.515625,
+    "canvasHeight": 300
+  },
+  {
+    "width": 320,
+    "separate": true,
+    "hits": [],
+    "overflow": false,
+    "panelHeight": 165.515625,
+    "canvasHeight": 300
+  }
+]
