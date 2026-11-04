@@ -1,0 +1,104 @@
+▶ sixth section teaches apparent depth with synchronized side and rendered observer views
+  ✔ the default is dry and physically occluded, with readable teaching and no automatic motion (1274.421334ms)
+  ✔ one press continuously fills or drains to its endpoint with synchronized views (6983.292566ms)
+  ✖ same-direction presses continue, opposite presses reverse and direct manipulation takes over (33490.86395ms)
+  ✔ water can be dragged vertically by its handle or surface, with keyboard access and no initial jump (6902.035374ms)
+  ✖ water and observer changes really repaint the coin, with the physical coin remaining fixed (30477.950665ms)
+  ✖ occlusion changes actual rendered pixels, and adding water at the same viewpoint reveals the coin (3356.289171ms)
+  ✖ the occluding wall is named in both views and the explanation follows the real visibility (768.246994ms)
+  ✖ hiding the construction preserves the eye view and the physical scene (152.333619ms)
+  ✔ keyboard and pointer change the same viewing position without losing focus (7210.207203ms)
+  ✔ the eye and viewing window share a visual cue and the dashed guide follows keyboard focus (3647.253272ms)
+  ✔ desktop and phone keep panels, labels and controls readable without horizontal page scrolling (58336.088037ms)
+  ✔ native mobile touch moves the viewpoint and updates the eye view (9286.199339ms)
+  ✔ filling and draining take two visible seconds under both motion preferences (19191.33972ms)
+  ✔ texture failure has a usable fallback and retry restores materials without resetting controls (5148.856901ms)
+  ✔ reading remains available with JavaScript disabled (696.13067ms)
+✖ sixth section teaches apparent depth with synchronized side and rendered observer views (191712.523217ms)
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (141.294235ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (594.977572ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (10792.722715ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (568.637883ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (14905.888307ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (13316.020064ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 16
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 222120.199255
+
+✖ failing tests:
+
+test at tests/unit-4.3-depth-lab.test.cjs:139:10
+✖ same-direction presses continue, opposite presses reverse and direct manipulation takes over (33490.86395ms)
+  page.waitForFunction: Timeout 30000ms exceeded.
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-depth-lab.test.cjs:146:14)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-depth-lab.test.cjs:139:2) {
+    name: 'TimeoutError',
+    log: []
+  }
+
+test at tests/unit-4.3-depth-lab.test.cjs:173:10
+✖ water and observer changes really repaint the coin, with the physical coin remaining fixed (30477.950665ms)
+  locator.getAttribute: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('#depth-scene .depth-apparent')[22m
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-depth-lab.test.cjs:176:68)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-depth-lab.test.cjs:173:2) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for locator('#depth-scene .depth-apparent')" ]
+  }
+
+test at tests/unit-4.3-depth-lab.test.cjs:193:10
+✖ occlusion changes actual rendered pixels, and adding water at the same viewpoint reveals the coin (3356.289171ms)
+  locator.evaluate: TypeError: Cannot read properties of null (reading 'getAttribute')
+      at eval (eval at evaluate (:311:30), <anonymous>:3:56)
+      at UtilityScript.evaluate (<anonymous>:313:16)
+      at UtilityScript.<anonymous> (<anonymous>:1:44)
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-depth-lab.test.cjs:201:57)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-depth-lab.test.cjs:193:2) {
+    log: []
+  }
+
+test at tests/unit-4.3-depth-lab.test.cjs:210:10
+✖ the occluding wall is named in both views and the explanation follows the real visibility (768.246994ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /前側槽壁.*光被擋住/s. Input:
+
+  '空槽靠近遠離↔ 左右拖動↕ 拉動水位實際位置前側槽壁'
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-depth-lab.test.cjs:211:27)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-depth-lab.test.cjs:210:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '空槽靠近遠離↔ 左右拖動↕ 拉動水位實際位置前側槽壁',
+    expected: /前側槽壁.*光被擋住/s,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/unit-4.3-depth-lab.test.cjs:224:10
+✖ hiding the construction preserves the eye view and the physical scene (152.333619ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  0 !== 2
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-depth-lab.test.cjs:229:51)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-depth-lab.test.cjs:224:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,32 @@
+▶ sixth section teaches apparent depth with synchronized side and rendered observer views
+  ✔ the default is dry and physically occluded, with readable teaching and no automatic motion (839.833226ms)
+  ✔ one press continuously fills or drains to its endpoint with synchronized views (6551.876021ms)
+  ✔ same-direction presses continue, opposite presses reverse and direct manipulation takes over (6539.296371ms)
+  ✔ water can be dragged vertically by its handle or surface, with keyboard access and no initial jump (6005.294067ms)
+  ✔ water and observer changes really repaint the coin, with the physical coin remaining fixed (9170.442359ms)
+  ✔ occlusion changes actual rendered pixels, and adding water at the same viewpoint reveals the coin (2917.59205ms)
+  ✔ the occluding wall is named in both views and the explanation follows the real visibility (2600.384346ms)
+  ✔ hiding the construction preserves the eye view and the physical scene (324.435189ms)
+  ✔ keyboard and pointer change the same viewing position without losing focus (4775.84065ms)
+  ✔ the eye and viewing window share a visual cue and the dashed guide follows keyboard focus (2564.732932ms)
+  ✔ desktop and phone keep panels, labels and controls readable without horizontal page scrolling (60607.877307ms)
+  ✔ native mobile touch moves the viewpoint and updates the eye view (9363.198764ms)
+  ✔ filling and draining take two visible seconds under both motion preferences (19322.976727ms)
+  ✔ texture failure has a usable fallback and retry restores materials without resetting controls (6722.464883ms)
+  ✔ reading remains available with JavaScript disabled (2864.547041ms)
+✔ sixth section teaches apparent depth with synchronized side and rendered observer views (146141.067014ms)
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (395.094575ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (957.73932ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (12888.282464ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (947.599756ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (22514.365052ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (16356.182424ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 189014.671601

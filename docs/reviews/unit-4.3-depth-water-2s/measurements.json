@@ -1,0 +1,4904 @@
+[
+  {
+    "width": 1536,
+    "height": 1000,
+    "help": "上下拖曳水面或水位把手；沿虛線左右拖動眼睛，靠近或遠離水槽。兩圖同步更新。",
+    "overflow": false,
+    "views": [
+      {
+        "x": 496,
+        "y": 198.09375,
+        "width": 405,
+        "height": 442.59375,
+        "top": 198.09375,
+        "right": 901,
+        "bottom": 640.6875,
+        "left": 496
+      },
+      {
+        "x": 949,
+        "y": 198.09375,
+        "width": 375,
+        "height": 442.59375,
+        "top": 198.09375,
+        "right": 1324,
+        "bottom": 640.6875,
+        "left": 949
+      }
+    ],
+    "texts": [
+      {
+        "font": 13.5,
+        "box": {
+          "x": 512.875,
+          "y": 303.96875,
+          "width": 27.5,
+          "height": 18,
+          "top": 303.96875,
+          "right": 540.375,
+          "bottom": 321.96875,
+          "left": 512.875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 727.2999877929688,
+          "y": 270.89373779296875,
+          "width": 27.5,
+          "height": 18,
+          "top": 270.89373779296875,
+          "right": 754.7999877929688,
+          "bottom": 288.89373779296875,
+          "left": 727.2999877929688
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 851.949951171875,
+          "y": 270.89373779296875,
+          "width": 27.5,
+          "height": 18,
+          "top": 270.89373779296875,
+          "right": 879.449951171875,
+          "bottom": 288.89373779296875,
+          "left": 851.949951171875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 769.375,
+          "y": 329.39373779296875,
+          "width": 14,
+          "height": 18,
+          "top": 329.39373779296875,
+          "right": 783.375,
+          "bottom": 347.39373779296875,
+          "left": 769.375
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 749.125,
+          "y": 395.54376220703125,
+          "width": 71.015625,
+          "height": 18,
+          "top": 395.54376220703125,
+          "right": 820.140625,
+          "bottom": 413.54376220703125,
+          "left": 749.125
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 511.75,
+          "y": 529.53125,
+          "width": 54,
+          "height": 18,
+          "top": 529.53125,
+          "right": 565.75,
+          "bottom": 547.53125,
+          "left": 511.75
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 535.375,
+          "y": 340.53125,
+          "width": 54,
+          "height": 18,
+          "top": 340.53125,
+          "right": 589.375,
+          "bottom": 358.53125,
+          "left": 535.375
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 512.875,
+          "y": 443.8062744140625,
+          "width": 27,
+          "height": 18,
+          "top": 443.8062744140625,
+          "right": 539.875,
+          "bottom": 461.8062744140625,
+          "left": 512.875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 512.875,
+          "y": 467.09375,
+          "width": 14,
+          "height": 18,
+          "top": 467.09375,
+          "right": 526.875,
+          "bottom": 485.09375,
+          "left": 512.875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 754.75,
+          "y": 465.6907958984375,
+          "width": 54,
+          "height": 18,
+          "top": 465.6907958984375,
+          "right": 808.75,
+          "bottom": 483.6907958984375,
+          "left": 754.75
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 578.85205078125,
+          "y": 408.3687744140625,
+          "width": 27.5,
+          "height": 18,
+          "top": 408.3687744140625,
+          "right": 606.35205078125,
+          "bottom": 426.3687744140625,
+          "left": 578.85205078125
+        }
+      }
+    ],
+    "svg": {
+      "x": 496,
+      "y": 256.09375,
+      "width": 405,
+      "height": 298.125,
+      "top": 256.09375,
+      "right": 901,
+      "bottom": 554.21875,
+      "left": 496
+    },
+    "eyeHit": {
+      "x": 744.625,
+      "y": 278.14373779296875,
+      "width": 63,
+      "height": 63,
+      "top": 278.14373779296875,
+      "right": 807.625,
+      "bottom": 341.14373779296875,
+      "left": 744.625
+    },
+    "water": {
+      "x": 698.65625,
+      "y": 384.84375,
+      "width": 44,
+      "height": 152,
+      "top": 384.84375,
+      "right": 742.65625,
+      "bottom": 536.84375,
+      "left": 698.65625
+    },
+    "rail": {
+      "x": 732.9249877929688,
+      "y": 309.64373779296875,
+      "width": 140.39996337890625,
+      "height": 0,
+      "top": 309.64373779296875,
+      "right": 873.324951171875,
+      "bottom": 309.64373779296875,
+      "left": 732.9249877929688
+    },
+    "buttons": [
+      {
+        "height": 46,
+        "clipped": false
+      },
+      {
+        "height": 46,
+        "clipped": false
+      }
+    ],
+    "controls": {
+      "x": 500,
+      "y": 657.6875,
+      "width": 313,
+      "height": 46,
+      "top": 657.6875,
+      "right": 813,
+      "bottom": 703.6875,
+      "left": 500
+    },
+    "pairings": [
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 732.9250068664551,
+              "y": 309.64374828338623
+            },
+            {
+              "x": 873.3249931335449,
+              "y": 309.64374828338623
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 726.1749877929688,
+            "y": 329.39373779296875,
+            "width": 14,
+            "height": 18,
+            "top": 329.39373779296875,
+            "right": 740.1749877929688,
+            "bottom": 347.39373779296875,
+            "left": 726.1749877929688
+          }
+        },
+        "eye": "210",
+        "frame": {
+          "x": 707.6124877929688,
+          "y": 293.33123779296875,
+          "width": 50.62506103515625,
+          "height": 32.625,
+          "top": 293.33123779296875,
+          "right": 758.237548828125,
+          "bottom": 325.95623779296875,
+          "left": 707.6124877929688
+        },
+        "stage": {
+          "x": 949,
+          "y": 256.09375,
+          "width": 375,
+          "height": 276.03125,
+          "top": 256.09375,
+          "right": 1324,
+          "bottom": 532.125,
+          "left": 949
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 732.9250068664551,
+              "y": 309.64374828338623
+            },
+            {
+              "x": 873.3249931335449,
+              "y": 309.64374828338623
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 823.375,
+            "y": 329.39373779296875,
+            "width": 14,
+            "height": 18,
+            "top": 329.39373779296875,
+            "right": 837.375,
+            "bottom": 347.39373779296875,
+            "left": 823.375
+          }
+        },
+        "eye": "300",
+        "frame": {
+          "x": 804.8125,
+          "y": 293.33123779296875,
+          "width": 50.625,
+          "height": 32.625,
+          "top": 293.33123779296875,
+          "right": 855.4375,
+          "bottom": 325.95623779296875,
+          "left": 804.8125
+        },
+        "stage": {
+          "x": 949,
+          "y": 256.09375,
+          "width": 375,
+          "height": 276.03125,
+          "top": 256.09375,
+          "right": 1324,
+          "bottom": 532.125,
+          "left": 949
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 732.9250068664551,
+              "y": 309.64374828338623
+            },
+            {
+              "x": 873.3249931335449,
+              "y": 309.64374828338623
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔ 左右拖動",
+          "box": {
+            "x": 818.2421875,
+            "y": 329.39373779296875,
+            "width": 71.015625,
+            "height": 18,
+            "top": 329.39373779296875,
+            "right": 889.2578125,
+            "bottom": 347.39373779296875,
+            "left": 818.2421875
+          }
+        },
+        "eye": "340",
+        "frame": {
+          "x": 848.012451171875,
+          "y": 293.33123779296875,
+          "width": 50.625,
+          "height": 32.625,
+          "top": 293.33123779296875,
+          "right": 898.637451171875,
+          "bottom": 325.95623779296875,
+          "left": 848.012451171875
+        },
+        "stage": {
+          "x": 949,
+          "y": 256.09375,
+          "width": 375,
+          "height": 276.03125,
+          "top": 256.09375,
+          "right": 1324,
+          "bottom": 532.125,
+          "left": 949
+        }
+      }
+    ],
+    "labelCases": [
+      {
+        "depth": 0,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      }
+    ]
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "help": "上下拖曳水面或水位把手；沿虛線左右拖動眼睛，靠近或遠離水槽。兩圖同步更新。",
+    "overflow": false,
+    "views": [
+      {
+        "x": 448,
+        "y": 198.09375,
+        "width": 405,
+        "height": 442.59375,
+        "top": 198.09375,
+        "right": 853,
+        "bottom": 640.6875,
+        "left": 448
+      },
+      {
+        "x": 901,
+        "y": 198.09375,
+        "width": 375,
+        "height": 442.59375,
+        "top": 198.09375,
+        "right": 1276,
+        "bottom": 640.6875,
+        "left": 901
+      }
+    ],
+    "texts": [
+      {
+        "font": 13.5,
+        "box": {
+          "x": 464.875,
+          "y": 303.96875,
+          "width": 27.499969482421875,
+          "height": 18,
+          "top": 303.96875,
+          "right": 492.3749694824219,
+          "bottom": 321.96875,
+          "left": 464.875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 679.2999877929688,
+          "y": 270.89373779296875,
+          "width": 27.5,
+          "height": 18,
+          "top": 270.89373779296875,
+          "right": 706.7999877929688,
+          "bottom": 288.89373779296875,
+          "left": 679.2999877929688
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 803.949951171875,
+          "y": 270.89373779296875,
+          "width": 27.5,
+          "height": 18,
+          "top": 270.89373779296875,
+          "right": 831.449951171875,
+          "bottom": 288.89373779296875,
+          "left": 803.949951171875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 721.375,
+          "y": 329.39373779296875,
+          "width": 14,
+          "height": 18,
+          "top": 329.39373779296875,
+          "right": 735.375,
+          "bottom": 347.39373779296875,
+          "left": 721.375
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 701.125,
+          "y": 395.54376220703125,
+          "width": 71.015625,
+          "height": 18,
+          "top": 395.54376220703125,
+          "right": 772.140625,
+          "bottom": 413.54376220703125,
+          "left": 701.125
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 463.75,
+          "y": 529.53125,
+          "width": 54,
+          "height": 18,
+          "top": 529.53125,
+          "right": 517.75,
+          "bottom": 547.53125,
+          "left": 463.75
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 487.375,
+          "y": 340.53125,
+          "width": 54,
+          "height": 18,
+          "top": 340.53125,
+          "right": 541.375,
+          "bottom": 358.53125,
+          "left": 487.375
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 464.875,
+          "y": 443.8062744140625,
+          "width": 27,
+          "height": 18,
+          "top": 443.8062744140625,
+          "right": 491.875,
+          "bottom": 461.8062744140625,
+          "left": 464.875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 464.875,
+          "y": 467.09375,
+          "width": 14,
+          "height": 18,
+          "top": 467.09375,
+          "right": 478.875,
+          "bottom": 485.09375,
+          "left": 464.875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 706.75,
+          "y": 465.6907958984375,
+          "width": 54,
+          "height": 18,
+          "top": 465.6907958984375,
+          "right": 760.75,
+          "bottom": 483.6907958984375,
+          "left": 706.75
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 530.85205078125,
+          "y": 408.3687744140625,
+          "width": 27.5,
+          "height": 18,
+          "top": 408.3687744140625,
+          "right": 558.35205078125,
+          "bottom": 426.3687744140625,
+          "left": 530.85205078125
+        }
+      }
+    ],
+    "svg": {
+      "x": 448,
+      "y": 256.09375,
+      "width": 405,
+      "height": 298.125,
+      "top": 256.09375,
+      "right": 853,
+      "bottom": 554.21875,
+      "left": 448
+    },
+    "eyeHit": {
+      "x": 696.625,
+      "y": 278.14373779296875,
+      "width": 63,
+      "height": 63,
+      "top": 278.14373779296875,
+      "right": 759.625,
+      "bottom": 341.14373779296875,
+      "left": 696.625
+    },
+    "water": {
+      "x": 650.65625,
+      "y": 384.84375,
+      "width": 44,
+      "height": 152,
+      "top": 384.84375,
+      "right": 694.65625,
+      "bottom": 536.84375,
+      "left": 650.65625
+    },
+    "rail": {
+      "x": 684.9249877929688,
+      "y": 309.64373779296875,
+      "width": 140.39996337890625,
+      "height": 0,
+      "top": 309.64373779296875,
+      "right": 825.324951171875,
+      "bottom": 309.64373779296875,
+      "left": 684.9249877929688
+    },
+    "buttons": [
+      {
+        "height": 46,
+        "clipped": false
+      },
+      {
+        "height": 46,
+        "clipped": false
+      }
+    ],
+    "controls": {
+      "x": 452,
+      "y": 657.6875,
+      "width": 313,
+      "height": 46,
+      "top": 657.6875,
+      "right": 765,
+      "bottom": 703.6875,
+      "left": 452
+    },
+    "pairings": [
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 684.9250068664551,
+              "y": 309.64374828338623
+            },
+            {
+              "x": 825.3249931335449,
+              "y": 309.64374828338623
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 678.1749877929688,
+            "y": 329.39373779296875,
+            "width": 14,
+            "height": 18,
+            "top": 329.39373779296875,
+            "right": 692.1749877929688,
+            "bottom": 347.39373779296875,
+            "left": 678.1749877929688
+          }
+        },
+        "eye": "210",
+        "frame": {
+          "x": 659.6124877929688,
+          "y": 293.33123779296875,
+          "width": 50.62506103515625,
+          "height": 32.625,
+          "top": 293.33123779296875,
+          "right": 710.237548828125,
+          "bottom": 325.95623779296875,
+          "left": 659.6124877929688
+        },
+        "stage": {
+          "x": 901,
+          "y": 256.09375,
+          "width": 375,
+          "height": 276.03125,
+          "top": 256.09375,
+          "right": 1276,
+          "bottom": 532.125,
+          "left": 901
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 684.9250068664551,
+              "y": 309.64374828338623
+            },
+            {
+              "x": 825.3249931335449,
+              "y": 309.64374828338623
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 775.375,
+            "y": 329.39373779296875,
+            "width": 14,
+            "height": 18,
+            "top": 329.39373779296875,
+            "right": 789.375,
+            "bottom": 347.39373779296875,
+            "left": 775.375
+          }
+        },
+        "eye": "300",
+        "frame": {
+          "x": 756.8125,
+          "y": 293.33123779296875,
+          "width": 50.625,
+          "height": 32.625,
+          "top": 293.33123779296875,
+          "right": 807.4375,
+          "bottom": 325.95623779296875,
+          "left": 756.8125
+        },
+        "stage": {
+          "x": 901,
+          "y": 256.09375,
+          "width": 375,
+          "height": 276.03125,
+          "top": 256.09375,
+          "right": 1276,
+          "bottom": 532.125,
+          "left": 901
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 684.9250068664551,
+              "y": 309.64374828338623
+            },
+            {
+              "x": 825.3249931335449,
+              "y": 309.64374828338623
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔ 左右拖動",
+          "box": {
+            "x": 770.2421875,
+            "y": 329.39373779296875,
+            "width": 71.015625,
+            "height": 18,
+            "top": 329.39373779296875,
+            "right": 841.2578125,
+            "bottom": 347.39373779296875,
+            "left": 770.2421875
+          }
+        },
+        "eye": "340",
+        "frame": {
+          "x": 800.012451171875,
+          "y": 293.33123779296875,
+          "width": 50.625,
+          "height": 32.625,
+          "top": 293.33123779296875,
+          "right": 850.637451171875,
+          "bottom": 325.95623779296875,
+          "left": 800.012451171875
+        },
+        "stage": {
+          "x": 901,
+          "y": 256.09375,
+          "width": 375,
+          "height": 276.03125,
+          "top": 256.09375,
+          "right": 1276,
+          "bottom": 532.125,
+          "left": 901
+        }
+      }
+    ],
+    "labelCases": [
+      {
+        "depth": 0,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      }
+    ]
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "help": "上下拖曳水面或水位把手；沿虛線左右拖動眼睛，靠近或遠離水槽。兩圖同步更新。",
+    "overflow": false,
+    "views": [
+      {
+        "x": 411,
+        "y": 176.09375,
+        "width": 405,
+        "height": 442.59375,
+        "top": 176.09375,
+        "right": 816,
+        "bottom": 618.6875,
+        "left": 411
+      },
+      {
+        "x": 864,
+        "y": 176.09375,
+        "width": 375,
+        "height": 442.59375,
+        "top": 176.09375,
+        "right": 1239,
+        "bottom": 618.6875,
+        "left": 864
+      }
+    ],
+    "texts": [
+      {
+        "font": 13.5,
+        "box": {
+          "x": 427.875,
+          "y": 281.96875,
+          "width": 27.499969482421875,
+          "height": 18,
+          "top": 281.96875,
+          "right": 455.3749694824219,
+          "bottom": 299.96875,
+          "left": 427.875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 642.2999877929688,
+          "y": 248.8937530517578,
+          "width": 27.5,
+          "height": 17.999984741210938,
+          "top": 248.8937530517578,
+          "right": 669.7999877929688,
+          "bottom": 266.89373779296875,
+          "left": 642.2999877929688
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 766.949951171875,
+          "y": 248.8937530517578,
+          "width": 27.5,
+          "height": 17.999984741210938,
+          "top": 248.8937530517578,
+          "right": 794.449951171875,
+          "bottom": 266.89373779296875,
+          "left": 766.949951171875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 684.375,
+          "y": 307.39373779296875,
+          "width": 14,
+          "height": 18,
+          "top": 307.39373779296875,
+          "right": 698.375,
+          "bottom": 325.39373779296875,
+          "left": 684.375
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 664.125,
+          "y": 373.54376220703125,
+          "width": 71.015625,
+          "height": 18,
+          "top": 373.54376220703125,
+          "right": 735.140625,
+          "bottom": 391.54376220703125,
+          "left": 664.125
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 426.75,
+          "y": 507.53125,
+          "width": 54,
+          "height": 18,
+          "top": 507.53125,
+          "right": 480.75,
+          "bottom": 525.53125,
+          "left": 426.75
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 450.375,
+          "y": 318.53125,
+          "width": 54,
+          "height": 18,
+          "top": 318.53125,
+          "right": 504.375,
+          "bottom": 336.53125,
+          "left": 450.375
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 427.875,
+          "y": 421.8062744140625,
+          "width": 27,
+          "height": 18,
+          "top": 421.8062744140625,
+          "right": 454.875,
+          "bottom": 439.8062744140625,
+          "left": 427.875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 427.875,
+          "y": 445.09375,
+          "width": 14,
+          "height": 18,
+          "top": 445.09375,
+          "right": 441.875,
+          "bottom": 463.09375,
+          "left": 427.875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 669.75,
+          "y": 443.6907958984375,
+          "width": 54,
+          "height": 18,
+          "top": 443.6907958984375,
+          "right": 723.75,
+          "bottom": 461.6907958984375,
+          "left": 669.75
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 493.85205078125,
+          "y": 386.3687744140625,
+          "width": 27.5,
+          "height": 18,
+          "top": 386.3687744140625,
+          "right": 521.35205078125,
+          "bottom": 404.3687744140625,
+          "left": 493.85205078125
+        }
+      }
+    ],
+    "svg": {
+      "x": 411,
+      "y": 234.09375,
+      "width": 405,
+      "height": 298.125,
+      "top": 234.09375,
+      "right": 816,
+      "bottom": 532.21875,
+      "left": 411
+    },
+    "eyeHit": {
+      "x": 659.625,
+      "y": 256.14373779296875,
+      "width": 63,
+      "height": 63,
+      "top": 256.14373779296875,
+      "right": 722.625,
+      "bottom": 319.14373779296875,
+      "left": 659.625
+    },
+    "water": {
+      "x": 613.65625,
+      "y": 362.84375,
+      "width": 44,
+      "height": 152,
+      "top": 362.84375,
+      "right": 657.65625,
+      "bottom": 514.84375,
+      "left": 613.65625
+    },
+    "rail": {
+      "x": 647.9249877929688,
+      "y": 287.64373779296875,
+      "width": 140.39996337890625,
+      "height": 0,
+      "top": 287.64373779296875,
+      "right": 788.324951171875,
+      "bottom": 287.64373779296875,
+      "left": 647.9249877929688
+    },
+    "buttons": [
+      {
+        "height": 46,
+        "clipped": false
+      },
+      {
+        "height": 46,
+        "clipped": false
+      }
+    ],
+    "controls": {
+      "x": 415,
+      "y": 635.6875,
+      "width": 313,
+      "height": 46,
+      "top": 635.6875,
+      "right": 728,
+      "bottom": 681.6875,
+      "left": 415
+    },
+    "pairings": [
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 647.9250068664551,
+              "y": 287.64374828338623
+            },
+            {
+              "x": 788.3249931335449,
+              "y": 287.64374828338623
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 641.1749877929688,
+            "y": 307.39373779296875,
+            "width": 14,
+            "height": 18,
+            "top": 307.39373779296875,
+            "right": 655.1749877929688,
+            "bottom": 325.39373779296875,
+            "left": 641.1749877929688
+          }
+        },
+        "eye": "210",
+        "frame": {
+          "x": 622.6124877929688,
+          "y": 271.33123779296875,
+          "width": 50.62506103515625,
+          "height": 32.625,
+          "top": 271.33123779296875,
+          "right": 673.237548828125,
+          "bottom": 303.95623779296875,
+          "left": 622.6124877929688
+        },
+        "stage": {
+          "x": 864,
+          "y": 234.09375,
+          "width": 375,
+          "height": 276.03125,
+          "top": 234.09375,
+          "right": 1239,
+          "bottom": 510.125,
+          "left": 864
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 647.9250068664551,
+              "y": 287.64374828338623
+            },
+            {
+              "x": 788.3249931335449,
+              "y": 287.64374828338623
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 738.375,
+            "y": 307.39373779296875,
+            "width": 14,
+            "height": 18,
+            "top": 307.39373779296875,
+            "right": 752.375,
+            "bottom": 325.39373779296875,
+            "left": 738.375
+          }
+        },
+        "eye": "300",
+        "frame": {
+          "x": 719.8125,
+          "y": 271.33123779296875,
+          "width": 50.625,
+          "height": 32.625,
+          "top": 271.33123779296875,
+          "right": 770.4375,
+          "bottom": 303.95623779296875,
+          "left": 719.8125
+        },
+        "stage": {
+          "x": 864,
+          "y": 234.09375,
+          "width": 375,
+          "height": 276.03125,
+          "top": 234.09375,
+          "right": 1239,
+          "bottom": 510.125,
+          "left": 864
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 647.9250068664551,
+              "y": 287.64374828338623
+            },
+            {
+              "x": 788.3249931335449,
+              "y": 287.64374828338623
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔ 左右拖動",
+          "box": {
+            "x": 733.2421875,
+            "y": 307.39373779296875,
+            "width": 71.015625,
+            "height": 18,
+            "top": 307.39373779296875,
+            "right": 804.2578125,
+            "bottom": 325.39373779296875,
+            "left": 733.2421875
+          }
+        },
+        "eye": "340",
+        "frame": {
+          "x": 763.012451171875,
+          "y": 271.33123779296875,
+          "width": 50.625,
+          "height": 32.625,
+          "top": 271.33123779296875,
+          "right": 813.637451171875,
+          "bottom": 303.95623779296875,
+          "left": 763.012451171875
+        },
+        "stage": {
+          "x": 864,
+          "y": 234.09375,
+          "width": 375,
+          "height": 276.03125,
+          "top": 234.09375,
+          "right": 1239,
+          "bottom": 510.125,
+          "left": 864
+        }
+      }
+    ],
+    "labelCases": [
+      {
+        "depth": 0,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      }
+    ]
+  },
+  {
+    "width": 1280,
+    "height": 650,
+    "help": "上下拖曳水面或水位把手；沿虛線左右拖動眼睛，靠近或遠離水槽。兩圖同步更新。",
+    "overflow": false,
+    "views": [
+      {
+        "x": 368,
+        "y": 88.1875,
+        "width": 405,
+        "height": 442.59375,
+        "top": 88.1875,
+        "right": 773,
+        "bottom": 530.78125,
+        "left": 368
+      },
+      {
+        "x": 821,
+        "y": 88.1875,
+        "width": 375,
+        "height": 442.59375,
+        "top": 88.1875,
+        "right": 1196,
+        "bottom": 530.78125,
+        "left": 821
+      }
+    ],
+    "texts": [
+      {
+        "font": 13.5,
+        "box": {
+          "x": 384.875,
+          "y": 194.0625,
+          "width": 27.499969482421875,
+          "height": 18,
+          "top": 194.0625,
+          "right": 412.3749694824219,
+          "bottom": 212.0625,
+          "left": 384.875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 599.2999877929688,
+          "y": 160.9875030517578,
+          "width": 27.5,
+          "height": 18,
+          "top": 160.9875030517578,
+          "right": 626.7999877929688,
+          "bottom": 178.9875030517578,
+          "left": 599.2999877929688
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 723.949951171875,
+          "y": 160.9875030517578,
+          "width": 27.5,
+          "height": 18,
+          "top": 160.9875030517578,
+          "right": 751.449951171875,
+          "bottom": 178.9875030517578,
+          "left": 723.949951171875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 641.375,
+          "y": 219.4875030517578,
+          "width": 14,
+          "height": 18,
+          "top": 219.4875030517578,
+          "right": 655.375,
+          "bottom": 237.4875030517578,
+          "left": 641.375
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 621.125,
+          "y": 285.63751220703125,
+          "width": 71.015625,
+          "height": 18,
+          "top": 285.63751220703125,
+          "right": 692.140625,
+          "bottom": 303.63751220703125,
+          "left": 621.125
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 383.75,
+          "y": 419.625,
+          "width": 54,
+          "height": 18,
+          "top": 419.625,
+          "right": 437.75,
+          "bottom": 437.625,
+          "left": 383.75
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 407.375,
+          "y": 230.625,
+          "width": 54,
+          "height": 18,
+          "top": 230.625,
+          "right": 461.375,
+          "bottom": 248.625,
+          "left": 407.375
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 384.875,
+          "y": 333.9000244140625,
+          "width": 27,
+          "height": 18,
+          "top": 333.9000244140625,
+          "right": 411.875,
+          "bottom": 351.9000244140625,
+          "left": 384.875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 384.875,
+          "y": 357.1875,
+          "width": 14,
+          "height": 18,
+          "top": 357.1875,
+          "right": 398.875,
+          "bottom": 375.1875,
+          "left": 384.875
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 626.75,
+          "y": 355.7845458984375,
+          "width": 54,
+          "height": 18,
+          "top": 355.7845458984375,
+          "right": 680.75,
+          "bottom": 373.7845458984375,
+          "left": 626.75
+        }
+      },
+      {
+        "font": 13.5,
+        "box": {
+          "x": 450.85205078125,
+          "y": 298.4625244140625,
+          "width": 27.499969482421875,
+          "height": 18,
+          "top": 298.4625244140625,
+          "right": 478.3520202636719,
+          "bottom": 316.4625244140625,
+          "left": 450.85205078125
+        }
+      }
+    ],
+    "svg": {
+      "x": 368,
+      "y": 146.1875,
+      "width": 405,
+      "height": 298.125,
+      "top": 146.1875,
+      "right": 773,
+      "bottom": 444.3125,
+      "left": 368
+    },
+    "eyeHit": {
+      "x": 616.625,
+      "y": 168.2375030517578,
+      "width": 63,
+      "height": 62.99998474121094,
+      "top": 168.2375030517578,
+      "right": 679.625,
+      "bottom": 231.23748779296875,
+      "left": 616.625
+    },
+    "water": {
+      "x": 570.65625,
+      "y": 274.9375,
+      "width": 44,
+      "height": 152,
+      "top": 274.9375,
+      "right": 614.65625,
+      "bottom": 426.9375,
+      "left": 570.65625
+    },
+    "rail": {
+      "x": 604.9249877929688,
+      "y": 199.7375030517578,
+      "width": 140.39996337890625,
+      "height": 0,
+      "top": 199.7375030517578,
+      "right": 745.324951171875,
+      "bottom": 199.7375030517578,
+      "left": 604.9249877929688
+    },
+    "buttons": [
+      {
+        "height": 46,
+        "clipped": false
+      },
+      {
+        "height": 46,
+        "clipped": false
+      }
+    ],
+    "controls": {
+      "x": 372,
+      "y": 547.78125,
+      "width": 313,
+      "height": 46,
+      "top": 547.78125,
+      "right": 685,
+      "bottom": 593.78125,
+      "left": 372
+    },
+    "pairings": [
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 604.9250068664551,
+              "y": 199.73749828338623
+            },
+            {
+              "x": 745.3249931335449,
+              "y": 199.73749828338623
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 598.1749877929688,
+            "y": 219.4875030517578,
+            "width": 14,
+            "height": 18,
+            "top": 219.4875030517578,
+            "right": 612.1749877929688,
+            "bottom": 237.4875030517578,
+            "left": 598.1749877929688
+          }
+        },
+        "eye": "210",
+        "frame": {
+          "x": 579.6124877929688,
+          "y": 183.4250030517578,
+          "width": 50.62506103515625,
+          "height": 32.62498474121094,
+          "top": 183.4250030517578,
+          "right": 630.237548828125,
+          "bottom": 216.04998779296875,
+          "left": 579.6124877929688
+        },
+        "stage": {
+          "x": 821,
+          "y": 146.1875,
+          "width": 375,
+          "height": 276.03125,
+          "top": 146.1875,
+          "right": 1196,
+          "bottom": 422.21875,
+          "left": 821
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 604.9250068664551,
+              "y": 199.73749828338623
+            },
+            {
+              "x": 745.3249931335449,
+              "y": 199.73749828338623
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 695.375,
+            "y": 219.4875030517578,
+            "width": 14,
+            "height": 18,
+            "top": 219.4875030517578,
+            "right": 709.375,
+            "bottom": 237.4875030517578,
+            "left": 695.375
+          }
+        },
+        "eye": "300",
+        "frame": {
+          "x": 676.8125,
+          "y": 183.4250030517578,
+          "width": 50.625,
+          "height": 32.62498474121094,
+          "top": 183.4250030517578,
+          "right": 727.4375,
+          "bottom": 216.04998779296875,
+          "left": 676.8125
+        },
+        "stage": {
+          "x": 821,
+          "y": 146.1875,
+          "width": 375,
+          "height": 276.03125,
+          "top": 146.1875,
+          "right": 1196,
+          "bottom": 422.21875,
+          "left": 821
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 604.9250068664551,
+              "y": 199.73749828338623
+            },
+            {
+              "x": 745.3249931335449,
+              "y": 199.73749828338623
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔ 左右拖動",
+          "box": {
+            "x": 690.2421875,
+            "y": 219.4875030517578,
+            "width": 71.015625,
+            "height": 18,
+            "top": 219.4875030517578,
+            "right": 761.2578125,
+            "bottom": 237.4875030517578,
+            "left": 690.2421875
+          }
+        },
+        "eye": "340",
+        "frame": {
+          "x": 720.012451171875,
+          "y": 183.4250030517578,
+          "width": 50.625,
+          "height": 32.62498474121094,
+          "top": 183.4250030517578,
+          "right": 770.637451171875,
+          "bottom": 216.04998779296875,
+          "left": 720.012451171875
+        },
+        "stage": {
+          "x": 821,
+          "y": 146.1875,
+          "width": 375,
+          "height": 276.03125,
+          "top": 146.1875,
+          "right": 1196,
+          "bottom": 422.21875,
+          "left": 821
+        }
+      }
+    ],
+    "labelCases": [
+      {
+        "depth": 0,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      }
+    ]
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "help": "上下拖曳水面或水位把手；沿虛線左右拖動眼睛，靠近或遠離水槽。兩圖同步更新。",
+    "overflow": false,
+    "views": [
+      {
+        "x": 326,
+        "y": 88.1875,
+        "width": 315.6875,
+        "height": 376.84375,
+        "top": 88.1875,
+        "right": 641.6875,
+        "bottom": 465.03125,
+        "left": 326
+      },
+      {
+        "x": 689.6875,
+        "y": 88.1875,
+        "width": 292.3125,
+        "height": 376.84375,
+        "top": 88.1875,
+        "right": 982,
+        "bottom": 465.03125,
+        "left": 689.6875
+      }
+    ],
+    "texts": [
+      {
+        "font": 13.486299646226415,
+        "box": {
+          "x": 339.1574401855469,
+          "y": 180.41627502441406,
+          "width": 27.46875,
+          "height": 18,
+          "top": 180.41627502441406,
+          "right": 366.6261901855469,
+          "bottom": 198.41627502441406,
+          "left": 339.1574401855469
+        }
+      },
+      {
+        "font": 13.486299646226415,
+        "box": {
+          "x": 506.29205322265625,
+          "y": 154.63580322265625,
+          "width": 27.46875,
+          "height": 18,
+          "top": 154.63580322265625,
+          "right": 533.7608032226562,
+          "bottom": 172.63580322265625,
+          "left": 506.29205322265625
+        }
+      },
+      {
+        "font": 13.486299646226415,
+        "box": {
+          "x": 597.558837890625,
+          "y": 154.63580322265625,
+          "width": 27.46881103515625,
+          "height": 18,
+          "top": 154.63580322265625,
+          "right": 625.0276489257812,
+          "bottom": 172.63580322265625,
+          "left": 597.558837890625
+        }
+      },
+      {
+        "font": 13.486299646226415,
+        "box": {
+          "x": 537.6145629882812,
+          "y": 203.19757080078125,
+          "width": 13.46868896484375,
+          "height": 18,
+          "top": 203.19757080078125,
+          "right": 551.083251953125,
+          "bottom": 221.19757080078125,
+          "left": 537.6145629882812
+        }
+      },
+      {
+        "font": 13.486299646226415,
+        "box": {
+          "x": 523.3036499023438,
+          "y": 263.72052001953125,
+          "width": 40.40625,
+          "height": 18,
+          "top": 263.72052001953125,
+          "right": 563.7098999023438,
+          "bottom": 281.72052001953125,
+          "left": 523.3036499023438
+        }
+      },
+      {
+        "font": 13.486299646226415,
+        "box": {
+          "x": 338.2805480957031,
+          "y": 356.2320556640625,
+          "width": 53.875,
+          "height": 18,
+          "top": 356.2320556640625,
+          "right": 392.1555480957031,
+          "bottom": 374.2320556640625,
+          "left": 338.2805480957031
+        }
+      },
+      {
+        "font": 13.486299646226415,
+        "box": {
+          "x": 356.6951599121094,
+          "y": 208.91510009765625,
+          "width": 53.875,
+          "height": 17.999984741210938,
+          "top": 208.91510009765625,
+          "right": 410.5701599121094,
+          "bottom": 226.9150848388672,
+          "left": 356.6951599121094
+        }
+      },
+      {
+        "font": 13.486299646226415,
+        "box": {
+          "x": 339.1574401855469,
+          "y": 292.376953125,
+          "width": 26.9375,
+          "height": 18,
+          "top": 292.376953125,
+          "right": 366.0949401855469,
+          "bottom": 310.376953125,
+          "left": 339.1574401855469
+        }
+      },
+      {
+        "font": 13.486299646226415,
+        "box": {
+          "x": 496.9970397949219,
+          "y": 309.4349365234375,
+          "width": 53.875030517578125,
+          "height": 18,
+          "top": 309.4349365234375,
+          "right": 550.8720703125,
+          "bottom": 327.4349365234375,
+          "left": 496.9970397949219
+        }
+      },
+      {
+        "font": 13.486299646226415,
+        "box": {
+          "x": 382.7298583984375,
+          "y": 261.7913818359375,
+          "width": 27.46875,
+          "height": 18,
+          "top": 261.7913818359375,
+          "right": 410.1986083984375,
+          "bottom": 279.7913818359375,
+          "left": 382.7298583984375
+        }
+      }
+    ],
+    "svg": {
+      "x": 326,
+      "y": 146.1875,
+      "width": 315.6875,
+      "height": 232.375,
+      "top": 146.1875,
+      "right": 641.6875,
+      "bottom": 378.5625,
+      "left": 326
+    },
+    "eyeHit": {
+      "x": 519.796142578125,
+      "y": 163.37448120117188,
+      "width": 49.1055908203125,
+      "height": 49.10565185546875,
+      "top": 163.37448120117188,
+      "right": 568.9017333984375,
+      "bottom": 212.48013305664062,
+      "left": 519.796142578125
+    },
+    "water": {
+      "x": 593,
+      "y": 241.796875,
+      "width": 44,
+      "height": 128.265625,
+      "top": 241.796875,
+      "right": 637,
+      "bottom": 370.0625,
+      "left": 593
+    },
+    "rail": {
+      "x": 510.676513671875,
+      "y": 187.92730712890625,
+      "width": 109.4354248046875,
+      "height": 0,
+      "top": 187.92730712890625,
+      "right": 620.1119384765625,
+      "bottom": 187.92730712890625,
+      "left": 510.676513671875
+    },
+    "buttons": [
+      {
+        "height": 46,
+        "clipped": false
+      },
+      {
+        "height": 46,
+        "clipped": false
+      }
+    ],
+    "controls": {
+      "x": 330,
+      "y": 493.34375,
+      "width": 313,
+      "height": 46,
+      "top": 493.34375,
+      "right": 643,
+      "bottom": 539.34375,
+      "left": 330
+    },
+    "pairings": [
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 510.67649120114885,
+              "y": 187.92730998273166
+            },
+            {
+              "x": 620.1119521950775,
+              "y": 187.92730998273166
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 503.9421081542969,
+            "y": 203.19757080078125,
+            "width": 13.468780517578125,
+            "height": 18,
+            "top": 203.19757080078125,
+            "right": 517.410888671875,
+            "bottom": 221.19757080078125,
+            "left": 503.9421081542969
+          }
+        },
+        "eye": "210",
+        "frame": {
+          "x": 490.946533203125,
+          "y": 175.2124481201172,
+          "width": 39.45989990234375,
+          "height": 25.429718017578125,
+          "top": 175.2124481201172,
+          "right": 530.4064331054688,
+          "bottom": 200.6421661376953,
+          "left": 490.946533203125
+        },
+        "stage": {
+          "x": 689.6875,
+          "y": 146.1875,
+          "width": 292.3125,
+          "height": 215.171875,
+          "top": 146.1875,
+          "right": 982,
+          "bottom": 361.359375,
+          "left": 689.6875
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 510.67649120114885,
+              "y": 187.92730998273166
+            },
+            {
+              "x": 620.1119521950775,
+              "y": 187.92730998273166
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 579.705078125,
+            "y": 203.19757080078125,
+            "width": 13.46875,
+            "height": 18,
+            "top": 203.19757080078125,
+            "right": 593.173828125,
+            "bottom": 221.19757080078125,
+            "left": 579.705078125
+          }
+        },
+        "eye": "300",
+        "frame": {
+          "x": 566.7095336914062,
+          "y": 175.2124481201172,
+          "width": 39.45989990234375,
+          "height": 25.429718017578125,
+          "top": 175.2124481201172,
+          "right": 606.16943359375,
+          "bottom": 200.6421661376953,
+          "left": 566.7095336914062
+        },
+        "stage": {
+          "x": 689.6875,
+          "y": 146.1875,
+          "width": 292.3125,
+          "height": 215.171875,
+          "top": 146.1875,
+          "right": 982,
+          "bottom": 361.359375,
+          "left": 689.6875
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 510.67649120114885,
+              "y": 187.92730998273166
+            },
+            {
+              "x": 620.1119521950775,
+              "y": 187.92730998273166
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔ 左右拖動",
+          "box": {
+            "x": 560.533447265625,
+            "y": 203.19757080078125,
+            "width": 70.859375,
+            "height": 18,
+            "top": 203.19757080078125,
+            "right": 631.392822265625,
+            "bottom": 221.19757080078125,
+            "left": 560.533447265625
+          }
+        },
+        "eye": "340",
+        "frame": {
+          "x": 600.3819580078125,
+          "y": 175.2124481201172,
+          "width": 39.4599609375,
+          "height": 25.429718017578125,
+          "top": 175.2124481201172,
+          "right": 639.8419189453125,
+          "bottom": 200.6421661376953,
+          "left": 600.3819580078125
+        },
+        "stage": {
+          "x": 689.6875,
+          "y": 146.1875,
+          "width": 292.3125,
+          "height": 215.171875,
+          "top": 146.1875,
+          "right": 982,
+          "bottom": 361.359375,
+          "left": 689.6875
+        }
+      }
+    ],
+    "labelCases": [
+      {
+        "depth": 0,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      }
+    ]
+  },
+  {
+    "width": 820,
+    "height": 900,
+    "help": "上下拖曳水面或水位把手；沿虛線左右拖動眼睛，靠近或遠離水槽。兩圖同步更新。",
+    "overflow": false,
+    "views": [
+      {
+        "x": 320,
+        "y": 78.796875,
+        "width": 464,
+        "height": 486.015625,
+        "top": 78.796875,
+        "right": 784,
+        "bottom": 564.8125,
+        "left": 320
+      },
+      {
+        "x": 320,
+        "y": 580.8125,
+        "width": 464,
+        "height": 479.03125,
+        "top": 580.8125,
+        "right": 784,
+        "bottom": 1059.84375,
+        "left": 320
+      }
+    ],
+    "texts": [
+      {
+        "font": 13.532989386792453,
+        "box": {
+          "x": 339.3387451171875,
+          "y": 193.6839599609375,
+          "width": 27.515716552734375,
+          "height": 18,
+          "top": 193.6839599609375,
+          "right": 366.8544616699219,
+          "bottom": 211.6839599609375,
+          "left": 339.3387451171875
+        }
+      },
+      {
+        "font": 13.532989386792453,
+        "box": {
+          "x": 584.9947509765625,
+          "y": 155.79159545898438,
+          "width": 27.51568603515625,
+          "height": 18,
+          "top": 155.79159545898438,
+          "right": 612.5104370117188,
+          "bottom": 173.79159545898438,
+          "left": 584.9947509765625
+        }
+      },
+      {
+        "font": 13.532989386792453,
+        "box": {
+          "x": 731.6856689453125,
+          "y": 155.79159545898438,
+          "width": 27.51568603515625,
+          "height": 18,
+          "top": 155.79159545898438,
+          "right": 759.2013549804688,
+          "bottom": 173.79159545898438,
+          "left": 731.6856689453125
+        }
+      },
+      {
+        "font": 13.532989386792453,
+        "box": {
+          "x": 634.1654052734375,
+          "y": 220.87881469726562,
+          "width": 14,
+          "height": 18,
+          "top": 220.87881469726562,
+          "right": 648.1654052734375,
+          "bottom": 238.87881469726562,
+          "left": 634.1654052734375
+        }
+      },
+      {
+        "font": 13.532989386792453,
+        "box": {
+          "x": 609.99853515625,
+          "y": 298.59686279296875,
+          "width": 71.09375,
+          "height": 18,
+          "top": 298.59686279296875,
+          "right": 681.09228515625,
+          "bottom": 316.59686279296875,
+          "left": 609.99853515625
+        }
+      },
+      {
+        "font": 13.532989386792453,
+        "box": {
+          "x": 338.04986572265625,
+          "y": 452.099609375,
+          "width": 54.078125,
+          "height": 18,
+          "top": 452.099609375,
+          "right": 392.12799072265625,
+          "bottom": 470.099609375,
+          "left": 338.04986572265625
+        }
+      },
+      {
+        "font": 13.532989386792453,
+        "box": {
+          "x": 365.1158447265625,
+          "y": 235.57177734375,
+          "width": 54.078155517578125,
+          "height": 18,
+          "top": 235.57177734375,
+          "right": 419.1940002441406,
+          "bottom": 253.57177734375,
+          "left": 365.1158447265625
+        }
+      },
+      {
+        "font": 13.532989386792453,
+        "box": {
+          "x": 339.3387451171875,
+          "y": 351.95550537109375,
+          "width": 27.046875,
+          "height": 18,
+          "top": 351.95550537109375,
+          "right": 366.3856201171875,
+          "bottom": 369.95550537109375,
+          "left": 339.3387451171875
+        }
+      },
+      {
+        "font": 13.532989386792453,
+        "box": {
+          "x": 339.3387451171875,
+          "y": 379.98809814453125,
+          "width": 14,
+          "height": 18,
+          "top": 379.98809814453125,
+          "right": 353.3387451171875,
+          "bottom": 397.98809814453125,
+          "left": 339.3387451171875
+        }
+      },
+      {
+        "font": 13.532989386792453,
+        "box": {
+          "x": 616.4428100585938,
+          "y": 377.02752685546875,
+          "width": 54.07806396484375,
+          "height": 17.999969482421875,
+          "top": 377.02752685546875,
+          "right": 670.5208740234375,
+          "bottom": 395.0274963378906,
+          "left": 616.4428100585938
+        }
+      },
+      {
+        "font": 13.532989386792453,
+        "box": {
+          "x": 420.04852294921875,
+          "y": 313.289794921875,
+          "width": 27.5157470703125,
+          "height": 18,
+          "top": 313.289794921875,
+          "right": 447.56427001953125,
+          "bottom": 331.289794921875,
+          "left": 420.04852294921875
+        }
+      }
+    ],
+    "svg": {
+      "x": 320,
+      "y": 136.796875,
+      "width": 464,
+      "height": 341.546875,
+      "top": 136.796875,
+      "right": 784,
+      "bottom": 478.34375,
+      "left": 320
+    },
+    "eyeHit": {
+      "x": 604.8431396484375,
+      "y": 162.05845642089844,
+      "width": 72.1759033203125,
+      "height": 72.17594909667969,
+      "top": 162.05845642089844,
+      "right": 677.01904296875,
+      "bottom": 234.23440551757812,
+      "left": 604.8431396484375
+    },
+    "water": {
+      "x": 555.390625,
+      "y": 287.5,
+      "width": 44,
+      "height": 167.71875,
+      "top": 287.5,
+      "right": 599.390625,
+      "bottom": 455.21875,
+      "left": 555.390625
+    },
+    "rail": {
+      "x": 591.43896484375,
+      "y": 198.14642333984375,
+      "width": 160.8492431640625,
+      "height": 0,
+      "top": 198.14642333984375,
+      "right": 752.2882080078125,
+      "bottom": 198.14642333984375,
+      "left": 591.43896484375
+    },
+    "buttons": [
+      {
+        "height": 46,
+        "clipped": false
+      },
+      {
+        "height": 46,
+        "clipped": false
+      }
+    ],
+    "controls": {
+      "x": 320,
+      "y": 1088.84375,
+      "width": 464,
+      "height": 46,
+      "top": 1088.84375,
+      "right": 784,
+      "bottom": 1134.84375,
+      "left": 320
+    },
+    "pairings": [
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 591.439005508063,
+              "y": 198.14642492015406
+            },
+            {
+              "x": 752.2882350579748,
+              "y": 198.14642492015406
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 584.67333984375,
+            "y": 220.87881469726562,
+            "width": 14,
+            "height": 18,
+            "top": 220.87881469726562,
+            "right": 598.67333984375,
+            "bottom": 238.87881469726562,
+            "left": 584.67333984375
+          }
+        },
+        "eye": "210",
+        "frame": {
+          "x": 562.4397583007812,
+          "y": 179.4580078125,
+          "width": 57.99847412109375,
+          "height": 37.3768310546875,
+          "top": 179.4580078125,
+          "right": 620.438232421875,
+          "bottom": 216.8348388671875,
+          "left": 562.4397583007812
+        },
+        "stage": {
+          "x": 320,
+          "y": 638.8125,
+          "width": 464,
+          "height": 341.546875,
+          "top": 638.8125,
+          "right": 784,
+          "bottom": 980.359375,
+          "left": 320
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 591.439005508063,
+              "y": 198.14642492015406
+            },
+            {
+              "x": 752.2882350579748,
+              "y": 198.14642492015406
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 696.030517578125,
+            "y": 220.87881469726562,
+            "width": 14,
+            "height": 18,
+            "top": 220.87881469726562,
+            "right": 710.030517578125,
+            "bottom": 238.87881469726562,
+            "left": 696.030517578125
+          }
+        },
+        "eye": "300",
+        "frame": {
+          "x": 673.796875,
+          "y": 179.4580078125,
+          "width": 57.99853515625,
+          "height": 37.3768310546875,
+          "top": 179.4580078125,
+          "right": 731.79541015625,
+          "bottom": 216.8348388671875,
+          "left": 673.796875
+        },
+        "stage": {
+          "x": 320,
+          "y": 638.8125,
+          "width": 464,
+          "height": 341.546875,
+          "top": 638.8125,
+          "right": 784,
+          "bottom": 980.359375,
+          "left": 320
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 591.439005508063,
+              "y": 198.14642492015406
+            },
+            {
+              "x": 752.2882350579748,
+              "y": 198.14642492015406
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔ 左右拖動",
+          "box": {
+            "x": 700.1151123046875,
+            "y": 220.87881469726562,
+            "width": 71.09375,
+            "height": 18,
+            "top": 220.87881469726562,
+            "right": 771.2088623046875,
+            "bottom": 238.87881469726562,
+            "left": 700.1151123046875
+          }
+        },
+        "eye": "340",
+        "frame": {
+          "x": 723.2889404296875,
+          "y": 179.4580078125,
+          "width": 57.99853515625,
+          "height": 37.3768310546875,
+          "top": 179.4580078125,
+          "right": 781.2874755859375,
+          "bottom": 216.8348388671875,
+          "left": 723.2889404296875
+        },
+        "stage": {
+          "x": 320,
+          "y": 638.8125,
+          "width": 464,
+          "height": 341.546875,
+          "top": 638.8125,
+          "right": 784,
+          "bottom": 980.359375,
+          "left": 320
+        }
+      }
+    ],
+    "labelCases": [
+      {
+        "depth": 0,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      }
+    ]
+  },
+  {
+    "width": 760,
+    "height": 844,
+    "help": "上下拖曳水面或水位把手；沿虛線左右拖動眼睛，靠近或遠離水槽。兩圖同步更新。",
+    "overflow": false,
+    "views": [
+      {
+        "x": 88,
+        "y": 210.375,
+        "width": 584,
+        "height": 574.34375,
+        "top": 210.375,
+        "right": 672,
+        "bottom": 784.71875,
+        "left": 88
+      },
+      {
+        "x": 88,
+        "y": 800.71875,
+        "width": 584,
+        "height": 567.359375,
+        "top": 800.71875,
+        "right": 672,
+        "bottom": 1368.078125,
+        "left": 88
+      }
+    ],
+    "texts": [
+      {
+        "font": 17.032783018867924,
+        "box": {
+          "x": 112.34197998046875,
+          "y": 339.5943298339844,
+          "width": 34.046875,
+          "height": 23,
+          "top": 339.5943298339844,
+          "right": 146.38885498046875,
+          "bottom": 362.5943298339844,
+          "left": 112.34197998046875
+        }
+      },
+      {
+        "font": 17.032783018867924,
+        "box": {
+          "x": 421.52752685546875,
+          "y": 291.9025573730469,
+          "width": 34.046875,
+          "height": 23,
+          "top": 291.9025573730469,
+          "right": 455.57440185546875,
+          "bottom": 314.9025573730469,
+          "left": 421.52752685546875
+        }
+      },
+      {
+        "font": 17.032783018867924,
+        "box": {
+          "x": 606.1491088867188,
+          "y": 291.9025573730469,
+          "width": 34.046875,
+          "height": 23,
+          "top": 291.9025573730469,
+          "right": 640.1959838867188,
+          "bottom": 314.9025573730469,
+          "left": 606.1491088867188
+        }
+      },
+      {
+        "font": 17.032783018867924,
+        "box": {
+          "x": 483.4140625,
+          "y": 373.8221130371094,
+          "width": 17.03125,
+          "height": 23,
+          "top": 373.8221130371094,
+          "right": 500.4453125,
+          "bottom": 396.8221130371094,
+          "left": 483.4140625
+        }
+      },
+      {
+        "font": 17.032783018867924,
+        "box": {
+          "x": 452.9976501464844,
+          "y": 471.6389465332031,
+          "width": 89.51565551757812,
+          "height": 23,
+          "top": 471.6389465332031,
+          "right": 542.5133056640625,
+          "bottom": 494.6389465332031,
+          "left": 452.9976501464844
+        }
+      },
+      {
+        "font": 17.032783018867924,
+        "box": {
+          "x": 110.71981048583984,
+          "y": 664.83935546875,
+          "width": 68.07811737060547,
+          "height": 23,
+          "top": 664.83935546875,
+          "right": 178.7979278564453,
+          "bottom": 687.83935546875,
+          "left": 110.71981048583984
+        }
+      },
+      {
+        "font": 17.032783018867924,
+        "box": {
+          "x": 144.78536987304688,
+          "y": 392.3148498535156,
+          "width": 68.078125,
+          "height": 23,
+          "top": 392.3148498535156,
+          "right": 212.86349487304688,
+          "bottom": 415.3148498535156,
+          "left": 144.78536987304688
+        }
+      },
+      {
+        "font": 17.032783018867924,
+        "box": {
+          "x": 112.34197998046875,
+          "y": 538.7967529296875,
+          "width": 34.046875,
+          "height": 23,
+          "top": 538.7967529296875,
+          "right": 146.38885498046875,
+          "bottom": 561.7967529296875,
+          "left": 112.34197998046875
+        }
+      },
+      {
+        "font": 17.032783018867924,
+        "box": {
+          "x": 112.34197998046875,
+          "y": 574.0789794921875,
+          "width": 17.03125,
+          "height": 23,
+          "top": 574.0789794921875,
+          "right": 129.37322998046875,
+          "bottom": 597.0789794921875,
+          "left": 112.34197998046875
+        }
+      },
+      {
+        "font": 17.032783018867924,
+        "box": {
+          "x": 461.10845947265625,
+          "y": 570.352783203125,
+          "width": 68.07818603515625,
+          "height": 23,
+          "top": 570.352783203125,
+          "right": 529.1866455078125,
+          "bottom": 593.352783203125,
+          "left": 461.10845947265625
+        }
+      },
+      {
+        "font": 17.032783018867924,
+        "box": {
+          "x": 213.92430114746094,
+          "y": 490.1317138671875,
+          "width": 34.046875,
+          "height": 23,
+          "top": 490.1317138671875,
+          "right": 247.97117614746094,
+          "bottom": 513.1317138671875,
+          "left": 213.92430114746094
+        }
+      }
+    ],
+    "svg": {
+      "x": 88,
+      "y": 268.375,
+      "width": 584,
+      "height": 429.875,
+      "top": 268.375,
+      "right": 672,
+      "bottom": 698.25,
+      "left": 88
+    },
+    "eyeHit": {
+      "x": 446.50897216796875,
+      "y": 300.1695251464844,
+      "width": 90.84149169921875,
+      "height": 90.84152221679688,
+      "top": 300.1695251464844,
+      "right": 537.3504638671875,
+      "bottom": 391.01104736328125,
+      "left": 446.50897216796875
+    },
+    "water": {
+      "x": 389.953125,
+      "y": 463.75,
+      "width": 44,
+      "height": 199.71875,
+      "top": 463.75,
+      "right": 433.953125,
+      "bottom": 663.46875,
+      "left": 389.953125
+    },
+    "rail": {
+      "x": 429.6383972167969,
+      "y": 345.59027099609375,
+      "width": 202.44680786132812,
+      "height": 0,
+      "top": 345.59027099609375,
+      "right": 632.085205078125,
+      "bottom": 345.59027099609375,
+      "left": 429.6383972167969
+    },
+    "buttons": [
+      {
+        "height": 46,
+        "clipped": false
+      },
+      {
+        "height": 46,
+        "clipped": false
+      }
+    ],
+    "controls": {
+      "x": 88,
+      "y": 1397.078125,
+      "width": 584,
+      "height": 46,
+      "top": 1397.078125,
+      "right": 672,
+      "bottom": 1443.078125,
+      "left": 88
+    },
+    "pairings": [
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 429.6384061273539,
+              "y": 345.59028054363324
+            },
+            {
+              "x": 632.0851787783065,
+              "y": 345.59028054363324
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 421.1227722167969,
+            "y": 373.8221130371094,
+            "width": 17.031219482421875,
+            "height": 23,
+            "top": 373.8221130371094,
+            "right": 438.15399169921875,
+            "bottom": 396.8221130371094,
+            "left": 421.1227722167969
+          }
+        },
+        "eye": "210",
+        "frame": {
+          "x": 393.13958740234375,
+          "y": 322.0688171386719,
+          "width": 72.99765014648438,
+          "height": 47.042938232421875,
+          "top": 322.0688171386719,
+          "right": 466.1372375488281,
+          "bottom": 369.11175537109375,
+          "left": 393.13958740234375
+        },
+        "stage": {
+          "x": 88,
+          "y": 858.71875,
+          "width": 584,
+          "height": 429.875,
+          "top": 858.71875,
+          "right": 672,
+          "bottom": 1288.59375,
+          "left": 88
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 429.6384061273539,
+              "y": 345.59028054363324
+            },
+            {
+              "x": 632.0851787783065,
+              "y": 345.59028054363324
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 561.2781982421875,
+            "y": 373.8221130371094,
+            "width": 17.03125,
+            "height": 23,
+            "top": 373.8221130371094,
+            "right": 578.3094482421875,
+            "bottom": 396.8221130371094,
+            "left": 561.2781982421875
+          }
+        },
+        "eye": "300",
+        "frame": {
+          "x": 533.2950439453125,
+          "y": 322.0688171386719,
+          "width": 72.99761962890625,
+          "height": 47.042938232421875,
+          "top": 322.0688171386719,
+          "right": 606.2926635742188,
+          "bottom": 369.11175537109375,
+          "left": 533.2950439453125
+        },
+        "stage": {
+          "x": 88,
+          "y": 858.71875,
+          "width": 584,
+          "height": 429.875,
+          "top": 858.71875,
+          "right": 672,
+          "bottom": 1288.59375,
+          "left": 88
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 429.6384061273539,
+              "y": 345.59028054363324
+            },
+            {
+              "x": 632.0851787783065,
+              "y": 345.59028054363324
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔ 左右拖動",
+          "box": {
+            "x": 566.4013671875,
+            "y": 373.8221130371094,
+            "width": 89.515625,
+            "height": 23,
+            "top": 373.8221130371094,
+            "right": 655.9169921875,
+            "bottom": 396.8221130371094,
+            "left": 566.4013671875
+          }
+        },
+        "eye": "340",
+        "frame": {
+          "x": 595.5863647460938,
+          "y": 322.0688171386719,
+          "width": 72.99761962890625,
+          "height": 47.042938232421875,
+          "top": 322.0688171386719,
+          "right": 668.583984375,
+          "bottom": 369.11175537109375,
+          "left": 595.5863647460938
+        },
+        "stage": {
+          "x": 88,
+          "y": 858.71875,
+          "width": 584,
+          "height": 429.875,
+          "top": 858.71875,
+          "right": 672,
+          "bottom": 1288.59375,
+          "left": 88
+        }
+      }
+    ],
+    "labelCases": [
+      {
+        "depth": 0,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "help": "上下拖曳水面或水位把手；沿虛線左右拖動眼睛，靠近或遠離水槽。兩圖同步更新。",
+    "overflow": false,
+    "views": [
+      {
+        "x": 30,
+        "y": 233.96875,
+        "width": 330,
+        "height": 387.375,
+        "top": 233.96875,
+        "right": 360,
+        "bottom": 621.34375,
+        "left": 30
+      },
+      {
+        "x": 30,
+        "y": 637.34375,
+        "width": 330,
+        "height": 402.40625,
+        "top": 637.34375,
+        "right": 360,
+        "bottom": 1039.75,
+        "left": 30
+      }
+    ],
+    "texts": [
+      {
+        "font": 13.49940026533019,
+        "box": {
+          "x": 43.75648498535156,
+          "y": 328.38323974609375,
+          "width": 27.484481811523438,
+          "height": 18,
+          "top": 328.38323974609375,
+          "right": 71.240966796875,
+          "bottom": 346.38323974609375,
+          "left": 43.75648498535156
+        }
+      },
+      {
+        "font": 13.49940026533019,
+        "box": {
+          "x": 218.46566772460938,
+          "y": 301.4344177246094,
+          "width": 27.484481811523438,
+          "height": 18,
+          "top": 301.4344177246094,
+          "right": 245.9501495361328,
+          "bottom": 319.4344177246094,
+          "left": 218.46566772460938
+        }
+      },
+      {
+        "font": 13.49940026533019,
+        "box": {
+          "x": 315.04266357421875,
+          "y": 301.4344177246094,
+          "width": 27.4844970703125,
+          "height": 18,
+          "top": 301.4344177246094,
+          "right": 342.52716064453125,
+          "bottom": 319.4344177246094,
+          "left": 315.04266357421875
+        }
+      },
+      {
+        "font": 13.49940026533019,
+        "box": {
+          "x": 251.4972686767578,
+          "y": 351.59893798828125,
+          "width": 14.000015258789062,
+          "height": 18,
+          "top": 351.59893798828125,
+          "right": 265.4972839355469,
+          "bottom": 369.59893798828125,
+          "left": 251.4972686767578
+        }
+      },
+      {
+        "font": 13.49940026533019,
+        "box": {
+          "x": 236.2482147216797,
+          "y": 415.46282958984375,
+          "width": 40.46876525878906,
+          "height": 18,
+          "top": 415.46282958984375,
+          "right": 276.71697998046875,
+          "bottom": 433.46282958984375,
+          "left": 236.2482147216797
+        }
+      },
+      {
+        "font": 13.49940026533019,
+        "box": {
+          "x": 42.83985900878906,
+          "y": 512.1670532226562,
+          "width": 53.95311737060547,
+          "height": 17.99993896484375,
+          "top": 512.1670532226562,
+          "right": 96.79297637939453,
+          "bottom": 530.1669921875,
+          "left": 42.83985900878906
+        }
+      },
+      {
+        "font": 13.49940026533019,
+        "box": {
+          "x": 62.08903121948242,
+          "y": 358.17364501953125,
+          "width": 53.953121185302734,
+          "height": 18,
+          "top": 358.17364501953125,
+          "right": 116.04215240478516,
+          "bottom": 376.17364501953125,
+          "left": 62.08903121948242
+        }
+      },
+      {
+        "font": 13.49940026533019,
+        "box": {
+          "x": 43.75648498535156,
+          "y": 444.8199157714844,
+          "width": 26.984375,
+          "height": 18,
+          "top": 444.8199157714844,
+          "right": 70.74085998535156,
+          "bottom": 462.8199157714844,
+          "left": 43.75648498535156
+        }
+      },
+      {
+        "font": 13.49940026533019,
+        "box": {
+          "x": 208.74940490722656,
+          "y": 462.6510009765625,
+          "width": 53.95310974121094,
+          "height": 18,
+          "top": 462.6510009765625,
+          "right": 262.7025146484375,
+          "bottom": 480.6510009765625,
+          "left": 208.74940490722656
+        }
+      },
+      {
+        "font": 13.49940026533019,
+        "box": {
+          "x": 90.88853454589844,
+          "y": 413.4462585449219,
+          "width": 27.48448944091797,
+          "height": 18.000030517578125,
+          "top": 413.4462585449219,
+          "right": 118.3730239868164,
+          "bottom": 431.4462890625,
+          "left": 90.88853454589844
+        }
+      }
+    ],
+    "svg": {
+      "x": 30,
+      "y": 291.96875,
+      "width": 330,
+      "height": 242.90625,
+      "top": 291.96875,
+      "right": 360,
+      "bottom": 534.875,
+      "left": 30
+    },
+    "eyeHit": {
+      "x": 232.58172607421875,
+      "y": 309.93463134765625,
+      "width": 51.33111572265625,
+      "height": 51.331146240234375,
+      "top": 309.93463134765625,
+      "right": 283.912841796875,
+      "bottom": 361.2657775878906,
+      "left": 232.58172607421875
+    },
+    "water": {
+      "x": 311,
+      "y": 392.796875,
+      "width": 44,
+      "height": 132,
+      "top": 392.796875,
+      "right": 355,
+      "bottom": 524.796875,
+      "left": 311
+    },
+    "rail": {
+      "x": 223.04879760742188,
+      "y": 335.6002197265625,
+      "width": 114.39508056640625,
+      "height": 0,
+      "top": 335.6002197265625,
+      "right": 337.4438781738281,
+      "bottom": 335.6002197265625,
+      "left": 223.04879760742188
+    },
+    "buttons": [
+      {
+        "height": 46,
+        "clipped": false
+      },
+      {
+        "height": 46,
+        "clipped": false
+      }
+    ],
+    "controls": {
+      "x": 30,
+      "y": 1068.75,
+      "width": 330,
+      "height": 46,
+      "top": 1068.75,
+      "right": 360,
+      "bottom": 1114.75,
+      "left": 30
+    },
+    "pairings": [
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 223.04880276446073,
+              "y": 335.6002108654886
+            },
+            {
+              "x": 337.4438859147846,
+              "y": 335.6002108654886
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 216.2987823486328,
+            "y": 351.59893798828125,
+            "width": 14,
+            "height": 18,
+            "top": 351.59893798828125,
+            "right": 230.2987823486328,
+            "bottom": 369.59893798828125,
+            "left": 216.2987823486328
+          }
+        },
+        "eye": "210",
+        "frame": {
+          "x": 202.4246826171875,
+          "y": 322.3091125488281,
+          "width": 41.24822998046875,
+          "height": 26.582183837890625,
+          "top": 322.3091125488281,
+          "right": 243.67291259765625,
+          "bottom": 348.89129638671875,
+          "left": 202.4246826171875
+        },
+        "stage": {
+          "x": 30,
+          "y": 695.34375,
+          "width": 330,
+          "height": 242.90625,
+          "top": 695.34375,
+          "right": 360,
+          "bottom": 938.25,
+          "left": 30
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 223.04880276446073,
+              "y": 335.6002108654886
+            },
+            {
+              "x": 337.4438859147846,
+              "y": 335.6002108654886
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 295.495361328125,
+            "y": 351.59893798828125,
+            "width": 14,
+            "height": 18,
+            "top": 351.59893798828125,
+            "right": 309.495361328125,
+            "bottom": 369.59893798828125,
+            "left": 295.495361328125
+          }
+        },
+        "eye": "300",
+        "frame": {
+          "x": 281.62127685546875,
+          "y": 322.3091125488281,
+          "width": 41.24822998046875,
+          "height": 26.582183837890625,
+          "top": 322.3091125488281,
+          "right": 322.8695068359375,
+          "bottom": 348.89129638671875,
+          "left": 281.62127685546875
+        },
+        "stage": {
+          "x": 30,
+          "y": 695.34375,
+          "width": 330,
+          "height": 242.90625,
+          "top": 695.34375,
+          "right": 360,
+          "bottom": 938.25,
+          "left": 30
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 223.04880276446073,
+              "y": 335.6002108654886
+            },
+            {
+              "x": 337.4438859147846,
+              "y": 335.6002108654886
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔ 左右拖動",
+          "box": {
+            "x": 278.5261535644531,
+            "y": 351.59893798828125,
+            "width": 70.9375,
+            "height": 18,
+            "top": 351.59893798828125,
+            "right": 349.4636535644531,
+            "bottom": 369.59893798828125,
+            "left": 278.5261535644531
+          }
+        },
+        "eye": "340",
+        "frame": {
+          "x": 316.81976318359375,
+          "y": 322.3091125488281,
+          "width": 41.24822998046875,
+          "height": 26.582183837890625,
+          "top": 322.3091125488281,
+          "right": 358.0679931640625,
+          "bottom": 348.89129638671875,
+          "left": 316.81976318359375
+        },
+        "stage": {
+          "x": 30,
+          "y": 695.34375,
+          "width": 330,
+          "height": 242.90625,
+          "top": 695.34375,
+          "right": 360,
+          "bottom": 938.25,
+          "left": 30
+        }
+      }
+    ],
+    "labelCases": [
+      {
+        "depth": 0,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      }
+    ]
+  },
+  {
+    "width": 320,
+    "height": 740,
+    "help": "上下拖曳水面或水位把手；沿虛線左右拖動眼睛，靠近或遠離水槽。兩圖同步更新。",
+    "overflow": false,
+    "views": [
+      {
+        "x": 30,
+        "y": 233.53125,
+        "width": 260,
+        "height": 358.25,
+        "top": 233.53125,
+        "right": 290,
+        "bottom": 591.78125,
+        "left": 30
+      },
+      {
+        "x": 30,
+        "y": 607.78125,
+        "width": 260,
+        "height": 349.984375,
+        "top": 607.78125,
+        "right": 290,
+        "bottom": 957.765625,
+        "left": 30
+      }
+    ],
+    "texts": [
+      {
+        "font": 13.499014764150944,
+        "box": {
+          "x": 40.84197998046875,
+          "y": 317.2505798339844,
+          "width": 27.484481811523438,
+          "height": 18,
+          "top": 317.2505798339844,
+          "right": 68.32646179199219,
+          "bottom": 335.2505798339844,
+          "left": 40.84197998046875
+        }
+      },
+      {
+        "font": 13.499014764150944,
+        "box": {
+          "x": 178.48756408691406,
+          "y": 296.018798828125,
+          "width": 27.484481811523438,
+          "height": 18,
+          "top": 296.018798828125,
+          "right": 205.9720458984375,
+          "bottom": 314.018798828125,
+          "left": 178.48756408691406
+        }
+      },
+      {
+        "font": 13.499014764150944,
+        "box": {
+          "x": 248.85165405273438,
+          "y": 296.018798828125,
+          "width": 27.484466552734375,
+          "height": 18,
+          "top": 296.018798828125,
+          "right": 276.33612060546875,
+          "bottom": 314.018798828125,
+          "left": 248.85165405273438
+        }
+      },
+      {
+        "font": 13.499014764150944,
+        "box": {
+          "x": 203.0797119140625,
+          "y": 338.40460205078125,
+          "width": 14,
+          "height": 18,
+          "top": 338.40460205078125,
+          "right": 217.0797119140625,
+          "bottom": 356.40460205078125,
+          "left": 203.0797119140625
+        }
+      },
+      {
+        "font": 13.499014764150944,
+        "box": {
+          "x": 192.4976348876953,
+          "y": 385.8567199707031,
+          "width": 40.46875,
+          "height": 18,
+          "top": 385.8567199707031,
+          "right": 232.9663848876953,
+          "bottom": 403.8567199707031,
+          "left": 192.4976348876953
+        }
+      },
+      {
+        "font": 13.499014764150944,
+        "box": {
+          "x": 40.11981201171875,
+          "y": 462.045654296875,
+          "width": 53.953125,
+          "height": 18,
+          "top": 462.045654296875,
+          "right": 94.07293701171875,
+          "bottom": 480.045654296875,
+          "left": 40.11981201171875
+        }
+      },
+      {
+        "font": 13.499014764150944,
+        "box": {
+          "x": 55.285377502441406,
+          "y": 340.7210998535156,
+          "width": 53.953125,
+          "height": 18,
+          "top": 340.7210998535156,
+          "right": 109.2385025024414,
+          "bottom": 358.7210998535156,
+          "left": 55.285377502441406
+        }
+      },
+      {
+        "font": 13.499014764150944,
+        "box": {
+          "x": 40.84197998046875,
+          "y": 411.84930419921875,
+          "width": 26.984375,
+          "height": 18,
+          "top": 411.84930419921875,
+          "right": 67.82635498046875,
+          "bottom": 429.84930419921875,
+          "left": 40.84197998046875
+        }
+      },
+      {
+        "font": 13.499014764150944,
+        "box": {
+          "x": 170.8325653076172,
+          "y": 425.8975830078125,
+          "width": 53.953125,
+          "height": 18,
+          "top": 425.8975830078125,
+          "right": 224.7856903076172,
+          "bottom": 443.8975830078125,
+          "left": 170.8325653076172
+        }
+      },
+      {
+        "font": 13.499014764150944,
+        "box": {
+          "x": 70.38714599609375,
+          "y": 384.2679443359375,
+          "width": 27.484474182128906,
+          "height": 18,
+          "top": 384.2679443359375,
+          "right": 97.87162017822266,
+          "bottom": 402.2679443359375,
+          "left": 70.38714599609375
+        }
+      }
+    ],
+    "svg": {
+      "x": 30,
+      "y": 291.53125,
+      "width": 260,
+      "height": 191.375,
+      "top": 291.53125,
+      "right": 290,
+      "bottom": 482.90625,
+      "left": 30
+    },
+    "eyeHit": {
+      "x": 186.8313751220703,
+      "y": 302.908203125,
+      "width": 45.996673583984375,
+      "height": 45.99664306640625,
+      "top": 302.908203125,
+      "right": 232.8280487060547,
+      "bottom": 348.90484619140625,
+      "left": 186.8313751220703
+    },
+    "water": {
+      "x": 241,
+      "y": 366.296875,
+      "width": 44,
+      "height": 113.328125,
+      "top": 366.296875,
+      "right": 285,
+      "bottom": 479.625,
+      "left": 241
+    },
+    "rail": {
+      "x": 182.09840393066406,
+      "y": 325.9065246582031,
+      "width": 90.12678527832031,
+      "height": 0,
+      "top": 325.9065246582031,
+      "right": 272.2251892089844,
+      "bottom": 325.9065246582031,
+      "left": 182.09840393066406
+    },
+    "buttons": [
+      {
+        "height": 46,
+        "clipped": false
+      },
+      {
+        "height": 46,
+        "clipped": false
+      }
+    ],
+    "controls": {
+      "x": 30,
+      "y": 986.765625,
+      "width": 260,
+      "height": 46,
+      "top": 986.765625,
+      "right": 290,
+      "bottom": 1032.765625,
+      "left": 30
+    },
+    "pairings": [
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 182.09840063418983,
+              "y": 325.9065319169242
+            },
+            {
+              "x": 272.22518427147054,
+              "y": 325.9065319169242
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 175.34840393066406,
+            "y": 338.40460205078125,
+            "width": 14,
+            "height": 18,
+            "top": 338.40460205078125,
+            "right": 189.34840393066406,
+            "bottom": 356.40460205078125,
+            "left": 175.34840393066406
+          }
+        },
+        "eye": "210",
+        "frame": {
+          "x": 165.84957885742188,
+          "y": 315.43505859375,
+          "width": 32.497650146484375,
+          "height": 20.94293212890625,
+          "top": 315.43505859375,
+          "right": 198.34722900390625,
+          "bottom": 336.37799072265625,
+          "left": 165.84957885742188
+        },
+        "stage": {
+          "x": 30,
+          "y": 665.78125,
+          "width": 260,
+          "height": 191.375,
+          "top": 665.78125,
+          "right": 290,
+          "bottom": 857.15625,
+          "left": 30
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 182.09840063418983,
+              "y": 325.9065319169242
+            },
+            {
+              "x": 272.22518427147054,
+              "y": 325.9065319169242
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔",
+          "box": {
+            "x": 237.74386596679688,
+            "y": 338.40460205078125,
+            "width": 14,
+            "height": 18,
+            "top": 338.40460205078125,
+            "right": 251.74386596679688,
+            "bottom": 356.40460205078125,
+            "left": 237.74386596679688
+          }
+        },
+        "eye": "300",
+        "frame": {
+          "x": 228.2450408935547,
+          "y": 315.43505859375,
+          "width": 32.49763488769531,
+          "height": 20.94293212890625,
+          "top": 315.43505859375,
+          "right": 260.74267578125,
+          "bottom": 336.37799072265625,
+          "left": 228.2450408935547
+        },
+        "stage": {
+          "x": 30,
+          "y": 665.78125,
+          "width": 260,
+          "height": 191.375,
+          "top": 665.78125,
+          "right": 290,
+          "bottom": 857.15625,
+          "left": 30
+        }
+      },
+      {
+        "depth": 70,
+        "masks": [],
+        "labelOverlaps": 0,
+        "handleHits": 0,
+        "frameHits": 0,
+        "clipped": 0,
+        "guide": {
+          "d": "M421.2 95.19999999999999H670.8",
+          "ends": [
+            {
+              "x": 182.09840063418983,
+              "y": 325.9065319169242
+            },
+            {
+              "x": 272.22518427147054,
+              "y": 325.9065319169242
+            }
+          ],
+          "dash": "5px, 5px",
+          "filter": "none",
+          "marker": "none",
+          "interactive": "none"
+        },
+        "cue": {
+          "text": "↔ 左右拖動",
+          "box": {
+            "x": 209.6917266845703,
+            "y": 338.40460205078125,
+            "width": 70.93748474121094,
+            "height": 18,
+            "top": 338.40460205078125,
+            "right": 280.62921142578125,
+            "bottom": 356.40460205078125,
+            "left": 209.6917266845703
+          }
+        },
+        "eye": "340",
+        "frame": {
+          "x": 255.9763641357422,
+          "y": 315.43505859375,
+          "width": 32.49763488769531,
+          "height": 20.94293212890625,
+          "top": 315.43505859375,
+          "right": 288.4739990234375,
+          "bottom": 336.37799072265625,
+          "left": 255.9763641357422
+        },
+        "stage": {
+          "x": 30,
+          "y": 665.78125,
+          "width": 260,
+          "height": 191.375,
+          "top": 665.78125,
+          "right": 290,
+          "bottom": 857.15625,
+          "left": 30
+        }
+      }
+    ],
+    "labelCases": [
+      {
+        "depth": 0,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 0,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 1,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 40,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 70,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 210,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 300,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      },
+      {
+        "depth": 100,
+        "position": 340,
+        "pairHits": [],
+        "handleHits": [],
+        "frameHits": [],
+        "clipped": [],
+        "photonMasks": []
+      }
+    ]
+  }
+]
