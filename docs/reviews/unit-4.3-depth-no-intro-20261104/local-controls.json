@@ -1,0 +1,58 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "guide": "dashed",
+      "stroke": 1,
+      "background": "none",
+      "shadow": "none",
+      "hitWidth": 44,
+      "overflow": false,
+      "intro": 0
+    },
+    {
+      "width": 1024,
+      "guide": "dashed",
+      "stroke": 1,
+      "background": "none",
+      "shadow": "none",
+      "hitWidth": 44,
+      "overflow": false,
+      "intro": 0
+    },
+    {
+      "width": 768,
+      "guide": "dashed",
+      "stroke": 1,
+      "background": "none",
+      "shadow": "none",
+      "hitWidth": 44,
+      "overflow": false,
+      "intro": 0
+    },
+    {
+      "width": 390,
+      "guide": "dashed",
+      "stroke": 1,
+      "background": "none",
+      "shadow": "none",
+      "hitWidth": 44,
+      "overflow": false,
+      "intro": 0
+    },
+    {
+      "width": 320,
+      "guide": "dashed",
+      "stroke": 1,
+      "background": "none",
+      "shadow": "none",
+      "hitWidth": 44,
+      "overflow": false,
+      "intro": 0
+    }
+  ],
+  "mouse": true,
+  "keyboard": true,
+  "nativeTouch": true,
+  "fillDrain": true
+}

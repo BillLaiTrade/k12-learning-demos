@@ -55,3 +55,5 @@
 2026-11-04第二小測新增pixel-tv-model.mjs（五級RGB、可達目標與逐格判定）、pixel-tv.mjs（獨立任務／試調帶回與畫布狀態）、pixel-tv.css（CSS電視框及對照介面）。目標小狐狸／4×4圖案由模型色塊直接繪製；三張生成示意圖只供設計參考，未貼成操作背景。新活動不依賴WebGL、不新增點陣圖或套件；原學習區及六題小測素材與模型保持。
 
 2026-11-04像素電視操作續修：15個原生亮度按鈕預先包含於HTML，pixel-tv-loader.js獨立啟動調色模組，不再依賴課程入口。五級按鈕與即時色塊由CSS／DOM呈現，子像素近看收合；沒有新圖片或套件。
+
+2026-11-04依核可示意加入像素概念導入。pixel-tv-picture.svg、pixel-tv-rgb.svg、pixel-tv-compose.svg由scripts/build-pixel-tv-concepts.mjs讀取pixel-tv-model的實際8×8目標及顯色函數產生，含真實3×3局部、RGB子像素和逐格組圖。參考圖exec-ae7277bf-ab83-47ea-adfd-928b3b399fe9.png僅作布局討論，未貼為網頁背景；圖解可在無JS時閱讀，沒有外部素材或依賴。
