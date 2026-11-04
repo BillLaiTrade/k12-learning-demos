@@ -4,7 +4,7 @@ import { TANK, depthGeometry, solveCoinRay, observerCamera, cameraDirection, tra
 
 const close = (a,b,eps=1e-8) => assert.ok(Math.abs(a-b)<eps,`${a} != ${b}`);
 test('depth construction conserves Snell direction and uses the backward intersection, with a fixed floor coin',()=>{
-  for(let depth=40;depth<=100;depth+=5)for(let eyeX=210;eyeX<=340;eyeX+=5){
+  for(let depth=1;depth<=100;depth+=3)for(let eyeX=210;eyeX<=340;eyeX+=5){
     const g=depthGeometry(depth,eyeX);
     assert.deepEqual(g.coin,[55,0]);assert.deepEqual(g.eye,[eyeX,190]);
     assert.ok(g.apparent[1]>0&&g.apparent[1]<depth);
@@ -46,7 +46,7 @@ test('first person view has a fixed target and finds the same coin through air-t
   }
 });
 test('every submerged camera ray conserves tangential direction in both horizontal axes',()=>{
-  const g=depthGeometry(),camera=observerCamera(g);let count=0;
+  const g=depthGeometry(70,250),camera=observerCamera(g);let count=0;
   for(let u=-.8;u<=.8;u+=.1)for(let v=-.8;v<=.8;v+=.1){
     const direction=cameraDirection(camera,u,v),hit=traceViewRay(g,camera.origin,direction);
     if(!hit?.wet)continue;count++;
@@ -56,8 +56,14 @@ test('every submerged camera ray conserves tangential direction in both horizont
   assert.ok(count>20);
 });
 test('controls stay finite across boundaries and the apparent point depends on observation position',()=>{
-  assert.equal(depthGeometry(-10,1000).depth,40);assert.equal(depthGeometry(-10,1000).eyeX,340);
-  assert.equal(depthGeometry(NaN,NaN).depth,70);
+  assert.equal(depthGeometry(-10,1000).depth,0);assert.equal(depthGeometry(-10,1000).eyeX,340);
+  assert.equal(depthGeometry(NaN,NaN).depth,0);
   assert.notDeepEqual(depthGeometry(70,210).apparent,depthGeometry(70,340).apparent);
   const ray=solveCoinRay(70,250);assert.ok(ray.hit[0]>55&&ray.hit[0]<250);
+});
+
+test('the default is a dry hidden coin; direct dry rays and filling use the same fixed world',()=>{
+ const initial=depthGeometry();assert.equal(initial.depth,0);assert.equal(initial.eyeX,300);assert.equal(initial.status,'hidden');assert.deepEqual(initial.apparent,initial.coin);
+ for(const eyeX of [210,250,300,340]){const g=depthGeometry(0,eyeX),r=g.center;const raw=[55-eyeX,-190,0],d=Math.hypot(...raw),hit=traceViewRay(g,[eyeX,190,0],raw.map(v=>v/d));if(r.visible){assert.equal(hit.kind,'coin');assert.equal(hit.wet,false);}else assert.ok(['outside','rim'].includes(hit.kind));}
+ const filled=depthGeometry(100,initial.eyeX);assert.equal(filled.status,'visible');assert.deepEqual(filled.coin,initial.coin);assert.deepEqual(filled.eye,initial.eye);
 });

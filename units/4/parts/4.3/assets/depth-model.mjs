@@ -1,10 +1,18 @@
 // One world (cm) for the side construction and the observer's pinhole view.
 // y is height above the floor; the pupil is small, the water surface is flat.
 export const TANK = Object.freeze({ length: 170, width: 130, height: 110, rim: 2.1, eyeHeight: 190, coinX: 55, coinRadius: 13, n: 4 / 3 });
+export const DEPTH_INITIAL = Object.freeze({ depth: 0, eyeX: 300 });
 export const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
 const unit = v => { const n = Math.hypot(...v); return v.map(x => x / n); };
 
 export function solveCoinRay(depth, eyeX, coinX = TANK.coinX) {
+  if (depth === 0) {
+    const eye = [eyeX, TANK.eyeHeight], openingX = coinX + TANK.height * (eyeX - coinX) / TANK.eyeHeight;
+    const rimHeight = TANK.eyeHeight * (TANK.length - coinX) / (eyeX - coinX);
+    return { coin: [coinX,0], hit: [coinX,0], eye, openingX, rimHeight,
+      blockPoint: rimHeight >= TANK.height ? [openingX,TANK.height] : [TANK.length,rimHeight],
+      visible: openingX >= TANK.rim && openingX <= TANK.length - TANK.rim };
+  }
   let low = coinX, high = eyeX;
   for (let i = 0; i < 56; i++) {
     const x = (low + high) / 2;
@@ -20,9 +28,9 @@ export function solveCoinRay(depth, eyeX, coinX = TANK.coinX) {
   return { coin: [coinX, 0], hit, eye, rimHeight, openingX, blockPoint, visible };
 }
 
-export function depthGeometry(depth = 70, eyeX = 250) {
-  depth = clamp(Number.isFinite(depth) ? depth : 70, 40, 100);
-  eyeX = clamp(Number.isFinite(eyeX) ? eyeX : 250, 210, 340);
+export function depthGeometry(depth = DEPTH_INITIAL.depth, eyeX = DEPTH_INITIAL.eyeX) {
+  depth = clamp(Number.isFinite(depth) ? depth : DEPTH_INITIAL.depth, 0, 100);
+  eyeX = clamp(Number.isFinite(eyeX) ? eyeX : DEPTH_INITIAL.eyeX, 210, 340);
   const center = solveCoinRay(depth, eyeX);
   const samples = [-12, -8, -4, 0, 4, 8, 12].map(dx => solveCoinRay(depth, eyeX, TANK.coinX + dx));
   const visibleSamples = samples.filter(r => r.visible);
@@ -32,7 +40,7 @@ export function depthGeometry(depth = 70, eyeX = 250) {
   // visible point, rather than extending a blocked ray from the coin's centre.
   const rays = [-.3, .3].map(offset => solveCoinRay(depth, eyeX + offset, representative.coin[0]));
   const slopes = rays.map(r => (r.hit[0] - r.eye[0]) / (depth - r.eye[1]));
-  const apparentY = depth + (rays[1].hit[0] - rays[0].hit[0]) / (slopes[0] - slopes[1]);
+  const apparentY = depth === 0 ? 0 : depth + (rays[1].hit[0] - rays[0].hit[0]) / (slopes[0] - slopes[1]);
   const apparent = [rays[0].hit[0] + slopes[0] * (apparentY - depth), apparentY];
   return { depth, eyeX, coin: center.coin, eye: center.eye, center, rays, apparent,
     apparentDepth: depth - apparentY, status, representative };
@@ -41,7 +49,7 @@ export function depthGeometry(depth = 70, eyeX = 250) {
 export function observerCamera(g, aspect = 1.4) {
   const origin = [g.eyeX, TANK.eyeHeight, 0];
   // Look at the same fixed region of the tank, never automatically track the coin.
-  const forward = unit([85 - g.eyeX, 73 - TANK.eyeHeight, 0]);
+  const forward = unit([85 - g.eyeX, 52 - TANK.eyeHeight, 0]);
   const up = [forward[1], -forward[0], 0], lens = Math.tan(24 * Math.PI / 180);
   return { origin, forward, up, lens, aspect };
 }
@@ -68,12 +76,20 @@ export function traceViewRay(g, origin, direction) {
   const point = t => origin.map((x, i) => x + direction[i] * t);
   const entry = point(Math.max(0, enter));
   // The near wall is opaque: the observation is through the opening, not the wall.
-  if (face !== 'top' || direction[1] >= 0) return { kind: 'outside', point: entry, face };
+  if (face !== 'top' || direction[1] >= 0) return { kind: 'outside', point: entry, face,
+    normal: face === 'end' ? [entry[0] > L/2 ? 1 : -1,0,0] : [0,0,entry[2] > 0 ? 1 : -1] };
   const inset = TANK.rim;
   if (entry[0] < inset || entry[0] > L - inset || Math.abs(entry[2]) > Z - inset)
-    return { kind: 'rim', point: entry };
+    return { kind: 'rim', point: entry, normal: [0,1,0] };
+  const normalAt = p => p[1] < 1e-7 ? [0,1,0] : p[0] < 1e-7 ? [1,0,0]
+    : p[0] > L-1e-7 ? [-1,0,0] : [0,0,p[2] > 0 ? -1 : 1];
+  if (g.depth === 0) {
+    const hit = point(leave), floor = hit[1] < 1e-7;
+    const kind = floor ? Math.hypot(hit[0]-TANK.coinX,hit[2]) <= TANK.coinRadius ? 'coin' : 'floor' : 'wall';
+    return { kind, point: hit, wet: false, normal: normalAt(hit), direction, distance: 0 };
+  }
   const surfaceT = (g.depth - origin[1]) / direction[1];
-  if (surfaceT > leave) return { kind: 'wall', point: point(leave), wet: false };
+  if (surfaceT > leave) { const hit = point(leave); return { kind: 'wall', point: hit, wet: false, normal: normalAt(hit) }; }
   const surface = point(surfaceT), eta = 1 / TANK.n;
   const waterDirection = [direction[0] * eta, -Math.sqrt(1 - eta * eta * (1 - direction[1] ** 2)), direction[2] * eta];
   let distance = -surface[1] / waterDirection[1], kind = 'floor';
@@ -85,5 +101,5 @@ export function traceViewRay(g, origin, direction) {
   }
   const hit = surface.map((x, i) => x + waterDirection[i] * distance);
   if (kind === 'floor' && Math.hypot(hit[0] - TANK.coinX, hit[2]) <= TANK.coinRadius) kind = 'coin';
-  return { kind, point: hit, surface, direction: waterDirection, wet: true, distance };
+  return { kind, point: hit, surface, direction: waterDirection, wet: true, distance, normal: normalAt(hit) };
 }
