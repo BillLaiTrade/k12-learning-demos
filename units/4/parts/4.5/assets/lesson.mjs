@@ -116,8 +116,6 @@ function initialiseQuiz(){
 
 document.querySelectorAll('[data-lab]').forEach((root,i)=>{try{initialiseLab(root,i);}catch(error){root.dataset.ready='false';const hint=root.querySelector('[data-load-note]');if(hint){hint.hidden=false;text(hint,'這個互動暫時無法載入，請重新整理後再試；仍可閱讀對話與說明。');}console.error('4.5 lab failed',error);}});
 initialiseQuiz();
-const pixelTvRoot=document.querySelector('.pixel-tv-quiz');
-if(pixelTvRoot)import('./pixel-tv.mjs?v=pixel-tv-20261104').then(module=>module.initialisePixelTv(pixelTvRoot)).catch(error=>{pixelTvRoot.querySelector('[data-tv-load-note]').hidden=false;console.error('4.5 pixel TV failed',error);});
 const nav=[...document.querySelectorAll('.route a')],sections=nav.map(a=>document.querySelector(a.hash));
 function active(id){for(const link of nav){if(link.hash==='#'+id)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');}}
 let queued=false;addEventListener('scroll',()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;let selected=sections[0];for(const section of sections)if(section.getBoundingClientRect().top<innerHeight*.4)selected=section;active(selected.id);});},{passive:true});

@@ -1,18 +1,20 @@
-import {CHANNELS,COLOUR_TARGETS,MAX_LEVEL,REPAIR_SIZE,REPAIR_HOLE,REPAIR_TARGET,PICTURE_SIZE,PICTURE_TARGET,initialRepair,blankPicture,fillPixel,evaluatePixels,coordinate,nextEmpty,sameColour,colourCss,subpixelCss,paletteName} from './pixel-tv-model.mjs?v=pixel-tv-20261104';
+import {COLOUR_TARGETS,REPAIR_SIZE,REPAIR_HOLE,REPAIR_TARGET,PICTURE_SIZE,PICTURE_TARGET,initialRepair,blankPicture,fillPixel,evaluatePixels,coordinate,nextEmpty,sameColour,colourCss,subpixelCss,paletteName} from './pixel-tv-model.mjs?v=pixel-tv-20261104';
 
 export function initialisePixelTv(root){
+ if(root.dataset.ready==='true')return;
  const $=s=>root.querySelector(s);let task=0,levels=[4,4,0],colourIndex=0,helper=null;
  const boards=[null,{size:REPAIR_SIZE,target:REPAIR_TARGET,pixels:initialRepair(),selected:REPAIR_HOLE,reviewed:false},{size:PICTURE_SIZE,target:PICTURE_TARGET,pixels:blankPicture(),selected:9,reviewed:false}],feedback=[null,null,null];
- const description=['調整三種色光，讓目前顏色接近目標。','對照完整目標，調好顏色後補回缺少的一格。','從空白畫布開始，逐格調色，重建目標圖像。'];
+ const description=['把左邊的顏色，調成右邊的目標色。','把左圖的問號缺格，補成右圖相同位置的顏色。','在左圖選一格，對照右圖調色，再填入，逐格重建畫面。'];
  const goal=()=>helper?{name:paletteName(helper.target),levels:helper.target}:COLOUR_TARGETS[colourIndex];
  function say(kind,message){feedback[task]={kind,message};renderFeedback();}
  function renderFeedback(){const value=feedback[task];$('[data-tv-feedback]').hidden=!value;if(value){$('[data-tv-feedback]').dataset.kind=value.kind;$('[data-tv-feedback]').textContent=value.message;}}
  function setLevels(value){levels=[...value];feedback[0]=null;}
  function renderTuner(){
   root.dataset.levels=JSON.stringify(levels);$('[data-tv-current-colour]').style.backgroundColor=colourCss(levels);$('[data-tv-combined]').style.backgroundColor=colourCss(levels);
-  root.querySelectorAll('[data-tv-channel]').forEach(group=>{const i=Number(group.dataset.tvChannel),n=levels[i];group.querySelector('[data-tv-level-value]').textContent=`第 ${n} 級`;group.querySelectorAll('[data-tv-level]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.tvLevel)===n)));$(`[data-tv-subpixel="${i}"]`).style.backgroundColor=subpixelCss(levels,i);$(`[data-tv-sublevel="${i}"]`).textContent=`${['R','G','B'][i]} ${n}`;});
+  root.querySelectorAll('[data-tv-channel]').forEach(group=>{const i=Number(group.dataset.tvChannel),n=levels[i];group.querySelector('[data-tv-level-value]').textContent=`目前 ${n} 級`;group.querySelectorAll('[data-tv-level]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.tvLevel)===n)));$(`[data-tv-subpixel="${i}"]`).style.backgroundColor=subpixelCss(levels,i);$(`[data-tv-sublevel="${i}"]`).textContent=`${['R','G','B'][i]} ${n}`;});
   $('[data-tv-current-values]').textContent=`目前設定：R ${levels[0]}・G ${levels[1]}・B ${levels[2]}`;
   $('[data-tv-work-solid]').style.backgroundColor=colourCss(levels);
+  $('[data-tv-live-swatch]').style.backgroundColor=colourCss(levels);$('[data-tv-live-values]').textContent=`紅 ${levels[0]}・綠 ${levels[1]}・藍 ${levels[2]}`;
  }
  function renderBoard(){
   const board=boards[task],work=$('[data-tv-work-grid]'),target=$('[data-tv-target-grid]');work.replaceChildren();target.replaceChildren();if(!board)return;
@@ -32,17 +34,21 @@ export function initialisePixelTv(root){
  function render(){
   root.dataset.task=String(task+1);root.querySelectorAll('[data-tv-task]').forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.tvTask)===task)));$('[data-tv-instruction]').textContent=`任務 ${task+1}｜${description[task]}`;
   const matching=task===0;$('[data-tv-work-solid]').hidden=!matching;$('[data-tv-target-solid]').hidden=!matching;$('[data-tv-work-grid]').hidden=matching;$('[data-tv-target-grid]').hidden=matching;
-  $('[data-tv-work-heading]').textContent=['我的調色','待修復畫面','我的空白畫布'][task];$('[data-tv-target-heading]').textContent=matching?'目標顏色':'完整目標';$('[data-tv-tuner-heading]').textContent=['調整目前的色光','先調色，再填入缺格','調整選取格的顏色'][task];
+  $('[data-tv-work-heading]').textContent=['我的調色','待修復畫面','我的空白畫布'][task];$('[data-tv-target-heading]').textContent=matching?'目標顏色':'完整目標';$('[data-tv-tuner-heading]').textContent='在這裡調色';
+  $('[data-tv-tuner-how]').textContent=matching?'點下方任一亮度，左邊的顏色就會改變。':'先點下方亮度調色，再按「填入」更新左圖的金框格。';
+  $('[data-tv-step-first]').textContent=['看右邊的目標色','看右圖缺格對應的顏色','在左圖點選要填的一格'][task];$('[data-tv-step-last]').textContent=['按「檢查顏色」','按「填入缺格」','按「填入這一格」'][task];
+  $('[data-tv-live-hint]').textContent=matching?'同步更新左圖':'準備填入金框格';
+  $('[data-tv-interaction-hint]').textContent=matching?'先點上方亮度按鈕調色，再按「檢查顏色」。':task===1?'問號格已選好；調出右圖相同位置的顏色，按「填入缺格」。':'點左圖選格 → 點亮度調色 → 按「填入這一格」。灰點格尚未填色；也可用列／格選單、方向鍵選格，Enter 填色。';
   $('[data-tv-next-colour]').hidden=!matching||!!helper;$('[data-tv-help]').hidden=matching;$('[data-tv-return]').hidden=!helper;$('[data-tv-apply]').hidden=matching;$('[data-tv-check]').hidden=task===1;$('[data-tv-reset]').hidden=matching;$('[data-tv-check]').textContent=matching?'檢查顏色':'檢查整幅圖';$('[data-tv-apply]').textContent=task===1?'填入缺格':'填入這一格';$('[data-tv-reset]').textContent=task===1?'重設缺格':'清空畫布';
   $('[data-tv-board-progress]').hidden=matching;$('[data-tv-cell-comparison]').hidden=matching;$('[data-tv-position-controls]').hidden=task!==2;
   $('[data-tv-helper-note]').hidden=!helper;if(helper){const p=coordinate(helper.index,boards[helper.origin].size);$('[data-tv-helper-note]').textContent=`正在為任務 ${helper.origin+1} 的第 ${p.row} 列、第 ${p.column} 格試調色。帶回後，再按填入。`;$('[data-tv-return]').textContent=`帶回任務 ${helper.origin+1} →`;}
-  if(matching){const value=goal();$('[data-tv-target-solid]').style.backgroundColor=colourCss(value.levels);$('[data-tv-target-solid]').setAttribute('aria-label',`目標顏色：${value.name}`);$('[data-tv-work-caption]').textContent='目前顏色';$('[data-tv-target-caption]').textContent=`請調出${value.name}，目標不顯示級數`;}renderTuner();renderBoard();renderFeedback();
+  if(matching){const value=goal();$('[data-tv-target-solid]').style.backgroundColor=colourCss(value.levels);$('[data-tv-target-solid]').setAttribute('aria-label',`目標顏色：${value.name}`);$('[data-tv-work-caption]').textContent='目前顏色';$('[data-tv-target-caption]').textContent=`請對照這個${value.name}調色`;}renderTuner();renderBoard();renderFeedback();
  }
  function focusInstruction(){const heading=$('[data-tv-instruction]');heading.focus({preventScroll:true});heading.scrollIntoView({block:'start',behavior:'auto'});}
  function selectCell(index,focus=false){const board=boards[task];if(!board||index<0||index>=board.pixels.length||task===1&&index!==REPAIR_HOLE)return;board.selected=index;if(board.pixels[index])setLevels(board.pixels[index]);render();if(focus)$('[data-tv-work-grid]').focus({preventScroll:true});}
  function apply(){if(!task)return;const board=boards[task];board.pixels=fillPixel(board.pixels,board.selected,levels);board.reviewed=false;const result=evaluatePixels(board.pixels,board.target),matched=sameColour(levels,board.target[board.selected]);
   feedback[task]={kind:matched?'correct':'retry',message:result.complete?(task===1?'缺格顏色與目標一致，畫面修復完成！':'64 格都與目標一致！你已用 RGB 級數重建整幅圖。'):matched?'這一格已與目標一致，可以繼續下一格。':'這一格已填入，與目標仍有差異；可再調整級數後填入。'};render();}
- root.querySelectorAll('[data-tv-channel]').forEach(group=>{const i=Number(group.dataset.tvChannel);for(let n=0;n<=MAX_LEVEL;n++){const button=document.createElement('button');button.type='button';button.dataset.tvLevel=String(n);button.setAttribute('aria-label',`${CHANNELS[i]}，第${n}級${n===0?'，關閉':''}`);button.setAttribute('aria-pressed',String(levels[i]===n));button.textContent=String(n);button.addEventListener('click',()=>{const next=[...levels];next[i]=n;setLevels(next);renderTuner();renderFeedback();});group.querySelector('[data-tv-level-options]').append(button);}});
+ root.querySelectorAll('[data-tv-channel]').forEach(group=>{const i=Number(group.dataset.tvChannel);group.querySelectorAll('[data-tv-level]').forEach(button=>{const n=Number(button.dataset.tvLevel);button.addEventListener('click',()=>{const next=[...levels];next[i]=n;setLevels(next);renderTuner();renderFeedback();});});});
  root.querySelectorAll('[data-tv-task]').forEach(button=>button.addEventListener('click',()=>{if(helper)feedback[0]=null;helper=null;task=Number(button.dataset.tvTask);render();focusInstruction();}));
  $('[data-tv-next-colour]').addEventListener('click',()=>{colourIndex=(colourIndex+1)%COLOUR_TARGETS.length;feedback[0]=null;render();});
  $('[data-tv-help]').addEventListener('click',()=>{const board=boards[task];helper={origin:task,index:board.selected,target:[...board.target[board.selected]]};task=0;feedback[0]=null;render();focusInstruction();});
