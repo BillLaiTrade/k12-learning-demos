@@ -5,10 +5,11 @@
 .tv-concepts{margin-bottom:25px;padding:16px 13px 12px;background:linear-gradient(130deg,#edf2e6,#f8f9f3);border:1px solid #d5dfcb;border-radius:15px}
 .tv-concepts-head{display:flex;align-items:center;gap:10px;margin:0 0 14px}.tv-concepts-head>span{color:#789d70;font-size:1.6rem}.tv-concepts h3{margin:0;color:#204c37;font-size:1.22rem;line-height:1.5}
 .tv-concept-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.tv-concept-card{position:relative;min-width:0;padding:13px 10px 11px;border:1px solid #cbd9c2;border-radius:12px;background:#fffef9;box-shadow:0 3px 6px #29482e08}
+.tv-concept-card{position:relative;display:flex;flex-direction:column;min-width:0;padding:13px 10px 11px;border:1px solid #cbd9c2;border-radius:12px;background:#fffef9;box-shadow:0 3px 6px #29482e08}
 .tv-concept-card:not(:last-child)::after{content:'→';position:absolute;z-index:1;right:-15px;top:43%;width:15px;text-align:center;color:#83a37c;font-size:1.2rem}
 .tv-concept-card h4{display:flex;align-items:flex-start;gap:7px;min-height:3.3em;margin:0;font-size:.91rem;line-height:1.65;color:#234c35}.tv-concept-card h4 b{display:grid;place-items:center;flex-shrink:0;width:25px;height:25px;border-radius:50%;background:#7f9f75;color:#fff;font-size:.8rem}
-.tv-concept-card img{display:block;width:100%;height:auto;max-width:330px;margin:12px auto 8px}.tv-concept-card p{margin:0;padding:10px;border-radius:8px;background:#eef3e5;font-size:.8rem;line-height:1.8;color:#38513d}.tv-concept-card strong{color:#1c5037}
+.tv-concept-card img{display:block;width:100%;height:auto;max-width:330px;margin:10px auto 12px}.tv-concept-card p{margin:0;padding:10px;border-radius:8px;background:#eef3e5;font-size:.85rem;line-height:1.8;color:#38513d}.tv-concept-card strong{color:#1c5037}
+.tv-concept-card .tv-concept-caption{min-height:3.6em;padding:3px 0 0;background:transparent;color:#607357;font-size:.75rem;line-height:1.8}.tv-concept-card .tv-concept-text{margin-top:auto}
 .tv-concept-bridge{margin:14px 0 6px;padding:10px 12px;border-radius:9px;background:#e4edda;color:#2d563b;font-size:.83rem;line-height:1.8;font-weight:650}.tv-concept-bridge a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px}
 .tv-concept-scale{margin:0 2px;font-size:.73rem;line-height:1.8;color:#65745d}.tv-task-purpose{margin:-5px 0 14px;color:#52684c;font-size:.8rem;line-height:1.75}
 .tv-task-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.tv-task-nav button{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px 8px;border:1px solid #b6cdb7;border-radius:10px;background:#fffefa;color:#315942;font-weight:700}
@@ -69,7 +70,7 @@
 .tv-interaction-hint{margin:11px 0 0;color:#6c7b63;font-size:.72rem;line-height:1.65}.pixel-tv-quiz .model-notes{margin-top:15px;font-size:.78rem}
 #pixel-tv-quiz{scroll-margin-top:100px}
 @media(max-width:1100px){.tv-workbench{grid-template-columns:minmax(0,1fr)}.tv-comparison{max-width:600px;margin:auto}.tv-tuner{margin-top:0}.tv-level-options button{min-height:54px}}
-@media(max-width:760px){.tv-concept-cards{grid-template-columns:minmax(0,1fr);gap:17px}.tv-concept-card h4{min-height:0}.tv-concept-card img{max-width:300px;margin-top:4px}.tv-concept-card:not(:last-child)::after{content:'↓';right:calc(50% - 8px);top:auto;bottom:-20px;height:20px}.tv-concept-card p{font-size:.84rem}}
+@media(max-width:760px){.tv-concept-cards{grid-template-columns:minmax(0,1fr);gap:17px}.tv-concept-card h4{min-height:0}.tv-concept-card img{max-width:300px;margin-top:4px}.tv-concept-card .tv-concept-caption{min-height:0}.tv-concept-card:not(:last-child)::after{content:'↓';right:calc(50% - 8px);top:auto;bottom:-20px;height:20px}.tv-concept-card p{font-size:.84rem}}
 @media(max-width:650px){
  .pixel-tv-quiz .quiz-head{padding:14px 12px;grid-template-columns:38px minmax(0,1fr);gap:10px}.pixel-tv-quiz .quiz-mark{width:36px;height:36px;border-radius:10px}.pixel-tv-quiz .quiz-mark svg{width:25px;height:25px}.pixel-tv-quiz .quiz-subtitle{font-size:.76rem}.pixel-tv-quiz .quiz-body{padding:12px}
  .tv-task-nav{gap:6px}.tv-task-nav button{flex-direction:column;gap:2px;font-size:.71rem;padding:8px 4px;line-height:1.5}.tv-flow-note{font-size:.69rem}.tv-instruction{padding:10px;font-size:.87rem}.tv-helper-note{font-size:.72rem}

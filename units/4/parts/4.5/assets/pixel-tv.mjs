@@ -36,7 +36,7 @@ export function initialisePixelTv(root){
   const matching=task===0;$('[data-tv-work-solid]').hidden=!matching;$('[data-tv-target-solid]').hidden=!matching;$('[data-tv-work-grid]').hidden=matching;$('[data-tv-target-grid]').hidden=matching;
   $('[data-tv-work-heading]').textContent=['我調出的像素','待修復畫面','我的空白畫布'][task];$('[data-tv-target-heading]').textContent=matching?'目標像素':'完整目標';$('[data-tv-tuner-heading]').textContent='在這裡調整三種色光';
   $('[data-tv-purpose]').textContent=['你看到的兩個色塊，是單一像素的放大畫面；調整的是這個像素內的 RGB 子像素亮度。','畫面中的每個像素各有自己的顏色；這次只修復缺少的一格。','許多像素一起組成畫面。對照目標，替每格調色並填入，完成一個 8×8 的簡化螢幕。'][task];
-  $('[data-tv-anatomy-heading]').textContent=matching?'同一個像素，兩種視角':'準備填入的像素：近看與合看';
+  $('[data-tv-anatomy-heading]').textContent=matching?'同一個像素，兩種觀看方式':'準備填入的像素：兩種觀看方式';
   $('[data-tv-tuner-how]').textContent=matching?'點下方任一亮度，左邊像素的顏色就會改變。':'先點下方亮度調色，再按「填入」更新左圖的金框格。';
   $('[data-tv-step-first]').textContent=['看右邊的目標色','看右圖缺格對應的顏色','在左圖點選要填的一格'][task];$('[data-tv-step-last]').textContent=['按「檢查顏色」','按「填入缺格」','按「填入這一格」'][task];
   $('[data-tv-live-hint]').textContent=matching?'同步更新左圖':'準備填入金框格';
