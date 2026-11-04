@@ -32,7 +32,7 @@ assert.ok(records[i].spread<records[i-1].spread);}const widths=await root('eye')
    assert.equal(await panel.getAttribute('data-mode'),mode);
    assert.deepEqual(await panel.locator('[data-bundle-point]').evaluateAll(es=>es.map(e=>e.dataset.bundlePoint)),['top','bottom']);
    const spans=await panel.locator('[data-bundle-point]').evaluateAll(es=>es.map(e=>{const p=[...e.querySelectorAll('[data-bundle-start]')],width=k=>Math.max(...p.map(e=>Number(e.getAttribute(k))))-Math.min(...p.map(e=>Number(e.getAttribute(k))));return {start:width('data-bundle-start'),end:width('data-bundle-end')};}));
-   for(const span of spans)assert.equal(Math.sign(span.start-span.end),Math.sign(object-100));
+   for(const span of spans){assert.equal(Math.sign(span.start-span.end),Math.sign(object-100));if(object===110.4)assert.ok(span.start-span.end>12,'剛跨F的方向差異應可辨認');}assert.equal(await panel.locator('small').isVisible(),true);
    assert.deepEqual((await read('eye')).camera,initial.camera);
    if(object>100){assert.match(await root('eye').locator('[data-mag-eye-badge]').innerText(),/會聚入眼.*無法對焦/);assert.match(await root('eye').locator('[data-mag-eye-note]').innerText(),/模糊程度為示意/);}
   }

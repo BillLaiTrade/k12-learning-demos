@@ -4,9 +4,9 @@ import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-view-con
 import {createBenchArt} from './convex-bench-model.mjs?v=20261104-convex-unified1';
 import {MAGNIFIER_HOME,fitMagnifier,clipProjectedRay} from './magnifier-framing.mjs?v=20261104-mag-overview1';
 import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261104-mag-overview1';
-import {createIncomingBundle} from './magnifier-bundle.mjs?v=20261104-mag-bundle1';
+import {createIncomingBundle} from './magnifier-bundle.mjs?v=20261104-mag-bundle2';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,magnifierDisplayRays,eyeRays} from './magnifier-optics.mjs?v=20261104-mag-bundle1';
+import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,magnifierDisplayRays,eyeRays} from './magnifier-optics.mjs?v=20261104-mag-bundle2';
 const root=document.querySelector('[data-magnifier-lab]');
 if(root) initialise(root);
 function initialise(root){

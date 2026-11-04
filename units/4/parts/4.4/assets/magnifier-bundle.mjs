@@ -11,7 +11,7 @@ export function createIncomingBundle(root){
   if(g.blocked)return;
   // Remove the chief-ray tilt and magnify signed angular spread continuously.
   // The bounded mapping keeps the direction visible without implying a new image position.
-  const endHalf=8,startHalf=endHalf*Math.exp(Math.tanh(g.eyeVergence*G.f*2.5));
+  const endHalf=8,startHalf=endHalf*Math.exp(Math.tanh(g.eyeVergence*G.f*8));
   const names=point==='both'?['top','bottom']:[point];
   element('path',{d:'M300 18V103',class:'magnifier-bundle-eye'});
   element('text',{x:300,y:11,'text-anchor':'middle',class:'magnifier-bundle-label'}).textContent='入眼處';
