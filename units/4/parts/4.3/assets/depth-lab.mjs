@@ -9,7 +9,8 @@ if (root) {
   const point = p => [X(p[0]), Y(p[1])];
   const path = points => `M${points.map(p => point(p).join(' ')).join('L')}`;
   let geometry = depthGeometry(), textures = createTextures(null);
-  let drawFrame = 0, animation = 0, progress = 1, playing = false, lastTime = 0, inView = false, dragging = false;
+  let drawFrame = 0, animation = 0, progress = 1, playing = false, lastTime = 0, inView = false;
+  let eyeX = DEPTH_INITIAL.eyeX;
   let mode = 'ray', fillElapsed = 0, fillStart = 0;
   let observerResult = null;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -47,11 +48,15 @@ if (root) {
     <text x="0" y="5" text-anchor="middle" font-size="18" transform="scale(1 .45)" style="fill:#81542b;stroke:#ffe0a5;stroke-width:.5">1</text>
   </g>
   <g class="depth-annotations" aria-hidden="true"></g>
-  <g class="depth-eye" tabindex="0" role="slider" aria-label="觀看位置，可拖曳或以方向鍵調整" aria-valuemin="210" aria-valuemax="340" aria-valuenow="250">
+  <path class="depth-water-hit" stroke="transparent" fill="none" aria-hidden="true"/>
+  <g id="depth-eye" class="depth-eye" tabindex="0" role="slider" aria-label="前後拖曳眼睛調整觀看位置" aria-orientation="horizontal" aria-describedby="depth-control-help" aria-valuemin="210" aria-valuemax="340" aria-valuenow="300">
+    <title>拖曳眼睛靠近或遠離；方向鍵微調，PageUp／PageDown調整10，Home／End到兩端</title>
     <rect class="depth-eye-hit" x="-48" y="-45" width="96" height="90" rx="16" fill="transparent"/>
     <g filter="url(#depth-object-shadow)"><path d="M-34 0Q0-33 34 0Q0 33-34 0Z" fill="url(#depth-eye-white)" stroke="#526747" stroke-width="3"/>
     <circle r="14" fill="url(#depth-iris)"/><circle r="5.5" fill="#13251f"/><circle cx="-4" cy="-5" r="3.5" fill="#fff"/>
     <path d="M-34 0Q0-33 34 0" stroke="#6a694d" stroke-width="3" fill="none"/></g>
+    <path class="depth-eye-grip" d="M-28 32H28M-20 26L-28 32L-20 38M20 26L28 32L20 38"/>
+    <ellipse class="depth-eye-focus" rx="40" ry="24"/>
   </g>`;
   const eye = q('.depth-eye');
 
@@ -105,21 +110,29 @@ if (root) {
     drawLabels();
   }
   function drawLabels() {
-    const g = geometry, font = Math.max(21, 13.5 / Math.max(.2, svg.clientWidth / 720)), s = Y(g.depth);
-    let html = badge(g.depth>0?'空氣':'空槽 · 尚未加水', 53, 130, font);
-    if(g.depth>0)html+=badge('水', 53, 405, font)+badge('水面',53,s-18,font);
-    html += badge('觀看位置', Math.min(520, X(g.eyeX)-90), 46, font);
+    const g = geometry, ratio=Math.max(.2,svg.clientWidth/720),font = Math.max(21, 13.5 / ratio), s = Y(g.depth);
+    let html = badge(g.depth>0?'空氣':'空槽', 53, 130, font);
+    if(g.depth>0) {
+      html+=badge('水面 ↕',53,s-18,font);
+      if(430-s>font*1.4+8/ratio)html+=badge('水',53,(s+430)/2+font*.3,font);
+    }
+    html += badge('拖曳眼睛', Math.min(520, X(g.eyeX)-2*font), 42, font);
+    html += badge(`距槽前${g.eyeX-TANK.length}cm`,53,42,font);
     html += `<path d="M${X(g.coin[0])+15} 433L200 474" fill="none" stroke="#fffbe7" stroke-width="2"/>` + badge('實際位置', 205, 483, font);
     if (g.depth>0 && q('#show-rays').checked && g.status !== 'hidden' && progress >= .76) {
-      const labelX = 375, labelY = Math.max(s + font * 1.6, Math.min(397, Y(g.apparent[1]) + font));
+      const below=s+38/ratio;
+      const labelX=480,labelY=below+font*.4<490?Math.max(below,Y(g.apparent[1])+font):s-24/ratio;
       html += `<path d="M${X(g.apparent[0])+20} ${Y(g.apparent[1])}L${labelX-10} ${labelY-8}" fill="none" stroke="#fffbe7" stroke-width="2"/>` + badge('看起來的位置', labelX, labelY, font);
     }
-    if (g.depth>0 && q('#show-rays').checked) html += badge('法線', X(g.representative.hit[0])+12, Math.max(185,s-63), font);
+    if (g.depth>0 && q('#show-rays').checked) {
+      const labelX=Math.min(Math.max(X(g.representative.hit[0])+12,53+font*4.8),X(TANK.length)+60-22/ratio-font*2.65-10);
+      html += badge('法線',labelX,s-28,font);
+    }
     q('.depth-annotations').innerHTML = html;
   }
   function drawSide() {
     const g = geometry, s = Y(g.depth);
-    const hitSize = Math.max(96, 46 / Math.max(.2, svg.clientWidth / 720));
+    const ratio=Math.max(.2,svg.clientWidth/720),hitSize = Math.max(112, 46 / ratio);
     const hitLeft=Math.min(-hitSize/2,720-X(g.eyeX)-hitSize);
     for (const [key,value] of Object.entries({x:hitLeft,y:-hitSize/2,width:hitSize,height:hitSize}))
       q('.depth-eye-hit').setAttribute(key,value);
@@ -128,6 +141,13 @@ if (root) {
     q('.depth-waterline').setAttribute('d',`M45 ${s}H${X(TANK.length)}`);
     q('.depth-meniscus').setAttribute('d',`M46 ${s+3}H${X(TANK.length)-1}`);
     q('.depth-waterline').style.display=q('.depth-meniscus').style.display=g.depth>0?'':'none';
+    q('.depth-water-hit').setAttribute('d',`M47 ${s}H${X(TANK.length)-3}`);
+    q('.depth-water-hit').setAttribute('stroke-width',44/ratio);
+    const waterControl=q('.depth-water-control'),handleX=(X(TANK.length)+60)*ratio;
+    Object.assign(waterControl.style,{left:`${handleX-22}px`,top:`${Y(100)*ratio-22}px`,height:`${(Y(0)-Y(100))*ratio+44}px`});
+    Object.assign(q('#depth-output').style,{left:`${handleX+28}px`,top:`${s*ratio}px`});
+    q('#depth-input').setAttribute('aria-valuetext',g.depth===0?'0公分，空槽':`${g.depth}公分`);
+    root.dataset.directReady='true';
     eye.setAttribute('transform',`translate(${X(g.eyeX)} ${Y(TANK.eyeHeight)})`);
     eye.setAttribute('aria-valuenow',g.eyeX); eye.setAttribute('aria-valuetext',`離槽前側${g.eyeX-TANK.length}公分`);
     drawConstruction();
@@ -151,9 +171,8 @@ if (root) {
   function scheduleObserver() { if(!drawFrame)drawFrame=requestAnimationFrame(drawObserver); }
   function stopAnimation() { if(animation)cancelAnimationFrame(animation);animation=0;lastTime=0; }
   function syncGeometry() {
-    geometry=depthGeometry(Number(q('#depth-input').value),Number(q('#depth-eye').value));
+    geometry=depthGeometry(Number(q('#depth-input').value),eyeX);
     q('#depth-output').textContent=`${geometry.depth} 公分`;
-    q('#depth-eye-output').textContent=`距槽前 ${geometry.eyeX-TANK.length} cm`;
     drawSide();scheduleObserver();
   }
   function finishAnimation() {
@@ -162,6 +181,9 @@ if (root) {
   }
   function update() {
     finishAnimation();progress=1;syncGeometry();
+  }
+  function beginManual() {
+    finishAnimation();progress=1;drawConstruction();scheduleObserver();
   }
   function tick(time) {
     animation=0;
@@ -179,7 +201,8 @@ if (root) {
     if(progress<1)animation=requestAnimationFrame(tick);
     else finishAnimation();
   }
-  q('#depth-input').addEventListener('input',update);q('#depth-eye').addEventListener('input',update);
+  q('#depth-input').addEventListener('input',update);
+  q('#depth-input').addEventListener('pointerdown',beginManual);
   q('#show-rays').addEventListener('change',()=>{drawConstruction();drawSide();});
   q('#depth-replay').addEventListener('click',()=>{
     finishAnimation();mode='ray';q('#show-rays').checked=true;playing=!reduced.matches;progress=playing?0:1;root.dataset.state=playing?'playing':'ready';
@@ -193,14 +216,29 @@ if (root) {
     syncGeometry();fillStart=geometry.depth;fillElapsed=0;playing=true;root.dataset.state='filling';
     q('#depth-fill').textContent='↻ 重新加水';if(inView&&!document.hidden)animation=requestAnimationFrame(tick);
   });
-  q('#depth-reset').addEventListener('click',()=>{q('#depth-input').value=DEPTH_INITIAL.depth;q('#depth-eye').value=DEPTH_INITIAL.eyeX;q('#show-rays').checked=true;update();});
+  q('#depth-reset').addEventListener('click',()=>{q('#depth-input').value=DEPTH_INITIAL.depth;eyeX=DEPTH_INITIAL.eyeX;q('#show-rays').checked=true;update();});
   eye.addEventListener('keydown',e=>{
-    const step={ArrowLeft:-2,ArrowDown:-2,ArrowRight:2,ArrowUp:2}[e.key];
-    if(step!==undefined||e.key==='Home'||e.key==='End'){e.preventDefault();q('#depth-eye').value=e.key==='Home'?210:e.key==='End'?340:clamp(geometry.eyeX+step,210,340);update();}
+    const step={ArrowLeft:-2,ArrowDown:-2,ArrowRight:2,ArrowUp:2,PageDown:-10,PageUp:10}[e.key];
+    if(step!==undefined||e.key==='Home'||e.key==='End'){e.preventDefault();eyeX=e.key==='Home'?210:e.key==='End'?340:clamp(geometry.eyeX+step,210,340);update();}
   });
-  eye.addEventListener('pointerdown',e=>{e.preventDefault();dragging=true;eye.setPointerCapture(e.pointerId);eye.focus({preventScroll:true});});
-  eye.addEventListener('pointermove',e=>{if(!dragging)return;const p=new DOMPoint(e.clientX,e.clientY).matrixTransform(svg.getScreenCTM().inverse());q('#depth-eye').value=clamp(Math.round((p.x-45)/1.85),210,340);update();});
-  eye.addEventListener('pointerup',()=>{dragging=false;});eye.addEventListener('pointercancel',()=>{dragging=false;});
+  function bindDrag(target,kind) {
+    let start=null;
+    const local=e=>new DOMPoint(e.clientX,e.clientY).matrixTransform(svg.getScreenCTM().inverse());
+    target.addEventListener('pointerdown',e=>{
+      if(e.button!==0)return;e.preventDefault();beginManual();
+      start={point:local(e),value:kind==='eye'?eyeX:geometry.depth,id:e.pointerId};
+      target.setPointerCapture(e.pointerId);
+      (kind==='eye'?eye:q('#depth-input')).focus({preventScroll:true});
+    });
+    target.addEventListener('pointermove',e=>{
+      if(!start||start.id!==e.pointerId)return;e.preventDefault();const p=local(e);
+      if(kind==='eye')eyeX=clamp(Math.round(start.value+(p.x-start.point.x)/1.85),210,340);
+      else q('#depth-input').value=clamp(Math.round(start.value+(start.point.y-p.y)/1.85),0,100);
+      update();
+    });
+    const end=()=>{start=null;};target.addEventListener('pointerup',end);target.addEventListener('pointercancel',end);target.addEventListener('lostpointercapture',end);
+  }
+  bindDrag(eye,'eye');bindDrag(q('.depth-water-hit'),'water');
   const resume=()=>{stopAnimation();if(playing&&inView&&!document.hidden){root.dataset.state=mode==='fill'?'filling':'playing';animation=requestAnimationFrame(tick);}else if(playing)root.dataset.state='paused';};
   new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;resume();},{threshold:.05}).observe(root);
   document.addEventListener('visibilitychange',resume);

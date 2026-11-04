@@ -37,3 +37,5 @@
 2026-11-03第一、二區依核可分工新增prism-lessons.css及prism-refraction-explanation.svg／prism-dispersion-explanation.svg。SVG由scripts/build-prism-explanations.mjs讀取既有光學模型產生，玻璃漸層與細陰影為呈現，幾何／光路維持同一比例；局部近看兩軸同倍率、不改角差。角色沿用正式共用頭像，核可概念圖僅作設計證據，未嵌入頁面。precision-prism新增固定白光參照canvas，沿用原drawProjection與曝光；原光學及3D模組未改。
 
 2026-11-04第一、二區依四項回饋修正。prism-display.mjs使用共同係數壓縮亮度，降低藍光因通道獨立裁切而偏紫；所有色光與主圖／預覽／備援共用，不改物理模型。兩張SVG各新增-mobile.svg構圖，picture依螢幕切換，仍由build-prism-explanations讀同一幾何生成；深綠墊、玻璃邊緣及投影均由SVG提供，沒有新點陣資產。A框與近看有明確對應及等軸倍率；對位虛線由HTML疊在兩列相同坐標，光學畫布像素保持可驗證。
+
+2026-11-04續修：第一區SVG補兩處各自原方向延長線與真實角度弧箭頭；第二區SVG改為可辨識的三色分離放大原理圖，圖內明列非實際角度，取消A近看。僅原理圖放大分離，立體實驗台及幕面仍用實際計算。四張圖由build-prism-explanations.mjs生成，不改執行模型與顯色；以本項及最新決策為準，前輪A近看描述保留歷史。
