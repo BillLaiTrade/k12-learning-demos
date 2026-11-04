@@ -1,4 +1,16 @@
-# 4.5 光的色散與顏色：五個學習區塊
+# 4.5 光的色散與顏色：五個學習區塊與兩個小測
+
+## 第二小測：像素電視實作（2026-11-04）
+
+新增獨立[像素電視](https://billlaitrade.github.io/k12-learning-demos/units/4/parts/4.5/#pixel-tv-quiz)：調出指定色、補回4×4中的一格、由空白逐格重建8×8目標。RGB各0～4級按鈕，所有目標使用同套125種設定。任務2／3可回任務1試調並帶回，仍須手動填入；已填畫面及進度在本次瀏覽保留。列／格選單、方向鍵與Enter支援手機及鍵盤；黑色與未填格分開，檢查不自動補圖。
+
+新模組pixel-tv-model／pixel-tv／pixel-tv.css以DOM格子及CSS電視框呈現，不需要WebGL或新依賴。理想RGB螢幕模型與原光譜／色片／紙張模型分開，五區與第一個六題小測保持。新版為五區加兩個小測；下方唯一小測描述保留歷史。[決策](../../../../docs/decisions/unit-4.5-pixel-tv.md)。
+
+```sh
+node tests/unit-4.5-pixel-tv-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5-pixel-tv.test.cjs
+```
+
 
 ## 六題一組、保留作答與連貫版面（2026-11-04）
 
