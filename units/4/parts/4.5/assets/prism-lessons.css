@@ -42,3 +42,11 @@
  #s2 .prism-compare-row{grid-template-columns:32px minmax(0,1fr);gap:4px;margin:2px 0}
  #s2 .prism-compare-row>span{font-size:.61rem}
 }
+
+/* Matching screen coordinates are marked above the untouched optical pixels. */
+#s2 .prism-screen-frame{position:relative;min-width:0;border:2px solid #4b5e4d;background:#3c3d3a}
+#s2 [data-precision] .prism-screen-frame canvas{border:0;display:block;width:100%;height:auto}
+#s2 [data-prism-landmark]{position:absolute;top:1px;bottom:1px;width:0;border-left:1px dashed #fff9da;filter:drop-shadow(0 0 1px #182b22);pointer-events:none}
+#s2 [data-prism-landmark]::before,#s2 [data-prism-landmark]::after{content:'';position:absolute;left:-3px;width:5px;height:5px;background:#fff4c0;border:1px solid #33483b;transform:rotate(45deg)}
+#s2 [data-prism-landmark]::before{top:0}#s2 [data-prism-landmark]::after{bottom:0}
+#s2 .prism-comparison .prism-match-key{margin:4px 0 0;font-size:.62rem;line-height:1.5;color:#405c49}

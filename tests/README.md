@@ -1,3 +1,14 @@
+## 4.5 圖解清晰度、對位與藍光顯色（2026-11-04）
+
+```sh
+node tests/unit-4.5-prism-optics.test.mjs
+node tests/unit-4.5-prism-display.test.mjs
+node tests/unit-4.5-prism-explanations.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5.test.cjs
+```
+
+光學7項回歸固定幾何與能量；顯色3項確認共用壓縮保留正通道比例、亮度單調與三色顯示／坐標；圖解4項涵蓋桌機手機四張SVG、法線、兩次折射、A區對應與等軸近看。整課35項（含外層）增加雙列DOM對位線同坐標、白光時隱藏、實際藍色像素不偏紫，保留主圖／預覽一致、操作、七寬度、觸控／備援與無JS。支援COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH，GPU檢查依序執行。
+
 ## 4.5 第一、二區色散教學分工（2026-11-03）
 
 ```sh
