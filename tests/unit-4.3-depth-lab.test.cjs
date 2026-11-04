@@ -25,21 +25,29 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   const curves=[...overlay.querySelectorAll('.depth-link-line')].map(path=>{
    const matrix=path.getScreenCTM(),length=path.getTotalLength();
    const points=Array.from({length:81},(_,i)=>{const p=path.getPointAtLength(length*i/80),q=new DOMPoint(p.x,p.y).matrixTransform(matrix);return{x:q.x,y:q.y};});
-   return{start:points[0],end:points.at(-1),inside:points.every(p=>p.x>=bounds.left-.5&&p.x<=bounds.right+.5&&p.y>=bounds.top-.5&&p.y<=bounds.bottom+.5),labelHits:points.filter(p=>labels.some(b=>p.x>b.left-1&&p.x<b.right+1&&p.y>b.top-1&&p.y<b.bottom+1)).length,arrow:getComputedStyle(path).markerEnd,stroke:parseFloat(getComputedStyle(path).strokeWidth)};
+   return{length,start:points[0],end:points.at(-1),inside:points.every(p=>p.x>=bounds.left-.5&&p.x<=bounds.right+.5&&p.y>=bounds.top-.5&&p.y<=bounds.bottom+.5),labelHits:points.filter(p=>labels.some(b=>p.x>b.left-1&&p.x<b.right+1&&p.y>b.top-1&&p.y<b.bottom+1)).length,arrow:getComputedStyle(path).markerEnd,stroke:parseFloat(getComputedStyle(path).strokeWidth)};
   });
   const hit=(a,b)=>a.left<b.right-.5&&a.right>b.left+.5&&a.top<b.bottom-.5&&a.bottom>b.top+.5;
   const pairs=labels.flatMap((a,i)=>labels.slice(i+1).filter(b=>hit(a,b))),water=box(el.querySelector('#depth-input')),scene=box(el.querySelector('#depth-scene'));
   const clipped=labels.filter(b=>b.left<scene.left-.5||b.right>scene.right+.5||b.top<scene.top-.5||b.bottom>scene.bottom+.5).length;
-  return{photonMasks,labelOverlaps:pairs.length,handleHits:labels.filter(b=>hit(b,water)).length,clipped,frameHits:labels.filter(b=>frame.left<b.right&&frame.right>b.left&&frame.top<b.bottom&&frame.bottom>b.top).length,layout:overlay.dataset.layout,eye:overlay.dataset.eyeX,frame,stage,curves,interactive:getComputedStyle(overlay).pointerEvents};
+  return{photonMasks,labelOverlaps:pairs.length,handleHits:labels.filter(b=>hit(b,water)).length,clipped,frameHits:labels.filter(b=>frame.left<b.right&&frame.right>b.left&&frame.top<b.bottom&&frame.bottom>b.top).length,key:box(el.querySelector('.depth-eye-key')),outline:overlay.querySelector('.depth-link-frame').getAttribute('d'),layout:overlay.dataset.layout,eye:overlay.dataset.eyeX,frame,stage,curves,interactive:getComputedStyle(overlay).pointerEvents};
  });
  const checkLinks=m=>{
   assert.deepEqual(m.photonMasks,[],'teaching tags do not mask the real light path');assert.equal(m.labelOverlaps,0,'teaching labels do not overlap');assert.equal(m.handleHits,0,'water control does not cover labels');assert.equal(m.clipped,0,'all teaching labels stay in the scene');
   assert.equal(m.curves.length,2);assert.equal(m.interactive,'none');assert.equal(m.frameHits,0,'eye frame does not cover labels');
   m.curves.forEach((p,i)=>{
    assert.ok(p.inside,'connection stays inside the diagram group');assert.equal(p.labelHits,0,'connection does not cover explanatory text');assert.equal(p.arrow,'none');assert.ok(p.stroke<2);
-   assert.ok(p.start.x>=m.frame.right-m.frame.width*.12&&p.start.x<=m.frame.right+1&&p.start.y>=m.frame.top&&p.start.y<=m.frame.bottom,'connection starts on the eye frame');
-   const edge=m.layout==='side'?m.stage.left:m.stage.right;
-   assert.ok(Math.abs(p.end.x-edge)<4&&Math.abs(p.end.y-(i?m.stage.bottom-10:m.stage.top+10))<2,'connection reaches the viewing frame');
+   const distance=Math.hypot(p.end.x-p.start.x,p.end.y-p.start.y);
+   assert.ok(p.length<distance*1.5+2,'neck takes a direct path, without a long detour');
+   assert.ok(m.outline?.includes('Q'),'one continuous rounded outline joins the neck and frame');
+   if(m.layout==='side'){
+    assert.ok(p.start.x>=m.frame.right-m.frame.width*.12&&p.start.x<=m.frame.right+1&&p.start.y>=m.frame.top&&p.start.y<=m.frame.bottom,'neck starts on the eye frame');
+    assert.ok(Math.abs(p.end.x-m.stage.left)<4&&Math.abs(p.end.y-p.start.y)<=5,'neck meets the window at eye height');
+   }else{
+    assert.ok(p.start.x>=m.key.left&&p.start.x<=m.key.right&&p.start.y>=m.key.top&&p.start.y<=m.key.bottom,'stacked neck starts at the matching header eye');
+    assert.ok(Math.abs(p.end.y-m.stage.top)<4&&Math.abs(p.end.x-p.start.x)<=3,'stacked neck opens into the nearby top frame');
+   }
+
   });
  };
  const capture=process.env.DEPTH_CAPTURE_DIR;if(capture)await fs.mkdir(capture,{recursive:true});

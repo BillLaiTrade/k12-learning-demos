@@ -47,7 +47,7 @@ if (root) {
   <path class="depth-front-outline" d="M${X(TANK.length)+8} ${Y(TANK.height)}V${Y(0)}" stroke="#a98551" stroke-width="5" opacity=".6"/>
   <path class="depth-meniscus" stroke="#a9ffff" stroke-width="7" opacity=".5" fill="none"/>
   <path class="depth-waterline"/>
-  <g class="depth-eye-rail" aria-hidden="true">
+  <g class="depth-eye-rail" transform="translate(0 34)" aria-hidden="true">
     <path class="depth-rail-shadow" d="M${X(210)} ${Y(TANK.eyeHeight)+3}H${X(340)}"/>
     <path class="depth-rail-line" d="M${X(210)} ${Y(TANK.eyeHeight)}H${X(340)}"/>
     <rect class="depth-rail-stops" x="${X(210)-3}" y="${Y(TANK.eyeHeight)-8}" width="6" height="16" rx="3" fill="url(#depth-eye-bezel)"/><rect class="depth-rail-stops" x="${X(340)-3}" y="${Y(TANK.eyeHeight)-8}" width="6" height="16" rx="3" fill="url(#depth-eye-bezel)"/>
@@ -65,6 +65,7 @@ if (root) {
     <title>沿導軌拖曳眼睛靠近或遠離；方向鍵微調，PageUp／PageDown加快，Home／End到兩端</title>
     <rect class="depth-eye-hit" x="-48" y="-45" width="96" height="90" rx="16" fill="transparent"/>
     <g class="depth-eye-device" filter="url(#depth-eye-soft-shadow)">
+      <path d="M0 26V34" fill="none" stroke="#b19661" stroke-width="3"/>
       <ellipse class="depth-eye-bezel" rx="45" ry="29" fill="url(#depth-eye-bezel)" stroke="#a58e61" stroke-width="1.1"/>
       <ellipse rx="42" ry="26" fill="url(#depth-eye-pad)" stroke="#fff9e4" stroke-width="1"/>
       <use href="#depth-eye-art"/>
@@ -83,22 +84,29 @@ if (root) {
     };
     const top=anchor(-EYE_LINK_ANCHOR.y), bottom=anchor(EYE_LINK_ANCHOR.y);
     const stacked=frame.left<left.right-1;
-    let upper,lower,area='';
+    // One continuous outline opens into the viewing window at the neck.
+    // Its edges meet a small port, rather than stretching to the window corners.
+    const l=frame.left-wrap.left-1,r=frame.right-wrap.left+1;
+    const t=frame.top-wrap.top-1,b=frame.bottom-wrap.top+1,radius=10;
+    let upper,lower,area,outline;
     if(stacked){
-      const x1=wrap.width-7,x2=wrap.width-3,ex=frame.right-wrap.left-2;
-      const y1=frame.top-wrap.top+10,y2=frame.bottom-wrap.top-10;
-      upper=`M${top.x} ${top.y}H${x1}V${y1}H${ex}`;
-      lower=`M${bottom.x} ${bottom.y}H${x2}V${y2}H${ex}`;
+      const key=q('.depth-eye-key').getBoundingClientRect();
+      const x=(key.left+key.right)/2-wrap.left,sy=key.bottom-wrap.top-6;
+      const x1=x-3,x2=x+3,p1=x1-2,p2=x2+2,gate=t-6;
+      upper=`M${x1} ${sy}V${gate}Q${x1} ${t} ${p1} ${t}`;
+      lower=`M${x2} ${sy}V${gate}Q${x2} ${t} ${p2} ${t}`;
+      area=`${upper}H${p2}Q${x2} ${t} ${x2} ${gate}V${sy}Z`;
+      outline=`${upper}H${l+radius}Q${l} ${t} ${l} ${t+radius}V${b-radius}Q${l} ${b} ${l+radius} ${b}H${r-radius}Q${r} ${b} ${r} ${b-radius}V${t+radius}Q${r} ${t} ${r-radius} ${t}H${p2}Q${x2} ${t} ${x2} ${gate}V${sy}`;
     }else{
-      const ex=frame.left-wrap.left+2,y1=frame.top-wrap.top+10,y2=frame.bottom-wrap.top-10;
-      const gate=left.right-wrap.left+4,bend=(ex-gate)*.48;
-      upper=`M${top.x} ${top.y}H${gate}C${gate+bend} ${top.y} ${ex-bend} ${y1} ${ex} ${y1}`;
-      lower=`M${bottom.x} ${bottom.y}H${gate}C${gate+bend} ${bottom.y} ${ex-bend} ${y2} ${ex} ${y2}`;
-      area=`M${top.x} ${top.y}H${gate}C${gate+bend} ${top.y} ${ex-bend} ${y1} ${ex} ${y1}V${y2}C${ex-bend} ${y2} ${gate+bend} ${bottom.y} ${gate} ${bottom.y}H${bottom.x}Z`;
+      const y1=top.y-4,y2=bottom.y+4,gate=l-9;
+      upper=`M${top.x} ${top.y}H${gate}Q${l} ${top.y} ${l} ${y1}`;
+      lower=`M${bottom.x} ${bottom.y}H${gate}Q${l} ${bottom.y} ${l} ${y2}`;
+      area=`${upper}V${y2}Q${l} ${bottom.y} ${gate} ${bottom.y}H${bottom.x}Z`;
+      outline=`${upper}V${t+radius}Q${l} ${t} ${l+radius} ${t}H${r-radius}Q${r} ${t} ${r} ${t+radius}V${b-radius}Q${r} ${b} ${r-radius} ${b}H${l+radius}Q${l} ${b} ${l} ${b-radius}V${y2}Q${l} ${bottom.y} ${gate} ${bottom.y}H${bottom.x}`;
     }
     links.setAttribute('viewBox',`0 0 ${wrap.width} ${wrap.height}`);
     q('[data-depth-link=top]').setAttribute('d',upper);q('[data-depth-link=bottom]').setAttribute('d',lower);
-    q('.depth-link-area').setAttribute('d',area);links.dataset.layout=stacked?'stacked':'side';links.dataset.eyeX=geometry.eyeX;
+    q('.depth-link-area').setAttribute('d',area);q('.depth-link-frame').setAttribute('d',outline);links.dataset.layout=stacked?'stacked':'side';links.dataset.eyeX=geometry.eyeX;
   }
   eye.addEventListener('focus',()=>{root.dataset.eyeActive='true';});
   eye.addEventListener('blur',()=>{root.dataset.eyeActive='false';});

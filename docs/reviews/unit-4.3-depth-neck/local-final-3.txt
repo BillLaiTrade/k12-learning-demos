@@ -1,0 +1,12 @@
+▶ sixth section teaches apparent depth with synchronized side and rendered observer views
+  ✔ the default is dry and physically occluded, with readable teaching and no automatic motion (829.556206ms)
+  ✔ the eye owns the viewing window and its connections follow keyboard movement and focus (3044.4759ms)
+✔ sixth section teaches apparent depth with synchronized side and rendered observer views (7626.743802ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8429.512808
