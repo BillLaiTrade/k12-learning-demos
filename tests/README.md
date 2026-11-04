@@ -1,3 +1,12 @@
+## 4.5 兩處偏轉與主圖分色（2026-11-04）
+
+```sh
+node tests/unit-4.5-prism-explanations.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.5-prism-diagrams.test.cjs
+```
+
+生成測試4項驗證真實法線、原方向延長與弧箭頭端點；第二區改驗明示放大分離的定性光路、順序與表面交點，取代舊A近看條件。瀏覽器專項8項子測試（含外層9項）：原生收合／鍵盤不重設原操作、1366／820／650／390／320寬度、四張SVG文字不裁切、無JS。僅載入第一、二區實際3D，其他區的WebGL模組在測試中攔截，不當成全課回歸。支援COLOR_URL／COLOR_CAPTURE_DIR／CHROMIUM_PATH。另沿用光學7及顯色3項檢查；下方舊規格保留歷史。
+
 ## 4.5 圖解清晰度、對位與藍光顯色（2026-11-04）
 
 ```sh
