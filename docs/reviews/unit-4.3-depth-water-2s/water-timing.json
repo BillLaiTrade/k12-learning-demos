@@ -1,0 +1,1236 @@
+[
+  {
+    "startDepth": 100,
+    "target": 0,
+    "start": 3812.60000000149,
+    "endpointMs": 2173.7999999970198,
+    "frames": [
+      {
+        "ms": 117.29999999701977,
+        "depth": 100,
+        "sideDepth": 100,
+        "waterHeight": 192,
+        "pixelHash": 1822320643
+      },
+      {
+        "ms": 300,
+        "depth": 94,
+        "sideDepth": 94,
+        "waterHeight": 180.48000000000002,
+        "pixelHash": 1170132356
+      },
+      {
+        "ms": 426.5999999977648,
+        "depth": 93,
+        "sideDepth": 93,
+        "waterHeight": 178.56,
+        "pixelHash": 3666386250
+      },
+      {
+        "ms": 528.0999999977648,
+        "depth": 85,
+        "sideDepth": 85,
+        "waterHeight": 163.2,
+        "pixelHash": 3660262064
+      },
+      {
+        "ms": 626,
+        "depth": 79,
+        "sideDepth": 79,
+        "waterHeight": 151.68,
+        "pixelHash": 685345488
+      },
+      {
+        "ms": 727.3999999985099,
+        "depth": 74,
+        "sideDepth": 74,
+        "waterHeight": 142.07999999999998,
+        "pixelHash": 2435866986
+      },
+      {
+        "ms": 833.5999999977648,
+        "depth": 69,
+        "sideDepth": 69,
+        "waterHeight": 132.48000000000002,
+        "pixelHash": 2622560545
+      },
+      {
+        "ms": 936.5,
+        "depth": 63,
+        "sideDepth": 63,
+        "waterHeight": 120.95999999999998,
+        "pixelHash": 3700793645
+      },
+      {
+        "ms": 1026.699999999255,
+        "depth": 58,
+        "sideDepth": 58,
+        "waterHeight": 111.36000000000001,
+        "pixelHash": 2378417447
+      },
+      {
+        "ms": 1123.5999999977648,
+        "depth": 53,
+        "sideDepth": 53,
+        "waterHeight": 101.75999999999999,
+        "pixelHash": 1713984503
+      },
+      {
+        "ms": 1223.699999999255,
+        "depth": 49,
+        "sideDepth": 49,
+        "waterHeight": 94.07999999999998,
+        "pixelHash": 280877871
+      },
+      {
+        "ms": 1324.0999999977648,
+        "depth": 44,
+        "sideDepth": 44,
+        "waterHeight": 84.48000000000002,
+        "pixelHash": 3683904808
+      },
+      {
+        "ms": 1414.2999999970198,
+        "depth": 39,
+        "sideDepth": 39,
+        "waterHeight": 74.88,
+        "pixelHash": 513346776
+      },
+      {
+        "ms": 1501.5999999977648,
+        "depth": 34,
+        "sideDepth": 34,
+        "waterHeight": 65.27999999999997,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 1596,
+        "depth": 29,
+        "sideDepth": 29,
+        "waterHeight": 55.68000000000001,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 1692.7999999970198,
+        "depth": 25,
+        "sideDepth": 25,
+        "waterHeight": 48,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 1788.2999999970198,
+        "depth": 21,
+        "sideDepth": 21,
+        "waterHeight": 40.31999999999999,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 1883.2999999970198,
+        "depth": 15,
+        "sideDepth": 15,
+        "waterHeight": 28.80000000000001,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 1981,
+        "depth": 11,
+        "sideDepth": 11,
+        "waterHeight": 21.120000000000005,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 2066.099999997765,
+        "depth": 6,
+        "sideDepth": 6,
+        "waterHeight": 11.519999999999982,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 2168.099999997765,
+        "depth": 1,
+        "sideDepth": 1,
+        "waterHeight": 1.920000000000016,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 2403.2999999970198,
+        "depth": 0,
+        "sideDepth": 0,
+        "waterHeight": 0,
+        "pixelHash": 3454411019
+      }
+    ],
+    "label": "mobile drain"
+  },
+  {
+    "startDepth": 0,
+    "target": 100,
+    "start": 6374.60000000149,
+    "endpointMs": 2129.89999999851,
+    "frames": [
+      {
+        "ms": 86.89999999850988,
+        "depth": 0,
+        "sideDepth": 0,
+        "waterHeight": 0,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 192.39999999850988,
+        "depth": 3,
+        "sideDepth": 3,
+        "waterHeight": 5.759999999999991,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 293.8999999985099,
+        "depth": 5,
+        "sideDepth": 5,
+        "waterHeight": 9.600000000000023,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 389.69999999925494,
+        "depth": 9,
+        "sideDepth": 9,
+        "waterHeight": 17.279999999999973,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 472.3999999985099,
+        "depth": 14,
+        "sideDepth": 14,
+        "waterHeight": 26.879999999999995,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 559.7999999970198,
+        "depth": 19,
+        "sideDepth": 19,
+        "waterHeight": 36.48000000000002,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 653.7999999970198,
+        "depth": 23,
+        "sideDepth": 23,
+        "waterHeight": 44.15999999999997,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 739.3999999985099,
+        "depth": 28,
+        "sideDepth": 28,
+        "waterHeight": 53.75999999999999,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 829.0999999977648,
+        "depth": 33,
+        "sideDepth": 33,
+        "waterHeight": 63.360000000000014,
+        "pixelHash": 2340446153
+      },
+      {
+        "ms": 917.5,
+        "depth": 37,
+        "sideDepth": 37,
+        "waterHeight": 71.03999999999996,
+        "pixelHash": 513346776
+      },
+      {
+        "ms": 1005.6999999992549,
+        "depth": 41,
+        "sideDepth": 41,
+        "waterHeight": 78.72000000000003,
+        "pixelHash": 2929189209
+      },
+      {
+        "ms": 1095.2999999970198,
+        "depth": 45,
+        "sideDepth": 45,
+        "waterHeight": 86.39999999999998,
+        "pixelHash": 3991886083
+      },
+      {
+        "ms": 1183.3999999985099,
+        "depth": 50,
+        "sideDepth": 50,
+        "waterHeight": 96,
+        "pixelHash": 1589700579
+      },
+      {
+        "ms": 1273.3999999985099,
+        "depth": 54,
+        "sideDepth": 54,
+        "waterHeight": 103.68,
+        "pixelHash": 1210903560
+      },
+      {
+        "ms": 1370.699999999255,
+        "depth": 58,
+        "sideDepth": 58,
+        "waterHeight": 111.36000000000001,
+        "pixelHash": 2378417447
+      },
+      {
+        "ms": 1466.5999999977648,
+        "depth": 63,
+        "sideDepth": 63,
+        "waterHeight": 120.95999999999998,
+        "pixelHash": 3700793645
+      },
+      {
+        "ms": 1555,
+        "depth": 68,
+        "sideDepth": 68,
+        "waterHeight": 130.56,
+        "pixelHash": 278391283
+      },
+      {
+        "ms": 1645.5,
+        "depth": 72,
+        "sideDepth": 72,
+        "waterHeight": 138.24,
+        "pixelHash": 2933915365
+      },
+      {
+        "ms": 1730.3999999985099,
+        "depth": 77,
+        "sideDepth": 77,
+        "waterHeight": 147.84000000000003,
+        "pixelHash": 1885240962
+      },
+      {
+        "ms": 1821.699999999255,
+        "depth": 82,
+        "sideDepth": 82,
+        "waterHeight": 157.44,
+        "pixelHash": 1819843019
+      },
+      {
+        "ms": 1931.5999999977648,
+        "depth": 86,
+        "sideDepth": 86,
+        "waterHeight": 165.12,
+        "pixelHash": 2066777974
+      },
+      {
+        "ms": 2029.199999999255,
+        "depth": 91,
+        "sideDepth": 91,
+        "waterHeight": 174.72000000000003,
+        "pixelHash": 4190282434
+      },
+      {
+        "ms": 2125.7999999970198,
+        "depth": 96,
+        "sideDepth": 96,
+        "waterHeight": 184.32,
+        "pixelHash": 378800765
+      },
+      {
+        "ms": 2363.89999999851,
+        "depth": 100,
+        "sideDepth": 100,
+        "waterHeight": 192,
+        "pixelHash": 3343489057
+      }
+    ],
+    "label": "mobile fill"
+  },
+  {
+    "startDepth": 0,
+    "target": 100,
+    "start": 116416.60000000149,
+    "endpointMs": 2142.39999999851,
+    "frames": [
+      {
+        "ms": 85.39999999850988,
+        "depth": 0,
+        "sideDepth": 0,
+        "waterHeight": 0,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 172.59999999776483,
+        "depth": 4,
+        "sideDepth": 4,
+        "waterHeight": 7.680000000000007,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 253.59999999776483,
+        "depth": 5,
+        "sideDepth": 5,
+        "waterHeight": 9.600000000000023,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 346,
+        "depth": 9,
+        "sideDepth": 9,
+        "waterHeight": 17.279999999999973,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 424,
+        "depth": 13,
+        "sideDepth": 13,
+        "waterHeight": 24.95999999999998,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 501.0999999977648,
+        "depth": 17,
+        "sideDepth": 17,
+        "waterHeight": 32.639999999999986,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 585.0999999977648,
+        "depth": 22,
+        "sideDepth": 22,
+        "waterHeight": 42.24000000000001,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 669.7999999970198,
+        "depth": 26,
+        "sideDepth": 26,
+        "waterHeight": 49.920000000000016,
+        "pixelHash": 4138428399
+      },
+      {
+        "ms": 750.3999999985099,
+        "depth": 30,
+        "sideDepth": 30,
+        "waterHeight": 57.60000000000002,
+        "pixelHash": 3247224877
+      },
+      {
+        "ms": 840.1999999992549,
+        "depth": 34,
+        "sideDepth": 34,
+        "waterHeight": 65.27999999999997,
+        "pixelHash": 1654093307
+      },
+      {
+        "ms": 931.0999999977648,
+        "depth": 38,
+        "sideDepth": 38,
+        "waterHeight": 72.95999999999998,
+        "pixelHash": 1462670990
+      },
+      {
+        "ms": 1010.3999999985099,
+        "depth": 42,
+        "sideDepth": 42,
+        "waterHeight": 80.63999999999999,
+        "pixelHash": 2592701100
+      },
+      {
+        "ms": 1095.5999999977648,
+        "depth": 47,
+        "sideDepth": 47,
+        "waterHeight": 90.24000000000001,
+        "pixelHash": 4020665107
+      },
+      {
+        "ms": 1191.5,
+        "depth": 51,
+        "sideDepth": 51,
+        "waterHeight": 97.92000000000002,
+        "pixelHash": 2852834708
+      },
+      {
+        "ms": 1273.0999999977648,
+        "depth": 55,
+        "sideDepth": 55,
+        "waterHeight": 105.60000000000002,
+        "pixelHash": 56671330
+      },
+      {
+        "ms": 1370,
+        "depth": 60,
+        "sideDepth": 60,
+        "waterHeight": 115.19999999999999,
+        "pixelHash": 2205269377
+      },
+      {
+        "ms": 1451.7999999970198,
+        "depth": 64,
+        "sideDepth": 64,
+        "waterHeight": 122.88,
+        "pixelHash": 2836306570
+      },
+      {
+        "ms": 1542.3999999985099,
+        "depth": 69,
+        "sideDepth": 69,
+        "waterHeight": 132.48000000000002,
+        "pixelHash": 3977086635
+      },
+      {
+        "ms": 1629.8999999985099,
+        "depth": 73,
+        "sideDepth": 73,
+        "waterHeight": 140.15999999999997,
+        "pixelHash": 3524581707
+      },
+      {
+        "ms": 1718.8999999985099,
+        "depth": 77,
+        "sideDepth": 77,
+        "waterHeight": 147.84000000000003,
+        "pixelHash": 2347167442
+      },
+      {
+        "ms": 1806,
+        "depth": 82,
+        "sideDepth": 82,
+        "waterHeight": 157.44,
+        "pixelHash": 840202756
+      },
+      {
+        "ms": 1894.2999999970198,
+        "depth": 87,
+        "sideDepth": 87,
+        "waterHeight": 167.03999999999996,
+        "pixelHash": 2158446247
+      },
+      {
+        "ms": 1984,
+        "depth": 91,
+        "sideDepth": 91,
+        "waterHeight": 174.72000000000003,
+        "pixelHash": 3033718792
+      },
+      {
+        "ms": 2137.39999999851,
+        "depth": 95,
+        "sideDepth": 95,
+        "waterHeight": 182.39999999999998,
+        "pixelHash": 3525477286
+      },
+      {
+        "ms": 2482.89999999851,
+        "depth": 100,
+        "sideDepth": 100,
+        "waterHeight": 192,
+        "pixelHash": 2745033357
+      }
+    ],
+    "label": "no-preference fill"
+  },
+  {
+    "startDepth": 100,
+    "target": 0,
+    "start": 118965.60000000149,
+    "endpointMs": 2188,
+    "frames": [
+      {
+        "ms": 112.5,
+        "depth": 100,
+        "sideDepth": 100,
+        "waterHeight": 192,
+        "pixelHash": 1150737503
+      },
+      {
+        "ms": 270.3999999985099,
+        "depth": 95,
+        "sideDepth": 95,
+        "waterHeight": 182.39999999999998,
+        "pixelHash": 3525477286
+      },
+      {
+        "ms": 376.69999999925494,
+        "depth": 93,
+        "sideDepth": 93,
+        "waterHeight": 178.56,
+        "pixelHash": 3012833513
+      },
+      {
+        "ms": 520.2999999970198,
+        "depth": 87,
+        "sideDepth": 87,
+        "waterHeight": 167.03999999999996,
+        "pixelHash": 2158446247
+      },
+      {
+        "ms": 630.8999999985099,
+        "depth": 82,
+        "sideDepth": 82,
+        "waterHeight": 157.44,
+        "pixelHash": 840202756
+      },
+      {
+        "ms": 741.5999999977648,
+        "depth": 74,
+        "sideDepth": 74,
+        "waterHeight": 142.07999999999998,
+        "pixelHash": 1971358728
+      },
+      {
+        "ms": 859.5,
+        "depth": 69,
+        "sideDepth": 69,
+        "waterHeight": 132.48000000000002,
+        "pixelHash": 3977086635
+      },
+      {
+        "ms": 952.5999999977648,
+        "depth": 63,
+        "sideDepth": 63,
+        "waterHeight": 120.95999999999998,
+        "pixelHash": 3655223411
+      },
+      {
+        "ms": 1052.3999999985099,
+        "depth": 58,
+        "sideDepth": 58,
+        "waterHeight": 111.36000000000001,
+        "pixelHash": 2220076122
+      },
+      {
+        "ms": 1151.5,
+        "depth": 53,
+        "sideDepth": 53,
+        "waterHeight": 101.75999999999999,
+        "pixelHash": 3171636384
+      },
+      {
+        "ms": 1243.8999999985099,
+        "depth": 48,
+        "sideDepth": 48,
+        "waterHeight": 92.15999999999997,
+        "pixelHash": 3458100029
+      },
+      {
+        "ms": 1341.2999999970198,
+        "depth": 43,
+        "sideDepth": 43,
+        "waterHeight": 82.56,
+        "pixelHash": 3227020419
+      },
+      {
+        "ms": 1459.199999999255,
+        "depth": 38,
+        "sideDepth": 38,
+        "waterHeight": 72.95999999999998,
+        "pixelHash": 1462670990
+      },
+      {
+        "ms": 1570.699999999255,
+        "depth": 33,
+        "sideDepth": 33,
+        "waterHeight": 63.360000000000014,
+        "pixelHash": 1917034255
+      },
+      {
+        "ms": 1674.3999999985099,
+        "depth": 28,
+        "sideDepth": 28,
+        "waterHeight": 53.75999999999999,
+        "pixelHash": 4138428399
+      },
+      {
+        "ms": 1773.5999999977648,
+        "depth": 22,
+        "sideDepth": 22,
+        "waterHeight": 42.24000000000001,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 1886.0999999977648,
+        "depth": 17,
+        "sideDepth": 17,
+        "waterHeight": 32.639999999999986,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 1980.2999999970198,
+        "depth": 12,
+        "sideDepth": 12,
+        "waterHeight": 23.04000000000002,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 2083.699999999255,
+        "depth": 6,
+        "sideDepth": 6,
+        "waterHeight": 11.519999999999982,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 2184.7999999970198,
+        "depth": 2,
+        "sideDepth": 2,
+        "waterHeight": 3.839999999999975,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 2486.5,
+        "depth": 0,
+        "sideDepth": 0,
+        "waterHeight": 0,
+        "pixelHash": 4274347391
+      }
+    ],
+    "label": "no-preference drain"
+  },
+  {
+    "startDepth": 0,
+    "target": 100,
+    "start": 122264.89999999851,
+    "endpointMs": 2182.900000002235,
+    "frames": [
+      {
+        "ms": 124,
+        "depth": 0,
+        "sideDepth": 0,
+        "waterHeight": 0,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 255.70000000298023,
+        "depth": 6,
+        "sideDepth": 6,
+        "waterHeight": 11.519999999999982,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 361.6000000014901,
+        "depth": 7,
+        "sideDepth": 7,
+        "waterHeight": 13.439999999999998,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 459.80000000074506,
+        "depth": 13,
+        "sideDepth": 13,
+        "waterHeight": 24.95999999999998,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 544.9000000022352,
+        "depth": 18,
+        "sideDepth": 18,
+        "waterHeight": 34.56,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 638.1000000014901,
+        "depth": 22,
+        "sideDepth": 22,
+        "waterHeight": 42.24000000000001,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 741,
+        "depth": 27,
+        "sideDepth": 27,
+        "waterHeight": 51.839999999999975,
+        "pixelHash": 4017355814
+      },
+      {
+        "ms": 849.1000000014901,
+        "depth": 32,
+        "sideDepth": 32,
+        "waterHeight": 61.44,
+        "pixelHash": 1523141623
+      },
+      {
+        "ms": 935.5,
+        "depth": 37,
+        "sideDepth": 37,
+        "waterHeight": 71.03999999999996,
+        "pixelHash": 1163985520
+      },
+      {
+        "ms": 1025.4000000022352,
+        "depth": 42,
+        "sideDepth": 42,
+        "waterHeight": 80.63999999999999,
+        "pixelHash": 2592701100
+      },
+      {
+        "ms": 1111.7000000029802,
+        "depth": 47,
+        "sideDepth": 47,
+        "waterHeight": 90.24000000000001,
+        "pixelHash": 4020665107
+      },
+      {
+        "ms": 1227.2000000029802,
+        "depth": 51,
+        "sideDepth": 51,
+        "waterHeight": 97.92000000000002,
+        "pixelHash": 2852834708
+      },
+      {
+        "ms": 1335.5,
+        "depth": 55,
+        "sideDepth": 55,
+        "waterHeight": 105.60000000000002,
+        "pixelHash": 56671330
+      },
+      {
+        "ms": 1420.800000000745,
+        "depth": 61,
+        "sideDepth": 61,
+        "waterHeight": 117.12,
+        "pixelHash": 2232697155
+      },
+      {
+        "ms": 1521.2000000029802,
+        "depth": 67,
+        "sideDepth": 67,
+        "waterHeight": 128.64,
+        "pixelHash": 823830757
+      },
+      {
+        "ms": 1611.9000000022352,
+        "depth": 71,
+        "sideDepth": 71,
+        "waterHeight": 136.32,
+        "pixelHash": 2554345017
+      },
+      {
+        "ms": 1720.2000000029802,
+        "depth": 76,
+        "sideDepth": 76,
+        "waterHeight": 145.91999999999996,
+        "pixelHash": 735022100
+      },
+      {
+        "ms": 1870.1000000014901,
+        "depth": 80,
+        "sideDepth": 80,
+        "waterHeight": 153.60000000000002,
+        "pixelHash": 3075743575
+      },
+      {
+        "ms": 2020.4000000022352,
+        "depth": 87,
+        "sideDepth": 87,
+        "waterHeight": 167.03999999999996,
+        "pixelHash": 2158446247
+      },
+      {
+        "ms": 2178,
+        "depth": 94,
+        "sideDepth": 94,
+        "waterHeight": 180.48000000000002,
+        "pixelHash": 118300634
+      },
+      {
+        "ms": 2601.300000000745,
+        "depth": 100,
+        "sideDepth": 100,
+        "waterHeight": 192,
+        "pixelHash": 2745033357
+      }
+    ],
+    "label": "reduce fill"
+  },
+  {
+    "startDepth": 100,
+    "target": 0,
+    "start": 124976.19999999925,
+    "endpointMs": 2201.300000000745,
+    "frames": [
+      {
+        "ms": 240.30000000074506,
+        "depth": 100,
+        "sideDepth": 100,
+        "waterHeight": 192,
+        "pixelHash": 1150737503
+      },
+      {
+        "ms": 469.80000000074506,
+        "depth": 86,
+        "sideDepth": 86,
+        "waterHeight": 165.12,
+        "pixelHash": 1072898865
+      },
+      {
+        "ms": 799,
+        "depth": 85,
+        "sideDepth": 85,
+        "waterHeight": 163.2,
+        "pixelHash": 446284557
+      },
+      {
+        "ms": 923.1999999992549,
+        "depth": 76,
+        "sideDepth": 76,
+        "waterHeight": 145.91999999999996,
+        "pixelHash": 735022100
+      },
+      {
+        "ms": 1053.9000000022352,
+        "depth": 60,
+        "sideDepth": 60,
+        "waterHeight": 115.19999999999999,
+        "pixelHash": 2205269377
+      },
+      {
+        "ms": 1179.699999999255,
+        "depth": 53,
+        "sideDepth": 53,
+        "waterHeight": 101.75999999999999,
+        "pixelHash": 3171636384
+      },
+      {
+        "ms": 1323.5,
+        "depth": 47,
+        "sideDepth": 47,
+        "waterHeight": 90.24000000000001,
+        "pixelHash": 4020665107
+      },
+      {
+        "ms": 1575.9000000022352,
+        "depth": 40,
+        "sideDepth": 40,
+        "waterHeight": 76.80000000000001,
+        "pixelHash": 3988044685
+      },
+      {
+        "ms": 1768.4000000022352,
+        "depth": 33,
+        "sideDepth": 33,
+        "waterHeight": 63.360000000000014,
+        "pixelHash": 1917034255
+      },
+      {
+        "ms": 1958.5,
+        "depth": 21,
+        "sideDepth": 21,
+        "waterHeight": 40.31999999999999,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 2073.300000000745,
+        "depth": 11,
+        "sideDepth": 11,
+        "waterHeight": 21.120000000000005,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 2197,
+        "depth": 2,
+        "sideDepth": 2,
+        "waterHeight": 3.839999999999975,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 2572.10000000149,
+        "depth": 0,
+        "sideDepth": 0,
+        "waterHeight": 0,
+        "pixelHash": 4274347391
+      }
+    ],
+    "label": "reduce drain"
+  },
+  {
+    "startDepth": 40,
+    "target": 100,
+    "start": 128564.39999999851,
+    "endpointMs": 2126.300000000745,
+    "frames": [
+      {
+        "ms": 128.20000000298023,
+        "depth": 40,
+        "sideDepth": 40,
+        "waterHeight": 76.80000000000001,
+        "pixelHash": 3988044685
+      },
+      {
+        "ms": 280.1000000014901,
+        "depth": 43,
+        "sideDepth": 43,
+        "waterHeight": 82.56,
+        "pixelHash": 3227020419
+      },
+      {
+        "ms": 382,
+        "depth": 44,
+        "sideDepth": 44,
+        "waterHeight": 84.48000000000002,
+        "pixelHash": 421955665
+      },
+      {
+        "ms": 533.7000000029802,
+        "depth": 48,
+        "sideDepth": 48,
+        "waterHeight": 92.15999999999997,
+        "pixelHash": 3458100029
+      },
+      {
+        "ms": 675.3000000007451,
+        "depth": 51,
+        "sideDepth": 51,
+        "waterHeight": 97.92000000000002,
+        "pixelHash": 2852834708
+      },
+      {
+        "ms": 807.1000000014901,
+        "depth": 56,
+        "sideDepth": 56,
+        "waterHeight": 107.51999999999998,
+        "pixelHash": 1811615341
+      },
+      {
+        "ms": 908.5,
+        "depth": 60,
+        "sideDepth": 60,
+        "waterHeight": 115.19999999999999,
+        "pixelHash": 2205269377
+      },
+      {
+        "ms": 1015.7000000029802,
+        "depth": 64,
+        "sideDepth": 64,
+        "waterHeight": 122.88,
+        "pixelHash": 2836306570
+      },
+      {
+        "ms": 1120.4000000022352,
+        "depth": 67,
+        "sideDepth": 67,
+        "waterHeight": 128.64,
+        "pixelHash": 823830757
+      },
+      {
+        "ms": 1243.5,
+        "depth": 70,
+        "sideDepth": 70,
+        "waterHeight": 134.39999999999998,
+        "pixelHash": 4229014159
+      },
+      {
+        "ms": 1347.7000000029802,
+        "depth": 73,
+        "sideDepth": 73,
+        "waterHeight": 140.15999999999997,
+        "pixelHash": 3524581707
+      },
+      {
+        "ms": 1457.5,
+        "depth": 77,
+        "sideDepth": 77,
+        "waterHeight": 147.84000000000003,
+        "pixelHash": 2347167442
+      },
+      {
+        "ms": 1573.2000000029802,
+        "depth": 80,
+        "sideDepth": 80,
+        "waterHeight": 153.60000000000002,
+        "pixelHash": 3075743575
+      },
+      {
+        "ms": 1687.7000000029802,
+        "depth": 84,
+        "sideDepth": 84,
+        "waterHeight": 161.27999999999997,
+        "pixelHash": 2317488740
+      },
+      {
+        "ms": 1797.300000000745,
+        "depth": 87,
+        "sideDepth": 87,
+        "waterHeight": 167.03999999999996,
+        "pixelHash": 2158446247
+      },
+      {
+        "ms": 1909.5,
+        "depth": 90,
+        "sideDepth": 90,
+        "waterHeight": 172.79999999999995,
+        "pixelHash": 880631904
+      },
+      {
+        "ms": 2016.2000000029802,
+        "depth": 93,
+        "sideDepth": 93,
+        "waterHeight": 178.56,
+        "pixelHash": 3012833513
+      },
+      {
+        "ms": 2121.300000000745,
+        "depth": 97,
+        "sideDepth": 97,
+        "waterHeight": 186.24,
+        "pixelHash": 1518427763
+      },
+      {
+        "ms": 2490.5,
+        "depth": 100,
+        "sideDepth": 100,
+        "waterHeight": 192,
+        "pixelHash": 2745033357
+      }
+    ],
+    "label": "partial 40 to 100, preference changes"
+  },
+  {
+    "startDepth": 60,
+    "target": 0,
+    "start": 131931.69999999925,
+    "endpointMs": 2224.199999999255,
+    "frames": [
+      {
+        "ms": 102.30000000074506,
+        "depth": 60,
+        "sideDepth": 60,
+        "waterHeight": 115.19999999999999,
+        "pixelHash": 2205269377
+      },
+      {
+        "ms": 240.30000000074506,
+        "depth": 58,
+        "sideDepth": 58,
+        "waterHeight": 111.36000000000001,
+        "pixelHash": 2220076122
+      },
+      {
+        "ms": 383,
+        "depth": 56,
+        "sideDepth": 56,
+        "waterHeight": 107.51999999999998,
+        "pixelHash": 1811615341
+      },
+      {
+        "ms": 501.5,
+        "depth": 53,
+        "sideDepth": 53,
+        "waterHeight": 101.75999999999999,
+        "pixelHash": 3171636384
+      },
+      {
+        "ms": 604.1000000014901,
+        "depth": 49,
+        "sideDepth": 49,
+        "waterHeight": 94.07999999999998,
+        "pixelHash": 78970331
+      },
+      {
+        "ms": 744.8000000007451,
+        "depth": 45,
+        "sideDepth": 45,
+        "waterHeight": 86.39999999999998,
+        "pixelHash": 3659817451
+      },
+      {
+        "ms": 875.3000000007451,
+        "depth": 42,
+        "sideDepth": 42,
+        "waterHeight": 80.63999999999999,
+        "pixelHash": 2592701100
+      },
+      {
+        "ms": 976.6999999992549,
+        "depth": 38,
+        "sideDepth": 38,
+        "waterHeight": 72.95999999999998,
+        "pixelHash": 1462670990
+      },
+      {
+        "ms": 1074,
+        "depth": 34,
+        "sideDepth": 34,
+        "waterHeight": 65.27999999999997,
+        "pixelHash": 1654093307
+      },
+      {
+        "ms": 1181.199999999255,
+        "depth": 31,
+        "sideDepth": 31,
+        "waterHeight": 59.51999999999998,
+        "pixelHash": 3710880059
+      },
+      {
+        "ms": 1280.4000000022352,
+        "depth": 28,
+        "sideDepth": 28,
+        "waterHeight": 53.75999999999999,
+        "pixelHash": 4138428399
+      },
+      {
+        "ms": 1380,
+        "depth": 25,
+        "sideDepth": 25,
+        "waterHeight": 48,
+        "pixelHash": 4138428399
+      },
+      {
+        "ms": 1476.300000000745,
+        "depth": 22,
+        "sideDepth": 22,
+        "waterHeight": 42.24000000000001,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 1572.199999999255,
+        "depth": 19,
+        "sideDepth": 19,
+        "waterHeight": 36.48000000000002,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 1673.6000000014901,
+        "depth": 16,
+        "sideDepth": 16,
+        "waterHeight": 30.720000000000027,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 1773.5,
+        "depth": 13,
+        "sideDepth": 13,
+        "waterHeight": 24.95999999999998,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 1882.4000000022352,
+        "depth": 10,
+        "sideDepth": 10,
+        "waterHeight": 19.19999999999999,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 1994.699999999255,
+        "depth": 7,
+        "sideDepth": 7,
+        "waterHeight": 13.439999999999998,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 2088.10000000149,
+        "depth": 4,
+        "sideDepth": 4,
+        "waterHeight": 7.680000000000007,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 2219.400000002235,
+        "depth": 1,
+        "sideDepth": 1,
+        "waterHeight": 1.920000000000016,
+        "pixelHash": 2278049037
+      },
+      {
+        "ms": 2536.10000000149,
+        "depth": 0,
+        "sideDepth": 0,
+        "waterHeight": 0,
+        "pixelHash": 4274347391
+      }
+    ],
+    "label": "partial 60 to 0, preference changes"
+  }
+]

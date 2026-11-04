@@ -47,6 +47,38 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   const data=await page.locator('#depth-observer').evaluate(c=>c.toDataURL('image/png'));
   await fs.writeFile(path.join(capture,name),Buffer.from(data.split(',')[1],'base64'));
  };
+ const waterTimings=[];
+ const observeWater=async(p,button,target,{tap=false,during,label}={})=>{
+  await p.locator(button).scrollIntoViewIfNeeded();
+  await p.evaluate(({button,target})=>{
+   const root=document.querySelector('#depth-lab'),canvas=document.querySelector('#depth-observer'),clip=document.querySelector('#depth-water-clip rect');
+   const log={startDepth:+document.querySelector('#depth-input').value,target,start:null,endpointMs:null,frames:[]};
+   const onCanvas=()=>{
+    if(log.start===null)return;
+    const depth=+canvas.dataset.depth;if(log.frames.at(-1)?.depth===depth)return;
+    const pixels=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
+    let hash=2166136261;for(let i=0;i<pixels.length;i+=4096)hash=Math.imul(hash^pixels[i],16777619)>>>0;
+    log.frames.push({ms:performance.now()-log.start,depth,sideDepth:+root.dataset.depth,waterHeight:+clip.getAttribute('height'),pixelHash:hash});
+   };
+   const onRoot=()=>{if(log.start!==null&&log.endpointMs===null&&+root.dataset.depth===target)log.endpointMs=performance.now()-log.start;};
+   const rendered=new MutationObserver(onCanvas);rendered.observe(canvas,{attributes:true,attributeFilter:['data-depth']});
+   const levels=new MutationObserver(onRoot);levels.observe(root,{attributes:true,attributeFilter:['data-depth']});
+   document.querySelector(button).addEventListener('click',()=>{log.start=performance.now();},{once:true,capture:true});
+   window.__depthWaterTiming={finish:()=>{rendered.disconnect();levels.disconnect();return log;}};
+  },{button,target});
+  await p.locator(button)[tap?'tap':'click']();
+  if(during)await during();
+  await p.waitForFunction(target=>document.querySelector('#depth-lab').dataset.state==='ready'&&document.querySelector('#depth-observer').dataset.depth===String(target),target);
+  const log=await p.evaluate(()=>window.__depthWaterTiming.finish());log.label=label;
+  const direction=Math.sign(target-log.startDepth),middle=log.frames.filter(x=>x.depth!==log.startDepth&&x.depth!==target);
+  assert.ok(log.endpointMs>=1800&&log.endpointMs<=3200,`${label}: endpoint took ${log.endpointMs}ms`);
+  assert.ok(middle.length>=4,`${label}: missing gradual rendered levels`);
+  assert.ok(middle.every(x=>x.depth===x.sideDepth),`${label}: side and eye views disagree`);
+  for(let i=1;i<log.frames.length;i++)assert.ok((log.frames[i].depth-log.frames[i-1].depth)*direction>0,`${label}: water reverses or jumps back`);
+  assert.ok(new Set(middle.map(x=>x.waterHeight)).size>=4,`${label}: side water did not move`);
+  if(Math.abs(target-log.startDepth)===100)assert.ok(new Set(middle.map(x=>x.pixelHash)).size>=2,`${label}: rendered water did not change`);
+  waterTimings.push(log);return log;
+ };
  const results=[];
  await t.test('the default is dry and physically occluded, with readable teaching and no automatic motion',async()=>{
   assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'ready');
@@ -106,22 +138,37 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
  });
  await t.test('same-direction presses continue, opposite presses reverse and direct manipulation takes over',async()=>{
   await set(0,250);await page.locator('#show-rays').uncheck();
-  await page.locator('#depth-fill').click();
-  await page.waitForFunction(()=>+document.querySelector('#depth-input').value>=25);
-  const beforeRepeat=+await page.locator('#depth-input').inputValue();await page.locator('#depth-fill').click();
-  assert.ok(+await page.locator('#depth-input').inputValue()>=beforeRepeat,'repeated fill does not restart');
-  assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'250');assert.equal(await page.locator('#show-rays').isChecked(),false);
-  await page.waitForFunction(()=>+document.querySelector('#depth-input').value>=40&&document.querySelector('#depth-lab').dataset.state==='filling');
-  const before=await page.evaluate(()=>{const depth=+document.querySelector('#depth-input').value;document.querySelector('#depth-drain').click();return depth;});
-  assert.equal(await page.locator('#depth-input').inputValue(),String(before));assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'draining');
-  await page.waitForFunction(()=>document.querySelector('#depth-lab').dataset.state==='ready'&&document.querySelector('#depth-observer').dataset.depth==='0');
-  assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'250');assert.equal(await page.locator('#show-rays').isChecked(),false);
-  await set(50,250);await page.locator('#depth-drain').click();await page.waitForTimeout(150);
-  const handle=await page.locator('#depth-input').evaluate(e=>{const b=e.getBoundingClientRect();return{x:b.x+b.width/2,y:b.y+22+(b.height-44)*(1-Number(e.value)/100)};});
-  await page.mouse.move(handle.x,handle.y);await page.mouse.down();
-  assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'ready');const frozen=await page.locator('#depth-input').inputValue();
-  await page.waitForTimeout(180);assert.equal(await page.locator('#depth-input').inputValue(),frozen);await page.mouse.up();
-  await page.locator('#show-rays').check();await set(0,300);
+  try{
+   // Observe the actual middle levels inside the browser: serial automation
+   // commands must not consume the short two-second interaction window.
+   await page.evaluate(()=>{
+    const root=document.querySelector('#depth-lab'),input=document.querySelector('#depth-input'),fill=document.querySelector('#depth-fill'),drain=document.querySelector('#depth-drain');
+    const report={repeat:null,reverse:null};window.__depthRepeatReverseReport=report;
+    const observer=new MutationObserver(()=>{
+     const depth=+input.value;if(root.dataset.state!=='filling'||depth>=100)return;
+     if(!report.repeat&&depth>=25){
+      report.repeat={before:depth};fill.click();report.repeat.after=+input.value;
+     }
+     if(report.repeat&&!report.reverse&&depth>=45){
+      report.reverse={before:+input.value};drain.click();report.reverse.after=+input.value;report.reverse.state=root.dataset.state;observer.disconnect();
+     }
+    });observer.observe(root,{attributes:true,attributeFilter:['data-depth']});
+   });
+   await page.locator('#depth-fill').click();
+   await page.waitForFunction(()=>window.__depthRepeatReverseReport?.reverse&&document.querySelector('#depth-lab').dataset.state==='ready'&&document.querySelector('#depth-observer').dataset.depth==='0');
+   const report=await page.evaluate(()=>window.__depthRepeatReverseReport);
+   assert.ok(report.repeat.before>=25&&report.repeat.before<100);assert.equal(report.repeat.after,report.repeat.before,'repeat does not jump back');
+   assert.ok(report.reverse.before>=45&&report.reverse.before<100);assert.equal(report.reverse.after,report.reverse.before,'reversal starts at the current level');assert.equal(report.reverse.state,'draining');
+   assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'250');assert.equal(await page.locator('#show-rays').isChecked(),false);
+   await set(50,250);await page.locator('#depth-drain').click();
+   await page.waitForFunction(()=>+document.querySelector('#depth-input').value<50&&+document.querySelector('#depth-input').value>0&&document.querySelector('#depth-lab').dataset.state==='draining');
+   const takeover=await page.locator('#depth-input').evaluate(input=>{
+    const before=+input.value;input.dispatchEvent(new PointerEvent('pointerdown',{button:0,pointerId:1,bubbles:true}));return{before,after:+input.value,state:document.querySelector('#depth-lab').dataset.state};
+   });
+   assert.ok(takeover.before>0&&takeover.before<50);assert.equal(takeover.after,takeover.before);assert.equal(takeover.state,'ready');
+   await page.waitForTimeout(180);assert.equal(+await page.locator('#depth-input').inputValue(),takeover.after);
+   assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'250');assert.equal(await page.locator('#show-rays').isChecked(),false);
+  }finally{await page.locator('#show-rays').check();await set(0,300);}
  });
  await t.test('water can be dragged vertically by its handle or surface, with keyboard access and no initial jump',async()=>{
   await set(0,300);const input=page.locator('#depth-input');await input.scrollIntoViewIfNeeded();let b=await input.boundingBox();
@@ -288,8 +335,8 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:wx,y:wb.y+22}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
   assert.equal(await water.inputValue(),'100');assert.ok(Math.abs(await p.evaluate(()=>scrollY)-scroll)<3);
   await p.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='100');
-  await p.locator('#depth-drain').tap();await p.waitForFunction(()=>document.querySelector('#depth-lab').dataset.state==='ready'&&document.querySelector('#depth-observer').dataset.depth==='0');
-  await p.locator('#depth-fill').tap();await p.waitForFunction(()=>document.querySelector('#depth-lab').dataset.state==='ready'&&document.querySelector('#depth-observer').dataset.depth==='100');
+  await observeWater(p,'#depth-drain',0,{tap:true,label:'mobile drain'});
+  await observeWater(p,'#depth-fill',100,{tap:true,label:'mobile fill'});
   const view=p.locator('#depth-observer');await view.scrollIntoViewIfNeeded();const vb=await view.boundingBox(),sx=vb.x+vb.width/2,sy=vb.y+vb.height*.7;
   const before=await p.evaluate(()=>scrollY);
   await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:sx,y:sy}]});
@@ -297,16 +344,22 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   assert.ok(await p.evaluate(()=>scrollY)>before+20,'page still scrolls outside the handles');
   await context.close();
  });
- await t.test('reduced motion reaches the requested endpoint in either direction',async()=>{
-  await page.emulateMedia({reducedMotion:'reduce'});await set(0,300);
-  await page.locator('#depth-fill').click();await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='100');
-  assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'ready');assert.equal(await page.locator('#depth-scene .extension').count(),2);
-  await page.locator('#depth-drain').click();await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='0');
-  assert.equal(await page.locator('#depth-drain').isDisabled(),true);
-  for(const [button,start,target] of [['#depth-drain',60,0],['#depth-fill',40,100]]){
-   await page.emulateMedia({reducedMotion:'no-preference'});await set(start,300);await page.locator(button).click();await page.waitForTimeout(150);await page.emulateMedia({reducedMotion:'reduce'});
-   await page.waitForFunction(n=>document.querySelector('#depth-observer').dataset.depth===String(n)&&document.querySelector('#depth-lab').dataset.state==='ready',target);
+ await t.test('filling and draining take two visible seconds under both motion preferences',async()=>{
+  await page.setViewportSize({width:1440,height:900});
+  for(const preference of ['no-preference','reduce']){
+   await page.emulateMedia({reducedMotion:preference});await set(0,300);
+   await observeWater(page,'#depth-fill',100,{label:`${preference} fill`});
+   await observeWater(page,'#depth-drain',0,{label:`${preference} drain`});
   }
+  for(const [button,start,target] of [['#depth-fill',40,100],['#depth-drain',60,0]]){
+   await page.emulateMedia({reducedMotion:'no-preference'});await set(start,300);
+   await observeWater(page,button,target,{label:`partial ${start} to ${target}, preference changes`,during:async()=>{
+    await page.waitForFunction(start=>Math.abs(+document.querySelector('#depth-input').value-start)>=10,start);
+    await page.emulateMedia({reducedMotion:'reduce'});
+    assert.notEqual(await page.locator('#depth-input').inputValue(),String(target),'changing preference must not skip the animation');
+   }});
+  }
+  if(capture)await fs.writeFile(path.join(capture,'water-timing.json'),JSON.stringify(waterTimings,null,2));
  });
  await t.test('texture failure has a usable fallback and retry restores materials without resetting controls',async()=>{
   const p=await browser.newPage();await p.route('**/oblique-entry-water.png',r=>r.abort());await p.goto(base);await p.waitForFunction(()=>document.querySelector('#depth-lab')?.dataset.texture==='fallback');

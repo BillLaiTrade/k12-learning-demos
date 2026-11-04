@@ -1,0 +1,61 @@
+{
+  "baseline": "44220e7534f3e9da8027d63d0ea68acc50f9bdfd",
+  "checks": [
+    {
+      "section": 1,
+      "match": true
+    },
+    {
+      "section": 2,
+      "match": true
+    },
+    {
+      "section": 3,
+      "match": true
+    },
+    {
+      "section": 4,
+      "match": true
+    },
+    {
+      "section": 5,
+      "match": true
+    },
+    {
+      "section": 6,
+      "match": true
+    },
+    {
+      "section": 7,
+      "match": true
+    },
+    {
+      "file": "units/4/parts/4.3/assets/depth-model.mjs",
+      "match": true
+    },
+    {
+      "file": "units/4/parts/4.3/assets/depth-observer.mjs",
+      "match": true
+    },
+    {
+      "file": "units/4/parts/4.3/assets/depth-eye-art.mjs",
+      "match": true
+    },
+    {
+      "file": "units/4/parts/4.3/assets/oblique-entry-water.png",
+      "match": true
+    },
+    {
+      "file": "units/4/parts/4.3/assets/lesson.mjs",
+      "match": true
+    },
+    {
+      "file": "units/4/parts/4.3/assets/optics.mjs",
+      "match": true
+    },
+    {
+      "file": "units/4/parts/4.3/assets/depth-lab.css",
+      "match": true
+    }
+  ]
+}

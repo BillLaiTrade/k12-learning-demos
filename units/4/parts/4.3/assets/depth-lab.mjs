@@ -15,9 +15,10 @@ if (root) {
   let drawFrame = 0, animation = 0, playing = false, lastTime = 0, inView = false;
   let eyeX = DEPTH_INITIAL.eyeX;
   let waterElapsed = 0, waterStart = 0, waterTarget = 0;
-  const waterMillisecondsPerUnit = 50;
+  // Water-level change is the lesson: keep it gradual under either motion
+  // preference. Decorative transitions still respect reduced motion in CSS.
+  const waterDurationMs = 2000;
   let observerResult = null;
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
   svg.innerHTML = `<defs>
     <filter id="depth-eye-cue-glow" x="-40%" y="-70%" width="180%" height="240%"><feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#dfbd70" flood-opacity=".65"/></filter>
@@ -204,7 +205,7 @@ if (root) {
     animation=0;
     if(!playing||!inView||document.hidden)return;
     const dt=lastTime?time-lastTime:0;lastTime=time;waterElapsed+=dt;
-    const duration=Math.abs(waterTarget-waterStart)*waterMillisecondsPerUnit;
+    const duration=waterDurationMs;
     const depth=Math.round(waterStart+(waterTarget-waterStart)*Math.min(1,waterElapsed/duration));
     if(depth!==geometry.depth){q('#depth-input').value=depth;syncGeometry();}
     if(waterElapsed<duration)animation=requestAnimationFrame(tick);
@@ -218,7 +219,6 @@ if (root) {
     if(target===geometry.depth||(playing&&target===waterTarget))return;
     finishAnimation();
     waterStart=geometry.depth;waterTarget=target;waterElapsed=0;
-    if(reduced.matches){q('#depth-input').value=target;syncGeometry();return;}
     syncGeometry();playing=true;root.dataset.state=direction>0?'filling':'draining';
     if(inView&&!document.hidden)animation=requestAnimationFrame(tick);
   }
@@ -249,7 +249,6 @@ if (root) {
   const resume=()=>{stopAnimation();if(playing&&inView&&!document.hidden){root.dataset.state=waterTarget>waterStart?'filling':'draining';animation=requestAnimationFrame(tick);}else if(playing)root.dataset.state='paused';};
   new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;resume();},{threshold:.05}).observe(root);
   document.addEventListener('visibilitychange',resume);
-  reduced.addEventListener('change',()=>{if(reduced.matches&&playing){q('#depth-input').value=waterTarget;finishAnimation();syncGeometry();}});
   new ResizeObserver(()=>{drawSide();scheduleObserver();}).observe(canvas);
   function loadPhoto() {
     const photo=new Image();photo.decoding='async';
