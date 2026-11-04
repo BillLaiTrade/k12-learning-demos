@@ -30,7 +30,7 @@ function sprite(key,x,y,w,h) {
 }
 export function createSetupScene(view,panels) {
   const main=view.querySelector('.oxygen-main-scene'),zoom=view.querySelector('.oxygen-mobile-zoom svg');
-  view.closest('.oxygen-preparation').querySelectorAll('[data-static-thistle],[data-static-material]').forEach(n=>n.remove());
+  view.closest('.oxygen-preparation').querySelectorAll('[data-static-thistle]').forEach(n=>n.remove());
   // Clip definitions must remain outside hidden step panels. Chromium drops
   // clips referenced by another SVG when their defining panel is display:none.
   const art=svg('g',{id:'oxygen-setup-art'}),defs=view.closest('.oxygen-preparation').querySelector('.oxygen-paint-resources defs');defs.append(art);
@@ -134,16 +134,7 @@ export function createSetupScene(view,panels) {
   }
   const worldClip=svg('clipPath',{id:'shared-jar-world'});
   worldClip.append(svg('path',{d:clip.firstChild.getAttribute('d'),transform:'translate(1035 465) rotate(180) translate(-111.5 -215)'}));defs.append(worldClip);
-  // Keep the material labels and hit areas, but render their desk with this same
-  // scene too. The original photo remains the no-JavaScript fallback.
-  const photo=panels[0].querySelector('.oxygen-materials-photo'),materialView=svg('svg',{viewBox:'0 0 1536 900','aria-hidden':'true','data-shared-materials':''});
-  materialView.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none';
-  materialView.append(svg('use',{href:'#oxygen-setup-art'}));photo.insertBefore(materialView,photo.querySelector('button'));photo.querySelector('img').style.opacity='0';
-  // The original photo's hit areas use an 850px crop. Keep them attached to
-  // their objects when the shared frame reveals the complete 900px tabletop.
-  photo.querySelectorAll('[data-material]').forEach(button=>{
-    for(const key of['--hit-y','--hit-h'])button.style.setProperty(key,`${parseFloat(button.style.getPropertyValue(key))*850/900}%`);
-  });
+  // Material identification has a separate, spacious desk; operation geometry stays shared.
   let activeView=view,operationStage=1;
   let tubePath='';
   function positionPipe(capX,capY,tipX,progress=1,layout=1,seal=0,tipY=665){

@@ -5,7 +5,7 @@ import {surfaceObservation} from '../units/4/parts/4.5/assets/surface-model.mjs'
 test('照明缺少的色光不出現在入射、反射、吸收或文字描述中',()=>{
  for(const [light,index,name] of [['red',0,'紅光'],['green',1,'綠光'],['blue',2,'藍光']]){
   for(const material of ['red','green','blue','white','black']){
-   const o=surfaceObservation(light,material);assert.equal(o.incoming,name);assert.ok(o.reflected.includes(name));assert.ok(o.absorbed.includes(name));
+   const o=surfaceObservation(light,material);assert.equal(o.incoming,name);assert.match(o.result,/進入眼睛/);assert.ok(o.reflected.includes(name));assert.ok(o.absorbed.includes(name));
    for(let i=0;i<3;i++){if(i!==index){assert.equal(o.signal.incoming[i],0);assert.equal(o.signal.outgoing[i],0);assert.equal(o.signal.absorbed[i],0);}assert.ok(Math.abs(o.signal.outgoing[i]+o.signal.absorbed[i]-o.signal.incoming[i])<1e-12);}
   }
  }

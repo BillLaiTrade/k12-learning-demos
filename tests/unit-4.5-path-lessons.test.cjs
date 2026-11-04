@@ -1,7 +1,7 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),http=require('node:http'),path=require('node:path'),fs=require('node:fs/promises');
 const {chromium}=require('playwright');
 const {PNG}=require('pngjs');
-test('4.5 第五六區：三組獨立色光條件、入眼遮擋與集中操作',{timeout:240000},async t=>{
+test('4.5 第四五區入眼整合：三組獨立色光條件與集中操作',{timeout:240000},async t=>{
  let base=process.env.COLOR_URL;
  if(!base){const root=path.resolve(__dirname,'..'),server=http.createServer(async(req,res)=>{try{let file=path.join(root,decodeURI(req.url.split('?')[0]));if((await fs.stat(file)).isDirectory())file+='/index.html';res.setHeader('Content-Type',({'.mjs':'text/javascript','.js':'text/javascript','.css':'text/css','.png':'image/png'})[path.extname(file)]||'text/html');res.end(await fs.readFile(file));}catch{res.statusCode=404;res.end('missing')}});await new Promise(r=>server.listen(0,'127.0.0.1',r));t.after(()=>server.close());base=`http://127.0.0.1:${server.address().port}/units/4/parts/4.5/`;}
  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',args:['--no-sandbox','--use-angle=swiftshader','--enable-unsafe-swiftshader'],...(process.env.COLOR_URL?{proxy:{server:process.env.HTTPS_PROXY||process.env.HTTP_PROXY}}:{})});t.after(()=>browser.close());
@@ -33,7 +33,7 @@ test('4.5 第五六區：三組獨立色光條件、入眼遮擋與集中操作'
      assert.deepEqual(pixel,signal.outgoing.map(v=>Math.round(255*(v*.28<=.0031308?v*.28*12.92:1.055*(v*.28)**(1/2.4)-.055))));
      const a=await audit('filter');assert.equal(a.paper.type,'MeshStandardMaterial');assert.equal(a.paper.roughness,1);assert.equal(a.paper.metalness,0);assert.deepEqual(a.paper.emissive,[0,0,0]);assert.deepEqual(a.paper.colour,MATERIALS[paper].rgb);assert.deepEqual(a.spot[0].colour,signal.transmitted);assert.equal(a.paperIsolated,true);assert.ok(a.paperLights.every(rgb=>rgb.every((v,i)=>v===signal.transmitted[i])));
      assert.deepEqual(await lab(5).locator('select').evaluateAll(es=>es.map(e=>e.value)),[light,filter,paper]);assert.equal(await lab(5).locator('.path-result [data-result]').count(),1);
-     if(paper==='black')assert.match(await lab(5).locator('[data-result]').innerText(),/很暗/);
+     assert.match(await lab(5).locator('[data-result]').innerText(),/進入眼睛/);assert.deepEqual(JSON.parse(await lab(5).getAttribute('data-received')),signal.outgoing);if(paper==='black')assert.match(await lab(5).locator('[data-result]').innerText(),/很暗/);
     }
    }
   }
@@ -47,25 +47,20 @@ test('4.5 第五六區：三組獨立色光條件、入眼遮擋與集中操作'
   await fs.writeFile(path.join(capture,'paper-pixels.json'),JSON.stringify({bright,redPaper,redSource},null,2));await lab(5).locator('[data-filter-setting=light]').selectOption('white');await lab(5).locator('[data-rays]').click();
   await page.locator('#s5').screenshot({path:path.join(capture,'filter-paper-default.png')});
  });
- await t.test('反射與透射：遮板真實截住3D光線，離開物體的光保持、入眼量歸零',async()=>{
-  await show(6);for(const mode of ['reflection','transmission']){
-   await lab(6).locator(`[data-eye-mode=${mode}]`).click();const before=await lab(6).getAttribute('data-outgoing');
-   await lab(6).locator('[data-blocker]').click();assert.equal(await lab(6).getAttribute('data-outgoing'),before);assert.deepEqual(JSON.parse(await lab(6).getAttribute('data-received')),[0,0,0]);
-   const a=await audit('eye');assert.equal(a.blocker,true);const intercepted=a.endsAtBoard.filter(p=>Math.abs(p[2])<.036&&Math.abs(p[0])<.58);assert.equal(intercepted.length,1);assert.ok(Math.abs(Math.abs(intercepted[0][2])-.035)<1e-5,'endpoint lies on board face');
-   const bars=await lab(6).locator('.channel-cell').last().locator('.surface-channel-bar b').evaluateAll(es=>es.map(e=>e.style.width));assert.deepEqual(bars,['0%','0%','0%']);
-   await page.locator('#s6').screenshot({path:path.join(capture,`eye-${mode}-blocked.png`)});
-   await lab(6).locator('[data-blocker]').click();assert.equal(await lab(6).getAttribute('data-received'),before);assert.match(await lab(6).locator('[data-result]').innerText(),/進入眼睛/);
-  }
+ await t.test('第四區20種組合都接續入眼結果，第六區已併入第五區',async()=>{
+  assert.equal(await page.locator('.lesson-card').count(),5);assert.equal(await page.locator('[data-lab=eye],.route a[href="#s6"]').count(),0);assert.equal(await page.locator('#s5 #s6').count(),1);
+  await show(4);for(const light of['white','red','green','blue'])for(const material of['red','green','blue','white','black']){await lab(4).locator('[data-light='+light+']').click();await lab(4).locator('[data-material='+material+']').click();assert.match(await lab(4).locator('[data-result]').innerText(),/進入眼睛/);assert.deepEqual(JSON.parse(await lab(4).getAttribute('data-received')),JSON.parse(await lab(4).getAttribute('data-outgoing')));}
+  for(const i of[4,5])assert.equal(await lab(i).locator('.receiver-heading').innerText(),'眼睛接收的光');
  });
  await t.test('光路開關、旋轉與鍵盤不改接收結果',async()=>{
   await show(5);const select=lab(5).locator('[data-filter-setting=light]'),before=await state(5);await select.focus();await page.keyboard.press('ArrowDown');await page.keyboard.press('Enter');assert.equal((await state(5)).light,'red');assert.equal((await state(5)).filter,before.filter);assert.equal((await state(5)).material,before.material);assert.equal(await select.evaluate(e=>e===document.activeElement),true);await select.selectOption('white');
-  for(const i of [5,6]){await show(i);const before=await lab(i).getAttribute('data-outgoing'),orbit=await lab(i).getAttribute('data-orbit');await lab(i).locator('[data-rays]').click();assert.equal((await state(i)).rays,false);assert.equal((await audit(i===5?'filter':'eye')).rays,false);await lab(i).locator('[data-studio]').focus();await page.keyboard.press('ArrowLeft');await page.waitForFunction(({i,orbit})=>document.querySelector(`#s${i} .lab`).dataset.orbit!==orbit,{i,orbit});await lab(i).locator('[data-view]').click();await lab(i).locator('[data-view]').click();assert.equal(await lab(i).getAttribute('data-outgoing'),before);await lab(i).locator('[data-rays]').click();}
+  for(const i of [5]){await show(i);const before=await lab(i).getAttribute('data-outgoing'),orbit=await lab(i).getAttribute('data-orbit');await lab(i).locator('[data-rays]').click();assert.equal((await state(i)).rays,false);assert.equal((await audit(i===5?'filter':'eye')).rays,false);await lab(i).locator('[data-studio]').focus();await page.keyboard.press('ArrowLeft');await page.waitForFunction(({i,orbit})=>document.querySelector(`#s${i} .lab`).dataset.orbit!==orbit,{i,orbit});await lab(i).locator('[data-view]').click();await lab(i).locator('[data-view]').click();assert.equal(await lab(i).getAttribute('data-outgoing'),before);await lab(i).locator('[data-rays]').click();}
  });
  await t.test('八種視窗的器材、預覽、精簡選單與說明完整，不遮擋或溢出',async()=>{
   const metrics=[],overlap=(a,b)=>Math.min(a.right,b.right)>Math.max(a.x,b.x)+2&&Math.min(a.bottom,b.bottom)>Math.max(a.y,b.y)+2;
   await page.reload();
   for(const [width,height]of [[1440,900],[1366,768],[1024,768],[820,900],[650,900],[390,844],[320,568],[844,390]]){
-   await page.setViewportSize({width,height});for(const i of [5,6]){
+   await page.setViewportSize({width,height});for(const i of [5]){
     await show(i);await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
     const m=await lab(i).evaluate(e=>{const rect=n=>{const r=n.getBoundingClientRect();return{x:r.x,y:r.y,right:r.right,bottom:r.bottom,height:r.height}};return{stage:rect(e.querySelector('.stage')),canvas:rect(e.querySelector('[data-studio]')),preview:rect(e.querySelector('.path-preview')),tools:rect(e.querySelector('.scene-tools')),comparison:rect(e.querySelector('.path-comparison')),buttons:[...e.querySelectorAll('button,select')].map(n=>({text:n.textContent,clipped:n.scrollWidth>n.clientWidth+2,...rect(n)})),overflow:document.documentElement.scrollWidth>innerWidth};});
     assert.equal(m.overflow,false);assert.ok(m.comparison.bottom<=m.stage.y);assert.ok(!overlap(m.preview,m.tools));if(i===5){const controls=await lab(5).locator('.filter-controls').boundingBox(),selects=await lab(5).locator('select').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width};}));assert.equal(selects.length,3);assert.ok(controls.height<=110);assert.ok(selects.every(s=>Math.abs(s.y-selects[0].y)<1&&s.width>=60));assert.ok(selects[0].x<selects[1].x&&selects[1].x<selects[2].x);}
@@ -75,13 +70,14 @@ test('4.5 第五六區：三組獨立色光條件、入眼遮擋與集中操作'
    }
   }await fs.writeFile(path.join(capture,'layout.json'),JSON.stringify(metrics,null,2));
  });
- await t.test('手機選單與原生拖曳、WebGL備援兩種入眼光路及取消',async()=>{
+ await t.test('手機選單與原生拖曳取消、第四五區平面備援入眼結果',async()=>{
   const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'});try{
    await mobile.route('**/4.5/assets/{prism-studio,torch-studio}.mjs*',r=>r.abort());const p=await mobile.newPage();p.on('pageerror',e=>errors.push(e.message));await p.goto(base+'#s5');const l=p.locator('#s5 .lab');await l.scrollIntoViewIfNeeded();await p.waitForFunction(()=>document.querySelector('#s5 .lab').dataset.renderer==='three');
    await l.locator('[data-filter-setting=filter]').selectOption('green');await l.locator('[data-filter-setting=light]').selectOption('red');assert.match(await l.locator('[data-result]').innerText(),/很暗/);
    const canvas=l.locator('[data-studio]');await canvas.scrollIntoViewIfNeeded();const r=await canvas.boundingBox(),orbit=await l.getAttribute('data-orbit'),session=await mobile.newCDPSession(p);await session.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:r.x+r.width*.35,y:r.y+r.height*.65}]});await session.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:r.x+r.width*.65,y:r.y+r.height*.65}]});await session.send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});await p.waitForFunction(old=>document.querySelector('#s5 .lab').dataset.orbit!==old,orbit);assert.ok(Math.abs(JSON.parse(await l.getAttribute('data-outgoing'))[0]-.0072)<1e-12);
-   await mobile.route('**/4.5/assets/studio.mjs*',r=>r.abort());await p.reload();const eye=p.locator('#s6 .lab');await eye.scrollIntoViewIfNeeded();await p.waitForSelector('#s6 .is-fallback');
-   for(const mode of ['reflection','transmission']){await eye.locator(`[data-eye-mode=${mode}]`).tap();await eye.locator('[data-blocker]').tap();assert.deepEqual(JSON.parse(await eye.getAttribute('data-received')),[0,0,0]);const svg=await eye.locator('[data-diagram]').innerHTML();assert.match(svg,/眼睛/);assert.ok(!svg.includes('觀察位置'));if(mode==='transmission')assert.match(svg,/fill="#37ac76"/,'green filter keeps its material colour even when the eye path is blocked');await p.locator('#s6').screenshot({path:path.join(capture,`fallback-${mode}.png`)});await eye.locator('[data-blocker]').tap();assert.ok(JSON.parse(await eye.getAttribute('data-received'))[1]>.8);}
+   await mobile.route('**/4.5/assets/studio.mjs*',r=>r.abort());await p.reload();const filter=p.locator('#s5 .lab');await filter.scrollIntoViewIfNeeded();await p.waitForSelector('#s5 .is-fallback');await filter.locator('[data-filter-setting=filter]').selectOption('green');await filter.locator('[data-filter-setting=material]').selectOption('red');assert.match(await filter.locator('[data-result]').innerText(),/進入眼睛/);assert.match(await filter.locator('[data-result]').innerText(),/很暗/);
+   const surface=p.locator('#s4 .lab');await surface.scrollIntoViewIfNeeded();await p.waitForSelector('#s4 .is-fallback');await surface.locator('[data-light=green]').tap();await surface.locator('[data-material=white]').tap();assert.match(await surface.locator('[data-result]').innerText(),/進入眼睛/);assert.equal(await surface.locator('.receiver-heading').innerText(),'眼睛接收的光');assert.equal(await p.locator('[data-lab=eye]').count(),0);await p.goto(base+'#s6');assert.equal(await p.locator('#s6').evaluate(e=>e.closest('.lesson-card').id),'s5');
+
   }finally{await mobile.close();}assert.deepEqual(errors,[]);
  });
 });

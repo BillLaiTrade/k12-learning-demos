@@ -17,10 +17,10 @@ export function surfaceObservation(light,material){
   absorbed=`${1-ratio>=.5?'大部分':1-ratio>=.045?'少量':'極少量'}${lightName}被吸收`;
  }
  let result;
- if(dark)result=`${materialName}在${lightName}下看起來很暗；它對這次照來的光反射很少，大部分被吸收。`;
- else if(light!=='white')result=`${materialName}在${lightName}下看起來是${appearance}，因為照過來的${lightName}大部分被反射。`;
- else if(white)result='白色色卡反射較多種類的可見光，因此在白光下看起來接近白色。';
- else result=`白光照到${materialName}，主要反射${channelsText(signal.outgoing)}光；其他色光較多被吸收。`;
+ if(dark)result=`${materialName}在${lightName}下看起來很暗；它對這次照來的光反射很少，大部分被吸收，進入眼睛的光也很少。`;
+ else if(light!=='white')result=`${materialName}在${lightName}下看起來是${appearance}，因為照過來的${lightName}大部分被反射，部分反射光進入眼睛。`;
+ else if(white)result='白色色卡反射較多種類的可見光進入眼睛，因此在白光下看起來接近白色。';
+ else result=`白光照到${materialName}，主要反射${channelsText(signal.outgoing)}光進入眼睛；其他色光較多被吸收。`;
  return {signal,appearance,incoming:light==='white'?'紅、綠、藍':lightName,reflected,absorbed,result,
   name:`${materialName}在${lightName}下`,preview:dark?'看起來很暗':`看起來是${appearance}`};
 }

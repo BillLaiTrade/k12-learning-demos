@@ -128,7 +128,15 @@
 .oxygen-main-scene>use,.oxygen-mobile-zoom svg>use{pointer-events:none}
 .oxygen-main-scene,.oxygen-mobile-zoom svg{pointer-events:auto;user-select:none;-webkit-user-select:none}
 
-/* 清水與藥匙直接擺在同一張材料桌，名稱與介紹入口沿用其他材料。 */
-#s3 .oxygen-materials-photo>img.oxygen-material-object{position:absolute;inset:auto;left:var(--object-x);top:var(--object-y);width:var(--object-w);height:auto;z-index:1;pointer-events:none}
-#s3 .oxygen-materials-photo>.oxygen-material-hit{z-index:2}
-#s3 .oxygen-materials-photo>.oxygen-material-hit[data-material=plate]{z-index:3}
+/* 三排材料共用一張桌面；辨識器材時不把名稱壓在物品上。 */
+#s3 .oxygen-materials-photo{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 22px;padding:22px 22px 28px;aspect-ratio:auto;background:url("oxygen-setup-table.png") center top/cover}
+#s3 .oxygen-materials-photo>.oxygen-material-hit{position:relative;inset:auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:10px;width:100%;height:auto;min-width:0;min-height:44px;padding:4px 0;clip-path:none;z-index:auto}
+#s3 .oxygen-material-hit[data-material=tank],#s3 .oxygen-material-hit[data-material=tube]{grid-column:span 2}
+#s3 .oxygen-materials-photo .oxygen-material-illustration{display:block;width:100%;height:150px;object-fit:contain;pointer-events:none}
+#s3 .oxygen-materials-photo .oxygen-material-label{position:static;transform:none;flex:none;font-size:.85rem;line-height:1.55;padding:3px 5px}
+@container(max-width:510px){
+ #s3 .oxygen-materials-photo{gap:18px 8px;padding:14px 8px 18px}
+ #s3 .oxygen-materials-photo>.oxygen-material-hit{gap:8px}
+ #s3 .oxygen-materials-photo .oxygen-material-illustration{height:92px}
+ #s3 .oxygen-materials-photo .oxygen-material-label{font-size:.65rem;padding:3px 4px}
+}
