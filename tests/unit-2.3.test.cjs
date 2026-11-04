@@ -66,26 +66,26 @@ test('2.3: complete learning page preserves cup dragging, water retention and re
     assert.equal(await page.locator('script[src*="air.js"]').count(), 0);
   });
 
-  await t.test('upright water entry is visible without inventing extra water or wetting the paper', async () => {
+  await t.test('main cup water stays at physical scale without a magnified panel or minimum water band', async () => {
     await page.locator('#cup-reset').click();
     assert.equal(await page.locator('#cup-scene .cup-entry-detail').count(), 0);
     await dragCupVertically(13);
-    const scene = page.locator('#cup-scene'), detail = scene.locator('.cup-entry-detail');
+    const scene = page.locator('#cup-scene');
     const depth = Number(await scene.getAttribute('data-depth')), level = Number(await scene.getAttribute('data-water'));
-    const entry = Number(await detail.getAttribute('data-entry-depth'));
+    const entry = depth - level;
     assert.ok(entry > .05 && entry < .2);
-    assert.ok(Math.abs(entry - (depth - level)) < 1e-8);
+    const clipY = Number(await scene.locator('#watercut-cup-main>rect').getAttribute('y'));
+    assert.ok(Math.abs(clipY - (210 + level * 24)) < 1e-8);
+    assert.ok(Math.abs((210 + depth * 24 - clipY) - entry * 24) < 1e-8);
+    assert.ok(210 + depth * 24 - clipY < 4, 'shallow immersion has no exaggerated minimum thickness');
+    assert.equal(await page.locator('#s1 .cup-entry-detail, #s1 .cup-mouth-ingress').count(), 0);
     assert.equal(await scene.getAttribute('data-wet'), 'false');
     assert.equal(await scene.getAttribute('data-escaped'), '0');
     assert.equal(await scene.locator('.cup-bubble').count(), 0);
-    const pixels = await scene.screenshot();
-    await scene.locator('.cup-mouth-ingress').evaluate(n => n.style.display = 'none');
-    assert.ok(!pixels.equals(await scene.screenshot()), 'main scene must visibly show the water layer');
-    await scene.locator('.cup-mouth-ingress').evaluate(n => n.style.display = '');
     await scene.screenshot({path:path.join(artifacts,'upright-small-entry.png')});
     await rotateRim(125);
     assert.equal(await scene.getAttribute('data-wet'), 'true');
-    assert.equal(await detail.count(), 0);
+    assert.equal(await scene.locator('.cup-entry-detail').count(), 0);
     await page.locator('#cup-reset').click();
   });
 

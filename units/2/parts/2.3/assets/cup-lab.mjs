@@ -1,5 +1,5 @@
 import { CUP, freshCup, moveCup, advanceCup, cupGeometry } from './cup-lab-model.mjs?v=reaudit-20261103-2';
-import { cupSVG, cupEntryDetail } from './cup-lab-view.mjs?v=real-water-entry-20261104';
+import { cupSVG } from './cup-lab-view.mjs?v=main-scale-water-20261104';
 const $ = s => document.querySelector(s);
 const scene = $('#cup-scene'), reduced = matchMedia('(prefers-reduced-motion: reduce)');
 let cup = freshCup(), before = null, after = null, preview = null, bubbles = [], recordBubbles = [], previewBubbles = [], drag = null;
@@ -48,7 +48,7 @@ function render() {
   const state = displayed(), g = geometry(state);
   if (!drag && !preview && geometry().submerged && geometry().paperBelowOutside) rotationUnlocked = true;
   const canRotate = rotationUnlocked;
-  scene.innerHTML = cupSVG(state, { id: 'cup-main', bubbles: preview ? previewBubbles : bubbles }) + cupEntryDetail(state);
+  scene.innerHTML = cupSVG(state, { id: 'cup-main', bubbles: preview ? previewBubbles : bubbles });
   Object.assign(scene.dataset, { depth: cup.depth, angle: cup.angle, escaped: cup.escaped, wet: cup.wet, preview: preview || '',
     submerged: g.submerged, paperBelow: g.paperBelowOutside, withinTank: g.withinTank, water: g.water,
     paperY: g.paper.y, waterArea: g.waterArea, targetWaterArea: g.equilibriumWaterArea,
@@ -62,7 +62,7 @@ function render() {
   $('#cup-comparison').hidden = !showComparison;
   $('#cup-conclusion').hidden = !showComparison;
   if (showComparison) {
-    $('#cup-before-scene').innerHTML = cupSVG(before || exampleBefore, { id: 'cup-before', mini: true }) + cupEntryDetail(before || exampleBefore);
+    $('#cup-before-scene').innerHTML = cupSVG(before || exampleBefore, { id: 'cup-before', mini: true });
     $('#cup-after-scene').innerHTML = cupSVG(after || exampleAfter, { id: 'cup-after', mini: true, bubbles: recordBubbles });
     document.querySelectorAll('[data-cup-preview]').forEach(b => b.setAttribute('aria-pressed', String(preview === b.dataset.cupPreview)));
   }

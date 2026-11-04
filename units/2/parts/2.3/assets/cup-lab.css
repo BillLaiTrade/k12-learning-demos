@@ -11,17 +11,3 @@
 .cup-scene .cup-glass{cursor:ns-resize}.cup-scene[data-rotation-unlocked="true"] .cup-rim-handle{cursor:grab}.cup-scene[data-drag-mode="rotate"] .cup-rim-handle{cursor:grabbing}
 
 .cup-scene svg{pointer-events:none}.cup-scene .cup-glass{pointer-events:all}
-
-/* Cup-mouth section: 100 CSS pixels per cm, driven by the same water level. */
-.cup-entry-detail{display:flex;align-items:center;gap:12px;padding:10px 12px;border-top:1px solid #cbdcd2;background:#f8faf4;cursor:default;text-align:left;line-height:1.55;pointer-events:none}
-.cup-entry-slice{position:relative;display:block;flex:0 0 108px;width:108px;height:82px;overflow:hidden;border:1px solid #a8c2c4;border-radius:6px;background:#b4e0e9}
-.cup-entry-air{position:absolute;left:18px;right:0;top:0;height:var(--cup-entry-line);background:#fcfcf1}
-.cup-entry-water{position:absolute;left:18px;right:0;top:var(--cup-entry-line);bottom:0;border-top:2px solid #3c7b90;background:linear-gradient(#c2e9ef,#90c7d6)}
-.cup-entry-wall{position:absolute;left:14px;top:0;height:50px;width:4px;background:#7598a1;box-shadow:inset 1px 0 #fff}
-.cup-entry-mouth{position:absolute;left:22px;right:3px;top:50px;border-top:1px dashed #466b72;padding-top:4px;text-align:right;white-space:nowrap;color:#31545e;font-size:10px}
-.cup-entry-copy{display:block;min-width:0;color:#365c4c;font-size:.79rem}
-.cup-entry-copy b{display:block;margin-bottom:4px;font-size:.82rem}
-.cup-entry-copy>span{display:block}
-.cup-snapshots .cup-entry-detail{padding:8px;gap:9px}
-@media(max-width:600px){.cup-entry-detail{gap:10px;padding:9px}.cup-entry-copy{font-size:.75rem}}
-.cup-entry-air::after{content:"杯內空氣";position:absolute;left:7px;bottom:5px;font-size:11px;color:#526b60;white-space:nowrap}
