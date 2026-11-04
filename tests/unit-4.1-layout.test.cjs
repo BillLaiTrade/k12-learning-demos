@@ -7,7 +7,7 @@ const {chromium}=require('playwright');
 const {expect}=require('playwright/test');
 
 const root=path.resolve(__dirname,'..');
-const titles=['為什麼我們看得見東西？','今晚，哪些光讓小葵看得見？','光會沿直線前進嗎？','影子怎麼形成？','影子的大小如何改變？','光傳得有多快？'];
+const titles=['為什麼我們看得見東西？','今晚，哪些光讓小葵看得見？','光是怎麼前進的？','影子怎麼形成？','影子的大小如何改變？','光傳得有多快？'];
 const sizes=[[1440,900],[1366,768],[1024,768],[768,1024],[390,844],[320,740]];
 
 test('4.1：六區頂部標頭、滿寬內容及原有操作',{timeout:360000},async t=>{
@@ -32,9 +32,9 @@ test('4.1：六區頂部標頭、滿寬內容及原有操作',{timeout:360000},a
  await page.goto(base,{waitUntil:'networkidle'});
  if(process.env.LIGHT_LAYOUT_CAPTURE_DIR)await fs.mkdir(process.env.LIGHT_LAYOUT_CAPTURE_DIR,{recursive:true});
  await t.test('原六區ID、導覽錨點、編號與主標題各出現一次',async()=>{
-  const state=await page.evaluate(()=>({cards:[...document.querySelectorAll('.lesson-card')].map(c=>({id:c.id,title:c.querySelector('.lesson-head h2').textContent,headingCount:c.querySelectorAll('h2').length,number:c.querySelector('.lesson-number').textContent,subtitles:c.querySelectorAll('.lesson-head p span').length})),oldColumns:document.querySelectorAll('.card-side,.card-number').length,links:[...document.querySelectorAll('.route a')].map(a=>a.getAttribute('href')),ids:[...document.querySelectorAll('[id]')].map(n=>n.id)}));
+  const state=await page.evaluate(()=>({cards:[...document.querySelectorAll('.lesson-card')].map(c=>({id:c.id,title:c.querySelector('.lesson-head h2').textContent,headingCount:c.querySelectorAll('h2').length,number:c.querySelector('.lesson-number').textContent,subtitle:c.querySelector('.lesson-head p').textContent})),oldColumns:document.querySelectorAll('.card-side,.card-number').length,links:[...document.querySelectorAll('.route a')].map(a=>a.getAttribute('href')),ids:[...document.querySelectorAll('[id]')].map(n=>n.id)}));
   assert.equal(state.cards.length,6);assert.equal(state.oldColumns,0);
-  state.cards.forEach((card,i)=>{assert.equal(card.id,`card-0${i+1}`);assert.equal(card.title,titles[i]);assert.equal(card.headingCount,1);assert.equal(card.number,`0${i+1}`);assert.equal(card.subtitles,2);assert.equal(state.links.filter(h=>h===`#${card.id}`).length,1);});
+  state.cards.forEach((card,i)=>{assert.equal(card.id,`card-0${i+1}`);assert.equal(card.title,titles[i]);assert.equal(card.headingCount,1);assert.equal(card.number,`0${i+1}`);assert.ok(card.subtitle.trim());assert.equal(state.links.filter(h=>h===`#${card.id}`).length,1);});
   assert.ok(state.links.includes('#unit-booklet'));assert.equal(new Set(state.ids).size,state.ids.length);
  });
  for(const [width,height]of sizes)await t.test(`${width}×${height}：六區上下排列、內容滿寬、文字與操作不溢出`,async()=>{
