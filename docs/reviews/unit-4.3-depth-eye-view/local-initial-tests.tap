@@ -1,0 +1,31 @@
+▶ sixth section teaches apparent depth with synchronized side and rendered observer views
+  ✔ the default is dry and physically occluded, with readable teaching and no automatic motion (751.551322ms)
+  ✔ one press continuously fills or drains to its endpoint with synchronized views (12280.54025ms)
+  ✔ same-direction presses continue, opposite presses reverse and direct manipulation takes over (11176.534824ms)
+  ✔ water can be dragged vertically by its handle or surface, with keyboard access and no initial jump (4803.218578ms)
+  ✔ water and observer changes really repaint the coin, with the physical coin remaining fixed (6900.564638ms)
+  ✔ occlusion changes actual rendered pixels, and adding water at the same viewpoint reveals the coin (2191.786926ms)
+  ✔ hiding the construction preserves the eye view and the physical scene (354.442422ms)
+  ✔ keyboard and pointer change the same viewing position without losing focus (4035.633769ms)
+  ✔ the eye owns the viewing window and its connections follow keyboard movement and focus (1775.248974ms)
+  ✔ desktop and phone keep panels, labels and controls readable without horizontal page scrolling (27941.870853ms)
+  ✔ native mobile touch moves the viewpoint and updates the eye view (14089.556371ms)
+  ✔ reduced motion reaches the requested endpoint in either direction (3226.314458ms)
+  ✔ texture failure has a usable fallback and retry restores materials without resetting controls (4999.9699ms)
+  ✔ reading remains available with JavaScript disabled (694.265861ms)
+✔ sixth section teaches apparent depth with synchronized side and rendered observer views (98505.562699ms)
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (137.010311ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (537.449385ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (9733.826401ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (456.317328ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (13428.737149ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (12201.324684ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 125797.87676
