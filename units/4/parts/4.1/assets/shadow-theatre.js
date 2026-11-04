@@ -500,17 +500,15 @@ if (canvas) {
     syncDepthControls(prop);
     checkPlacement(prop, allowSnap);
   };
-  const moveDepth = (prop, direction) => { if (prop) setDepth(prop, prop.mesh.position.z + direction * 0.16); };
   depthInput.addEventListener('input', () => setDepth(props.get(selectedProp), rulerToDepth(Number(depthInput.value)), false));
   depthInput.addEventListener('change', () => {
     const prop = props.get(selectedProp);
     if (prop && !prop.placed) checkPlacement(prop);
   });
   canvas.addEventListener('wheel', (event) => {
-    const prop = props.get(selectedProp);
-    if (!prop || prop.placed) return;
     event.preventDefault();
-    moveDepth(prop, event.deltaY < 0 ? 1 : -1);
+    radius = THREE.MathUtils.clamp(radius * Math.exp(event.deltaY * 0.001), 6.5, 18);
+    updateCamera();
   }, { passive: false });
 
   const reset = () => {

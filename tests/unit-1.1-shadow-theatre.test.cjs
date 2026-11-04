@@ -53,9 +53,11 @@ test('影子劇場實際操作：學生調大小與位置後才小幅吸附',{ti
  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:root,stdio:['ignore','pipe','pipe']});t.after(()=>server.kill());
  const port=await new Promise((resolve,reject)=>{let text='';const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{text+=d;const m=text.match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});});
  const url=`http://127.0.0.1:${port}/units/4/parts/4.1/#unit-booklet`,errors=[];
- const launch=()=>chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
+ const launch=()=>chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--no-sandbox','--disable-dev-shm-usage','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
  const browser=await launch();t.after(()=>browser.close());
  async function open(context){const p=await context.newPage();p.on('pageerror',e=>errors.push(e.message));p.on('requestfailed',r=>errors.push(r.url()));p.on('response',r=>{if(r.status()>=400)errors.push(r.url());});
+  await p.addInitScript(()=>document.addEventListener('DOMContentLoaded',()=>{const s=document.createElement('style');s.textContent='html{scroll-behavior:auto!important}';document.head.append(s);}));
+  await p.route(/\/assets\/(?:aperture-3d|shadow-3d|shadow-size-3d)\.js(?:\?.*)?$/,route=>route.fulfill({contentType:'text/javascript',body:''}));
   await p.route('**/assets/shadow-theatre.js*',async route=>{const response=await route.fetch(),body=await response.text();assert.ok(body.includes('const checkPlacement = (prop, allowSnap = true) => {'));await route.fulfill({response,body:body.replace('const checkPlacement = (prop, allowSnap = true) => {','window.__theatreTest={props,camera,scene,lightSource,shadowScale,screenZ}; const checkPlacement = (prop, allowSnap = true) => {')});});
   await p.bringToFront();await p.goto(url,{waitUntil:'networkidle'});await p.locator('#shadow-theatre-scene').scrollIntoViewIfNeeded();await p.waitForFunction(()=>!!window.__theatreTest,null,{polling:100,timeout:60000});return p;
  }
@@ -100,11 +102,17 @@ test('影子劇場實際操作：學生調大小與位置後才小幅吸附',{ti
   await expect(finish).toBeEnabled();await finish.click();await expect(finish).toHaveText('演出完成');await expect(finish).toBeDisabled();await p.locator('#shadow-theatre-reset').click();
  });
  async function screenPoint(page,id,dx=0,dy=0){return page.locator('#shadow-theatre-scene').evaluate((el,{id,dx,dy})=>{const a=window.__theatreTest,v=a.props.get(id).mesh.position.clone();v.x+=dx;v.y+=dy;v.project(a.camera);const r=el.getBoundingClientRect();return{x:r.x+(v.x+1)*r.width/2,y:r.y+(1-v.y)*r.height/2};},{id,dx,dy});}
- await t.test('滑鼠拖曳及滾輪只改學生操作的方向，鏡頭轉動不改判定',async()=>{
+ await t.test('滑鼠拖曳保留深度；滾輪只縮放視角，不移動或吸附道具',async()=>{
   const el=p.locator('#shadow-theatre-scene');await el.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await p.waitForTimeout(250);const a=await screenPoint(p,'moon'),b=await screenPoint(p,'moon',.2,.2),before=(await read()).moon;
   await p.mouse.move(a.x,a.y);await p.mouse.down();assert.equal(await el.evaluate(e=>e.hasPointerCapture(1)),true);await p.mouse.move(b.x,b.y,{steps:8});await p.mouse.up();const dragged=(await read()).moon;assert.equal(dragged.z,before.z);assert.ok(!dragged.placed);assert.ok(Math.hypot(dragged.x-before.x,dragged.y-before.y)>.1);
   await p.locator('#shadow-theatre-view').click();assert.deepEqual((await read()).moon,dragged);
-  await select('moon');await el.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));const box=await el.boundingBox();await p.mouse.move(box.x+box.width/2,box.y+box.height/2);await p.mouse.wheel(0,-80);await expect.poll(async()=>(await read()).moon.z).toBe(dragged.z+.16);near((await read()).moon.z,dragged.z+.16);assert.ok(!(await read()).moon.placed);assert.deepEqual(errors,[]);
+  const radius=()=>p.evaluate(()=>{const a=window.__theatreTest,c=document.querySelector('#shadow-theatre-scene'),aspect=c.clientWidth/c.clientHeight,fit=Math.max(1,1.12/Math.max(aspect,.72));return a.camera.position.distanceTo(a.camera.position.clone().set(0,1.48,-.2))/fit;});
+  const wheel=async delta=>{await el.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));const box=await el.boundingBox();await p.mouse.move(box.x+box.width/2,box.y+box.height/2);const before=await radius(),scroll=await p.evaluate(()=>scrollY),state=await read();await p.mouse.wheel(0,delta);await expect.poll(radius).not.toBe(before);assert.deepEqual(await read(),state);assert.ok(Math.abs(await p.evaluate(()=>scrollY)-scroll)<2);return radius();};
+  for(const id of ['moon','rabbit','tree']){await select(id);const before=await radius();assert.ok(await wheel(-80)<before);}
+  await p.locator('[data-prop-select="tree"]').click();assert.equal(await p.locator('[data-prop-select="tree"]').getAttribute('aria-pressed'),'false');const unselectedRadius=await radius();assert.ok(await wheel(80)>unselectedRadius);
+  near(await wheel(-100000),6.5);near(await wheel(100000),18);
+  await p.locator('#shadow-theatre-reset').click();near(await radius(),9.2);
+  await expect(p.locator('#shadow-theatre-view-hint')).toHaveText('滾輪可縮放視角；道具前後位置請用尺軌調整。');assert.deepEqual(errors,[]);
  });
  await t.test('尺軌刻度、端點、讀值及鍵盤方向正確，切換道具不改距離',async()=>{
   await p.locator('#shadow-theatre-reset').click();

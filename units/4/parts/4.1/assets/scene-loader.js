@@ -49,10 +49,12 @@ const scenes = [
     canvas: '#shadow-theatre-scene',
     root: '#unit-booklet',
     notice: '#shadow-theatre-load-failure',
-    load: () => import('./shadow-theatre.js?v=select-focus-20261104'),
+    load: () => import('./shadow-theatre.js?v=wheel-view-zoom-20261104'),
     showUnavailable(root) {
       root.querySelector('#shadow-theatre-status').textContent = '舞台暫時無法操作';
       root.querySelector('#booklet-target-status').textContent = '舞台暫時無法操作';
+      const viewHint = root.querySelector('#shadow-theatre-view-hint');
+      if (viewHint) viewHint.textContent = '立體畫面暫時無法操作，請重新整理頁面後再試。';
       const finishNote = root.querySelector('#shadow-theatre-finish-note');
       finishNote.textContent = failureMessage;
       finishNote.dataset.done = 'false';
