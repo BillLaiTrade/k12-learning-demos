@@ -1,5 +1,6 @@
+import {createLensGeometry} from './lens-geometry.mjs?v=20261104-lens-solid4';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {parallelModel} from './parallel-optics.mjs?v=20261102-split1';
+import {parallelModel} from './parallel-optics.mjs?v=20261104-lens-solid4';
 const root=document.querySelector('[data-convex-lab]');
 if(root) initialise(root);
 
@@ -75,15 +76,11 @@ function initialise(root){
   mount(sourceX-.3,AXIS-.99);const source=box(scene,[.64,1.95,.78],[sourceX-.33,AXIS,0],dark);box(scene,[.025,2.02,.84],[sourceX-.02,AXIS,0],steel);
   for(const r of g.rays)box(scene,[.008,.055,.43],[sourceX-.004,AXIS-r.from[1]*SCALE,0],new THREE.MeshBasicMaterial({color:'#ffe6a0',toneMapped:false}),false);
   for(const y of [AXIS-.87,AXIS+.87])for(const z of [-.33,.33]){const bolt=new THREE.Mesh(new THREE.SphereGeometry(.025,12,8),brass);bolt.position.set(sourceX+.02,y,z);scene.add(bolt);}
-  const centerX=g.thickness*SCALE/2,R=g.halfHeight*SCALE,profile=[];
-  for(let i=0;i<=72;i++){const r=g.halfHeight*i/72;profile.push(new THREE.Vector2(r*SCALE,g.left(r)*SCALE));}
-  for(let i=72;i>=0;i--){const r=g.halfHeight*i/72;profile.push(new THREE.Vector2(r*SCALE,g.right(r)*SCALE));}
-  const lensGeometry=new THREE.LatheGeometry(profile,96),glass=new THREE.MeshPhysicalMaterial({color:'#d8f2ee',metalness:0,roughness:.06,transparent:true,opacity:.6,transmission:.08,ior:g.index,thickness:g.thickness*SCALE,depthWrite:false,side:THREE.DoubleSide});
-  const lens=new THREE.Mesh(lensGeometry,glass);lens.rotation.z=-Math.PI/2;lens.position.y=AXIS;scene.add(lens);
-  for(const edge of ['left','right']){const points=[];for(let i=0;i<=96;i++){const y=-g.halfHeight+2*g.halfHeight*i/96;points.push(world([g[edge](y),y]));}const outline=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:'#def6ee',transparent:true,opacity:.65,depthWrite:false,toneMapped:false}));scene.add(outline);}
-  for(const x of [g.left(g.halfHeight)*SCALE,g.right(g.halfHeight)*SCALE]){const ring=new THREE.Mesh(new THREE.TorusGeometry(R+.045,.035,12,96),steel);ring.rotation.y=Math.PI/2;ring.position.set(x,AXIS,0);ring.castShadow=true;scene.add(ring);}
-  mount(centerX,AXIS-R-.08);box(scene,[.55,.12,.23],[centerX,AXIS-R-.025,0],steel);box(scene,[.58,.12,.23],[centerX,AXIS+R+.045,0],steel);
-  const knob=cylinder(scene,.11,.14,[centerX,AXIS+R+.17,0],steel);for(let i=0;i<12;i++){const a=i*Math.PI/6;box(knob,[.017,.13,.025],[Math.cos(a)*.1,0,Math.sin(a)*.1],dark,false);}
+  const centerX=g.thickness*SCALE/2,R=g.halfHeight*SCALE;
+  const lensGeometry=createLensGeometry(THREE,{radius:R,halfThickness:r=>(g.thickness/2-g.left(r/SCALE))*SCALE}),glass=new THREE.MeshPhysicalMaterial({color:'#c4e6df',metalness:0,roughness:.08,transparent:false,opacity:1,transmission:.65,ior:g.index,thickness:g.thickness*SCALE,clearcoat:1,clearcoatRoughness:.1,depthWrite:true,side:THREE.DoubleSide});
+  const lens=new THREE.Mesh(lensGeometry,glass);lens.position.set(centerX,AXIS,0);scene.add(lens);
+  for(const edge of ['left','right']){const points=[];for(let i=0;i<=96;i++){const y=-g.halfHeight+2*g.halfHeight*i/96;points.push(world([g[edge](y),y]));}const outline=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:'#e3f6e8',transparent:true,opacity:.55,depthWrite:false,depthTest:false,toneMapped:false}));outline.renderOrder=3;scene.add(outline);}
+  mount(centerX,AXIS-R-.08);box(scene,[.4,.11,.28],[centerX,AXIS-R-.065,0],steel);
   const axisGeo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(sourceX-.05,AXIS,0),new THREE.Vector3(g.rays[0].end[0]*SCALE+.35,AXIS,0)]),axis=new THREE.Line(axisGeo,new THREE.LineDashedMaterial({color:'#e9eee2',dashSize:.12,gapSize:.08,transparent:true,opacity:.8}));axis.computeLineDistances();scene.add(axis);
   const rays=new THREE.Group(),arrowMeshes=[];scene.add(rays);
   const direction=new THREE.Vector3(0,1,0);
