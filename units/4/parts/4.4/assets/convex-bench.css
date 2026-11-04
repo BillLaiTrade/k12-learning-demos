@@ -56,3 +56,10 @@
 .convex-bench .convex-ruler[data-guided] { outline:3px solid #d5a63c; outline-offset:1px; }
 
 .convex-bench .imaging-operating { gap:0; }
+
+.magnifier-lab .convex-rulers { grid-template-columns:minmax(0,1fr); }
+.magnifier-further { margin:16px 0 0; padding:10px 12px; border:1px solid #cbd9bf; border-radius:10px; background:#f5f8ef; font-size:.8rem; }
+.magnifier-further summary { cursor:pointer; color:#31543c; font-weight:700; }
+.magnifier-further>p { margin:8px 0; line-height:1.6; }
+.magnifier-further-tools { display:flex; flex-wrap:wrap; gap:7px; margin:8px 0; }
+.magnifier-further-tools button { min-height:36px; padding:6px 10px; font-size:.76rem; }
