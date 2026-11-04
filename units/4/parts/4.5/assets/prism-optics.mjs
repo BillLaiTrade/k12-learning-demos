@@ -1,3 +1,4 @@
+import {toneMapPrism,linearToSrgb} from './prism-display.mjs?v=prism-clarity-20261104';
 import {CIE_D65} from './spectral-data.mjs';
 // All physical coordinates below are millimetres. Scene scale: 100 mm = 1 unit.
 export const SETUP=Object.freeze({side:50,height:40,axisHeight:120,apexDeg:30,referenceNm:587.5618,sourceX:-150,slitX:-80,slitWidth:1,slitHeight:5,screenX:300,screenZ:[-165,25],screenY:[65,175],railOut:90,cropWidth:15,cropHeight:10,exposure:7,ambient:.045});
@@ -29,14 +30,15 @@ const NORM=Array.from({length:401},(_,i)=>{const v=observer(380+i);return v[1]*v
 const RADIANT=Array.from({length:401},(_,i)=>observer(380+i)[3]/NORM).reduce((a,b)=>a+b,0);
 export function spectrum(inserted=true,light='white'){return rays(inserted,light).map(({wavelength})=>{const a=trace(wavelength,{inserted,offset:-SETUP.slitWidth/2}),b=trace(wavelength,{inserted,offset:SETUP.slitWidth/2}),[x,y,z,power]=observer(wavelength);return{wavelength,low:Math.min(a.landing,b.landing),high:Math.max(a.landing,b.landing),xyz:[x,y,z].map(v=>v*(light==='white'?power/NORM:RADIANT)*(a.transmission+b.transmission)/2)};});}
 const xyzToLinear=([x,y,z])=>[3.2406*x-1.5372*y-.4986*z,-.9689*x+1.8758*y+.0415*z,.0557*x-.204*y+1.057*z];
+export function prismRayRgb(wavelength){return toneMapPrism(xyzToLinear(observer(wavelength).slice(0,3).map(v=>v*RADIANT)),SETUP.exposure,0);}
 export function pixelLinear(zLow,zHigh,model){let xyz=[0,0,0];for(const s of model){const overlap=Math.max(0,Math.min(zHigh,s.high)-Math.max(zLow,s.low));if(!overlap)continue;const gain=overlap/(zHigh-zLow)*SETUP.slitWidth/(s.high-s.low);for(let i=0;i<3;i++)xyz[i]+=s.xyz[i]*gain;}return xyzToLinear(xyz);}
 export function measurements(inserted=true,light='white'){const model=spectrum(inserted,light),visible=model.filter(s=>s.wavelength>=400&&s.wavelength<=700),low=Math.min(...model.map(s=>s.low)),high=Math.max(...model.map(s=>s.high)),reference=light==='white'?model:spectrum(inserted),cropCenter=(Math.min(...reference.map(s=>s.low))+Math.max(...reference.map(s=>s.high)))/2;return{low,high,width:high-low,height:SETUP.slitHeight,visibleWidth:Math.max(...visible.map(s=>s.high))-Math.min(...visible.map(s=>s.low)),center:(low+high)/2,incidenceDeg:INCIDENCE*180/Math.PI,deviationDeg:trace(MONOCHROMATIC[light]||SETUP.referenceNm,{inserted}).deviation*180/Math.PI,crop:[cropCenter-SETUP.cropWidth/2,cropCenter+SETUP.cropWidth/2],screenDistance:SETUP.screenX};}
 export function drawProjection(canvas,inserted=true,{whole=false,scales=true,light='white'}={}){
  const model=spectrum(inserted,light),m=measurements(inserted,light),domain=whole?SETUP.screenZ:m.crop,ys=whole?SETUP.screenY:[SETUP.axisHeight-SETUP.cropHeight/2,SETUP.axisHeight+SETUP.cropHeight/2],ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height,pixels=ctx.createImageData(w,h),profile=[];
  for(let x=0;x<w;x++)profile.push(pixelLinear(domain[0]+x/w*(domain[1]-domain[0]),domain[0]+(x+1)/w*(domain[1]-domain[0]),model));
- const srgb=v=>{v=Math.max(0,Math.min(1,v));return v<=.0031308?12.92*v:1.055*v**(1/2.4)-.055;};
+ const srgb=v=>linearToSrgb(Math.max(0,Math.min(1,v)));
  for(let y=0;y<h;y++){const bottom=ys[1]-(y+1)/h*(ys[1]-ys[0]),top=ys[1]-y/h*(ys[1]-ys[0]),heightFraction=Math.max(0,Math.min(top,SETUP.axisHeight+SETUP.slitHeight/2)-Math.max(bottom,SETUP.axisHeight-SETUP.slitHeight/2))/(top-bottom);
-  for(let x=0;x<w;x++){const at=(y*w+x)*4;for(let i=0;i<3;i++)pixels.data[at+i]=Math.round(srgb(SETUP.ambient+SETUP.exposure*profile[x][i]*heightFraction)*255);pixels.data[at+3]=255;}
+  for(let x=0;x<w;x++){const at=(y*w+x)*4,rgb=toneMapPrism(profile[x],SETUP.exposure*heightFraction,SETUP.ambient);for(let i=0;i<3;i++)pixels.data[at+i]=Math.round(srgb(rgb[i])*255);pixels.data[at+3]=255;}
  }ctx.putImageData(pixels,0,0);
  if(scales&&!whole){const pxPerMm=w/(domain[1]-domain[0]),pyPerMm=h/(ys[1]-ys[0]);ctx.strokeStyle='#f2f5ec';ctx.fillStyle='#f2f5ec';ctx.lineWidth=4;const x=20,y=h-24;ctx.beginPath();ctx.moveTo(x,y-5);ctx.lineTo(x,y);ctx.lineTo(x+5*pxPerMm,y);ctx.lineTo(x+5*pxPerMm,y-5);ctx.stroke();ctx.font='30px sans-serif';ctx.fillText('5 mm',x,y-10);canvas.dataset.pixelScale=JSON.stringify([pxPerMm,pyPerMm]);}
  canvas.dataset.physicalDomain=JSON.stringify({z:domain,y:ys});canvas.setAttribute('aria-label',light!=='white'?`白幕正面：${{red:'紅',green:'綠',blue:'藍'}[light]}色狹縫光斑，寬約${m.width.toFixed(2)}毫米、高5毫米，與白光使用同一取景範圍`:inserted?`白幕正面：380至780奈米色光的幾何包絡寬${m.width.toFixed(1)}毫米、高5毫米`:'白幕正面：寬1毫米、高5毫米的白色狹縫光斑');return m;
