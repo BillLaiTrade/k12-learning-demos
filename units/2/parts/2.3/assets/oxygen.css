@@ -129,14 +129,19 @@
 .oxygen-main-scene,.oxygen-mobile-zoom svg{pointer-events:auto;user-select:none;-webkit-user-select:none}
 
 /* 三排材料共用一張桌面；辨識器材時不把名稱壓在物品上。 */
-#s3 .oxygen-materials-photo{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 22px;padding:22px 22px 28px;aspect-ratio:auto;background:url("oxygen-setup-table.png") center top/cover}
-#s3 .oxygen-materials-photo>.oxygen-material-hit{position:relative;inset:auto;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:10px;width:100%;height:auto;min-width:0;min-height:44px;padding:4px 0;clip-path:none;z-index:auto}
+#s3 .oxygen-materials-photo{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));height:clamp(248px,calc(100svh - 330px),360px);gap:12px 18px;padding:14px 18px;aspect-ratio:auto;background:url("oxygen-setup-table.png") center top/cover}
+#s3 .oxygen-materials-photo>.oxygen-material-hit{position:relative;inset:auto;display:grid;grid-template-rows:minmax(0,1fr) auto;justify-items:center;align-items:stretch;gap:6px;width:100%;height:auto;min-width:0;min-height:44px;padding:2px 0;clip-path:none;z-index:auto}
 #s3 .oxygen-material-hit[data-material=tank],#s3 .oxygen-material-hit[data-material=tube]{grid-column:span 2}
-#s3 .oxygen-materials-photo .oxygen-material-illustration{display:block;width:100%;height:150px;object-fit:contain;pointer-events:none}
+#s3 .oxygen-materials-photo .oxygen-material-illustration{display:block;width:100%;height:100%;min-height:0;overflow:hidden;object-fit:contain;pointer-events:none}
 #s3 .oxygen-materials-photo .oxygen-material-label{position:static;transform:none;flex:none;font-size:.85rem;line-height:1.55;padding:3px 5px}
 @container(max-width:510px){
- #s3 .oxygen-materials-photo{gap:18px 8px;padding:14px 8px 18px}
- #s3 .oxygen-materials-photo>.oxygen-material-hit{gap:8px}
- #s3 .oxygen-materials-photo .oxygen-material-illustration{height:92px}
+ #s3 .oxygen-materials-photo{gap:10px 8px;padding:10px 8px}
+ #s3 .oxygen-materials-photo>.oxygen-material-hit{gap:5px}
+ #s3 .oxygen-materials-photo .oxygen-material-illustration{height:100%}
  #s3 .oxygen-materials-photo .oxygen-material-label{font-size:.65rem;padding:3px 4px}
 }
+
+/* 辨識材料不沿用較長操作說明的標題留位；步驟欄在內容結尾收齊。 */
+#s3 #oxygen-step-0 .oxygen-step-head{min-height:0}
+#s3 .oxygen-preparation[data-stage="0"] .oxygen-step-nav{align-self:start;width:100%}
+@container(max-width:720px){#s3 .oxygen-materials-photo{height:clamp(210px,calc(100svh - 500px),330px)}}

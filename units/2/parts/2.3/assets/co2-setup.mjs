@@ -5,7 +5,6 @@ const NS='http://www.w3.org/2000/svg';
 const atlas='assets/co2-marble-atlas.png';
 // Equal atlas cells, cropped to the generated object's transparent silhouette.
 const crops=[[40,152,473,324],[606,159,339,325],[1122,175,336,289],[114,635,345,298],[618,636,345,288],[1121,623,330,329]];
-const keys=['marble','acid','flask','jar','tube','plate','funnel'];
 function node(tag,attrs={}){const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));return n;}
 function photo(key,box){const n=node('image',{href:`assets/${key}`,preserveAspectRatio:'none'});setBox(n,box);return n;}
 function setBox(n,p){for(const [i,a] of ['x','y','width','height'].entries())n.setAttribute(a,p[i]);}
@@ -20,7 +19,6 @@ const stopperOutline='M-50 -15Q0 -33 50 -15L40 45Q0 58 -40 45Z';
 export function createCO2Bench(panel,panels){
  // Definitions live outside all hidden panels, so Chromium retains liquid clips.
  const resources=node('svg',{class:'co2-paint-resources',width:0,height:0,'aria-hidden':'true',focusable:'false'}),defs=node('defs');resources.append(defs);panel.prepend(resources);
- const materialTubeShape=node('path',{id:'co2-material-tube-shape',fill:'none',stroke:'black','stroke-width':24});defs.append(materialTubeShape);
  const art=node('g',{id:'co2-shared-bench','data-shared-bench':''});defs.append(art);
  const flaskClip=node('clipPath',{id:'co2-live-flask-inside',clipPathUnits:'userSpaceOnUse'});flaskClip.append(node('path',{d:polygon(CO2_LIQUID_PROFILE)}));defs.append(flaskClip);
  const stopperClip=node('clipPath',{id:'co2-live-stopper-shape'});stopperClip.append(node('path',{d:stopperOutline}));defs.append(stopperClip);
@@ -59,14 +57,10 @@ export function createCO2Bench(panel,panels){
  const air=node('g',{fill:'none',stroke:'#9c864c','stroke-width':3,'data-bench-air':''});for(const x of [804,941])air.append(node('path',{d:`M${x} 330V260m-7 10 7-10 7 10`}));art.append(air);
  const sample=node('g',{'data-bench-sample':''});sample.append(node('rect',{x:808,y:384,width:124,height:45,rx:7,fill:'#fffdf5',stroke:'#c6d2b9'}));const sampleText=node('text',{x:870,y:413,'text-anchor':'middle','font-size':21});sampleText.textContent='二氧化碳';sample.append(sampleText);art.append(sample);
  const labels={};for(const [key,x,y]of[['flask',300,623],['jar',870,608]]){const label=node('text',{x,y,'text-anchor':'middle','font-size':19,'data-bench-label':key});art.append(label);labels[key]=label;}
- const material=panels[0].querySelector('.co2-material-scene');
- const source=node('svg',{'data-shared-materials':'',viewBox:'0 -100 1100 750','aria-hidden':'true',preserveAspectRatio:'none'});source.append(node('use',{href:'#co2-shared-bench'}));material.prepend(source);material.querySelectorAll('img').forEach(image=>image.style.opacity='0');
- const extraTube=document.createElement('button');extraTube.type='button';extraTube.dataset.co2MaterialAlt='tube';extraTube.tabIndex=-1;extraTube.setAttribute('aria-label','雙孔塞與導管');extraTube.setAttribute('aria-haspopup','dialog');extraTube.style.cssText='position:absolute;left:92.5%;top:62%;width:4%;height:36%;min-width:0;min-height:0;background:transparent;border:0;padding:0';material.append(extraTube);
  for(const [index,view]of panels.entries())if(index){
   view.querySelector(`#co2-scene-${index}`).style.display='none';
   for(const canvas of view.querySelectorAll('.co2-main-scene,.co2-closeup svg'))canvas.append(node('use',{href:'#co2-shared-bench','data-shared-bench-use':'','aria-hidden':'true'}));
  }
- const materialBoxes={flask:[140,100,340,340],jar:[715,155,350,350],acid:[30,420,170,170],marble:[280,446,220,148],tube:[490,390,240,250],plate:[738,500,270,110],funnel:[690,35,100,520]};
  let current,frame,stage=0,lastHoseKey='',hoseShape=null;
  function render(index,elapsed,f){
   stage=index;frame=f;current=co2BenchFrame(index,elapsed,f);const {bodies:state,bowl:bp,glass,plate:pp}=current;
@@ -92,7 +86,6 @@ export function createCO2Bench(panel,panels){
   for(const path of flowPaths){path.setAttribute('opacity',f.flow?'1':'0');path.style.strokeDashoffset=String(-time/35);}
   setBox(plateImage,plateBox(pp));plate.dataset.cover=String(f.cover);air.setAttribute('opacity',f.collecting?'1':'0');air.setAttribute('transform',`translate(0 ${-6*((time%1000)/1000)})`);sample.setAttribute('opacity',f.labeled?'1':'0');
   labels.flask.textContent=f.flaskCount===0&&f.dishCount===5?'錐形瓶（空）':f.acid===0?'錐形瓶：大理石':'錐形瓶：大理石＋稀鹽酸';labels.jar.textContent='集氣瓶：瓶口朝上';for(const label of Object.values(labels))label.setAttribute('opacity',index===0?'0':String(f.placement));
-  for(const key of keys){const [x,y,w,h]=materialBoxes[key],button=material.querySelector(`[data-co2-material="${key}"]`);button.style.cssText=`left:${x/11}%;top:${(y+100)/7.5}%;width:${w/11}%;height:${h/7.5}%`;}
   if(index){panels[index].querySelector('.co2-main-scene').setAttribute('viewBox','0 -100 1100 750');panels[index].querySelector('.co2-closeup svg').setAttribute('viewBox',index<=3?'100 -80 500 700':'555 195 520 420');}
   if(index===1)return f.localTime<4000?'把錐形瓶與直立集氣瓶移到工作位置，接著加入大理石':f.flaskCount<5?'錐形瓶略微傾斜，用鑷子逐塊輕放，讓大理石沿內壁滑入':dishVisible?'大理石已加入，將不再使用的空碟移開':'大理石已加入，接著裝好薊頭漏斗與雙孔塞';
   if(index===2)return f.seal<1?'把薊頭漏斗與導管穿過雙孔塞，對準瓶口裝好':'雙孔塞已塞緊；接著由薊頭漏斗加入稀鹽酸';
@@ -119,9 +112,5 @@ export function createCO2Bench(panel,panels){
   const d=key==='flask'?`M${p(.42,.1)}H${x+w*.58}V${y+h*.31}L${p(.8,.82)}Q${p(.86,.94)} ${p(.5,.96)}Q${p(.14,.94)} ${p(.2,.82)}L${p(.42,.31)}Z`:key==='jar'?`M${p(.24,.16)}Q${p(.5,.08)} ${p(.76,.16)}V${y+h*.83}Q${p(.5,.95)} ${p(.24,.83)}Z`:`M${p(.1,.1)}h${w*.8}v${h*.8}h${-w*.8}Z`;
   return {visible:b.visible,bounds:b.box,stroke:false,transform:`rotate(${b.angle} ${b.cx} ${b.cy})`,d};
  }
- function materialTubeAt(clientX,clientY){
-  if(stage!==0)return false;const r=material.getBoundingClientRect();if(!r.width||!r.height)return false;
-  materialTubeShape.setAttribute('d',target('tube').d);return materialTubeShape.isPointInStroke(new DOMPoint((clientX-r.left)*1100/r.width,-100+(clientY-r.top)*750/r.height));
- }
- return {render,target,materialTubeAt};
+ return {render,target};
 }

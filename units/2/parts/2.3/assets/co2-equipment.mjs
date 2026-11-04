@@ -36,7 +36,7 @@ export function createCO2Explorer({panel,panels,getStage,onOpen,onBackgroundClic
   dialog.querySelector('[data-equipment-role-label]').textContent=stage===0?'用途':'本步中的作用';
   dialog.querySelector('[data-equipment-role]').textContent=stage===0?info.role:role(key,stage);
   const portrait=dialog.querySelector('[data-equipment-portrait]');let toolPortrait=dialog.querySelector('[data-forceps-portrait]');
-  if(!toolPortrait){toolPortrait=node('svg',{viewBox:'842 35 110 1155',width:'112',height:'116',role:'img','aria-label':'金屬鑷子','data-forceps-portrait':''});toolPortrait.style.cssText='width:112px;height:116px;flex:0 0 112px;border:1px solid #e2e8d8;border-radius:12px;background:#f4f5e9';toolPortrait.append(node('image',{href:'assets/co2-tools-atlas.png',width:'1268',height:'1241'}));portrait.after(toolPortrait);}
+  if(!toolPortrait){toolPortrait=node('svg',{viewBox:'842 35 110 1155',width:'112',height:'116',role:'img','aria-label':'金屬鑷子','data-forceps-portrait':''});toolPortrait.style.cssText='width:112px;height:116px;flex:0 0 112px;overflow:hidden;border:1px solid #e2e8d8;border-radius:12px;background:#f4f5e9';toolPortrait.append(node('image',{href:'assets/co2-tools-atlas.png',width:'1268',height:'1241'}));portrait.after(toolPortrait);}
   toolPortrait.querySelectorAll('[data-tube-portrait]').forEach(n=>n.remove());
   const atlas=key==='funnel'||key==='stopper',custom=atlas||key==='forceps'||key==='tube';
   portrait.style.display=custom?'none':'';toolPortrait.style.display=custom?'':'none';
@@ -45,7 +45,7 @@ export function createCO2Explorer({panel,panels,getStage,onOpen,onBackgroundClic
   if(key==='tube'){
    const copy=panel.querySelector('.co2-double-stopper-fallback').cloneNode(true),ids=new Map([...copy.querySelectorAll('[id]')].map(n=>[n.id,n.id+'-dialog']));
    for(const n of copy.querySelectorAll('*'))for(const a of[...n.attributes])n.setAttribute(a.name,a.name==='id'?ids.get(a.value)||a.value:a.value.replace(/#([\w-]+)/g,(m,id)=>ids.has(id)?'#'+ids.get(id):m));
-   const group=node('g',{'data-tube-portrait':''});group.append(...copy.childNodes);toolPortrait.append(group);toolPortrait.setAttribute('viewBox','490 390 580 250');
+   const group=node('g',{'data-tube-portrait':''});group.append(...copy.childNodes);toolPortrait.append(group);toolPortrait.setAttribute('viewBox',copy.getAttribute('viewBox'));
   }
   if(!custom)portrait.src=`assets/co2-${key}.webp`;
   dialog.querySelector('.co2-equipment-paused').textContent=stage===0?'關閉介紹後，可繼續點選其他材料或選擇操作。':'已暫停在目前位置，關閉後可自行按繼續。';
