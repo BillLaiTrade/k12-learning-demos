@@ -224,13 +224,16 @@
     .booklet-route-link { margin-top: 8px; border-top: 1px solid var(--line) !important; padding-top: 14px !important; color: #795b20 !important; }
     .booklet-route-link b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #f5e9c9; color: #795b20; }
     .booklet-route-link[aria-current="step"] { border-left-color: #c09139 !important; background: #f8f0dd !important; color: #795b20 !important; }
-    .unit-booklet { scroll-margin-top: 22px; padding: clamp(18px, 3vw, 30px); border: 1px solid #d6c9a5; border-radius: 24px; background: linear-gradient(150deg, #fffdf7, #f8f5e9); box-shadow: 0 10px 30px #453b2210; }
-    .booklet-heading { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
-    .booklet-kicker { margin: 0 0 3px; color: #9a712b; font-size: .78rem; font-weight: 850; letter-spacing: .1em; }
-    .booklet-heading h2 { margin: 0 0 5px; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.3; }
-    .booklet-heading p:last-child { max-width: 700px; margin: 0; color: var(--muted); }
-    .booklet-stamp { display: grid; flex: none; place-items: center; width: 62px; height: 62px; border: 2px solid #d8bc77; border-radius: 50%; color: #9a712b; font-family: serif; font-size: 1.02rem; font-weight: 900; line-height: 1.1; text-align: center; transform: rotate(8deg); }
-    .unit-booklet > .dialogue { margin: 12px 0; }
+    .unit-booklet { scroll-margin-top: 22px; min-width: 0; padding: 0; overflow: hidden; border: 1px solid #eadfca; border-radius: 24px; background: #fffefa; color: #182326; line-height: 1.7; box-shadow: 0 14px 38px rgb(21 47 38 / 8%); }
+    .booklet-heading { display: flex; align-items: center; gap: 14px; padding: 20px 24px; border-bottom: 1px solid #eadfca; background: #f8f1e4; }
+    .booklet-heading > div { min-width: 0; flex: 1; }
+    .booklet-kicker { display: inline-block; margin: 0 10px 0 0; color: #88652a; font-size: .78rem; font-weight: 800; letter-spacing: .05em; }
+    .booklet-heading h2 { display: inline; margin: 0; color: #143f34; font-size: 1.65rem; line-height: 1.35; }
+    .booklet-heading p:last-child { margin: 5px 0 0; color: var(--muted); font-size: .88rem; }
+    .booklet-mark { display: grid; place-items: center; flex: none; width: 50px; height: 50px; border-radius: 15px; background: #f7e5b5; color: #85601d; font-size: 1.3rem; font-weight: 400; }
+    .booklet-body { min-width: 0; padding: 20px; }
+    .booklet-body > .dialogue { margin: 12px 0; }
+    .booklet-body > .dialogue:first-child { margin-top: 0; }
     .booklet-game-layout { display: grid; grid-template-columns: minmax(0, 1fr) 228px; align-items: stretch; gap: 13px; margin-top: 15px; }
     .booklet-stage-column { min-width: 0; }
     .booklet-stage-frame { position: relative; min-width: 0; height: clamp(340px, 43vw, 480px); overflow: hidden; border: 1px solid #263a3a; border-radius: 18px; background: #0a1726; box-shadow: 0 8px 24px #17271d26; }
@@ -300,7 +303,8 @@
     .booklet-finish-note[data-done="true"] { color: #176b53 !important; font-weight: 750; }
     @media (max-width: 900px) { .booklet-game-layout { grid-template-columns: minmax(0, 1fr) 195px; gap: 9px; } .booklet-mission-panel { padding: 13px 11px; } }
     @media (max-width: 700px) { .booklet-game-layout { grid-template-columns: 1fr; } .booklet-stage-frame { height: clamp(310px, 72vw, 420px); } .booklet-mission-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; } .booklet-mission-top, .booklet-mission-panel h3, .booklet-mission-panel > p, .booklet-target-card, .booklet-progress-track, .booklet-slot-list, .booklet-finish-button, .booklet-finish-note { grid-column: 1 / -1; } .booklet-mission-panel h3 { margin-top: 7px; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 150px; align-items: center; justify-items: start; } .booklet-target-card svg { grid-column: 2; grid-row: 1 / span 2; height: 84px; } .booklet-target-status { align-self: start; } .booklet-slot-list { grid-template-columns: repeat(3,1fr); gap: 3px; } .booklet-slot-list span { justify-content: center; font-size: .73rem; } }
-    @media (max-width: 460px) { .unit-booklet { padding: 15px; border-radius: 19px; } .booklet-stamp { width: 49px; height: 49px; font-size: .82rem; } .booklet-stage-frame { height: 300px; } .booklet-stage-button { min-height: 38px; padding: 5px 9px; font-size: .76rem; } .booklet-stage-badge { font-size: .72rem; } .booklet-prop-token { grid-template-columns: 28px minmax(0,1fr); padding: 6px; column-gap: 6px; } .booklet-prop-icon { width: 28px; height: 28px; font-size: 1.1rem; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 120px; } .booklet-depth-controls { padding-inline: 7px; } .booklet-depth-row { gap: 5px; } .booklet-depth-end { gap: 2px; font-size: .7rem; } .booklet-depth-end svg { width: 17px; } .booklet-depth-header label { font-size: .73rem; } .booklet-depth-meta { gap: 7px; font-size: .66rem; } }
+    @media (max-width: 760px) { .booklet-heading { gap: 10px; padding: 16px; } .booklet-mark { width: 40px; height: 40px; border-radius: 12px; } .booklet-heading h2 { font-size: 1.4rem; } .booklet-heading p:last-child { font-size: .82rem; } .booklet-body { padding: 14px; } }
+    @media (max-width: 460px) { .booklet-stage-frame { height: 300px; } .booklet-stage-button { min-height: 38px; padding: 5px 9px; font-size: .76rem; } .booklet-stage-badge { font-size: .72rem; } .booklet-prop-token { grid-template-columns: 28px minmax(0,1fr); padding: 6px; column-gap: 6px; } .booklet-prop-icon { width: 28px; height: 28px; font-size: 1.1rem; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 120px; } .booklet-depth-controls { padding-inline: 7px; } .booklet-depth-row { gap: 5px; } .booklet-depth-end { gap: 2px; font-size: .7rem; } .booklet-depth-end svg { width: 17px; } .booklet-depth-header label { font-size: .73rem; } .booklet-depth-meta { gap: 7px; font-size: .66rem; } }
     @media (max-width: 520px) {
       #aperture-3d-scene { height: 300px; }
       .aperture-scene-with-height { grid-template-columns: minmax(0, 1fr) 52px; gap: 7px; }
@@ -334,6 +338,7 @@
       .route a { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); white-space: nowrap; }
       .route a[aria-current="step"] { border-color: var(--green); }
       .lesson-card { border-radius: 19px; scroll-margin-top: 110px; }
+      .unit-booklet { scroll-margin-top: 110px; }
       .medium-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .night-switches { grid-template-columns: 1fr; gap: 8px; }
       .light-switch { min-height: 70px; }
@@ -597,9 +602,10 @@
 
         <section class="unit-booklet" id="unit-booklet" aria-labelledby="unit-booklet-title">
           <header class="booklet-heading">
+            <span class="booklet-mark" aria-hidden="true">?</span>
             <div><p class="booklet-kicker">第一段學習・單元小測</p><h2 id="unit-booklet-title">月光影子劇場</h2><p>替小葵和阿公完成一幕影子戲。把舞台道具移到合適的位置，讓實際投影和目標描邊重合。</p></div>
-            <span class="booklet-stamp" aria-hidden="true">光<br>影</span>
           </header>
+          <div class="booklet-body">
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我想讓月亮兔出現在幕上！可是道具要放在哪裡，影子才會剛好對上呢？</p></div>
           <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先選道具，拖尺軌調整影子大小，再拖動道具對準位置。舞台只會微調上下、左右。</p></div>
           <div class="booklet-game-layout">
@@ -645,6 +651,7 @@
               <button class="booklet-finish-button" id="shadow-theatre-finish" type="button" disabled>完成演出</button>
               <p class="booklet-finish-note" id="shadow-theatre-finish-note" aria-live="polite">道具就位後，描邊會全部消失。</p>
             </aside>
+          </div>
           </div>
         </section>
       </div>
