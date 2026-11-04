@@ -4,10 +4,16 @@
 .rank-quiz .rank-new{flex:none;margin-left:auto;min-height:44px;padding:8px 14px;background:#fff9ec;border-color:#b69b60;color:#36533c;white-space:nowrap}
 .rank-quiz .rank-body{padding:16px 12px 18px}
 .rank-bench{margin:0;border:1px solid #bc9d60;border-radius:12px;overflow:hidden;background:#f8f4e7;box-shadow:0 2px 5px #4e3e2514}
-.rank-stage{position:relative;background:#c99966;overflow:hidden}
+.rank-stage{position:relative;background:#fcfaf4;overflow:hidden}
+.rank-quiz [data-texture=loading] .rank-stage::after{content:'準備操作台…';position:absolute;top:12px;right:14px;padding:5px 10px;border:1px solid #d1bd8b;border-radius:6px;background:#fff9e9e8;color:#526246;font-size:.78rem;pointer-events:none}
+.rank-bench-photo{transition:opacity .15s}
+.rank-quiz [data-background-ready=false] .rank-bench-photo,.rank-quiz [data-source-ready=false] .rank-source-photo{opacity:0}
+.rank-quiz [data-source-ready=true] .rank-source-fallback{display:none}
 #rank-scene{display:block;width:100%;height:auto;font-family:ui-sans-serif,system-ui,"Noto Sans TC",sans-serif}
 #rank-scene text{fill:#244d37;font-weight:650}
-.rank-layer{stroke:#effff6;stroke-width:1.3;vector-effect:non-scaling-stroke}
+.rank-layer{stroke:none}
+.rank-interface{fill:none;stroke:#effffa;stroke-width:1.3;vector-effect:non-scaling-stroke;opacity:.86}
+.rank-medium>text{fill:#183f32!important;font-weight:750;paint-order:stroke;stroke:#fff9e2;stroke-width:.35px}
 .rank-normal{fill:none;stroke:#476d59;stroke-width:1.3;stroke-dasharray:6 5;vector-effect:non-scaling-stroke}
 .rank-angle{fill:none;stroke:#365f44;stroke-width:1.6;vector-effect:non-scaling-stroke}
 .rank-beam{fill:none;stroke:#ffdc57;stroke-width:3;stroke-linecap:round;vector-effect:non-scaling-stroke}
@@ -72,4 +78,4 @@
  .rank-order{gap:6px}.rank-slots,.rank-pool{gap:6px}.rank-endpoint{font-size:.76rem}
 }
 @container(max-width:340px){.rank-quiz .rank-body{padding-inline:8px}.rank-answer{padding-inline:8px}.rank-quiz .rank-slot{font-size:.8rem;gap:1px;padding-inline:2px}.rank-slot .rank-grip{display:none}.rank-legend p{flex-basis:100%;text-align:center}}
-@media(prefers-reduced-motion:reduce){.rank-beam-halo{filter:none;opacity:.15}}
+@media(prefers-reduced-motion:reduce){.rank-beam-halo{filter:none;opacity:.15}.rank-bench-photo{transition:none}}

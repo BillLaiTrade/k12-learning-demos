@@ -11,7 +11,22 @@ if(root){
   let question=deck.next(), order=[null,null,null], selected=null, revealed=false;
   let state='idle', elapsed=0, startTime=0, frame=0, observed=false, inView=true;
   let drag=null, suppressClickUntil=0, suppressClickTarget=null, project, pixelRatio=1, lastLayout='';
-  const photoURL=new URL('./oblique-entry-water.png',import.meta.url).href;
+  const photoURLs=Object.fromEntries(['wide','tall','source'].map(key=>[key,new URL(`./layer-quiz-${key==='source'?'source':`bench-${key}`}.png`,import.meta.url).href]));
+  const photos=new Map();let backgroundKey='wide';
+  function updateTextures(){
+    const background=photos.get(backgroundKey)?.state||'loading',source=photos.get('source')?.state||'loading';
+    root.dataset.backgroundReady=String(background==='ready');root.dataset.sourceReady=String(source==='ready');
+    root.dataset.texture=[background,source].includes('loading')?'loading':[background,source].includes('fallback')?'fallback':'ready';
+    q('#rank-fallback').textContent=root.dataset.texture==='fallback'?'目前使用簡化底圖，光路與排序仍可正常操作。':'';
+  }
+  function loadPhoto(key){
+    if(photos.has(key))return;
+    const image=new Image(),record={image,state:'loading'};photos.set(key,record);
+    const timeout=setTimeout(()=>{record.state='fallback';updateTextures();},10000);
+    image.onload=()=>{clearTimeout(timeout);record.state='ready';updateTextures();};
+    image.onerror=()=>{clearTimeout(timeout);record.state='fallback';updateTextures();};
+    image.src=photoURLs[key];
+  }
   const line=(a,b)=>`M${a.join(' ')}L${b.join(' ')}`;
   const pointAt=(a,b,f)=>a.map((v,i)=>v+(b[i]-v)*f);
   const direction=(a,b,size)=>{
@@ -22,16 +37,21 @@ if(root){
   };
 
   function buildScene(){
-    const narrow=root.closest('.rank-quiz').clientWidth<=650, width=narrow?660:1200, height=narrow?720:580;
-    const h=narrow?170:115, top=narrow?175:170, entry=narrow?250:390;
-    const left=narrow?20:38, right=narrow?640:948, font=narrow?35:26;
+    const narrow=root.closest('.rank-quiz').clientWidth<=650, width=narrow?660:1200, height=narrow?720:600;
+    const top=narrow?199:190,bottom=narrow?609:494,h=(bottom-top)/3,entry=narrow?280:400;
+    const left=narrow?59:70,right=narrow?600:915,font=narrow?35:26;
+    backgroundKey=narrow?'tall':'wide';loadPhoto(backgroundKey);loadPhoto('source');updateTextures();
     pixelRatio=svg.clientWidth/width;
     project=p=>[entry+p[0]*h,top+p[1]*h];
     svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
-    const source=project(question.geometry.points[0]), lampScale=narrow?1.05:1;
+    const source=project(question.geometry.points[0]), lampScale=1;
     svg.innerHTML=`<title id="rank-scene-title">三層透明介質中的折射光路</title>
       <desc id="rank-scene-desc">尚未發射光束。三層介面互相平行，只比較介質甲、乙、丙。</desc>
       <defs>
+        <filter id="rank-object-shadow" x="-35%" y="-35%" width="170%" height="180%"><feDropShadow dx="1" dy="4" stdDeviation="3" flood-color="#44301b" flood-opacity=".32"/></filter>
+        <filter id="rank-label-shadow" x="-15%" y="-25%" width="135%" height="160%"><feDropShadow dx="0" dy="2" stdDeviation="1.6" flood-color="#67502b" flood-opacity=".28"/></filter>
+        <linearGradient id="rank-ivory" x2=".15" y2="1"><stop stop-color="#fffef4"/><stop offset=".55" stop-color="#fff8df"/><stop offset="1" stop-color="#ecdfb9"/></linearGradient>
+        ${[['#e3f4ef','#bfd5cf'],['#b6e0e6','#91bfc4'],['#fae4b9','#d9bc86']].map((colours,i)=>`<linearGradient id="rank-medium-fill-${i}" x2="0" y2="1"><stop stop-color="${colours[0]}" stop-opacity="${i===1?.46:.3}"/><stop offset=".52" stop-color="${colours[1]}" stop-opacity="${i===1?.43:.25}"/><stop offset="1" stop-color="${colours[1]}" stop-opacity="${i===1?.54:.36}"/></linearGradient>`).join('')}
         <filter id="rank-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
         <linearGradient id="rank-metal"><stop stop-color="#10191b"/><stop offset=".18" stop-color="#6d7777"/><stop offset=".4" stop-color="#263033"/><stop offset=".78" stop-color="#101719"/><stop offset="1" stop-color="#414b4c"/></linearGradient>
         <linearGradient id="rank-rim"><stop stop-color="#665334"/><stop offset=".3" stop-color="#f4d58d"/><stop offset=".6" stop-color="#b18b47"/><stop offset="1" stop-color="#4b3e28"/></linearGradient>
@@ -39,18 +59,26 @@ if(root){
         <linearGradient id="rank-reflection"><stop stop-color="#fff" stop-opacity=".24"/><stop offset=".12" stop-color="#fff" stop-opacity="0"/><stop offset=".84" stop-color="#fff" stop-opacity=".02"/><stop offset=".9" stop-color="#fff" stop-opacity=".23"/><stop offset="1" stop-color="#fff" stop-opacity=".03"/></linearGradient>
         <radialGradient id="rank-lens-on"><stop stop-color="#fffde4"/><stop offset=".5" stop-color="#ffe286"/><stop offset="1" stop-color="#ad8748"/></radialGradient>
       </defs>
-      <rect width="${width}" height="${height}" fill="#d7ae7e"/>
-      <svg width="${width}" height="${height}" viewBox="250 310 750 220" preserveAspectRatio="none" aria-hidden="true"><image class="rank-wood-photo" width="1254" height="1254" href="${photoURL}"/></svg>
-      <rect width="${width}" height="${height}" fill="#ffe6bf" opacity=".15"/>
-      ${question.geometry.layers.map((layer,i)=>`<g class="rank-medium" data-layer="${i}">
-        <rect class="rank-layer" x="${left}" y="${top+i*h}" width="${right-left}" height="${h}" fill="${['#d7e4dc','#b5d7d2','#efd49f'][i]}" fill-opacity="${[.56,.62,.5][i]}"/>
-        <rect x="${left+18}" y="${top+(i+.5)*h-25}" width="${narrow?166:166}" height="50" rx="8" fill="#fff9e6" stroke="#b4a06c" stroke-width="1"/>
-        <text x="${left+101}" y="${top+(i+.5)*h+font*.35}" text-anchor="middle" font-size="${font}">${names[i]}</text>
-        <g class="rank-speed-badge" visibility="hidden"><text x="${left+101}" y="${top+(i+.5)*h+61}" text-anchor="middle" font-size="${font*.82}"></text></g>
-      </g>`).join('')}
-      <rect x="${left+2}" y="${top+2}" width="${right-left-4}" height="${3*h-4}" fill="url(#rank-reflection)" pointer-events="none"/>
-      <path d="M${left-4} ${top-4}V${top+3*h+6}H${right+4}V${top-4}Z" fill="none" stroke="url(#rank-frame)" stroke-width="9"/>
-      <path d="M${left+5} ${top+3*h-2}H${right-5}" fill="none" stroke="#fff9dc" stroke-width="2" opacity=".7"/>
+      <g class="rank-bench-fallback" aria-hidden="true">
+        <rect width="${width}" height="${height}" rx="16" fill="#d7ac72"/>
+        <path d="M8 12H${width-8}M8 30H${width-8}M8 ${height-28}H${width-8}" stroke="#f8d79f" stroke-width="2" opacity=".5"/>
+        <rect x="${left}" y="${top}" width="${right-left}" height="${3*h}" fill="#f4f7dc" opacity=".18"/>
+        <path d="M${left-4} ${top-4}V${bottom+6}H${right+4}V${top-4}Z" fill="none" stroke="url(#rank-frame)" stroke-width="9"/>
+      </g>
+      <image class="rank-bench-photo" x="0" y="0" width="${width}" height="${height}" href="${photoURLs[backgroundKey]}" preserveAspectRatio="none" aria-hidden="true"/>
+      ${question.geometry.layers.map((layer,i)=>{
+        const cy=top+(i+.5)*h,plateX=left+18,plateWidth=166;
+        return `<g class="rank-medium" data-layer="${i}">
+        <rect class="rank-layer" x="${left}" y="${top+i*h}" width="${right-left}" height="${h}" fill="url(#rank-medium-fill-${i})"/>
+        ${i>0?`<path class="rank-interface" d="M${left} ${top+i*h}H${right}"/>`:''}
+        <g class="rank-nameplate" filter="url(#rank-label-shadow)" aria-hidden="true">
+          <path d="M${plateX+8} ${cy-26}H${plateX+plateWidth-8}L${plateX+plateWidth} ${cy-18}V${cy+18}L${plateX+plateWidth-8} ${cy+26}H${plateX+8}L${plateX} ${cy+18}V${cy-18}Z" fill="url(#rank-ivory)" stroke="#b2985c" stroke-width="1.2"/>
+          <path d="M${plateX+10} ${cy-23}H${plateX+plateWidth-10}" stroke="#fffef5" stroke-width="1.7"/>
+          ${[plateX+9,plateX+plateWidth-9].map(x=>`<circle cx="${x}" cy="${cy}" r="3.1" fill="url(#rank-rim)" stroke="#a58c4e" stroke-width=".5"/><path d="M${x-1.6} ${cy}h3.2" stroke="#8f753c" stroke-width=".7"/>`).join('')}
+        </g>
+        <text x="${left+101}" y="${cy+font*.35}" text-anchor="middle" font-size="${font}">${names[i]}</text>
+        <g class="rank-speed-badge" visibility="hidden"><text x="${left+101}" y="${cy+58}" text-anchor="middle" font-size="${font*.82}"></text></g>
+      </g>`;}).join('')}
       <g class="rank-construction" aria-hidden="true">${question.geometry.layers.map(layer=>{
         const p=project(layer.from),theta=layer.angle*Math.PI/180,r=narrow?65:44;
         return `<g data-rank-construction="${layer.id}" visibility="hidden"><path class="rank-normal" d="M${p[0]} ${p[1]-46}V${p[1]+Math.min(h-8,narrow?114:88)}"/>
@@ -58,21 +86,25 @@ if(root){
           ${layer.id===0?`<text x="${p[0]+18}" y="${p[1]-54}" font-size="${font}">法線</text>`:''}</g>`;
       }).join('')}</g>
       <g aria-hidden="true">${question.geometry.segments.map((segment,i)=>`<g class="rank-light-segment" data-segment="${i}"><path class="rank-beam-halo"/><path class="rank-beam"/><path class="rank-beam-core"/><path class="rank-direction"/></g>`).join('')}</g>
-      <g aria-hidden="true">
-        <rect x="${source[0]-76}" y="${source[1]-29}" width="12" height="${top-12-source[1]+29}" rx="3" fill="url(#rank-rim)"/>
-        <ellipse cx="${source[0]-70}" cy="${top-9}" rx="37" ry="8" fill="url(#rank-rim)" stroke="#6c5c39"/>
-        <rect x="${source[0]-70}" y="${source[1]-34}" width="43" height="10" rx="3" fill="url(#rank-rim)"/><circle cx="${source[0]-27}" cy="${source[1]-29}" r="7" fill="url(#rank-rim)" stroke="#695430"/>
-        <g transform="translate(${source.join(' ')}) rotate(${-question.geometry.incident}) scale(${lampScale})">
-          <rect x="-29" y="-69" width="58" height="57" rx="10" fill="url(#rank-metal)" stroke="#182321" stroke-width="2"/>
-          <path d="M-20-60V-26M-15-60V-26" stroke="#a5afaa" stroke-width="1.4" opacity=".5"/>
-          <rect x="-32" y="-22" width="64" height="13" rx="4" fill="url(#rank-rim)"/>
-          <ellipse cy="-5" rx="31" ry="13" fill="url(#rank-rim)" stroke="#443a26" stroke-width="2"/>
-          <ellipse class="rank-source-lens" cy="-3" rx="24" ry="8.5" fill="#57716a" stroke="#68573b" stroke-width="1.5"/>
+      <g class="rank-source-device" aria-hidden="true">
+        <g filter="url(#rank-object-shadow)">
+          <ellipse cx="${source[0]-78}" cy="${top-11}" rx="43" ry="10" fill="#543a21" opacity=".25"/>
+          <ellipse cx="${source[0]-78}" cy="${top-17}" rx="39" ry="10" fill="#56482b" stroke="#9a793d"/>
+          <ellipse cx="${source[0]-78}" cy="${top-20}" rx="37" ry="7" fill="url(#rank-rim)" stroke="#c7ab67"/>
+          <rect x="${source[0]-85}" y="${source[1]-43}" width="14" height="${top-23-source[1]+43}" rx="3" fill="url(#rank-frame)" stroke="#817a59" stroke-width=".7"/>
+          <path d="M${source[0]-82} ${source[1]-39}V${top-26}" stroke="#fff4bd" stroke-width="1.5" opacity=".75"/>
+          <rect x="${source[0]-90}" y="${source[1]-47}" width="25" height="15" rx="3" fill="url(#rank-metal)" stroke="#8b8c74"/>
+          <circle cx="${source[0]-78}" cy="${source[1]-39}" r="3.1" fill="url(#rank-rim)"/>
+          <rect x="${source[0]-78}" y="${source[1]-46}" width="48" height="10" rx="3" fill="url(#rank-frame)" stroke="#7f7252" stroke-width=".7"/>
+          <circle cx="${source[0]-31}" cy="${source[1]-41}" r="11" fill="url(#rank-rim)" stroke="#6e5730"/>
+          <circle cx="${source[0]-31}" cy="${source[1]-41}" r="6" fill="#4e5143" stroke="#d9c790"/>
+        </g>
+        <g class="rank-source-optic" transform="translate(${source.join(' ')}) rotate(${-question.geometry.incident}) scale(${lampScale})">
+          <g class="rank-source-fallback"><rect x="-29" y="-69" width="58" height="57" rx="10" fill="url(#rank-metal)"/><ellipse cy="-3" rx="31" ry="13" fill="url(#rank-rim)"/><ellipse cy="-3" rx="24" ry="8.5" fill="#57716a"/></g>
+          <image class="rank-source-photo" x="-55" y="-128" width="111" height="141.7" href="${photoURLs.source}" preserveAspectRatio="none"/>
+          <ellipse class="rank-source-lens" cx="0" cy="0" rx="26" ry="6.5" fill="url(#rank-lens-on)" opacity="0"/>
         </g>
       </g>`;
-    svg.querySelector('.rank-wood-photo').addEventListener('error',()=>{
-      q('#rank-fallback').textContent='目前使用簡化底圖，光路與排序仍可正常操作。';
-    },{once:true});
     draw();
   }
 
@@ -88,7 +120,7 @@ if(root){
       group.querySelector('.rank-direction').setAttribute('d',passed?direction(a,fullEnd,9/pixelRatio):'');
       if(segment.layer>=0)svg.querySelector(`[data-rank-construction="${segment.layer}"]`).setAttribute('visibility',segment.fraction>0?'visible':'hidden');
     });
-    svg.querySelector('.rank-source-lens').setAttribute('fill',elapsed>0?'url(#rank-lens-on)':'#57716a');
+    svg.querySelector('.rank-source-lens').setAttribute('opacity',elapsed>0?'.82':'0');
     const comparison=compareLayers(question.geometry,order);
     svg.querySelectorAll('.rank-angle').forEach(arc=>arc.dataset.emphasis=String(revealed&&snapshot.complete));
     svg.querySelectorAll('.rank-speed-badge').forEach((badge,i)=>{

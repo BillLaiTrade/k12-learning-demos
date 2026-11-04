@@ -1,0 +1,20 @@
+{
+  "layer-speed-model.mjs": true,
+  "lesson.mjs": true,
+  "depth-lab.mjs": true,
+  "depth-lab.css": true,
+  "depth-model.mjs": true,
+  "depth-observer.mjs": true,
+  "single-refraction-model.mjs": true,
+  "return-refraction-lab.mjs": true,
+  "oblique-entry-water.png": true,
+  "light-speed-bench.png": true,
+  "section_1": true,
+  "section_2": true,
+  "section_3": true,
+  "section_4": true,
+  "section_5": true,
+  "section_6": true,
+  "quiz_html_same": true,
+  "playback_sorting_grading_and_deck_handlers_same": true
+}

@@ -1,0 +1,27 @@
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (201.498607ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (848.995785ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (13513.292767ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (792.876216ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (23015.214783ms)
+▶ 4.3 layer-speed quiz applies refraction through one three-layer bench
+  ✔ initial scene awaits emission, preserves six teaching sections and withholds speed answers (646.155566ms)
+  ✔ emission draws genuine intermediate, continuous refracted segments and leaves parallel normals for comparison (3438.662785ms)
+  ✔ photoreal bench and transparent source load, with the optical aperture aligned to the computed ray (51.217903ms)
+  ✔ partial and wrong answers get actionable feedback; correction and new edits update the same diagram (1288.903958ms)
+  ✔ mouse dragging swaps occupied slots, cancels outside drops and does not leak a click or ghost (909.630873ms)
+  ✔ keyboard selection, arrows, deletion and Escape support the complete ranking workflow (4126.422595ms)
+  ✔ offscreen playback suspends and resumes, while changing question cancels old playback and clears answers (10743.18809ms)
+  ✔ desktop, laptop and narrow screens preserve physical angles, readable labels and complete controls (6439.044523ms)
+  ✔ native phone touch drags cards without page scrolling and reduced-motion playback still reveals intermediate light (7176.942594ms)
+  ✔ texture failure leaves a usable vector bench, and no-JavaScript explains how to continue (9683.690037ms)
+✔ 4.3 layer-speed quiz applies refraction through one three-layer bench (48415.387569ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (19617.07847ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 94519.952537

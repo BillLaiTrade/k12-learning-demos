@@ -11,7 +11,7 @@ test('4.3 layer-speed quiz applies refraction through one three-layer bench',{ti
  const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox'],...(process.env.LESSON_USE_PROXY?{proxy:{server:process.env.HTTPS_PROXY}}:{})});t.after(()=>browser.close());
  const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(`${r.status()} ${r.url()}`);});
- const ready=async p=>{await p.goto(base.replace(/#.*$/,'')+'#s7');await p.waitForFunction(()=>document.querySelector('#rank-lab')?.dataset.ready==='true');};
+ const ready=async p=>{await p.goto(base.replace(/#.*$/,'')+'#s7');await p.waitForFunction(()=>document.querySelector('#rank-lab')?.dataset.ready==='true'&&['ready','fallback'].includes(document.querySelector('#rank-lab').dataset.texture));};
  const complete=async p=>{await p.locator('#rank-play').click();await p.waitForFunction(()=>document.querySelector('#rank-lab').dataset.state==='complete');};
  const order=()=>page.locator('.rank-slot').evaluateAll(es=>es.map(e=>e.dataset.filled==='true'?e.textContent.replace('⠿','').trim():null));
  const answer=()=>page.locator('.rank-light-segment').evaluateAll(groups=>groups.slice(1).map((group,id)=>{const path=group.querySelector('.rank-beam'),a=path.getPointAtLength(0),b=path.getPointAtLength(path.getTotalLength());return{id,angle:Math.atan2(b.x-a.x,b.y-a.y)};}).sort((a,b)=>b.angle-a.angle).map(x=>x.id));
@@ -31,6 +31,15 @@ test('4.3 layer-speed quiz applies refraction through one three-layer bench',{ti
   const geometry=await page.locator('#rank-scene').evaluate(svg=>{const point=p=>({x:p.x,y:p.y});const lines=[...svg.querySelectorAll('.rank-beam')].map(p=>({start:point(p.getPointAtLength(0)),end:point(p.getPointAtLength(p.getTotalLength()))}));const normals=[...svg.querySelectorAll('.rank-normal')].map(p=>({start:point(p.getPointAtLength(0)),end:point(p.getPointAtLength(p.getTotalLength()))}));return{lines,normals};});
   for(let i=1;i<4;i++){assert.ok(Math.abs(geometry.lines[i-1].end.x-geometry.lines[i].start.x)<.01);assert.ok(Math.abs(geometry.lines[i-1].end.y-geometry.lines[i].start.y)<.01);assert.equal(geometry.normals[i-1].start.x,geometry.normals[i-1].end.x);assert.ok(Math.abs(geometry.normals[i-1].start.x-geometry.lines[i].start.x)<.01);}
   assert.deepEqual(await answer(),[0,2,1]);assert.equal(await page.locator('#rank-check').isEnabled(),true);assert.equal(await page.locator('.rank-speed-badge[visibility=visible]').count(),0);await shot('observed.png');
+ });
+ await t.test('photoreal bench and transparent source load, with the optical aperture aligned to the computed ray',async()=>{
+  assert.equal(await page.locator('#rank-lab').getAttribute('data-texture'),'ready');
+  assert.equal(await page.locator('#rank-lab').getAttribute('data-background-ready'),'true');
+  assert.equal(await page.locator('#rank-lab').getAttribute('data-source-ready'),'true');
+  assert.match(await page.locator('.rank-bench-photo').getAttribute('href'),/layer-quiz-bench-wide\.png$/);
+  assert.match(await page.locator('.rank-source-photo').getAttribute('href'),/layer-quiz-source\.png$/);
+  const alignment=await page.locator('#rank-scene').evaluate(svg=>{const optic=svg.querySelector('.rank-source-optic'),path=svg.querySelector('.rank-beam'),a=new DOMPoint(0,0).matrixTransform(optic.getScreenCTM()),b=path.getPointAtLength(0).matrixTransform(path.getScreenCTM());return{distance:Math.hypot(a.x-b.x,a.y-b.y),fallback:getComputedStyle(svg.querySelector('.rank-source-fallback')).display};});
+  assert.ok(alignment.distance<.01);assert.equal(alignment.fallback,'none');
  });
  await t.test('partial and wrong answers get actionable feedback; correction and new edits update the same diagram',async()=>{
   await page.locator('#rank-check').click();assert.match(await page.locator('#quiz-result').textContent(),/未放入/);
@@ -57,9 +66,9 @@ test('4.3 layer-speed quiz applies refraction through one three-layer bench',{ti
  const layouts=[];
  await t.test('desktop, laptop and narrow screens preserve physical angles, readable labels and complete controls',async()=>{
   const baseOrder=await answer();for(const width of [1536,1366,1280,1024,820,760,650,390,320]){
-   await page.setViewportSize({width,height:width<760?900:1000});await page.locator('#s7').scrollIntoViewIfNeeded();await page.waitForTimeout(70);
+   await page.setViewportSize({width,height:width<760?900:1000});await page.locator('#s7').scrollIntoViewIfNeeded();await page.waitForFunction(()=>['ready','fallback'].includes(document.querySelector('#rank-lab').dataset.texture));await page.waitForTimeout(70);
    const m=await page.locator('#s7').evaluate(el=>{const svg=el.querySelector('#rank-scene'),box=svg.getBoundingClientRect(),matrix=svg.getScreenCTM();return{width:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth,scaleX:matrix.a,scaleY:matrix.d,clipped:[...el.querySelectorAll('button')].filter(b=>b.scrollWidth>b.clientWidth+1).map(b=>b.textContent),labels:[...svg.querySelectorAll('.rank-medium>text')].map(t=>({font:parseFloat(getComputedStyle(t).fontSize)*matrix.a,left:t.getBoundingClientRect().left,right:t.getBoundingClientRect().right})),box:box.toJSON(),buttons:[...el.querySelectorAll('button:not([hidden])')].map(b=>({height:b.getBoundingClientRect().height,left:b.getBoundingClientRect().left,right:b.getBoundingClientRect().right}))};});
-   assert.equal(m.overflow,false,`${width} overflow`);assert.deepEqual(m.clipped,[],`${width} clipped`);assert.ok(Math.abs(m.scaleX-m.scaleY)<1e-5,`${width} distorts angles`);assert.ok(m.labels.every(x=>x.font>=13.4&&x.left>=m.box.left&&x.right<=m.box.right),`${width} labels`);assert.ok(m.buttons.every(x=>x.height>=44&&x.left>=0&&x.right<=width+1),`${width} controls`);assert.deepEqual(await answer(),baseOrder);layouts.push(m);if([1366,390,320].includes(width))await shot(`${width}-quiz.png`);
+   assert.equal(m.overflow,false,`${width} overflow`);assert.deepEqual(m.clipped,[],`${width} clipped`);assert.ok(Math.abs(m.scaleX-m.scaleY)<1e-5,`${width} distorts angles`);assert.ok(m.labels.every(x=>x.font>=13.4&&x.left>=m.box.left&&x.right<=m.box.right),`${width} labels`);assert.ok(m.buttons.every(x=>x.height>=44&&x.left>=0&&x.right<=width+1),`${width} controls`);assert.deepEqual(await answer(),baseOrder);assert.match(await page.locator('.rank-bench-photo').getAttribute('href'),m.box.width<650&&await page.locator('#s7').evaluate(e=>e.clientWidth<=650)?/bench-tall\.png$/:/bench-wide\.png$/);layouts.push(m);if([1366,390,320].includes(width))await shot(`${width}-quiz.png`);
   }
   if(capture)await fs.writeFile(path.join(capture,'layouts.json'),JSON.stringify(layouts,null,2));
  });
@@ -68,7 +77,7 @@ test('4.3 layer-speed quiz applies refraction through one three-layer bench',{ti
   await p.locator('[data-rank-medium="1"]').tap();await p.locator('[data-rank-slot="2"]').tap();await p.locator('[data-rank-medium="2"]').tap();await p.locator('[data-rank-slot="1"]').tap();await p.locator('#rank-check').tap();assert.equal(await p.locator('#quiz-result').getAttribute('data-result'),'correct');await context.close();
  });
  await t.test('texture failure leaves a usable vector bench, and no-JavaScript explains how to continue',async()=>{
-  const p=await browser.newPage();await p.route('**/oblique-entry-water.png',r=>r.abort());await ready(p);await p.waitForFunction(()=>document.querySelector('#rank-fallback').textContent.includes('簡化底圖'));await complete(p);assert.equal(await p.locator('#rank-check').isEnabled(),true);await p.close();const context=await browser.newContext({javaScriptEnabled:false});const plain=await context.newPage();await plain.goto(base);assert.match(await plain.locator('#s7 noscript').textContent(),/啟用JavaScript/);assert.equal(await plain.locator('#rank-play').isDisabled(),true);await context.close();
+  const p=await browser.newPage();await p.route('**/layer-quiz-*.png',r=>r.abort());await ready(p);await p.waitForFunction(()=>document.querySelector('#rank-fallback').textContent.includes('簡化底圖'));await complete(p);assert.equal(await p.locator('#rank-check').isEnabled(),true);await p.close();const context=await browser.newContext({javaScriptEnabled:false});const plain=await context.newPage();await plain.goto(base);assert.match(await plain.locator('#s7 noscript').textContent(),/啟用JavaScript/);assert.equal(await plain.locator('#rank-play').isDisabled(),true);await context.close();
  });
  assert.deepEqual(errors,[]);
 });
