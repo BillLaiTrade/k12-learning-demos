@@ -119,30 +119,43 @@
 .magnifier-lab.convex-bench .magnifier-trace { flex:0 0 auto; flex-wrap:nowrap; align-items:stretch; }
 .magnifier-takeaway { margin:14px 0 10px; padding:10px 12px; border-radius:10px; background:#e5efda; color:#28553a; font-size:.86rem; line-height:1.6; font-weight:650; }
 .magnifier-takeaway .magnifier-review-link { display:block; margin:4px 0 0; font-size:.73rem; font-weight:400; }
-.magnifier-lab .magnifier-why { margin:10px 0 0; border:1px solid #bccdb1; border-radius:9px; background:#f8faf3; color:#31543c; font-size:.8rem; }
-.magnifier-lab .magnifier-why summary { display:flex; align-items:center; gap:8px; width:auto; padding:9px 11px; list-style:none; cursor:pointer; font-weight:650; }
+.magnifier-lab .magnifier-why { margin:12px 0 0; border:1px solid #c2d1b7; border-radius:15px; background:#f6f8f0; color:#31543c; font-size:.82rem; overflow:hidden; }
+.magnifier-lab .magnifier-why summary { display:flex; align-items:center; gap:11px; width:auto; padding:15px 18px; list-style:none; cursor:pointer; font-size:.88rem; font-weight:650; }
 .magnifier-why summary::-webkit-details-marker { display:none; }
-.magnifier-why summary::before { content:'▸'; }
-.magnifier-why[open] summary::before { content:'▾'; }
-.magnifier-why summary small { margin-left:auto; padding:1px 7px; border-radius:9px; background:#e3ebd8; font-size:.66rem; font-weight:400; white-space:nowrap; }
-.magnifier-why-body { padding:0 11px 10px; }
-.magnifier-lab .magnifier-why p { margin:4px 0 9px; padding:0; line-height:1.6; }
-.magnifier-analogies { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
-.magnifier-analogies figure { min-width:0; margin:0; padding:8px; border:1px solid #d1dec5; border-radius:8px; background:#fffdf5; }
-.magnifier-analogies h4 { margin:0 0 3px; font-size:.78rem; }
-.magnifier-analogies svg { display:block; width:100%; height:auto; }
-.magnifier-analogies figcaption { margin:4px 0 0; font-size:.74rem; line-height:1.5; }
-.magnifier-analogies svg text { fill:#31543c; font:12px system-ui,sans-serif; }
-.analogy-mirror { fill:none; stroke:#608b94; stroke-width:5; }
-.analogy-hatch { fill:none; stroke:#96aa9a; stroke-width:2; }
-.analogy-stem { fill:none; stroke:#6d9163; stroke-width:3; }
-.analogy-red { fill:#d96950; }
-.analogy-blue { fill:#438dbb; }
-.analogy-light { fill:none; stroke:#d98568; stroke-width:1.6; }
-.analogy-back { fill:none; stroke:#d98568; stroke-width:1.4; stroke-dasharray:4 4; }
-.analogy-dashed-frame { fill:none; stroke:#8ba18a; stroke-width:1.2; stroke-dasharray:4 4; }
-.analogy-lens { fill:#d5e9df; stroke:#527b69; stroke-width:2; }
-.analogy-eye { fill:#f5f2df; stroke:#52735c; stroke-width:1.5; }
-.analogy-pupil { fill:#34583d; }
-.magnifier-lab .magnifier-why-conclusion { margin:9px 0 0; font-weight:650; }
-@container convex-bench (max-width:599px) { .magnifier-analogies { grid-template-columns:minmax(0,1fr); } }
+.magnifier-why summary::before { content:'＋'; display:grid; place-items:center; width:23px; height:23px; flex:0 0 23px; border-radius:50%; background:#e0e9d5; color:#406448; font-size:16px; font-weight:400; }
+.magnifier-why[open] summary::before { content:'−'; }
+.magnifier-why[open] summary { border-bottom:1px solid #dce5d3; }
+.magnifier-why summary small { margin-left:auto; padding:3px 10px; border:1px solid #d3dfc8; border-radius:20px; font-size:.68rem; font-weight:400; white-space:nowrap; }
+.magnifier-why-body { padding:16px 18px 18px; }
+.magnifier-lab .magnifier-why p { margin:0 0 14px; padding:0; line-height:1.7; }
+.magnifier-lab .magnifier-why-intro { color:#5b7258; font-size:.8rem; }
+.magnifier-analogies { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.magnifier-analogies figure { min-width:0; margin:0; border:1px solid #d5decb; border-radius:12px; background:#fffdf7; box-shadow:0 3px 10px #2e4c2a06; overflow:hidden; }
+.analogy-heading { display:flex; align-items:center; gap:8px; padding:13px 14px 11px; }
+.analogy-number { display:grid; place-items:center; flex:0 0 25px; height:25px; border-radius:8px; background:#edf1e3; color:#728369; font-size:.64rem; font-variant-numeric:tabular-nums; }
+.magnifier-analogies h4 { margin:0; color:#2e533a; font-size:.87rem; font-weight:650; }
+.analogy-medium { margin-left:auto; color:#829175; font-size:.65rem; letter-spacing:.08em; }
+.magnifier-analogies svg { display:block; width:calc(100% - 16px); height:auto; margin:0 8px; overflow:visible; }
+.magnifier-analogies svg text { font:20px system-ui,sans-serif; fill:#34583c; }
+.analogy-label text { font-weight:550; }
+.analogy-light { fill:none; stroke:#ffbf96; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+.analogy-back { fill:none; stroke:#e4efcf; stroke-width:1.4; stroke-dasharray:5 5; opacity:.8; }
+.analogy-direction { fill:none; stroke:#ffbf96; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
+.magnifier-analogies figcaption { display:grid; gap:4px; padding:13px 15px 16px; font-size:.76rem; line-height:1.6; }
+.magnifier-analogies figcaption strong { color:#30583c; font-weight:650; }
+.magnifier-analogies figcaption span { color:#71816a; font-size:.72rem; }
+.analogy-line-key { display:flex; flex-wrap:wrap; justify-content:center; gap:6px 20px; margin:12px 0; color:#7c8c72; font-size:.68rem; }
+.analogy-line-key span { display:inline-flex; align-items:center; gap:7px; }
+.analogy-line-key i { display:inline-block; width:23px; height:0; border-top:2px solid #c28661; }
+.analogy-line-key .analogy-key-dashed { border-top:2px dashed #8fa17b; }
+.magnifier-lab .magnifier-why .magnifier-why-conclusion { margin:0; padding:11px 14px; border-radius:9px; background:#e7eedb; color:#355b3e; font-size:.78rem; font-weight:550; text-align:center; }
+@container convex-bench (max-width:599px) {
+ .magnifier-analogies { grid-template-columns:minmax(0,1fr); gap:14px; }
+ .magnifier-lab .magnifier-why summary { padding:12px; gap:8px; font-size:.8rem; }
+ .magnifier-why-body { padding:13px 11px; }
+ .magnifier-analogies h4 { font-size:.82rem; }
+ .analogy-heading { padding:11px; }
+ .magnifier-analogies figcaption { padding:10px 12px 13px; }
+ .analogy-line-key { justify-content:flex-start; gap:5px 14px; font-size:.64rem; }
+ .magnifier-lab .magnifier-why .magnifier-why-conclusion { text-align:left; padding:10px 12px; }
+}
