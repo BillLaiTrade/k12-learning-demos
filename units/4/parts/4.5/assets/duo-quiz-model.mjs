@@ -1,7 +1,7 @@
 import {LIGHTS,MATERIALS,FILTERS} from './color-model.mjs';
-import {SOURCE_LINEAR} from './mix-optics.mjs';
+import {MIX_SETUP,SOURCE_LINEAR} from './mix-optics.mjs';
 
-export const PROBE_SETUP=Object.freeze({width:1000,height:400,radius:140,edge:.07});
+export const PROBE_SETUP=MIX_SETUP;
 export const PRIMARY_KEYS=Object.freeze(['red','green','blue']);
 export const PAPER_TYPES=Object.freeze({
  red:{name:'紅紙',rgb:MATERIALS.red.rgb,css:'#c54c42'},green:{name:'綠紙',rgb:MATERIALS.green.rgb,css:'#4c9d69'},blue:{name:'藍紙',rgb:MATERIALS.blue.rgb,css:'#467fc1'},
@@ -39,7 +39,7 @@ export function shuffledQuestions(random=Math.random){
  const deck=[...QUESTION_BANK];for(let i=deck.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}return deck;
 }
 export function probeLinear(x,y,lamps){
- const weights=lamps.map(spot=>Math.max(0,Math.min(1,(1-Math.hypot((x-spot.x)*PROBE_SETUP.width,(y-spot.y)*PROBE_SETUP.height)/PROBE_SETUP.radius)/PROBE_SETUP.edge)));
+ const weights=lamps.map(spot=>spot.on===false?0:Math.max(0,Math.min(1,(1-Math.hypot((x-spot.x)*PROBE_SETUP.width,(y-spot.y)*PROBE_SETUP.height)/PROBE_SETUP.radius)/PROBE_SETUP.edge)));
  return [0,1,2].map(c=>lamps.reduce((v,spot,i)=>v+weights[i]*SOURCE_LINEAR[PRIMARY_KEYS.indexOf(spot.colour)][c],0));
 }
 // Every ray from either lamp to any paper corner crosses the full filter pane.

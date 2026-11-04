@@ -1,9 +1,7 @@
 import {LIGHTS,FILTERS,rgbCss} from './color-model.mjs';
-import {MIX_SETUP,SOURCE_LINEAR} from './mix-optics.mjs';
-import {PROBE_SETUP,PRIMARY_KEYS,PAPER_TYPES,COLOUR_OPTIONS,TRANSMISSION_OPTIONS,REFLECTION_OPTIONS,INITIAL_QUESTION,challengeSignal,expectedAnswer,checkPrediction,shuffledQuestions} from './duo-quiz-model.mjs';
+import {initialiseDuoProbe} from './duo-probe.mjs?v=duo-free-torches-20261104';
+import {PAPER_TYPES,COLOUR_OPTIONS,TRANSMISSION_OPTIONS,REFLECTION_OPTIONS,INITIAL_QUESTION,challengeSignal,expectedAnswer,checkPrediction,shuffledQuestions} from './duo-quiz-model.mjs?v=duo-free-torches-20261104';
 
-const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
-const srgb=n=>{n=clamp(n,0,1);return n<=.0031308?n*12.92:1.055*n**(1/2.4)-.055;};
 const colourName=key=>COLOUR_OPTIONS.find(o=>o[0]===key)?.[1]||key;
 export function challengeDiagram(q,signal,lit){
  const paper=PAPER_TYPES[q.paper],shade=lit?rgbCss(signal.outgoing.map(v=>v*.4)):paper.css;
@@ -19,25 +17,9 @@ export function challengeDiagram(q,signal,lit){
 }
 
 export function initialiseDuoQuiz(root){
- const $=s=>root.querySelector(s),form=$('[data-quiz]'),feedback=$('[data-duo-feedback]'),canvas=$('[data-duo-probe]'),ctx=canvas.getContext('2d');
- const lamps=[{colour:'red',x:.42,y:.5},{colour:'blue',x:.58,y:.5}],handles=[...root.querySelectorAll('[data-probe-spot]')];
- let question=INITIAL_QUESTION,deck=shuffledQuestions().filter(q=>q.id!==question.id),lit=false,studio=null,studioLoading=false,threeFailed=false,drag=null,activeLamp=1,paintFrame=0;
- const pixels=ctx.createImageData(canvas.width,canvas.height);
- function paint(){
-  paintFrame=0;const data=pixels.data,P=PROBE_SETUP,centres=lamps.map(s=>[s.x*P.width,s.y*P.height]),sources=lamps.map(s=>SOURCE_LINEAR[PRIMARY_KEYS.indexOf(s.colour)]);
-  for(let y=0;y<canvas.height;y++)for(let x=0;x<canvas.width;x++){
-   const px=(x+.5)/canvas.width*P.width,py=(y+.5)/canvas.height*P.height;
-   const a=clamp((1-Math.hypot(px-centres[0][0],py-centres[0][1])/P.radius)/P.edge,0,1),b=clamp((1-Math.hypot(px-centres[1][0],py-centres[1][1])/P.radius)/P.edge,0,1),at=(y*canvas.width+x)*4;
-   for(let c=0;c<3;c++)data[at+c]=Math.round(255*srgb(MIX_SETUP.ambient+MIX_SETUP.exposure*(a*sources[0][c]+b*sources[1][c])));data[at+3]=255;
-  }ctx.putImageData(pixels,0,0);
- }
- function updateProbe(){
-  root.dataset.probe=JSON.stringify(lamps);canvas.setAttribute('aria-label',`白幕上手電筒A的${LIGHTS[lamps[0].colour].name}與手電筒B的${LIGHTS[lamps[1].colour].name}光斑，可移動光斑觀察重疊`);
-  lamps.forEach((lamp,i)=>{const handle=handles[i];handle.style.left=lamp.x*100+'%';handle.style.top=lamp.y*100+'%';handle.style.zIndex=i===activeLamp?3:2;handle.setAttribute('aria-label',`移動手電筒${i?'B':'A'}的${LIGHTS[lamp.colour].name}光斑，方向鍵調整位置`);
-   const image=$(`[data-probe-torch="${i}"]`);const src=new URL(`./torch-${lamp.colour}.png`,import.meta.url).href;if(image.src!==src)image.src=src;image.style.transform=`rotate(${(lamp.x-(i?.75:.25))*22}deg)`;
-   root.querySelectorAll(`[data-probe-lamp="${i}"]`).forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.probeColour===lamp.colour)));
-  });if(!paintFrame)paintFrame=requestAnimationFrame(paint);
- }
+ const $=s=>root.querySelector(s),form=$('[data-quiz]'),feedback=$('[data-duo-feedback]');
+ const probe=initialiseDuoProbe(root);
+ let question=INITIAL_QUESTION,deck=shuffledQuestions().filter(q=>q.id!==question.id),lit=false,studio=null,studioLoading=false,threeFailed=false;
  function updateScene(){const signal=challengeSignal(question);root.dataset.lit=String(lit);$('[data-challenge-state]').textContent=lit?'題目照明已開啟':'尚未開燈';$('[data-paper-reference]').textContent=`${PAPER_TYPES[question.paper].name}（${lit?'題目照明下':'白光下的外觀'}）`;
   $('[data-duo-fallback]').innerHTML=challengeDiagram(question,signal,lit);studio?.update(question,signal,lit);
   if(lit)root.dataset.signal=JSON.stringify(signal);else delete root.dataset.signal;
@@ -52,14 +34,7 @@ export function initialiseDuoQuiz(root){
  }
  const colours=$('[data-colour-options]');COLOUR_OPTIONS.forEach(([key,name,swatch])=>{const label=document.createElement('label');label.className='duo-answer';const input=document.createElement('input');input.type='radio';input.name='appearance';input.value=key;input.required=true;const dot=document.createElement('i');dot.style.backgroundColor=swatch;dot.setAttribute('aria-hidden','true');label.append(input,dot,document.createTextNode(name));colours.append(label);});
  for(const [selector,options]of[['[name=transmission]',TRANSMISSION_OPTIONS],['[name=reflection]',REFLECTION_OPTIONS]])for(const [value,label]of options){const option=document.createElement('option');option.value=value;option.textContent=label;$(selector).append(option);}
- root.querySelectorAll('[data-probe-colour]').forEach(button=>button.addEventListener('click',()=>{const i=Number(button.dataset.probeLamp);activeLamp=i;lamps[i].colour=button.dataset.probeColour;updateProbe();}));
- handles.forEach((handle,i)=>{
-  handle.addEventListener('pointerdown',e=>{if(!e.isPrimary){drag=null;return;}e.preventDefault();activeLamp=i;drag={id:e.pointerId,index:i,x:e.clientX,y:e.clientY,start:{...lamps[i]}};handle.setPointerCapture(e.pointerId);updateProbe();});
-  handle.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId||drag.index!==i)return;e.preventDefault();const bounds=canvas.getBoundingClientRect();lamps[i].x=clamp(drag.start.x+(e.clientX-drag.x)/bounds.width,.1,.9);lamps[i].y=clamp(drag.start.y+(e.clientY-drag.y)/bounds.height,.25,.75);updateProbe();});
-  for(const type of['pointerup','pointercancel','lostpointercapture'])handle.addEventListener(type,()=>{drag=null;});
-  handle.addEventListener('keydown',e=>{const move={ArrowLeft:[-.025,0],ArrowRight:[.025,0],ArrowUp:[0,-.025],ArrowDown:[0,.025]}[e.key];if(e.key==='Home'){e.preventDefault();lamps[i].x=lamps[i].y=.5;}else if(move){e.preventDefault();lamps[i].x=clamp(lamps[i].x+move[0],.1,.9);lamps[i].y=clamp(lamps[i].y+move[1],.25,.75);}else return;activeLamp=i;updateProbe();});
- });
- $('[data-reproduce]').addEventListener('click',()=>{question.lights.forEach((colour,i)=>Object.assign(lamps[i],{colour,x:i?.58:.42,y:.5}));updateProbe();$('.duo-probe').scrollIntoView({block:'start',behavior:'auto'});$('[data-probe-lamp="0"][aria-pressed=true]').focus({preventScroll:true});$('[data-probe-help]').textContent='已重現本題的兩盞燈色；仍可自由換色、拖動光斑查證。';});
+ $('[data-reproduce]').addEventListener('click',()=>probe.reproduce(question.lights));
  $('[data-next-question]').addEventListener('click',()=>{if(!deck.length){deck=shuffledQuestions();if(deck[0].id===question.id)[deck[0],deck[1]]=[deck[1],deck[0]];}question=deck.shift();renderQuestion();$('[data-prediction-title]').focus({preventScroll:true});});
  form.addEventListener('change',invalidate);
  form.addEventListener('submit',e=>{
@@ -72,7 +47,7 @@ export function initialiseDuoQuiz(root){
   feedback.replaceChildren(lead,detail,reason);
   requestAnimationFrame(()=>{const r=feedback.getBoundingClientRect();if(r.bottom>innerHeight-12||r.top<100)feedback.scrollIntoView({block:'center',behavior:'auto'});});
  });
- root.querySelectorAll('[data-quiz-pending]').forEach(e=>e.disabled=false);$('[data-duo-load-note]').hidden=true;$('[data-probe-static]').setAttribute('hidden','');root.dataset.ready=form.dataset.ready='true';root.dataset.renderer='diagram';updateProbe();renderQuestion();
+ root.querySelectorAll('[data-quiz-pending]').forEach(e=>e.disabled=false);$('[data-duo-load-note]').hidden=true;root.dataset.ready=form.dataset.ready='true';root.dataset.renderer='diagram';renderQuestion();
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){observer.disconnect();loadStudio();}},{rootMargin:'120px'});observer.observe($('[data-challenge-stage]'));
- addEventListener('pagehide',event=>{if(!event.persisted){cancelAnimationFrame(paintFrame);studio?.dispose();}},{once:true});
+ addEventListener('pagehide',event=>{if(!event.persisted){probe.dispose();studio?.dispose();}},{once:true});
 }
