@@ -61,9 +61,14 @@ export function createEquipmentExplorer({panel,panels,getStage,onOpen,onBackgrou
     portrait.querySelectorAll('[data-tube-portrait]').forEach(n=>n.remove());
     const image=portrait.querySelector(':scope > image');image.style.display=key==='tube'?'none':'';image.setAttribute('href',atlas?'assets/thistle-apparatus-atlas.png':key==='water'?'assets/oxygen-peroxide-open.webp':key==='spoon'?'assets/oxygen-catalyst-spoon.webp':'assets/oxygen-materials-layout.webp');image.setAttribute('width',key==='water'?'500':atlas?'1536':key==='spoon'?'245':'1536');image.setAttribute('height',key==='water'?'810':atlas?'1024':key==='spoon'?'55':'850');
     if(key==='tube'){
-      const rig=panel.querySelector('[data-photographic-equipment=tube]').cloneNode(true);
-      for(const n of[rig,...rig.querySelectorAll('*')])for(const a of[...n.attributes])if(a.name.startsWith('data-'))n.removeAttribute(a.name);
-      rig.setAttribute('data-tube-portrait','');rig.removeAttribute('transform');rig.setAttribute('opacity','1');portrait.setAttribute('viewBox','-35 -115 630 175');portrait.append(rig);
+      const material=panels[0].querySelector('[data-material=tube] .oxygen-material-illustration'),rig=svgElement('g',{});
+      rig.append(...[...material.childNodes].map(n=>n.cloneNode(true)));
+      const ids=new Map([...rig.querySelectorAll('[id]')].map(n=>[n.id,'oxygen-portrait-'+n.id]));
+      for(const n of[rig,...rig.querySelectorAll('*')])for(const a of[...n.attributes]){
+        if(a.name.startsWith('data-'))n.removeAttribute(a.name);
+        else n.setAttribute(a.name,a.name==='id'?ids.get(a.value)||a.value:a.value.replace(/#([\w-]+)/g,(match,id)=>ids.has(id)?'#'+ids.get(id):match));
+      }
+      rig.setAttribute('data-tube-portrait','');portrait.setAttribute('viewBox',material.getAttribute('viewBox'));portrait.append(rig);
     }
     node.setAttribute('aria-expanded','true');dialog.showModal();
   }
