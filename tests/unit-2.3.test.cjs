@@ -66,6 +66,29 @@ test('2.3: complete learning page preserves cup dragging, water retention and re
     assert.equal(await page.locator('script[src*="air.js"]').count(), 0);
   });
 
+  await t.test('upright water entry is visible without inventing extra water or wetting the paper', async () => {
+    await page.locator('#cup-reset').click();
+    assert.equal(await page.locator('#cup-scene .cup-entry-detail').count(), 0);
+    await dragCupVertically(13);
+    const scene = page.locator('#cup-scene'), detail = scene.locator('.cup-entry-detail');
+    const depth = Number(await scene.getAttribute('data-depth')), level = Number(await scene.getAttribute('data-water'));
+    const entry = Number(await detail.getAttribute('data-entry-depth'));
+    assert.ok(entry > .05 && entry < .2);
+    assert.ok(Math.abs(entry - (depth - level)) < 1e-8);
+    assert.equal(await scene.getAttribute('data-wet'), 'false');
+    assert.equal(await scene.getAttribute('data-escaped'), '0');
+    assert.equal(await scene.locator('.cup-bubble').count(), 0);
+    const pixels = await scene.screenshot();
+    await scene.locator('.cup-mouth-ingress').evaluate(n => n.style.display = 'none');
+    assert.ok(!pixels.equals(await scene.screenshot()), 'main scene must visibly show the water layer');
+    await scene.locator('.cup-mouth-ingress').evaluate(n => n.style.display = '');
+    await scene.screenshot({path:path.join(artifacts,'upright-small-entry.png')});
+    await rotateRim(125);
+    assert.equal(await scene.getAttribute('data-wet'), 'true');
+    assert.equal(await detail.count(), 0);
+    await page.locator('#cup-reset').click();
+  });
+
   await t.test('cup first drag stays vertical until release; dragging the rim then rotates both ways', async () => {
     await page.locator('#cup-reset').click(); await page.locator('#cup-scene').scrollIntoViewIfNeeded();
     assert.equal(await page.locator('#s1 .cup-callout, #s1 .cup-parts, #cup-hint').count(), 0);

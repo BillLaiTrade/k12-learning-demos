@@ -198,3 +198,17 @@ test('2.3: integrated report checks evidence instead of reusing main experiment'
     assert.equal(checkReport({ ...correct, ...change }).result, 'revise');
   }
 });
+
+test('2.3: upright immersion admits a small increasing water amount by compressing trapped air', async () => {
+  const { freshCup, moveCup, cupGeometry } = await import('../units/2/parts/2.3/assets/cup-lab-model.mjs');
+  let previousWater = 0, previousEntry = 0;
+  for (const depth of [2, 6, 10, 12, 13.5]) {
+    const state = moveCup(freshCup(), depth, 0), g = cupGeometry(depth, 0, state.escaped, state.waterArea);
+    const entry = depth - g.water;
+    assert.ok(g.waterArea > previousWater && g.waterArea < 72 * .02);
+    assert.ok(entry > previousEntry && entry < .2, 'shallow basin ingress stays below 2 mm');
+    assert.ok(Math.abs(g.airArea * (1 + g.water / 1033) - 72) < 1e-7);
+    assert.equal(state.escaped, 0); assert.equal(state.wet, false);
+    previousWater = g.waterArea; previousEntry = entry;
+  }
+});

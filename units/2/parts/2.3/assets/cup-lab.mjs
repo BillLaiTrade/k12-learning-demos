@@ -1,5 +1,5 @@
 import { CUP, freshCup, moveCup, advanceCup, cupGeometry } from './cup-lab-model.mjs?v=reaudit-20261103-2';
-import { cupSVG } from './cup-lab-view.mjs?v=clear-bubbles-20261104';
+import { cupSVG, cupEntryDetail } from './cup-lab-view.mjs?v=real-water-entry-20261104';
 const $ = s => document.querySelector(s);
 const scene = $('#cup-scene'), reduced = matchMedia('(prefers-reduced-motion: reduce)');
 let cup = freshCup(), before = null, after = null, preview = null, bubbles = [], drag = null;
@@ -41,20 +41,20 @@ function update(depth, angle, { capture = true, elapsed = 0 } = {}) {
   }
 }
 function status(g) {
-  if (preview) return preview === 'before' ? '回看杯口朝下入水：紙團低於外側水面，仍保持乾燥。' : '回看傾斜之後：空氣從杯口逸出，水進入並接觸紙團。';
+  if (preview) return preview === 'before' ? '回看杯口朝下入水：少量水已進入杯口，尚未碰到紙團。' : '回看傾斜之後：空氣從杯口逸出，水進入並接觸紙團。';
   if (g.draining) return '杯口露出水面，空氣進入，杯內的水正從杯口流出；紙團仍然是濕的。';
   if (cup.wet && !g.mouthExposed && g.minY < 0 && g.waterArea > 71) return '杯口還在水中，水仍留在杯內；紙團已經沾濕。';
   if (rotationUnlocked && g.mouthExposed) return cup.wet ? g.waterArea > .01 ? '能流出的水已流出，仍有水留在杯內較低處；紙團仍然是濕的。' : '杯內的水已流回水槽；紙團仍然是濕的。' : '杯口已接通外界空氣；上下移動仍會保留你設定的角度。';
   if (cup.wet) return Math.abs(cup.angle) < 2 ? '紙團已經沾水；回正杯子，不會自動補回空氣或讓紙團變乾。' : '空氣從杯口逸出，水進入杯內；水碰到紙團，紙團才變濕。';
   if (g.vent > .005) return '空氣從杯口逸出，水逐漸進入；繼續觀察水是否碰到紙團。';
-  if (g.submerged && g.paperBelowOutside) return '紙團低於外側水面，仍保持乾燥。杯裡的水未填滿，空氣可稍微壓縮。';
+  if (g.submerged && g.paperBelowOutside) return '少量水已進入杯口，杯內空氣受到壓縮；水還沒碰到紙團，所以紙團保持乾燥。';
   return '請再往下移，讓整個杯子浸入水中；放開後即可抓杯口旋轉。';
 }
 function render() {
   const state = displayed(), g = geometry(state);
   if (!drag && !preview && geometry().submerged && geometry().paperBelowOutside) rotationUnlocked = true;
   const canRotate = rotationUnlocked;
-  scene.innerHTML = cupSVG(state, { id: 'cup-main', bubbles: preview ? state.bubbles || [] : bubbles });
+  scene.innerHTML = cupSVG(state, { id: 'cup-main', bubbles: preview ? state.bubbles || [] : bubbles }) + cupEntryDetail(state);
   Object.assign(scene.dataset, { depth: cup.depth, angle: cup.angle, escaped: cup.escaped, wet: cup.wet, preview: preview || '',
     submerged: g.submerged, paperBelow: g.paperBelowOutside, withinTank: g.withinTank, water: g.water,
     paperY: g.paper.y, waterArea: g.waterArea, targetWaterArea: g.equilibriumWaterArea,
@@ -68,7 +68,7 @@ function render() {
   $('#cup-comparison').hidden = !showComparison;
   $('#cup-conclusion').hidden = !showComparison;
   if (showComparison) {
-    $('#cup-before-scene').innerHTML = cupSVG(before || exampleBefore, { id: 'cup-before', mini: true });
+    $('#cup-before-scene').innerHTML = cupSVG(before || exampleBefore, { id: 'cup-before', mini: true }) + cupEntryDetail(before || exampleBefore);
     $('#cup-after-scene').innerHTML = cupSVG(after || exampleAfter, { id: 'cup-after', mini: true, bubbles: after?.bubbles || [] });
     document.querySelectorAll('[data-cup-preview]').forEach(b => b.setAttribute('aria-pressed', String(preview === b.dataset.cupPreview)));
   }
