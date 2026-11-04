@@ -9,6 +9,8 @@ const scenes = [
     showUnavailable(root) {
       root.querySelector('#aperture-result').textContent = failureMessage;
       root.querySelector('#aperture-xiaokui-observation').textContent = '請重新整理頁面後再試。';
+      const operationHint = root.querySelector('#aperture-operation-hint');
+      if (operationHint) operationHint.textContent = '立體畫面暫時無法操作，請重新整理頁面後再試。';
       const heightOutput = root.querySelector('#aperture-offset-output');
       heightOutput.textContent = '無法操作';
       heightOutput.classList.remove('is-standard');
