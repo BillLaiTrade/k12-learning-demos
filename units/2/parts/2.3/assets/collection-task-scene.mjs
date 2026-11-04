@@ -1,9 +1,10 @@
-import {bodyOffset,bodyPoint} from './collection-task-layout.mjs?v=reaudit-20261103-2';
-import {regionPath,looseFunnelPose,STONE_OFFSETS} from './collection-task-contact.mjs?v=reaudit-20261103-2';
-import {directPosition,parkPosition} from './collection-task-direct.mjs?v=reaudit-20261103-2';
-import {createThistleFunnel,createDoubleStopper,svgNode as n} from './thistle-apparatus.mjs?v=reaudit-20261103-2';
-import {taskHosePoints,deskFrame,outletPose,jarPose,jarMouth,waterSurface,flaskSurface,ease,mix,clamp,rigPosition,heldMaterial,usedMarbleIds,vesselReaction,marbleFraction} from './collection-task-model.mjs?v=reaudit-20261103-2';
-import {liquidGeometry} from './co2-model.mjs?v=reaudit-20261103-2';
+import {tankWaterRegion} from './collection-task-water.mjs';
+import {bodyOffset,bodyPoint} from './collection-task-layout.mjs?v=b-decisions-20261104';
+import {regionPath,looseFunnelPose,STONE_OFFSETS} from './collection-task-contact.mjs?v=b-decisions-20261104';
+import {directPosition,parkPosition} from './collection-task-direct.mjs?v=b-decisions-20261104';
+import {createThistleFunnel,createDoubleStopper,svgNode as n} from './thistle-apparatus.mjs?v=b-decisions-20261104';
+import {taskHosePoints,deskFrame,overflowPoint,liquidReceiver,outletPose,jarPose,jarMouth,waterSurface,flaskSurface,ease,mix,clamp,rigPosition,heldMaterial,usedMarbleIds,vesselReaction,marbleFraction} from './collection-task-model.mjs?v=b-decisions-20261104';
+import {liquidGeometry} from './co2-model.mjs?v=b-decisions-20261104';
 const image=(file,box)=>{const el=n('image',{href:'assets/'+file,preserveAspectRatio:'none'});['x','y','width','height'].forEach((key,i)=>el.setAttribute(key,box[i]));return el;};
 const box=(el,b)=>['x','y','width','height'].forEach((k,i)=>el.setAttribute(k,b[i]));
 export function sprite(file,crop,b,size){const el=n('svg',{viewBox:crop.join(' '),preserveAspectRatio:'none',overflow:'hidden'});box(el,b);el.append(image(file,[0,0,...size]));return el;}
@@ -129,7 +130,7 @@ export function createCollectionScene(svg){
   flask.setAttribute('transform',`translate(${fd.x} ${fd.y}) rotate(${sp?.angle||0} 300 579.7)`);bowl.setAttribute('transform',`translate(${520+md.x} ${560+md.y})`);for(const el of [tankProxy,tankBody,water,surface,deposits.tank.group,localBubbles.tank])el.setAttribute('transform',`translate(${td.x} ${td.y})`);neckFront.setAttribute('transform',`translate(${fd.x} ${fd.y})`);anchor(flask,bodyPoint(s,'flask',300,410));anchor(tankBody,bodyPoint(s,'tank',1000,480));anchor(bowl,bodyPoint(s,'marble',520,560));liquid.setAttribute('d',liquidGeometry(flaskSurface(s)).d);liquid.setAttribute('opacity',s.acid+s.flaskWater+s.contents.flask.peroxide>0?'1':'0');flaskPowder.forEach((el,i)=>el.setAttribute('visibility',s.contents.flask.catalyst>i?'visible':'hidden'));solidNodes.forEach((el,i)=>{el.setAttribute('visibility',i<s.flaskMarbles?'visible':'hidden');const id=s.flaskStoneIds?.[i]??i,scale=Math.cbrt(marbleFraction(s,id));el.setAttribute('viewBox',crops[id].join(' '));box(el,[positions[i][0]-24*scale,positions[i][1]+20-40*scale,48*scale,40*scale]);});
   bowlStones.forEach((el,i)=>{const returning=f.motion==='return-stone'&&p>=.65,taken=usedMarbleIds(s).includes(i)||(i===(s.heldStoneId??s.flaskMarbles)&&s.heldMarble&&!returning)||(i===m?.index&&['pick-stone','place-stone'].includes(f.motion));el.setAttribute('visibility',taken?'hidden':'visible');});
   sourceBubbles.setAttribute('opacity',String(f.reactionStrength));[...sourceBubbles.children].forEach((b,i)=>{b.setAttribute('cx',235+i%6*24+Math.sin(s.time/450+i)*7);b.setAttribute('cy',575-((s.time/750+i*.13)%1)*Math.max(0,575-flaskSurface(s)));});
-  const sy=waterSurface(s)-td.y;water.setAttribute('d',`M580 ${sy}L1100 ${sy-18}V600H580Z`);surface.setAttribute('d',`M597 ${sy}L655 ${sy-38}L1050 ${sy-18}L1010 ${sy+20}Z`);water.setAttribute('opacity',s.tankWater>0?'1':'0');surface.setAttribute('opacity',s.tankWater>0?'1':'0');
+  const sy=waterSurface(s)-td.y;water.setAttribute('d',regionPath(tankWaterRegion(s,{local:true})));surface.setAttribute('d',`M597 ${sy}L655 ${sy-38}L1050 ${sy-18}L1010 ${sy+20}Z`);water.setAttribute('opacity',s.tankWater>0?'1':'0');surface.setAttribute('opacity',s.tankWater>0?'1':'0');
   jarProxy.setAttribute('transform',jt);jarProxy.setAttribute('visibility',has('jar')?'visible':'hidden');jar.setAttribute('transform',jt);jarFront.setAttribute('transform',jt);jarShape.setAttribute('transform',jt);
   // 保持水面水平，並以旋轉後的瓶內輪廓裁切，沒有伸出瓶外的方塊。
   const a=s.jarAngle*Math.PI/180,points=[[799,228],[820,218],[920,218],[941,228],[941,439],[920,449],[820,449],[799,439]].map(([x,y])=>({x:870+jp.x+(x-870)*Math.cos(a)-(y-330)*Math.sin(a),y:330+jp.y+(x-870)*Math.sin(a)+(y-330)*Math.cos(a)}));
@@ -189,8 +190,7 @@ export function createCollectionScene(svg){
   if(!dragOrder&&s.funnel&&funnel.group.nextSibling!==first)art.insertBefore(funnel.group,first);
   if(!dragOrder&&s.rig&&neckFront.previousSibling!==first)art.insertBefore(neckFront,first.nextSibling);
   const chosen=({forceps,water:bottles.water,acid:bottles.acid,peroxide:bottles.peroxide,rig:first,funnel:funnel.group,plate,...spare})[s.tool];if(!dragOrder&&chosen&&art.lastChild!==chosen&&!(s.tool==='rig'&&s.rig)&&!(s.tool==='funnel'&&s.funnel))art.append(chosen);
-  const mouth=jarMouth(s),overflow=s.overflow&&s.time-s.overflow.time<500;spill.setAttribute('opacity',s.spilling||overflow?'1':'0');spill.setAttribute('d',`M${mouth.x} ${mouth.y}Q${mouth.x+15} ${mouth.y+45} ${mouth.x+10} ${Math.max(570,mouth.y+75)}`);
-  if(overflow){const a=s.overflow.target==='tank'?bodyPoint(s,'tank',1010,397):s.overflow.target==='jar'?mouth:s.overflow.viaFunnel?funnel.mouth():bodyPoint(s,'flask',340,212);spill.setAttribute('d',`M${a.x} ${a.y}Q${a.x+28} ${a.y+45} ${a.x+18} 585`);}
+  const mouth=jarMouth(s),overflow=s.overflow&&s.time-s.overflow.time<500,spillOrigin=overflow?overflowPoint(s,s.overflow.target,s.overflow):mouth,receiver=overflow?s.overflow.receiver:liquidReceiver(s,'jar',mouth),endY=receiver==='tank'?Math.max(spillOrigin.y+12,waterSurface(s)):Math.max(585,spillOrigin.y+75);spill.setAttribute('opacity',s.spilling||overflow?'1':'0');spill.setAttribute('d',`M${spillOrigin.x} ${spillOrigin.y}Q${spillOrigin.x+15} ${(spillOrigin.y+endY)/2} ${spillOrigin.x+10} ${endY}`);
   labels.flask.setAttribute('transform',`translate(${300+fd.x} ${620+fd.y})`);labels.marble.setAttribute('transform',`translate(${520+md.x} ${640+md.y})`);labels.tank.setAttribute('transform',`translate(${1000+td.x} ${590+td.y})`);labels.jar.setAttribute('transform',`translate(${870+jp.x} ${Math.max(...ys)+32})`);
   sample.textContent=s.sampleStarted?(s.otherVolume>.01?'混有其他氣體':s.airVolume>.01?'混有空氣':s.co2Volume>.98?'二氧化碳':'正在集氣'):'';sample.setAttribute('x',870+jp.x);sample.setAttribute('y',330+jp.y);sample.setAttribute('opacity',s.co2Volume>0||s.airVolume>0||s.otherVolume>0?'1':'0');
   return{jar:{x:870+jp.x,y:330+jp.y},flask:bodyPoint(s,'flask',300,410),marble:bodyPoint(s,'marble',520,560),tank:bodyPoint(s,'tank',1000,480),outlet:{x:op.x+260,y:op.y+10},funnel:{x:274+fd.x,y:75+fd.y}};

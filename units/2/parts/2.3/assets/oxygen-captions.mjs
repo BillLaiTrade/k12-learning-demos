@@ -1,5 +1,5 @@
-// One caption follows the active scene. Native animation delays pause together
-// with its fade, so reading time never expires while the experiment is paused.
+// Playing captions retain their reading hold and fade. Pausing replaces any
+// delayed sentence with the current scene before freezing the caption.
 export function createSceneCaptions(panel,{host=null}={}) {
   const sources=[...panel.querySelectorAll('[data-scene-note]')];
   const bubble=sources[0];
@@ -37,7 +37,7 @@ export function createSceneCaptions(panel,{host=null}={}) {
       const figure=host||view.querySelector('.oxygen-apparatus,.co2-apparatus');
       if(strip.parentElement!==figure)figure.append(strip);
       wanted=text;
-      if(staticText){
+      if(staticText||paused){
         generation++;animation?.cancel();animation=null;shown=text;
         bubble.textContent=text;bubble.style.opacity='1';phase('idle');return;
       }
@@ -52,6 +52,6 @@ export function createSceneCaptions(panel,{host=null}={}) {
       shown='';wanted='';paused=false;bubble.style.opacity='1';phase('idle');if(!host)strip.remove();
     },
     pause() {paused=true;animation?.pause();},
-    resume() {paused=false;if(animation?.playState==='paused')animation.play();},
+    resume() {paused=false;if(animation?.playState==='paused')animation.play();else if(shown&&!animation)hold();},
   };
 }
