@@ -6,7 +6,6 @@
 .concave-tools { position:absolute; z-index:2; top:12px; left:12px; right:12px; display:flex; flex-wrap:wrap; gap:8px; pointer-events:none; }
 .concave-tools button { pointer-events:auto; min-height:40px; padding:8px 12px; font-size:.82rem; background:#fffef4; color:#304e3d; box-shadow:0 3px 10px #17281d22; }
 .concave-tools [data-parallel-rays], .concave-tools [data-parallel-rays][aria-pressed=true] { background:#f5d88d; border-color:#e4ca83; color:#42351a; font-weight:750; }
-.concave-tools [data-parallel-close][aria-pressed=true] { background:#dce9d0; color:#244a32; border-color:#8eac7d; }
 .concave-anchor { position:absolute; padding:4px 8px; border:1px solid #e0e7d9; border-radius:6px; background:#344a3ce8; color:#fffdf1; font-size:.76rem; white-space:nowrap; pointer-events:none; transform:translate(-50%,-100%); }
 .concave-anchor::after { content:''; position:absolute; top:100%; left:50%; height:12px; border-left:1px solid #e9eedf; }
 .concave-anchor[data-concave-label=focus] { border-color:#efd99a; color:#fff0ba; font-weight:750; }

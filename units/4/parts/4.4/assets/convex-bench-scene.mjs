@@ -20,7 +20,11 @@ export function createBenchApparatus(THREE,scene,G,art,paper,{withEye=false,lens
   const lensGroup=new THREE.Group();scene.add(lensGroup);mount(lensGroup,G.axis-.91);const profile=[];for(let i=0;i<=64;i++){const r=.88*i/64;profile.push(new THREE.Vector2(r,-lensHalfThickness(r)));}for(let i=64;i>=0;i--){const r=.88*i/64;profile.push(new THREE.Vector2(r,lensHalfThickness(r)));}
   const lens=new THREE.Mesh(new THREE.LatheGeometry(profile,80),new THREE.MeshPhysicalMaterial({color:'#d4ede6',transparent:true,opacity:lensKind==='concave'?.32:.5,transmission:.09,roughness:.05,metalness:0,depthWrite:false,side:THREE.DoubleSide}));lens.rotation.z=-Math.PI/2;lens.position.y=G.axis;lensGroup.add(lens);
   if(lensKind==='concave')for(const side of [-1,1]){const points=[];for(let i=0;i<=80;i++){const y=-.88+i*1.76/80;points.push(new THREE.Vector3(side*lensHalfThickness(Math.abs(y)),G.axis+y,0));}const outline=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:'#e5f4df',transparent:true,opacity:.9,depthWrite:false,depthTest:false}));outline.renderOrder=5;lensGroup.add(outline);}
-  for(const x of lensKind==='concave'?[-lensHalfThickness(.88),lensHalfThickness(.88)]:[-.012,.012]){const ring=new THREE.Mesh(new THREE.TorusGeometry(.92,.026,12,80),steel);ring.rotation.y=Math.PI/2;ring.position.set(x,G.axis,0);ring.castShadow=true;lensGroup.add(ring);}box(lensGroup,[.25,.10,.24],[0,G.axis-.94,0],steel);cylinder(lensGroup,.10,.12,[0,G.axis+.99,0],brass);
+  if(lensKind==='convex'){
+   for(const x of [-.012,.012]){const ring=new THREE.Mesh(new THREE.TorusGeometry(.92,.026,12,80),steel);ring.rotation.y=Math.PI/2;ring.position.set(x,G.axis,0);ring.castShadow=true;lensGroup.add(ring);}
+   cylinder(lensGroup,.10,.12,[0,G.axis+.99,0],brass);
+  }
+  box(lensGroup,[.25,.10,.24],[0,G.axis-.94,0],steel);
   const screen=new THREE.Group();scene.add(screen);mount(screen,.50);frame(screen,G.screenWidth,G.screenHeight);
   const projectedTexture=new THREE.CanvasTexture(paper);projectedTexture.colorSpace=THREE.SRGBColorSpace;const screenPlane=plane(screen,G.screenWidth,G.screenHeight,-.009,new THREE.MeshBasicMaterial({map:projectedTexture,toneMapped:false}),-Math.PI/2);
   for(const group of [source,screen]){box(group,[.18,.14,.30],[0,.54,.84],brass);for(let i=0;i<4;i++)box(group,[.19,.012,.24],[0,.49+i*.033,.84],dark);}

@@ -6,7 +6,7 @@ if(root) initialise(root);
 function initialise(root){
  const $=s=>root.querySelector(s),g=parallelModel('convex'),canvas=$('#convex-canvas'),svg=$('[data-convex-section]');
  const SCALE=.55,AXIS=1.75,world=p=>new THREE.Vector3(p[0]*SCALE,AXIS-p[1]*SCALE,0);
- let showRays=true,close=false,step='enter',studio=null;
+ let showRays=true,step='enter',studio=null;
  const NS='http://www.w3.org/2000/svg';
  function el(tag,attrs={},parent=svg){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));parent.append(e);return e;}
  function path(points,attrs={}){return el('path',{d:points.map((p,i)=>`${i?'L':'M'}${p[0]} ${p[1]}`).join(' '),fill:'none',...attrs});}
@@ -37,18 +37,16 @@ function initialise(root){
  function update(){
   renderDetail();
   $('[data-parallel-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-parallel-rays]').setAttribute('aria-pressed',String(showRays));
-  $('[data-parallel-close]').textContent=close?'返回整體觀察':'近看折射';$('[data-parallel-close]').setAttribute('aria-pressed',String(close));
   root.querySelectorAll('[data-convex-step]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.convexStep===step)));
   $('[data-convex-explain]').textContent=step==='enter'?'先看第一個表面：光從空氣進入玻璃，偏向這個表面的法線，與法線的夾角變小。':'再看第二個表面：光從玻璃進入空氣，偏離這個表面的法線，與法線的夾角變大。';
   $('[data-result]').textContent=showRays?'凸透鏡中間厚、邊緣薄。這組平行光在另一側會聚，會聚位置稱為焦點 F。凸透鏡中心到 F 的距離叫焦距；光通過焦點後仍繼續前進。':'先觀察鏡片厚薄，再顯示輔助光路，追蹤入射、玻璃內部與出射的方向。';
-  canvas.setAttribute('aria-label',`立體凸透鏡實驗台，${close?'近看'+(step==='enter'?'進入玻璃':'離開玻璃'):'平行光會聚於焦點'}，光路${showRays?'顯示':'隱藏'}`);
-  root.dataset.view=close?'surface':'overall';root.dataset.rays=String(showRays);root.dataset.step=step;
+  canvas.setAttribute('aria-label',`立體凸透鏡實驗台，平行光會聚於焦點，光路${showRays?'顯示':'隱藏'}`);
+  root.dataset.view='overall';root.dataset.rays=String(showRays);root.dataset.step=step;
   studio?.update();
  }
  $('[data-parallel-rays]').addEventListener('click',()=>{showRays=!showRays;update();});
- $('[data-parallel-close]').addEventListener('click',()=>{close=!close;if(close)showRays=true;update();});
  root.querySelectorAll('[data-convex-step]').forEach(b=>b.addEventListener('click',()=>{step=b.dataset.convexStep;showRays=true;update();}));
- try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-convex-fallback]').hidden=false;$('[data-parallel-close]').hidden=true;root.dataset.webgl='unavailable';console.warn('Convex 3D:',error.message);}
+ try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-convex-fallback]').hidden=false;root.dataset.webgl='unavailable';console.warn('Convex 3D:',error.message);}
  update();root.dataset.ready='true';
 
  function createStudio(){
@@ -56,7 +54,7 @@ function initialise(root){
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
   const scene=new THREE.Scene();scene.background=new THREE.Color('#839487');scene.fog=new THREE.Fog('#839487',25,60);
   const camera=new THREE.PerspectiveCamera(43,1,.03,90),target=new THREE.Vector3(1.25,1.35,0);
-  let orbit={azimuth:-.26,polar:1.39,radius:11.5},nearZoom=1,pending=0;
+  let orbit={azimuth:-.26,polar:1.39,radius:11.5},pending=0;
   scene.add(new THREE.HemisphereLight('#eff1e4','#5a6e56',2));
   const key=new THREE.DirectionalLight('#fff4d6',3);key.position.set(-2,7,5);key.castShadow=true;key.shadow.mapSize.set(1024,1024);Object.assign(key.shadow.camera,{left:-8,right:9,top:6,bottom:-4});key.shadow.bias=-.0003;scene.add(key);
   const rim=new THREE.DirectionalLight('#d9f0ee',1.7);rim.position.set(3,4,-4);scene.add(rim);
@@ -97,20 +95,14 @@ function initialise(root){
    }
   }
   const focus=new THREE.Mesh(new THREE.SphereGeometry(.052,20,16),new THREE.MeshBasicMaterial({color:'#ffedb1',toneMapped:false}));focus.position.copy(world([g.focus,0]));scene.add(focus);
-  const selection=new THREE.Group();scene.add(selection);
-  const selectedPoint=new THREE.Mesh(new THREE.SphereGeometry(.036,16,12),new THREE.MeshBasicMaterial({color:'#badd98',toneMapped:false}));selection.add(selectedPoint);
-  const normal=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineDashedMaterial({color:'#e3eedb',dashSize:.045,gapSize:.025,depthTest:false}));normal.renderOrder=4;selection.add(normal);
   function updateCamera(){
-   const aspect=Math.max(camera.aspect,.55);let aim=target;
-   if(close){aim=world(g.rays[0][step]);const r=3.8*nearZoom*Math.max(1,.95/aspect);camera.position.set(aim.x-.65,aim.y+.25,r);camera.lookAt(aim);}
-   else{const r=orbit.radius*Math.max(1,1.55/aspect);camera.position.set(target.x+r*Math.sin(orbit.polar)*Math.sin(orbit.azimuth),target.y+r*Math.cos(orbit.polar),target.z+r*Math.sin(orbit.polar)*Math.cos(orbit.azimuth));camera.lookAt(target);}
-   camera.updateProjectionMatrix();camera.updateMatrixWorld();
+   const r=orbit.radius*Math.max(1,1.55/Math.max(camera.aspect,.55));camera.position.set(target.x+r*Math.sin(orbit.polar)*Math.sin(orbit.azimuth),target.y+r*Math.cos(orbit.polar),target.z+r*Math.sin(orbit.polar)*Math.cos(orbit.azimuth));camera.lookAt(target);camera.updateProjectionMatrix();camera.updateMatrixWorld();
   }
   const labels={source:{point:new THREE.Vector3(sourceX,AXIS+.92,0),dx:-10,dy:-18},thick:{point:new THREE.Vector3(centerX,AXIS,0),dx:42,dy:-8},thin:{point:new THREE.Vector3(centerX,AXIS+R*.94,0),dx:48,dy:-12},focus:{point:focus.position,dx:0,dy:-22},axis:{point:new THREE.Vector3(g.rays[0].end[0]*SCALE,AXIS,0),dx:-12,dy:29}};
   function updateLabels(){const rect=canvas.getBoundingClientRect();updateFocalDistance(rect);for(const[name,config]of Object.entries(labels)){const e=$(`[data-convex-label=${name}]`),v=config.point.clone().project(camera);e.hidden=(name==='focus'&&!showRays)||v.z< -1||v.z>1||Math.abs(v.x)>.96||Math.abs(v.y)>.9;if(e.hidden)continue;const x=(v.x+1)*rect.width/2+(rect.width<400&&name==='thin'?-12:config.dx),y=(1-v.y)*rect.height/2+(rect.width<400&&name==='focus'?-44:config.dy);e.style.left=Math.max(e.offsetWidth/2+5,Math.min(rect.width-e.offsetWidth/2-5,x))+'px';e.style.top=Math.max(67,y)+'px';}}
   function updateFocalDistance(rect){
    const overlay=$('[data-convex-focal-distance]'),a=new THREE.Vector3(centerX,AXIS,0).project(camera),b=focus.position.clone().project(camera);
-   overlay.toggleAttribute('hidden',close||!showRays||[a,b].some(v=>v.z< -1||v.z>1||Math.abs(v.x)>.96||Math.abs(v.y)>.8));if(overlay.hasAttribute('hidden'))return;
+   overlay.toggleAttribute('hidden',!showRays||[a,b].some(v=>v.z< -1||v.z>1||Math.abs(v.x)>.96||Math.abs(v.y)>.8));if(overlay.hasAttribute('hidden'))return;
    overlay.setAttribute('viewBox',`0 0 ${rect.width} ${rect.height}`);overlay.style.height=rect.height+'px';
    const ax=(a.x+1)*rect.width/2,ay=(1-a.y)*rect.height/2,bx=(b.x+1)*rect.width/2,by=(1-b.y)*rect.height/2,offset=rect.width<600?48:66;
    $('[data-focal-guides]').setAttribute('d',`M${ax} ${ay}V${ay+offset}M${bx} ${by}V${by+offset}`);
@@ -121,23 +113,23 @@ function initialise(root){
   }
   let lastRayRadius=0;
   function draw(){pending=0;
-   const distance=camera.position.distanceTo(close?world(g.rays[0][step]):target),pixelWorld=2*distance*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))/Math.max(1,canvas.clientHeight),radius=THREE.MathUtils.clamp(pixelWorld*.72,.004,.045);
+   const distance=camera.position.distanceTo(target),pixelWorld=2*distance*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))/Math.max(1,canvas.clientHeight),radius=THREE.MathUtils.clamp(pixelWorld*.72,.004,.045);
    if(Math.abs(radius-lastRayRadius)>.0007){for(const tube of rays.children.filter(m=>m.geometry.type==='TubeGeometry')){const {path,tubularSegments}=tube.geometry.parameters;tube.geometry.dispose();tube.geometry=new THREE.TubeGeometry(path,tubularSegments,radius,7,false);}lastRayRadius=radius;}
    const scale=THREE.MathUtils.clamp(pixelWorld/.02,.4,2.5);arrowMeshes.forEach(m=>m.scale.setScalar(scale));focus.scale.setScalar(scale);
    renderer.render(scene,camera);updateLabels();
   }
   function requestDraw(){if(!pending)pending=requestAnimationFrame(draw);}
   function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;updateCamera();requestDraw();}
-  function update(){rays.visible=showRays;focus.visible=showRays;selection.visible=showRays&&close;selectedPoint.position.copy(world(g.rays[0][step]));const p=g.rays[0][step],N=step==='enter'?g.rays[0].N1:g.rays[0].N2;normal.geometry.dispose();normal.geometry=new THREE.BufferGeometry().setFromPoints([world([p[0]-N[0]*.8,p[1]-N[1]*.8]),world([p[0]+N[0]*.8,p[1]+N[1]*.8])]);normal.computeLineDistances();updateCamera();requestDraw();}
+  function update(){rays.visible=showRays;focus.visible=showRays;updateCamera();requestDraw();}
   const pointers=new Map();let gesture=null;
   const pinch=()=>{const p=[...pointers.values()];return p.length<2?0:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);};
-  canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.setPointerCapture(e.pointerId);gesture=pointers.size>1?{kind:'pinch',distance:pinch(),radius:orbit.radius,nearZoom}:{kind:'orbit',x:e.clientX,y:e.clientY,azimuth:orbit.azimuth,polar:orbit.polar};});
-  canvas.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId)||!gesture)return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(gesture.kind==='pinch'){const ratio=gesture.distance/Math.max(20,pinch());if(close)nearZoom=THREE.MathUtils.clamp(gesture.nearZoom*ratio,.7,1.8);else orbit.radius=THREE.MathUtils.clamp(gesture.radius*ratio,7,19);}else if(!close){orbit.azimuth=THREE.MathUtils.clamp(gesture.azimuth-(e.clientX-gesture.x)*.004,-.9,.7);orbit.polar=THREE.MathUtils.clamp(gesture.polar+(e.clientY-gesture.y)*.003,.85,1.55);}updateCamera();requestDraw();});
+  canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.setPointerCapture(e.pointerId);gesture=pointers.size>1?{kind:'pinch',distance:pinch(),radius:orbit.radius}:{kind:'orbit',x:e.clientX,y:e.clientY,azimuth:orbit.azimuth,polar:orbit.polar};});
+  canvas.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId)||!gesture)return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(gesture.kind==='pinch'){const ratio=gesture.distance/Math.max(20,pinch());orbit.radius=THREE.MathUtils.clamp(gesture.radius*ratio,7,19);}else{orbit.azimuth=THREE.MathUtils.clamp(gesture.azimuth-(e.clientX-gesture.x)*.004,-.9,.7);orbit.polar=THREE.MathUtils.clamp(gesture.polar+(e.clientY-gesture.y)*.003,.85,1.55);}updateCamera();requestDraw();});
   function stop(e){pointers.delete(e.pointerId);gesture=null;}
   for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,stop);
-  canvas.addEventListener('wheel',e=>{e.preventDefault();if(close)nearZoom=THREE.MathUtils.clamp(nearZoom+e.deltaY*.002,.7,1.8);else orbit.radius=THREE.MathUtils.clamp(orbit.radius+e.deltaY*.008,7,19);updateCamera();requestDraw();},{passive:false});
-  canvas.addEventListener('keydown',e=>{const map={ArrowLeft:[-.07,0],ArrowRight:[.07,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!map[e.key]||close)return;e.preventDefault();orbit.azimuth=THREE.MathUtils.clamp(orbit.azimuth+map[e.key][0],-.9,.7);orbit.polar=THREE.MathUtils.clamp(orbit.polar+map[e.key][1],.85,1.55);updateCamera();requestDraw();});
+  canvas.addEventListener('wheel',e=>{e.preventDefault();orbit.radius=THREE.MathUtils.clamp(orbit.radius+e.deltaY*.008,7,19);updateCamera();requestDraw();},{passive:false});
+  canvas.addEventListener('keydown',e=>{const map={ArrowLeft:[-.07,0],ArrowRight:[.07,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!map[e.key])return;e.preventDefault();orbit.azimuth=THREE.MathUtils.clamp(orbit.azimuth+map[e.key][0],-.9,.7);orbit.polar=THREE.MathUtils.clamp(orbit.polar+map[e.key][1],.85,1.55);updateCamera();requestDraw();});
   new ResizeObserver(resize).observe(canvas);resize();document.addEventListener('visibilitychange',()=>{if(!document.hidden)requestDraw();});
-  return {update,scene,camera,renderer,lens,rays,focus,source,selection,g,world};
+  return {update,scene,camera,renderer,lens,rays,focus,source,g,world};
  }
 }
