@@ -1,0 +1,29 @@
+▶ sixth section teaches apparent depth with synchronized side and rendered observer views
+  ✔ one press continuously fills or drains to its endpoint with synchronized views (13039.113558ms)
+  ✔ same-direction presses continue, opposite presses reverse and direct manipulation takes over (12642.083967ms)
+  ✔ water can be dragged vertically by its handle or surface, with keyboard access and no initial jump (8163.100402ms)
+  ✔ water and observer changes really repaint the coin, with the physical coin remaining fixed (10987.858492ms)
+  ✔ occlusion changes actual rendered pixels, and adding water at the same viewpoint reveals the coin (3058.492983ms)
+  ✔ the occluding wall is named in both views and the explanation follows the real visibility (2583.038806ms)
+  ✔ hiding the construction preserves the eye view and the physical scene (237.519306ms)
+  ✔ keyboard and pointer change the same viewing position without losing focus (8224.087687ms)
+  ✔ native mobile touch moves the viewpoint and updates the eye view (15664.13508ms)
+  ✔ reduced motion reaches the requested endpoint in either direction (5075.319734ms)
+  ✔ texture failure has a usable fallback and retry restores materials without resetting controls (6234.511523ms)
+  ✔ reading remains available with JavaScript disabled (704.245041ms)
+✔ sixth section teaches apparent depth with synchronized side and rendered observer views (90920.638314ms)
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (184.37014ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (559.714607ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (12532.154262ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (638.623591ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (17097.840972ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (15101.180817ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 125161.333238
