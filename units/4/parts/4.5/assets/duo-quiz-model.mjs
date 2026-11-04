@@ -15,6 +15,16 @@ const MASK_COLOURS={1:'red',2:'green',4:'blue',3:'yellow',6:'cyan',5:'magenta',7
 export const INITIAL_QUESTION=Object.freeze({id:'red-green/green/red',lights:['red','green'],filter:'green',paper:'red'});
 export const QUESTION_BANK=Object.freeze([['red','green'],['red','blue'],['green','blue']].flatMap(lights=>['clear',...lights].flatMap(filter=>Object.keys(PAPER_TYPES).map(paper=>Object.freeze({id:`${lights.join('-')}/${filter}/${paper}`,lights:[...lights],filter,paper})))));
 
+// Six visible cases introduce mixing first, then filter and paper selection.
+export const INITIAL_SERIES=Object.freeze(['red-green/clear/white','red-blue/clear/white','green-blue/clear/yellow','red-green/green/red','red-blue/red/magenta','green-blue/blue/cyan'].map(id=>QUESTION_BANK.find(q=>q.id===id)));
+export function newQuestionSeries(random=Math.random,previous=[]){
+ const used=new Set(previous.map(q=>q.id));
+ return [false,true].flatMap(filtered=>[['red','green'],['red','blue'],['green','blue']].map(pair=>{
+  const pool=QUESTION_BANK.filter(q=>q.lights.join('-')===pair.join('-')&&(q.filter!=='clear')===filtered),fresh=pool.filter(q=>!used.has(q.id)),choices=fresh.length?fresh:pool;
+  return choices[Math.floor(random()*choices.length)];
+ }));
+}
+
 // Add the two source components before the filter and paper select from them.
 // This is the same qualitative three-channel response used in lessons 4 and 5.
 export function challengeSignal(question){

@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {QUESTION_BANK,PAPER_TYPES,INITIAL_QUESTION,challengeSignal,expectedAnswer,checkPrediction,shuffledQuestions,CHALLENGE_LAYOUT as L,filterIntersection,probeLinear} from '../units/4/parts/4.5/assets/duo-quiz-model.mjs';
+import {QUESTION_BANK,PAPER_TYPES,INITIAL_QUESTION,INITIAL_SERIES,newQuestionSeries,challengeSignal,expectedAnswer,checkPrediction,shuffledQuestions,CHALLENGE_LAYOUT as L,filterIntersection,probeLinear} from '../units/4/parts/4.5/assets/duo-quiz-model.mjs';
 import {SOURCE_LINEAR} from '../units/4/parts/4.5/assets/mix-optics.mjs';
 test('72題涵蓋三種雙色、無色片／有效色片及八種紙張，輪內不重複',()=>{
  assert.equal(QUESTION_BANK.length,72);assert.equal(new Set(QUESTION_BANK.map(q=>q.id)).size,72);assert.equal(Object.keys(PAPER_TYPES).length,8);
@@ -36,4 +36,14 @@ test('兩燈開關不改顏色或足跡，關閉後不提供色光',()=>{
  const lamps=[{colour:'red',x:.5,y:.5,on:true},{colour:'green',x:.5,y:.5,on:false}];
  assert.deepEqual(probeLinear(.5,.5,lamps),[...SOURCE_LINEAR[0]]);
  lamps[0].on=false;assert.deepEqual(probeLinear(.5,.5,lamps),[0,0,0]);
+});
+
+test('六題初始情境涵蓋混光、紙張選色與色片，六種結果都可推論',()=>{
+ assert.equal(INITIAL_SERIES.length,6);assert.ok(INITIAL_SERIES.every(Boolean));assert.equal(new Set(INITIAL_SERIES.map(q=>q.id)).size,6);
+ assert.ok(INITIAL_SERIES.slice(0,3).every(q=>q.filter==='clear'));assert.ok(INITIAL_SERIES.slice(3).every(q=>q.filter!=='clear'));
+ assert.deepEqual(INITIAL_SERIES.map(q=>expectedAnswer(q).colour),['yellow','magenta','green','dark','red','blue']);assert.equal(expectedAnswer(INITIAL_SERIES[2]).reflection,'some');
+});
+test('換組維持三題無色片及三題有色片，各雙色組合都有且不重複前組',()=>{
+ let previous=INITIAL_SERIES;
+ for(let n=0;n<8;n++){const next=newQuestionSeries(()=>n/8,previous);assert.equal(next.length,6);assert.equal(new Set(next.map(q=>q.id)).size,6);assert.ok(next.every(q=>QUESTION_BANK.includes(q)&&!previous.some(old=>old.id===q.id)));assert.ok(next.slice(0,3).every(q=>q.filter==='clear'));assert.ok(next.slice(3).every(q=>q.filter!=='clear'));for(const half of[next.slice(0,3),next.slice(3)])assert.equal(new Set(half.map(q=>q.lights.join('-'))).size,3);previous=next;}
 });
