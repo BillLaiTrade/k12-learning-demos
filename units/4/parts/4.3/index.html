@@ -37,7 +37,7 @@
   <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-fit2">
 <link rel="stylesheet" href="assets/integrated-refraction.css?v=20261103-fit2">
   <link rel="stylesheet" href="assets/return-refraction-refresh.css?v=20261103-inline1">
-  <link rel="stylesheet" href="assets/depth-lab.css?v=20261104-dashed1">
+  <link rel="stylesheet" href="assets/depth-lab.css?v=20261104-visual1">
   <script type="module" src="assets/depth-lab.mjs?v=20261104-water2s1"></script>
   <script type="module" src="assets/lesson.mjs?v=20261103-depth1">
 </script>
@@ -492,10 +492,39 @@
 <p id="depth-live" class="visually-hidden" role="status" aria-live="polite"></p>
 <p id="depth-fallback" class="depth-fallback"></p>
 <details class="depth-more"><summary>為什麼看到的位置與實際位置不同？</summary><div>
-<p>硬幣反射的光從水進入空氣，斜射時偏離法線。眼睛依入眼光線的方向往回判斷，得到比硬幣更靠近水面的視位置。左邊的橘色虛線只用來說明這個判斷，光並沒有沿虛線傳播。</p>
-<p>右邊是左側觀看位置的視野。觀看位置太遠、水位較低時，前側槽壁可能遮住硬幣的光；靠近或加水，便能觀察可見範圍如何改變。即使暫時看不到硬幣，它仍固定在槽底。</p>
-<p>生活中，池底或水中物體也常看起來較淺；看見的深度不能直接當作實際水深。</p>
-<p class="note">模型：平坦水面、代表水折射率4/3，小瞳孔附近的光估計局部視位置。右側以相同場景的光線追跡繪製，從槽口觀看，前側槽壁設為不透光以呈現遮擋；未模擬透過槽壁的另一組折射、波浪與部分反射。</p>
+<div class="depth-reason-layout">
+<figure class="depth-position-figure">
+<svg class="depth-position-diagram" viewBox="0 0 440 300" role="img" aria-labelledby="depth-position-title depth-position-desc">
+<title id="depth-position-title">硬幣沒動，看起來的位置卻較淺</title>
+<desc id="depth-position-desc">金色實線從槽底硬幣出發，在水面折射後進入眼睛。橘色虛線沿入眼方向反向延伸，指向較靠近水面的視位置；虛線不是光真正走的路。</desc>
+<defs><linearGradient id="depth-explain-water" x2="0" y2="1"><stop stop-color="#d4efeb"/><stop offset="1" stop-color="#a9d5d1"/></linearGradient><linearGradient id="depth-explain-coin"><stop stop-color="#e9cf87"/><stop offset=".5" stop-color="#fff0b6"/><stop offset="1" stop-color="#b78b3a"/></linearGradient><marker id="depth-explain-arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1L8 5L1 9" fill="none" stroke="#b88a16" stroke-width="1.5"/></marker></defs>
+<rect x="1" y="1" width="438" height="298" rx="14" fill="#fcfbf3"/>
+<path d="M1 135H439V285Q439 299 425 299H15Q1 299 1 285Z" fill="url(#depth-explain-water)"/>
+<path d="M1 135H439" stroke="#579c9b" stroke-width="2"/>
+<g fill="#31584f" font-size="15"><text x="18" y="116">空氣</text><text x="18" y="160">水</text><text x="373" y="126">水面</text></g>
+<path d="M182 90V270" stroke="#7a9487" stroke-width="1.5" stroke-dasharray="5 5"/>
+<text x="151" y="81" fill="#637c70" font-size="14">法線</text>
+<path d="M110 260L182 135L275 31" fill="none" stroke="#e0ac2c" stroke-width="3.5"/>
+<path d="M133 220L151 189M214 99L235 76" fill="none" stroke="#b88a16" stroke-width="2" marker-end="url(#depth-explain-arrow)"/>
+<path d="M182 135L128.5 195" fill="none" stroke="#c16c3c" stroke-width="2.5" stroke-dasharray="6 5"/>
+<use href="#depth-eye-art" transform="translate(284 31) scale(.65)"/>
+<text x="319" y="35" fill="#31584f" font-size="15">眼睛</text>
+<ellipse cx="110" cy="260" rx="18" ry="6" fill="url(#depth-explain-coin)" stroke="#9b7634" stroke-width="1.5"/>
+<ellipse cx="128.5" cy="195" rx="18" ry="6" fill="#fff5d9" fill-opacity=".6" stroke="#c16c3c" stroke-width="2" stroke-dasharray="4 3"/>
+<path d="M147 195H239M129 260H239" stroke="#5b7f73" stroke-width="1.2"/>
+<g fill="#254f43" font-size="16" font-weight="650"><text x="250" y="192">看起來的位置</text><text x="250" y="258">實際位置</text></g>
+<g fill="#527368" font-size="14"><text x="250" y="217">較靠近水面</text><text x="250" y="285">硬幣一直在這裡</text></g>
+</svg>
+<figcaption><span><i class="depth-reason-real"></i>光真正的路</span><span><i class="depth-reason-backtrack"></i>沿入眼方向往回判斷</span></figcaption>
+</figure>
+<ol class="depth-reason-steps">
+<li><strong>光出水，方向改變</strong><span>從水斜射進空氣，偏離法線。</span></li>
+<li><strong>眼睛沿入眼方向往回判斷</strong><span>虛線指向看起來的位置。</span></li>
+<li><strong>硬幣沒動，卻看起來較淺</strong><span>光沒有沿著虛線傳播。</span></li>
+</ol>
+</div>
+<p class="depth-life-link">池底也常看起來較淺，<strong>看見的深度不等於實際水深。</strong></p>
+<details class="depth-model-note"><summary>示意圖與模型補充</summary><p>圖解用來比較位置，並非上方操作台的即時畫面。模型採平坦水面、水折射率4/3，以小瞳孔附近的光估計局部視位置；右側追跡同一槽體的光線，前側槽壁不透光。不含透過槽壁的另一組折射、波浪與部分反射。</p></details>
 </div></details>
 <noscript><p class="depth-fallback">水底硬幣沒有移動。光出水時折射，眼睛沿入眼方向往回判斷，因此看起來較淺；啟用JavaScript後可同步調整水位與觀看位置。</p></noscript>
 </div>

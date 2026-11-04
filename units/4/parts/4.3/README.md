@@ -418,3 +418,7 @@ node --test --test-concurrency=1 tests/unit-4.3-depth-model.test.mjs tests/unit-
 依使用者要求，每次按加水／放水都從目前水位連續推進約兩秒到滿／空，取代前輪全量約五秒。修正系統減少動態偏好及播放中切換偏好時會瞬間跳到端點的分支；教學水位在兩種偏好下皆逐幀播放，CSS裝飾轉場偏好保持。中途開始也約兩秒，同向重按不重啟，反向從當前水位重新計時；手動接管及離屏續播保持，沒有重播／重設。
 
 瀏覽器專項仍16項，配格式與整課共22項（含外層）。新增真實時鐘與逐幀記錄，檢查兩偏好、雙方向、中途水位及播放中切換偏好的約兩秒時長，確認側圖水面與Canvas中間水位同步、畫面像素真的改變；原生手機觸控同樣計時。`water-timing.json`保存觀測值，DEPTH_CAPTURE_DIR／公開參數沿用。模型／固定鏡頭／右圖／既有虛線樣式保持。見`docs/decisions/unit-4.3-depth-water-2s.md`及`docs/reviews/unit-4.3-depth-water-2s/review.md`。
+
+## 第六區視深圖解（2026-11-04）
+
+「為什麼看到的位置與實際位置不同？」改以實線／虛線位置對照圖及三句重點說明，生活提醒縮成一句，模型細節收進次層補充。桌機並排、窄容器上下排列；同款眼睛與既有綠／金色系保持。圖解不是操作台即時畫面，不新增動畫，不改任何操作或物理。見`docs/decisions/unit-4.3-depth-visual-explanation.md`及`docs/reviews/unit-4.3-depth-visual-explanation-20261104/review.md`。

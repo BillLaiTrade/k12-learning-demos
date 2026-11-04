@@ -1,0 +1,51 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "documentOverflow": false,
+      "columns": "426.828px 371.156px",
+      "diagramWidth": 426.828125,
+      "clipped": 0,
+      "modelClosed": true,
+      "modelCue": "\"＋\""
+    },
+    {
+      "width": 1024,
+      "documentOverflow": false,
+      "columns": "334.828px 291.156px",
+      "diagramWidth": 334.828125,
+      "clipped": 0,
+      "modelClosed": true,
+      "modelCue": "\"＋\""
+    },
+    {
+      "width": 768,
+      "documentOverflow": false,
+      "columns": "400px",
+      "diagramWidth": 400,
+      "clipped": 0,
+      "modelClosed": true,
+      "modelCue": "\"＋\""
+    },
+    {
+      "width": 390,
+      "documentOverflow": false,
+      "columns": "318px",
+      "diagramWidth": 318,
+      "clipped": 0,
+      "modelClosed": true,
+      "modelCue": "\"＋\""
+    },
+    {
+      "width": 320,
+      "documentOverflow": false,
+      "columns": "248px",
+      "diagramWidth": 248,
+      "clipped": 0,
+      "modelClosed": true,
+      "modelCue": "\"＋\""
+    }
+  ],
+  "errors": [],
+  "fillDrain": true
+}

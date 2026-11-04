@@ -1,0 +1,14 @@
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (328.805075ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (949.025733ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (16551.894663ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (896.812476ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (25366.565704ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 26920.170547
