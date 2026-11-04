@@ -4,8 +4,9 @@ import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-view-con
 import {createBenchArt} from './convex-bench-model.mjs?v=20261104-convex-unified1';
 import {MAGNIFIER_HOME,fitMagnifier,clipProjectedRay} from './magnifier-framing.mjs?v=20261104-mag-overview1';
 import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261104-mag-overview1';
+import {createIncomingBundle} from './magnifier-bundle.mjs?v=20261104-mag-bundle1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,magnifierDisplayRays,eyeRays} from './magnifier-optics.mjs?v=20261104-mag-layout2';
+import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,magnifierDisplayRays,eyeRays} from './magnifier-optics.mjs?v=20261104-mag-bundle1';
 const root=document.querySelector('[data-magnifier-lab]');
 if(root) initialise(root);
 function initialise(root){
@@ -14,6 +15,7 @@ function initialise(root){
  const distanceLabel=value=>`${Number((value/G.f).toFixed(3))}F`;
  const workspace=createMagnifierWorkspace(root,{G,move,observe(preset){state={object:preset.object,eye:G.eye,screen:50,screenIn:preset.screenIn};if(preset.rays)showRays=true;extensions=false;front=false;selected='object';update();studio?.frameObservation();}});
  const art=createBenchArt();
+ const paintBundle=createIncomingBundle(root);
  const eyeCanvas=$('[data-mag-eye]'),reference=$('[data-mag-reference]'),paper=$('[data-mag-paper]');
  eyeCanvas.getContext('2d',{willReadFrequently:true});reference.getContext('2d',{willReadFrequently:true});
  let observerKey='',paperKey='';
@@ -23,8 +25,8 @@ function initialise(root){
   c.clearRect(0,0,W,H);c.fillStyle='#fffdf3';c.fillRect(0,0,W,H);c.save();c.beginPath();c.arc(W/2,H/2,r,0,Math.PI*2);c.clip();c.fillStyle='#fffdf3';c.fillRect(0,0,W,H);
   if(g.blocked){c.fillStyle='#657260';c.fillRect(0,0,W,H);c.strokeStyle='#aebaa4';c.lineWidth=10;c.strokeRect(W*.15,H*.12,W*.7,H*.76);c.fillStyle='#f5f5e5';c.font='24px system-ui';c.textAlign='center';c.fillText('屏幕背面',W/2,H*.48);c.font='20px system-ui';c.fillText('視線被擋住',W/2,H*.56);}
   else if(!g.resolved){
-   // Deliberately unresolved light, not a fabricated upright virtual image.
-   for(const [y,color]of [[H*.4,'221,104,79'],[H*.6,'67,141,187']]){const glow=c.createRadialGradient(W/2,y,0,W/2,y,W*.28);glow.addColorStop(0,`rgba(${color},.42)`);glow.addColorStop(1,`rgba(${color},0)`);c.fillStyle=glow;c.fillRect(0,0,W,H);}
+   // Preserve continuity at F; this is an illustrative defocused outline, not a resolved image.
+   c.filter=`blur(${g.blurRadius}px)`;drawArt(c,W,H,pixels*g.previewScale);c.filter='none';
   }else drawArt(c,W,H,pixels*g.imageScale);
   c.restore();
   const rc=reference.getContext('2d');rc.clearRect(0,0,reference.width,reference.height);rc.fillStyle='#fffdf3';rc.fillRect(0,0,reference.width,reference.height);drawArt(rc,reference.width,reference.height,pixels*g.referenceScale);
@@ -33,7 +35,7 @@ function initialise(root){
  }
  function paintPaper(){const key=state.object+'|'+state.screen;if(key===paperKey)return;paperKey=key;paintBenchProjection(paper,art,G,state);}
  function update(){
-  const g=paintObserver();if(state.screenIn)paintPaper();$('[data-mag-extensions]').disabled=g.type!=='virtual';
+  const g=paintObserver();paintBundle({g,G,point,visible:showRays&&!front});if(state.screenIn)paintPaper();$('[data-mag-extensions]').disabled=g.type!=='virtual';
   $('[data-mag-paper-description]').textContent=g.type==='virtual'?'有光到達，但無法直接接到這個正立放大的虛像。':g.type==='infinity'?'各物點出射平行光，有限距離的屏幕接不到清楚像。':g.screenClear?`屏幕已在 ${distanceLabel(g.v)} 接到清楚倒立實像；前方固定眼位能否看清仍要另行判斷。`:`實像在屏幕側${distanceLabel(g.v)}，目前屏幕${distanceLabel(state.screen)}未在清楚像位置。`;
   $('[data-mag-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-mag-rays]').setAttribute('aria-pressed',String(showRays));$('[data-mag-extensions]').textContent=extensions?'隱藏反向延長線':'顯示反向延長線';$('[data-mag-extensions]').setAttribute('aria-pressed',String(extensions));$('[data-mag-trace]').hidden=!showRays;
   $$('[data-mag-point]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.magPoint===point)));
@@ -43,11 +45,12 @@ function initialise(root){
   $$('[data-mag-device]').forEach(b=>{if(b.getAttribute('role')!=='slider')b.setAttribute('aria-pressed',String(selected===b.dataset.magDevice));b.setAttribute('aria-label',`${b.dataset.magDevice==='object'?'圖卡':b.dataset.magDevice==='eye'?'眼睛':'屏幕'}，${distanceLabel(state[b.dataset.magDevice])}，方向鍵可沿軌道移動`);});
   $$('[data-mag-nudge]').forEach(b=>{const key=b.dataset.magNudge;b.disabled=Number(b.dataset.direction)<0?state[key]<=G[key+'Min']:state[key]>=G[key+'Max'];});
   const size=g.angularGain===null?'':Math.abs(g.angularGain-1)<.02?'視角相近':g.angularGain>1?'比原物大':'比原物小';
-  const viewMessage=g.blocked?'屏幕擋住視線':g.eyeMode==='at-image'?'眼睛在實像位置':g.eyeMode==='too-close'?'離實像太近':g.eyeMode==='converging'?'此眼位無法看清':g.eyeMode==='parallel'?'平行光・像在無窮遠':`${g.eyeMode==='real'?'倒立':'正立'}・${size}`;
+  const viewMessage=g.blocked?'屏幕擋住視線':g.eyeMode==='at-image'?'眼睛在實像位置':g.eyeMode==='too-close'?'離實像太近':g.eyeMode==='converging'?'會聚入眼・無法對焦':g.eyeMode==='parallel'?'平行光・像在無窮遠':`${g.eyeMode==='real'?'倒立':'正立'}・${size}`;
   $('[data-mag-eye-badge]').textContent=viewMessage;
-  const condition=g.blocked?'屏幕擋住視線，取下後再比較。':g.eyeMode==='virtual'?'正立、放大虛像；屏幕接不到，眼睛仍可看見。':g.eyeMode==='parallel'?'光線平行；留在原位放鬆觀看像在無窮遠。':`仍形成實像；這個固定眼位無法看清。`;
+  const condition=g.blocked?'屏幕擋住視線，取下後再比較。':g.eyeMode==='virtual'?'正立、放大虛像；屏幕接不到，眼睛仍可看見。':g.eyeMode==='parallel'?'光線平行；留在原位放鬆觀看像在無窮遠。':`仍形成實像；會聚光入眼，此固定眼位無法對焦。`;
   $('[data-mag-condition]').textContent=condition;
-  $('[data-mag-eye-note]').textContent=g.resolved&&!g.blocked?'相同尺度，直接比較圖案大小。':'眼睛固定；光路與觀看結果分開判斷。';
+  $('[data-mag-eye-note]').textContent=g.blocked?'取下屏幕後再比較。':g.resolved?'相同尺度，直接比較圖案大小。':'光束仍在會聚；模糊程度為示意。';
+  root.dataset.blurRadius=g.blurRadius;
   $('[data-mag-ray-name]').textContent=point==='top'?'紅：代表光':point==='bottom'?'藍：代表光':'紅／藍：代表光';
   let message=condition;if(g.type==='virtual')message+=' 這是正立放大虛像，屏幕無法直接接到清楚像。';
   if(extensions&&g.type==='virtual')message+=` 虛線往回交於圖卡同側${distanceLabel(Math.abs(g.v))}，正立放大的透明圖案標示虛像；光沒有真的在那裡會聚。`;
@@ -97,7 +100,9 @@ function initialise(root){
    const placedArrows=[];const project=p=>{const v=new THREE.Vector3(...p).project(camera);return{x:(v.x+1)*r.width/2,y:(1-v.y)*r.height/2,z:v.z};};
    if(showRays&&!front)for(const ray of magnifierDisplayRays(state,point)){const a=project(ray.lens),b=project(ray.end),cut=clipProjectedRay(a,b,{left:8,top:viewport.top,width:r.width-16,height:r.height-viewport.top-44});if(!cut||(state.screenIn&&!cut.clipped)||a.z< -1||a.z>1)continue;if(magnifierState(state).type==='real'&&placedArrows.some(p=>p.name===ray.name&&Math.hypot(p.x-cut.end.x,p.y-cut.end.y)<12))continue;placedArrows.push({...cut.end,name:ray.name});const dx=b.x-a.x,dy=b.y-a.y,length=Math.hypot(dx,dy),ux=dx/length,uy=dy/length,p=cut.end,path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',`M${p.x-ux*11-uy*5},${p.y-uy*11+ux*5} L${p.x},${p.y} L${p.x-ux*11+uy*5},${p.y-uy*11-ux*5}`);path.setAttribute('stroke',ray.name==='top'?'#f4a17e':'#88c7ee');path.setAttribute('data-continuation',ray.name);overlay.append(path);}
    const focus=$('[data-mag-focus]');if(!focus.hidden)focus.style.top=Math.max(viewport.top+focus.offsetHeight/2,parseFloat(focus.style.top)-26)+'px';
-   const image=magnifierState(state);if(image.type==='real'&&!image.blocked&&!front){const p=project([image.v*G.scale,G.axis+image.m*G.pointTop,0]);if(p.x<0||p.x>r.width||p.y<0||p.y>r.height)$('[data-mag-condition]').textContent=`實像在畫面外 ${distanceLabel(image.v)}；此固定眼位無法看清。`;}
+   const image=magnifierState(state);if(image.type==='real'&&!image.blocked&&!front){const p=project([image.v*G.scale,G.axis+image.m*G.pointTop,0]);if(p.x<0||p.x>r.width||p.y<0||p.y>r.height)$('[data-mag-condition]').textContent=`實像在畫面外 ${distanceLabel(image.v)}；會聚光入眼，此眼位無法對焦。`;}
+   const link=$('[data-mag-bundle-link]');link.replaceChildren();link.hidden=!showRays||front||image.blocked;
+   if(!link.hidden){const eyePoint=project([G.eye*G.scale,G.axis,0]),column=link.getBoundingClientRect();link.setAttribute('viewBox',`0 0 ${r.width} ${column.height}`);if(eyePoint.z< -1||eyePoint.z>1||eyePoint.x<8||eyePoint.x>r.width-8||eyePoint.y<8||eyePoint.y>r.height-12)link.hidden=true;else{const ns='http://www.w3.org/2000/svg',circle=document.createElementNS(ns,'circle'),line=document.createElementNS(ns,'path');circle.setAttribute('cx',eyePoint.x);circle.setAttribute('cy',eyePoint.y);circle.setAttribute('r',8);line.setAttribute('d',`M${eyePoint.x+6} ${eyePoint.y+6}L${r.width-10} ${r.height-8}V${r.height+23}`);link.append(circle,line);}}
    for(const [i,key]of ['object','lens','eye'].entries()){const e=$(`[data-mag-apparatus=${key}]`),x=key==='object'?-state.object*G.scale:key==='eye'?G.eye*G.scale:0,p=project([x,.22,1.05]);e.hidden=front||p.z< -1||p.z>1;if(e.hidden)continue;const outside=p.x<20||p.x>r.width-20;e.textContent=outside&&key==='object'?`圖卡在畫面外・${distanceLabel(state.object)}`:key==='object'?'圖卡':key==='lens'?'透鏡':'眼睛';const half=e.offsetWidth/2+5;e.style.left=Math.max(half,Math.min(r.width-half,p.x))+'px';e.style.top=Math.min(r.height-44,p.y+(i===1?8:28))+'px';}
   }
   function draw(){pending=0;renderer.render(scene,camera);labels();annotations();}
