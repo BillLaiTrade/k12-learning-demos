@@ -50,3 +50,25 @@ test('可見光路只調整取樣與延伸範圍，仍符合相同薄透鏡方�
   if(r.virtual){const g=magnifierState({object,screen:200});assert.ok(Math.abs(G.axis+h+slope*g.v-r.virtual[1])<1e-9);}
  }
 });
+
+test('入眼光束的曲率與同一物點實際光線一致，跨F連續由發散經平行轉為會聚',()=>{
+ let previous=-Infinity;
+ for(const object of [30,50,90,99.9,100,100.1,110.4,150,350]){
+  const state={object,screen:300},g=magnifierState(state);
+  assert.ok(g.eyeVergence>previous);previous=g.eyeVergence;
+  for(const point of ['top','bottom']){
+   const rays=eyeRays(state,point),a=rays[0],b=rays[2];
+   const slope=r=>(r.to[1]-r.from[1])/(r.to[0]-r.from[0]);
+   const measured=-(slope(b)-slope(a))/(b.to[1]-a.to[1])*G.scale;
+   assert.ok(Math.abs(measured-g.eyeVergence)<1e-10);
+  }
+  assert.equal(Math.sign(g.eyeVergence),Math.sign(object-G.f));
+ }
+});
+test('跨F失焦示意連續增強，不把預覽輪廓當成清楚的虛像',()=>{
+ const before=magnifierState({object:99.9}),at=magnifierState({object:100}),after=magnifierState({object:100.1});
+ assert.equal(at.blurRadius,0);assert.equal(after.resolved,false);assert.equal(after.imageScale,null);
+ assert.ok(after.blurRadius>0&&after.blurRadius<.12);assert.ok(Math.abs(before.previewScale-after.previewScale)<.001);
+ let previous=0;
+ for(const object of [100.1,101,110.4,150,200,350]){const g=magnifierState({object});assert.ok(g.blurRadius>previous&&g.blurRadius<36);previous=g.blurRadius;assert.ok(Number.isFinite(g.previewScale)&&g.previewScale>0);}
+});
