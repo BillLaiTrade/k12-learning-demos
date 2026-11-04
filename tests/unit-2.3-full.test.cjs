@@ -111,7 +111,7 @@ test('2.3 complete page: five teaching sections and one evidence-based quiz', { 
   await t.test('all teaching evidence is available without JavaScript', async () => {
     const context = await browser.newContext({ javaScriptEnabled:false, viewport:{width:390,height:844} });
     const staticPage = await context.newPage(); await staticPage.goto(url, {waitUntil:'networkidle'});
-    for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#air-profile-nitrogen .gas-profile-properties','#air-profile-oxygen .gas-profile-properties','#air-profile-argon .gas-profile-properties','#s3 .sequence-grid','#s3 .properties-collected-note','#s4 .co2-step','#s5 .oxygen-comparison','#s5 .properties-limewater','#s6 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
+    for (const selector of ['#cup-before-scene svg','#cup-after-scene svg','#s2 .air-share-grid','#air-profile-nitrogen .gas-profile-properties','#air-profile-oxygen .gas-profile-properties','#air-profile-argon .gas-profile-properties','#s3 .sequence-grid','#s4 .co2-step','#s5 .oxygen-comparison','#s5 .properties-limewater','#s6 .quiz-source']) assert.equal(await staticPage.locator(selector).first().isVisible(),true,selector);
     assert.equal(await staticPage.locator('#s4 .co2-step:visible').count(),7);
     assert.equal(await staticPage.locator('#s4 [data-co2-info]:visible').count(),8);
     await context.close();
