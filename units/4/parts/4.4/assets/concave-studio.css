@@ -1,0 +1,60 @@
+.concave-lab { margin:18px 0; min-width:0; }
+.concave-stage { position:relative; overflow:hidden; border:1px solid #8a9e8c; border-radius:16px; background:#849386; }
+#concave-canvas { display:block; width:100%; height:440px; cursor:grab; touch-action:none; }
+#concave-canvas:active { cursor:grabbing; }
+#concave-canvas:focus-visible { outline:3px solid #f4dc99; outline-offset:-4px; }
+.concave-tools { position:absolute; z-index:2; top:12px; left:12px; right:12px; display:flex; flex-wrap:wrap; gap:8px; pointer-events:none; }
+.concave-tools button { pointer-events:auto; min-height:40px; padding:8px 12px; font-size:.82rem; background:#fffef4; color:#304e3d; box-shadow:0 3px 10px #17281d22; }
+.concave-tools [data-parallel-rays], .concave-tools [data-parallel-rays][aria-pressed=true] { background:#f5d88d; border-color:#e4ca83; color:#42351a; font-weight:750; }
+.concave-tools [data-parallel-close][aria-pressed=true] { background:#dce9d0; color:#244a32; border-color:#8eac7d; }
+.concave-anchor { position:absolute; padding:4px 8px; border:1px solid #e0e7d9; border-radius:6px; background:#344a3ce8; color:#fffdf1; font-size:.76rem; white-space:nowrap; pointer-events:none; transform:translate(-50%,-100%); }
+.concave-anchor::after { content:''; position:absolute; top:100%; left:50%; height:12px; border-left:1px solid #e9eedf; }
+.concave-anchor[data-concave-label=focus] { border-color:#efd99a; color:#fff0ba; font-weight:750; }
+.concave-caption { margin:0; padding:9px 12px; color:#eaf0e3; background:#344a3cbf; font-size:.76rem; }
+.concave-hint { margin:8px 1px 12px; font-size:.8rem; color:#64796a; }
+.concave-detail { display:grid; grid-template-columns:minmax(180px,.38fr) minmax(0,.62fr); gap:16px; padding:16px; border:1px solid #d5dfcf; border-radius:15px; background:#f7faf2; }
+.concave-detail h3 { margin:0 0 12px; font-size:1rem; }
+.concave-step-buttons { display:flex; flex-wrap:wrap; gap:7px; margin:0 0 12px; }
+.concave-step-buttons button { min-height:40px; padding:7px 9px; font-size:.8rem; }
+.concave-step-buttons button[aria-pressed=true] { background:#f9e9b7; color:#4b3c1c; border-color:#d6b45f; }
+.concave-step-copy { margin:0; padding:12px; border-radius:10px; background:#eaf1e5; color:#34543e; font-size:.88rem; }
+.concave-detail-scene { overflow:hidden; min-width:0; align-self:stretch; border:1px solid #dbe5d5; border-radius:11px; background:#eff5eb; }
+.concave-detail-scene svg { display:block; width:100%; height:260px; }
+.concave-detail-note { margin:8px 0 0; color:#64796a; font-size:.75rem; }
+.concave-result { margin:12px 0 0; padding:12px 15px; border-left:4px solid #86a777; border-radius:0 10px 10px 0; background:#eff5e9; color:#35533e; font-size:.9rem; }
+.concave-result p { margin:0; }
+.concave-fallback { min-height:220px; padding:70px 20px 20px; background:#e8f0e0; color:#34543e; }
+@media(max-width:760px) {
+ #concave-canvas { height:300px; }
+ .concave-tools { top:9px; left:9px; right:9px; gap:7px; }
+ .concave-tools button { padding:7px 9px; font-size:.76rem; }
+ .concave-anchor { font-size:.7rem; padding:3px 6px; }
+ .concave-detail { grid-template-columns:minmax(0,1fr); gap:12px; padding:12px; }
+ .concave-detail-scene svg { height:240px; }
+ .concave-caption { font-size:.72rem; }
+}
+
+
+.concave-focal-distance { position:absolute; left:0; top:0; width:100%; pointer-events:none; overflow:visible; }
+
+.concave-lab [hidden] { display:none!important; }
+.concave-lab .concave-tools { flex-wrap:nowrap; overflow-x:auto; pointer-events:auto; padding-bottom:4px; }
+.concave-lab .concave-tools button { flex:0 0 auto; white-space:nowrap; }
+.concave-lab .concave-tools [data-parallel-extensions][aria-pressed=true] { background:#dce9d0; color:#244a32; }
+#concave-canvas { height:440px; }
+#concave-imaging-canvas { position:absolute; inset:0; display:block; width:100%; height:100%; touch-action:none; cursor:grab; }
+#concave-imaging-canvas:focus-visible { outline:3px solid #f0d485; outline-offset:-4px; }
+.concave-imaging .magnifier-eye-note { line-height:1.5; }
+.concave-summary { padding:14px 16px; border-radius:11px; background:#eaf1df; color:#31543b; }
+.concave-summary h3 { margin:0 0 7px; font-size:.88rem; }
+.concave-summary p { margin:0; font-size:.82rem; line-height:1.7; }
+.concave-summary .concave-size-note { margin-top:7px; color:#687b5e; font-size:.72rem; }
+@media(max-width:760px) { #concave-canvas { height:340px; } .concave-lab .concave-tools { gap:5px; left:8px; right:8px; } .concave-lab .concave-tools button { padding:7px 8px; font-size:.72rem; } }
+
+.concave-imaging.magnifier-lab .magnifier-stage { grid-template-columns:minmax(0,1fr) 240px; height:400px; }
+.concave-imaging.magnifier-lab .magnifier-viewport { height:380px; }
+@container convex-bench (max-width:679px) { .concave-imaging.magnifier-lab .magnifier-stage { grid-template-columns:minmax(0,1fr); height:auto; } .concave-imaging.magnifier-lab .magnifier-viewport { height:350px; } }
+
+.concave-imaging [data-ci-eye],.concave-imaging [data-ci-reference] { display:block; width:100%; height:auto; max-width:none; border:1px solid #bacbb0; border-radius:6px; background:#fffdf3; }
+.concave-imaging .magnifier-tools [data-ci-rays] { background:#f5d88d; color:#42351a; border-color:#e4ca83; font-weight:750; }
+.concave-imaging .convex-ruler-major[data-distance="0"] { width:30px; min-width:30px; }
