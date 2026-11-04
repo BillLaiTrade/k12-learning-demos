@@ -15,7 +15,7 @@ test('眼睛在模型層固定，移動操作僅接受圖卡與比較屏幕',()=
 });
 test('四個主觀察條件依序向外，只改圖卡，沒有移眼或屏幕變因',()=>{
  assert.deepEqual(Object.keys(observations),['near','focus','at_f','outside']);assert.deepEqual(Object.values(observations).map(p=>p.object),[50,90,100,150]);
- for(const p of Object.values(observations)){assert.equal(p.eye,undefined);assert.equal(p.screenIn,false);assert.equal(p.point,'top');}
+ for(const p of Object.values(observations)){assert.equal(p.eye,undefined);assert.equal(p.screenIn,false);assert.equal(p.point,undefined);}
 });
 test('F內正立虛像，固定眼位的透鏡影像與原物採相同角度尺度',()=>{
  let previous=0;for(const object of [30,50,60,90,99.9]){const g=magnifierState({object,screen:95});assert.equal(g.eyeMode,'virtual');assert.ok(g.v<0&&g.m>1&&g.imageScale>0);assert.ok(Math.abs(g.imageScale-g.m/((G.eye-g.v)*G.scale))<1e-10);assert.ok(Math.abs(g.referenceScale-1/((G.eye+object)*G.scale))<1e-10);assert.ok(g.angularGain>previous&&g.angularGain>1);previous=g.angularGain;}

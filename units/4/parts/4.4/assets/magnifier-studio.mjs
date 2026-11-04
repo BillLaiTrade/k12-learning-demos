@@ -2,17 +2,17 @@ import {paintBenchProjection} from './screen-projection.mjs?v=20261104-view-cond
 import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-mag-fixed-eye1';
 import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-view-conditions1';
 import {createBenchArt} from './convex-bench-model.mjs?v=20261104-convex-unified1';
-import {MAGNIFIER_HOME,fitMagnifier,clipProjectedRay} from './magnifier-framing.mjs?v=20261104-mag-layout2';
-import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261104-mag-layout2';
+import {MAGNIFIER_HOME,fitMagnifier,clipProjectedRay} from './magnifier-framing.mjs?v=20261104-mag-overview1';
+import {createMagnifierWorkspace} from './magnifier-workspace.mjs?v=20261104-mag-overview1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,magnifierDisplayRays,eyeRays} from './magnifier-optics.mjs?v=20261104-mag-layout2';
 const root=document.querySelector('[data-magnifier-lab]');
 if(root) initialise(root);
 function initialise(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],canvas=$('#magnifier-canvas');
- let state={object:50,screen:50,eye:G.eye,screenIn:false},showRays=true,extensions=false,point='top',front=false,selected='object',studio=null;
+ let state={object:50,screen:50,eye:G.eye,screenIn:false},showRays=true,extensions=false,point='both',front=false,selected='object',studio=null;
  const distanceLabel=value=>`${Number((value/G.f).toFixed(3))}F`;
- const workspace=createMagnifierWorkspace(root,{G,move,observe(preset){state={object:preset.object,eye:G.eye,screen:50,screenIn:preset.screenIn};if(preset.rays)showRays=true;extensions=false;point=preset.point||'both';front=false;selected='object';update();studio?.frameObservation();}});
+ const workspace=createMagnifierWorkspace(root,{G,move,observe(preset){state={object:preset.object,eye:G.eye,screen:50,screenIn:preset.screenIn};if(preset.rays)showRays=true;extensions=false;front=false;selected='object';update();studio?.frameObservation();}});
  const art=createBenchArt();
  const eyeCanvas=$('[data-mag-eye]'),reference=$('[data-mag-reference]'),paper=$('[data-mag-paper]');
  eyeCanvas.getContext('2d',{willReadFrequently:true});reference.getContext('2d',{willReadFrequently:true});
@@ -58,7 +58,7 @@ function initialise(root){
  }
  function clearGestureNotice(){$('[data-mag-gesture-note]').hidden=true;$$('[data-mag-ruler]').forEach(r=>r.removeAttribute('data-guided'));}
  function showGestureNotice(key){const note=$('[data-mag-gesture-note]');note.textContent=key==='eye'?'眼睛固定，請移動圖卡比較光路與大小。':key==='lens'?'凸透鏡是固定的。':`請使用下方${key==='object'?'圖卡':key==='eye'?'眼睛':'比較屏幕'}位置尺調整。`;note.hidden=false;$$('[data-mag-ruler]').forEach(r=>r.toggleAttribute('data-guided',r.dataset.magRuler===key));}
- function move(key,value){if(!['object','screen'].includes(key))return;clearGestureNotice();const before=state.object;state=moveMagnifier(state,key,value);if(key==='object'&&state.object===G.f&&before!==G.f)point='top';if(state.object>=G.f)extensions=false;selected=key;update();}
+ function move(key,value){if(!['object','screen'].includes(key))return;clearGestureNotice();state=moveMagnifier(state,key,value);if(state.object>=G.f)extensions=false;selected=key;update();}
  $('[data-mag-rays]').addEventListener('click',()=>{showRays=!showRays;if(!showRays)extensions=false;update();});$('[data-mag-extensions]').addEventListener('click',()=>{extensions=!extensions;if(extensions)showRays=true;update();studio?.frameObservation();});
  $('[data-mag-screen]').addEventListener('click',()=>{state={...state,screenIn:!state.screenIn};front=false;if(!state.screenIn)selected='object';update();});$('[data-mag-front]').addEventListener('click',()=>{front=!front;update();});
  $$('[data-mag-point]').forEach(b=>b.addEventListener('click',()=>{point=b.dataset.magPoint;update();}));

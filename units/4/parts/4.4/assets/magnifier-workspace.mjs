@@ -1,10 +1,10 @@
 import {bindBenchRuler} from './convex-bench-workspace.mjs?v=20261104-view-conditions1';
 // Keep the observer fixed while the object moves outward through the focal point.
 export const observations=Object.freeze({
- near:{object:50,screenIn:false,point:'top'},
- focus:{object:90,screenIn:false,point:'top'},
- at_f:{object:100,screenIn:false,point:'top'},
- outside:{object:150,screenIn:false,point:'top'}
+ near:{object:50,screenIn:false},
+ focus:{object:90,screenIn:false},
+ at_f:{object:100,screenIn:false},
+ outside:{object:150,screenIn:false}
 });
 export function createMagnifierWorkspace(root,{G,move,observe}){
  let current={object:50,eye:G.eye,screen:50};const layout=createMagnifierLayout(root),rulers=[];
