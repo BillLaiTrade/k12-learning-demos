@@ -1,6 +1,6 @@
 import {initialiseFrontMix} from './mix-lab.mjs?v=mix-drag-focus-20261103';
 import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-clarity-20261104';
-import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays,QUIZ} from './color-model.mjs?v=integrated-eye-20261104';
+import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays} from './color-model.mjs?v=integrated-eye-20261104';
 import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs?v=filter-paper-20261103';
 import {surfaceObservation} from './surface-model.mjs?v=integrated-eye-20261104';
 import {filterPaperObservation} from './filter-paper-model.mjs?v=integrated-eye-20261104';
@@ -110,21 +110,8 @@ function initialiseLab(root,index){
 }
 
 function initialiseQuiz(){
- const form=document.querySelector('[data-quiz]'),questions=form.querySelector('[data-questions]'),summary=form.querySelector('[data-quiz-summary]');
- for(const [i,q]of QUIZ.entries()){
-  const field=document.createElement('fieldset');field.className='quiz-item';field.dataset.question=q.id;const legend=document.createElement('legend');legend.textContent=`${i+1}. ${q.question}`;field.append(legend);
-  q.options.forEach((option,j)=>{const label=document.createElement('label');label.className='quiz-option';const input=document.createElement('input');input.type='radio';input.name=q.id;input.value=j;input.id=`answer-${q.id}-${j}`;const copy=document.createElement('span');copy.textContent=option;label.append(input,copy);field.append(label);});
-  const feedback=document.createElement('p');feedback.className='quiz-feedback';feedback.hidden=true;field.append(feedback);questions.append(field);
- }
- form.querySelector('[data-submit]').disabled=false;form.querySelector('[data-quiz-reset]').disabled=false;text(summary,'選好各情境的解釋後，再確認這次作答。');form.dataset.ready='true';
- form.addEventListener('submit',event=>{
-  event.preventDefault();const missing=QUIZ.find(q=>!form.querySelector(`input[name="${q.id}"]:checked`));
-  if(missing){text(summary,'還有情境尚未作答，先完成選擇再確認。');summary.dataset.error='true';form.querySelector(`input[name="${missing.id}"]`).focus();return;}
-  let correct=0;for(const q of QUIZ){const selected=Number(form.querySelector(`input[name="${q.id}"]:checked`).value),ok=selected===q.answer;correct+=ok;const field=form.querySelector(`[data-question="${q.id}"]`),feedback=field.querySelector('.quiz-feedback');field.dataset.correct=String(ok);feedback.hidden=false;feedback.replaceChildren(document.createTextNode((ok?'這個解釋符合觀察。':'再對照一下光的去向。')+q.explanation));const link=document.createElement('a');link.href='#'+q.anchor;link.textContent='回看這個實驗';feedback.append(link);}
-  summary.dataset.error='false';summary.dataset.score=String(correct);text(summary,correct===QUIZ.length?'四個情境都能用光路說明了！再回想：光源提供什麼、物體改變什麼、眼睛收到什麼？':`這次有${correct}個情境的解釋符合觀察。可以依提示回看實驗，再修改作答。`);
- });
- form.addEventListener('change',event=>{const field=event.target.closest('.quiz-item');if(!field)return;delete field.dataset.correct;field.querySelector('.quiz-feedback').hidden=true;delete summary.dataset.score;text(summary,'作答已更新，請重新確認這次作答。');summary.dataset.error='false';});
- form.querySelector('[data-quiz-reset]').addEventListener('click',()=>{form.reset();form.querySelectorAll('.quiz-item').forEach(f=>{delete f.dataset.correct;f.querySelector('.quiz-feedback').hidden=true;});delete summary.dataset.score;summary.dataset.error='false';text(summary,'已清除作答，可以重新觀察情境。');});
+ const root=document.querySelector('.duo-quiz');
+ import('./duo-quiz.mjs?v=duo-quiz-20261104').then(module=>module.initialiseDuoQuiz(root)).catch(error=>{root.querySelector('[data-duo-load-note]').hidden=false;console.error('4.5 quiz failed',error);});
 }
 
 document.querySelectorAll('[data-lab]').forEach((root,i)=>{try{initialiseLab(root,i);}catch(error){root.dataset.ready='false';const hint=root.querySelector('[data-load-note]');if(hint){hint.hidden=false;text(hint,'這個互動暫時無法載入，請重新整理後再試；仍可閱讀對話與說明。');}console.error('4.5 lab failed',error);}});
