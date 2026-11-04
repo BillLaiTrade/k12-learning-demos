@@ -232,13 +232,13 @@
     .booklet-route-link { margin-top: 8px; border-top: 1px solid var(--line) !important; padding-top: 14px !important; color: #795b20 !important; }
     .booklet-route-link b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #f5e9c9; color: #795b20; }
     .booklet-route-link[aria-current="step"] { border-left-color: #c09139 !important; background: #f8f0dd !important; color: #795b20 !important; }
-    .unit-booklet { scroll-margin-top: 22px; min-width: 0; padding: 0; overflow: hidden; border: 1px solid #eadfca; border-radius: 24px; background: #fffefa; color: #182326; line-height: 1.7; box-shadow: 0 14px 38px rgb(21 47 38 / 8%); }
-    .booklet-heading { display: flex; align-items: center; gap: 14px; padding: 20px 24px; border-bottom: 1px solid #eadfca; background: #f8f1e4; }
+    .unit-booklet { scroll-margin-top: 22px; min-width: 0; padding: 0; overflow: hidden; border: 1px solid #ddd6c4; border-radius: 20px; background: #fffefa; color: #182326; line-height: 1.7; box-shadow: 0 14px 38px rgb(21 47 38 / 8%); }
+    .booklet-heading { display: flex; align-items: flex-start; gap: 18px; padding: 25px 28px 21px; border-bottom: 1px solid #e7e1d2; background: linear-gradient(105deg, #fffdf6, #fdfbf3); font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif; line-height: 1.8; }
     .booklet-heading > div { min-width: 0; flex: 1; }
-    .booklet-kicker { display: inline-block; margin: 0 10px 0 0; color: #88652a; font-size: .78rem; font-weight: 800; letter-spacing: .05em; }
-    .booklet-heading h2 { display: inline; margin: 0; color: #143f34; font-size: 1.65rem; line-height: 1.35; }
-    .booklet-heading p:last-child { margin: 5px 0 0; color: var(--muted); font-size: .88rem; }
-    .booklet-mark { display: grid; place-items: center; flex: none; width: 50px; height: 50px; border-radius: 15px; background: #f7e5b5; color: #85601d; font-size: 1.3rem; font-weight: 400; }
+    .booklet-kicker { margin: 0 0 4px; color: #946f2d; font-size: .82rem; font-weight: 800; letter-spacing: .06em; }
+    .booklet-heading h2 { margin: 0; color: #243d35; font-size: clamp(1.15rem, 1.85vw, 1.5rem); line-height: 1.55; letter-spacing: -.02em; }
+    .booklet-heading p:last-child { margin: 9px 0 0; color: #64766c; font-size: .9rem; font-weight: 400; }
+    .booklet-mark { display: grid; place-items: center; flex: 0 0 50px; width: 50px; height: 50px; border-radius: 15px; background: #f5ead0; color: #8b6725; font-size: 1.45rem; font-weight: 800; }
     .booklet-body { min-width: 0; padding: 20px; }
     .booklet-body > .dialogue { margin: 12px 0; }
     .booklet-body > .dialogue:first-child { margin-top: 0; }
@@ -311,7 +311,7 @@
     .booklet-finish-note[data-done="true"] { color: #176b53 !important; font-weight: 750; }
     @media (max-width: 900px) { .booklet-game-layout { grid-template-columns: minmax(0, 1fr) 195px; gap: 9px; } .booklet-mission-panel { padding: 13px 11px; } }
     @media (max-width: 700px) { .booklet-game-layout { grid-template-columns: 1fr; } .booklet-stage-frame { height: clamp(310px, 72vw, 420px); } .booklet-mission-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; } .booklet-mission-top, .booklet-mission-panel h3, .booklet-mission-panel > p, .booklet-target-card, .booklet-progress-track, .booklet-slot-list, .booklet-finish-button, .booklet-finish-note { grid-column: 1 / -1; } .booklet-mission-panel h3 { margin-top: 7px; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 150px; align-items: center; justify-items: start; } .booklet-target-card svg { grid-column: 2; grid-row: 1 / span 2; height: 84px; } .booklet-target-status { align-self: start; } .booklet-slot-list { grid-template-columns: repeat(3,1fr); gap: 3px; } .booklet-slot-list span { justify-content: center; font-size: .73rem; } }
-    @media (max-width: 760px) { .booklet-heading { gap: 10px; padding: 16px; } .booklet-mark { width: 40px; height: 40px; border-radius: 12px; } .booklet-heading h2 { font-size: 1.4rem; } .booklet-heading p:last-child { font-size: .82rem; } .booklet-body { padding: 14px; } }
+    @media (max-width: 760px) { .booklet-heading { gap: 12px; padding: 20px 16px; } .booklet-mark { flex-basis: 42px; width: 42px; height: 42px; border-radius: 13px; } .booklet-heading p:last-child { font-size: .85rem; } .booklet-body { padding: 14px; } }
     @media (max-width: 460px) { .booklet-stage-frame { height: 300px; } .booklet-stage-button { min-height: 38px; padding: 5px 9px; font-size: .76rem; } .booklet-stage-badge { font-size: .72rem; } .booklet-prop-token { grid-template-columns: 28px minmax(0,1fr); padding: 6px; column-gap: 6px; } .booklet-prop-icon { width: 28px; height: 28px; font-size: 1.1rem; } .booklet-target-card { grid-template-columns: minmax(0,1fr) 120px; } .booklet-depth-controls { padding-inline: 7px; } .booklet-depth-row { gap: 5px; } .booklet-depth-end { gap: 2px; font-size: .7rem; } .booklet-depth-end svg { width: 17px; } .booklet-depth-header label { font-size: .73rem; } .booklet-depth-meta { gap: 7px; font-size: .66rem; } }
     @media (max-width: 520px) {
       #aperture-3d-scene { height: 300px; }
@@ -416,7 +416,7 @@
           <a href="#card-04"><b>04</b><span>影子怎麼形成？</span></a>
           <a href="#card-05"><b>05</b><span>影子的大小如何改變？</span></a>
           <a href="#card-06"><b>06</b><span>光傳得有多快？</span></a>
-          <a class="booklet-route-link" href="#unit-booklet"><b aria-hidden="true">✦</b><span>單元小測・月光影子劇場</span></a>
+          <a class="booklet-route-link" href="#unit-booklet"><b aria-hidden="true">✦</b><span>單元小測</span></a>
         </div>
       </nav>
       <div class="cards">
@@ -613,7 +613,7 @@
         <section class="unit-booklet" id="unit-booklet" aria-labelledby="unit-booklet-title">
           <header class="booklet-heading">
             <span class="booklet-mark" aria-hidden="true">?</span>
-            <div><p class="booklet-kicker">第一段學習・單元小測</p><h2 id="unit-booklet-title">月光影子劇場</h2><p>替小葵和阿公完成一幕影子戲。把舞台道具移到合適的位置，讓實際投影和目標描邊重合。</p></div>
+            <div><p class="booklet-kicker">單元小測</p><h2 id="unit-booklet-title">月光影子劇場</h2><p>替小葵和阿公完成一幕影子戲。把舞台道具移到合適的位置，讓實際投影和目標描邊重合。</p></div>
           </header>
           <div class="booklet-body">
           <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我想讓月亮兔出現在幕上！可是道具要放在哪裡，影子才會剛好對上呢？</p></div>
