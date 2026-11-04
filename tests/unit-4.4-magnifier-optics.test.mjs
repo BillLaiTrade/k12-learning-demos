@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,eyeRays} from '../units/4/parts/4.4/assets/magnifier-optics.mjs';
+import {MAGNIFIER as G,magnifierState,moveMagnifier,magnifierRays,magnifierDisplayRays,eyeRays} from '../units/4/parts/4.4/assets/magnifier-optics.mjs';
 import {IMAGING,imagingRays} from '../units/4/parts/4.4/assets/imaging-optics.mjs';
 import {observations} from '../units/4/parts/4.4/assets/magnifier-workspace.mjs';
 test('保留兩區共同器材與同條件的代表光路',()=>{
@@ -14,7 +14,7 @@ test('眼睛在模型層固定，移動操作僅接受圖卡與比較屏幕',()=
  for(const eye of [0,50,200,500]){const g=magnifierState({...state,eye});assert.equal(g.eye,G.eye);assert.deepEqual(g,magnifierState(state));}
 });
 test('四個主觀察條件依序向外，只改圖卡，沒有移眼或屏幕變因',()=>{
- assert.deepEqual(Object.keys(observations),['near','focus','at_f','outside']);assert.deepEqual(Object.values(observations).map(p=>p.object),[30,90,100,150]);
+ assert.deepEqual(Object.keys(observations),['near','focus','at_f','outside']);assert.deepEqual(Object.values(observations).map(p=>p.object),[50,90,100,150]);
  for(const p of Object.values(observations)){assert.equal(p.eye,undefined);assert.equal(p.screenIn,false);assert.equal(p.point,'top');}
 });
 test('F內正立虛像，固定眼位的透鏡影像與原物採相同角度尺度',()=>{
@@ -41,4 +41,12 @@ test('屏幕接像與固定眼位看清是兩個判準，實像可接到而眼�
  const a={object:150,screen:300},g=magnifierState(a);assert.equal(g.screenClear,true);assert.equal(g.resolved,false);
  assert.equal(magnifierState({...a,screen:200}).screenClear,false);
  for(const object of [30,60,90])for(const screen of [50,100,200,300,500]){const state=magnifierState({object,screen});assert.equal(state.screenClear,false);assert.equal(state.resolved,true);}
+});
+
+test('可見光路只調整取樣與延伸範圍，仍符合相同薄透鏡方程與成像位置',()=>{
+ for(const object of [30,50,90,100,100.1,150,200,350])for(const point of ['top','bottom','both'])for(const r of magnifierDisplayRays({object,screen:200},point)){
+  const y=r.name==='top'?G.pointTop:G.pointBottom,h=r.lens[1]-G.axis,d=r.end[0]/G.scale,slope=(h-y)/object-h/G.f;
+  assert.ok(Math.abs(r.end[1]-(G.axis+h+slope*d))<1e-9);assert.ok(Math.abs(h)<=G.aperture+1e-9);assert.equal(r.from[0],-object*G.scale);
+  if(r.virtual){const g=magnifierState({object,screen:200});assert.ok(Math.abs(G.axis+h+slope*g.v-r.virtual[1])<1e-9);}
+ }
 });
