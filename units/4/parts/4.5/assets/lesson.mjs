@@ -1,9 +1,9 @@
 import {initialiseFrontMix} from './mix-lab.mjs?v=mix-drag-focus-20261103';
 import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-clarity-20261104';
-import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays,QUIZ} from './color-model.mjs?v=merged-surface-20261103';
+import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays,QUIZ} from './color-model.mjs?v=integrated-eye-20261104';
 import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs?v=filter-paper-20261103';
-import {surfaceObservation} from './surface-model.mjs?v=merged-surface-20261103';
-import {filterPaperObservation} from './filter-paper-model.mjs?v=filter-paper-20261103';
+import {surfaceObservation} from './surface-model.mjs?v=integrated-eye-20261104';
+import {filterPaperObservation} from './filter-paper-model.mjs?v=integrated-eye-20261104';
 let studioModule=null;
 const text=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};
 const pressed=(root,selector,key)=>root.querySelectorAll(selector).forEach(b=>b.setAttribute('aria-pressed',String(b.getAttribute(selector.slice(1,-1))===key)));

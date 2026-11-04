@@ -85,3 +85,6 @@
  #s5 .filter-controls .control-label{font-size:.69rem;margin-bottom:6px}
  #s5 .filter-controls select{font-size:.7rem;padding:8px 3px;border-radius:8px}
 }
+
+/* Keep historical #s6 links at the integrated fifth lesson without another card. */
+.integrated-eye-anchor{display:block;height:0;scroll-margin-top:105px}
