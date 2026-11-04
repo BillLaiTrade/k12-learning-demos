@@ -31,3 +31,9 @@ test('自由試光沿用第三區線性顯色，兩燈可同色且分開後不�
  for(const [a,b]of[[0,1],[0,2],[1,2],[0,0]]){const keys=['red','green','blue'],lamps=[{colour:keys[a],x:.5,y:.5},{colour:keys[b],x:.5,y:.5}];for(let c=0;c<3;c++)assert.ok(Math.abs(probeLinear(.5,.5,lamps)[c]-SOURCE_LINEAR[a][c]-SOURCE_LINEAR[b][c])<1e-12);}
  const separated=[{colour:'red',x:.2,y:.5},{colour:'blue',x:.8,y:.5}];assert.deepEqual(probeLinear(.2,.5,separated),SOURCE_LINEAR[0]);
 });
+
+test('兩燈開關不改顏色或足跡，關閉後不提供色光',()=>{
+ const lamps=[{colour:'red',x:.5,y:.5,on:true},{colour:'green',x:.5,y:.5,on:false}];
+ assert.deepEqual(probeLinear(.5,.5,lamps),[...SOURCE_LINEAR[0]]);
+ lamps[0].on=false;assert.deepEqual(probeLinear(.5,.5,lamps),[0,0,0]);
+});

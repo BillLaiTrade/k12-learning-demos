@@ -1,7 +1,7 @@
 import {tankWaterRegion,inTankWater} from './collection-task-water.mjs';
 import {bodyOffset} from './collection-task-layout.mjs?v=b-decisions-20261104';
 // 第六區的實物接觸幾何；場景提示與判定共用輪廓，座標來自器材繪圖。
-import {jarMouth,waterSurface,rigPosition} from './collection-task-model.mjs?v=b-decisions-20261104';
+import {jarMouth,waterSurface,rigPosition} from './collection-task-model.mjs?v=water-guidance-20261104';
 export const STONE_OFFSETS=[[-48,-12],[0,-22],[48,-10],[-27,17],[27,19]];
 const polygon=points=>({kind:'polygon',points});
 const ellipse=(x,y,rx,ry)=>({kind:'ellipse',x,y,rx,ry});

@@ -45,3 +45,5 @@
 2026-11-04整合：移除第六區頁面與導覽，第四／五區的surface-model及filter-paper-model觀察句接到反射光入眼；計算函式不變。lesson.mjs更新文案模組與小測版本，path-lessons.css保留舊#s6零高度原生錨點於第五區。3D、接收預覽與材質不改，無新圖片或依賴。舊eye分支保留相容，頁面不再建立eye實驗。
 
 2026-11-04雙色光小測：duo-quiz-model.mjs共用72題的色光選擇／判定與上方混光；duo-quiz.mjs控制相互獨立的查證／作答與平面備援，duo-quiz-studio.mjs建立兩燈／色片／金框紙張的3D場景，duo-quiz.css只作用於小測。上方沿用現有torch三張PNG與SOURCE_LINEAR，下方紙面獨立受光，不新增素材／套件。五區及舊模型保持。核可概念圖只供構圖參考，未整張貼入網頁。
+
+2026-11-04依回饋，duo-probe.mjs改為第三區相同的直接拖曳／點按開關／快速排列。沿用MIX_SETUP、torch-studio真實幾何與PNG投影校準，白幕及淺木紋比例對齊；兩支燈仍可獨立換色。torch-studio僅擴充可選目標幕、動態色環，不更動原預設、幾何與材質。小測柔光束／金邊使用獨立SVG ID，無新圖像或依賴。

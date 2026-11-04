@@ -17,7 +17,7 @@ function gripTextures(){
  }
  c.putImageData(pixels,0,0);const texture=new THREE.CanvasTexture(canvas);texture.wrapS=texture.wrapT=THREE.RepeatWrapping;texture.repeat.set(9,4);texture.anisotropy=4;return texture;
 }
-export function createTorchStudio(canvas,index,{unavailable,ready}={}){
+export function createTorchStudio(canvas,index,{unavailable,ready,screen:providedScreen}={}){
  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true,preserveDrawingBuffer:true,powerPreference:'low-power'});
  renderer.setSize(360,260,false);renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setClearColor(0x000000,0);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
  const scene=new THREE.Scene();scene.environment=studioEnvironment();
@@ -58,8 +58,9 @@ export function createTorchStudio(canvas,index,{unavailable,ready}={}){
  const lens=new THREE.Mesh(new THREE.CircleGeometry(.355,64),new THREE.MeshPhysicalMaterial({color:'#30363b',metalness:.15,roughness:.16,transparent:true,opacity:.65}));lens.position.z=-1.585;lens.rotation.y=Math.PI;torch.add(lens);
  let frame=0,disposed=false,lastPose='';
  function draw(){frame=0;if(!disposed){renderer.render(scene,camera);if(canvas.dataset.ready!=='true'){canvas.dataset.ready='true';ready?.();}}}
- function update(spot){
-  const pitch=.035+(.5-spot.y)*.08,aim=torchAim(index,spot),screen=canvas.closest('.mix-scene')?.querySelector('[data-mix]'),bounds=canvas.parentElement.getBoundingClientRect();
+ function update(spot,colourIndex=index){
+  band.color.set(['#b82b29','#278541','#2457b7'][colourIndex]);
+  const pitch=.035+(.5-spot.y)*.08,aim=torchAim(index,spot),screen=providedScreen||canvas.closest('.mix-scene')?.querySelector('[data-mix]'),bounds=canvas.parentElement.getBoundingClientRect();
   let yaw=Math.atan2(-aim.direction[0],-aim.direction[2]);camera.zoom=1;camera.updateProjectionMatrix();
   if(screen&&bounds.width&&bounds.height){
    const r=screen.getBoundingClientRect(),target={x:r.left+spot.x*r.width,y:r.top+spot.y*r.height},up=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,1),vertical=Math.sin(pitch)*up.y-Math.cos(pitch)*up.z;
@@ -69,7 +70,7 @@ export function createTorchStudio(canvas,index,{unavailable,ready}={}){
    const ends=[-1.59,1.31].map(z=>new THREE.Vector3(0,0,z).applyMatrix4(torch.matrixWorld).project(camera)),mx=.437*2/(camera.right-camera.left),my=.437*2/(camera.top-camera.bottom),extent=Math.max(...ends.flatMap(p=>[Math.abs(p.x)+mx,Math.abs(p.y)+my]));
    camera.zoom=Math.min(1,.94/extent);camera.updateProjectionMatrix();yaw=align();
   }
-  torch.rotation.set(pitch,yaw,0);const pose=[pitch,yaw,camera.zoom].join(',');if(pose===lastPose)return;lastPose=pose;
+  torch.rotation.set(pitch,yaw,0);const pose=[pitch,yaw,camera.zoom,colourIndex].join(',');if(pose===lastPose)return;lastPose=pose;
   canvas.dataset.orientation=JSON.stringify(torch.rotation.toArray().slice(0,3));if(!frame)frame=requestAnimationFrame(draw);
  }
  function getLensPosition(){

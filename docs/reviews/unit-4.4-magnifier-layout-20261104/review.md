@@ -22,3 +22,5 @@ LENS_CAPTURE_DIR=/tmp/mag-layout-integration node tests/unit-4.4.test.cjs
 [桌面主畫面](desktop.png)、[手機主畫面](mobile.png)、[F外光路](outside.png)。
 
 本機70項全數通過：屏幕模型10、第四區模型11、兩區瀏覽器11、第四區瀏覽器15、整課23（瀏覽器含主項）。[屏幕模型](screen-model-tests.txt)、[第四區模型](eye-model-tests.txt)、[兩區回歸](shared-tests.txt)、[第四區操作](eye-tests.txt)、[整課](integration-tests.txt)。
+
+公開複驗後補上F標記與器材名稱的矩形碰撞檢查。F文字向上避讓，保留原本焦距的水平位置，並限制在工具列下方；四尺寸×四條件的標記互不重疊，第四區15項重新通過。
