@@ -9,7 +9,7 @@ export function bindBenchRuler({track,handle,key,min,max,reverse,get,move}){
 }
 export function createBenchLayout(root){
  const stage=root.querySelector('.convex-stage'),panel=root.querySelector('.convex-panel');
- function layout(){const width=stage.clientWidth,nav=document.querySelector('.route'),navHeight=innerWidth<=760&&nav?nav.offsetHeight:0;root.dataset.narrow=String(width<600);root.dataset.compact=String(width<1000);root.style.setProperty('--bench-window-height',Math.max(280,innerHeight-navHeight-24)+'px');root.style.setProperty('--bench-dock-height',(width<600?290:158)+'px');root.style.setProperty('--eye-art-width',Math.max(40,Math.min(panel.clientWidth-16,(stage.clientHeight-148)/2))+'px');root.style.setProperty('--preview-paper-width',Math.min(panel.clientWidth-16,Math.max(38,(stage.clientHeight-115)*380/600))+'px');}
+ function layout(){const width=stage.clientWidth,nav=document.querySelector('.route'),navHeight=innerWidth<=760&&nav?nav.offsetHeight:0;root.dataset.narrow=String(width<600);root.dataset.compact=String(width<1000);root.style.setProperty('--bench-window-height',Math.max(280,innerHeight-navHeight-24)+'px');root.style.setProperty('--bench-dock-height',(width<600?290:158)+'px');root.style.setProperty('--eye-art-width',Math.max(40,Math.min(panel.clientWidth-16,(stage.clientHeight-(root.hasAttribute('data-magnifier-lab')?180:148))/2))+'px');root.style.setProperty('--preview-paper-width',Math.min(panel.clientWidth-16,Math.max(38,(stage.clientHeight-115)*380/600))+'px');}
  new ResizeObserver(layout).observe(stage);window.addEventListener('resize',layout);layout();
  return {layout,safeRect(){
   // Reserve identical tool space in both experiments, including the optional screen comparison.

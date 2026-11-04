@@ -25,7 +25,8 @@ export function createBenchApparatus(THREE,scene,G,art,paper,{withEye=false}={})
   for(const n of [-200,-100,100,200])box(scene,[.025,.10,.12],[n*G.scale,.3,.87],brass);
   const eye=new THREE.Group();eye.position.x=(G.eye??G.f*2)*G.scale;scene.add(eye);mount(eye,G.axis-.18);
   const eyeArt=document.createElement('canvas');eyeArt.width=256;eyeArt.height=128;const ec=eyeArt.getContext('2d');ec.fillStyle='#fbf5e4';ec.strokeStyle='#586f59';ec.lineWidth=5;ec.beginPath();ec.moveTo(16,64);ec.quadraticCurveTo(128,-18,240,64);ec.quadraticCurveTo(128,146,16,64);ec.fill();ec.stroke();ec.fillStyle='#78977d';ec.beginPath();ec.ellipse(85,64,25,37,0,0,Math.PI*2);ec.fill();ec.fillStyle='#213a2c';ec.beginPath();ec.ellipse(78,64,12,25,0,0,Math.PI*2);ec.fill();ec.fillStyle='#fff';ec.beginPath();ec.arc(71,52,6,0,Math.PI*2);ec.fill();
-  const eyeTexture=new THREE.CanvasTexture(eyeArt);eyeTexture.colorSpace=THREE.SRGBColorSpace;const eyeMarker=new THREE.Mesh(new THREE.PlaneGeometry(.72,.36),new THREE.MeshBasicMaterial({map:eyeTexture,transparent:true,side:THREE.DoubleSide,toneMapped:false}));eyeMarker.position.set(0,G.axis,0);eye.add(eyeMarker);
+  const eyeTexture=new THREE.CanvasTexture(eyeArt);eyeTexture.colorSpace=THREE.SRGBColorSpace;const eyeMarker=new THREE.Mesh(new THREE.PlaneGeometry(.72,.36),new THREE.MeshBasicMaterial({map:eyeTexture,transparent:true,side:THREE.DoubleSide,toneMapped:false}));// Anchor the pupil painted at texture x=78 to the optical receiving position.
+  eyeMarker.name='eye-marker';eyeMarker.position.set((.5-78/256)*.72,G.axis,0);eye.add(eyeMarker);
 
   eye.visible=withEye;box(eye,[.34,.18,.36],[0,.54,.84],brass);
   return {source,lens,lensGroup,screen,screenPlane,projectedTexture,artTex,eye};

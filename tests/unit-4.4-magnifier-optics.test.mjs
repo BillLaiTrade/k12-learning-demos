@@ -8,6 +8,7 @@ test('保留兩區共同器材與同條件的代表光路',()=>{
  for(const object of [30,90,100,100.1,150,200,320,350])for(const point of ['top','bottom','both'])assert.deepEqual(magnifierRays({object,screen:500},point),imagingRays({object,screen:500},point));
 });
 test('眼睛在模型層固定，移動操作僅接受圖卡與比較屏幕',()=>{
+ assert.ok(G.eye>0&&G.eye<G.f);
  const state={object:30,eye:G.eye,screen:95,screenIn:false};assert.equal(moveMagnifier(state,'eye',500),state);assert.equal(moveMagnifier(state,'eye',NaN),state);
  assert.equal(moveMagnifier(state,'object',0).object,30);assert.equal(moveMagnifier(state,'object',1000).object,350);assert.equal(moveMagnifier(state,'screen',0).screen,50);assert.equal(moveMagnifier(state,'screen',1000).screen,500);
  for(const eye of [0,50,200,500]){const g=magnifierState({...state,eye});assert.equal(g.eye,G.eye);assert.deepEqual(g,magnifierState(state));}
@@ -29,10 +30,15 @@ test('F外仍有倒立實像，固定眼位不冒充清晰正立放大像',()=>{
  for(const object of [100.1,110,150,200,300,320,350]){const g=magnifierState({object,screen:95});assert.equal(g.type,'real');assert.ok(g.v>0&&g.m<0);assert.equal(g.resolved,false);assert.equal(g.imageScale,null);assert.equal(g.angularGain,null);assert.ok(['converging','at-image','too-close'].includes(g.eyeMode));}
 });
 test('額外入眼光始終到達同一位置，虛像位置在另一側而非觀察位置',()=>{
- for(const object of [30,60,90,100,150,320])for(const r of eyeRays({object,screen:95})){assert.equal(r.to[0],G.eye*G.scale);assert.ok(Math.abs(r.to[1]-G.axis)<1e-9);assert.ok(Math.abs(r.from[1]-G.axis)<=G.aperture);}
- const g=magnifierState({object:60,screen:95});assert.ok(g.v<0&&g.eye>0);
+ for(const object of [30,60,90,100,150,320])for(const r of eyeRays({object,screen:95})){assert.equal(r.to[0],G.eye*G.scale);assert.ok(Math.abs(r.to[1]-G.axis)<=G.pupilRadius+1e-9);assert.ok(Math.abs(r.from[1]-G.axis)<=G.aperture);}
+ const g=magnifierState({object:60,screen:50});assert.ok(g.v<0&&g.eye>0);for(const point of ['top','bottom']){const bundle=eyeRays({object:60,screen:50},point);assert.equal(bundle.length,3);const heights=bundle.map(r=>r.to[1]);assert.ok(Math.max(...heights)-Math.min(...heights)>G.pupilRadius*1.9);}
 });
 test('屏幕在固定眼睛前方才遮擋，取下或移到後方即恢復',()=>{
- const s={object:60,screen:95,screenIn:true};assert.equal(magnifierState(s).blocked,true);assert.equal(magnifierState({...s,screen:200}).blocked,false);assert.equal(magnifierState({...s,screenIn:false}).blocked,false);assert.deepEqual(eyeRays(s),[]);assert.ok(magnifierState(s).spread>0);
+ const s={object:60,screen:50,screenIn:true};assert.equal(magnifierState(s).blocked,true);assert.equal(magnifierState({...s,screen:200}).blocked,false);assert.equal(magnifierState({...s,screenIn:false}).blocked,false);assert.deepEqual(eyeRays(s),[]);assert.ok(magnifierState(s).spread>0);
  for(const object of [30,99.9,100,100.1,150,300,350])for(const r of magnifierRays({object,screen:500}))assert.ok([...r.from,...r.lens,...r.end,...(r.virtual||[])].every(Number.isFinite));
+});
+test('屏幕接像與固定眼位看清是兩個判準，實像可接到而眼睛此處仍看不清',()=>{
+ const a={object:150,screen:300},g=magnifierState(a);assert.equal(g.screenClear,true);assert.equal(g.resolved,false);
+ assert.equal(magnifierState({...a,screen:200}).screenClear,false);
+ for(const object of [30,60,90])for(const screen of [50,100,200,300,500]){const state=magnifierState({object,screen});assert.equal(state.screenClear,false);assert.equal(state.resolved,true);}
 });

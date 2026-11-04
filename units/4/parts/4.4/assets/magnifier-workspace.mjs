@@ -1,4 +1,4 @@
-import {bindBenchRuler,createBenchLayout} from './convex-bench-workspace.mjs?v=20261104-convex-unified1';
+import {bindBenchRuler,createBenchLayout} from './convex-bench-workspace.mjs?v=20261104-view-conditions1';
 // Keep the observer fixed while the object moves outward through the focal point.
 export const observations=Object.freeze({
  near:{object:30,screenIn:false,point:'top'},
@@ -7,7 +7,7 @@ export const observations=Object.freeze({
  outside:{object:150,screenIn:false,point:'top'}
 });
 export function createMagnifierWorkspace(root,{G,move,observe}){
- let current={object:30,eye:G.eye,screen:95};const layout=createBenchLayout(root),rulers=[];
+ let current={object:30,eye:G.eye,screen:50};const layout=createBenchLayout(root),rulers=[];
  for(const key of ['object','screen']){
   const track=root.querySelector(`[data-mag-ruler-track=${key}]`),handle=root.querySelector(`[data-mag-device=${key}]`);
   rulers.push({key,handle,update:bindBenchRuler({track,handle,key,min:G[key+'Min'],max:G[key+'Max'],reverse:key==='object',get:()=>current[key],move})});

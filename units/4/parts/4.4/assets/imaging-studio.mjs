@@ -1,8 +1,9 @@
+import {paintBenchProjection} from './screen-projection.mjs?v=20261104-view-conditions1';
 import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-mag-fixed-eye1';
-import {bindBenchRuler} from './convex-bench-workspace.mjs?v=20261104-convex-unified1';
-import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-convex-unified1';
+import {bindBenchRuler} from './convex-bench-workspace.mjs?v=20261104-view-conditions1';
+import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-view-conditions1';
 import {BENCH_HOME,createBenchArt} from './convex-bench-model.mjs?v=20261104-convex-unified1';
-import {fitBench} from './convex-bench-workspace.mjs?v=20261104-convex-unified1';
+import {fitBench} from './convex-bench-workspace.mjs?v=20261104-view-conditions1';
 import {createImagingWorkspace} from './imaging-workspace.mjs?v=20261104-convex-unified1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {IMAGING as G,moveImaging,imagingState,imagingRays,imagingKeypointState} from './imaging-optics.mjs?v=20261104-convex-unified1';
@@ -16,20 +17,8 @@ function initialise(root){
  const workspace=createImagingWorkspace(root);
 
  const art=createBenchArt();
- const paper=$('[data-imaging-paper]'),pc=paper.getContext('2d');
- function paintProjection(){
-  const g=imagingState(state),W=paper.width,H=paper.height;pc.fillStyle='#f1f1e5';pc.fillRect(0,0,W,H);
-  if(state.atInfinity){const rx=Math.max(5,g.spread*W/G.screenWidth),ry=Math.max(5,g.spread*H/G.screenHeight);pc.fillStyle='#d17c36';pc.beginPath();pc.ellipse(W/2,H/2,rx,ry,0,0,Math.PI*2);pc.fill();return g;}
-  // Uniform pupil samples spread an extended object on the actual receiving plane.
-  // Their envelope is exactly the same thin-lens rayAt geometry as the helper rays.
-  const samples=g.spread<.003?1:61;pc.save();pc.globalAlpha=1/samples;
-  for(let i=0;i<samples;i++){
-   const radius=samples===1?0:Math.sqrt((i+.5)/samples)*g.spread,angle=i*2.399963229728653;
-   pc.save();pc.translate(W/2+Math.cos(angle)*radius*W/G.screenWidth,H/2+Math.sin(angle)*radius*H/G.screenHeight);
-   pc.scale(g.projectionScale*G.cardWidth/G.screenWidth*W/art.width,g.projectionScale*G.cardHeight/G.screenHeight*H/art.height);pc.drawImage(art,-art.width/2,-art.height/2);pc.restore();
-  }
-  pc.restore();return g;
- }
+ const paper=$('[data-imaging-paper]');
+ function paintProjection(){return paintBenchProjection(paper,art,G,state);}
  function clearGestureNotice(){const note=$('[data-imaging-gesture-note]');note.hidden=true;root.dataset.gestureHelp='false';$$('[data-imaging-ruler]').forEach(r=>r.removeAttribute('data-guided'));}
  function showGestureNotice(key){clearGestureNotice();$$('[data-imaging-ruler]').forEach(r=>r.toggleAttribute('data-guided',r.dataset.imagingRuler===key));const note=$('[data-imaging-gesture-note]');note.textContent=key==='lens'?'凸透鏡是固定的。':`請使用下方金框標示的${key==='object'?'圖卡尺':'屏幕尺'}的刻度按鈕或綠色把手調整距離。`;note.hidden=false;root.dataset.gestureHelp='true';}
  function update(){
