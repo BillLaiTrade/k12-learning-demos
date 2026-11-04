@@ -22,5 +22,5 @@ function createMagnifierLayout(root){
  const viewport=root.querySelector('[data-mag-viewport]');
  function layout(){const width=root.clientWidth;root.dataset.narrow=String(width<680);root.dataset.compact=String(width<1000);}
  new ResizeObserver(layout).observe(root);layout();
- return {layout,safeRect(){const top=viewport.clientWidth<220?86:50;return {left:14,top,width:Math.max(60,viewport.clientWidth-28),height:Math.max(60,viewport.clientHeight-top-42)};}};
+ return {layout,safeRect(){const tools=root.querySelector('.magnifier-tools'),top=tools.offsetTop+tools.offsetHeight+10;return {left:14,top,width:Math.max(60,viewport.clientWidth-28),height:Math.max(60,viewport.clientHeight-top-42)};}};
 }

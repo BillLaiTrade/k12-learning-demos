@@ -112,4 +112,37 @@
 .magnifier-review-link { margin:12px 0; font-size:.78rem; color:#58705b; }
 .magnifier-lab .magnifier-ruler-focus { left:33.3333%; right:0; }
 @container convex-bench (max-width:679px) { .magnifier-lab.convex-bench .magnifier-viewport { height:330px; } }
-@container convex-bench (max-width:419px) { .magnifier-lab.convex-bench .magnifier-viewport { height:310px; } }
+@container convex-bench (max-width:419px) { .magnifier-lab.convex-bench .magnifier-viewport { height:325px; } }
+
+.magnifier-lab.convex-bench .magnifier-tools { flex-wrap:nowrap; overflow-x:auto; overflow-y:hidden; padding-bottom:5px; pointer-events:auto; scrollbar-width:thin; }
+.magnifier-lab.convex-bench .magnifier-tools button { flex:0 0 auto; white-space:nowrap; }
+.magnifier-lab.convex-bench .magnifier-trace { flex:0 0 auto; flex-wrap:nowrap; align-items:stretch; }
+.magnifier-takeaway { margin:14px 0 10px; padding:10px 12px; border-radius:10px; background:#e5efda; color:#28553a; font-size:.86rem; line-height:1.6; font-weight:650; }
+.magnifier-takeaway .magnifier-review-link { display:block; margin:4px 0 0; font-size:.73rem; font-weight:400; }
+.magnifier-lab .magnifier-why { margin:10px 0 0; border:1px solid #bccdb1; border-radius:9px; background:#f8faf3; color:#31543c; font-size:.8rem; }
+.magnifier-lab .magnifier-why summary { display:flex; align-items:center; gap:8px; width:auto; padding:9px 11px; list-style:none; cursor:pointer; font-weight:650; }
+.magnifier-why summary::-webkit-details-marker { display:none; }
+.magnifier-why summary::before { content:'▸'; }
+.magnifier-why[open] summary::before { content:'▾'; }
+.magnifier-why summary small { margin-left:auto; padding:1px 7px; border-radius:9px; background:#e3ebd8; font-size:.66rem; font-weight:400; white-space:nowrap; }
+.magnifier-why-body { padding:0 11px 10px; }
+.magnifier-lab .magnifier-why p { margin:4px 0 9px; padding:0; line-height:1.6; }
+.magnifier-analogies { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.magnifier-analogies figure { min-width:0; margin:0; padding:8px; border:1px solid #d1dec5; border-radius:8px; background:#fffdf5; }
+.magnifier-analogies h4 { margin:0 0 3px; font-size:.78rem; }
+.magnifier-analogies svg { display:block; width:100%; height:auto; }
+.magnifier-analogies figcaption { margin:4px 0 0; font-size:.74rem; line-height:1.5; }
+.magnifier-analogies svg text { fill:#31543c; font:12px system-ui,sans-serif; }
+.analogy-mirror { fill:none; stroke:#608b94; stroke-width:5; }
+.analogy-hatch { fill:none; stroke:#96aa9a; stroke-width:2; }
+.analogy-stem { fill:none; stroke:#6d9163; stroke-width:3; }
+.analogy-red { fill:#d96950; }
+.analogy-blue { fill:#438dbb; }
+.analogy-light { fill:none; stroke:#d98568; stroke-width:1.6; }
+.analogy-back { fill:none; stroke:#d98568; stroke-width:1.4; stroke-dasharray:4 4; }
+.analogy-dashed-frame { fill:none; stroke:#8ba18a; stroke-width:1.2; stroke-dasharray:4 4; }
+.analogy-lens { fill:#d5e9df; stroke:#527b69; stroke-width:2; }
+.analogy-eye { fill:#f5f2df; stroke:#52735c; stroke-width:1.5; }
+.analogy-pupil { fill:#34583d; }
+.magnifier-lab .magnifier-why-conclusion { margin:9px 0 0; font-weight:650; }
+@container convex-bench (max-width:599px) { .magnifier-analogies { grid-template-columns:minmax(0,1fr); } }

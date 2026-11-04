@@ -33,16 +33,7 @@ export function eyeRays(state,point='both'){
  return paths;
 }
 
-// Select visible pupil samples without changing the thin-lens path or image position.
+// Use the same three lens samples per object point as the screen experiment.
 export function magnifierDisplayRays(state,point='both'){
- const G=MAGNIFIER,end=state.screenIn?state.screen:330,geometry=convexRays(state,point,end,G),groups=[];
- for(const name of ['top','bottom']){
-  const rays=geometry.filter(r=>r.name===name);if(!rays.length)continue;
-  const y=name==='top'?G.pointTop:G.pointBottom,g=magnifierState(state),den=1+end*(1/state.object-1/G.f);
-  let low=-G.aperture,high=G.aperture;
-  if(g.type!=='infinity'&&Math.abs(den)>1e-6){const bounds=[(.68-G.axis+end*y/state.object)/den,(4.4-G.axis+end*y/state.object)/den].sort((a,b)=>a-b);low=Math.max(low,bounds[0]);high=Math.min(high,bounds[1]);if(high-low<.12){low=-G.aperture;high=G.aperture;}}
-  const heights=g.type==='infinity'?rays.map(r=>r.lens[1]-G.axis):[low,(low+high)/2,high];
-  for(const h of heights)groups.push({name,from:[-state.object*G.scale,G.axis+y,0],lens:[0,G.axis+h,0],end:[end*G.scale,G.axis+rayAt(G.f,state.object,y,h,end),0],...(g.type==='virtual'?{virtual:[g.v*G.scale,G.axis+g.m*y,0]}:{})});
- }
- return groups;
+ return convexRays(state,point,state.screenIn?state.screen:330,MAGNIFIER);
 }
