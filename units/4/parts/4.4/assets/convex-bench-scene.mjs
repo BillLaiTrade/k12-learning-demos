@@ -1,4 +1,4 @@
-import {createLensGeometry} from './lens-geometry.mjs?v=20261104-lens-solid4';
+import {createLensVisual} from './lens-geometry.mjs?v=20261104-lens-clear5';
 export function createBenchApparatus(THREE,scene,G,art,paper,{withEye=false,lensKind='convex'}={}){
   scene.add(new THREE.HemisphereLight('#f2f3df','#3a503e',2.1));const light=new THREE.DirectionalLight('#fff0cf',3.1);light.position.set(-3,8,6);light.castShadow=true;light.shadow.mapSize.set(1024,1024);Object.assign(light.shadow.camera,{left:-12,right:14,top:7,bottom:-5});light.shadow.bias=-.0004;scene.add(light);const rim=new THREE.DirectionalLight('#d3e9e0',1.6);rim.position.set(5,4,-4);scene.add(rim);
   const mat=(color,options={})=>new THREE.MeshStandardMaterial({color,roughness:.5,metalness:.15,...options}),dark=mat('#283e30',{metalness:.5,roughness:.36}),steel=mat('#a2b4a4',{metalness:.7,roughness:.27}),brass=mat('#bba267',{metalness:.7,roughness:.3});
@@ -19,9 +19,7 @@ export function createBenchApparatus(THREE,scene,G,art,paper,{withEye=false,lens
   for(const [x,rot]of [[-.011,-Math.PI/2],[.040,Math.PI/2]])plane(source,G.cardWidth,G.cardHeight,x,new THREE.MeshBasicMaterial({map:artTex,transparent:true,toneMapped:false}),rot);
   const lensHalfThickness=r=>lensKind==='concave'?.014+.16*(r/.88)**2:.014+.126*(1-(r/.88)**2);
   const lensGroup=new THREE.Group();scene.add(lensGroup);mount(lensGroup,G.axis-.91);
-  const lensGeometry=createLensGeometry(THREE,{radius:.88,halfThickness:lensHalfThickness});
-  const lens=new THREE.Mesh(lensGeometry,new THREE.MeshPhysicalMaterial({color:'#c7e9df',transparent:false,opacity:1,transmission:.65,roughness:.08,metalness:0,clearcoat:1,clearcoatRoughness:.1,depthWrite:true,side:THREE.DoubleSide}));lens.position.y=G.axis;lensGroup.add(lens);
-  for(const side of [-1,1]){const points=[];for(let i=0;i<=80;i++){const y=-.88+i*1.76/80;points.push(new THREE.Vector3(side*lensHalfThickness(Math.abs(y)),G.axis+y,0));}const outline=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:'#e5f4df',transparent:true,opacity:.55,depthWrite:false,depthTest:false}));outline.renderOrder=5;lensGroup.add(outline);}
+  const lens=createLensVisual(THREE,{radius:.88,halfThickness:lensHalfThickness});lens.position.y=G.axis;lensGroup.add(lens);
   box(lensGroup,[.25,.10,.24],[0,G.axis-.94,0],steel);
   const screen=new THREE.Group();scene.add(screen);mount(screen,.50);frame(screen,G.screenWidth,G.screenHeight);
   const projectedTexture=new THREE.CanvasTexture(paper);projectedTexture.colorSpace=THREE.SRGBColorSpace;const screenPlane=plane(screen,G.screenWidth,G.screenHeight,-.009,new THREE.MeshBasicMaterial({map:projectedTexture,toneMapped:false}),-Math.PI/2);

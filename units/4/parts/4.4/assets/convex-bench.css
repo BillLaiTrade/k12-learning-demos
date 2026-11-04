@@ -81,7 +81,7 @@
 .magnifier-ray-key { position:absolute; left:4px; bottom:4px; display:flex; flex-wrap:wrap; gap:10px; color:#fffbed; font-size:.69rem; background:#34513fd9; padding:4px 7px; border-radius:5px; pointer-events:none; }
 .magnifier-ray-edges { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:hidden; }
 .magnifier-ray-edges path { fill:none; stroke-width:2.3; }
-.magnifier-device-tag { position:absolute; transform:translate(-50%,-50%); font-size:.67rem; padding:2px 5px; border-radius:4px; background:#f8f8e8ee; color:#31543c; pointer-events:none; }
+.magnifier-device-tag { white-space:nowrap; position:absolute; transform:translate(-50%,-50%); font-size:.67rem; padding:2px 5px; border-radius:4px; background:#f8f8e8ee; color:#31543c; pointer-events:none; }
 .magnifier-lab .magnifier-gesture-note { right:10px; bottom:34px; }
 .magnifier-ruler-focus { position:absolute; top:37px; height:7px; left:57.1429%; right:8.5714%; background:#c5de9d; border-radius:4px; pointer-events:none; }
 .magnifier-lab [data-secondary-mark] { background:transparent; border-color:transparent; box-shadow:none; color:#647961; }
