@@ -40,6 +40,13 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   assert.ok(m.cue.box.top>=m.frame.bottom,'double arrow belongs below the eye');assert.match(m.cue.text,/↔/);
  };
  const capture=process.env.DEPTH_CAPTURE_DIR;if(capture)await fs.mkdir(capture,{recursive:true});
+ const captureObserver=async name=>{
+  if(!capture)return;
+  // Read the existing canvas without scrolling or waiting for an element
+  // screenshot, so observation does not consume the intermediate water stage.
+  const data=await page.locator('#depth-observer').evaluate(c=>c.toDataURL('image/png'));
+  await fs.writeFile(path.join(capture,name),Buffer.from(data.split(',')[1],'base64'));
+ };
  const results=[];
  await t.test('the default is dry and physically occluded, with readable teaching and no automatic motion',async()=>{
   assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'ready');
@@ -80,7 +87,7 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   const stopped=await page.locator('#depth-input').inputValue();await page.waitForTimeout(200);assert.equal(await page.locator('#depth-input').inputValue(),stopped);
   await page.locator('#depth-lab').scrollIntoViewIfNeeded();
   await page.waitForFunction(()=>+document.querySelector('#depth-observer').dataset.depth>=30&&document.querySelector('#depth-lab').dataset.state==='filling');
-  if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,'water-filling.png')});
+  await captureObserver('water-filling.png');
   await page.waitForFunction(()=>+document.querySelector('#depth-observer').dataset.depth>=65&&document.querySelector('#depth-lab').dataset.state==='filling');
   await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='100'&&document.querySelector('#depth-lab').dataset.state==='ready');
   assert.equal(await page.locator('#depth-fill').isDisabled(),true);
@@ -89,7 +96,7 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   await page.locator('#depth-drain').click();await page.waitForTimeout(150);assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'draining');
   assert.ok(+await page.locator('#depth-input').inputValue()<100&&+await page.locator('#depth-input').inputValue()>0);
   await page.waitForFunction(()=>+document.querySelector('#depth-observer').dataset.depth<=65&&+document.querySelector('#depth-observer').dataset.depth>0&&document.querySelector('#depth-lab').dataset.state==='draining');
-  if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,'water-draining.png')});
+  await captureObserver('water-draining.png');
   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(180);assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'paused');
   const paused=await page.locator('#depth-input').inputValue();await page.waitForTimeout(180);assert.equal(await page.locator('#depth-input').inputValue(),paused);
   await page.locator('#depth-lab').scrollIntoViewIfNeeded();
@@ -201,7 +208,13 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   await page.setViewportSize({width:1440,height:900});await set(80,300);await page.locator('#show-rays').focus();
   const before=await readPairing();checkPairing(before);
   const art=await page.locator('.depth-eye-device use,.depth-eye-key use').evaluateAll(es=>es.map(e=>e.getAttribute('href')));assert.deepEqual(art,['#depth-eye-art','#depth-eye-art']);
-  const border=()=>page.locator('.depth-observation .depth-stage').evaluate(e=>getComputedStyle(e,'::after').borderColor);
+  const border=()=>page.locator('.depth-observation .depth-stage').evaluate(async e=>{
+   // Flush style, then compare the completed focus transition rather than an
+   // interpolated color sampled between two browser frames.
+   getComputedStyle(e,'::after').borderColor;
+   await Promise.all(e.getAnimations({subtree:true}).map(a=>a.finished.catch(()=>{})));
+   return getComputedStyle(e,'::after').borderColor;
+  });
   const idle=await border();await page.locator('#depth-eye').focus();assert.equal(await page.locator('#depth-lab').getAttribute('data-eye-active'),'true');assert.notEqual(await border(),idle);
   await page.keyboard.press('Home');await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.eyeX==='210');const near=await readPairing();checkPairing(near);
   await page.keyboard.press('End');await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.eyeX==='340');const far=await readPairing();checkPairing(far);

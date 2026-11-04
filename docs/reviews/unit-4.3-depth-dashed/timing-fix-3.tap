@@ -1,0 +1,29 @@
+TAP version 13
+# Subtest: sixth section teaches apparent depth with synchronized side and rendered observer views
+    # Subtest: one press continuously fills or drains to its endpoint with synchronized views
+    ok 1 - one press continuously fills or drains to its endpoint with synchronized views
+      ---
+      duration_ms: 12917.635279
+      type: 'test'
+      ...
+    # Subtest: the eye and viewing window share a visual cue and the dashed guide follows keyboard focus
+    ok 2 - the eye and viewing window share a visual cue and the dashed guide follows keyboard focus
+      ---
+      duration_ms: 3200.738784
+      type: 'test'
+      ...
+    1..2
+ok 1 - sixth section teaches apparent depth with synchronized side and rendered observer views
+  ---
+  duration_ms: 20691.762312
+  type: 'test'
+  ...
+1..1
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 22073.717347
