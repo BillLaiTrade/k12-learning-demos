@@ -1,0 +1,23 @@
+▶ sixth section teaches apparent depth with synchronized side and rendered observer views
+  ✔ the default is dry and physically occluded, with readable teaching and no automatic motion (1741.744198ms)
+  ✔ adding water reveals the real rendered coin without moving the observer and reset restores the dry start (11252.554346ms)
+  ✔ water can be dragged vertically by its handle or surface, with keyboard access and no initial jump (10518.123838ms)
+  ✔ water and observer changes really repaint the coin, with the physical coin remaining fixed (4069.184712ms)
+  ✔ occlusion changes actual rendered pixels, and adding water at the same viewpoint reveals the coin (2582.638039ms)
+  ✔ hiding the construction preserves the eye view and the physical scene (211.033758ms)
+  ✔ keyboard and pointer change the same viewing position without losing focus (4239.52332ms)
+  ✔ replay traces coin to eye before revealing auxiliary lines, pauses offscreen, and can restart (4163.920787ms)
+  ✔ desktop and phone keep panels, labels and controls readable without horizontal page scrolling (9868.689116ms)
+  ✔ native mobile touch moves the viewpoint and updates the eye view (3884.588532ms)
+  ✔ reduced motion retains a complete static example after replay (419.9237ms)
+  ✔ texture failure has a usable fallback and retry restores materials without resetting controls (7158.037217ms)
+  ✔ reading remains available with JavaScript disabled (815.999261ms)
+✔ sixth section teaches apparent depth with synchronized side and rendered observer views (69048.923816ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 70538.729129

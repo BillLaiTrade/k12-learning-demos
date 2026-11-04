@@ -21,7 +21,8 @@
 #depth-scene .extension{fill:none;stroke:#e87523;stroke-width:2.7;stroke-dasharray:8 6}
 #depth-scene .depth-apparent{fill:#fff9c4;fill-opacity:.2;stroke:#ffeac2;stroke-width:3;stroke-dasharray:6 4}
 #depth-scene .depth-eye{cursor:ew-resize;touch-action:none;outline:none}
-#depth-scene .depth-eye:focus-visible .depth-eye-hit{stroke:#fff6ba;stroke-width:4}
+#depth-scene .depth-eye-focus{fill:none;stroke:#fff6ba;stroke-width:3;opacity:0;pointer-events:none}
+#depth-scene .depth-eye:focus-visible .depth-eye-focus{opacity:1}
 .depth-observer-state{position:absolute;left:10px;top:10px;max-width:calc(100% - 20px);padding:4px 10px;border:1px solid #e5efd3;border-radius:20px;background:#246840ed;color:#fffde6;font-size:.79rem;font-weight:750;pointer-events:none}
 .depth-observer-state[data-visible=hidden]{background:#6b5439ed}
 .depth-view-note{min-height:47px;display:flex;align-items:center;justify-content:center;gap:8px 14px;flex-wrap:wrap;padding:8px 10px;font-size:.77rem;line-height:1.5;text-align:center;background:#f8f5e7}
@@ -63,3 +64,20 @@
 .depth-observer-state{box-shadow:0 2px 5px #1f372b33;backdrop-filter:blur(5px)}
 .depth-view-note{font-size:.8rem;border-top:1px solid #cfc6a7;background:linear-gradient(#faf7eb,#eee9d7)}
 @container (max-width:560px){.depth-controls{grid-template-columns:1fr;gap:12px}.depth-actions{gap:7px;justify-content:flex-start}.depth-actions button{padding:9px 11px;min-width:0}#depth-fill{flex:1 1 100%;min-width:0}.depth-view figcaption{padding:8px 10px}.depth-view-note{font-size:.76rem}}
+/* Operate on the water surface and observer, inside the explanatory view. */
+.depth-water-control{position:absolute;z-index:2;width:44px;visibility:hidden}
+.depth-water-readout{position:absolute;z-index:3;visibility:hidden;transform:translateY(-50%);padding:2px 6px;border:1px solid #b4ad86;border-radius:6px;background:#fffdebeF;color:#24533d;font-size:14px;font-weight:750;line-height:24px;white-space:nowrap;box-shadow:0 2px 4px #40391c24;pointer-events:none}
+#depth-lab[data-direct-ready=true] :is(.depth-water-control,.depth-water-readout){visibility:visible}
+#depth-input{display:block;appearance:none;-webkit-appearance:none;writing-mode:vertical-lr;direction:rtl;width:44px;height:100%;min-height:0;margin:0;padding:0;background:transparent;cursor:ns-resize;touch-action:none;border:0;border-radius:12px}
+#depth-input::-webkit-slider-runnable-track{width:44px;height:100%;border-radius:8px;background:linear-gradient(90deg,transparent 20px,#e1ebd17a 20px,#e1ebd17a 24px,transparent 24px)}
+#depth-input::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:44px;height:44px;margin:0;border:2px solid #6d8860;border-radius:12px;background:#fffce8 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cpath d='M20 5L14 12H26ZM20 35L14 28H26Z' fill='%233c6b49'/%3E%3Cpath d='M8 20Q12 16 16 20T24 20T32 20' fill='none' stroke='%230d95a8' stroke-width='2.5'/%3E%3C/svg%3E") center/40px 40px no-repeat;box-shadow:0 3px 6px #302d203b,inset 0 1px #fff}
+#depth-input::-moz-range-track{width:4px;height:100%;border-radius:4px;background:#e1ebd17a}
+#depth-input::-moz-range-thumb{width:40px;height:40px;border:2px solid #6d8860;border-radius:12px;background:#fffce8 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M20 5L14 12H26ZM20 35L14 28H26Z' fill='%233c6b49'/%3E%3Cpath d='M8 20Q12 16 16 20T24 20T32 20' fill='none' stroke='%230d95a8' stroke-width='2.5'/%3E%3C/svg%3E") center no-repeat;box-shadow:0 3px 6px #302d203b}
+#depth-input:focus-visible{outline:none}
+#depth-input:focus-visible::-webkit-slider-thumb{outline:3px solid #286d4d;outline-offset:2px}
+#depth-input:focus-visible::-moz-range-thumb{outline:3px solid #286d4d;outline-offset:2px}
+#depth-scene .depth-water-hit{cursor:ns-resize;touch-action:none;pointer-events:stroke}
+#depth-scene .depth-eye{cursor:grab}#depth-scene .depth-eye:active{cursor:grabbing}
+#depth-scene .depth-eye-grip{fill:none;stroke:#345d40;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 1px 1px #fffbd1)}
+.depth-controls{display:flex;align-items:center;gap:8px;padding:10px 14px}
+.depth-controls .depth-actions{grid-column:auto;width:100%;border:0;padding:0}

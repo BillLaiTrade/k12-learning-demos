@@ -1,0 +1,44 @@
+▶ sixth section teaches apparent depth with synchronized side and rendered observer views
+  ✔ the default is dry and physically occluded, with readable teaching and no automatic motion (707.295904ms)
+  ✖ adding water reveals the real rendered coin without moving the observer and reset restores the dry start (8049.15207ms)
+  ✔ water can be dragged vertically by its handle or surface, with keyboard access and no initial jump (5000.930651ms)
+  ✔ water and observer changes really repaint the coin, with the physical coin remaining fixed (3443.6933ms)
+  ✔ occlusion changes actual rendered pixels, and adding water at the same viewpoint reveals the coin (2504.246592ms)
+  ✔ hiding the construction preserves the eye view and the physical scene (194.941648ms)
+  ✔ keyboard and pointer change the same viewing position without losing focus (4298.358113ms)
+  ✔ replay traces coin to eye before revealing auxiliary lines, pauses offscreen, and can restart (4083.923757ms)
+  ✔ desktop and phone keep panels, labels and controls readable without horizontal page scrolling (9569.848356ms)
+  ✔ native mobile touch moves the viewpoint and updates the eye view (5303.608164ms)
+  ✔ reduced motion retains a complete static example after replay (479.617737ms)
+  ✔ texture failure has a usable fallback and retry restores materials without resetting controls (4957.68868ms)
+  ✔ reading remains available with JavaScript disabled (752.615333ms)
+✖ sixth section teaches apparent depth with synchronized side and rendered observer views (53387.468543ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 12
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 54383.435351
+
+✖ failing tests:
+
+test at tests/unit-4.3-depth-lab.test.cjs:38:10
+✖ adding water reveals the real rendered coin without moving the observer and reset restores the dry start (8049.15207ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '38' !== '7'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-depth-lab.test.cjs:50:92)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-depth-lab.test.cjs:38:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '38',
+    expected: '7',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

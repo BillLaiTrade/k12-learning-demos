@@ -15,18 +15,20 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
  page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('favicon.ico'))errors.push(`${r.status()} ${r.url()}`);});
  const ready=async p=>{await p.goto(base);await p.waitForFunction(()=>document.querySelector('#depth-lab')?.dataset.texture==='ready'&&document.querySelector('#depth-observer')?.dataset.depth==='0');};
  await ready(page);
- const set=async(depth,eye)=>{await page.locator('#depth-input').fill(String(depth));await page.locator('#depth-eye').fill(String(eye));await page.waitForFunction(({depth,eye})=>{const c=document.querySelector('#depth-observer');return c.dataset.depth===String(depth)&&c.dataset.eyeX===String(eye);},{depth,eye});};
+ const set=async(depth,eye)=>{await page.locator('#depth-input').fill(String(depth));await page.locator('#depth-eye').evaluate((el,value)=>{el.dispatchEvent(new KeyboardEvent('keydown',{key:'Home',bubbles:true}));const delta=value-210;for(let n=0;n<Math.floor(delta/10);n++)el.dispatchEvent(new KeyboardEvent('keydown',{key:'PageUp',bubbles:true}));for(let n=0;n<delta%10;n+=2)el.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));},eye);await page.waitForFunction(({depth,eye})=>{const c=document.querySelector('#depth-observer');return c.dataset.depth===String(depth)&&c.dataset.eyeX===String(eye);},{depth,eye});};
  const capture=process.env.DEPTH_CAPTURE_DIR;if(capture)await fs.mkdir(capture,{recursive:true});
  const results=[];
  await t.test('the default is dry and physically occluded, with readable teaching and no automatic motion',async()=>{
   assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'ready');
   assert.equal(await page.locator('#depth-lab figure').count(),2);
   assert.equal(await page.locator('#depth-lab form').count(),0);
+  assert.equal(await page.locator('#depth-lab input[type=range]').count(),1);
+  assert.equal(await page.locator('#depth-input').getAttribute('aria-orientation'),'vertical');
   assert.equal(await page.locator('#depth-lab button').count(),3);
   assert.equal(await page.locator('#depth-scene .extension').count(),0);
   assert.equal(+await page.locator('#depth-observer').getAttribute('data-coin-pixels'),0);
   assert.equal(await page.locator('#depth-input').inputValue(),'0');
-  assert.equal(await page.locator('#depth-eye').inputValue(),'300');
+  assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'300');
   assert.equal(await page.locator('#depth-scene .depth-normal').count(),0);
   if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,'initial-empty.png')});
   assert.match(await page.locator('.depth-takeaway').innerText(),/硬幣沒有移動/);
@@ -39,9 +41,29 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(180);assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'paused');
   const stopped=await page.locator('#depth-input').inputValue();await page.waitForTimeout(200);assert.equal(await page.locator('#depth-input').inputValue(),stopped);
   await page.locator('#depth-lab').scrollIntoViewIfNeeded();await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='100'&&document.querySelector('#depth-lab').dataset.state==='ready');
-  assert.equal(await page.locator('#depth-eye').inputValue(),'300');assert.ok(+await page.locator('#depth-observer').getAttribute('data-coin-pixels')>50);
+  assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'300');assert.ok(+await page.locator('#depth-observer').getAttribute('data-coin-pixels')>50);
   if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,'filled-default-view.png')});
+  await page.locator('#depth-fill').click();await page.waitForTimeout(300);
+  const handle=await page.locator('#depth-input').boundingBox(),readout=await page.locator('#depth-output').boundingBox();
+  await page.mouse.move(handle.x+handle.width/2,readout.y+readout.height/2);await page.mouse.down();
+  assert.equal(await page.locator('#depth-lab').getAttribute('data-state'),'ready');const frozen=await page.locator('#depth-input').inputValue();
+  await page.waitForTimeout(180);assert.equal(await page.locator('#depth-input').inputValue(),frozen);await page.mouse.up();
   await page.locator('#depth-reset').click();await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='0');assert.equal(+await page.locator('#depth-observer').getAttribute('data-coin-pixels'),0);
+ });
+ await t.test('water can be dragged vertically by its handle or surface, with keyboard access and no initial jump',async()=>{
+  await set(0,300);const input=page.locator('#depth-input');await input.scrollIntoViewIfNeeded();let b=await input.boundingBox();
+  assert.ok(b.height>b.width&&b.width>=44);
+  await page.mouse.move(b.x+b.width/2,b.y+b.height-22);await page.mouse.down();assert.equal(await input.inputValue(),'0');
+  await page.mouse.move(b.x+b.width/2,b.y+22,{steps:6});await page.mouse.up();assert.equal(await input.inputValue(),'100');
+  await input.focus();await page.keyboard.press('ArrowDown');assert.equal(await input.inputValue(),'99');await page.keyboard.press('ArrowUp');assert.equal(await input.inputValue(),'100');
+  await page.keyboard.press('Home');assert.equal(await input.inputValue(),'0');await page.keyboard.press('End');assert.equal(await input.inputValue(),'100');
+  await set(50,300);await page.locator('#depth-scene').scrollIntoViewIfNeeded();
+  const point=await page.locator('#depth-scene').evaluate(e=>{const p=new DOMPoint(100,430-50*1.85).matrixTransform(e.getScreenCTM());return{x:p.x,y:p.y};});
+  await page.mouse.move(point.x,point.y);await page.mouse.down();assert.equal(await input.inputValue(),'50');
+  await page.mouse.move(point.x,point.y-22,{steps:4});await page.mouse.up();assert.ok(+await input.inputValue()>50);
+  assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'300');
+  await page.waitForFunction(()=>document.querySelector('#depth-input').value===document.querySelector('#depth-observer').dataset.depth);
+  await page.locator('#depth-reset').click();
  });
  await t.test('water and observer changes really repaint the coin, with the physical coin remaining fixed',async()=>{
   const fixed=await page.locator('#depth-scene .depth-coin').getAttribute('transform');
@@ -79,12 +101,12 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   await page.locator('#show-rays').check();assert.equal(await page.locator('#depth-scene .extension').count(),2);
  });
  await t.test('keyboard and pointer change the same viewing position without losing focus',async()=>{
-  await set(70,250);const eye=page.locator('.depth-eye');await eye.focus();await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#depth-eye').inputValue(),'252');
+  await set(70,250);const eye=page.locator('.depth-eye');await eye.focus();await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'252');
   assert.equal(await eye.evaluate(e=>document.activeElement===e),true);
-  await page.keyboard.press('Home');assert.equal(await page.locator('#depth-eye').inputValue(),'210');
-  await page.keyboard.press('End');assert.equal(await page.locator('#depth-eye').inputValue(),'340');
-  await set(70,250);await eye.scrollIntoViewIfNeeded();const b=await eye.boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2+35,b.y+b.height/2,{steps:6});await page.mouse.up();assert.ok(+await page.locator('#depth-eye').inputValue()>250);
-  await page.locator('#depth-reset').click();assert.equal(await page.locator('#depth-eye').inputValue(),'300');assert.equal(await page.locator('#depth-input').inputValue(),'0');
+  await page.keyboard.press('Home');assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'210');
+  await page.keyboard.press('End');assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'340');
+  await set(70,250);await eye.scrollIntoViewIfNeeded();const b=await eye.boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2+35,b.y+b.height/2,{steps:6});await page.mouse.up();assert.ok(+await page.locator('#depth-eye').getAttribute('aria-valuenow')>250);
+  await page.locator('#depth-reset').click();assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'300');assert.equal(await page.locator('#depth-input').inputValue(),'0');
  });
  await t.test('replay traces coin to eye before revealing auxiliary lines, pauses offscreen, and can restart',async()=>{
   await set(100,300);await page.locator('#depth-lab').scrollIntoViewIfNeeded();await page.waitForTimeout(150);await page.locator('#depth-replay').click();
@@ -103,13 +125,16 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
     const views=[...el.querySelectorAll('figure')].map(e=>e.getBoundingClientRect().toJSON());
     const texts=[...el.querySelectorAll('#depth-scene .depth-annotations text')].map(e=>({font:parseFloat(getComputedStyle(e).fontSize)*e.getScreenCTM().a,box:e.getBoundingClientRect().toJSON()}));
     const svg=el.querySelector('svg').getBoundingClientRect();
-    return{overflow:document.documentElement.scrollWidth>innerWidth,views,texts,svg:svg.toJSON(),eyeHit:el.querySelector('.depth-eye-hit').getBoundingClientRect().toJSON(),buttons:[...el.querySelectorAll('button')].map(e=>({height:e.getBoundingClientRect().height,clipped:e.scrollWidth>e.clientWidth+1})),controls:el.querySelector('.depth-controls').getBoundingClientRect().toJSON()};
+    return{overflow:document.documentElement.scrollWidth>innerWidth,views,texts,svg:svg.toJSON(),eyeHit:el.querySelector('.depth-eye-hit').getBoundingClientRect().toJSON(),water:el.querySelector('#depth-input').getBoundingClientRect().toJSON(),readout:el.querySelector('#depth-output').getBoundingClientRect().toJSON(),buttons:[...el.querySelectorAll('button')].map(e=>({height:e.getBoundingClientRect().height,clipped:e.scrollWidth>e.clientWidth+1})),controls:el.querySelector('.depth-controls').getBoundingClientRect().toJSON()};
    });
    assert.equal(m.overflow,false,`${width} page overflow`);
    assert.ok(m.texts.every(t=>t.font>=13.4&&t.box.left>=m.svg.left-1&&t.box.right<=m.svg.right+1),`${width} diagram labels`);
    assert.ok(m.buttons.every(b=>b.height>=44&&!b.clipped),`${width} buttons`);
    assert.ok(m.eyeHit.width>=44&&m.eyeHit.height>=44,`${width} eye touch target`);
    assert.ok(m.controls.left>=0&&m.controls.right<=width+1);
+   assert.ok(m.water.height>m.water.width&&m.water.width>=44);
+   assert.ok(m.water.left>=m.svg.left-1&&m.water.right<=m.svg.right+1);
+   assert.ok(m.readout.left>=m.svg.left-1&&m.readout.right<=m.svg.right+1);
    if(width>=1280)assert.ok(Math.abs(m.views[0].top-m.views[1].top)<1);
    if(width<=390)assert.ok(m.views[1].top>m.views[0].bottom);
    results.push({width,height,...m});
@@ -121,7 +146,18 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const p=await context.newPage();await ready(p);
   const eye=p.locator('.depth-eye');await eye.scrollIntoViewIfNeeded();const b=await eye.boundingBox(),x=b.x+b.width/2,y=b.y+b.height/2;
   const cdp=await context.newCDPSession(p);await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+32,y}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
-  assert.ok(+await p.locator('#depth-eye').inputValue()>300);await p.waitForFunction(()=>document.querySelector('#depth-eye').value===document.querySelector('#depth-observer').dataset.eyeX);await context.close();
+  assert.ok(+await p.locator('#depth-eye').getAttribute('aria-valuenow')>300);await p.waitForFunction(()=>document.querySelector('#depth-eye').getAttribute('aria-valuenow')===document.querySelector('#depth-observer').dataset.eyeX);const water=p.locator('#depth-input');await water.scrollIntoViewIfNeeded();const wb=await water.boundingBox(),wx=wb.x+wb.width/2;
+  const scroll=await p.evaluate(()=>scrollY);
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:wx,y:wb.y+wb.height-22}]});
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:wx,y:wb.y+22}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+  assert.equal(await water.inputValue(),'100');assert.ok(Math.abs(await p.evaluate(()=>scrollY)-scroll)<3);
+  await p.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='100');
+  const view=p.locator('#depth-observer');await view.scrollIntoViewIfNeeded();const vb=await view.boundingBox(),sx=vb.x+vb.width/2,sy=vb.y+vb.height*.7;
+  const before=await p.evaluate(()=>scrollY);
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:sx,y:sy}]});
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:sx,y:sy-70}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await p.waitForTimeout(200);
+  assert.ok(await p.evaluate(()=>scrollY)>before+20,'page still scrolls outside the handles');
+  await context.close();
  });
  await t.test('reduced motion retains a complete static example after replay',async()=>{
   await page.emulateMedia({reducedMotion:'reduce'});await page.locator('#depth-reset').click();await page.locator('#depth-fill').click();
