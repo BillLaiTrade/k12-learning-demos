@@ -2,7 +2,6 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const states = {
-    radiation: {time:0, playing:false, shield:false},
     insulation: {time:0, playing:false}
   };
   let frame=0, last=null;
@@ -11,18 +10,6 @@
     return Math.abs(value-ambient)<.05?ambient:value;
   };
   const degrees = t => `${t.toFixed(1)}°C`;
-  function renderRadiation() {
-    const s=states.radiation;
-    $('radiation-shield').toggleAttribute('hidden',!s.shield);
-    document.querySelectorAll('[data-radiation-ray]').forEach(n=>{
-      const y=n.getAttribute('d').match(/^M225 (\d+)/)[1];
-      n.setAttribute('d',`M225 ${y}H${s.shield?440:675}`);
-    });
-    $('radiation-rays').setAttribute('stroke-dashoffset',-s.time*30);
-    $('radiation-shield-toggle').setAttribute('aria-pressed',String(s.shield));
-    $('radiation-shield-toggle').textContent=s.shield?'移開遮擋板':'加入遮擋板';
-    $('radiation-note').textContent=s.shield?'遮擋板減少了到達地球的直接照射；遮擋物仍可能吸熱與再放熱。':'輻射能穿越沒有空氣的太空，將能量傳向地球。';
-  }
   function renderInsulation() {
     const s=states.insulation, wall=$('insulation-wall').checked, air=$('insulation-air').checked, reflect=$('insulation-reflect').checked;
     const factor=.4*(wall?.45:1)+.4*(air?.4:1)+.2*(reflect?.4:1);
@@ -31,7 +18,7 @@
     $('insulation-coat').toggleAttribute('hidden',!wall);$('insulation-silver').toggleAttribute('hidden',!reflect);
     $('insulation-conduction').textContent=wall?'減少':'原先';$('insulation-convection').textContent=air?'減少':'原先';$('insulation-radiation').textContent=reflect?'減少':'原先';
   }
-  const renderers={radiation:renderRadiation,insulation:renderInsulation};
+  const renderers={insulation:renderInsulation};
   function renderOne(id) {
     renderers[id]();
     const button=$(`${id}-play`), label=states[id].playing?'暫停觀察':states[id].time>0?'繼續觀察':'開始觀察';
@@ -51,14 +38,12 @@
   function start(){if(!frame){last=null;frame=requestAnimationFrame(tick);}}
   function reset(id) {
     const s=states[id];s.time=0;s.playing=false;
-    if(id==='radiation')s.shield=false;
     renderOne(id);
   }
   Object.keys(states).forEach(id=>{
     $(`${id}-play`).addEventListener('click',()=>{states[id].playing=!states[id].playing;renderOne(id);start();});
     $(`${id}-reset`).addEventListener('click',()=>reset(id));
   });
-  $('radiation-shield-toggle').addEventListener('click',()=>{states.radiation.shield=!states.radiation.shield;renderRadiation();});
   ['wall','air','reflect'].forEach(id=>$(`insulation-${id}`).addEventListener('change',()=>reset('insulation')));
   document.addEventListener('visibilitychange',()=>{if(document.hidden){Object.values(states).forEach(s=>{s.playing=false;});cancelAnimationFrame(frame);frame=0;last=null;renderAll();}});
   const form=$('heat-quiz'),result=$('heat-quiz-result');

@@ -1,0 +1,49 @@
+▶ 5.2 convection: fluid movement, mode changes and observation lifecycle
+  ✔ starts with a real distinction between water and a room, without a premature conclusion (170.45846ms)
+  ✔ both sides rise near the source, move continuously and use the same relative-warmth key (12993.551516ms)
+  ✔ photographic scenes keep animated arrows in the fluid and not inside the heater (70.526339ms)
+  ✔ pause freezes actual rendered positions and screenshots; resume preserves progress (1114.416694ms)
+  ✔ switching the fluid cancels old animation, clears the discovery and resets observations (772.457939ms)
+  ✔ clicking each appliance starts or resumes without toggling off or multiplying animation loops (3590.780631ms)
+  ✔ keyboard, rapid actions and background interruptions leave no delayed restart (410.464485ms)
+  ✔ radiation, insulation and the integrated quiz still work independently (1592.703628ms)
+  ✔ all supported viewports keep explanatory text, controls and the actual fluid scene readable (846.881726ms)
+  ✔ a failed image can be retried, and a late response cannot reset a different running mode (1873.734334ms)
+  ✔ real frames keep moving with both motion preferences and touch can pause/reset (14776.356065ms)
+✔ 5.2 convection: fluid movement, mode changes and observation lifecycle (40386.27724ms)
+▶ 5.2 first block: three environments and in-water thermometers
+  ✔ starts with three clean scenes, pending observations and authentic portraits (236.333957ms)
+  ✔ matching scales, immersed bulbs and synchronized liquid/readout levels (1755.471391ms)
+  ✔ 25°C: A releases heat and B absorbs heat; pause freezes readouts (1500.817778ms)
+  ✔ 5°C: both release heat and scene/captions change together (2162.685947ms)
+  ✔ 70°C: even the initially hot cup absorbs heat; both arrows point inward (2029.225995ms)
+  ✔ copper paths cross cup boundaries and pulses move, pause and resume with the model (7844.225076ms)
+  ✔ reset and switching environment during playback cancel old observations (872.963217ms)
+  ✔ same displayed temperature removes heat flow and replay starts cleanly (10147.183828ms)
+  ✔ keyboard and reduced motion preserve all basic controls (836.798825ms)
+  ✔ in-scene instruments and controls fit desktop, tablet and phone widths (1387.318668ms)
+  ✔ real rendered flow keeps moving with either motion preference and freezes only when paused (4994.987689ms)
+  ✔ real mobile taps change scene, play, pause and restart (1149.763373ms)
+  ✔ remaining learning blocks and quiz still operate independently (1045.123784ms)
+✔ 5.2 first block: three environments and in-water thermometers (38409.178213ms)
+▶ 5.2 radiation: one energy path, surface outcomes and conditional warming
+  ✔ manual start is required and the concept uses a single radiation-energy stream (291.765509ms)
+  ✔ travel precedes surface reflection/absorption, and heating begins only after absorption (2161.58026ms)
+  ✔ pause freezes the whole rendered illustration and resume keeps the same progress (828.891595ms)
+  ✔ repeated source clicks cannot stop the demo or multiply animation loops; reset clears all results (5272.885994ms)
+  ✔ keyboard and background interruptions are consistent and do not auto-resume (483.488197ms)
+  ✔ the reflection and absorption paths are distinct outcomes at the same surface point (26.55336ms)
+  ✔ insulation, convection and quiz remain independent after extracting radiation from the shared controller (2871.316266ms)
+  ✔ desktop, laptop and narrow layouts keep controls, condition and actual scenes in view (747.249813ms)
+  ✔ either photo may fail and retry without premature playback or loss of the other successful photo (2122.306902ms)
+  ✔ a late photo response after reset leaves the observation stopped at its beginning (941.384068ms)
+  ✔ real touch under both motion preferences starts moving rays and pauses/resets actual frames (7400.168698ms)
+✔ 5.2 radiation: one energy path, surface outcomes and conditional warming (25423.744488ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 40873.969209

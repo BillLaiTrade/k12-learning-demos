@@ -11,7 +11,7 @@ export const DUO_FILTERS=Object.freeze({...FILTERS,yellow:Object.freeze({name:'�
 export function lightComponents(key){return DUO_LIGHTS[key].components.map(c=>DUO_LIGHTS[c].name).join('＋');}
 // Describe the displayed swatch, including unequal mixtures available in free probing.
 export function probeColourName([r,g,b]){const high=Math.max(r,g,b),low=Math.min(r,g,b),delta=high-low;if(high<32)return'很暗';if(delta<24)return low>230?'白色':'灰色';let hue=high===r?((g-b)/delta+6)%6:high===g?(b-r)/delta+2:(r-g)/delta+4;hue*=60;return hue<15||hue>=345?'紅色':hue<45?'橙色':hue<70?'黃色':hue<165?'綠色':hue<195?'青色':hue<265?'藍色':hue<295?'紫色':'洋紅色';}
-export const QUESTION_FOCUS=Object.freeze(['辨認複合色光與彩色紙','與第1題比較：只換色片','觀察複合色片保留的色光','與第3題比較：只換紙張','綜合比較光源、色片與紙張','判斷白光經色片後的反射']);
+export const QUESTION_FOCUS=Object.freeze(['第1步｜兩束原色光照白紙','第1步｜只換一盞燈，觀察混光','第2步｜與第2題比較：加入色片','第2步｜與第3題比較：只換色片','第3步｜與第4題比較：換成彩色紙','第3步｜與第5題比較：只換紙張']);
 
 export const PAPER_TYPES=Object.freeze({
  red:{name:'紅紙',rgb:MATERIALS.red.rgb,css:'#c54c42'},green:{name:'綠紙',rgb:MATERIALS.green.rgb,css:'#4c9d69'},blue:{name:'藍紙',rgb:MATERIALS.blue.rgb,css:'#467fc1'},
@@ -23,20 +23,21 @@ export const TRANSMISSION_OPTIONS=Object.freeze([['red','紅光'],['green','綠�
 export const REFLECTION_OPTIONS=Object.freeze([['much','較多被反射'],['some','只有部分較多被反射'],['little','反射很少']]);
 const MASK_COLOURS={1:'red',2:'green',4:'blue',3:'yellow',6:'cyan',5:'magenta',7:'white',0:'dark'};
 export const INITIAL_QUESTION=Object.freeze({id:'red-green/green/red',lights:['red','green'],filter:'green',paper:'red'});
-const LIGHT_PAIRS=Object.freeze([['red','green'],['red','blue'],['green','blue'],['yellow','yellow'],['cyan','cyan'],['magenta','magenta'],['yellow','blue'],['cyan','red'],['magenta','green'],['white','white']]);
-export const QUESTION_BANK=Object.freeze(LIGHT_PAIRS.flatMap(lights=>Object.keys(DUO_FILTERS).filter(filter=>filter==='clear'||DUO_FILTERS[filter].rgb.some((v,c)=>v>.5&&lights.some(key=>DUO_LIGHTS[key].rgb[c]))).flatMap(filter=>Object.keys(PAPER_TYPES).map(paper=>Object.freeze({id:`${lights.join('-')}/${filter}/${paper}`,lights:Object.freeze([...lights]),filter,paper})))));
-export const INITIAL_SERIES=Object.freeze(['yellow-yellow/clear/yellow','yellow-yellow/cyan/yellow','cyan-red/magenta/white','cyan-red/magenta/yellow','magenta-green/yellow/green','white-white/cyan/red'].map(id=>QUESTION_BANK.find(q=>q.id===id)));
+// Each lamp stays primary. A series changes one condition at a time.
+const LIGHT_PAIRS=Object.freeze(PRIMARY_KEYS.flatMap(a=>PRIMARY_KEYS.filter(b=>b!==a).map(b=>Object.freeze([a,b]))));
+export const QUESTION_BANK=Object.freeze(LIGHT_PAIRS.flatMap(lights=>['clear',...lights].flatMap(filter=>['white',...PRIMARY_KEYS].map(paper=>Object.freeze({id:`${lights.join('-')}/${filter}/${paper}`,lights,filter,paper})))));
+const questionById=new Map(QUESTION_BANK.map(q=>[q.id,q]));
+const findQuestion=(lights,filter,paper)=>questionById.get(`${lights.join('-')}/${filter}/${paper}`);
+export const INITIAL_SERIES=Object.freeze(['red-green/clear/white','red-blue/clear/white','red-blue/red/white','red-blue/blue/white','red-blue/blue/blue','red-blue/blue/red'].map(id=>questionById.get(id)));
+// All 24 teaching sequences: mix twice, compare two primary filters, compare papers.
+const SERIES_POOL=Object.freeze(LIGHT_PAIRS.flatMap(lights=>[0,1].flatMap(changed=>{
+ const first=[...lights];first[changed]=PRIMARY_KEYS.find(key=>!lights.includes(key));
+ return[0,1].map(filterIndex=>{const a=lights[filterIndex],b=lights[1-filterIndex];return Object.freeze([findQuestion(first,'clear','white'),findQuestion(lights,'clear','white'),findQuestion(lights,a,'white'),findQuestion(lights,b,'white'),findQuestion(lights,b,b),findQuestion(lights,b,a)]);});
+})));
 export function newQuestionSeries(random=Math.random,previous=[]){
- const used=new Set(previous.map(q=>q.id));
- const pick=pool=>{const fresh=pool.filter(q=>!used.has(q.id)),options=fresh.length?fresh:pool;if(!options.length)throw new Error('沒有符合教學焦點的題目');const q=options[Math.min(options.length-1,Math.floor(random()*options.length))];used.add(q.id);return q;};
- const first=pick(QUESTION_BANK.filter(q=>SECONDARY_KEYS.includes(q.lights[0])&&q.lights[0]===q.lights[1]&&q.filter==='clear'&&q.paper===q.lights[0]));
- const second=pick(QUESTION_BANK.filter(q=>q.lights.join()===first.lights.join()&&q.paper===first.paper&&SECONDARY_KEYS.includes(q.filter)&&q.filter!==first.lights[0]));
- const third=pick(QUESTION_BANK.filter(q=>SECONDARY_KEYS.includes(q.lights[0])&&q.lights[0]!==q.lights[1]&&q.lights[0]!==first.lights[0]&&SECONDARY_KEYS.includes(q.filter)&&q.filter!==second.filter&&q.paper==='white'));
- const fourth=pick(QUESTION_BANK.filter(q=>q.lights.join()===third.lights.join()&&q.filter===third.filter&&q.paper!=='white'&&expectedAnswer(q).reflection==='some'));
- const remainingSource=SECONDARY_KEYS.find(key=>key!==first.lights[0]&&key!==third.lights[0]),remainingFilter=SECONDARY_KEYS.find(key=>key!==second.filter&&key!==third.filter);
- const fifth=pick(QUESTION_BANK.filter(q=>q.lights[0]===remainingSource&&q.lights[0]!==q.lights[1]&&q.filter===remainingFilter&&PRIMARY_KEYS.includes(q.paper)&&expectedAnswer(q).reflection==='some'));
- const sixth=pick(QUESTION_BANK.filter(q=>q.lights[0]==='white'&&SECONDARY_KEYS.includes(q.filter)&&expectedAnswer(q).reflection==='little'));
- return[first,second,third,fourth,fifth,sixth];
+ const used=new Set(previous.map(q=>q.id)),fresh=SERIES_POOL.filter(series=>series.every(q=>!used.has(q.id)));
+ const options=fresh.length?fresh:SERIES_POOL.filter(series=>series.some((q,i)=>q.id!==previous[i]?.id));
+ return [...options[Math.max(0,Math.min(options.length-1,Math.floor(random()*options.length)))]];
 }
 
 // Add the two source components before the filter and paper select from them.

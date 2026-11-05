@@ -26,10 +26,10 @@
   <link rel="stylesheet" href="assets/lesson-base.css">
   <link rel="stylesheet" href="assets/lesson-layout.css">
   <link rel="stylesheet" href="assets/heat-quantity.css?v=format-1">
-  <link rel="stylesheet" href="assets/calorie-lab.css?v=observe-1">
+  <link rel="stylesheet" href="assets/calorie-lab.css?v=water100-1">
   <link rel="stylesheet" href="../../assets/unit-format.css?v=20261105">
   <script type="module" src="assets/heat-quantity.js?v=format-1"></script>
-  <script type="module" src="assets/calorie-lab.js?v=observe-1"></script>
+  <script type="module" src="assets/calorie-lab.js?v=water100-1"></script>
 </head>
 <body>
   <header class="shell masthead"><div class="brand-row"><a class="brand" href="../../index.html">← 溫度與熱</a><span class="crumb">國二上・熱量與比熱</span></div>
@@ -55,59 +55,44 @@
       <div class="cards">
 
         <section class="lesson-card" id="card-01" aria-labelledby="title-01">
-          <header class="lesson-head"><span class="card-number">01</span><div class="card-heading"><h2 id="title-01">讓 1 g 水升高 1°C，需要多少熱？</h2><p class="card-intro">熱量單位：1 g 水的吸熱與升溫</p></div></header>
+          <header class="lesson-head"><span class="card-number">01</span><div class="card-heading"><h2 id="title-01">讓 1 g 水升高 1°C，需要多少熱？</h2><p class="card-intro">熱量單位：從 100 g 水的升溫認識「卡」</p></div></header>
           <div class="card-main">
-            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>「溫度計能告訴我水有幾度，那水吸收了多少熱，要怎麼記錄？」</p></div>
-            <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>「先看這 1 g 水。讓熱從較熱的地方傳進來，觀察水溫改變了幾度。」</p></div>
-            <div class="unit-panel calorie-observation" id="calorie-lab" data-phase="ready">
-              <div class="lab-heading"><h3>追蹤這 1 g 水的變化</h3><span class="condition-chip">水量固定・初溫 20°C</span></div>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>溫度我會量了，水吸收的熱量要用什麼單位？</p></div>
+            <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>1 g 水太少，不容易操作。我們先量取 100 g 水，觀察它從 20°C 升到 21°C。</p></div>
+            <div class="unit-panel calorie-observation" id="calorie-lab" data-phase="loading" data-playing="false">
+              <div class="lab-heading"><h3>觀察同一份水</h3><span class="condition-chip">100 g 水・初溫 20°C</span></div>
               <div class="calorie-workbench">
-                <svg class="calorie-scene" viewBox="0 0 640 360" role="img" aria-labelledby="calorie-scene-title calorie-scene-description">
-                  <title id="calorie-scene-title">1 g 水吸收熱量的放大示意</title><desc id="calorie-scene-description">熱源比水溫高；初始水溫 20°C，尚未吸收熱量。右側放大刻度與液柱同步。</desc>
-                  <defs>
-                    <linearGradient id="cal-glass"><stop stop-color="#91b0b0" stop-opacity=".4"/><stop offset=".18" stop-color="#fff" stop-opacity=".9"/><stop offset=".65" stop-color="#e6f2ee" stop-opacity=".3"/><stop offset="1" stop-color="#8da6a7" stop-opacity=".6"/></linearGradient>
-                    <linearGradient id="cal-water" x2="0" y2="1"><stop stop-color="#b8dce0" stop-opacity=".55"/><stop offset="1" stop-color="#72aab9" stop-opacity=".75"/></linearGradient>
-                    <linearGradient id="cal-source" x2="0" y2="1"><stop stop-color="#efc697"/><stop offset="1" stop-color="#c68b60"/></linearGradient>
-                    <linearGradient id="cal-probe"><stop stop-color="#869f97"/><stop offset=".4" stop-color="#f6fcf5"/><stop offset="1" stop-color="#a2b5ab"/></linearGradient>
-                    <marker id="cal-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 10 5 0 10Z" fill="#bb743c"/></marker>
-                  </defs>
-                  <ellipse cx="235" cy="318" rx="208" ry="12" fill="#48634c" opacity=".07"/>
-                  <rect x="29" y="306" width="400" height="7" rx="3" fill="#d6ded0"/>
-                  <rect x="50" y="196" width="113" height="110" rx="13" fill="url(#cal-source)" stroke="#b48664" stroke-width="1.5"/>
-                  <path d="M64 203H149" stroke="#fff0d9" stroke-width="2"/>
-                  <text x="106" y="237" text-anchor="middle" class="cal-source-label">高溫熱源</text><text x="106" y="263" text-anchor="middle">50°C</text>
-                  <path d="M163 284H307" stroke="#b29875" stroke-width="8"/>
-                  <path id="calorie-flow" d="M176 260H286" stroke="#bb743c" stroke-width="3" stroke-dasharray="9 7" marker-end="url(#cal-arrow)" fill="none" visibility="hidden"/>
-                  <text x="228" y="237" text-anchor="middle" class="cal-flow-label" id="calorie-flow-label">等待傳入熱量</text>
-                  <path d="M295 184H407L401 292Q352 306 301 292Z" fill="#e4eada" stroke="#bdcbb5" stroke-width="2"/>
-                  <path d="M315 223Q351 229 387 223V280Q351 291 315 280Z" fill="url(#cal-water)"/>
-                  <ellipse cx="351" cy="223" rx="36" ry="5" fill="#d8edf0" stroke="#91b4b9"/>
-                  <path d="M310 177Q351 168 392 177L388 283Q351 296 314 283Z" fill="url(#cal-glass)" stroke="#8ca5a5" stroke-width="1.5"/>
-                  <ellipse cx="351" cy="177" rx="41" ry="7" fill="#fff" fill-opacity=".5" stroke="#91aaa6"/>
-                  <path d="M320 189 323 271" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-                  <rect x="347" y="119" width="9" height="154" rx="4" fill="url(#cal-probe)" stroke="#8ca69c"/>
-                  <path d="M352 119V91H401V167" fill="none" stroke="#718e7c" stroke-width="3"/>
-                  <path d="M339 147h25" stroke="#708b78" stroke-width="5" stroke-linecap="round"/>
-                  <text x="350" y="334" text-anchor="middle" class="cal-sample-label">同一份水・1 g</text>
-                  <path d="M367 122 449 83M367 145 449 288" stroke="#b3c4b8" stroke-width="1" stroke-dasharray="4 4"/>
-                  <g id="calorie-zoom-group">
-                  <rect x="449" y="31" width="168" height="270" rx="14" fill="#fffefa" stroke="#cfdbce"/>
-                  <text x="533" y="55" text-anchor="middle" class="cal-zoom-title">溫度刻度放大</text>
-                  <path d="M485 71v183a13 13 0 1 1-14 0V71a7 7 0 0 1 14 0Z" fill="url(#cal-glass)" stroke="#8ba9a1"/>
-                  <rect id="calorie-liquid" x="476" y="223" width="4" height="41" rx="2" fill="#c85845"/><circle cx="478" cy="265" r="8" fill="#c85845"/>
-                  <g id="calorie-ticks"></g>
-                  <path id="calorie-rise-bracket" d="M565 223V223" fill="none" stroke="#b87a40" stroke-width="2"/>
-                  <text id="calorie-rise-label" x="576" y="224" class="cal-rise-label"></text>
-                  </g>
-                </svg>
-                <div class="calorie-details"><svg class="calorie-mobile-zoom calorie-scene" viewBox="449 31 191 270" aria-hidden="true"><use href="#calorie-zoom-group"/></svg><div class="calorie-readings"><div><span>水溫</span><strong><output id="calorie-end">20.0</output> <small>°C</small></strong><span>初溫 20°C → 目前讀值</span></div><div><span>從初溫升高</span><strong><output id="calorie-rise">0.0</output> <small>°C</small></strong><span>目前水溫－20°C</span></div><div><span>累計吸收熱量</span><strong><output id="calorie-heat">0.0</output> <small>cal</small></strong><span>記錄傳入水的能量</span></div></div></div>
+                <figure class="calorie-apparatus-view">
+                  <div class="calorie-photo">
+                    <img id="calorie-apparatus" src="assets/calorie-water-apparatus.webp" width="1536" height="1024" alt="AI 生成的器材情境示意：燒杯內約 100 mL 的水，置於加熱攪拌器上；浸入水中的溫度探針連接數位溫度計。">
+                    <span class="calorie-photo-label">已量取 100 g 水</span>
+                    <div class="calorie-meter-screen" id="calorie-meter-screen" aria-hidden="true" hidden><span id="calorie-meter">20.0</span><small>°C</small></div>
+                    <div class="calorie-scene-loading" id="calorie-scene-loading">正在準備器材畫面…</div>
+                  </div>
+                  <figcaption id="calorie-heater-status">等待開始觀察</figcaption>
+                </figure>
+                <div class="calorie-temperature-panel" aria-label="水溫前後比較">
+                  <h4>水溫的變化</h4>
+                  <div class="calorie-temperature-values"><div><span>起始</span><strong>20.0 <small>°C</small></strong></div><b aria-hidden="true">→</b><div><span>目前</span><strong><output id="calorie-end">20.0</output> <small>°C</small></strong></div></div>
+                  <div class="calorie-rise-track" aria-hidden="true"><span></span></div>
+                  <div class="calorie-rise-value"><span>從初溫升高</span><strong><output id="calorie-rise">0.0</output> °C</strong></div>
+                  <p>顯示至 0.1°C；升高 1°C 後停止加熱。</p>
+                </div>
               </div>
-              <div class="calorie-actions"><button class="action" id="calorie-transfer" type="button">傳入約 1 cal</button><button class="secondary" id="calorie-pause" type="button" disabled>暫停觀察</button><button class="secondary" id="calorie-reset" type="button">重來</button></div>
-              <p class="calorie-observation-note" id="calorie-observation" role="status">先傳入一次熱量，觀察液柱，再比較水溫改變了幾度。</p>
-              <p class="lab-note">1 g 水與測溫構造為放大示意，忽略容器吸熱與散熱；流光表示熱傳方向，並非熱的顆粒。</p>
+              <div class="calorie-actions"><button class="action" id="calorie-transfer" type="button" disabled>開始加熱</button><button class="secondary" id="calorie-reset" type="button" disabled>重來</button><button class="secondary" id="calorie-retry" type="button" hidden>重新載入器材</button><span>AI 器材示意・動畫已加速</span></div>
+              <p class="calorie-observation-note" id="calorie-observation" role="status">正在準備器材畫面…</p>
+              <div class="calorie-result" id="calorie-conclusion" hidden>
+                <div class="calorie-unit-bridge">
+                  <h3>用「卡」記錄水吸收的熱量</h3>
+                  <div class="calorie-bridge-row"><strong>100 g 水</strong><span>升高 1°C</span><strong>約 <output id="calorie-heat">100</output> cal</strong></div>
+                  <p class="calorie-bridge-hint">水量與吸收熱量一起除以 100，升高的溫度相同</p>
+                  <div class="calorie-bridge-row"><strong>1 g 水</strong><span>升高 1°C</span><strong>約 1 cal</strong></div>
+                  <p class="calorie-energy-note">水吸收的熱量為模型估算；溫度計讀的是溫度。加熱器供應的能量，還有一部分用於容器吸熱與向環境散熱。</p>
+                </div>
+                <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>讓 1 g 水升高 1°C 所需的熱量，約是 1 cal，也就是 1 卡。°C 記錄溫度，cal 記錄熱量。</p></div>
+              </div>
             </div>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p id="calorie-dialogue">「我會把『水現在幾度』和『水吸收多少熱量』分開記錄，再比較前後的變化。」</p></div>
-            <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>「讓 1 g 水升高 1°C 所需的熱量，約是 1 cal，也就是 1 卡。°C 記錄溫度；cal 記錄吸收或放出的熱量。」</p></div>
+            <details class="relation calorie-assumptions"><summary>器材與模型條件</summary><p>先將空燒杯在電子秤上歸零，再量取 100 g 水。溫度探針浸入水中，不碰杯底或杯壁，並以攪拌使水溫較均勻。畫面呈現的是生成的虛擬器材，並非實驗錄影。</p><p>模型分開計算水吸熱、玻璃容器吸熱與向 20°C 環境散熱；假設水與容器充分達到同溫。採水的近似比熱、容器熱容量 42 J/°C、有效供熱 20 W、散熱係數 0.5 W/°C；有效供熱不等於加熱板的額定功率。</p><p>動畫加速 4 倍，到 21°C 停熱；完成後保留當次讀值，不繼續模擬冷卻，也不呈現探針反應延遲與停熱後餘熱。100 g 水吸收約 100 cal 是模型換算，沒有將溫度計當作熱量計。</p></details>
             <details class="relation calorie-units"><summary>生活中的「大卡」和焦耳呢？</summary><p>1 kcal（大卡）＝1,000 cal（卡）。J（焦耳）也是能量單位，1 cal 約為 4.2 J。</p><p>改變單位，並不會改變實際傳遞的能量，就像同一段長度能用公分或公尺表示。</p></details>
           </div>
         </section>

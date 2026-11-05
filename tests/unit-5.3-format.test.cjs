@@ -79,14 +79,15 @@ test('5.3 共通格式、導覽連動與原有活動回歸', {timeout:180000}, a
     if(process.env.UNIT53_CAPTURE_DIR){await fs.mkdir(process.env.UNIT53_CAPTURE_DIR,{recursive:true});await fs.writeFile(path.join(process.env.UNIT53_CAPTURE_DIR,'layout.json'),JSON.stringify(layouts,null,2));await page.locator('#card-01').screenshot({path:path.join(process.env.UNIT53_CAPTURE_DIR,'card01.png')});await page.locator('#card-04').screenshot({path:path.join(process.env.UNIT53_CAPTURE_DIR,'card04.png')});await page.locator('h1').evaluate(n=>n.scrollIntoView({block:'center'}));await page.waitForFunction(()=>document.querySelector('.route a').getAttribute('aria-current')==='step');await page.screenshot({path:path.join(process.env.UNIT53_CAPTURE_DIR,'opening.png')});}
   });
 
-  await t.test('第一區吸熱、暫停及重來，三個讀數同步',async()=>{
+  await t.test('第一區 100 g 水升溫、完成後介紹卡，重來同步清除結果',async()=>{
     await page.clock.install();
-    await page.locator('#calorie-transfer').click();await page.clock.runFor(800);await page.locator('#calorie-pause').click();
-    const heat=Number(await page.locator('#calorie-heat').textContent());assert.ok(heat>0&&heat<1);
-    await page.clock.runFor(600);assert.equal(Number(await page.locator('#calorie-heat').textContent()),heat);
-    await page.locator('#calorie-pause').click();await page.clock.runFor(2500);
-    assert.equal(await page.locator('#calorie-end').textContent(),'21.0');assert.equal(await page.locator('#calorie-rise').textContent(),'1.0');assert.equal(await page.locator('#calorie-heat').textContent(),'1.0');
+    assert.equal(await page.locator('#calorie-conclusion').isHidden(),true);
+    assert.equal(await page.locator('#calorie-pause').count(),0);
+    await page.locator('#calorie-transfer').click();await page.clock.runFor(6500);
+    assert.equal(await page.locator('#calorie-end').textContent(),'21.0');assert.equal(await page.locator('#calorie-rise').textContent(),'1.0');assert.equal(await page.locator('#calorie-heat').textContent(),'100');
+    assert.equal(await page.locator('#calorie-meter').textContent(),'21.0');assert.equal(await page.locator('#calorie-conclusion').isVisible(),true);
     await page.locator('#calorie-reset').click();assert.equal(await page.locator('#calorie-end').textContent(),'20.0');
+    assert.equal(await page.locator('#calorie-conclusion').isHidden(),true);
   });
 
   await t.test('三組實驗可完成、記錄、改條件重來；生活應用可切換',async()=>{

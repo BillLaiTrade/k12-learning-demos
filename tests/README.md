@@ -1620,6 +1620,14 @@ MOON_CAPTURE預設/tmp/unit41-reflection-play，保存雙視窗與整區截圖�
 
 整頁回歸仍使用`CHROMIUM_PATH=/usr/bin/chromium node --test --test-skip-pattern='入口、|潛望鏡素材' tests/unit-4.2-completion.test.cjs`，驗證導覽、實際燈具點擊與拖曳、第四區及WebGL備援。
 
+## 5.2 第五區：輻射、地表反射／吸收與定性受熱
+
+```bash
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-radiation.test.cjs
+```
+
+12項（含外層）檢查同一輻射能量路徑、手動開始／點太陽、先到達再吸收後揭露曲線、實際流光及曲線暫停像素、停續／重來、重複啟動防護、鍵盤／背景中斷、兩照片分別失敗重試與延遲載入、七種視窗、390／320px兩種動態偏好真實觸控，以及保溫、對流與原小測獨立運作。`RADIATION_LAB_URL`可指定公開網址，未設定則啟動本機伺服器。曲線不含實測溫度或時間刻度，不檢驗虛構地球溫度公式；科學條件及來源見本輪決策與review。前區回歸同步移除舊遮擋按鈕斷言，改查新停續／重來。
+
 ## 4.3 第二、三區小車版面（2026-11-05）
 
 `unit-4.3-cart-layout.test.cjs`以四桌面尺寸與七個動畫時刻檢查雙輪完整落在圖框內、圖內標籤至少12px且不與車輪重疊、圖文以動畫中心對齊、控制緊鄰實際狀態文字且按鈕位置固定、44px控制同列，以及播放／完成按鈕狀態。`CART_LAYOUT_CAPTURE_DIR`可保存畫面與量測。原`normal-lab`、`oblique-cart`與`exit-cart`回歸保留同時／先後變速的運動及中斷邏輯，不降低運動斷言。

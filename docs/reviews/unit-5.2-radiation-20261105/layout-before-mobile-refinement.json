@@ -1,0 +1,405 @@
+{
+  "base": "http://127.0.0.1:8765",
+  "rows": [
+    {
+      "width": 1440,
+      "height": 900,
+      "overflow": false,
+      "controls": [
+        {
+          "left": 1,
+          "right": 621.8125,
+          "width": 155.1875,
+          "height": 310.390625,
+          "font": 16
+        },
+        {
+          "left": 17,
+          "right": 651,
+          "width": 110,
+          "height": 45.578125,
+          "font": 15.04
+        },
+        {
+          "left": 139,
+          "right": 529,
+          "width": 110,
+          "height": 45.578125,
+          "font": 15.04
+        }
+      ],
+      "condition": {
+        "left": 319.390625,
+        "right": 18.015625,
+        "width": 440.59375,
+        "height": 34.34375,
+        "font": 13.12
+      },
+      "source": {
+        "left": 1,
+        "right": 1,
+        "width": 776,
+        "height": 310.390625,
+        "font": 16
+      },
+      "surface": {
+        "left": 18,
+        "right": 18,
+        "width": 742,
+        "height": 192.90625,
+        "font": 16
+      },
+      "state": {
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "16.992",
+        "heatProgress": "1.0000"
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "controls": [
+        {
+          "left": 1,
+          "right": 621.8125,
+          "width": 155.1875,
+          "height": 310.390625,
+          "font": 16
+        },
+        {
+          "left": 17,
+          "right": 651,
+          "width": 110,
+          "height": 45.578125,
+          "font": 15.04
+        },
+        {
+          "left": 139,
+          "right": 529,
+          "width": 110,
+          "height": 45.578125,
+          "font": 15.04
+        }
+      ],
+      "condition": {
+        "left": 319.390625,
+        "right": 18.015625,
+        "width": 440.59375,
+        "height": 34.34375,
+        "font": 13.12
+      },
+      "source": {
+        "left": 1,
+        "right": 1,
+        "width": 776,
+        "height": 310.390625,
+        "font": 16
+      },
+      "surface": {
+        "left": 18,
+        "right": 18,
+        "width": 742,
+        "height": 192.90625,
+        "font": 16
+      },
+      "state": {
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "16.976",
+        "heatProgress": "1.0000"
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "overflow": false,
+      "controls": [
+        {
+          "left": 1,
+          "right": 621.8125,
+          "width": 155.1875,
+          "height": 310.390625,
+          "font": 16
+        },
+        {
+          "left": 17,
+          "right": 651,
+          "width": 110,
+          "height": 45.578125,
+          "font": 15.04
+        },
+        {
+          "left": 139,
+          "right": 529,
+          "width": 110,
+          "height": 45.578125,
+          "font": 15.04
+        }
+      ],
+      "condition": {
+        "left": 319.390625,
+        "right": 18.015625,
+        "width": 440.59375,
+        "height": 34.34375,
+        "font": 13.12
+      },
+      "source": {
+        "left": 1,
+        "right": 1,
+        "width": 776,
+        "height": 310.390625,
+        "font": 16
+      },
+      "surface": {
+        "left": 18,
+        "right": 18,
+        "width": 742,
+        "height": 192.90625,
+        "font": 16
+      },
+      "state": {
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "16.976",
+        "heatProgress": "1.0000"
+      }
+    },
+    {
+      "width": 820,
+      "height": 900,
+      "overflow": false,
+      "controls": [
+        {
+          "left": 1,
+          "right": 405,
+          "width": 101,
+          "height": 202,
+          "font": 16
+        },
+        {
+          "left": 17,
+          "right": 380,
+          "width": 110,
+          "height": 45.578125,
+          "font": 15.04
+        },
+        {
+          "left": 139,
+          "right": 258,
+          "width": 110,
+          "height": 45.578125,
+          "font": 15.04
+        }
+      ],
+      "condition": {
+        "left": 18,
+        "right": 18,
+        "width": 471,
+        "height": 34.34375,
+        "font": 13.12
+      },
+      "source": {
+        "left": 1,
+        "right": 1,
+        "width": 505,
+        "height": 202,
+        "font": 16
+      },
+      "surface": {
+        "left": 18,
+        "right": 18,
+        "width": 471,
+        "height": 122.453125,
+        "font": 16
+      },
+      "state": {
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "16.992",
+        "heatProgress": "1.0000"
+      }
+    },
+    {
+      "width": 760,
+      "height": 900,
+      "overflow": false,
+      "controls": [
+        {
+          "left": 1,
+          "right": 460.203125,
+          "width": 114.796875,
+          "height": 229.59375,
+          "font": 16
+        },
+        {
+          "left": 17,
+          "right": 449,
+          "width": 110,
+          "height": 45.578125,
+          "font": 15.04
+        },
+        {
+          "left": 139,
+          "right": 327,
+          "width": 110,
+          "height": 45.578125,
+          "font": 15.04
+        }
+      ],
+      "condition": {
+        "left": 18,
+        "right": 18,
+        "width": 540,
+        "height": 34.34375,
+        "font": 13.12
+      },
+      "source": {
+        "left": 1,
+        "right": 1,
+        "width": 574,
+        "height": 229.59375,
+        "font": 16
+      },
+      "surface": {
+        "left": 18,
+        "right": 18,
+        "width": 540,
+        "height": 140.390625,
+        "font": 16
+      },
+      "state": {
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "16.992",
+        "heatProgress": "1.0000"
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "controls": [
+        {
+          "left": 1,
+          "right": 261.8125,
+          "width": 65.1875,
+          "height": 130.390625,
+          "font": 16
+        },
+        {
+          "left": 13,
+          "right": 168,
+          "width": 147,
+          "height": 44,
+          "font": 13.92
+        },
+        {
+          "left": 168,
+          "right": 13,
+          "width": 147,
+          "height": 44,
+          "font": 13.92
+        }
+      ],
+      "condition": {
+        "left": 14,
+        "right": 14,
+        "width": 300,
+        "height": 37.140625,
+        "font": 13
+      },
+      "source": {
+        "left": 1,
+        "right": 1,
+        "width": 326,
+        "height": 130.390625,
+        "font": 16
+      },
+      "surface": {
+        "left": 14,
+        "right": 14,
+        "width": 300,
+        "height": 78,
+        "font": 16
+      },
+      "state": {
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "16.976",
+        "heatProgress": "1.0000"
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "overflow": false,
+      "controls": [
+        {
+          "left": 1,
+          "right": 205.8125,
+          "width": 51.1875,
+          "height": 102.390625,
+          "font": 16
+        },
+        {
+          "left": 13,
+          "right": 133,
+          "width": 112,
+          "height": 44,
+          "font": 13.92
+        },
+        {
+          "left": 133,
+          "right": 13,
+          "width": 112,
+          "height": 44,
+          "font": 13.92
+        }
+      ],
+      "condition": {
+        "left": 14,
+        "right": 14,
+        "width": 230,
+        "height": 57.28125,
+        "font": 13
+      },
+      "source": {
+        "left": 1,
+        "right": 1,
+        "width": 256,
+        "height": 102.390625,
+        "font": 16
+      },
+      "surface": {
+        "left": 14,
+        "right": 14,
+        "width": 230,
+        "height": 72,
+        "font": 16
+      },
+      "state": {
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "16.976",
+        "heatProgress": "1.0000"
+      }
+    }
+  ],
+  "errors": []
+}

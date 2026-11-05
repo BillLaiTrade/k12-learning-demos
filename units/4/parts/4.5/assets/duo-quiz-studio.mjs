@@ -1,5 +1,5 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {DUO_LIGHTS as LIGHTS,DUO_FILTERS as FILTERS,PAPER_TYPES,CHALLENGE_LAYOUT as L,filterIntersection} from './duo-quiz-model.mjs?v=compound-light-20261105';
+import {DUO_LIGHTS as LIGHTS,DUO_FILTERS as FILTERS,PAPER_TYPES,CHALLENGE_LAYOUT as L,filterIntersection} from './duo-quiz-model.mjs?v=single-change-20261105';
 
 export function createChallengeStudio(canvas,{unavailable,onLabels}={}){
  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'low-power'});
