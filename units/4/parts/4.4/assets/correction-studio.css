@@ -1,0 +1,38 @@
+.correction-lab .eye-tools [data-correction-rays] { background:#f8e4ad; border-color:#ddc47f; color:#493d20; font-weight:750; }
+.correction-lab .eye-tools [data-correction-point][aria-pressed=true] { background:#d9e8c6; border-color:#9cba86; }
+.correction-lab .eye-tools [data-correction-reset] { margin-left:auto; }
+.correction-lab[data-eye-render="3d"] [data-correction-anatomy],.correction-lab[data-eye-render="3d"] [data-correction-card] { visibility:hidden; }
+.correction-lab[data-eye-render=fallback] [data-correction-model] { display:none; }
+.correction-condition { font-size:.8rem; font-weight:700; margin:12px 14px 0; color:#31543d; }
+.correction-explanation { margin:0 12px 12px; padding:10px 12px; border-radius:10px; background:#f5f7e9; font-size:.8rem; line-height:1.7; text-align:center; }
+.correction-dock { grid-template-columns:minmax(0,1fr) minmax(0,1fr); }
+.correction-comparison table { width:100%; border-collapse:separate; border-spacing:0; font-size:.9rem; border:1px solid #b6c8a9; border-radius:10px; overflow:hidden; table-layout:fixed; }
+.correction-comparison thead { background:#235a42; color:#fffef3; }
+.correction-comparison th,.correction-comparison td { padding:14px 10px; text-align:center; line-height:1.6; overflow-wrap:anywhere; }
+.correction-comparison tbody th { font-weight:650; }
+.correction-comparison tbody tr+tr>* { border-top:1px solid #c6d4b9; }
+.correction-comparison tr[data-active=true]>* { background:#e2edce; }
+.correction-comparison .eye-insight { text-align:center; }
+.correction-model-tag { float:right; border-radius:15px; padding:0 9px; color:#5d7550; background:#e5edd9; font-size:.7rem; font-weight:500; }
+.eye-scene .correction-focus-label { font-size:17px; font-weight:500; }
+.correction-lab .eye-status { min-height:32px; }
+@container (max-width:640px) {
+ .correction-dock { grid-template-columns:1fr; }
+ .correction-lab .eye-distance button { padding-inline:7px; }
+ .correction-comparison { padding:14px 10px; }
+ .correction-comparison table { font-size:.75rem; }
+ .correction-comparison th,.correction-comparison td { padding:12px 4px; }
+ .correction-condition { margin:9px 10px 0; font-size:.73rem; }
+ .correction-explanation { font-size:.75rem; }
+ .correction-lab .eye-scene .eye-label { font-size:24px; }
+ .correction-lab .eye-scene .eye-caption { font-size:20px; }
+ .eye-scene .correction-focus-label { font-size:18px; }
+}
+@container (max-width:350px) {
+ .correction-lab .eye-tools [data-correction-reset] { flex-basis:100%; margin:0; min-height:30px; text-align:right; padding-block:3px; background:transparent; border-color:transparent; box-shadow:none; }
+ .correction-lab .eye-distance button { font-size:.85rem; }
+ .correction-comparison table { font-size:.7rem; }
+ .correction-model-tag { float:none; display:inline-block; margin-left:8px; }
+}
+
+.correction-lab .eye-image-copy { white-space:pre-line; }

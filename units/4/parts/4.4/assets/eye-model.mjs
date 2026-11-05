@@ -2,7 +2,7 @@ import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 
 // A fixed, open teaching model. The camera looks into the cut face, so the
 // retinal lining and optical overlay stay visible through every adjustment.
-export function createEyeModel(canvas){
+export function createEyeModel(canvas,options={}){
  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.94;renderer.shadowMap.enabled=false;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
  const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera(0,760,0,-420,1,2000);camera.position.set(0,0,1000);camera.lookAt(0,0,0);
  scene.add(new THREE.HemisphereLight('#fffdf2','#6e856d',1.3));
@@ -27,11 +27,23 @@ export function createEyeModel(canvas){
  const lens=new THREE.Mesh(new THREE.SphereGeometry(70,96,64),material('#b0e0df',{roughness:.12,transmission:.48,thickness:24,ior:1.46,clearcoat:1,clearcoatRoughness:.1,envMapIntensity:.55}));lens.position.set(365.54,-220,8);lens.scale.set(.4,1,.65);lens.castShadow=true;scene.add(lens);
  const cardShape=new THREE.Shape(),w=25,h=101,r=6;cardShape.moveTo(-w+r,-h);cardShape.lineTo(w-r,-h);cardShape.quadraticCurveTo(w,-h,w,-h+r);cardShape.lineTo(w,h-r);cardShape.quadraticCurveTo(w,h,w-r,h);cardShape.lineTo(-w+r,h);cardShape.quadraticCurveTo(-w,h,-w,h-r);cardShape.lineTo(-w,-h+r);cardShape.quadraticCurveTo(-w,-h,-w+r,-h);
  const card=new THREE.Mesh(new THREE.ExtrudeGeometry(cardShape,{depth:5,bevelEnabled:true,bevelThickness:1.4,bevelSize:1.3,bevelSegments:4}),material('#fffbed',{roughness:.53}));card.position.set(64,-220,35);card.rotation.y=-.16;card.castShadow=true;scene.add(card);
+ // Section 8 reuses the same cutaway, with a separate spectacle and axial model.
+ const axialParts=[shell,bowl,cut,band,shadow].map(mesh=>({mesh,x:mesh.position.x,sx:mesh.scale.x}));
+ const spectacles={};
+ if(options.correction){
+  for(const type of ['concave','convex']){
+   const shape=new THREE.Shape();
+   if(type==='concave'){shape.moveTo(-17,-96);shape.bezierCurveTo(-11,-60,-3,-25,-3,0);shape.bezierCurveTo(-3,25,-11,60,-17,96);shape.lineTo(17,96);shape.bezierCurveTo(11,60,3,25,3,0);shape.bezierCurveTo(3,-25,11,-60,17,-96);}
+   else{shape.moveTo(0,-96);shape.bezierCurveTo(-29,-55,-29,55,0,96);shape.bezierCurveTo(29,55,29,-55,0,-96);}
+   shape.closePath();const mesh=new THREE.Mesh(new THREE.ExtrudeGeometry(shape,{depth:12,bevelEnabled:true,bevelThickness:1,bevelSize:1,bevelSegments:4,curveSegments:64}),material('#b4e2dc',{roughness:.15,transmission:.4,thickness:12,ior:1.45,clearcoat:1}));
+   mesh.position.set(178.45,-220,16);mesh.visible=false;scene.add(mesh);spectacles[type]=mesh;
+  }
+ }
  let pending=0;
  function render(){pending=0;const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);renderer.render(scene,camera);}
  function request(){if(!pending)pending=requestAnimationFrame(render);}
  const observer=new ResizeObserver(request);observer.observe(canvas);
- function update(state){lens.scale.x=(17+22*state.accommodation/100)/70;card.position.x=state.distance==='far'?64:155;request();}
+ function update(state){if(options.correction){const ratio=state.retina;for(const {mesh,x,sx}of axialParts){mesh.position.x=302+(x-302)*ratio;mesh.scale.x=sx*ratio;}lens.scale.x=20.7/70;card.position.x=54;for(const [type,mesh]of Object.entries(spectacles))mesh.visible=state.lens===type;request();return;}lens.scale.x=(17+22*state.accommodation/100)/70;card.position.x=state.distance==='far'?64:155;request();}
  request();
- return{update,scene,camera,renderer,lens,card,shell,band,cornea,dispose(){observer.disconnect();if(pending)cancelAnimationFrame(pending);scene.traverse(m=>{m.geometry?.dispose();if(m.material)m.material.dispose();});environment.dispose();shadowTex.dispose();bgTex.dispose();renderer.dispose();}};
+ return{update,scene,camera,renderer,lens,card,shell,band,cornea,spectacles,dispose(){observer.disconnect();if(pending)cancelAnimationFrame(pending);scene.traverse(m=>{m.geometry?.dispose();if(m.material)m.material.dispose();});environment.dispose();shadowTex.dispose();bgTex.dispose();renderer.dispose();}};
 }

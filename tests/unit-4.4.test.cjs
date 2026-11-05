@@ -48,12 +48,12 @@ test('4.4 十區整合版：獨立透鏡、共用成像台及跨尺寸導覽',{t
  await scenario('遠近切換保留視網膜，調節後恢復清楚像',async()=>{
   const before=await lab(7).locator('[data-scene]').innerHTML();await lab(7).locator('[data-eye-distance=near]').click();assert.match(await result(7).innerText(),/視網膜後/);await lab(7).locator('[data-eye-accommodation]').fill('83');await lab(7).locator('[data-eye-accommodation]').dispatchEvent('input');assert.match(await result(7).innerText(),/清楚/);assert.match(await lab(7).locator('[data-eye-adjust]').innerText(),/較厚/);assert.notEqual(await lab(7).locator('[data-scene]').innerHTML(),before);await shot(7,'near-accommodation');
  });
- await scenario('近視／遠視與眼鏡矯正共用同一眼睛，切模型撤除舊鏡片',async()=>{
-  assert.equal(await page.locator('#lab9').count(),0);assert.equal(await lab(8).locator('[data-action=correct]').isDisabled(),true);
-  const retina=()=>lab(8).locator('[data-scene]').evaluate(e=>[...e.querySelectorAll('path')].find(p=>p.getAttribute('stroke-width')==='7')?.getAttribute('d'));const fixed=await retina();
-  await lab(8).locator('[data-value=myopia]').click();assert.match(await result(8).innerText(),/視網膜前/);await lab(8).locator('[data-action=correct]').click();assert.match(await result(8).innerText(),/清楚/);assert.match(await lab(8).locator('[data-scene]').innerHTML(),/凹透鏡矯正/);
-  await lab(8).locator('[data-value=hyperopia]').click();assert.equal(await lab(8).locator('[data-action=correct]').getAttribute('aria-pressed'),'false');assert.match(await result(8).innerText(),/視網膜後/);await lab(8).locator('[data-action=correct]').click();assert.match(await result(8).innerText(),/清楚/);assert.match(await lab(8).locator('[data-scene]').innerHTML(),/凸透鏡矯正/);assert.equal(await retina(),fixed);await shot(8,'glasses-correction');
-  await lab(8).locator('[data-value=normal]').click();assert.equal(await lab(8).locator('[data-action=correct]').isDisabled(),true);assert.equal(await lab(8).locator('[data-action=correct]').getAttribute('aria-pressed'),'false');assert.match(await result(8).innerText(),/清楚/);
+ await scenario('近視／遠視的眼軸模型與眼鏡矯正，切模型撤除舊鏡片',async()=>{
+  assert.equal(await page.locator('#lab9').count(),0);
+  for(const [kind,lens,pos]of [['myopia','concave','前'],['hyperopia','convex','後']]){
+   await lab(8).locator(`[data-correction-kind=${kind}]`).click();assert.equal(await lab(8).getAttribute('data-lens'),'none');assert.match(await result(8).innerText(),new RegExp('視網膜'+pos));const fixed=await lab(8).locator('[data-correction-retina]').getAttribute('d');await lab(8).locator(`[data-correction-lens=${lens}]`).click();assert.match(await result(8).innerText(),/清楚/);assert.equal(await lab(8).locator('[data-correction-retina]').getAttribute('d'),fixed);
+  }
+  await shot(8,'glasses-correction');await lab(8).locator('[data-correction-kind=normal]').click();assert.equal(await lab(8).getAttribute('data-lens'),'none');assert.match(await result(8).innerText(),/清楚/);
  });
  await scenario('顯微鏡獨立成區，物鏡／目鏡／合看與自身重設連動',async()=>{
   await page.locator('[data-value=eyepiece]').click();assert.match(await page.locator('#micro-result').innerText(),/目鏡焦距內/);assert.ok(await page.locator('#microscope-scene .extension').count()>0);await page.locator('[data-value=both][data-set=micro]').click();assert.match(await page.locator('#micro-result').innerText(),/接力/);await page.locator('[data-micro-reset]').click();assert.equal(await page.locator('#s9 [data-action=correct]').count(),0);assert.equal(await page.locator('[data-value=objective]').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('#microscope-scene .extension').count(),0);
