@@ -1,0 +1,62 @@
+.micro-lab { margin:20px 0; color:#31543d; container-type:inline-size; }
+.micro-workspace { display:grid; grid-template-columns:minmax(0,1fr) 220px; border:1px solid #91a587; border-radius:17px; overflow:hidden; background:#506657; }
+.micro-optical { min-width:0; }
+.micro-tools { display:flex; align-items:center; flex-wrap:wrap; gap:6px; padding:12px; background:#364f40; border-bottom:1px solid #84957a; }
+.micro-tools button { background:#fffbed; color:#31543d; font-size:.8rem; padding:8px 10px; min-height:40px; }
+.micro-tools [data-micro-rays][aria-pressed=true] { background:#f6dfa0; border-color:#d1b565; }
+.micro-tools [data-micro-reset] { margin-left:auto; }
+.micro-trace { display:flex; gap:4px; }
+.micro-trace button[aria-pressed=true] { background:#d6e6c2; }
+.micro-tools button:disabled { opacity:.45; cursor:default; }
+.micro-scene { display:block; width:100%; height:auto; }
+.micro-scene text { font-family:inherit; }
+.micro-scene .micro-label { font-size:21px; font-weight:700; fill:#344b37; }
+.micro-scene .micro-small { font-size:18px; fill:#e9efdf; }
+.micro-scene .micro-leader { fill:none; stroke:#dfe6d4; stroke-width:1.5; }
+.micro-scene .micro-ray { fill:none; stroke-width:2.1; }
+.micro-scene .extension { stroke-dasharray:6 5; opacity:.8; }
+.micro-scene .micro-muted { opacity:.28; }
+.micro-viewer { padding:20px 14px; background:#fffdf4; border-left:1px solid #bfcead; display:flex; flex-direction:column; align-items:stretch; gap:13px; min-width:0; }
+.micro-viewer h3 { font-size:1rem; line-height:1.6; text-align:center; margin:0; }
+.micro-viewer p { margin:0; text-align:center; font-size:.8rem; line-height:1.8; }
+.micro-preview { width:100%; height:auto; aspect-ratio:1; border:1px solid #b6c8a5; border-radius:50%; background:radial-gradient(ellipse at 35% 30%,#fffef8,#e6edda); box-shadow:inset 0 0 0 5px #e2e8d7; }
+.micro-viewer .micro-badge { padding:8px; border-radius:20px; background:#f4e2ad; color:#5a491f; font-weight:750; }
+.micro-original { border-top:1px solid #d5dfc9; padding-top:12px; display:flex; justify-content:center; align-items:center; gap:15px; }
+.micro-original svg { width:30px; height:55px; }
+.micro-original span { font-size:.8rem; }
+.micro-key { margin:0; padding:0 15px 14px; font-size:.73rem; color:#eef1e3; line-height:1.8; }
+.micro-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:14px 0 8px; }
+.micro-steps button { background:#fffdf1; border:1px solid #a6ba96; color:#31553e; padding:12px 8px; min-height:48px; font-size:.86rem; line-height:1.6; }
+.micro-steps button[aria-pressed=true] { background:#276345; color:#fffdf1; border-color:#276345; }
+.micro-help { margin:0 0 12px; font-size:.8rem; color:#5c7152; }
+.micro-status { padding:12px 15px; border-left:4px solid #a1b87c; background:#edf3e3; font-size:.9rem; line-height:1.8; margin:12px 0; }
+.micro-concepts { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; }
+.micro-concepts section { border:1px solid #b4c5a6; border-radius:13px; padding:17px; background:#fafbf2; }
+.micro-concepts h3 { margin:0 0 9px; font-size:1rem; }
+.micro-concepts p { margin:0; font-size:.88rem; line-height:1.8; }
+.micro-concepts .micro-reference { margin-top:10px; color:#586f4c; font-size:.78rem; }
+.micro-lab button:focus-visible { outline:3px solid #c99a3c; outline-offset:3px; }
+@container (max-width:640px) {
+ .micro-workspace { grid-template-columns:minmax(0,1fr); }
+ .micro-viewer { border-left:0; border-top:1px solid #bfcead; display:grid; grid-template-columns:minmax(0,1fr) 130px; align-items:center; gap:8px 12px; padding:14px; }
+ .micro-viewer h3,.micro-viewer>p,.micro-original { grid-column:1; }
+ .micro-preview { grid-column:2; grid-row:1 / 5; }
+ .micro-viewer h3 { font-size:.9rem; }
+ .micro-viewer p { font-size:.75rem; }
+ .micro-viewer .micro-view-copy { grid-column:1 / -1; }
+ .micro-original { padding-top:8px; gap:8px; }
+ .micro-original svg { height:36px; width:22px; }
+ .micro-steps { gap:6px; }
+ .micro-steps button { font-size:.78rem; padding:9px 5px; }
+ .micro-concepts { grid-template-columns:1fr; }
+ .micro-tools { padding:8px; gap:5px; }
+ .micro-tools button { font-size:.7rem; padding:6px 7px; }
+ .micro-tools [data-micro-reset] { margin-left:0; }
+ .micro-scene .micro-label { font-size:23px; }
+ .micro-scene .micro-small { font-size:21px; }
+}
+@container (max-width:350px) {
+ .micro-viewer { grid-template-columns:minmax(0,1fr) 102px; padding:10px; gap:8px; }
+ .micro-steps button span { display:block; }
+ .micro-viewer h3 { font-size:.85rem; }
+}
