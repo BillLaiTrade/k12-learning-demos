@@ -1,5 +1,5 @@
 import * as THREE from './vendor/three/build/three.module.js';
-import {RADII,PHYSICAL,ORBIT,EARTH,SUN,SUN_DIRECTIONS,orbitBasis,orbitAngle,lunarVector,positionsAt,reflectionState,wrapAngle,unit,sub,add,scale} from './moon-reflection-model.mjs?v=orbit-20261105';
+import {RADII,PHYSICAL,ORBIT,EARTH,SUN,SUN_DIRECTIONS,orbitBasis,orbitAngle,lunarVector,positionsAt,reflectionState,wrapAngle,unit,sub,add,scale,dot} from './moon-reflection-model.mjs?v=orbit-20261105b';
 
 export async function createMoonLab(root){
   const canvas=root.querySelector('canvas'),frame=root.querySelector('.moon-space-frame'),slider=root.querySelector('#moon-orbit-position');
@@ -82,7 +82,7 @@ export async function createMoonLab(root){
       const start=add(point,[-2.8,0,0]);arrow(start,point,'#f7bf58',.85);segments.push([start,point]);
       const normal=new THREE.Vector3(...patch.normal),tangent=new THREE.Vector3(0,1,0).cross(normal).normalize(),bitangent=normal.clone().cross(tangent).normalize();
       for(let i=0;i<2;i++){const a=i*Math.PI+.7,dir=normal.clone().multiplyScalar(.8).addScaledVector(tangent,Math.cos(a)*.6).addScaledVector(bitangent,Math.sin(a)*.6).normalize();arrow(point,add(point,scale(dir.toArray(),.85)),'#6cb8d9',.42);}
-      if(patch.viewCos>0){arrow(point,eye,'#8eddf5',.8);segments.push([point,eye]);}else segments.push(null);
+      if(patch.viewCos>0&&dot(patch.normal,sub(eye,point))>0){arrow(point,eye,'#8eddf5',.8);segments.push([point,eye]);}else segments.push(null);
     }
     const percent=Math.round(readout.fraction*100);root.querySelector('#moon-phase-value').textContent=percent+'%';slider.value=String(angle);
     canvas.setAttribute('aria-label','沿軌道拖動月球的3D天體模型。可用方向鍵調整月球位置，目前可見亮面約百分之'+percent+'。');
