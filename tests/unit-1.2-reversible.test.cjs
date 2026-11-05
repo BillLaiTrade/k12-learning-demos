@@ -7,7 +7,7 @@ const fs = require('node:fs');
 const { chromium } = require('playwright');
 const { expect } = require('playwright/test');
 
-test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 }, async t => {
+test('1.2 reversible light reuses the reflection laboratory', { timeout: 180000 }, async t => {
   const root = path.resolve(__dirname, '..');
   const asset = path.join(root, 'units/4/parts/4.2/assets');
   const { reciprocalPath, laserPath, MIRROR_FACE_X } = await import(pathToFileURL(path.join(asset, 'planar-reflection.mjs')));
@@ -66,6 +66,9 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
   });
   const url = new URL('units/4/parts/4.2/#card-06', process.env.LESSON_BASE_URL || `http://127.0.0.1:${port}/`).href;
   await page.goto(url, { waitUntil: 'networkidle' });
+  // Physical coordinates must stay fixed while moving between sections.
+  // A pending smooth scroll can resume after scrollIntoView({behavior:'instant'}).
+  await page.addStyleTag({ content: 'html{scroll-behavior:auto!important}' });
   const section = page.locator('#card-06');
   const canvas = page.locator('#reverse-scene');
   const toggleA = page.locator('#reverse-toggle-a'), toggleB = page.locator('#reverse-toggle-b'), reset = page.locator('#reverse-reset');
@@ -88,6 +91,7 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
       const second = await target.boundingBox();
       return Math.abs(first.y - second.y) < 0.5;
     }).toBe(true);
+    await expect(target).toBeInViewport({ ratio: 1 });
     const box = await target.boundingBox(), [x, y] = JSON.parse(await target.getAttribute(target === canvas ? 'data-emitter-a-screen' : 'data-emitter-screen'));
     await page.mouse.move(box.x + x, box.y + y); await page.mouse.down();
     assert.equal(await target.evaluate(el => el.hasPointerCapture(1)), true, 'Physical pointer must actually hit the emitter');

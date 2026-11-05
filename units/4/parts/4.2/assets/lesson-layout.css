@@ -1,0 +1,177 @@
+/* Common lesson chrome follows the current 4.1 lesson and booklet styles. */
+:root {
+  --ink: #182326;
+  --muted: #59696b;
+  --line: #d7e1dd;
+  --paper: #f4f7f1;
+  --card: #fffefa;
+  --shadow: 0 14px 38px rgb(21 47 38 / 8%);
+}
+
+.shell { width: min(1120px, calc(100% - 40px)); }
+.lesson-layout {
+  grid-template-columns: minmax(205px, 250px) minmax(0, 1fr);
+  gap: 34px;
+}
+.lesson-list { gap: 20px; }
+.route a[aria-current="step"] { font-weight: 750; }
+.route-number { color: var(--green); font-size: .76rem; font-weight: 700; }
+
+.lesson-card:not(#unit-quiz) {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #d8e2da;
+  border-radius: 20px;
+  background: var(--card);
+  color: #1c2927;
+  line-height: 1.72;
+  box-shadow: 0 10px 28px rgb(24 52 40 / 7%);
+}
+.lesson-card:not(#unit-quiz) > .card-heading {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  padding: 25px 28px 21px;
+  border-bottom: 1px solid #e7ece5;
+}
+.lesson-card:not(#unit-quiz) .card-number {
+  width: 50px;
+  height: 50px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 15px;
+  background: #e9f0e3;
+  color: #416c39;
+  font-size: 1.1rem;
+  font-weight: 850;
+  letter-spacing: normal;
+}
+.lesson-card:not(#unit-quiz) .card-heading h2 {
+  margin: 0;
+  font-size: clamp(1.22rem, 2vw, 1.65rem);
+  line-height: 1.35;
+  overflow-wrap: normal;
+}
+.lesson-card:not(#unit-quiz) .card-subtitle {
+  margin: 8px 0 0;
+  color: #5b6a65;
+  font-size: .94rem;
+  white-space: normal;
+}
+.lesson-card:not(#unit-quiz) > .card-main {
+  min-width: 0;
+  padding: 23px 28px 28px;
+}
+.lesson-card:not(#unit-quiz) .dialogue {
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+  padding: 11px 15px;
+}
+.dialogue .speaker::before {
+  width: 44px;
+  height: 44px;
+  box-shadow: 0 2px 6px rgb(21 47 38 / 12%);
+}
+.lesson-card:not(#unit-quiz) .dialogue .speaker::before {
+  width: 48px;
+  height: 48px;
+}
+
+/* Match 4.1's separate quiz chrome; retain the periscope task layout. */
+.lesson-card#unit-quiz {
+  border-color: #ddd6c4;
+  border-radius: 20px;
+  background: #fffefa;
+  color: #182326;
+  line-height: 1.7;
+  box-shadow: 0 14px 38px rgb(21 47 38 / 8%);
+}
+.periscope-heading {
+  align-items: flex-start;
+  gap: 18px;
+  padding: 25px 28px 21px;
+  border-bottom: 1px solid #e7e1d2;
+  background: linear-gradient(105deg, #fffdf6, #fdfbf3);
+  line-height: 1.8;
+}
+.periscope-heading > div { min-width: 0; flex: 1; }
+.periscope-heading .quiz-icon {
+  flex: 0 0 50px;
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  background: #f5ead0;
+  color: #8b6725;
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+.periscope-heading small {
+  display: block;
+  margin: 0 0 4px;
+  color: #946f2d;
+  font-size: .82rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+}
+.periscope-heading h2 {
+  margin: 0;
+  color: #243d35;
+  font-size: clamp(1.15rem, 1.85vw, 1.5rem);
+  line-height: 1.55;
+  letter-spacing: -.02em;
+}
+.periscope-heading p {
+  margin: 9px 0 0;
+  color: #64766c;
+  font-size: .9rem;
+  font-weight: 400;
+}
+.periscope-body { padding: 20px; }
+.periscope-body .dialogue {
+  align-items: center;
+  margin: 12px 0;
+  padding: 11px 15px;
+  font-size: inherit;
+}
+
+@media (max-width: 1100px) and (min-width: 761px) {
+  .lesson-layout { grid-template-columns: 205px minmax(0, 1fr); gap: 24px; }
+}
+@media (max-width: 900px) {
+  .lesson-card:not(#unit-quiz) > .card-heading,
+  .lesson-card:not(#unit-quiz) > .card-main { padding-inline: 21px; }
+}
+@media (max-width: 760px) {
+  .shell { width: min(100% - 24px, 620px); }
+  .lesson-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .route { width: auto; max-width: none; margin: 0 -12px; }
+  .lesson-card:not(#unit-quiz),
+  .lesson-card#unit-quiz,
+  #card-07 { scroll-margin-top: 110px; }
+  .periscope-heading { gap: 12px; padding: 20px 16px; }
+  .periscope-heading .quiz-icon {
+    flex-basis: 42px;
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+  }
+  .periscope-heading p { font-size: .85rem; }
+  .periscope-body { padding: 14px; }
+}
+@media (max-width: 700px) {
+  .lesson-card:not(#unit-quiz) > .card-heading {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 10px;
+    padding: 18px;
+  }
+  .lesson-card:not(#unit-quiz) .card-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+  .lesson-card:not(#unit-quiz) > .card-main { padding: 18px; }
+}

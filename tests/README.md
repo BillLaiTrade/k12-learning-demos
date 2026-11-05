@@ -1540,3 +1540,17 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.1-
 新增readiness七項（含外層）：靜態分享標題／摘要／URL／開場圖及實際PNG尺寸、夜間四種狀態、320px圖片失敗及鍵盤重試、較早成功／失敗請求不覆蓋目前場景、四個3D區載入期間停用控制及實際孔板就緒後讀值／通光同步。`UNIT41_READY_CAPTURE`保存畫面與觀察記錄；不提供該變數也可執行。
 
 劇場新增快速完成／重設還原補光及清理延遲回呼的實際流程，原投影及操作檢查沿用。孔板觸控測試將窄版投影出的拖曳距離維持至少24px，超過既有6px門檻；產品門檻不改。孔板專項隔離未測的另外三個3D場景，保留圖片、第二區開關及計時回歸；整課場景與主要操作仍由layout套件檢查。五檔合計50項（含外層），執行結果以當輪日誌為準。
+
+## 4.2 以4.1為標準的共用外觀（2026-11-05）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.2-style-alignment.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.2-completion.test.cjs tests/unit-1.2-mirror.test.cjs tests/unit-1.2-curved-mirrors.test.cjs tests/unit-1.2-reversible.test.cjs tests/unit-1.2-periscope.test.cjs
+```
+
+新增版面專項18項（含外層），以14個寬度直接比較4.1與4.2的實際CSS計算值，涵蓋六區卡片、頁寬、欄距、編號牌、標題、副標、內距與頭像；另比較小測外框／標頭，檢查窄版導覽不遮標題、唯一ID及資源載入。`STYLE_CAPTURE_DIR`可保存桌機／手機截圖與量測；`LESSON_BASE_URL`可指向公開站，`LESSON_USE_PROXY=1`使用環境HTTPS代理。切換寬度後以實際截圖提交畫面，避免背景分頁尚未更新斷點時讀取舊樣式。
+
+既有鏡像專項改驗核可的48px教學頭像，其餘圖文避讓斷言保留；整課分享圖斷言同步先前已核可的1671×941小熊開場圖。互動與光學斷言不變。
+
+雙光源專項在測試頁停用文件平滑捲動，並在實體指標操作前要求畫布完整入鏡，避免跳區捲動尚未停止時取得負的螢幕座標；不改產品捲動設定、指標命中或光學斷言。
+軟體3D繪圖的整套總預算調整為180秒，與鏡像及潛望鏡相同；個別產品計時與操作斷言不變。

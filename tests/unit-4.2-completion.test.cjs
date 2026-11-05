@@ -45,11 +45,11 @@ test('4.2 完整頁面、主要活動與資源失敗恢復',{timeout:300000},asy
       const canonical='https://billlaitrade.github.io/k12-learning-demos/units/4/parts/4.2/';
       await expect(p.locator('link[rel="canonical"]')).toHaveAttribute('href',canonical);await expect(p.locator('meta[property="og:url"]')).toHaveAttribute('content',canonical);
       const image=p.locator('.hero img');await image.evaluate(e=>e.decode());
-      assert.deepEqual(await image.evaluate(e=>[e.naturalWidth,e.naturalHeight]),[1672,941]);
-      await expect(p.locator('meta[property="og:image"]')).toHaveAttribute('content',canonical+'assets/optics-lab-opening.png');
-      await expect(p.locator('meta[name="twitter:image"]')).toHaveAttribute('content',canonical+'assets/optics-lab-opening.png');
-      await expect(p.locator('meta[property="og:image:width"]')).toHaveAttribute('content','1672');await expect(p.locator('meta[property="og:image:height"]')).toHaveAttribute('content','941');
-      assert.ok((await p.locator('meta[property="og:image:alt"]').getAttribute('content')).includes('小葵和阿公'));
+      assert.deepEqual(await image.evaluate(e=>[e.naturalWidth,e.naturalHeight]),[1671,941]);
+      await expect(p.locator('meta[property="og:image"]')).toHaveAttribute('content',canonical+'assets/optics-lab-opening-teddy.png');
+      await expect(p.locator('meta[name="twitter:image"]')).toHaveAttribute('content',canonical+'assets/optics-lab-opening-teddy.png');
+      await expect(p.locator('meta[property="og:image:width"]')).toHaveAttribute('content','1671');await expect(p.locator('meta[property="og:image:height"]')).toHaveAttribute('content','941');
+      assert.ok((await p.locator('meta[property="og:image:alt"]').getAttribute('content')).includes('小葵與阿公'));
       await expect(p.locator('#unit-quiz noscript p')).toContainText('需要 JavaScript');
     }finally{await plain.close();}
   });

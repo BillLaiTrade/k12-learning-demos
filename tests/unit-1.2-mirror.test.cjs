@@ -189,7 +189,7 @@ test('第三區上下同時對照、整熊觀察及銜接第四區',{timeout:180
         const a=avatar.getBoundingClientRect(),b=text.getBoundingClientRect(),r=row.getBoundingClientRect();
         return {avatar:style.backgroundImage,avatarWidth:style.width,textFits:text.scrollWidth<=text.clientWidth+1,separated:a.right<=b.left,within:b.right<=r.right,background:getComputedStyle(row).backgroundColor};
       }));
-      assert.ok(layout.every(r=>r.avatar.includes('dialogue-character-avatars.png')&&r.avatarWidth===(width<=460?'38px':'44px')&&r.textFits&&r.separated&&r.within));
+      assert.ok(layout.every(r=>r.avatar.includes('dialogue-character-avatars.png')&&r.avatarWidth==='48px'&&r.textFits&&r.separated&&r.within));
       assert.notEqual(layout[0].background,layout[1].background);
       if(width===390||width===1440){
         const name=width===390?'mobile':'desktop';

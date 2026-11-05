@@ -1,0 +1,151 @@
+<!-- 4.1 presentation snapshot at 36da1bf794693de262ff772c20cb3627cd6f103f. Scripts and unrelated content omitted; production 4.1 is unchanged. -->
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>:root { color-scheme: light; --ink: #182326; --muted: #59696b; --line: #d7e1dd; --paper: #f4f7f1; --card: #fffefa; --green: #176b53; --green-pale: #e5f2e9; --orange: #bc612b; --orange-pale: #fff0e3; --sun: #e9b64c; --shadow: 0 14px 38px rgb(21 47 38 / 8%); font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0px; background: var(--paper); color: var(--ink); line-height: 1.7; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+a { color: var(--green); }
+.shell { width: min(1120px, 100% - 40px); margin: 0px auto; }
+.masthead { padding: 22px 0px 12px; }
+.brand-row, .section-top, .controls, .card-head, .readout-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand-row { font-size: 0.9rem; font-weight: 750; }
+.crumb { color: var(--muted); font-weight: 500; }
+.back-link { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; }
+.hero-layout { display: grid; grid-template-columns: minmax(0px, 0.9fr) minmax(320px, 1.1fr); align-items: center; gap: 32px; padding: 36px 0px 28px; }
+.hero { min-width: 0px; container-type: inline-size; }
+.hero-art { min-width: 0px; margin: 0px; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); }
+.hero-art img { display: block; width: 100%; height: auto; aspect-ratio: 1672 / 941; object-fit: cover; }
+.eyebrow { color: var(--green); font-size: 0.82rem; font-weight: 800; letter-spacing: 0.12em; }
+h1 { margin: 8px 0px 12px; font-size: clamp(2rem, 4.4vw, 3.55rem); line-height: 1.18; letter-spacing: -0.04em; }
+.hero h1 { font-size: clamp(1.7rem, 9.5cqi, 3.55rem); }
+.hero-title-line { display: block; }
+.hero p { margin: 0px; color: var(--muted); font-size: 1.08rem; }
+.section-top { align-items: end; margin: 0px 0px 18px; }
+.section-top h2 { margin: 0px; font-size: 1.32rem; }
+.lesson-layout { display: grid; grid-template-columns: minmax(205px, 250px) minmax(0px, 1fr); gap: 34px; align-items: start; }
+@media (max-width: 1100px) and (min-width: 761px){.lesson-layout { grid-template-columns: 205px minmax(0px, 1fr); gap: 24px; }}
+.route { position: sticky; top: 18px; max-height: calc(-36px + 100svh); overflow-y: auto; padding: 8px 10px 12px 0px; scrollbar-width: thin; }
+.route-label { margin: 0px 0px 8px; color: var(--muted); font-size: 0.76rem; letter-spacing: 0.08em; }
+.route-inner { display: grid; gap: 4px; }
+.route a { display: grid; grid-template-columns: 28px minmax(0px, 1fr); align-items: start; gap: 8px; padding: 10px 11px; border-width: 1px 1px 1px 3px; border-style: solid; border-color: transparent; border-image: none; border-radius: 0px 10px 10px 0px; color: var(--muted); font-size: 0.88rem; line-height: 1.45; text-decoration: none; }
+.route a:hover, .route a:focus-visible { border-color: var(--line); outline: transparent solid 2px; }
+.route a[aria-current="step"] { border-left-color: var(--green); background: rgb(231, 238, 224); color: rgb(49, 90, 70); font-weight: 750; }
+.route b { color: var(--green); font-size: 0.76rem; font-weight: 700; }
+.cards { display: grid; gap: 20px; }
+.lesson-card { position: relative; scroll-margin-top: 22px; min-width: 0px; display: block; padding: 0px; overflow: hidden; border: 1px solid rgb(216, 226, 218); border-radius: 20px; background: var(--card); color: rgb(28, 41, 39); line-height: 1.72; box-shadow: rgba(24, 52, 40, 0.07) 0px 10px 28px; }
+.lesson-head { display: grid; grid-template-columns: 74px minmax(0px, 1fr); gap: 16px; align-items: start; padding: 25px 28px 21px; border-bottom: 1px solid rgb(231, 236, 229); }
+.lesson-number { display: grid; place-items: center; width: 50px; height: 50px; border-radius: 15px; background: rgb(233, 240, 227); color: rgb(65, 108, 57); font-weight: 850; font-size: 1.1rem; }
+.lesson-head h2 { margin: 0px; font-size: clamp(1.22rem, 2vw, 1.65rem); line-height: 1.35; }
+.lesson-head p { margin: 8px 0px 0px; color: rgb(91, 106, 101); font-size: 0.94rem; }
+.lesson-head p span + span::before { content: "；"; }
+.lesson-body { padding: 23px 28px 28px; min-width: 0px; }
+@media (max-width: 900px){.lesson-head, .lesson-body { padding-left: 21px; padding-right: 21px; }}
+@media (max-width: 700px){.lesson-head { grid-template-columns: 48px minmax(0px, 1fr); gap: 10px; padding: 18px; }
+.lesson-number { width: 40px; height: 40px; border-radius: 12px; }
+.lesson-body { padding: 18px; }}
+.lesson-card button:focus-visible, .lesson-card input:focus-visible { outline: rgb(199, 142, 49) solid 3px; outline-offset: 3px; }
+.dialogue { display: flex; gap: 10px; align-items: center; margin: 12px 0px; padding: 11px 15px; border-left: 4px solid rgb(140, 174, 145); border-radius: 0px 13px 13px 0px; background: rgb(240, 245, 235); }
+.dialogue p { margin: 0px; }
+.dialogue .speaker { display: inline-flex; flex: 0 0 auto; align-items: center; color: rgb(49, 90, 70); font-weight: 800; }
+.dialogue .speaker::before { content: ""; display: block; width: 44px; height: 44px; border: 2px solid rgb(140, 174, 145); border-radius: 50%; background-image: url("../../../../shared-assets/characters/dialogue-character-avatars.png?v=clean-shaven-grandpa"); background-repeat: no-repeat; background-position: 100% 50%; background-size: 200% 100%; box-shadow: rgba(21, 47, 38, 0.12) 0px 2px 6px; }
+.lesson-card .dialogue .speaker::before { width: 48px; height: 48px; }
+.dialogue--xiaokui { border-left-color: rgb(211, 151, 101); background: rgb(255, 244, 232); }
+.dialogue--xiaokui .speaker { color: rgb(148, 85, 35); }
+.dialogue--xiaokui .speaker::before { border-color: rgb(211, 151, 101); background-position: 0px 50%; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0px; margin: -1px; overflow: hidden; clip: rect(0px, 0px, 0px, 0px); white-space: nowrap; border: 0px; }
+.scene-example-head { display: flex; align-items: center; gap: 12px; margin-bottom: 5px; }
+.scene-example-head h3 { margin: 0px; font-size: 1.16rem; line-height: 1.4; }
+.scene-index { flex: 0 0 auto; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: rgb(245, 233, 201); color: rgb(121, 91, 32); font-size: 0.8rem; font-weight: 850; }
+.night-scene-message button { min-height: 44px; padding: 9px 16px; border: 1px solid var(--line); border-radius: 13px; background: rgb(255, 255, 255); color: var(--ink); font-weight: 750; }
+[data-scene-failed="true"] button:disabled, [data-scene-failed="true"] input:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+.aperture-scene-actions { position: absolute; z-index: 2; top: 10px; left: 10px; display: flex; flex-wrap: wrap; gap: 7px; }
+.aperture-scene-action { min-height: 44px; padding: 9px 16px; border: 1px solid var(--line); border-radius: 13px; background: rgb(255, 255, 255); color: var(--ink); font-size: 0.9rem; font-weight: 750; }
+.aperture-scene-action:hover, .aperture-scene-action:focus-visible { border-color: var(--green); outline: rgba(23, 107, 83, 0.12) solid 2px; }
+.equipment-labels button { min-width: 0px; min-height: 32px; padding: 2px 3px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: inherit; font: inherit; text-align: center; white-space: nowrap; cursor: pointer; }
+.equipment-labels button:hover { background: rgb(241, 245, 239); color: var(--green); }
+.equipment-labels button:focus-visible { outline: rgba(23, 107, 83, 0.28) solid 3px; outline-offset: 1px; }
+.unit-booklet { scroll-margin-top: 22px; min-width: 0px; padding: 0px; overflow: hidden; border: 1px solid rgb(221, 214, 196); border-radius: 20px; background: rgb(255, 254, 250); color: rgb(24, 35, 38); line-height: 1.7; box-shadow: rgba(21, 47, 38, 0.08) 0px 14px 38px; }
+.booklet-heading { display: flex; align-items: flex-start; gap: 18px; padding: 25px 28px 21px; border-bottom: 1px solid rgb(231, 225, 210); background: linear-gradient(105deg, rgb(255, 253, 246), rgb(253, 251, 243)); font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif; line-height: 1.8; }
+.booklet-heading > div { min-width: 0px; flex: 1 1 0%; }
+.booklet-kicker { margin: 0px 0px 4px; color: rgb(148, 111, 45); font-size: 0.82rem; font-weight: 800; letter-spacing: 0.06em; }
+.booklet-heading h2 { margin: 0px; color: rgb(36, 61, 53); font-size: clamp(1.15rem, 1.85vw, 1.5rem); line-height: 1.55; letter-spacing: -0.02em; }
+.booklet-heading p:last-child { margin: 9px 0px 0px; color: rgb(100, 118, 108); font-size: 0.9rem; font-weight: 400; }
+.booklet-mark { display: grid; place-items: center; flex: 0 0 50px; width: 50px; height: 50px; border-radius: 15px; background: rgb(245, 234, 208); color: rgb(139, 103, 37); font-size: 1.45rem; font-weight: 800; }
+.booklet-body { min-width: 0px; padding: 20px; }
+.booklet-body > .dialogue { margin: 12px 0px; }
+.booklet-body > .dialogue:first-child { margin-top: 0px; }
+@media (max-width: 760px){.booklet-heading { gap: 12px; padding: 20px 16px; }
+.booklet-mark { flex-basis: 42px; width: 42px; height: 42px; border-radius: 13px; }
+.booklet-heading p:last-child { font-size: 0.85rem; }
+.booklet-body { padding: 14px; }}
+@media (max-width: 520px){.equipment-labels button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding-inline: 1px; white-space: normal; }
+.aperture-scene-actions { top: 8px; left: 8px; gap: 6px; }
+.aperture-scene-action { min-height: 44px; padding: 9px 12px; font-size: 0.84rem; }}
+.end-card .lesson-head { border-color: rgb(208, 221, 203); }
+footer { padding: 22px 0px 36px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.88rem; }
+@media (max-width: 760px){.shell { width: min(100% - 24px, 620px); }
+.hero-layout { grid-template-columns: 1fr; gap: 16px; padding: 26px 0px 20px; }
+.hero-art { max-height: 250px; }
+.hero-art img { max-height: 250px; object-fit: cover; object-position: center 42%; }
+.lesson-layout { grid-template-columns: minmax(0px, 1fr); gap: 12px; }
+.route { z-index: 5; top: 0px; max-height: none; margin: 0px -12px; padding: 6px 12px 10px; overflow: auto hidden; background: var(--paper); }
+.route-label { margin: 0px 0px 6px; }
+.route-inner { display: flex; width: max-content; gap: 6px; }
+.route a { display: inline-flex; align-items: center; gap: 6px; padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); white-space: nowrap; }
+.route a[aria-current="step"] { border-color: var(--green); }
+.lesson-card { scroll-margin-top: 110px; }
+.unit-booklet { scroll-margin-top: 110px; }
+.scene-example-head h3 { font-size: 1.02rem; }}
+@media (max-width: 460px){.route { margin-inline: -12px; }
+.brand-row { align-items: flex-start; }
+.section-top { align-items: start; }
+.section-top h2 { font-size: 1.15rem; }}
+@media (prefers-reduced-motion: reduce){*, ::before, ::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }}</style></head><body><header class="shell masthead">
+    <div class="brand-row">
+      <a class="back-link" href="../../index.html" aria-label="返回光學單元學習路線">← 返回學習路線</a>
+      <span class="crumb">國二上・理化</span>
+    </div>
+    <div class="hero-layout">
+      <div class="hero">
+        <div class="eyebrow">學習內容 4.1｜第一段學習・光與看見</div>
+        <h1><span class="hero-title-line">書頁不發光，</span><span class="hero-title-line">我們為什麼看得見它？</span></h1>
+        <p>夜裡，電視螢幕亮著，阿公在檯燈下讀書，窗外月光灑進屋裡。從這個熟悉的夜晚出發，沿著光的路徑，看看光如何讓我們看見，也如何形成影子。</p>
+      </div>
+      <figure class="hero-art">
+        <img src="assets/unit-1-light-title.png?v=clean-shaven-grandpa" alt="夜晚的實驗室裡，小葵和阿公觀察三個小孔的直線光路、球體在屏幕上形成的影子，以及地球和月球模型。">
+      </figure>
+    </div>
+  </header><main class="shell">
+    <div class="section-top">
+      <div><h2>沿著探索路線，一步步認識光</h2><progress id="lesson-progress" max="6" value="1" aria-label="學習路線閱讀進度"></progress></div>
+      <span class="progress-copy" id="progress-copy">目前在第 1 段，共 6 段</span>
+    </div>
+    <div class="lesson-layout">
+      <nav class="route" aria-label="探索路線">
+        <p class="route-label">這段學習的路線</p>
+        <div class="route-inner">
+          <a href="#card-01" aria-current="step"><b>01</b><span>為什麼我們看得見東西？</span></a>
+          <a href="#card-02"><b>02</b><span>今晚，哪些光讓小葵看得見？</span></a>
+          <a href="#card-03"><b>03</b><span>光會自己繞路嗎？</span></a>
+          <a href="#card-04"><b>04</b><span>牆上的影子，是怎麼冒出來的？</span></a>
+          <a href="#card-05"><b>05</b><span>小小一顆球，為什麼影子這麼大？</span></a>
+          <a href="#card-06"><b>06</b><span>光傳得有多快？</span></a>
+          <a class="booklet-route-link" href="#unit-booklet"><b aria-hidden="true">✦</b><span>單元小測</span></a>
+        </div>
+      </nav>
+      <div class="cards"><section class="lesson-card" id="card-01">
+          <header class="lesson-head">
+            <span class="lesson-number">01</span>
+            <div><h2>為什麼我們看得見東西？</h2><p><span>從眼睛看到的現象開始</span><span>光要進入眼睛</span></p></div>
+          </header>
+          <div class="card-main lesson-body"><div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>我在家看電視時，電視螢幕的光直接進入眼睛；可是書頁自己不發光，阿公怎麼也看得見？</p></div><div class="scene-example-head"><h3>小葵看見電視螢幕發出的光</h3></div><button class="aperture-scene-action" type="button" id="aperture-reset" disabled="" data-scene-pending-control="">重設位置</button></div>
+        </section><section class="unit-booklet" id="unit-booklet" data-scene-state="loading" aria-busy="true" aria-labelledby="unit-booklet-title">
+          <header class="booklet-heading">
+            <span class="booklet-mark" aria-hidden="true">?</span>
+            <div><p class="booklet-kicker">單元小測</p><h2 id="unit-booklet-title">月光影子劇場</h2><p>替小葵和阿公完成一幕影子戲。把舞台道具移到合適的位置，讓實際投影和目標描邊重合。</p></div>
+          </header>
+          <div class="booklet-body">格式比對用內容。</div>
+        </section></div>
+    </div>
+  </main><footer class="shell">格式比對</footer></body></html>
