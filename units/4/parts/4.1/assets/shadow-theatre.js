@@ -511,7 +511,10 @@ if (canvas) {
     updateCamera();
   }, { passive: false });
 
+  let completionTimer;
   const reset = () => {
+    window.clearTimeout(completionTimer);
+    warmFill.intensity = 32;
     completed = false;
     yaw = home.yaw;
     pitch = home.pitch;
@@ -551,7 +554,8 @@ if (canvas) {
     finishNote.dataset.done = 'true';
     status.textContent = '演出完成！你的影子戲登上月光舞台。';
     warmFill.intensity = 43;
-    window.setTimeout(() => { if (completed) warmFill.intensity = 32; }, 750);
+    window.clearTimeout(completionTimer);
+    completionTimer = window.setTimeout(() => { if (completed) warmFill.intensity = 32; }, 750);
   });
 
   canvas.addEventListener('keydown', (event) => {
@@ -589,10 +593,12 @@ if (canvas) {
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(canvas);
   resize();
+  status.textContent = '月亮、兔子、樹影，等你上場';
   updateProgress();
   animate();
 
   window.addEventListener('pagehide', () => {
+    window.clearTimeout(completionTimer);
     cancelAnimationFrame(animationId);
     resizeObserver.disconnect();
     renderer.dispose();

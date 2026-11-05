@@ -1495,3 +1495,12 @@ depth-lab以觀看配對取代已刪除的接頸檢查：水平虛線、眼睛�
 ## 4.3 第六區約兩秒的漸進加放水（2026-11-04）
 
 既有動態偏好檢查改驗兩種偏好都漸進、切換偏好不跳端點。以實際click／tap計時、MutationObserver逐幀觀察Canvas已繪製水位與側圖水面／像素摘要，檢查正常及減少動態的加滿／放空、中途40→100／60→0與播放中改偏好，手機原生觸控也量測。每次端點約兩秒，中間至少四個實際繪製水位，雙視圖數值同步，滿量行程須有不同中間像素；不使用模擬時鐘取代實際時間。`water-timing.json`保存觀測。專項16項、加格式及整課22項，原方向反轉、手動接管及離屏續播保持。
+## 4.1 共通規格六項修正（2026-11-05）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.1-readiness.test.cjs tests/unit-1.1-aperture.test.cjs tests/unit-1.1-shadow-theatre.test.cjs tests/unit-4.1-scene-failure.test.cjs tests/unit-4.1-layout.test.cjs
+```
+
+新增readiness七項（含外層）：靜態分享標題／摘要／URL／開場圖及實際PNG尺寸、夜間四種狀態、320px圖片失敗及鍵盤重試、較早成功／失敗請求不覆蓋目前場景、四個3D區載入期間停用控制及實際孔板就緒後讀值／通光同步。`UNIT41_READY_CAPTURE`保存畫面與觀察記錄；不提供該變數也可執行。
+
+劇場新增快速完成／重設還原補光及清理延遲回呼的實際流程，原投影及操作檢查沿用。孔板觸控測試將窄版投影出的拖曳距離維持至少24px，超過既有6px門檻；產品門檻不改。孔板專項隔離未測的另外三個3D場景，保留圖片、第二區開關及計時回歸；整課場景與主要操作仍由layout套件檢查。五檔合計50項（含外層），執行結果以當輪日誌為準。

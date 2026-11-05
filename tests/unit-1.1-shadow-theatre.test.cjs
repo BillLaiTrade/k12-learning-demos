@@ -58,7 +58,7 @@ test('影子劇場實際操作：學生調大小與位置後才小幅吸附',{ti
  async function open(context){const p=await context.newPage();p.on('pageerror',e=>errors.push(e.message));p.on('requestfailed',r=>errors.push(r.url()));p.on('response',r=>{if(r.status()>=400)errors.push(r.url());});
   await p.addInitScript(()=>document.addEventListener('DOMContentLoaded',()=>{const s=document.createElement('style');s.textContent='html{scroll-behavior:auto!important}';document.head.append(s);}));
   await p.route(/\/assets\/(?:aperture-3d|shadow-3d|shadow-size-3d)\.js(?:\?.*)?$/,route=>route.fulfill({contentType:'text/javascript',body:''}));
-  await p.route('**/assets/shadow-theatre.js*',async route=>{const response=await route.fetch(),body=await response.text();assert.ok(body.includes('const checkPlacement = (prop, allowSnap = true) => {'));await route.fulfill({response,body:body.replace('const checkPlacement = (prop, allowSnap = true) => {','window.__theatreTest={props,camera,scene,lightSource,shadowScale,screenZ}; const checkPlacement = (prop, allowSnap = true) => {')});});
+  await p.route('**/assets/shadow-theatre.js*',async route=>{const response=await route.fetch(),body=await response.text();assert.ok(body.includes('const checkPlacement = (prop, allowSnap = true) => {'));await route.fulfill({response,body:body.replace('const checkPlacement = (prop, allowSnap = true) => {','window.__theatreTest={props,camera,scene,lightSource,shadowScale,screenZ,warmFill}; const checkPlacement = (prop, allowSnap = true) => {')});});
   await p.bringToFront();await p.goto(url,{waitUntil:'networkidle'});await p.locator('#shadow-theatre-scene').scrollIntoViewIfNeeded();await p.waitForFunction(()=>!!window.__theatreTest,null,{polling:100,timeout:60000});return p;
  }
  const context=await browser.newContext({viewport:{width:1440,height:1050}}),p=await open(context);
@@ -102,6 +102,20 @@ test('影子劇場實際操作：學生調大小與位置後才小幅吸附',{ti
   await expect(finish).toBeEnabled();await finish.click();await expect(finish).toHaveText('演出完成');await expect(finish).toBeDisabled();await p.locator('#shadow-theatre-reset').click();
  });
  async function screenPoint(page,id,dx=0,dy=0){return page.locator('#shadow-theatre-scene').evaluate((el,{id,dx,dy})=>{const a=window.__theatreTest,v=a.props.get(id).mesh.position.clone();v.x+=dx;v.y+=dy;v.project(a.camera);const r=el.getBoundingClientRect();return{x:r.x+(v.x+1)*r.width/2,y:r.y+(1-v.y)*r.height/2};},{id,dx,dy});}
+ await t.test('演出完成後立即重設，清除完成燈光及延遲回呼',async()=>{
+  for(const id of ['moon','rabbit','tree']){
+   await select(id);const input=p.locator('#shadow-theatre-depth');await input.fill('6.57');await input.dispatchEvent('input');await input.dispatchEvent('change');await alignXY(id);
+  }
+  await expect(p.locator('#shadow-theatre-finish')).toBeEnabled();
+  const lighting=await p.evaluate(()=>{
+   const initial=window.__theatreTest.warmFill.intensity;
+   document.querySelector('#shadow-theatre-finish').click();const finished=window.__theatreTest.warmFill.intensity;
+   document.querySelector('#shadow-theatre-reset').click();return{initial,finished,reset:window.__theatreTest.warmFill.intensity};
+  });
+  assert.deepEqual(lighting,{initial:32,finished:43,reset:32});await p.waitForTimeout(850);
+  assert.equal(await p.evaluate(()=>window.__theatreTest.warmFill.intensity),32);
+  await expect(p.locator('.booklet-progress-track')).toHaveAttribute('aria-valuenow','0');await expect(p.locator('#shadow-theatre-finish')).toBeDisabled();
+ });
  await t.test('滑鼠拖曳保留深度；滾輪只縮放視角，不移動或吸附道具',async()=>{
   const el=p.locator('#shadow-theatre-scene');await el.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await p.waitForTimeout(250);const a=await screenPoint(p,'moon'),b=await screenPoint(p,'moon',.2,.2),before=(await read()).moon;
   await p.mouse.move(a.x,a.y);await p.mouse.down();assert.equal(await el.evaluate(e=>e.hasPointerCapture(1)),true);await p.mouse.move(b.x,b.y,{steps:8});await p.mouse.up();const dragged=(await read()).moon;assert.equal(dragged.z,before.z);assert.ok(!dragged.placed);assert.ok(Math.hypot(dragged.x-before.x,dragged.y-before.y)>.1);

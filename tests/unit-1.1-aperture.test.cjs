@@ -61,6 +61,8 @@ test('第三區實際器材、亮點、燈號與既有操作',{timeout:240000},a
   const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});t.after(()=>browser.close());
   const url=`http://127.0.0.1:${port}/units/4/parts/4.1/#card-03`,errors=[];
   async function open(context){const p=await context.newPage();p.on('pageerror',e=>{errors.push(e.message);console.error('Browser error:',e.message);});p.on('requestfailed',r=>errors.push(r.url()));p.on('response',r=>{if(r.status()>=400)errors.push(r.url());});
+    // Keep this optical/interaction suite focused on the aperture scene.
+    await p.route(/\/assets\/(?:shadow-3d|shadow-size-3d|shadow-theatre)\.js(?:\?.*)?$/,route=>route.fulfill({contentType:'text/javascript',body:''}));
     await p.route('**/assets/aperture-3d.js*',async route=>{const response=await route.fetch(),body=await response.text();assert.ok(body.includes('const updateExperiment = () => {'));
       await route.fulfill({response,body:body.replace('const updateExperiment = () => {','window.__apertureTest={plateStates,plates,spot,spotGlow,mats,camera,scene}; const updateExperiment = () => {')});});
     await p.bringToFront();await p.goto(url,{waitUntil:'networkidle'});await p.waitForFunction(()=>!!window.__apertureTest,null,{polling:100}).catch(e=>{throw Error('Aperture load failure: '+JSON.stringify({url:p.url(),errors})+' '+e.message);});return p;
@@ -108,7 +110,8 @@ test('第三區實際器材、亮點、燈號與既有操作',{timeout:240000},a
     await context.close();await browser.close();
     const mobileBrowser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});
     const c=await mobileBrowser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true,reducedMotion:'reduce'}),page=await open(c),el=page.locator('#aperture-3d-scene');
-    try{await check(page);await el.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await page.waitForTimeout(250);const a=await point(page,0,1.59),b=await point(page,.4,1.28),cdp=await c.newCDPSession(page);
+    try{await check(page);await el.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await page.waitForTimeout(250);const a=await point(page,0,1.59),target=await point(page,.4,1.28),distance=Math.hypot(target.x-a.x,target.y-a.y),factor=Math.max(1,24/distance),b={x:a.x+(target.x-a.x)*factor,y:a.y+(target.y-a.y)*factor},cdp=await c.newCDPSession(page);
+      assert.ok(Math.hypot(b.x-a.x,b.y-a.y)>=23.9,'窄版仍超過6px防誤觸門檻');
       await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:a.x,y:a.y,id:1}]});for(let i=1;i<=8;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:a.x+(b.x-a.x)*i/8,y:a.y+(b.y-a.y)*i/8,id:1}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
       const moved=await check(page);assert.ok(Math.abs(moved.states[1].height-.31)>.1);await page.locator('#aperture-reset').tap();assert.equal((await check(page)).power,0);await shot('mobile-touch',page);
     }finally{await c.close();await mobileBrowser.close();}

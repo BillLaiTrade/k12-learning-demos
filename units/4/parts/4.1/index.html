@@ -6,9 +6,23 @@
   <meta name="theme-color" content="#f4f7f1">
   <meta name="description" content="從光源與看見物體開始，探索光的直進、影子，再以光速收尾。">
   <link rel="icon" href="data:,">
-  <title>書頁不發光，我們為什麼看得見它？｜光學單元</title>
-  <meta property="og:title" content="書頁不發光，我們為什麼看得見它？">
-  <meta name="twitter:title" content="書頁不發光，我們為什麼看得見它？">
+  <title>書頁不發光，我們為什麼看得見它？｜4.1 光與看見</title>
+  <link rel="canonical" href="https://billlaitrade.github.io/k12-learning-demos/units/4/parts/4.1/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:url" content="https://billlaitrade.github.io/k12-learning-demos/units/4/parts/4.1/">
+  <meta property="og:title" content="書頁不發光，我們為什麼看得見它？｜4.1 光與看見">
+  <meta property="og:description" content="從光源與看見物體開始，探索光的直進、影子，再以光速收尾。">
+  <meta property="og:image" content="https://billlaitrade.github.io/k12-learning-demos/units/4/parts/4.1/assets/unit-1-light-title.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1672">
+  <meta property="og:image:height" content="941">
+  <meta property="og:image:alt" content="夜晚的實驗室裡，小葵和阿公觀察三個小孔的直線光路、球體在屏幕上形成的影子，以及地球和月球模型。">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="書頁不發光，我們為什麼看得見它？｜4.1 光與看見">
+  <meta name="twitter:description" content="從光源與看見物體開始，探索光的直進、影子，再以光速收尾。">
+  <meta name="twitter:image" content="https://billlaitrade.github.io/k12-learning-demos/units/4/parts/4.1/assets/unit-1-light-title.png">
+  <meta name="twitter:image:alt" content="夜晚的實驗室裡，小葵和阿公觀察三個小孔的直線光路、球體在屏幕上形成的影子，以及地球和月球模型。">
   <style>
     :root {
       color-scheme: light;
@@ -148,6 +162,11 @@
     .lamp-switch[aria-pressed="true"] .switch-status { color: #9b681d; }
     .night-scene { position: relative; margin: 0; overflow: hidden; border: 1px solid #263d48; border-radius: 17px; background: #07172a; box-shadow: 0 5px 18px #243a3514; }
     .night-scene img { display: block; width: 100%; height: auto; aspect-ratio: 1672 / 941; object-fit: cover; }
+    .night-experiment:not([data-night-state="ready"]) .night-scene img { visibility: hidden; }
+    .night-scene-message { position: absolute; inset: 0; display: grid; align-content: center; justify-items: center; gap: 12px; padding: 16px; background: #f5f3eb; color: #405851; text-align: center; }
+    .night-scene-message[hidden] { display: none; }
+    .night-scene-message p { margin: 0; }
+    .night-scene-message button { min-height: 44px; padding: 9px 16px; border: 1px solid var(--line); border-radius: 13px; background: #fff; color: var(--ink); font-weight: 750; }
     .path-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
     .path-chip { padding: 6px 10px; border: 1px solid #dce7e8; border-radius: 10px; background: #eef6f8; color: #426e84; font-size: .79rem; font-weight: 750; }
     .path-chip.lamp { border-color: #f0dfbd; background: #fff6e7; color: #916222; }
@@ -459,7 +478,7 @@
             <p>能自己發光的物體叫作光源，例如太陽和亮著的檯燈。切換照向月球的陽光和書桌檯燈，觀察月亮、書頁與光路如何改變。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>月亮的光從哪裡來？只靠月光，看得見書嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>月亮本身不發光，是反射太陽光。我們可以試著關掉檯燈，看看書頁和光路會怎麼變。</p></div>
-            <div class="night-experiment">
+            <div class="night-experiment" data-night-state="loading">
               <div class="night-switches" role="group" aria-label="切換夜間場景中的光源">
                 <button class="light-switch moon-switch" id="moonlight-toggle" type="button" aria-pressed="true" aria-describedby="moonlight-hint">
                   <span class="source-icon" aria-hidden="true">☼</span>
@@ -474,9 +493,9 @@
                   <span class="switch-status">開啟</span>
                 </button>
               </div>
-              <figure class="night-scene">
+              <figure class="night-scene" aria-busy="true">
                 <img id="night-scene-image" src="assets/night-scene-both-on.webp" alt="夜晚的小葵在檯燈下看書，窗外月亮明亮可見。">
-
+                <div class="night-scene-message" id="night-scene-message" role="status"><p id="night-scene-message-text">場景圖片載入中，請稍候。</p><button id="night-scene-retry" type="button" hidden>重新載入場景</button></div>
               </figure>
               <div class="path-legend" id="path-legend" aria-live="polite"></div>
               <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p id="night-feedback" aria-live="polite"></p></div>
@@ -492,27 +511,28 @@
           <div class="card-main lesson-body">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>現在中間板偏高，屏幕沒有亮點；光會不會自己轉彎，繞過中間板呢？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>先把中間板往下調，直到屏幕出現亮點；再慢慢往上移，觀察亮點如何變化。</p></div>
-            <div class="aperture-lab">
+            <div class="aperture-lab" data-scene-state="loading" aria-busy="true">
               <p class="visual-caption" id="aperture-operation-hint">點選下方孔板名稱，再用滑桿調整高度；也可直接拖曳孔板前後或上下移動。</p>
               <div class="aperture-scene-with-height">
                 <div class="aperture-scene-frame">
-                  <canvas id="aperture-3d-scene" tabindex="0" aria-label="3D 小孔實驗台"></canvas>
+                  <canvas id="aperture-3d-scene" data-scene-tabindex="0" aria-label="3D 小孔實驗台" tabindex="-1" aria-disabled="true"></canvas>
                   <p class="scene-load-failure" id="aperture-load-failure" role="alert" tabindex="-1" hidden></p>
+                <p class="scene-load-failure" data-scene-loading role="status">立體畫面載入中，請稍候。</p>
                   <div class="aperture-scene-actions">
-                    <button class="aperture-scene-action" type="button" id="aperture-reset">重設位置</button>
-                    <button class="aperture-scene-action" type="button" id="aperture-view-reset">重設視角</button>
+                    <button class="aperture-scene-action" type="button" id="aperture-reset" disabled data-scene-pending-control>重設位置</button>
+                    <button class="aperture-scene-action" type="button" id="aperture-view-reset" disabled data-scene-pending-control>重設視角</button>
                   </div>
                 </div>
                 <div class="aperture-height-control">
-                  <output id="aperture-offset-output" class="is-standard">標準高度</output>
+                  <output id="aperture-offset-output">載入中</output>
                   <span class="aperture-height-arrow" aria-hidden="true">↑</span>
-                  <input id="aperture-offset" type="range" min="-100" max="100" step="1" value="0" aria-label="上下調整選取小孔板的高度">
+                  <input id="aperture-offset" type="range" min="-100" max="100" step="1" value="0" aria-label="上下調整選取小孔板的高度" disabled data-scene-pending-control>
                   <span class="aperture-height-arrow" aria-hidden="true">↓</span>
                 </div>
               </div>
-              <div class="equipment-labels"><span>光源</span><button type="button" data-plate="0" aria-pressed="false">小孔板 1<svg class="aperture-through-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4m-2-20a7 7 0 0 0-4.2 12.6c.8.6 1.2 1.3 1.2 2.4h6c0-1.1.4-1.8 1.2-2.4A7 7 0 0 0 12 1Z" fill="#f5c64d" stroke="#9b701b" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 5.2a4.2 4.2 0 0 0-2.1 4" fill="none" stroke="#fff4c2" stroke-width="1.4" stroke-linecap="round"/></svg></button><button type="button" data-plate="1" aria-pressed="true">中間板<svg class="aperture-through-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4m-2-20a7 7 0 0 0-4.2 12.6c.8.6 1.2 1.3 1.2 2.4h6c0-1.1.4-1.8 1.2-2.4A7 7 0 0 0 12 1Z" fill="#f5c64d" stroke="#9b701b" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 5.2a4.2 4.2 0 0 0-2.1 4" fill="none" stroke="#fff4c2" stroke-width="1.4" stroke-linecap="round"/></svg></button><button type="button" data-plate="2" aria-pressed="false">小孔板 3<svg class="aperture-through-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4m-2-20a7 7 0 0 0-4.2 12.6c.8.6 1.2 1.3 1.2 2.4h6c0-1.1.4-1.8 1.2-2.4A7 7 0 0 0 12 1Z" fill="#f5c64d" stroke="#9b701b" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 5.2a4.2 4.2 0 0 0-2.1 4" fill="none" stroke="#fff4c2" stroke-width="1.4" stroke-linecap="round"/></svg></button><span>屏幕</span></div>
-              <div class="aperture-result" id="aperture-result" aria-live="polite"><span class="aperture-result-dot" aria-hidden="true"></span><span>三個小孔排成一直線，屏幕上出現亮點。</span></div>
-              <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p id="aperture-xiaokui-observation" aria-live="polite">中間板偏高時，亮點消失了；光沒有繞過去。</p></div>
+              <div class="equipment-labels"><span>光源</span><button type="button" data-plate="0" aria-pressed="false" disabled data-scene-pending-control>小孔板 1<svg class="aperture-through-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4m-2-20a7 7 0 0 0-4.2 12.6c.8.6 1.2 1.3 1.2 2.4h6c0-1.1.4-1.8 1.2-2.4A7 7 0 0 0 12 1Z" fill="#f5c64d" stroke="#9b701b" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 5.2a4.2 4.2 0 0 0-2.1 4" fill="none" stroke="#fff4c2" stroke-width="1.4" stroke-linecap="round"/></svg></button><button type="button" data-plate="1" aria-pressed="true" disabled data-scene-pending-control>中間板<svg class="aperture-through-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4m-2-20a7 7 0 0 0-4.2 12.6c.8.6 1.2 1.3 1.2 2.4h6c0-1.1.4-1.8 1.2-2.4A7 7 0 0 0 12 1Z" fill="#f5c64d" stroke="#9b701b" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 5.2a4.2 4.2 0 0 0-2.1 4" fill="none" stroke="#fff4c2" stroke-width="1.4" stroke-linecap="round"/></svg></button><button type="button" data-plate="2" aria-pressed="false" disabled data-scene-pending-control>小孔板 3<svg class="aperture-through-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6m-5 3h4m-2-20a7 7 0 0 0-4.2 12.6c.8.6 1.2 1.3 1.2 2.4h6c0-1.1.4-1.8 1.2-2.4A7 7 0 0 0 12 1Z" fill="#f5c64d" stroke="#9b701b" stroke-width="1.5" stroke-linejoin="round"/><path d="M10 5.2a4.2 4.2 0 0 0-2.1 4" fill="none" stroke="#fff4c2" stroke-width="1.4" stroke-linecap="round"/></svg></button><span>屏幕</span></div>
+              <div class="aperture-result" id="aperture-result" aria-live="polite"><span class="aperture-result-dot" aria-hidden="true"></span><span>立體畫面載入中，尚未顯示通光結果。</span></div>
+              <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p id="aperture-xiaokui-observation" aria-live="polite">等畫面準備好後，再觀察小孔與亮點。</p></div>
               <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>你看，小孔前後距離改變時，只要仍排成一直線，光就能通過；稍微偏離時，屏幕亮點會變暗；偏得太多，光被板片擋住，亮點就消失了。光在均勻介質中沿直線傳播，本實驗以空氣為例。</p></div>
             </div>
           </div>
@@ -523,27 +543,28 @@
             <span class="lesson-number">04</span>
             <div><h2>影子怎麼形成？</h2><p><span>把直線光路連到影子</span><span>不透明物體擋住光</span></p></div>
           </header>
-          <div class="card-main lesson-body">
+          <div class="card-main lesson-body" data-scene-state="loading" aria-busy="true">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>剛才孔板擋住了光；如果換成一顆不透明球，屏幕上是不是也會留下暗的地方？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>沿著光源到屏幕的路徑看一看，球擋住光之後，屏幕哪裡收不到光？</p></div>
             <p>光源發出的光沿直線前進。不透明物體擋住光源的光，使屏幕上部分區域受到較少或沒有這個光源的直接照射，形成影子。</p>
             <div class="shadow-lab">
               <div class="shadow-scene-frame">
-                <canvas id="shadow-3d-scene" role="img" aria-label="可旋轉觀察的立體影子實驗：可直接拖曳球體沿導軌移動，觀察屏幕影子變化。" aria-describedby="shadow-scene-status shadow-view-hint"></canvas>
+                <canvas id="shadow-3d-scene" role="img" aria-label="可旋轉觀察的立體影子實驗：可直接拖曳球體沿導軌移動，觀察屏幕影子變化。" aria-describedby="shadow-scene-status shadow-view-hint" tabindex="-1" aria-disabled="true"></canvas>
                 <p class="scene-load-failure" id="shadow-load-failure" role="alert" tabindex="-1" hidden></p>
-                <div class="shadow-scene-actions"><button class="shadow-scene-action" id="shadow-view-reset" type="button">重設視角</button></div>
-                <p class="shadow-scene-status" id="shadow-scene-status" aria-live="polite">球體停在光路旁，屏幕均勻受光。</p>
+                <p class="scene-load-failure" data-scene-loading role="status">立體畫面載入中，請稍候。</p>
+                <div class="shadow-scene-actions"><button class="shadow-scene-action" id="shadow-view-reset" type="button" disabled data-scene-pending-control>重設視角</button></div>
+                <p class="shadow-scene-status" id="shadow-scene-status" aria-live="polite">立體畫面載入中，請稍候。</p>
               </div>
               <div class="shadow-controls" role="group" aria-label="影子形成實驗控制">
                 <div class="shadow-fixed-label"><span aria-hidden="true">●</span>光源固定</div>
-                <button class="shadow-block-toggle" id="shadow-block-toggle" type="button" aria-pressed="false" aria-label="將遮擋球沿導軌滑入光路">
+                <button class="shadow-block-toggle" id="shadow-block-toggle" type="button" aria-pressed="false" aria-label="將遮擋球沿導軌滑入光路" disabled data-scene-pending-control>
                   <span class="shadow-toggle-copy"><strong>遮擋物</strong><small id="shadow-toggle-label">滑入光路</small></span>
                   <span class="shadow-toggle-track" aria-hidden="true"><i></i></span>
                 </button>
                 <div class="shadow-fixed-label"><span aria-hidden="true">▯</span>屏幕固定</div>
               </div>
               <p class="visual-caption" id="shadow-view-hint">直接拖曳球體沿導軌移動，屏幕影子會隨位置改變；拖曳空白處可旋轉場景，滾輪或雙指可縮放。</p>
-              <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p id="shadow-xiaokui-observation" aria-live="polite">球在光路旁，屏幕上還沒有球的影子。</p></div>
+              <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p id="shadow-xiaokui-observation" aria-live="polite">等畫面準備好後，再觀察影子。</p></div>
             </div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p id="shadow-grandpa-explanation" aria-live="polite">試著把球移進光路，看看屏幕哪裡會變暗。</p></div>
           </div>
@@ -558,15 +579,16 @@
             <p>試著移動光源和屏幕之間的遮擋物。觀察它靠近光源或靠近屏幕時，屏幕上的影子有什麼變化。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p>同一個物體的影子，為什麼有時會變大，有時又會變小呢？</p></div>
             <div class="dialogue"><span class="speaker"><span class="sr-only">阿公</span></span><p>試著讓遮擋物靠近光源，再慢慢遠離光源，觀察影子的大小如何改變。</p></div>
-            <div class="visual">
+            <div class="visual" data-scene-state="loading" aria-busy="true">
               <div class="shadow-scene-frame shadow-size-scene-frame">
-                <canvas id="shadow-size-3d-scene" role="img" aria-label="可旋轉觀察的立體影子大小實驗：直接拖曳球體沿光源到屏幕的方向前後移動，觀察屏幕上的影子大小變化。" aria-describedby="shadow-size-scene-status shadow-size-feedback"></canvas>
+                <canvas id="shadow-size-3d-scene" role="img" aria-label="可旋轉觀察的立體影子大小實驗：直接拖曳球體沿光源到屏幕的方向前後移動，觀察屏幕上的影子大小變化。" aria-describedby="shadow-size-scene-status shadow-size-feedback" tabindex="-1" aria-disabled="true"></canvas>
                 <p class="scene-load-failure" id="shadow-size-load-failure" role="alert" tabindex="-1" hidden></p>
-                <div class="shadow-scene-actions"><button class="shadow-scene-action" id="shadow-size-view-reset" type="button">重設視角</button></div>
-                <p class="shadow-scene-status" id="shadow-size-scene-status" aria-live="polite">球體目前靠近光源，屏幕上的影子較大。</p>
+                <p class="scene-load-failure" data-scene-loading role="status">立體畫面載入中，請稍候。</p>
+                <div class="shadow-scene-actions"><button class="shadow-scene-action" id="shadow-size-view-reset" type="button" disabled data-scene-pending-control>重設視角</button></div>
+                <p class="shadow-scene-status" id="shadow-size-scene-status" aria-live="polite">立體畫面載入中，請稍候。</p>
               </div>
               <p class="visual-caption" id="shadow-size-feedback" aria-live="polite">拖曳球體沿導軌前後移動，觀察影子大小改變；拖曳空白處可旋轉場景，滾輪或雙指可縮放。</p>
-              <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p id="shadow-size-xiaokui-observation" aria-live="polite">球目前靠近光源，屏幕上的影子較大。</p></div>
+              <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p id="shadow-size-xiaokui-observation" aria-live="polite">等畫面準備好後，再比較影子大小。</p></div>
             </div>
           </div>
         </section>
@@ -610,7 +632,7 @@
           </div>
         </section>
 
-        <section class="unit-booklet" id="unit-booklet" aria-labelledby="unit-booklet-title">
+        <section class="unit-booklet" id="unit-booklet" data-scene-state="loading" aria-busy="true" aria-labelledby="unit-booklet-title">
           <header class="booklet-heading">
             <span class="booklet-mark" aria-hidden="true">?</span>
             <div><p class="booklet-kicker">單元小測</p><h2 id="unit-booklet-title">月光影子劇場</h2><p>替小葵和阿公完成一幕影子戲。把舞台道具移到合適的位置，讓實際投影和目標描邊重合。</p></div>
@@ -621,10 +643,11 @@
           <div class="booklet-game-layout">
             <div class="booklet-stage-column">
               <div class="booklet-stage-frame">
-                <canvas id="shadow-theatre-scene" tabindex="0" aria-label="可切換視角的 3D 月光影子劇場。拖動月亮、兔子和樹影道具，將它們投出的影子移到屏幕上的描邊位置；拖動空白處可轉動視角。" aria-describedby="shadow-theatre-help"></canvas>
+                <canvas id="shadow-theatre-scene" data-scene-tabindex="0" aria-label="可切換視角的 3D 月光影子劇場。拖動月亮、兔子和樹影道具，將它們投出的影子移到屏幕上的描邊位置；拖動空白處可轉動視角。" aria-describedby="shadow-theatre-help" tabindex="-1" aria-disabled="true"></canvas>
                 <p class="scene-load-failure" id="shadow-theatre-load-failure" role="alert" tabindex="-1" hidden></p>
-                <div class="booklet-stage-actions"><button class="booklet-stage-button" id="shadow-theatre-reset" type="button">重設舞台</button><button class="booklet-stage-button" id="shadow-theatre-view" type="button">切換視角</button></div>
-                <div class="booklet-stage-badge"><span class="booklet-live-dot"></span><span id="shadow-theatre-status" aria-live="polite">月亮、兔子、樹影，等你上場</span></div>
+                <p class="scene-load-failure" data-scene-loading role="status">立體畫面載入中，請稍候。</p>
+                <div class="booklet-stage-actions"><button class="booklet-stage-button" id="shadow-theatre-reset" type="button" disabled data-scene-pending-control>重設舞台</button><button class="booklet-stage-button" id="shadow-theatre-view" type="button" disabled data-scene-pending-control>切換視角</button></div>
+                <div class="booklet-stage-badge"><span class="booklet-live-dot"></span><span id="shadow-theatre-status" aria-live="polite">舞台載入中，請稍候。</span></div>
               </div>
               <p class="visual-caption" id="shadow-theatre-view-hint">滾輪可縮放視角；道具前後位置請用尺軌調整。</p>
               <p class="sr-only" id="shadow-theatre-help">選取道具後拖動尺軌調整前後距離，再拖動舞台道具對齊描邊。影子大小與位置都接近才會吸附。拖曳空白處轉動視角，方向鍵移動選中道具，滾輪縮放視角。</p>
@@ -632,15 +655,15 @@
                 <div class="booklet-depth-header"><label id="shadow-theatre-depth-label" for="shadow-theatre-depth">前後位置</label><span class="booklet-depth-meta"><output id="shadow-theatre-depth-readout" for="shadow-theatre-depth">位置 0.0</output><span aria-hidden="true">左右拖動</span></span></div>
                 <div class="booklet-depth-row">
                   <span class="booklet-depth-end" data-depth-end="light"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6V18L14 16V8Z" fill="#365d50" stroke="#28483c"/><ellipse cx="14" cy="12" rx="3" ry="5" fill="#fff0b6" stroke="#bd9041"/><path d="M5 18V21M18 7L21 5M19 12H23M18 17L21 19" fill="none" stroke="#bd9041" stroke-width="1.5" stroke-linecap="round"/></svg>光源</span>
-                  <div class="booklet-depth-ruler"><div class="booklet-depth-scale" aria-hidden="true"><div class="booklet-depth-ticks" id="shadow-theatre-depth-ticks"></div><div class="booklet-depth-numbers" id="shadow-theatre-depth-numbers"></div></div><input id="shadow-theatre-depth" type="range" min="0" max="10" step="0.01" value="5" aria-describedby="shadow-theatre-depth-hint"></div>
+                  <div class="booklet-depth-ruler"><div class="booklet-depth-scale" aria-hidden="true"><div class="booklet-depth-ticks" id="shadow-theatre-depth-ticks"></div><div class="booklet-depth-numbers" id="shadow-theatre-depth-numbers"></div></div><input id="shadow-theatre-depth" type="range" min="0" max="10" step="0.01" value="5" aria-describedby="shadow-theatre-depth-hint" disabled data-scene-pending-control></div>
                   <span class="booklet-depth-end" data-depth-end="screen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3H19V19H5Z" fill="#faf8eb" stroke="#315548" stroke-width="1.5"/><path d="M12 19V22M8 22H16" fill="none" stroke="#315548" stroke-width="1.5" stroke-linecap="round"/></svg>屏幕</span>
                 </div>
                 <span class="sr-only" id="shadow-theatre-depth-hint">向左靠近光源，向右靠近屏幕。刻度代表相對位置，不是公分或公尺。</span>
               </div>
               <div class="booklet-prop-tray" role="group" aria-label="舞台上的可移動道具">
-                <button type="button" class="booklet-prop-token" data-prop-select="moon" aria-pressed="false"><span class="booklet-prop-icon" aria-hidden="true"><svg viewBox="0 0 50 50"><path d="M16 8c-1 15 8 26 23 27-9 10-25 8-31-3C2 21 7 11 16 8Z"/></svg></span><span>月亮</span><span class="booklet-prop-state" data-prop-state="moon">待定位</span></button>
-                <button type="button" class="booklet-prop-token" data-prop-select="rabbit" aria-pressed="false"><span class="booklet-prop-icon" aria-hidden="true"><svg viewBox="0 0 50 50"><path d="M13 38c-5-7 0-14 8-16-4-8-3-17 1-17 5 0 3 12 6 17 2-8 8-15 11-12 3 3-5 12-6 17 7 4 8 11 2 15-6 4-17 2-22-4Z"/></svg></span><span>兔子</span><span class="booklet-prop-state" data-prop-state="rabbit">待定位</span></button>
-                <button type="button" class="booklet-prop-token" data-prop-select="tree" aria-pressed="false"><span class="booklet-prop-icon" aria-hidden="true"><svg viewBox="0 0 50 50"><path d="M23 43h5V29h11l-5-6h6l-7-8h4L27 5 17 15h4l-7 8h6l-5 6h8Z"/></svg></span><span>樹影</span><span class="booklet-prop-state" data-prop-state="tree">待定位</span></button>
+                <button type="button" class="booklet-prop-token" data-prop-select="moon" aria-pressed="false" disabled data-scene-pending-control><span class="booklet-prop-icon" aria-hidden="true"><svg viewBox="0 0 50 50"><path d="M16 8c-1 15 8 26 23 27-9 10-25 8-31-3C2 21 7 11 16 8Z"/></svg></span><span>月亮</span><span class="booklet-prop-state" data-prop-state="moon">待定位</span></button>
+                <button type="button" class="booklet-prop-token" data-prop-select="rabbit" aria-pressed="false" disabled data-scene-pending-control><span class="booklet-prop-icon" aria-hidden="true"><svg viewBox="0 0 50 50"><path d="M13 38c-5-7 0-14 8-16-4-8-3-17 1-17 5 0 3 12 6 17 2-8 8-15 11-12 3 3-5 12-6 17 7 4 8 11 2 15-6 4-17 2-22-4Z"/></svg></span><span>兔子</span><span class="booklet-prop-state" data-prop-state="rabbit">待定位</span></button>
+                <button type="button" class="booklet-prop-token" data-prop-select="tree" aria-pressed="false" disabled data-scene-pending-control><span class="booklet-prop-icon" aria-hidden="true"><svg viewBox="0 0 50 50"><path d="M23 43h5V29h11l-5-6h6l-7-8h4L27 5 17 15h4l-7 8h6l-5 6h8Z"/></svg></span><span>樹影</span><span class="booklet-prop-state" data-prop-state="tree">待定位</span></button>
               </div>
             </div>
             <aside class="booklet-mission-panel" aria-label="影子劇場任務">
@@ -676,6 +699,13 @@
       const nightImage = document.querySelector('#night-scene-image');
       const nightFeedback = document.querySelector('#night-feedback');
       const pathLegend = document.querySelector('#path-legend');
+      const nightRoot = document.querySelector('.night-experiment');
+      const nightFrame = document.querySelector('.night-scene');
+      const nightMessage = document.querySelector('#night-scene-message');
+      const nightMessageText = document.querySelector('#night-scene-message-text');
+      const nightRetry = document.querySelector('#night-scene-retry');
+      let imageRequest = 0;
+      let retrySerial = 0;
       const nightScenes = {
         'true-true': {
           image: 'assets/night-scene-both-on.webp',
@@ -698,22 +728,55 @@
           text: '如果連月光都沒有，書頁就沒有光可以反射進眼睛，我們也就看不到書本了。'
         }
       };
-      Object.values(nightScenes).forEach(({ image }) => { const preload = new Image(); preload.src = image; });
-      const updateNightScene = () => {
+      const updateNightScene = async (retry = false) => {
+        const request = ++imageRequest;
         const moonOn = moonToggle.getAttribute('aria-pressed') === 'true';
         const lampOn = lampToggle.getAttribute('aria-pressed') === 'true';
         const state = nightScenes[`${moonOn}-${lampOn}`];
-        nightImage.src = state.image;
-        nightImage.alt = state.alt;
         moonToggle.querySelector('.switch-status').textContent = moonOn ? '開啟' : '關閉';
         lampToggle.querySelector('.switch-status').textContent = lampOn ? '開啟' : '關閉';
+        nightRoot.dataset.nightState = 'loading';
+        nightFrame.setAttribute('aria-busy', 'true');
+        nightMessage.hidden = false;
+        nightMessage.setAttribute('role', 'status');
+        nightMessageText.textContent = '場景圖片載入中，請稍候。';
+        nightRetry.hidden = true;
+        pathLegend.textContent = '';
+        nightFeedback.textContent = '圖片準備好後，再一起觀察光路。';
+        const imageURL = new URL(state.image, document.baseURI);
+        if (retry) imageURL.searchParams.set('retry', String(++retrySerial));
+        const pendingImage = new Image();
+        try {
+          await new Promise((resolve, reject) => {
+            pendingImage.onload = resolve;
+            pendingImage.onerror = reject;
+            pendingImage.src = imageURL.href;
+          });
+          await pendingImage.decode();
+        } catch {
+          if (request !== imageRequest) return;
+          nightRoot.dataset.nightState = 'failed';
+          nightFrame.setAttribute('aria-busy', 'false');
+          nightMessage.setAttribute('role', 'alert');
+          nightMessageText.textContent = '場景圖片未能載入，請重試。';
+          nightRetry.hidden = false;
+          nightFeedback.textContent = '目前無法觀察此場景，請重新載入圖片後再試。';
+          return;
+        }
+        if (request !== imageRequest) return;
+        nightImage.src = imageURL.href;
+        nightImage.alt = state.alt;
         pathLegend.innerHTML = `${moonOn ? '<span class="path-chip">陽光 → 月球 → 書頁 → 眼睛</span>' : '<span class="path-chip inactive">月亮的反射光路中斷</span>'}${lampOn ? '<span class="path-chip lamp">檯燈 → 書頁 → 眼睛</span>' : '<span class="path-chip inactive">檯燈照明光路中斷</span>'}`;
         nightFeedback.textContent = state.text;
+        nightRoot.dataset.nightState = 'ready';
+        nightFrame.setAttribute('aria-busy', 'false');
+        nightMessage.hidden = true;
       };
       [moonToggle, lampToggle].forEach((button) => button.addEventListener('click', () => {
         button.setAttribute('aria-pressed', String(button.getAttribute('aria-pressed') !== 'true'));
         updateNightScene();
       }));
+      nightRetry.addEventListener('click', () => updateNightScene(true));
       updateNightScene();
 
       const cards = [...document.querySelectorAll('.lesson-card')];
@@ -749,7 +812,7 @@
       }
     })();
   </script>
-  <script type="module" src="assets/scene-loader.js?v=theatre-wheel-zoom-20261104"></script>
+  <script type="module" src="assets/scene-loader.js?v=ready-controls-20261105"></script>
   <script type="module" src="assets/light-speed-timer.js?v=clear-results-on-start-20261029"></script>
 </body>
 </html>

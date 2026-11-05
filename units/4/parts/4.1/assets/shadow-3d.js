@@ -437,6 +437,8 @@ if (canvas) {
       toggleLabel.textContent = value ? '滑出光路' : '滑入光路';
       toggle.setAttribute('aria-label', value ? '將遮擋球沿導軌滑出光路' : '將遮擋球沿導軌滑入光路');
     };
+    status.textContent = '球體停在光路旁，屏幕均勻受光。';
+    updateObservationForPosition();
     toggle.addEventListener('click', () => {
       const nextState = !blocked;
       setToggleState(nextState);

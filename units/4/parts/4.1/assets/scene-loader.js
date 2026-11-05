@@ -24,7 +24,7 @@ const scenes = [
     canvas: '#shadow-3d-scene',
     root: '#card-04 .lesson-body',
     notice: '#shadow-load-failure',
-    load: () => import('./shadow-3d.js?v=unavailable-state-20261104'),
+    load: () => import('./shadow-3d.js?v=loading-state-20261105'),
     showUnavailable(root) {
       root.querySelector('#shadow-scene-status').textContent = failureMessage;
       root.querySelector('#shadow-toggle-label').textContent = '無法操作';
@@ -49,7 +49,7 @@ const scenes = [
     canvas: '#shadow-theatre-scene',
     root: '#unit-booklet',
     notice: '#shadow-theatre-load-failure',
-    load: () => import('./shadow-theatre.js?v=wheel-view-zoom-20261104'),
+    load: () => import('./shadow-theatre.js?v=reset-light-20261105'),
     showUnavailable(root) {
       root.querySelector('#shadow-theatre-status').textContent = '舞台暫時無法操作';
       root.querySelector('#booklet-target-status').textContent = '舞台暫時無法操作';
@@ -68,6 +68,7 @@ for (const scene of scenes) {
   const root = document.querySelector(scene.root);
   const notice = document.querySelector(scene.notice);
   if (!canvas || !root || !notice) continue;
+  const loading = root.querySelector('[data-scene-loading]');
 
   let failed = false;
   const showFailure = (error) => {
@@ -75,6 +76,9 @@ for (const scene of scenes) {
     failed = true;
     const hadFocus = root.contains(document.activeElement);
     root.dataset.sceneFailed = 'true';
+    root.dataset.sceneState = 'failed';
+    root.setAttribute('aria-busy', 'false');
+    if (loading) loading.hidden = true;
     notice.textContent = failureMessage;
     notice.hidden = false;
     canvas.setAttribute('aria-disabled', 'true');
@@ -86,9 +90,9 @@ for (const scene of scenes) {
     console.error('立體場景無法載入：', scene.canvas, error);
   };
 
-  // Also block already-registered handlers if the graphics context is lost later.
+  // Block handlers before initialization and after a graphics failure.
   const stopFailedInteraction = (event) => {
-    if (!failed || !(event.target instanceof Element)) return;
+    if (root.dataset.sceneState === 'ready' || !(event.target instanceof Element)) return;
     if (event.target !== canvas && !event.target.closest('button, input')) return;
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -98,5 +102,19 @@ for (const scene of scenes) {
   }
   canvas.addEventListener('webglcontextlost', () => showFailure('WebGL context lost'));
   // Dynamic import catches dependency download errors and initialization errors.
-  scene.load().catch(showFailure);
+  scene.load().then(() => {
+    if (failed) return;
+    root.dataset.sceneState = 'ready';
+    root.setAttribute('aria-busy', 'false');
+    canvas.removeAttribute('aria-disabled');
+    if (canvas.dataset.sceneTabindex !== undefined) {
+      canvas.setAttribute('tabindex', canvas.dataset.sceneTabindex);
+      delete canvas.dataset.sceneTabindex;
+    } else canvas.removeAttribute('tabindex');
+    root.querySelectorAll('[data-scene-pending-control]').forEach((control) => {
+      control.disabled = false;
+      control.removeAttribute('data-scene-pending-control');
+    });
+    if (loading) loading.hidden = true;
+  }).catch(showFailure);
 }
