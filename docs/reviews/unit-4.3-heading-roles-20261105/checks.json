@@ -1,0 +1,277 @@
+{
+  "cases": [
+    {
+      "width": 1440,
+      "height": 900,
+      "headers": [
+        {
+          "title": "光在不同介質中一樣快嗎？",
+          "subtitle": "介質與光速：同時出發，比較傳播快慢",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "光正對水面照下去，會轉彎嗎？",
+          "subtitle": "垂直入射：光速與前進方向的比較",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "光斜著進入，會往哪裡偏？",
+          "subtitle": "斜射與折射：入射角與折射角的關係",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "光由水或玻璃射回空氣，方向又會怎樣？",
+          "subtitle": "折射方向：光由水、玻璃進入空氣",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "折射光路能倒著走嗎？",
+          "subtitle": "反向傳播：正反方向的折射光路比較",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "水底的物體看起來在哪裡？",
+          "subtitle": "視深：分清楚實際位置與看起來的位置",
+          "whiteSpace": "normal",
+          "clipped": false
+        }
+      ],
+      "conditions": [
+        {
+          "angle": "0",
+          "medium": "water",
+          "visible": false,
+          "fits": false
+        },
+        {
+          "angle": "40",
+          "medium": "water",
+          "visible": true,
+          "fits": true
+        },
+        {
+          "angle": "0",
+          "medium": "glass",
+          "visible": false,
+          "fits": false
+        },
+        {
+          "angle": "40",
+          "medium": "glass",
+          "visible": true,
+          "fits": true
+        }
+      ]
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "headers": [
+        {
+          "title": "光在不同介質中一樣快嗎？",
+          "subtitle": "介質與光速：同時出發，比較傳播快慢",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "光正對水面照下去，會轉彎嗎？",
+          "subtitle": "垂直入射：光速與前進方向的比較",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "光斜著進入，會往哪裡偏？",
+          "subtitle": "斜射與折射：入射角與折射角的關係",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "光由水或玻璃射回空氣，方向又會怎樣？",
+          "subtitle": "折射方向：光由水、玻璃進入空氣",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "折射光路能倒著走嗎？",
+          "subtitle": "反向傳播：正反方向的折射光路比較",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "水底的物體看起來在哪裡？",
+          "subtitle": "視深：分清楚實際位置與看起來的位置",
+          "whiteSpace": "normal",
+          "clipped": false
+        }
+      ],
+      "conditions": [
+        {
+          "angle": "0",
+          "medium": "water",
+          "visible": false,
+          "fits": false
+        },
+        {
+          "angle": "40",
+          "medium": "water",
+          "visible": true,
+          "fits": true
+        },
+        {
+          "angle": "0",
+          "medium": "glass",
+          "visible": false,
+          "fits": false
+        },
+        {
+          "angle": "40",
+          "medium": "glass",
+          "visible": true,
+          "fits": true
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "headers": [
+        {
+          "title": "光在不同介質中一樣快嗎？",
+          "subtitle": "介質與光速：同時出發，比較傳播快慢",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "光正對水面照下去，會轉彎嗎？",
+          "subtitle": "垂直入射：光速與前進方向的比較",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "光斜著進入，會往哪裡偏？",
+          "subtitle": "斜射與折射：入射角與折射角的關係",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "光由水或玻璃射回空氣，方向又會怎樣？",
+          "subtitle": "折射方向：光由水、玻璃進入空氣",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "折射光路能倒著走嗎？",
+          "subtitle": "反向傳播：正反方向的折射光路比較",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "水底的物體看起來在哪裡？",
+          "subtitle": "視深：分清楚實際位置與看起來的位置",
+          "whiteSpace": "normal",
+          "clipped": false
+        }
+      ],
+      "conditions": [
+        {
+          "angle": "0",
+          "medium": "water",
+          "visible": false,
+          "fits": false
+        },
+        {
+          "angle": "40",
+          "medium": "water",
+          "visible": true,
+          "fits": true
+        },
+        {
+          "angle": "0",
+          "medium": "glass",
+          "visible": false,
+          "fits": false
+        },
+        {
+          "angle": "40",
+          "medium": "glass",
+          "visible": true,
+          "fits": true
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "headers": [
+        {
+          "title": "光在不同介質中一樣快嗎？",
+          "subtitle": "介質與光速：同時出發，比較傳播快慢",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "光正對水面照下去，會轉彎嗎？",
+          "subtitle": "垂直入射：光速與前進方向的比較",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "光斜著進入，會往哪裡偏？",
+          "subtitle": "斜射與折射：入射角與折射角的關係",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "光由水或玻璃射回空氣，方向又會怎樣？",
+          "subtitle": "折射方向：光由水、玻璃進入空氣",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "折射光路能倒著走嗎？",
+          "subtitle": "反向傳播：正反方向的折射光路比較",
+          "whiteSpace": "normal",
+          "clipped": false
+        },
+        {
+          "title": "水底的物體看起來在哪裡？",
+          "subtitle": "視深：分清楚實際位置與看起來的位置",
+          "whiteSpace": "normal",
+          "clipped": false
+        }
+      ],
+      "conditions": [
+        {
+          "angle": "0",
+          "medium": "water",
+          "visible": false,
+          "fits": false
+        },
+        {
+          "angle": "40",
+          "medium": "water",
+          "visible": true,
+          "fits": true
+        },
+        {
+          "angle": "0",
+          "medium": "glass",
+          "visible": false,
+          "fits": false
+        },
+        {
+          "angle": "40",
+          "medium": "glass",
+          "visible": true,
+          "fits": true
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

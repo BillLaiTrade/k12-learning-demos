@@ -38,6 +38,15 @@ function drawPaths(){
 $('#reverse-path').onclick=()=>{reversed=!reversed;drawPaths();};drawPaths();
 const links=$$('.route-inner a');
 const sections=links.map(a=>$(a.hash));
+const teachingHeadings=sections.map(section=>$('.lesson-head h2',section));
+function syncNavTitles(){
+  teachingHeadings.forEach((heading,index)=>{
+    if(heading)$('span',links[index]).textContent=heading.textContent.trim();
+  });
+}
+syncNavTitles();
+const titleObserver=new MutationObserver(syncNavTitles);
+teachingHeadings.filter(Boolean).forEach(heading=>titleObserver.observe(heading,{childList:true,subtree:true,characterData:true}));
 const route=$('.route'), routeInner=$('.route-inner');
 let activeSection;
 function updateNav(){
