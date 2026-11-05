@@ -13,7 +13,8 @@
 
 ## 檔案
 
-- `lesson-base.css`、`lesson-layout.css`：由現行 5.2 複用，保持全站的左右欄卡片、學習導覽與小測格式。本次不修改 5.2。
+- `lesson-base.css`、`lesson-layout.css`：保留初稿基礎樣式；2026-11-05 加載 `units/5/assets/unit-format.css`，以現行共通規格的上方標頭／下方完整內容覆蓋舊左右欄，沿用共用角色與小測樣式。未改動 5.1／5.2 的檔案。
+- `lesson-navigation.js`：直接讀取各區及小測的 `h2` 作為導覽唯一文字來源，監看標題更名並同步更新；HTML 只維護編號與錨點，不另寫一份導覽文案。
 - `heat-model.mjs`：`Q/(mc)` 的純函式模型、材料近似比熱、各實驗樣品條件。
 - `heat-quantity.js`：SVG 儀器／曲線、各區獨立開始／暫停／重來、切換重設、最近六筆結果、小測回饋與側欄標示。失焦或進入背景會暫停；紀錄保留於當次頁面，不寫入永久儲存。
 - `heat-quantity.css`：僅供 5.3 的實驗、紀錄與生活應用；支援窄內容欄與手機。
@@ -36,3 +37,9 @@
 - 比熱與熱量關係參考：[OpenStax College Physics 2e，14.2 Temperature Change and Heat Capacity](https://openstax.org/books/college-physics-2e/pages/14-2-temperature-change-and-heat-capacity)。頁面使用教材常見的 cal 近似值；不以參考表列值作精密物性測量。
 
 功能、版面與部署核對紀錄放在 `docs/reviews/unit-5.3-initial/`。
+
+## 2026-11-05 共通格式修訂
+
+依使用者指示對齊共通規格 v1.2：五區上標頭／下主體、六個導覽標題連動、第二／三區探索問題與五區科學焦點副標；入口、頁面及靜態 OG／Twitter 標題統一。分享圖沿用本頁開場 WebP（1672×941），未新增或替換素材。移回頁首的開場保持原導言與插圖；實驗、生活情境、小測題目與答案政策保留。返回開場時，導覽回到第一區標示。
+
+本輪新增 `tests/unit-5.3-format.test.cjs`，涵蓋靜態分享資料、六入口與更名同步、五區布局、三組桌機與兩組窄版，以及原有活動／小測的代表性回歸。檢查與公開交付見 `docs/reviews/unit-5.3-format-standard-20261105/`；維持第 4 階段，局部格式通過不代表完整內容驗收。

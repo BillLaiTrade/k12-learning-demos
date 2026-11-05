@@ -15,3 +15,6 @@
 @container lesson-content (max-width:430px){.unit-panel,.experiment,.application-panel{padding:14px}.experiment-view{grid-template-columns:1fr}.calorie-equivalence{gap:6px;grid-template-columns:1fr 20px 1fr}.calorie-equivalence strong{font-size:1.2rem}.lab-heading{margin-bottom:13px}.condition-chip{font-size:.74rem}.sample .temperature-readout{font-size:1.1rem}.application-content{grid-template-columns:1fr;gap:12px}.application-content svg{max-width:120px;margin:auto}.setting-row output{font-size:.85rem}.sample-condition{font-size:.7rem}.sample svg text{font-size:12px}}
 @media(max-width:360px){.unit-panel,.experiment,.application-panel{padding:10px}.experiment-controls button{padding:8px 9px;font-size:.8rem}.choice{padding:8px 11px}.sample-rise,.sample-energy{font-size:.7rem}}
 @media(prefers-reduced-motion:reduce){.scale-track>span{transition:none}}
+/* 長導覽標題完整呈現；窄版可在橫向導覽內自然換行。 */
+.route-inner a span{min-width:0;overflow-wrap:anywhere}
+@media(max-width:760px){.route-inner a span{max-width:14rem;white-space:normal}.route-inner a b{flex-shrink:0}.route-inner a{align-items:flex-start}}

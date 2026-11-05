@@ -3,7 +3,7 @@ const root=document.querySelector('#microscope-lab');
 if(root){
  const $=s=>root.querySelector(s),all=s=>[...root.querySelectorAll(s)],g=microscopeGeometry();
  const red='#ec8b6d',blue='#6dbde3',axis=432,k=1.1,Y=s=>550-s*k;
- let step='objective',rays=true,point='both',model=null,view='whole';
+ let step='objective',rays=true,point='both',model=null,view='objective';
  const symbol=(x,y,h,inverted=false)=>{
   const w=Math.max(4,h*.22),radius=Math.max(3,h*.18),stem=Math.max(2,h*.055);
   return `<g transform="translate(${x} ${y})${inverted?' rotate(180)':''}"><path d="M0 ${-h}V${h}" stroke="#8ca778" stroke-width="${stem}"/><path d="M0 ${-h-w}L${-w} ${-h+w}H${w}Z" fill="${red}"/><circle cy="${h}" r="${radius}" fill="${blue}"/></g>`;
@@ -63,7 +63,7 @@ if(root){
    return[(p[0]*scale+(box.width-760*scale)/2)/box.width*100,(p[1]*scale+(box.height-780*scale)/2)/box.height*100];
   };
   let labels='';
-  const targets=view==='objective'?[['中間像',image,true,null],['物鏡',objective,true,'objective'],['原物',at(-g.objective.u),true,null]]:view==='eyepiece'?[['眼睛',at(g.eye+4),true,null],['目鏡',ocular,true,'eyepiece'],['中間像',image,true,null]]:[['目鏡',ocular,step!=='objective','eyepiece'],['中間像',image,true,null],['物鏡',objective,step!=='eyepiece','objective']];
+  const targets=view==='objective'?[['A 中間像',image,true,null],['物鏡',objective,true,'objective'],['原物',at(-g.objective.u),true,null]]:view==='eyepiece'?[['眼睛',at(g.eye+4),true,null],['目鏡',ocular,true,'eyepiece'],['A 中間像',image,true,null]]:[['目鏡',ocular,step!=='objective','eyepiece'],['A 中間像',image,true,null],['物鏡',objective,step!=='eyepiece','objective']];
   for(const [name,p,active,lens]of targets){
    const [x,y]=position(p),attrs=`class="micro-label${view==='whole'?'':' micro-label-right'}" style="left:calc(${x}% ${view==='whole'?'-':'+'} 24px);top:${y}%;opacity:${active?1:.55}"`;
    labels+=`<span class="micro-connector" style="left:calc(${x}% ${view==='whole'?'- 24':'+ 6'}px);top:${y}%"></span>`;
@@ -72,6 +72,11 @@ if(root){
   }
   const left=project(axis-30,Y(g.intermediate)),right=project(axis+30,Y(g.intermediate));
   out+=`<path data-micro-image-plane d="M${left[0]} ${left[1]}L${right[0]} ${right[1]}" stroke="#f1dba2" stroke-width="2.3" stroke-dasharray="4 5"/>`;
+  if(step==='objective'){
+   const f=at(-g.objective.f),twoF=at(-2*g.objective.f),x=objective[0]-82;
+   out+=`<path data-micro-object-range d="M${x} ${f[1]}V${twoF[1]}M${x-5} ${f[1]}h10M${x-5} ${twoF[1]}h10" stroke="#e3c888" stroke-width="1.5" fill="none"/>`;
+   for(const [p,name]of [[f,'F'],[twoF,'2F']]){const [fx,fy]=position([x-24,p[1]]);labels+=`<span class="micro-focus-label" style="left:${fx}%;top:${fy}%">${name}</span>`;}
+  }
   if(step!=='objective'&&view!=='objective'){
    const f=at(g.ocularFocus),x=ocular[0]+(view==='eyepiece'?-82:72);
    out+=`<path d="M${x} ${ocular[1]}V${f[1]}m-6 0h12M${x-6} ${ocular[1]}h12" stroke="#e3c888" fill="none" stroke-width="1.5"/>`;
@@ -79,9 +84,14 @@ if(root){
    labels+=`<span class="micro-focus-label" style="left:${fx}%;top:${fy}%">F</span>`;
   }
   const focused=document.activeElement?.dataset.microLens,focusWasLabel=document.activeElement?.classList.contains('micro-label');
+  const callout=$('[data-micro-a-callout]');
+  const calloutBox=callout.getBoundingClientRect(),startX=calloutBox.right-box.left,startY=calloutBox.top+calloutBox.height/2-box.top;
+  const toSvg=(x,y)=>{if(model)return[x/box.width*760,y/box.height*780];const scale=Math.min(box.width/760,box.height/780);return[(x-(box.width-760*scale)/2)/scale,(y-(box.height-780*scale)/2)/scale];};
+  const from=toSvg(startX,startY);
+  out+=`<path data-micro-a-leader d="M${from[0]} ${from[1]}L${image[0]-20} ${image[1]}" stroke="#e7cb77" stroke-width="1.5" fill="none"/>`;
   $('.micro-labels').innerHTML=labels;
   if(focused)$(`${focusWasLabel?'.micro-label':'.micro-pick'}[data-micro-lens="${focused}"]`)?.focus({preventScroll:true});
-  $('[data-micro-detail-title]').hidden=view==='whole';$('[data-micro-detail-title]').textContent=view==='objective'?'近看物鏡成像':'近看目鏡觀察';
+  $('[data-micro-detail-title]').hidden=view==='whole';$('[data-micro-detail-title]').textContent=view==='objective'?'原物 → 物鏡 → A':'A → 目鏡 → 眼睛';
   $('[data-micro-overview]').hidden=view==='whole';$('[data-micro-map]').hidden=view==='whole';
   if(model?.overview){const img=$('[data-micro-map-image]');if(!img.getAttribute('src'))img.src=model.overview;$('.micro-map-picture').style.aspectRatio=String(model.overviewAspect);}
   const region=$('[data-micro-map-region]'),regionBounds=model?model.overviewRegion(view):view==='objective'?[335,240,195,440]:[355,100,160,265];
@@ -97,13 +107,19 @@ if(root){
   }
   $('#microscope-scene').setAttribute('preserveAspectRatio',model?'none':'xMidYMid meet');
   $('#microscope-scene').innerHTML=out;
-  const first=step==='objective';
-  $('[data-micro-view-title]').textContent=first?'物鏡形成的中間像':'透過目鏡看到的圖案';
-  $('[data-micro-preview]').innerHTML=symbol(100,115,first?36:90,true);
-  $('[data-micro-preview]').setAttribute('aria-label',first?'倒立、放大的中間實像':'透過目鏡看到倒立、放大的虛像');
-  $('[data-micro-badge]').textContent=first?'倒立・放大的實像':'倒立・放大的虛像';
-  $('[data-micro-copy]').textContent=first?'中間像形成在鏡筒內，這裡沒有放置屏幕。':'目鏡把中間像當作觀察對象，圖案相對原物仍倒立。';
-  $('#micro-result').textContent={objective:'① 物鏡先把原物形成倒立、放大的實像；這個像就是中間像。',eyepiece:'② 中間像位於目鏡焦距內，目鏡像放大鏡一樣觀察它，眼睛看見放大的虛像。',both:'③ 兩組透鏡接力：物鏡先成中間像，目鏡再觀察它；最終像仍相對原物倒立。'}[step];
+  const first=step==='objective',ocularStep=step==='eyepiece';
+  $('[data-micro-a-role]').textContent=first?'物鏡形成的實像':ocularStep?'目鏡觀察的物體':'連接兩段的同一個像';
+  $('[data-micro-view-title]').textContent=first?'第一段：物鏡成像':ocularStep?'第二段：目鏡觀察':'完整接力：前後比較';
+  $('.micro-compare-note').textContent=first?'比較成像前後':'比較觀察前後';
+  $('[data-micro-before-label]').textContent=ocularStep?'A 同一個中間像':'原物';
+  $('[data-micro-after-label]').textContent=first?'A 中間實像':'最後看見的虛像';
+  $('[data-micro-before]').innerHTML=symbol(100,115,ocularStep?48:20,ocularStep);
+  $('[data-micro-before]').setAttribute('aria-label',ocularStep?'與第一段相同的 A 中間像，仍是藍上紅下':'原物，紅上藍下');
+  $('[data-micro-preview]').innerHTML=symbol(100,115,first?48:90,true);
+  $('[data-micro-preview]').setAttribute('aria-label',first?'A 中間實像，倒立、放大':'透過目鏡看到的虛像，相對中間像方向不變、進一步放大');
+  $('[data-micro-badge]').textContent=first?'倒立・放大的實像':ocularStep?'不再倒轉・放大的虛像':'相對原物倒立・放大虛像';
+  $('[data-micro-copy]').textContent=first?'A 形成在鏡筒內，這裡沒有放置屏幕。':ocularStep?'目鏡觀察前一步的 A；圖案相對原物仍倒立。':'同一個 A 中間像，連接兩段成像。';
+  $('#micro-result').textContent={objective:'① 原物經物鏡，在鏡筒內形成 A 中間實像。',eyepiece:'② 同一個 A 位於目鏡焦距內，成為目鏡觀察的物體。',both:'③ 兩段接力：物鏡形成的 A 實像，就是目鏡接著觀察的物體。'}[step];
   all('[data-micro-card]').forEach(b=>{const selected=view===b.dataset.microCard;b.setAttribute('aria-pressed',String(selected));b.closest('section').dataset.active=String(selected);});
   all('[data-set=micro]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.value===step)));
   $('[data-micro-rays]').setAttribute('aria-pressed',String(rays));$('[data-micro-rays]').textContent=rays?'隱藏輔助光路':'顯示輔助光路';
@@ -121,10 +137,11 @@ if(root){
   else if(b.hasAttribute('data-micro-overview')){step='both';view='whole';}
   else if(b.hasAttribute('data-micro-rays'))rays=!rays;
   else if(b.dataset.microPoint)point=b.dataset.microPoint;
-  else if(b.hasAttribute('data-micro-reset')){step='objective';view='whole';rays=true;point='both';}
+  else if(b.hasAttribute('data-micro-reset')){step='objective';view='objective';rays=true;point='both';}
   else return;render();
  });
  new ResizeObserver(render).observe($('.micro-stage'));
+ $('[data-micro-a-symbol]').innerHTML=symbol(50,50,28,true);
  render();
- import('./microscope-model.mjs?v=20261105-micro-detail5').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
+ import('./microscope-model.mjs?v=20261105-micro-handoff9').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
 }
