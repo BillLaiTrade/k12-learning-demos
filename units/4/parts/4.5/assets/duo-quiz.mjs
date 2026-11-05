@@ -1,6 +1,6 @@
-import {LIGHTS,FILTERS,rgbCss} from './color-model.mjs';
-import {initialiseDuoProbe} from './duo-probe.mjs?v=probe-result-20261105';
-import {PAPER_TYPES,COLOUR_OPTIONS,TRANSMISSION_OPTIONS,REFLECTION_OPTIONS,INITIAL_SERIES,newQuestionSeries,challengeSignal,expectedAnswer,checkPrediction} from './duo-quiz-model.mjs?v=duo-series-20261104';
+import {rgbCss} from './color-model.mjs';
+import {initialiseDuoProbe} from './duo-probe.mjs?v=compound-light-20261105';
+import {DUO_LIGHTS as LIGHTS,DUO_FILTERS as FILTERS,lightComponents,QUESTION_FOCUS,PAPER_TYPES,COLOUR_OPTIONS,TRANSMISSION_OPTIONS,REFLECTION_OPTIONS,INITIAL_SERIES,newQuestionSeries,challengeSignal,expectedAnswer,checkPrediction} from './duo-quiz-model.mjs?v=compound-light-20261105';
 
 const colourName=key=>COLOUR_OPTIONS.find(o=>o[0]===key)?.[1]||key;
 export function challengeDiagram(q,signal,lit){
@@ -58,13 +58,13 @@ export function initialiseDuoQuiz(root){
   if(lit)root.dataset.signal=JSON.stringify(signal);else delete root.dataset.signal;
  }
  function fallback(){threeFailed=true;studio?.dispose();studio=null;$('[data-challenge-canvas]').hidden=true;$('[data-duo-fallback]').hidden=false;$('[data-scene-help]').textContent='目前以平面光路示意顯示；可繼續作答、開燈與換題。';root.dataset.renderer='diagram';$('[data-scene-labels]').hidden=true;}
- async function loadStudio(){if(studioLoading||threeFailed||studio)return;studioLoading=true;try{const module=await import('./duo-quiz-studio.mjs?v=duo-orbit-20261104');studio=module.createChallengeStudio($('[data-challenge-canvas]'),{unavailable:fallback,onLabels:placeLabels});$('[data-challenge-canvas]').hidden=false;$('[data-duo-fallback]').hidden=true;root.dataset.renderer='three';studio.update(question,challengeSignal(question),lit);dispatchEvent(new Event('resize'));}catch{fallback();}}
+ async function loadStudio(){if(studioLoading||threeFailed||studio)return;studioLoading=true;try{const module=await import('./duo-quiz-studio.mjs?v=compound-light-20261105');studio=module.createChallengeStudio($('[data-challenge-canvas]'),{unavailable:fallback,onLabels:placeLabels});$('[data-challenge-canvas]').hidden=false;$('[data-duo-fallback]').hidden=true;root.dataset.renderer='three';studio.update(question,challengeSignal(question),lit);dispatchEvent(new Event('resize'));}catch{fallback();}}
  function clearExplanation(){const explanation=$('[data-duo-explanation]');explanation.hidden=true;explanation.open=false;$('[data-duo-reason]').textContent='';}
  function invalidate(){const state=attempts[current];state.answer=readAnswer();state.tried=false;feedback.hidden=true;feedback.replaceChildren();clearExplanation();$('[data-feedback-placeholder]').hidden=false;delete form.dataset.correct;form.querySelectorAll('[aria-invalid]').forEach(e=>e.removeAttribute('aria-invalid'));lit=false;updateScene();progress();}
  function renderQuestion(){
   question=attempts[current].question;
   root.dataset.question=JSON.stringify(question);$('[data-question-lights]').textContent=question.lights.map(key=>LIGHTS[key].name).join(' ＋ ');$('[data-question-filter]').textContent=question.filter==='clear'?'不放色片':FILTERS[question.filter].name;$('[data-filter-route]').textContent=question.filter==='clear'?'兩束光直接照到紙張':'兩束光都先通過這片色片';question.lights.forEach((key,i)=>{$(`[data-question-lamp="${i}"]`).textContent=LIGHTS[key].name;$(`[data-scene-label="${i?'b':'a'}"]`).textContent=`${i?'B':'A'} ${LIGHTS[key].name}`;});$('[data-scene-label=filter]').textContent=`② ${FILTERS[question.filter].name}`;$('[data-scene-label=paper]').textContent=`③ ${PAPER_TYPES[question.paper].name}`;$('[data-question-paper]').textContent=PAPER_TYPES[question.paper].name;
-  $('[data-challenge-question]').textContent=`同時開啟兩盞燈後，金框中的${PAPER_TYPES[question.paper].name}會看起來是什麼顏色？`;
+  const hint=$('[data-question-components]');hint.open=false;$('[data-question-focus]').textContent=QUESTION_FOCUS[current];$('[data-light-components]').textContent=question.lights.map((key,i)=>`${i?'B':'A'} ${LIGHTS[key].name}：${lightComponents(key)}`).join('；');$('[data-filter-components]').textContent=question.filter==='clear'?'不放色片：保留原有色光。':`${FILTERS[question.filter].name}主要讓${['red','green','blue'].filter((_,c)=>FILTERS[question.filter].rgb[c]>.5).map(key=>LIGHTS[key].name).join('、')}通過。`;$('[data-challenge-question]').textContent=`同時開啟兩盞燈後，金框中的${PAPER_TYPES[question.paper].name}會看起來是什麼顏色？`;
   $('[data-prediction-title]').textContent='你預測的紙面顏色';
   form.reset();const state=attempts[current];if(state.answer.colour)form.querySelector(`[name=appearance][value="${state.answer.colour}"]`).checked=true;form.elements.transmission.value=state.answer.transmission;form.elements.reflection.value=state.answer.reflection;
   renderFeedback();progress();

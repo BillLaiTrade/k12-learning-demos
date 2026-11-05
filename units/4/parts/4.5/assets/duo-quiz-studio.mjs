@@ -1,6 +1,5 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {LIGHTS,FILTERS} from './color-model.mjs';
-import {PAPER_TYPES,CHALLENGE_LAYOUT as L,filterIntersection} from './duo-quiz-model.mjs';
+import {DUO_LIGHTS as LIGHTS,DUO_FILTERS as FILTERS,PAPER_TYPES,CHALLENGE_LAYOUT as L,filterIntersection} from './duo-quiz-model.mjs?v=compound-light-20261105';
 
 export function createChallengeStudio(canvas,{unavailable,onLabels}={}){
  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'low-power'});
@@ -30,7 +29,9 @@ export function createChallengeStudio(canvas,{unavailable,onLabels}={}){
  const pane=new THREE.Mesh(new THREE.PlaneGeometry(1.8,1.8),new THREE.MeshStandardMaterial({side:THREE.DoubleSide,transparent:true,opacity:.32,roughness:.2,depthWrite:false}));pane.rotation.y=-Math.PI/2;pane.position.set(0,L.axis,0);filterScene.add(pane);
  for(const z of[-.94,.94])box(filterFrame,[.055,1.92,.055],[0,L.axis,z],metal);
  for(const y of[L.axis-.94,L.axis+.94])box(filterFrame,[.055,.055,1.94],[0,y,0],metal);
- const paper=new THREE.Mesh(new THREE.PlaneGeometry(1.8,1.8),new THREE.MeshStandardMaterial({side:THREE.DoubleSide,roughness:1,metalness:0}));paper.rotation.y=-Math.PI/2;paper.position.set(L.paperX,L.axis,0);paperScene.add(paper);mount(scene,L.paperX,0,.38);
+ // Paper follows the selective diffuse model. Keep the bench's filmic RGB
+ // cross-talk and specular highlights out of the observed paper response.
+ const paper=new THREE.Mesh(new THREE.PlaneGeometry(1.8,1.8),new THREE.MeshLambertMaterial({side:THREE.DoubleSide,toneMapped:false}));paper.rotation.y=-Math.PI/2;paper.position.set(L.paperX,L.axis,0);paperScene.add(paper);mount(scene,L.paperX,0,.38);
  const gold=new THREE.MeshBasicMaterial({color:'#f4d487',toneMapped:false});
  for(const z of[-.94,.94])box(scene,[.055,1.94,.045],[L.paperX-.025,L.axis,z],gold);
  for(const y of[L.axis-.94,L.axis+.94])box(scene,[.055,.045,1.94],[L.paperX-.025,y,0],gold);
@@ -39,7 +40,9 @@ export function createChallengeStudio(canvas,{unavailable,onLabels}={}){
  filterScene.add(new THREE.HemisphereLight('#ffffff','#54634d',1.4));
  const rays=new THREE.Group();scene.add(rays);
  function clearRays(){for(const line of [...rays.children]){rays.remove(line);line.geometry.dispose();line.material.dispose();}}
- function line(a,b,rgb){const strength=Math.max(...rgb);if(strength<.045)return;const mesh=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a),new THREE.Vector3(...b)]),new THREE.LineBasicMaterial({color:new THREE.Color().setRGB(...rgb),transparent:true,opacity:.85,toneMapped:false}));rays.add(mesh);}
+ // Guide rays are annotations; they must not write depth over the paper's
+ // subsequently rendered surface, especially at the shared endpoint.
+ function line(a,b,rgb){const strength=Math.max(...rgb);if(strength<.045)return;const mesh=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a),new THREE.Vector3(...b)]),new THREE.LineBasicMaterial({color:new THREE.Color().setRGB(...rgb),transparent:true,opacity:.85,depthWrite:false,toneMapped:false}));rays.add(mesh);}
  function draw(){frame=0;if(disposed)return;camera.position.set(target.x+Math.sin(orbit.yaw)*Math.sin(orbit.pitch)*orbit.radius,target.y+Math.cos(orbit.pitch)*orbit.radius,target.z+Math.cos(orbit.yaw)*Math.sin(orbit.pitch)*orbit.radius);camera.lookAt(target);
   renderer.autoClear=true;renderer.render(scene,camera);renderer.autoClear=false;renderer.render(paperScene,camera);renderer.render(filterScene,camera);renderer.autoClear=true;
   if(question&&onLabels){camera.updateMatrixWorld(true);const project=point=>{const p=new THREE.Vector3(...point).project(camera);return{x:(p.x+1)/2,y:(1-p.y)/2};};onLabels({a:project(L.sources[0]),b:project(L.sources[1]),filter:question.filter==='clear'?null:project([0,L.axis+.65,0]),paper:project([L.paperX,L.axis+.65,0])});}

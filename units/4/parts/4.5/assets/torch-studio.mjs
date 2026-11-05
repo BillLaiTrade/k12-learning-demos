@@ -59,7 +59,7 @@ export function createTorchStudio(canvas,index,{unavailable,ready,screen:provide
  let frame=0,disposed=false,lastPose='';
  function draw(){frame=0;if(!disposed){renderer.render(scene,camera);if(canvas.dataset.ready!=='true'){canvas.dataset.ready='true';ready?.();}}}
  function update(spot,colourIndex=index){
-  band.color.set(['#b82b29','#278541','#2457b7'][colourIndex]);
+  band.color.set(typeof colourIndex==='string'?colourIndex:['#b82b29','#278541','#2457b7'][colourIndex]);
   const pitch=.035+(.5-spot.y)*.08,aim=torchAim(index,spot),screen=providedScreen||canvas.closest('.mix-scene')?.querySelector('[data-mix]'),bounds=canvas.parentElement.getBoundingClientRect();
   let yaw=Math.atan2(-aim.direction[0],-aim.direction[2]);camera.zoom=1;camera.updateProjectionMatrix();
   if(screen&&bounds.width&&bounds.height){
