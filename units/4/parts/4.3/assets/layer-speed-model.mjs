@@ -9,10 +9,7 @@ export const LAYER_MATERIALS = Object.freeze([
 ]);
 const permutations = values => values.length ? values.flatMap((value,i) =>
   permutations(values.filter((_,j)=>j!==i)).map(rest=>[value,...rest])) : [[]];
-const PERMUTATIONS = Object.freeze([
-  [0, 2, 1, 3],
-  ...permutations([0,1,2,3]).filter(order=>order.join()!=='0,2,1,3'),
-].map(Object.freeze));
+const PERMUTATIONS = Object.freeze(permutations([0,1,2,3]).map(Object.freeze));
 export const MS_PER_OPTICAL_UNIT = 520;
 
 export function layerGeometry(indices, incident = 40) {
@@ -52,7 +49,7 @@ export function layerSnapshot(geometry, elapsed) {
 }
 
 export function createLayerDeck(random = Math.random) {
-  let remaining = [0], last = -1, serial = 0;
+  let remaining = [], last = -1, serial = 0;
   const shuffle = list => {
     for(let i=list.length-1;i>0;i--){const j=Math.min(i,Math.max(0,Math.floor(random()*(i+1))));[list[i],list[j]]=[list[j],list[i]];}
     return list;
@@ -63,8 +60,7 @@ export function createLayerDeck(random = Math.random) {
       if(remaining[0]===last)remaining.push(remaining.shift());
     }
     const key = remaining.shift();
-    if(serial===0)remaining=shuffle(PERMUTATIONS.map((_,i)=>i).slice(1));
-    const incident = serial===0||random()>=.5 ? 40 : 36;
+    const incident = random()>=.5 ? 40 : 36;
     last=key;serial++;
     const materials=PERMUTATIONS[key].map(i=>LAYER_MATERIALS[i]);
     return {id:serial, key, materials, geometry:layerGeometry(materials.map(material=>material.n),incident)};

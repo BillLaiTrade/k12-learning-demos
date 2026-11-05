@@ -1,4 +1,4 @@
-import {createLayerDeck, layerSnapshot, placeLayer, compareLayers, invertedLayerPair, LAYER_NAMES} from './layer-speed-model.mjs?v=20261105-review1';
+import {createLayerDeck, layerSnapshot, placeLayer, compareLayers, invertedLayerPair, LAYER_NAMES} from './layer-speed-model.mjs?v=20261105-random1';
 
 const root=document.querySelector('#rank-lab');
 if(root){
