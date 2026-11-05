@@ -103,15 +103,19 @@ button.primary:hover, .rank-quiz .rank-play:hover, .rank-quiz .rank-check:hover 
 #exit-lab[data-angle="0"] #exit-transmission-condition { display: none; }
 
 /* Keep each cart's explanation beside the scene and its live controls together. */
-.cart-explanation .cart-analogy-grid { align-items: start; gap: 20px; }
-.cart-explanation .cart-analogy-copy { padding-top: 2px; }
-.cart-explanation .cart-analogy-copy p { margin: 0 0 16px; line-height: 1.75; }
-.cart-explanation .cart-light-link span { display: block; margin-bottom: 4px; color: var(--muted); font-size: .76rem; }
-.cart-demo-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; margin-top: 10px; }
-.cart-demo-controls > p { flex: 1; min-width: 0; min-height: 0; margin: 0; font-size: .79rem; line-height: 1.5; }
+.cart-explanation { max-width: 720px; margin-inline: auto; }
+.cart-explanation :is(.normal-explanation-body,.oblique-explanation-body) { padding: 16px; }
+.cart-explanation .cart-analogy-grid { align-items: center; gap: 20px; }
+.cart-explanation .cart-analogy-copy { padding-left: 16px; border-left: 2px solid #c9d9c2; }
+.cart-explanation .cart-analogy-copy > p { display: grid; grid-template-columns: 2.3em minmax(0,1fr); align-items: baseline; gap: 8px; margin: 0 0 10px; line-height: 1.65; }
+.cart-explanation .cart-copy-label { color: var(--muted); font-size: .76rem; }
+.cart-explanation .cart-light-link > span:last-child { color: var(--green); font-weight: 650; }
+.cart-demo-controls { display: flex; align-items: center; justify-content: flex-start; gap: 12px; min-height: 44px; margin-top: 10px; }
+.cart-demo-controls > p { flex: 0 1 auto; min-width: 0; min-height: 0; margin: 0; font-size: .79rem; line-height: 1.5; }
 .cart-demo-controls > button { flex: none; margin: 0; }
-.cart-analogy-notes { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 16px; margin-top: 14px; padding-top: 10px; border-top: 1px solid #e1e9dc; }
+.cart-analogy-notes { margin: 10px 0 0 calc(2.3em + 8px); }
 .cart-analogy-notes > p { margin: 0; color: var(--muted); font-size: .76rem; line-height: 1.6; }
+.cart-analogy-notes > p + p { margin-top: 4px; }
 @media (min-width: 901px) {
-  .cart-explanation .cart-analogy-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+  .cart-explanation .cart-analogy-grid { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); }
 }

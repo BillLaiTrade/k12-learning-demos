@@ -1622,7 +1622,7 @@ MOON_CAPTURE預設/tmp/unit41-reflection-play，保存雙視窗與整區截圖�
 
 ## 4.3 第二、三區小車版面（2026-11-05）
 
-`unit-4.3-cart-layout.test.cjs`以四桌面尺寸與七個動畫時刻檢查雙輪完整落在圖框內、圖內標籤至少12px且不與車輪重疊、右文頂部對齊、狀態與44px控制同列，以及播放／完成按鈕狀態。`CART_LAYOUT_CAPTURE_DIR`可保存畫面與量測。原`normal-lab`、`oblique-cart`與`exit-cart`回歸保留同時／先後變速的運動及中斷邏輯，不降低運動斷言。
+`unit-4.3-cart-layout.test.cjs`以四桌面尺寸與七個動畫時刻檢查雙輪完整落在圖框內、圖內標籤至少12px且不與車輪重疊、圖文以動畫中心對齊、控制緊鄰實際狀態文字且按鈕位置固定、44px控制同列，以及播放／完成按鈕狀態。`CART_LAYOUT_CAPTURE_DIR`可保存畫面與量測。原`normal-lab`、`oblique-cart`與`exit-cart`回歸保留同時／先後變速的運動及中斷邏輯，不降低運動斷言。
 
 ## 4.2 可見播放與輔助圖解精緻化（2026-11-05）
 

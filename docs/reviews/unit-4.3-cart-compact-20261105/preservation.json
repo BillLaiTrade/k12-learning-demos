@@ -1,0 +1,13 @@
+{
+  "base": "5e3b2e7aaadf5fa9ef985a59620492eaa03cbc86",
+  "preserved_sections": [
+    1,
+    4,
+    5,
+    6,
+    7
+  ],
+  "preserved_js_and_png_files": 39,
+  "all_javascript_unchanged": true,
+  "only_presentation_changed": true
+}
