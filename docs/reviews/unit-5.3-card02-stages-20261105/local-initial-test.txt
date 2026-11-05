@@ -1,0 +1,48 @@
+▶ 5.3 第一區：100 g 水、揭示順序、中斷與器材失敗恢復
+  ✖ 手動開始，器材與側邊讀值同源；開始前未揭示熱量與定義 (219.523768ms)
+  ✔ 換區或背景中斷不自動續熱，舊結果不延遲寫回 (2010.654225ms)
+  ✔ 三組桌機與兩組窄版，器材讀值、結果及展開說明不裁切 (2637.293295ms)
+  ✔ 圖片慢載入／失敗時不能加熱，重試恢復且其他區仍可用 (1721.150795ms)
+✖ 5.3 第一區：100 g 水、揭示順序、中斷與器材失敗恢復 (9732.943683ms)
+▶ 5.3 共通格式、導覽連動與原有活動回歸
+  ✔ 靜態 HTML 的標題、摘要、分享圖及入口一致，不依賴 JS (287.765178ms)
+  ✔ 五區導覽標題連動；小測固定名稱、共通樣式及活動說明同步 (1765.749365ms)
+  ✔ 五區均為上標頭下內容；三種桌機與兩種窄版可完整閱讀 (1621.862256ms)
+  ✔ 第一區 100 g 水升溫、完成後介紹卡，重新觀察同步清除結果 (2363.607976ms)
+  ✔ 第二區分段自動記錄，原質量／材料比較與生活應用保持 (5948.169221ms)
+  ✔ 原有四題小測可核對與重答；無載入或程式錯誤 (280.645505ms)
+✔ 5.3 共通格式、導覽連動與原有活動回歸 (15182.230252ms)
+▶ 5.3 第二區：分段加熱、自動紀錄、圖表、中斷與載入恢復
+  ✔ 只記錄觀察過的點，三次累計熱量對應正確水溫與溫升 (7437.073978ms)
+  ✔ 換區／背景中斷保留已完成紀錄，回來不自動加熱且可接續 (4512.40606ms)
+  ✔ 五種版面可讀，旋鈕及LCD在照片內，其他區與小測不受影響 (590.016552ms)
+  ✔ 器材慢載入或失敗時禁用兩入口，重試不會自行啟動 (650.602281ms)
+✔ 5.3 第二區：分段加熱、自動紀錄、圖表、中斷與載入恢復 (16126.012627ms)
+✔ 100g水累計500／1000／2000cal對應25／30／40°C與5／10／20°C溫升 (2.098833ms)
+✔ 全程守恆，累計熱量單調，固定加熱設定下階段時長由模型決定 (2.630913ms)
+✔ 累計熱量與時間換算互逆，非法值被拒絕 (0.781509ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 18
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16616.296821
+
+✖ failing tests:
+
+test at tests/unit-5.3-calorie-lab.test.cjs:20:11
+✖ 手動開始，器材與側邊讀值同源；開始前未揭示熱量與定義 (219.523768ms)
+  locator.evaluate: Error: strict mode violation: locator('.calorie-heater-light') resolved to 2 elements:
+      1) <span aria-hidden="true" class="calorie-heater-light"></span> aka locator('.calorie-heater-light').first()
+      2) <span aria-hidden="true" class="calorie-heater-light"></span> aka locator('.heat-stage-workbench > .calorie-apparatus-view > .calorie-photo > .calorie-heater-light')
+  
+  Call log:
+  [2m  - waiting for locator('.calorie-heater-light')[22m
+  
+      at light (/workspace/k12-learning-demos/tests/unit-5.3-calorie-lab.test.cjs:26:59)
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-calorie-lab.test.cjs:27:26)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-calorie-lab.test.cjs:20:3) {
+    log: [ "  - waiting for locator('.calorie-heater-light')" ]
+  }
