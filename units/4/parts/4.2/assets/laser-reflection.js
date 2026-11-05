@@ -22,24 +22,13 @@ if (bench) {
 const { scene, camera, renderer, centerPoint, reflectedRayLength, emitter, emitterBody, emitterStem, emitterFoot, pivot, incoming, reflected, setBeam, incomingSector, reflectedSector, incomingArc, outgoingArc, arc, setAngleSector, setThickArc, normalLabel, makeAngleLabel, updateAngleLabel, rayMaterial } = bench;
 
 function svgArc(radius, degrees, rightSide) {
-  const steps = Math.max(5, Math.ceil(degrees / 3));
-  let d = '';
-  for (let i = 0; i <= steps; i++) {
-    const a = degrees * Math.PI / 180 * i / steps;
-    const x = 300 + (rightSide ? 1 : -1) * radius * Math.sin(a), y = 280 - radius * Math.cos(a);
-    d += `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`;
-  }
-  return d;
+  const radians = degrees * Math.PI / 180;
+  const x = 300 + (rightSide ? 1 : -1) * radius * Math.sin(radians);
+  const y = 292 - radius * Math.cos(radians);
+  return `M300 ${292-radius}A${radius} ${radius} 0 0 ${rightSide ? 1 : 0} ${x.toFixed(3)} ${y.toFixed(3)}`;
 }
 function svgSector(radius, degrees, rightSide) {
-  const steps = Math.max(5, Math.ceil(degrees / 3));
-  let d = 'M300 280L300 ' + (280 - radius).toFixed(1);
-  for (let i = 1; i <= steps; i++) {
-    const a = degrees * Math.PI / 180 * i / steps;
-    const x = 300 + (rightSide ? 1 : -1) * radius * Math.sin(a), y = 280 - radius * Math.cos(a);
-    d += `L${x.toFixed(1)} ${y.toFixed(1)}`;
-  }
-  return d + 'Z';
+  return `M300 292L${svgArc(radius,degrees,rightSide).slice(1)}Z`;
 }
 function update() {
   const deg = angleDegrees, angle = THREE.MathUtils.degToRad(deg), radius = 7.0;
@@ -64,32 +53,38 @@ function update() {
   normalLabel.position.set(centerPoint.x - 5.5, 1.5, centerPoint.z);
   updateAngleLabel(normalLabel, '法線');
 
-  const diagramLength = 190, dx = diagramLength * Math.sin(angle), dy = diagramLength * Math.cos(angle);
-  const endOffset = 14, halfAngle = angle / 2, labelRadius = 150;
-  const incidentEndX = 300 + dx / diagramLength * endOffset, contactY = 280 - dy / diagramLength * endOffset;
-  const reflectedStartX = 300 - dx / diagramLength * endOffset;
-  document.querySelector('#law-incident').setAttribute('d', `M${(300 + dx).toFixed(1)} ${(280 - dy).toFixed(1)}L${incidentEndX.toFixed(1)} ${contactY.toFixed(1)}`);
-  document.querySelector('#law-reflected').setAttribute('d', `M${reflectedStartX.toFixed(1)} ${contactY.toFixed(1)}L${(300 - dx).toFixed(1)} ${(280 - dy).toFixed(1)}`);
-  document.querySelector('#law-wedge-incident').setAttribute('d', svgSector(166, deg, true));
-  document.querySelector('#law-wedge-reflected').setAttribute('d', svgSector(166, deg, false));
-  document.querySelector('#law-arc-incident').setAttribute('d', svgArc(82, deg, true));
-  document.querySelector('#law-arc-reflected').setAttribute('d', svgArc(82, deg, false));
-  const angleLabelX = 300 + labelRadius * Math.sin(halfAngle), angleLabelY = 280 - labelRadius * Math.cos(halfAngle);
-  const valueX = 300 + 110 * Math.sin(halfAngle), valueY = 280 - 110 * Math.cos(halfAngle);
-  document.querySelector('#law-angle-name-in').setAttribute('x', angleLabelX.toFixed(1));
-  document.querySelector('#law-angle-name-out').setAttribute('x', (600 - angleLabelX).toFixed(1));
-  document.querySelector('#law-angle-name-in').setAttribute('y', (angleLabelY + 4).toFixed(1));
-  document.querySelector('#law-angle-name-out').setAttribute('y', (angleLabelY + 4).toFixed(1));
-  document.querySelector('#law-angle-in').setAttribute('x', valueX.toFixed(1));
-  document.querySelector('#law-angle-out').setAttribute('x', (600 - valueX).toFixed(1));
-  document.querySelector('#law-angle-in').setAttribute('y', (valueY + 4).toFixed(1));
-  document.querySelector('#law-angle-out').setAttribute('y', (valueY + 4).toFixed(1));
+  const diagramLength = 223, dx = diagramLength * Math.sin(angle), dy = diagramLength * Math.cos(angle);
+  const compact = document.querySelector('.laser-diagram').clientWidth <= 460;
+  const halfAngle = angle / 2, labelRadius = compact ? 230 : deg < 25 ? 200 : 175;
+  const valueRadius = compact ? 173 : deg < 25 ? 150 : 128;
+  document.querySelector('#law-incident').setAttribute('d', `M${(300 + dx).toFixed(3)} ${(292 - dy).toFixed(3)}L300 292`);
+  document.querySelector('#law-incident-direction').setAttribute('d', `M${(300 + 30*Math.sin(angle)).toFixed(3)} ${(292 - 30*Math.cos(angle)).toFixed(3)}L${(300 + 15*Math.sin(angle)).toFixed(3)} ${(292 - 15*Math.cos(angle)).toFixed(3)}`);
+  document.querySelector('#law-reflected').setAttribute('d', `M300 292L${(300 - dx).toFixed(3)} ${(292 - dy).toFixed(3)}`);
+  document.querySelector('#law-wedge-incident').setAttribute('d', svgSector(142, deg, true));
+  document.querySelector('#law-wedge-reflected').setAttribute('d', svgSector(142, deg, false));
+  document.querySelector('#law-arc-incident').setAttribute('d', svgArc(104, deg, true));
+  document.querySelector('#law-arc-reflected').setAttribute('d', svgArc(104, deg, false));
+  const angleLabelX = 300 + Math.max(compact ? 44 : 0,labelRadius * Math.sin(halfAngle)), angleLabelY = 292 - labelRadius * Math.cos(halfAngle);
+  const valueX = 300 + valueRadius * Math.sin(halfAngle), valueY = 292 - valueRadius * Math.cos(halfAngle);
+  document.querySelector('#law-angle-name-in').setAttribute('x', angleLabelX.toFixed(3));
+  document.querySelector('#law-angle-name-out').setAttribute('x', (600 - angleLabelX).toFixed(3));
+  document.querySelector('#law-angle-name-in').setAttribute('y', (angleLabelY + 4).toFixed(3));
+  document.querySelector('#law-angle-name-out').setAttribute('y', (angleLabelY + 4).toFixed(3));
+  document.querySelector('#law-angle-in').setAttribute('x', valueX.toFixed(3));
+  document.querySelector('#law-angle-out').setAttribute('x', (600 - valueX).toFixed(3));
+  document.querySelector('#law-angle-in').setAttribute('y', (valueY + 5).toFixed(3));
+  document.querySelector('#law-angle-out').setAttribute('y', (valueY + 5).toFixed(3));
   document.querySelector('#law-angle-in').textContent = `${deg}°`;
   document.querySelector('#law-angle-out').textContent = `${deg}°`;
-  const lineLabelX = 300 + dx + 40;
-  const lineLabelY = 280 - dy - 24;
-  document.querySelector('#law-line-name-in').setAttribute('transform', `translate(${lineLabelX.toFixed(1)} ${lineLabelY.toFixed(1)})`);
-  document.querySelector('#law-line-name-out').setAttribute('transform', `translate(${(600 - lineLabelX).toFixed(1)} ${lineLabelY.toFixed(1)})`);
+  const lineLabelX = Math.min(548,300 + dx + (compact ? 65 : 45));
+  const lineLabelY = Math.max(55,292 - dy - 24);
+  document.querySelector('#law-line-name-in').setAttribute('transform', `translate(${lineLabelX.toFixed(3)} ${lineLabelY.toFixed(3)})`);
+  document.querySelector('#law-line-name-out').setAttribute('transform', `translate(${(600 - lineLabelX).toFixed(3)} ${lineLabelY.toFixed(3)})`);
+  const normalName = document.querySelector('#law-normal-name');
+  normalName.setAttribute('x', compact ? '300' : '330');
+  normalName.setAttribute('y', compact ? '30' : '40');
+  normalName.setAttribute('text-anchor', compact ? 'middle' : 'start');
+  document.querySelector('#law-normal-leader').setAttribute('d', compact ? 'M300 33V35' : 'M306 53L324 35');
   document.querySelector('#lab-angle-in').textContent = `${deg}°`;
   document.querySelector('#lab-angle-out').textContent = `${deg}°`;
   canvas.setAttribute('aria-valuenow', String(deg));

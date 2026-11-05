@@ -5,24 +5,27 @@
 .calorie-apparatus-view{min-width:0;margin:0;display:flex;flex-direction:column;justify-content:center;border:1px solid #d7e1d9;border-radius:13px;background:#edf2e9;overflow:hidden}
 .calorie-photo{position:relative;min-width:0;container-type:inline-size}
 .calorie-photo img{display:block;width:100%;height:auto;aspect-ratio:3/2}
+.calorie-heater{position:absolute;left:41%;top:80.4%;width:44px;height:44px;transform:translate(-50%,-50%);padding:0;border:2px solid transparent;border-radius:50%;background:transparent;cursor:pointer;z-index:1}
+.calorie-heater:not(:disabled):hover{border-color:#176b53;background:#ffffff20}
+.calorie-heater:focus-visible{outline:3px solid #176b53;outline-offset:3px;background:#ffffff20}
+.calorie-heater:disabled{cursor:default}
+.calorie-heater-light{position:absolute;left:33.15%;top:79.7%;width:1.3%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:#263c2c;pointer-events:none}
+#calorie-lab[data-playing=true] .calorie-heater-light{background:#81e65b;box-shadow:0 0 5px 2px #75d654a0}
 .calorie-meter-screen{position:absolute;left:66.2%;top:55.4%;width:20.3%;height:13.1%;display:flex;align-items:center;justify-content:center;gap:3px;color:#20352a;font-family:ui-monospace,"Courier New",monospace;font-weight:700;font-size:clamp(13px,4.25cqi,24px);line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
 .calorie-meter-screen small{font-family:inherit;font-size:.62em}
 .calorie-photo-label{position:absolute;top:10px;left:10px;padding:4px 8px;border:1px solid #cdd9ca;border-radius:7px;background:#fffefae8;color:#315c43;font-size:.8rem;font-weight:700}
 .calorie-scene-loading{position:absolute;inset:0;display:grid;place-items:center;padding:20px;background:#f1f5eef2;color:#52665a;font-size:.9rem;text-align:center}
 .calorie-apparatus-view figcaption{padding:7px 10px;border-top:1px solid #d7e1d9;color:#3e5c49;text-align:center;font-size:.85rem;line-height:1.5}
 #calorie-lab[data-playing=true] .calorie-apparatus-view figcaption{color:#9a5c26;background:#fff3df}
-.calorie-temperature-panel{min-width:0;padding:15px;border:1px solid #d7e1d9;border-radius:13px;background:#fffefa;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.calorie-temperature-panel{min-width:0;align-self:center;padding:18px;border:1px solid #d7e1d9;border-radius:13px;background:#fffefa;display:flex;flex-direction:column;gap:15px}
 .calorie-temperature-panel h4{margin:0;color:#456052;font-size:.9rem}
-.calorie-temperature-values{display:grid;grid-template-columns:1fr 20px 1fr;align-items:center;gap:5px}
-.calorie-temperature-values div{display:grid;gap:3px;min-width:0}
-.calorie-temperature-values span{font-size:.8rem;color:#617568}
-.calorie-temperature-values strong{font-size:clamp(1.05rem,2.2cqi,1.45rem);color:#285a46;white-space:nowrap;font-variant-numeric:tabular-nums}
-.calorie-temperature-values small{font-size:.72em;font-weight:500}
-.calorie-temperature-values b{font-size:1.15rem;color:#789181}
-.calorie-rise-track{height:14px;border-radius:999px;background:#e5ece1;border:1px solid #d6e1d1;overflow:hidden}
-.calorie-rise-track span{display:block;width:calc(var(--calorie-rise,0) * 100%);height:100%;background:#d9a05d}
-.calorie-rise-value{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#5c6e61;font-size:.85rem}
-.calorie-rise-value strong{font-size:1.35rem;color:#a05d27;white-space:nowrap;font-variant-numeric:tabular-nums}
+.calorie-difference{display:grid;gap:8px}
+.calorie-difference>div{display:grid;grid-template-columns:18px minmax(0,1fr) auto;align-items:center;gap:8px;min-width:0}
+.calorie-difference b{color:#5f7868;font-size:1.2rem;text-align:center}
+.calorie-difference span{font-size:.83rem;color:#617568}
+.calorie-difference strong{font-size:1.2rem;color:#285a46;white-space:nowrap;font-variant-numeric:tabular-nums}
+.calorie-difference .calorie-difference-result{margin-top:2px;padding-top:12px;border-top:1px solid #cfdbcc}
+.calorie-difference-result strong{color:#a05d27;font-size:1.45rem}
 .calorie-temperature-panel p{margin:0;color:#6c7a70;font-size:.77rem}
 .calorie-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:13px}
 .calorie-actions button{min-height:44px;font-size:.9rem}
@@ -32,12 +35,16 @@
 .calorie-result{margin:16px 0 0}
 .calorie-unit-bridge{padding:15px;border:1px solid #d7e1cf;border-radius:12px;background:#f0f5e9}
 .calorie-unit-bridge h3{margin:0 0 10px;font-size:1rem;color:#315a43}
-.calorie-bridge-row{display:grid;grid-template-columns:1fr 1fr 1.1fr;gap:8px;align-items:center;margin:7px 0;padding:9px 12px;border-radius:8px;background:#fffefa;font-size:.9rem}
-.calorie-bridge-row strong:last-child{color:#a05d27;font-size:1.1rem;white-space:nowrap}
-.calorie-bridge-hint{margin:4px 0;color:#607464;text-align:center;font-size:.8rem}
+.calorie-comparison{width:100%;border-spacing:0;table-layout:fixed}
+.calorie-table-caption{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.calorie-comparison thead th{padding:0 8px 6px;color:#637569;font-size:.8rem;font-weight:500}
+.calorie-comparison tbody th,.calorie-comparison td{padding:10px 8px;background:#fffefa;text-align:center;font-size:1rem;white-space:nowrap}
+.calorie-comparison tbody th{border-radius:9px 0 0 9px}
+.calorie-comparison td{border-radius:0 9px 9px 0;color:#a05d27;font-weight:750;font-size:1.1rem}
+.calorie-comparison .calorie-scale-row td{padding:4px 8px;background:transparent;color:#5d7661;font-size:.85rem;font-weight:600}
 .calorie-energy-note{margin:10px 0 0;font-size:.8rem;color:#68766b;line-height:1.7}
 #card-01 .calorie-assumptions{margin:12px 0 0;background:transparent}
 #card-01 .calorie-assumptions p{font-size:.86rem}
-@container calorie-workbench (max-width:580px){.calorie-workbench{grid-template-columns:minmax(0,1fr)}.calorie-apparatus-view{max-width:520px;width:100%;margin-inline:auto}.calorie-temperature-panel{gap:9px}.calorie-temperature-values{grid-template-columns:1fr 24px 1fr}.calorie-temperature-values strong{font-size:1.4rem}.calorie-rise-track{height:10px}}
-@container calorie-workbench (max-width:320px){#calorie-lab .lab-heading h3{font-size:.95rem}.calorie-temperature-panel{padding:12px}.calorie-photo-label{font-size:.72rem;left:6px;top:6px}.calorie-bridge-row{grid-template-columns:1fr;font-size:.9rem;text-align:center}.calorie-actions>span{flex-basis:100%}}
+@container calorie-workbench (max-width:580px){.calorie-workbench{grid-template-columns:minmax(0,1fr)}.calorie-apparatus-view{max-width:520px;width:100%;margin-inline:auto}.calorie-temperature-panel{gap:10px}.calorie-difference strong{font-size:1.3rem}.calorie-difference-result strong{font-size:1.5rem}}
+@container calorie-workbench (max-width:320px){#calorie-lab .lab-heading h3{font-size:.95rem}.calorie-temperature-panel{padding:12px}.calorie-photo-label{font-size:.72rem;left:6px;top:6px}.calorie-difference>div{gap:5px}.calorie-difference span{font-size:.8rem}.calorie-difference strong{font-size:1.15rem}.calorie-actions>span{flex-basis:100%}}
 @media(max-width:460px){#calorie-lab{padding:12px}.calorie-unit-bridge{padding:12px}}

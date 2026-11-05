@@ -1,0 +1,30 @@
+/* Approved science-exhibit composition; the experiment below keeps its controls. */
+#card-02 .laser-lesson { border-color: #cbd6cc; background: #fffef9; }
+#card-02 .laser-concept { container: laser-concept / inline-size; padding: 26px 24px 14px; background: #fcfcf7; }
+#card-02 .laser-concept-copy { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 7px 24px; padding-bottom: 22px; border-bottom: 1px solid #d3d6ca; }
+#card-02 .laser-concept-copy h3 { grid-column: 1; grid-row: 1; margin: 0; color: #23392f; font-size: clamp(1.15rem,1.8vw,1.45rem); font-weight: 700; line-height: 1.4; }
+#card-02 .laser-rule { grid-column: 1; grid-row: 2; margin: 0; color: #687469; font-size: .94rem; line-height: 1.6; }
+#card-02 .laser-law { grid-column: 2; grid-row: 1 / span 2; justify-self: end; margin: 0; padding-bottom: 7px; border-bottom: 1px solid #24766c; color: #175e53; font-size: clamp(1.05rem,1.6vw,1.3rem); font-weight: 600; line-height: 1.5; white-space: nowrap; }
+#card-02 .laser-diagram { display: block; width: 100%; height: auto; margin: 14px auto 0; }
+#card-02 .laser-diagram text { fill: #4f5d53; font-family: inherit; font-size: 17px; font-weight: 500; }
+#card-02 #law-line-name-in text, #card-02 #law-angle-name-in { fill: #8f642a; }
+#card-02 #law-line-name-out text, #card-02 #law-angle-name-out { fill: #1e6c60; }
+#card-02 #law-angle-name-in, #card-02 #law-angle-name-out { font-size: 19px; }
+#card-02 #law-angle-in, #card-02 #law-angle-out { font-size: 25px; font-weight: 500; font-variant-numeric: tabular-nums; }
+#card-02 #law-angle-in { fill: #a8752e; }
+#card-02 #law-angle-out { fill: #24766c; }
+#card-02 .law-mirror-caption { font-size: 19px; letter-spacing: .5px; }
+@container laser-concept (max-width: 460px) {
+  #card-02 .laser-concept-copy { grid-template-columns: minmax(0,1fr); gap: 6px; padding-bottom: 16px; }
+  #card-02 .laser-concept-copy h3 { font-size: 1.15rem; }
+  #card-02 .laser-law { grid-column: 1; grid-row: 3; justify-self: start; margin-top: 7px; font-size: 1.05rem; }
+  #card-02 .laser-rule { font-size: .88rem; }
+  #card-02 .laser-diagram text { font-size: 26px; }
+  #card-02 #law-angle-name-in, #card-02 #law-angle-name-out { font-size: 26px; }
+  #card-02 #law-angle-in, #card-02 #law-angle-out { font-size: 30px; }
+  #card-02 .law-hit-label, #card-02 #law-normal-name { font-size: 24px; }
+  #card-02 .law-mirror-caption { font-size: 26px; letter-spacing: 0; }
+}
+@media (max-width: 760px) {
+  #card-02 .laser-concept { padding: 20px 12px 10px; }
+}
