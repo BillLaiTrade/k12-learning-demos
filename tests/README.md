@@ -1645,3 +1645,7 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-radiation.test.cjs
 第一區專項的播放案例改為取樣真正的Web Animations時間軸，確認24個transform效果共用起始時間、不同時間的實際SVG像素確實改變、結束恢復完整光路。以MutationObserver量測播放期間的幾何／樣式／子節點改寫數，排除階段邊界必要的aria狀態；預期為0，不把單一硬體的FPS當跨裝置保證。減少動態、重播、鍵盤、偏好切換與觸控回歸保留。幾何檢查改讀取實際SVG viewBox，不綁定舊構圖尺寸。
 
 `native-playback.json`保存兩種偏好的像素差異、原生效果數、時間軸進度及DOM改寫數；畫面與本次驗證見`docs/reviews/unit-4.2-surface-native-20261105/`。
+
+## 4.2 第二區核可反射定律圖（2026-11-05）
+
+`CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.2-law-diagram.test.cjs`檢查六種寬度、標示不溢出／不重疊、真實Home／End／方向鍵、實際拖曳、兩角讀值及SVG光路／圓弧的獨立角度量測；另檢查無JavaScript及WebGL失敗時的精確30°圖解。只隔離其他學習區塊，保留第二區真正的3D器材與輸入處理；`LAW_CAPTURE_DIR`可指定畫面與幾何紀錄目錄。
