@@ -107,16 +107,20 @@ test('5.3 共通格式、導覽連動與原有活動回歸', {timeout:180000}, a
     assert.equal(await page.locator('#calorie-conclusion').isHidden(),true);
   });
 
-  await t.test('第二區分段自動記錄，原質量／材料比較與生活應用保持',async()=>{
+  await t.test('第二、三區自動記錄，原材料比較與生活應用保持',async()=>{
     await page.locator('#heat-stage-play').click();await page.clock.runFor(3000);
     assert.equal(await page.locator('#heat-lab').getAttribute('data-records'),'1');
     assert.equal(await page.locator('#heat-stage-meter').textContent(),'25.0');
-    for(const [id,expected]of [['mass-lab',['30.0','25.0']],['material-lab',['25.0','42.7']]]){
+    await page.locator('[data-mass-choice="200"]').click();await page.locator('#mass-play').click();await page.clock.runFor(6500);
+    assert.equal(await page.locator('#mass-lab').getAttribute('data-phase'),'complete');
+    assert.equal(await page.locator('#mass-meter-a').textContent(),'30.0');assert.equal(await page.locator('#mass-meter-b').textContent(),'25.0');
+    assert.equal(await page.locator('#mass-records tr').count(),1);
+    for(const [id,expected]of [['material-lab',['25.0','42.7']]]){
       const lab=page.locator(`#${id}`);await lab.locator('[data-play]').click();await page.clock.runFor(6500);
       assert.equal(await lab.getAttribute('data-phase'),'complete');assert.deepEqual(await lab.locator('[data-temperature]').allTextContents(),expected);
       await lab.locator('[data-record]').click();assert.equal(await lab.locator('[data-records] tr').count(),1);
       const setting=lab.locator('[data-setting]');
-      await setting.selectOption(id==='mass-lab'?'300':'copper');
+      await setting.selectOption('copper');
       assert.equal(await lab.getAttribute('data-phase'),'ready');assert.equal(await lab.locator('[data-records] tr').count(),1);
     }
     for(const key of ['bottle','coast','pan']){await page.locator(`[data-application="${key}"]`).click();assert.equal(await page.locator(`[data-application="${key}"]`).getAttribute('aria-pressed'),'true');assert.ok((await page.locator('#application-content').textContent()).length>40);}
