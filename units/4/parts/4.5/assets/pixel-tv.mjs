@@ -1,4 +1,4 @@
-import {WIDTH,HEIGHT,QUICK_POINTS,DEFAULT_INDEX,sourcePixels,currentPixel,renderPixels,rgbaPixels,pixelAt,colourCss,colourName,sameColour,neighbourhood,moveSelection,observationText,loupeLayout,sampleDragIndex} from './pixel-tv-observer-model.mjs?v=tv-whole-20261105';
+import {WIDTH,HEIGHT,QUICK_POINTS,DEFAULT_INDEX,sourcePixels,currentPixel,renderPixels,rgbaPixels,pixelAt,colourCss,colourName,sameColour,neighbourhood,moveSelection,observationText,loupeLayout,sampleDragIndex} from './pixel-tv-observer-model.mjs?v=tv-three-20261105';
 export function initialisePixelTv(root){
  if(root.dataset.ready==='true')return;
  const $=s=>root.querySelector(s),source=sourcePixels();
@@ -27,7 +27,15 @@ export function initialisePixelTv(root){
  }
  function screenSummary(){
   const v=state.screenValues;if(v.every(n=>n===255))return'三種色光都保留，調整後與原圖相同。';if(v.every(n=>n===0))return'三種色光都關閉，畫面呈黑色。';
-  return v.map((n,c)=>['紅光','綠光','藍光'][c]+(n===0?'已關閉':n===255?'保留原值':'已減弱')).join('；')+'。';
+  return v.map((n,c)=>['紅光','綠光','藍光'][c]+(n===0?'已關閉':n===255?'保留原值':'減少一半')).join('；')+'。';
+ }
+ function screenEffect(){
+  const v=state.screenValues;
+  if(v.every(n=>n===255))return'尚未減少任何色光，因此畫面與原圖相同。';
+  if(v.every(n=>n===0))return'紅、綠、藍三種色光全部關閉，沒有色光送出，因此整幅圖呈黑色。';
+  if(v.every(n=>n===128))return'三種色光都減少一半，因此白雲變灰、整幅圖變暗；各像素原本的 RGB 比例保持相同。';
+  const changed=v.flatMap((n,c)=>n===255?[]:[['紅光','綠光','藍光'][c]+(n===0?'關閉':'減少一半')]);
+  return changed.join('、')+`，使三種色光的比例改變，因此原本白色的雲偏${colourName(v).replace(/色$/,'')}；其他區域也依原本的色光組成改變。`;
  }
  const values=()=>state.mode==='screen'?state.screenValues:state.colourValues;
  const settings=()=>({mode:state.mode,selected:state.selected,values:values()});
@@ -78,13 +86,13 @@ export function initialisePixelTv(root){
   }
   const row=$('[data-tv-rgb="before"]');before.forEach((n,c)=>{row.querySelector(`[data-component="${c}"]`).style.backgroundColor=colourCss(before.map((v,i)=>i===c?v:0));row.querySelector(`[data-value="${c}"]`).textContent=`${['R','G','B'][c]} ${n}`;});row.querySelector('[data-combined]').style.backgroundColor=colourCss(before);row.querySelector('[data-combined]').setAttribute('aria-label',`原本${colourName(before)}，RGB ${before.join('、')}`);
   $('[data-tv-control-label]').textContent=state.mode==='screen'?'調整整幅圖的 RGB':'調整 RGB';
-  $('[data-tv-control-help]').textContent=state.mode==='screen'?'每個控制都影響整幅圖。先關掉一種色光比較，255 保留原圖的該色光。':'點選 0／128／255，或直接輸入數值。修改會立即套用整組。';
-  root.querySelectorAll('[data-tv-value]').forEach((input,c)=>{if(input.value!==String(config.values[c]))input.value=String(config.values[c]);input.setAttribute('aria-invalid','false');});
+  $('[data-tv-control-help]').textContent=state.mode==='screen'?'每個選項都影響整幅圖。「減少一半」以原圖為準；「保留」維持原圖的該色光。':'點選 0／128／255，或直接輸入數值。修改會立即套用整組。';
+  root.querySelectorAll('[data-tv-value]').forEach((input,c)=>{if(input.value!==String(config.values[c]))input.value=String(config.values[c]);input.setAttribute('aria-invalid','false');input.hidden=state.mode==='screen';input.disabled=state.mode==='screen';});
   root.querySelectorAll('[data-tv-preset]').forEach(b=>b.setAttribute('aria-pressed',String(config.values[Number(b.dataset.channel)]===Number(b.dataset.tvPreset))));
-  root.querySelectorAll('[data-channel-row]').forEach((row,c)=>{row.querySelector('label').firstChild.textContent=state.mode==='screen'?`${['紅光','綠光','藍光'][c]} ${['R','G','B'][c]}`:`${['紅','綠','藍'][c]} ${['R','G','B'][c]}`;});
+  root.querySelectorAll('[data-channel-row]').forEach((row,c)=>{const label=row.querySelector('label');label.firstChild.textContent=state.mode==='screen'?`${['紅光','綠光','藍光'][c]} ${['R','G','B'][c]}`:`${['紅','綠','藍'][c]} ${['R','G','B'][c]}`;row.setAttribute('role','group');row.setAttribute('aria-label',`${['紅光','綠光','藍光'][c]}${state.mode==='screen'?'整圖調整選項':'數值調整'}`);if(state.mode==='screen')label.removeAttribute('for');else label.setAttribute('for',`tv-rgb-${c}`);});
   root.querySelectorAll('[data-tv-value]').forEach((input,c)=>input.setAttribute('aria-label',state.mode==='screen'?`${['紅光','綠光','藍光'][c]}整圖強度，0關閉，255保留原圖`:`${['紅光 R','綠光 G','藍光 B'][c]} 數值，0到255`));
-  root.querySelectorAll('[data-tv-preset]').forEach(b=>{const n=Number(b.dataset.tvPreset),name=['紅光','綠光','藍光'][Number(b.dataset.channel)],meaning=state.mode==='screen'?(n===0?'關閉':n===128?'約半':'保留'):(n===0?'關閉':n===128?'中':'最亮');b.querySelector('small').textContent=meaning;b.setAttribute('aria-label',state.mode==='screen'?`${name}整圖強度${n}，${n===255?'保留原圖':n===128?'約保留一半':'關閉'}`:`${name}設為${n}，${meaning}`);});
-  if(state.mode==='screen'){const message=screenSummary();if($('[data-tv-screen-summary]').textContent!==message)$('[data-tv-screen-summary]').textContent=message;}
+  root.querySelectorAll('[data-tv-preset]').forEach(b=>{const n=Number(b.dataset.tvPreset),name=['紅光','綠光','藍光'][Number(b.dataset.channel)],meaning=state.mode==='screen'?(n===0?'關閉':n===128?'減少一半':'保留'):(n===0?'關閉':n===128?'中':'最亮');b.querySelector('small').textContent=meaning;b.setAttribute('aria-label',state.mode==='screen'?`${name}：${meaning}`:`${name}設為${n}，${meaning}`);});
+  if(state.mode==='screen'){const message=screenSummary(),effect=screenEffect();if($('[data-tv-screen-summary]').textContent!==message)$('[data-tv-screen-summary]').textContent=message;if($('[data-tv-screen-effect]').textContent!==effect)$('[data-tv-screen-effect]').textContent=effect;}
   $('[data-tv-pixel-values]').textContent=`目前像素：R ${after[0]}・G ${after[1]}・B ${after[2]}`;
   $('[data-tv-reset]').textContent=state.mode==='colour'?'還原這組顏色':'還原整幅圖';$('[data-tv-input-error]').hidden=true;
   const nextFrameKey=state.mode==='inspect'?'inspect':state.mode+':'+config.values.join(',')+(state.mode==='colour'?':'+before.join(','):'');
@@ -93,18 +101,18 @@ export function initialisePixelTv(root){
   const neighbours=neighbourhood(state.selected,2);
   lenses.forEach((lens,i)=>{const ctx=lensContexts[i],frame=i===0?source:visible;ctx.clearRect(0,0,150,150);ctx.fillStyle='#d9ded1';ctx.fillRect(0,0,150,150);neighbours.forEach((index,j)=>{const a=j%5*30,b=Math.floor(j/5)*30;if(index!==null){ctx.fillStyle=colourCss(pixelAt(frame,index));ctx.fillRect(a,b,30,30);}ctx.strokeStyle='#64765d80';ctx.lineWidth=1;ctx.strokeRect(a+.5,b+.5,29,29);});ctx.strokeStyle='#3c3219';ctx.lineWidth=5;ctx.strokeRect(60,60,30,30);ctx.strokeStyle='#ffd45c';ctx.lineWidth=2;ctx.strokeRect(60,60,30,30);lens.hidden=false;lens.setAttribute('aria-label',`${i===0?'原圖':'目前圖'}的實際局部放大，中央第 ${y+1} 列第 ${x+1} 格。拖曳圖上的小取樣框換選。`);});
   }
-  pictures.forEach((canvas,i)=>{canvas.hidden=false;canvas.setAttribute('aria-describedby',state.mode==='screen'?'tv-screen-intro':'tv-picture-help');canvas.setAttribute('aria-label',state.mode==='screen'?(i===0?'原圖，保留全部原始色光。':'調整後的整幅圖。'+screenSummary()):`${i===0?'原圖':'目前畫面'}，已選第 ${y+1} 列第 ${x+1} 格。請拖曳小取樣框選像素，或用方向鍵微調。`);});
+  pictures.forEach((canvas,i)=>{canvas.hidden=false;canvas.setAttribute('aria-describedby',state.mode==='screen'?(i===0?'tv-screen-intro':'tv-screen-summary tv-screen-effect'):'tv-picture-help');canvas.setAttribute('aria-label',state.mode==='screen'?(i===0?'原圖，保留全部原始色光。':'調整後的整幅圖。'+screenSummary()):`${i===0?'原圖':'目前畫面'}，已選第 ${y+1} 列第 ${x+1} 格。請拖曳小取樣框選像素，或用方向鍵微調。`);});
   positionLenses();$('[data-tv-observation]').textContent=observationText(before,after,config);
   $('[data-tv-takeaway]').textContent=state.mode==='inspect'?'拖曳小取樣框 → 放大鏡自動跟隨 → 顏色與 RGB 同步。':state.mode==='colour'?`現在只調整原圖中相同 RGB 的 ${matches.length} 格，其他像素保持原樣。`:'整圖調整時，每個像素仍保有各自的 RGB 原值與比例。';
   root.querySelectorAll('[data-tv-point]').forEach(b=>b.setAttribute('aria-pressed',String(QUICK_POINTS.find(p=>p.id===b.dataset.tvPoint).index===state.selected)));
  }
  function select(index){if(state.mode==='screen'||index===state.selected)return;if(drag&&sameColour(source,index,drag.initial.selected))state.colourValues=[...drag.initial.colourValues];else if(!sameColour(source,state.selected,index))state.colourValues=pixelAt(source,index);state.selected=index;render();}
  function setMode(mode){cancelDrag();state.mode=mode;render();}
- function setChannel(channel,value){cancelDrag();if(!Number.isInteger(value)||value<0||value>255)return false;values()[channel]=value;render();return true;}
+ function setChannel(channel,value){cancelDrag();if(!Number.isInteger(value)||value<0||value>255||(state.mode==='screen'&&![0,128,255].includes(value)))return false;values()[channel]=value;render();return true;}
  root.querySelectorAll('[data-tv-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.tvMode)));
  $('[data-tv-adjust-selected]').addEventListener('click',()=>setMode('colour'));
  root.querySelectorAll('[data-tv-preset]').forEach(b=>b.addEventListener('click',()=>setChannel(Number(b.dataset.channel),Number(b.dataset.tvPreset))));
- root.querySelectorAll('[data-tv-value]').forEach((input,c)=>{input.addEventListener('input',()=>{if(input.value.trim()===''||!setChannel(c,Number(input.value))){input.setAttribute('aria-invalid','true');$('[data-tv-input-error]').hidden=false;}});input.addEventListener('blur',()=>{if(input.getAttribute('aria-invalid')==='true'){input.value=String(values()[c]);input.setAttribute('aria-invalid','false');$('[data-tv-input-error]').hidden=true;}});});
+ root.querySelectorAll('[data-tv-value]').forEach((input,c)=>{input.addEventListener('input',()=>{if(state.mode==='screen'){input.value=String(values()[c]);return;}if(input.value.trim()===''||!setChannel(c,Number(input.value))){input.setAttribute('aria-invalid','true');$('[data-tv-input-error]').hidden=false;}});input.addEventListener('blur',()=>{if(input.getAttribute('aria-invalid')==='true'){input.value=String(values()[c]);input.setAttribute('aria-invalid','false');$('[data-tv-input-error]').hidden=true;}});});
  $('[data-tv-reset]').addEventListener('click',()=>{cancelDrag();if(state.mode==='screen')state.screenValues=[255,255,255];else state.colourValues=pixelAt(source,state.selected);render();});
  function keyboard(e){if(state.mode==='screen')return;if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(e.key))return;e.preventDefault();cancelDrag();select(moveSelection(state.selected,e.key));}
  function applyDrag(){if(!drag||!pendingDrag)return;const p=pendingDrag;pendingDrag=null;const rect=pictures[drag.index].getBoundingClientRect();if(rect.width<60)return cancelDrag();select(sampleDragIndex(p.x,p.y,rect,drag.grabX,drag.grabY));}
