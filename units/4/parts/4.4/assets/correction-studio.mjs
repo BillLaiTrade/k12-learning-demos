@@ -1,5 +1,5 @@
-import {createEyeModel} from './eye-model.mjs?v=20261105-correction2';
-import {initialCorrection,changeCorrection,correctionState,SPECTACLE} from './correction-optics.mjs?v=20261105-correction2';
+import {createEyeModel} from './eye-model.mjs?v=20261105-correction3';
+import {initialCorrection,changeCorrection,correctionState,SPECTACLE} from './correction-optics.mjs?v=20261105-correction3';
 const root=document.querySelector('[data-correction-lab]');
 if(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],svg=$('[data-correction-scene]'),preview=$('[data-correction-preview]');
@@ -15,11 +15,12 @@ if(root){
   <g data-correction-anatomy><g transform="translate(${CX*(1-g.retina)} 0) scale(${g.retina} 1)"><ellipse data-correction-shell cx="470" cy="220" rx="200" ry="182" fill="#c6d6b0" stroke="#91aa7a" stroke-width="2"/><ellipse cx="470" cy="220" rx="192" ry="174" fill="url(#eye8-bowl)" stroke="#f8fbeb" stroke-width="3"/></g><path data-correction-retina d="${band}" fill="#e9bc87"/><path d="M325 127C269 167 267 272 325 313C302 274 298 170 325 127Z" fill="url(#eye8-glass)" stroke="#91bfcb" stroke-width="1.8"/><ellipse cx="${LX}" cy="220" rx="20.7" ry="70" fill="url(#eye8-glass)" stroke="#81b6c6"/>
   ${state.lens==='none'?'':`<path data-correction-glass d="${state.lens==='concave'?`M${SX-17} 124C${SX-11} 160 ${SX-3} 195 ${SX-3} 220C${SX-3} 245 ${SX-11} 280 ${SX-17} 316H${SX+17}C${SX+11} 280 ${SX+3} 245 ${SX+3} 220C${SX+3} 195 ${SX+11} 160 ${SX+17} 124Z`:`M${SX} 124C${SX-29} 165 ${SX-29} 275 ${SX} 316C${SX+29} 275 ${SX+29} 165 ${SX} 124Z`}" fill="url(#eye8-glass)" stroke="#8ab7ae"/>`}</g>
   <path d="M20 220H746" stroke="#82967c" stroke-width="1.1" stroke-dasharray="7 6" opacity=".55"/>
-  <rect data-correction-card x="31" y="120" width="46" height="200" rx="8" fill="#fffdf0" stroke="#a4b38d"/><path d="M54 147V300" stroke="#6d9467" stroke-width="3.5"/><path d="M54 140L43 161H65Z" fill="${red}"/><circle cx="54" cy="300" r="8" fill="${blue}"/><text class="eye-caption" x="54" y="352" text-anchor="middle">遠方圖卡</text>`;
+  <g data-correction-source-inset><rect x="18" y="25" width="116" height="111" rx="12" fill="#fdfcf0" stroke="#b6c8a5"/><text class="correction-source-title" x="76" y="49" text-anchor="middle">遠方圖卡</text><rect x="31" y="59" width="30" height="63" rx="5" fill="#fffef8" stroke="#c8d4b9"/><path d="M46 70V111" stroke="#769367" stroke-width="2.5"/><g opacity="${state.point==='bottom'?.35:1}"><path d="M46 65L39 78H53Z" fill="${red}"/><text class="correction-source-point" x="78" y="79" fill="${red}">上端</text></g><g opacity="${state.point==='top'?.35:1}"><circle cx="46" cy="111" r="5" fill="${blue}"/><text class="correction-source-point" x="78" y="114" fill="${blue}">下端</text></g></g>
+  <text class="correction-incoming-label" x="91" y="348" text-anchor="middle">來自遠方圖卡的光</text>`;
   if(state.rays){
    for(const r of g.rays.filter(r=>state.point==='both'||state.point===r.name)){
-    const c=r.name==='top'?red:blue,yy=Y+r.retinaY*SY,end=[wall(yy),yy],points=[[110,Y+(r.spectacleY-r.incoming*(SX-110)/353)*SY],[SX,Y+r.spectacleY*SY],[CX,Y+r.corneaY*SY],[LX,Y+r.lensY*SY],end];
-    out+=`<path class="eye-ray" data-correction-ray="${r.name}" d="M54 ${Y+r.objectY*SY}L82 ${n(points[0][1])} ${points.map(([x,y],i)=>`${i?'L':'M'}${pt(x,y)}`).join('')}" stroke="${c}"/>`;
+    const c=r.name==='top'?red:blue,yy=Y+r.retinaY*SY,end=[wall(yy),yy],points=[[18,Y+(r.spectacleY-r.incoming*(SX-18)/353)*SY],[SX,Y+r.spectacleY*SY],[CX,Y+r.corneaY*SY],[LX,Y+r.lensY*SY],end];
+    out+=`<path class="eye-ray" data-correction-ray="${r.name}" d="${points.map(([x,y],i)=>`${i?'L':'M'}${pt(x,y)}`).join('')}" stroke="${c}"/>`;
     for(const [a,b]of [[points[0],points[1]],[points[1],points[2]],[points[3],points[4]]]){const x=a[0]+(b[0]-a[0])*.62,y=a[1]+(b[1]-a[1])*.62;out+=`<path d="M${pt(x-(b[0]-a[0])*.025,y-(b[1]-a[1])*.025)}L${pt(x,y)}" stroke="${c}" stroke-width="2" marker-end="url(#eye8-arrow${r.name==='top'?0:1})"/>`;}
     out+=`<circle data-correction-hit="${r.name}" cx="${n(end[0])}" cy="${n(end[1])}" r="${g.clear?3:3.8}" fill="${c}" opacity="${g.clear?1:.7}"/>`;
     if(g.position==='behind'){
@@ -31,7 +32,6 @@ if(root){
     const fx=CX+353*g.focus;out+=`<path data-correction-focus d="M${n(fx)} 178V262" stroke="#b69950" stroke-width="1.3" stroke-dasharray="4 5"/>`;
    }
   }
-  out+=`<g data-correction-distance-break><path d="M94 177L89 188M103 177L98 188M94 249L89 260M103 249L98 260" fill="none" stroke="#879b7d" stroke-width="1.8"/><text x="96" y="107" text-anchor="middle" class="correction-distance-label">物距省略</text></g>`;
   out+=state.lens==='none'?`<text class="eye-caption" x="${SX}" y="85" text-anchor="middle">未加鏡片</text>`:leader(SX,85,lenses[state.lens],SX,128);
   out+=leader(277,71,'角膜',285,178)+leader(414,47,'水晶體',LX,173)+leader(609,71,'視網膜',wall(154)+3,154);
   const hitYs=g.rays.map(r=>Y+r.retinaY*SY),top=Math.min(...hitYs)-9,bottom=Math.max(...hitYs)+9,bx=rx+13;
