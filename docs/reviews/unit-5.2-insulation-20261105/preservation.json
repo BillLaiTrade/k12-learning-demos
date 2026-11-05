@@ -1,0 +1,12 @@
+{
+  "baseline": "a394ccdc4fd8292c551e6f645fd68eae0141f3b3",
+  "checks": {
+    "card-01": true,
+    "card-02": true,
+    "card-03": true,
+    "card-04": true,
+    "card-05": true,
+    "quiz": true,
+    "quiz-and-nav-js": true
+  }
+}

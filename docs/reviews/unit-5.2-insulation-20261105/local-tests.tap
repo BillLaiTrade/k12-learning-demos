@@ -1,0 +1,45 @@
+▶ 5.2 convection: fluid movement, mode changes and observation lifecycle
+  ✔ starts with a real distinction between water and a room, without a premature conclusion (159.228792ms)
+  ✔ both sides rise near the source, move continuously and use the same relative-warmth key (11634.635571ms)
+  ✔ photographic scenes keep animated arrows in the fluid and not inside the heater (158.268862ms)
+  ✔ pause freezes actual rendered positions and screenshots; resume preserves progress (1336.195566ms)
+  ✔ switching the fluid cancels old animation, clears the discovery and resets observations (782.4565ms)
+  ✔ clicking each appliance starts or resumes without toggling off or multiplying animation loops (3746.48048ms)
+  ✔ keyboard, rapid actions and background interruptions leave no delayed restart (476.406149ms)
+  ✔ radiation, insulation and the integrated quiz still work independently (2616.098283ms)
+  ✔ all supported viewports keep explanatory text, controls and the actual fluid scene readable (1419.196143ms)
+  ✔ a failed image can be retried, and a late response cannot reset a different running mode (2859.14757ms)
+  ✔ real frames keep moving with both motion preferences and touch can pause/reset (15252.884858ms)
+✔ 5.2 convection: fluid movement, mode changes and observation lifecycle (42764.421809ms)
+▶ 5.2 insulation: controlled comparisons, remaining heat paths and manual observation
+  ✔ starts only on request, retains the scientific bridge and uses identical capped bottles (191.109531ms)
+  ✔ air and vacuum differ in gas paths while radiation and solid neck/support paths remain (777.790701ms)
+  ✔ pause freezes actual paths and graph pixels, resume does not restart, repeated bottle clicks are idempotent (7048.466776ms)
+  ✔ lining comparison resets progress, holds vacuum fixed and changes only gap-facing imagery (6492.950321ms)
+  ✔ keyboard, background pause and other experiments remain independent (1258.203906ms)
+  ✔ both modes at seven viewports keep the full plot and all native controls inside the panel (2613.656143ms)
+  ✔ each required image can fail and retry without automatic playback (4039.858435ms)
+  ✔ late lining image cannot restart or reset a different running comparison (2104.527441ms)
+  ✔ real touch in both modes and motion preferences moves paths and pauses actual curves (11994.588948ms)
+✔ 5.2 insulation: controlled comparisons, remaining heat paths and manual observation (38809.251711ms)
+▶ 5.2 radiation: one energy path, surface outcomes and conditional warming
+  ✔ manual start is required and the concept uses a single radiation-energy stream (198.704695ms)
+  ✔ travel precedes surface reflection/absorption, and heating begins only after absorption (2128.009629ms)
+  ✔ pause freezes the whole rendered illustration and resume keeps the same progress (935.719513ms)
+  ✔ repeated source clicks cannot stop the demo or multiply animation loops; reset clears all results (3732.226268ms)
+  ✔ keyboard and background interruptions are consistent and do not auto-resume (400.875063ms)
+  ✔ the reflection and absorption paths are distinct outcomes at the same surface point (23.016462ms)
+  ✔ insulation, convection and quiz remain independent after extracting radiation from the shared controller (2852.333075ms)
+  ✔ desktop, laptop and narrow layouts keep controls, condition and actual scenes in view (1283.183321ms)
+  ✔ either photo may fail and retry without premature playback or loss of the other successful photo (2766.639463ms)
+  ✔ a late photo response after reset leaves the observation stopped at its beginning (1094.295474ms)
+  ✔ real touch under both motion preferences starts moving rays and pauses/resets actual frames (9142.112625ms)
+✔ 5.2 radiation: one energy path, surface outcomes and conditional warming (27097.574631ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43256.532341

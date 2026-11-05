@@ -1,0 +1,40 @@
+[
+  {
+    "url": "https://openstax.org/books/college-physics-2e/pages/14-7-radiation",
+    "finalUrl": "https://openstax.org/books/college-physics-2e/pages/14-7-radiation",
+    "http": 200,
+    "date": "2026-11-05",
+    "excerpts": [
+      "sitive to it. Figure 14.26 A black object is a good absorber and a good radiator, while a white (or silver) object is a poor absorber and a poor radiator. It is as if radiation from the inside is reflected back into the silver object, whereas radiation from the inside of the black object is “absorbed” when it hits the surface and finds itself on the outside and is strongly emitted. The rate of heat transfer by emitted radiation is determined by the Stefan-Boltzmann law of radiation : Q t = σ e A T 4 , Q t = σ e A T 4 , 14.43 where σ = 5 . 67 × 10 − 8 J/s ⋅ m 2 ⋅ K 4 σ = 5 . 67 × 10 − 8 J/s ⋅ m 2 ⋅ K 4 is the Stefan-Boltzmann constant, A A is the surface area of the object, and T T is its absolute temperature in kelvin. The symbol e e stands",
+      "ce area of the object, and T T is its absolute temperature in kelvin. The symbol e e stands for the emissivity of the object, which is a measure of how well it radiates. An ideal jet-black (or black body) radiator has e = 1 e = 1 , whereas a perfect reflector has e = 0 e = 0 . Real objects fall between these two values. Take, for example, tungsten light bulb filaments which have an e e of about 0 . 5 0 . 5 , and carbon black (a material used in printer toner), which has the (greatest known) emissivity of about 0.99 0.99 . The radiation rate is directly proportional to the fourth power of the absolute temperature—a remarkably strong temperature dependence. Furthermore, the radiated heat is proportional to the surface area of the object. If y"
+    ]
+  },
+  {
+    "url": "https://openstax.org/books/college-physics-2e/pages/14-5-conduction",
+    "finalUrl": "https://openstax.org/books/college-physics-2e/pages/14-5-conduction",
+    "http": 200,
+    "date": "2026-11-05",
+    "excerpts": []
+  },
+  {
+    "url": "https://openstax.org/books/college-physics-2e/pages/14-6-convection",
+    "finalUrl": "https://openstax.org/books/college-physics-2e/pages/14-6-convection",
+    "http": 200,
+    "date": "2026-11-05",
+    "excerpts": [
+      "14.6 Convection - College Physics 2e | OpenStax Skip to Content Go to accessibility page Keyboard shortcuts menu College Physics 2e 14.6 Convection College Physics 2e 14.6 Convection Contents Highlights Print Search Search Close Search 14.6 Convection Learning Objectives By the end of this section, you will be able to: Discuss the method of heat transfer by convection. Convection is driven by large-scale flow of matter. In the case of Earth, the atmospheric circulation is caused by the flow of hot air from the tropics to the poles, and the flow of cold air from the poles toward the tropics. (Note that Earth’s rotation causes the observed easterly "
+    ]
+  },
+  {
+    "url": "https://openstax.org/books/university-physics-volume-2/pages/1-6-mechanisms-of-heat-transfer",
+    "http": 200,
+    "date": "2026-11-05",
+    "excerpts": [
+      "nsferred by radiation ( Figure 1.28 ). That is, the hot body emits electromagnetic waves that are absorbed by the skin. No medium is required for electromagnetic waves to propagate. Different names are used for electromagnetic waves of different wavelengths: radio waves, microwaves, infrared radiation, visible light, ultraviolet radiation, X-rays, and gamma rays. Figure 1.28 Most of the heat transfer from this fire to the observers occurs through infrared radiation. The visible light, although dramatic, transfers relatively little thermal energy. Convection transfers energy away from the observers as hot air rises, while conduction is negligibly slow here. Skin is very sensitive to infrared radiation, so you ca",
+      "reases linearly from T h T h to T c . T c . Substance Thermal Conductivity k ( W / m · °C ) ( W / m · °C ) Diamond 2000 Silver 420 Copper 390 Gold 318 Aluminum 220 Steel iron 80 Steel (stainless) 14 Ice 2.2 Glass (average) 0.84 Concrete brick 0.84 Water 0.6 Fatty tissue (without blood) 0.2 Asbestos 0.16 Plasterboard 0.16 Wood 0.08–0.16 Snow (dry) 0.10 Cork 0.042 Glass wool 0.042 Wool 0.04 Polystyrene foam 0.035 Down feathers 0.025 Air 0.023 Table 1.5 Thermal Conductivities of Common Substances Values are given for temperatures near 0 ° C 0 ° C . Example 1.10 Calculating Heat Transfer through Conduction A polystyrene foam icebox has a total area of 0.950 m 2 0.950 m 2 and walls with an average thickness of 2.50 ",
+      "ing and the outside environment. (credit: Tracey Nicholls) Note that in Table 1.5 , most of the best thermal conductors—silver, copper, gold, and aluminum—are also the best electrical conductors, because they contain many free electrons that can transport thermal energy. (Diamond, an electrical insulator, conducts heat by atomic vibrations.) Cooking utensils are typically made from good conductors, but the handles of those used on the stove are made from good insulators (bad conductors). Example 1.11 Two Conductors End to End A steel rod and an aluminum rod, each of diameter 1.00 cm and length 25.0 cm, are welded end to end. One end of the steel rod is placed in a large tank of boiling water at 100 ° C 100 ° C ",
+      "nd thickness, as shown in Figure 1.22 , T h − T c T h − T c is the temperature difference across the slab, and k is the thermal conductivity of the material. Table 1.5 gives representative values of thermal conductivity. More generally, we can write P = − k A d T d x , P = − k A d T d x , where x is the coordinate in the direction of heat flow. Since in Figure 1.22 , the power and area are constant, dT / dx is constant, and the temperature decreases linearly from T h T h to T c . T c . Substance Thermal Conductivity k ( W / m · °C ) ( W / m · °C ) Diamond 2000 Silver 420 Copper 390 Gold 318 Aluminum 220 Steel iron 80 Steel (stainless) 14 Ice 2.2 Glass (average) 0.84 Concrete brick 0.84 Water 0.6 Fatty tissue (w",
+      "difference across the slab, and k is the thermal conductivity of the material. Table 1.5 gives representative values of thermal conductivity. More generally, we can write P = − k A d T d x , P = − k A d T d x , where x is the coordinate in the direction of heat flow. Since in Figure 1.22 , the power and area are constant, dT / dx is constant, and the temperature decreases linearly from T h T h to T c . T c . Substance Thermal Conductivity k ( W / m · °C ) ( W / m · °C ) Diamond 2000 Silver 420 Copper 390 Gold 318 Aluminum 220 Steel iron 80 Steel (stainless) 14 Ice 2.2 Glass (average) 0.84 Concrete brick 0.84 Water 0.6 Fatty tissue (without blood) 0.2 Asbestos 0.16 Plasterboard 0.16 Wood 0.08–0.16 Snow (dry) 0.1"
+    ]
+  }
+]

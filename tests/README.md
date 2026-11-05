@@ -1645,3 +1645,13 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-radiation.test.cjs
 第一區專項的播放案例改為取樣真正的Web Animations時間軸，確認24個transform效果共用起始時間、不同時間的實際SVG像素確實改變、結束恢復完整光路。以MutationObserver量測播放期間的幾何／樣式／子節點改寫數，排除階段邊界必要的aria狀態；預期為0，不把單一硬體的FPS當跨裝置保證。減少動態、重播、鍵盤、偏好切換與觸控回歸保留。幾何檢查改讀取實際SVG viewBox，不綁定舊構圖尺寸。
 
 `native-playback.json`保存兩種偏好的像素差異、原生效果數、時間軸進度及DOM改寫數；畫面與本次驗證見`docs/reviews/unit-4.2-surface-native-20261105/`。
+
+## 5.2 第六區：真空與反射層保溫比較
+
+```bash
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-insulation.test.cjs
+```
+
+10項（含父測試）檢查手動開始、兩組各只改一項條件、共用瓶體與夾層遮罩、氣體路徑有無與輻射／固體路徑仍存、同起點定性曲線、實際圖表暫停像素、停續／重來／重複點擊／背景中斷、兩比較七種視窗全圖可見與44px操作、三張照片分別失敗重試、晚到亮面照片不干擾另一組播放，以及390／320px兩偏好兩比較的真實觸控。`INSULATION_LAB_URL`可指向公開頁。輻射及對流的跨區回歸改查新曲線相對位置，移除已撤換的舊保溫選項與溫度讀值；不保留假舊控制。
+
+三套共34項。曲線只表達組內定性快慢，不檢驗虛構保溫時長或機制百分比。檢查及七組視窗量測見`docs/reviews/unit-5.2-insulation-20261105/`。

@@ -1,51 +1,6 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
-  const states = {
-    insulation: {time:0, playing:false}
-  };
-  let frame=0, last=null;
-  const temperature = (initial, ambient, time, rate=.16) => {
-    const value=ambient+(initial-ambient)*Math.exp(-rate*time);
-    return Math.abs(value-ambient)<.05?ambient:value;
-  };
-  const degrees = t => `${t.toFixed(1)}°C`;
-  function renderInsulation() {
-    const s=states.insulation, wall=$('insulation-wall').checked, air=$('insulation-air').checked, reflect=$('insulation-reflect').checked;
-    const factor=.4*(wall?.45:1)+.4*(air?.4:1)+.2*(reflect?.4:1);
-    $('insulation-base-temp').textContent=degrees(temperature(60,25,s.time));
-    $('insulation-design-temp').textContent=degrees(temperature(60,25,s.time,.16*factor));
-    $('insulation-coat').toggleAttribute('hidden',!wall);$('insulation-silver').toggleAttribute('hidden',!reflect);
-    $('insulation-conduction').textContent=wall?'減少':'原先';$('insulation-convection').textContent=air?'減少':'原先';$('insulation-radiation').textContent=reflect?'減少':'原先';
-  }
-  const renderers={insulation:renderInsulation};
-  function renderOne(id) {
-    renderers[id]();
-    const button=$(`${id}-play`), label=states[id].playing?'暫停觀察':states[id].time>0?'繼續觀察':'開始觀察';
-    if(button.textContent!==label)button.textContent=label;
-    button.setAttribute('aria-pressed',String(states[id].playing));
-  }
-  function renderAll() { Object.keys(renderers).forEach(renderOne); }
-  function tick(now) {
-    const dt=last===null?0:Math.max(0,Math.min(.05,(now-last)/1000));last=now;
-    Object.entries(states).forEach(([id,s])=>{
-      if(!s.playing)return;
-      s.time+=dt;
-      renderOne(id);
-    });
-    if(Object.values(states).some(s=>s.playing))frame=requestAnimationFrame(tick);else{frame=0;last=null;}
-  }
-  function start(){if(!frame){last=null;frame=requestAnimationFrame(tick);}}
-  function reset(id) {
-    const s=states[id];s.time=0;s.playing=false;
-    renderOne(id);
-  }
-  Object.keys(states).forEach(id=>{
-    $(`${id}-play`).addEventListener('click',()=>{states[id].playing=!states[id].playing;renderOne(id);start();});
-    $(`${id}-reset`).addEventListener('click',()=>reset(id));
-  });
-  ['wall','air','reflect'].forEach(id=>$(`insulation-${id}`).addEventListener('change',()=>reset('insulation')));
-  document.addEventListener('visibilitychange',()=>{if(document.hidden){Object.values(states).forEach(s=>{s.playing=false;});cancelAnimationFrame(frame);frame=0;last=null;renderAll();}});
   const form=$('heat-quiz'),result=$('heat-quiz-result');
   form.noValidate=true;
   form.addEventListener('submit',event=>{
@@ -64,5 +19,4 @@
     if(entry.isIntersecting)links.forEach(link=>{if(link.hash===`#${entry.target.id}`)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');});
   }),{rootMargin:'-20% 0px -65% 0px'});
   links.forEach(link=>observer.observe(document.querySelector(link.hash)));
-  renderAll();
 })();

@@ -1,0 +1,775 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "height": 900,
+      "mode": "gap",
+      "overflow": false,
+      "panelWidth": 778,
+      "plotWidth": 736,
+      "plotRight": 1230,
+      "panelRight": 1251,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "有空氣",
+          "size": 12.16,
+          "width": 50.46875
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "抽去大部分空氣",
+          "size": 12.16,
+          "width": 99.09375
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "gap",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.480",
+        "gasA": "true",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "false",
+        "progress": "1.0000"
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "mode": "lining",
+      "overflow": false,
+      "panelWidth": 778,
+      "plotWidth": 736,
+      "plotRight": 1230,
+      "panelRight": 1251,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "無亮面反射層",
+          "size": 12.16,
+          "width": 86.9375
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "亮面金屬層",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "lining",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.480",
+        "gasA": "false",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "true",
+        "progress": "1.0000"
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "mode": "gap",
+      "overflow": false,
+      "panelWidth": 778,
+      "plotWidth": 736,
+      "plotRight": 1193,
+      "panelRight": 1214,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "有空氣",
+          "size": 12.16,
+          "width": 50.46875
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "抽去大部分空氣",
+          "size": 12.16,
+          "width": 99.09375
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "gap",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.496",
+        "gasA": "true",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "false",
+        "progress": "1.0000"
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "mode": "lining",
+      "overflow": false,
+      "panelWidth": 778,
+      "plotWidth": 736,
+      "plotRight": 1193,
+      "panelRight": 1214,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "無亮面反射層",
+          "size": 12.16,
+          "width": 86.9375
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "亮面金屬層",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "lining",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.480",
+        "gasA": "false",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "true",
+        "progress": "1.0000"
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "mode": "gap",
+      "overflow": false,
+      "panelWidth": 778,
+      "plotWidth": 736,
+      "plotRight": 1150,
+      "panelRight": 1171,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "有空氣",
+          "size": 12.16,
+          "width": 50.46875
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "抽去大部分空氣",
+          "size": 12.16,
+          "width": 99.09375
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "gap",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.480",
+        "gasA": "true",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "false",
+        "progress": "1.0000"
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "mode": "lining",
+      "overflow": false,
+      "panelWidth": 778,
+      "plotWidth": 736,
+      "plotRight": 1150,
+      "panelRight": 1171,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "無亮面反射層",
+          "size": 12.16,
+          "width": 86.9375
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "亮面金屬層",
+          "size": 12.16,
+          "width": 74.78125
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "lining",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.480",
+        "gasA": "false",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "true",
+        "progress": "1.0000"
+      }
+    },
+    {
+      "width": 820,
+      "height": 900,
+      "mode": "gap",
+      "overflow": false,
+      "panelWidth": 507,
+      "plotWidth": 465,
+      "plotRight": 757,
+      "panelRight": 778,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 11.52,
+          "width": 71.578125
+        },
+        {
+          "text": "有空氣",
+          "size": 11.68,
+          "width": 49.015625
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 11.52,
+          "width": 71.578125
+        },
+        {
+          "text": "抽去大部分空氣",
+          "size": 11.68,
+          "width": 88.1875
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "gap",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.496",
+        "gasA": "true",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "false",
+        "progress": "1.0000"
+      }
+    },
+    {
+      "width": 820,
+      "height": 900,
+      "mode": "lining",
+      "overflow": false,
+      "panelWidth": 507,
+      "plotWidth": 465,
+      "plotRight": 757,
+      "panelRight": 778,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 11.52,
+          "width": 71.578125
+        },
+        {
+          "text": "無亮面反射層",
+          "size": 11.68,
+          "width": 83.296875
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 11.52,
+          "width": 71.578125
+        },
+        {
+          "text": "亮面金屬層",
+          "size": 11.68,
+          "width": 72.359375
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "lining",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.480",
+        "gasA": "false",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "true",
+        "progress": "1.0000"
+      }
+    },
+    {
+      "width": 760,
+      "height": 900,
+      "mode": "gap",
+      "overflow": false,
+      "panelWidth": 576,
+      "plotWidth": 534,
+      "plotRight": 647,
+      "panelRight": 668,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 11.52,
+          "width": 71.578125
+        },
+        {
+          "text": "有空氣",
+          "size": 11.68,
+          "width": 49.015625
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 11.52,
+          "width": 71.578125
+        },
+        {
+          "text": "抽去大部分空氣",
+          "size": 11.68,
+          "width": 95.703125
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "gap",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.480",
+        "gasA": "true",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "false",
+        "progress": "1.0000"
+      }
+    },
+    {
+      "width": 760,
+      "height": 900,
+      "mode": "lining",
+      "overflow": false,
+      "panelWidth": 576,
+      "plotWidth": 534,
+      "plotRight": 647,
+      "panelRight": 668,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 11.52,
+          "width": 71.578125
+        },
+        {
+          "text": "無亮面反射層",
+          "size": 11.68,
+          "width": 84.03125
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 11.52,
+          "width": 71.578125
+        },
+        {
+          "text": "亮面金屬層",
+          "size": 11.68,
+          "width": 72.359375
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "lining",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.480",
+        "gasA": "false",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "true",
+        "progress": "1.0000"
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "mode": "gap",
+      "overflow": false,
+      "panelWidth": 328,
+      "plotWidth": 300,
+      "plotRight": 345,
+      "panelRight": 359,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12,
+          "width": 74.015625
+        },
+        {
+          "text": "有空氣",
+          "size": 11.84,
+          "width": 49.5
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12,
+          "width": 74.015625
+        },
+        {
+          "text": "抽去大部分空氣",
+          "size": 11.84,
+          "width": 96.8125
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "gap",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.496",
+        "gasA": "true",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "false",
+        "progress": "1.0000"
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "mode": "lining",
+      "overflow": false,
+      "panelWidth": 328,
+      "plotWidth": 300,
+      "plotRight": 345,
+      "panelRight": 359,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12,
+          "width": 74.015625
+        },
+        {
+          "text": "無亮面反射層",
+          "size": 11.84,
+          "width": 84.984375
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12,
+          "width": 74.015625
+        },
+        {
+          "text": "亮面金屬層",
+          "size": 11.84,
+          "width": 73.15625
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "lining",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.480",
+        "gasA": "false",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "true",
+        "progress": "1.0000"
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "mode": "gap",
+      "overflow": false,
+      "panelWidth": 258,
+      "plotWidth": 230,
+      "plotRight": 275,
+      "panelRight": 289,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12,
+          "width": 74.015625
+        },
+        {
+          "text": "有空氣",
+          "size": 11.84,
+          "width": 49.5
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12,
+          "width": 74.015625
+        },
+        {
+          "text": "抽去大部分空氣",
+          "size": 11.84,
+          "width": 80.90625
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "gap",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.480",
+        "gasA": "true",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "false",
+        "progress": "1.0000"
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "mode": "lining",
+      "overflow": false,
+      "panelWidth": 258,
+      "plotWidth": 230,
+      "plotRight": 275,
+      "panelRight": 289,
+      "labels": [
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12,
+          "width": 74.015625
+        },
+        {
+          "text": "無亮面反射層",
+          "size": 11.84,
+          "width": 73.765625
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        },
+        {
+          "text": "瓶口、支撐仍會傳熱",
+          "size": 12,
+          "width": 74.015625
+        },
+        {
+          "text": "亮面金屬層",
+          "size": 11.84,
+          "width": 73.15625
+        },
+        {
+          "text": "輻射",
+          "size": 11.52,
+          "width": 37.03125
+        }
+      ],
+      "state": {
+        "comparison": "lining",
+        "playing": "false",
+        "stage": "observed",
+        "assets": "ready",
+        "started": "true",
+        "elapsed": "14.480",
+        "gasA": "false",
+        "gasB": "false",
+        "liningA": "false",
+        "liningB": "true",
+        "progress": "1.0000"
+      }
+    }
+  ],
+  "errors": []
+}

@@ -259,3 +259,17 @@ SVG裁切區48,60,1514,866與250×137.3顯示邊界一致，使用preserveAspect
 `radiation-lab.js`共用一個觀察時鐘，先傳遞、後反射／吸收，再揭露曲線；曲線是無數值的定性示意，不是地球溫度計算模型。可見光／紅外線都攜能，兩種觀察分別是反射可見光進眼睛與吸收造成受熱；升溫條件固定標示吸收多於散失，補充交代大氣與散失。無新物理公式計算或數字測溫政策。
 
 點太陽或按開始才播放，停續／重來、背景中斷、減少動態低速與載入失敗重試完整支援；延遲圖片完成不自動開始。結語待完整觀察後出現。`solar-1`統一照片／CSS／JS版本，共用腳本改用`radiation-independent-2`。原保溫、小測與導覽保留，另外五區HTML逐字保留。決策、來源與檢查見`docs/decisions/unit-5.2-radiation.md`及本輪review。維持第4階段待實作檢視。
+
+## 2026-11-05：第六區保溫瓶剖面比較
+
+依使用者核可圖及真空／輻射銜接討論實作。核可圖原檔見`docs/reviews/unit-5.2-insulation-20261105/approved-mockup.png`。
+
+| 成品 | 生成原檔（/workspace/generated_images） | 匯出 |
+| --- | --- | --- |
+| insulation-bench.webp | exec-52f55225-4f68-4eee-b9eb-efce4681faf4.png | 1774×887，WebP quality90，100290 bytes |
+| insulation-flask-matte.webp | exec-cb83ef40-fb72-4b61-b702-1a1079f864fb.png | 1024×1536 RGBA，WebP quality92，113720 bytes |
+| insulation-flask-lining.webp | exec-58422da3-d1bf-4c7b-9503-4f3ab000784b.png | 1024×1536 RGBA，WebP quality92，125474 bytes |
+
+背景及透明剖面瓶由image_gen生成，亮面版本由image_gen編輯原瓶；程式只轉換WebP編碼，未重畫材質。共約339KB。A／B共用同一個霧面瓶底圖；亮面版本只以環形遮罩顯示面向夾層的表面，瓶蓋、水、外殼相同。這是生成教學示意，非器材實拍或測量證據。
+
+`insulation-lab.css/js?v=flask-1`獨立負責兩種控制變因比較、原生標籤、向外傳導／氣體流動／跨夾層輻射與同步定性曲線。初溫與室溫是共同設定，曲線無實測刻度、無機制固定占比。共用腳本版本改為`insulation-independent-3`，只移除舊保溫控制器，原小測／導覽保留；前五區HTML逐字保留。載入失敗、延遲回應、手動開始／瓶身點擊、停續／重來、鍵盤／觸控與減少動態均已納入檢查。決策及科學限制見`docs/decisions/unit-5.2-insulation.md`。
