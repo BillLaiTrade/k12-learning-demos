@@ -1,0 +1,109 @@
+{
+  "records": [
+    {
+      "width": 1440,
+      "lab": 7,
+      "keyBelowImage": true,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "imageInViewer": true,
+      "keyInViewer": true
+    },
+    {
+      "width": 1440,
+      "lab": 8,
+      "keyBelowImage": true,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "imageInViewer": true,
+      "keyInViewer": true
+    },
+    {
+      "width": 1024,
+      "lab": 7,
+      "keyBelowImage": true,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "imageInViewer": true,
+      "keyInViewer": true
+    },
+    {
+      "width": 1024,
+      "lab": 8,
+      "keyBelowImage": true,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "imageInViewer": true,
+      "keyInViewer": true
+    },
+    {
+      "width": 390,
+      "lab": 7,
+      "keyBelowImage": true,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "imageInViewer": true,
+      "keyInViewer": true
+    },
+    {
+      "width": 390,
+      "lab": 8,
+      "keyBelowImage": true,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "imageInViewer": true,
+      "keyInViewer": true
+    },
+    {
+      "width": 320,
+      "lab": 7,
+      "keyBelowImage": true,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "imageInViewer": true,
+      "keyInViewer": true
+    },
+    {
+      "width": 320,
+      "lab": 8,
+      "keyBelowImage": true,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "imageInViewer": true,
+      "keyInViewer": true
+    }
+  ],
+  "errors": []
+}
