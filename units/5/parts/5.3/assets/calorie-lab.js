@@ -1,5 +1,7 @@
+import {mountHeatBench} from './heat-bench-view.mjs?v=refined-1';
 import {CALORIE_SETUP,calorieObservationAt} from './calorie-model.mjs';
 const root=document.getElementById('calorie-lab');
+const bench=mountHeatBench(root);
 const get=id=>document.getElementById(id);
 const startButton=get('calorie-transfer'),heaterButton=get('calorie-heater');
 const image=get('calorie-apparatus'),message=get('calorie-observation'),result=get('calorie-conclusion');
@@ -22,6 +24,7 @@ function render(){
   heaterButton.setAttribute('aria-label',`${label}：從 20°C 觀察至 21°C`);
   heaterButton.title=playing?'加熱中，到 21°C 自動停止':label;
   result.hidden=!state.complete;
+  bench.draw({elapsed,playing,ready:assetReady,speed:CALORIE_SETUP.animationSpeed});
 }
 function cancel(){playing=false;cancelAnimationFrame(frame);}
 function reset(){
@@ -56,7 +59,7 @@ async function loadScene(retry=false){
   get('calorie-scene-loading').hidden=false;
   get('calorie-scene-loading').textContent='正在準備器材畫面…';
   get('calorie-retry').hidden=true;get('calorie-meter-screen').hidden=true;
-  if(retry)image.src=new URL(`calorie-water-apparatus.webp?retry=${attempt}`,import.meta.url).href;
+  if(retry)image.src=new URL(`heat-bench-refined.webp?retry=${attempt}`,import.meta.url).href;
   render();
   try{
     await image.decode();if(attempt!==loadAttempt)return;

@@ -1,6 +1,8 @@
+import {mountHeatBench} from './heat-bench-view.mjs?v=refined-1';
 import {HEAT_STAGES,STAGE_SECONDS,STAGE_ANIMATION_SPEED,heatStageObservationAt} from './heat-stage-model.mjs';
 
 const root=document.getElementById('heat-lab');
+const bench=mountHeatBench(root);
 const get=id=>document.getElementById(id);
 const play=get('heat-stage-play'),heater=get('heat-stage-heater'),image=get('heat-stage-apparatus');
 const status=get('heat-stage-status'),svg=get('heat-stage-graph');
@@ -48,6 +50,7 @@ function render(){
   }
   get('heat-stage-record-panel').hidden=records.length===0;
   get('heat-stage-conclusion').hidden=!complete;
+  bench.draw({elapsed,playing,ready:assetReady,speed:STAGE_ANIMATION_SPEED});
 }
 function reset(){
   cancel();elapsed=0;records.length=0;renderedRecords=-1;root.dataset.phase=assetReady?'ready':'loading';
@@ -79,7 +82,7 @@ async function loadScene(retry=false){
   const version=++attempt;assetReady=false;reset();
   get('heat-stage-loading').hidden=false;get('heat-stage-loading').textContent='正在準備器材畫面…';
   get('heat-stage-retry').hidden=true;get('heat-stage-meter-screen').hidden=true;
-  if(retry)image.src=new URL(`calorie-water-apparatus.webp?stageRetry=${version}`,import.meta.url).href;
+  if(retry)image.src=new URL(`heat-bench-refined.webp?stageRetry=${version}`,import.meta.url).href;
   try{
     await image.decode();if(version!==attempt)return;
     assetReady=true;get('heat-stage-loading').hidden=true;get('heat-stage-meter-screen').hidden=false;reset();

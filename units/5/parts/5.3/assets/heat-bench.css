@@ -1,0 +1,59 @@
+/* 第一、二區共用實驗桌；僅改呈現，不改實驗模型與教學順序。 */
+#calorie-lab,#heat-lab{padding:18px}
+.heat-bench{border:1px solid #cbbba2;border-radius:15px;overflow:hidden;background:#f2e8d7;box-shadow:0 5px 16px #573f2410}
+.heat-bench .calorie-workbench,.heat-bench .heat-stage-workbench{position:relative;display:block;isolation:isolate}
+.heat-bench .calorie-apparatus-view{display:block;position:relative;border:0;border-radius:0;background:transparent;margin:0;max-width:none;width:100%;overflow:visible}
+.heat-bench .calorie-photo{position:relative;container-type:inline-size;overflow:hidden}
+.heat-bench .calorie-photo img{width:100%;height:auto;aspect-ratio:1672/941;display:block}
+.heat-apparatus-motion{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.heat-bench .calorie-meter-screen{left:45.95%;top:58.15%;width:12.1%;height:10.65%;gap:2px;font-size:clamp(13px,2.6cqi,27px);color:#203221;text-shadow:0 1px 1px #f8ffd228;letter-spacing:-.04em}
+.heat-bench .calorie-meter-screen small{font-size:.52em;letter-spacing:0}
+.heat-bench .calorie-heater{left:32.18%;top:80.13%;width:max(44px,6.6%);height:auto;aspect-ratio:1;border:2px solid transparent;box-shadow:none}
+.heat-bench .calorie-heater:not(:disabled):hover{background:#ffffff14;border-color:#2a7159;box-shadow:0 0 0 4px #fff9e954}
+.heat-bench .calorie-heater:focus-visible{outline:3px solid #176b53;outline-offset:4px;background:#ffffff20}
+.heat-bench .calorie-heater-light{left:25.81%;top:79.7%;width:1.05%;background:#173b20;box-shadow:inset 0 0 2px #081b0b}
+#calorie-lab[data-playing=true] .calorie-heater-light,#heat-lab[data-playing=true] .calorie-heater-light{background:#b2ff70;box-shadow:0 0 4px 2px #93e95bb0}
+.heat-bench .calorie-photo-label{left:21.6%;top:34.7%;font-size:.78rem;border:1px solid #ded5bd;background:#fffbedf0;color:#375640;box-shadow:0 2px 5px #684b2814}
+.heat-knob-hint{position:absolute;left:38%;top:84%;padding:4px 8px;border:1px solid #d6c8ad;border-radius:6px;background:#fff9eae8;color:#3d5848;font-size:.72rem;line-height:1.4;pointer-events:none;white-space:nowrap}
+.heat-bench .calorie-apparatus-view figcaption{position:absolute;bottom:12px;left:14px;border:1px solid #e3d5bc;border-radius:6px;padding:4px 9px;background:#fff8e9e8;color:#51634e;font-size:.77rem;box-shadow:0 2px 6px #543b1e12}
+#calorie-lab[data-playing=true] .heat-bench figcaption,#heat-lab[data-playing=true] .heat-bench figcaption{background:#fff6dceF;color:#7e5724}
+.heat-bench .calorie-temperature-panel,.heat-bench .heat-stage-plot{position:absolute;right:2.1%;top:50%;transform:translateY(-50%);width:35%;margin:0;border:1px solid #eadfca;border-radius:12px;background:#fffcf3f5;box-shadow:0 5px 18px #5d422322;padding:16px;min-width:0}
+.heat-bench .calorie-temperature-panel{gap:13px}
+.heat-bench .calorie-temperature-panel h4,.heat-bench .heat-stage-plot h4{font-size:1rem;color:#37563f}
+.heat-bench .calorie-difference>div{grid-template-columns:16px minmax(0,1fr) auto;gap:5px}
+.heat-bench .calorie-difference strong{font-size:1.14rem}
+.heat-bench .calorie-difference-result strong{font-size:1.4rem}
+.heat-bench .heat-stage-plot{padding:13px 10px}
+.heat-bench .heat-stage-plot svg{overflow:visible}
+.heat-bench .heat-stage-plot svg text{font-size:20px}
+.heat-bench .heat-stage-plot svg .heat-stage-axis-title{font-size:18px}
+.heat-bench .heat-stage-grid text:last-child{text-anchor:end}
+.heat-bench .heat-stage-energy{padding:8px 6px 0;border-top:1px solid #e6ddc9;align-items:center;flex-wrap:wrap;gap:5px}
+.heat-bench .heat-stage-energy strong{font-size:1.2rem}
+.heat-bench-console{position:relative;padding:10px 14px;background:linear-gradient(110deg,#f7efdf,#e8d7ba);border-top:1px solid #c6ad87}
+.heat-bench-console .calorie-actions{margin:0;gap:10px}
+.heat-bench-console .calorie-observation-note{margin:7px 0 0;min-height:1.7em;font-size:.83rem}
+.heat-bench-console .action{box-shadow:0 2px 3px #4b462218}
+#heat-lab .heat-stage-steps{gap:6px 10px}
+#heat-lab .heat-stage-steps li[data-heat-stage]{padding:4px 10px;background:#fffdf6;border:1px solid #d5dece;border-radius:20px;font-size:.84rem}
+#heat-lab .heat-stage-steps li[data-state=recorded]{background:#e9f1e1;border-color:#aebfa1}
+#heat-lab .heat-stage-steps li[data-state=running]{background:#fff0cc;border-color:#c49c58}
+#heat-lab .heat-stage-steps li::after{display:none}
+.heat-bench [hidden]{display:none}
+@container calorie-workbench (max-width:580px){
+.heat-bench .calorie-photo img{width:162%;max-width:none}.heat-bench .heat-apparatus-motion{width:162%;height:100%}
+.heat-bench .calorie-meter-screen{left:74.439%;width:19.602%;font-size:clamp(13px,4.212cqi,27px)}
+.heat-bench .calorie-heater{left:52.1316%;width:max(44px,10.692%)}.heat-bench .calorie-heater-light{left:41.8122%;width:1.701%}
+.heat-bench .calorie-photo-label{left:35%;font-size:.72rem}.heat-knob-hint{left:64%;top:86%;font-size:.65rem;padding:3px 5px}
+.heat-bench .calorie-temperature-panel{position:static;transform:none;width:calc(100% - 24px);margin:12px;padding:15px;gap:11px}
+.heat-bench .calorie-apparatus-view figcaption{bottom:8px;left:10px;font-size:.72rem}
+}
+@container heat-stage-workbench (max-width:580px){
+.heat-bench .calorie-photo img{width:162%;max-width:none}.heat-bench .heat-apparatus-motion{width:162%;height:100%}
+.heat-bench .calorie-meter-screen{left:74.439%;width:19.602%;font-size:clamp(13px,4.212cqi,27px)}
+.heat-bench .calorie-heater{left:52.1316%;width:max(44px,10.692%)}.heat-bench .calorie-heater-light{left:41.8122%;width:1.701%}
+.heat-bench .calorie-photo-label{left:35%;font-size:.72rem}.heat-knob-hint{left:64%;top:86%;font-size:.65rem;padding:3px 5px}
+.heat-bench .heat-stage-plot{position:static;transform:none;width:calc(100% - 24px);max-width:none;margin:12px;padding:12px}
+.heat-bench .calorie-apparatus-view figcaption{bottom:8px;left:10px;font-size:.72rem}
+}
+@media(prefers-reduced-motion:reduce){.heat-bench *{scroll-behavior:auto}.heat-water-surface{display:none}}

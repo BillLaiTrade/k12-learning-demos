@@ -84,14 +84,14 @@ test('5.3 第一區：100 g 水、揭示順序、中斷與器材失敗恢復',{t
   await t.test('圖片慢載入／失敗時不能加熱，重試恢復且其他區仍可用',async()=>{
     const other=await browser.newPage({viewport:{width:1366,height:768}});
     let release;const gate=new Promise(resolve=>{release=resolve;});
-    await other.route('**/calorie-water-apparatus.webp*',async route=>{await gate;await route.abort();});
+    await other.route('**/heat-bench-refined.webp*',async route=>{await gate;await route.abort();});
     await other.goto(url,{waitUntil:'domcontentloaded'});
     await other.waitForFunction(()=>document.querySelector('#calorie-lab').dataset.phase==='loading');
     assert.equal(await other.locator('#calorie-transfer').isDisabled(),true);assert.equal(await other.locator('#calorie-heater').isDisabled(),true);assert.equal(await other.locator('#calorie-conclusion').isHidden(),true);
     release();await other.waitForFunction(()=>document.querySelector('#calorie-lab').dataset.phase==='error');
     assert.equal(await other.locator('#calorie-transfer').isDisabled(),true);
     await other.locator('[data-application="pan"]').click();assert.match(await other.locator('#application-content').textContent(),/導熱/);
-    await other.unroute('**/calorie-water-apparatus.webp*');await other.locator('#calorie-retry').click();
+    await other.unroute('**/heat-bench-refined.webp*');await other.locator('#calorie-retry').click();
     await other.waitForFunction(()=>document.querySelector('#calorie-lab').dataset.phase==='ready');
     assert.equal(await other.locator('#calorie-transfer').isEnabled(),true);assert.equal(await other.locator('#calorie-heater').isEnabled(),true);assert.equal(await other.locator('#calorie-end').textContent(),'20.0');
     await other.close();

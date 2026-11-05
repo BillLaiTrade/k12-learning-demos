@@ -73,12 +73,12 @@ test('5.3 第二區：分段加熱、自動紀錄、圖表、中斷與載入恢�
 
   await t.test('器材慢載入或失敗時禁用兩入口，重試不會自行啟動',async()=>{
     const p=await browser.newPage();let release;const gate=new Promise(resolve=>{release=resolve;});
-    await p.route('**/calorie-water-apparatus.webp*',async r=>{await gate;await r.abort();});
+    await p.route('**/heat-bench-refined.webp*',async r=>{await gate;await r.abort();});
     await p.goto(url,{waitUntil:'domcontentloaded'});await p.waitForFunction(()=>document.querySelector('#heat-lab').dataset.phase==='loading');
     assert.equal(await p.locator('#heat-stage-play').isDisabled(),true);assert.equal(await p.locator('#heat-stage-heater').isDisabled(),true);
     release();await p.waitForFunction(()=>document.querySelector('#heat-lab').dataset.phase==='error');
     await p.locator('[data-application="pan"]').click();assert.match(await p.locator('#application-content').textContent(),/導熱/);
-    await p.unroute('**/calorie-water-apparatus.webp*');await p.locator('#heat-stage-retry').click();
+    await p.unroute('**/heat-bench-refined.webp*');await p.locator('#heat-stage-retry').click();
     await p.waitForFunction(()=>document.querySelector('#heat-lab').dataset.phase==='ready');
     assert.equal(await p.locator('#heat-stage-play').isEnabled(),true);assert.equal(await p.locator('#heat-stage-meter').textContent(),'20.0');
     assert.equal(await p.locator('#heat-lab').getAttribute('data-records'),'0');await p.close();

@@ -1,0 +1,17 @@
+{
+  "third_to_end_identical": true,
+  "unchanged_files": {
+    "assets/heat-stage-lab.css": true,
+    "assets/heat-quantity.css": true,
+    "assets/heat-model.mjs": true,
+    "assets/lesson-navigation.js": true,
+    "assets/calorie-water-apparatus.webp": true,
+    "assets/lesson-layout.css": true,
+    "assets/heat-quantity.js": true,
+    "assets/lesson-base.css": true,
+    "assets/heat-stage-model.mjs": true,
+    "assets/calorie-model.mjs": true,
+    "assets/calorie-lab.css": true,
+    "assets/heat-story-opening.webp": true
+  }
+}
