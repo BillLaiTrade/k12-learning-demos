@@ -3,7 +3,7 @@ const root=document.querySelector('#microscope-lab');
 if(root){
  const $=s=>root.querySelector(s),all=s=>[...root.querySelectorAll(s)],g=microscopeGeometry();
  const red='#ec8b6d',blue='#6dbde3',axis=432,k=1.1,Y=s=>550-s*k;
- let step='objective',rays=false,point='both',model=null;
+ let step='objective',rays=false,point='both',model=null,view='whole';
  const symbol=(x,y,h,inverted=false)=>{
   const w=Math.max(4,h*.22),radius=Math.max(3,h*.18),stem=Math.max(2,h*.055);
   return `<g transform="translate(${x} ${y})${inverted?' rotate(180)':''}"><path d="M0 ${-h}V${h}" stroke="#8ca778" stroke-width="${stem}"/><path d="M0 ${-h-w}L${-w} ${-h+w}H${w}Z" fill="${red}"/><circle cy="${h}" r="${radius}" fill="${blue}"/></g>`;
@@ -47,12 +47,15 @@ if(root){
  <path d="M409 144Q432 123 455 144Q432 165 409 144Z" fill="#fff9e5" stroke="#263f2f" stroke-width="2"/><circle cx="432" cy="144" r="7" fill="#355a40"/>
  `;
  function render(){
-  root.dataset.step=step;root.dataset.rays=String(rays);root.dataset.point=point;
-  const project=(x,y)=>model?model.project(x,y):[x,y];
+  root.dataset.step=step;root.dataset.rays=String(rays);root.dataset.point=point;root.dataset.view=view;
+  const bounds=view==='objective'?{top:210,height:500}:view==='eyepiece'?{top:70,height:340}:{top:0,height:780};
+  const fallback=(x,y)=>view==='whole'?[x,y]:[380+(x-432)*780/bounds.height,(y-bounds.top)*780/bounds.height];
+  const project=(x,y)=>model?model.project(x,y):fallback(x,y);
   const at=(s,h=0)=>project(axis+h,Y(s));
-  let out=model?hardware.slice(0,hardware.indexOf('</defs>')+8):hardware;
+  let out=model?hardware.slice(0,hardware.indexOf('</defs>')+8):`<g transform="translate(${380-432*780/bounds.height} ${-bounds.top*780/bounds.height}) scale(${780/bounds.height})">${hardware}</g>`;
+  if(!model&&view==='whole')out=hardware;
   const ocular=at(g.separation),image=at(g.intermediate),objective=at(0);
-  if(model){const eye=at(g.eye+4);out+=`<path d="M${eye[0]-20} ${eye[1]}q20 -18 40 0q-20 18 -40 0Z" fill="#fff8e6" stroke="#76917a" stroke-width="2"/><circle cx="${eye[0]}" cy="${eye[1]}" r="6" fill="#355a40"/>`;}
+  if(model&&view!=='objective'){const eye=at(g.eye+4);out+=`<path d="M${eye[0]-20} ${eye[1]}q20 -18 40 0q-20 18 -40 0Z" fill="#fff8e6" stroke="#76917a" stroke-width="2"/><circle cx="${eye[0]}" cy="${eye[1]}" r="6" fill="#355a40"/>`;}
   const box=$('.micro-stage').getBoundingClientRect();
   const position=p=>{
    if(model)return[p[0]/760*100,p[1]/780*100];
@@ -60,19 +63,29 @@ if(root){
    return[(p[0]*scale+(box.width-760*scale)/2)/box.width*100,(p[1]*scale+(box.height-780*scale)/2)/box.height*100];
   };
   let labels='';
-  for(const [name,p,active]of [['目鏡',ocular,step!=='objective'],['中間像',image,true],['物鏡',objective,step!=='eyepiece']]){
-   const [x,y]=position(p);
-   labels+=`<span class="micro-label" style="left:calc(${x}% - 24px);top:${y}%;opacity:${active?1:.45}">${name}</span>`;
+  const targets=view==='objective'?[['中間像',image,true,null],['物鏡',objective,true,'objective'],['原物',at(-g.objective.u),true,null]]:view==='eyepiece'?[['眼睛',at(g.eye+4),true,null],['目鏡',ocular,true,'eyepiece'],['中間像',image,true,null]]:[['目鏡',ocular,step!=='objective','eyepiece'],['中間像',image,true,null],['物鏡',objective,step!=='eyepiece','objective']];
+  for(const [name,p,active,lens]of targets){
+   const [x,y]=position(p),attrs=`class="micro-label${view==='whole'?'':' micro-label-right'}" style="left:calc(${x}% ${view==='whole'?'-':'+'} 24px);top:${y}%;opacity:${active?1:.55}"`;
+   labels+=`<span class="micro-connector" style="left:calc(${x}% ${view==='whole'?'- 24':'+ 6'}px);top:${y}%"></span>`;
+   labels+=lens?`<button type="button" ${attrs} data-micro-lens="${lens}" title="點選近看${name}" aria-label="近看${name}${lens==='objective'?'成像':'觀察'}">${name}</button>`:`<span ${attrs}>${name}</span>`;
+   if(lens)labels+=`<button type="button" class="micro-pick" data-micro-lens="${lens}" style="left:${x}%;top:${y}%" aria-label="近看${name}剖面"></button>`;
   }
   const left=project(axis-30,Y(g.intermediate)),right=project(axis+30,Y(g.intermediate));
   out+=`<path data-micro-image-plane d="M${left[0]} ${left[1]}L${right[0]} ${right[1]}" stroke="#f1dba2" stroke-width="2.3" stroke-dasharray="4 5"/>`;
-  if(step!=='objective'){
-   const f=at(g.ocularFocus),x=ocular[0]+72;
+  if(step!=='objective'&&view!=='objective'){
+   const f=at(g.ocularFocus),x=ocular[0]+(view==='eyepiece'?-82:72);
    out+=`<path d="M${x} ${ocular[1]}V${f[1]}m-6 0h12M${x-6} ${ocular[1]}h12" stroke="#e3c888" fill="none" stroke-width="1.5"/>`;
-   const [fx,fy]=position([x+13,f[1]]);
+   const [fx,fy]=position([x+(view==='eyepiece'?-22:13),f[1]]);
    labels+=`<span class="micro-focus-label" style="left:${fx}%;top:${fy}%">F</span>`;
   }
+  const focused=document.activeElement?.dataset.microLens,focusWasLabel=document.activeElement?.classList.contains('micro-label');
   $('.micro-labels').innerHTML=labels;
+  if(focused)$(`${focusWasLabel?'.micro-label':'.micro-pick'}[data-micro-lens="${focused}"]`)?.focus({preventScroll:true});
+  $('[data-micro-detail-title]').hidden=view==='whole';$('[data-micro-detail-title]').textContent=view==='objective'?'近看物鏡成像':'近看目鏡觀察';
+  $('[data-micro-overview]').hidden=view==='whole';$('[data-micro-map]').hidden=view==='whole';
+  if(model?.overview){const img=$('[data-micro-map-image]');if(!img.getAttribute('src'))img.src=model.overview;$('.micro-map-picture').style.aspectRatio=String(model.overviewAspect);}
+  const region=$('[data-micro-map-region]'),regionBounds=model?model.overviewRegion(view):view==='objective'?[335,240,195,440]:[355,100,160,265];
+  for(const [key,value]of ['x','y','width','height'].map((k,i)=>[k,regionBounds[i]]))region.setAttribute(key,value);
   if(rays)for(const r of g.rays){
    if(point!=='both'&&point!==r.point)continue;
    const color=r.point==='top'?red:blue,marker=r.point==='top'?'red':'blue';
@@ -95,11 +108,21 @@ if(root){
   $('[data-micro-rays]').setAttribute('aria-pressed',String(rays));$('[data-micro-rays]').textContent=rays?'隱藏輔助光路':'顯示輔助光路';
   all('[data-micro-point]').forEach(b=>{b.disabled=!rays;b.setAttribute('aria-pressed',String(b.dataset.microPoint===point));});
   $('.micro-key').hidden=!rays;
-  if(model)model.update(step);
+  if(model)model.update(step,view);
   root.dataset.ready='true';
  }
- root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.set==='micro')step=b.dataset.value;else if(b.hasAttribute('data-micro-rays'))rays=!rays;else if(b.dataset.microPoint)point=b.dataset.microPoint;else if(b.hasAttribute('data-micro-reset')){step='objective';rays=false;point='both';}else return;render();});
+ function selectLens(lens){step=lens;view=lens;render();}
+ root.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.microLens){selectLens(b.dataset.microLens);return;}
+  if(b.dataset.set==='micro'){step=b.dataset.value;view=step==='both'?'whole':step;}
+  else if(b.hasAttribute('data-micro-overview')){step='both';view='whole';}
+  else if(b.hasAttribute('data-micro-rays'))rays=!rays;
+  else if(b.dataset.microPoint)point=b.dataset.microPoint;
+  else if(b.hasAttribute('data-micro-reset')){step='objective';view='whole';rays=false;point='both';}
+  else return;render();
+ });
  new ResizeObserver(render).observe($('.micro-stage'));
  render();
- import('./microscope-model.mjs?v=20261105-micro-type4').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
+ import('./microscope-model.mjs?v=20261105-micro-detail5').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
 }

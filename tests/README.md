@@ -1601,3 +1601,9 @@ MOON_CAPTURE預設/tmp/unit41-reflection-play，保存雙視窗與整區截圖�
 正面PNG仍為原場景擷取，未重製。主畫面與PNG長寬比不同時，分別投影相同材料位置再取樣亮度，保留原容差6。`viewport.json`及`viewport-1366.png`／`viewport-390.png`記錄同窗檢查；原生觸控、開關、光錐、側面反光及無WebGL備援斷言保留。整頁回歸沿用前述排除未變動分享與延遲潛望鏡素材的completion命令。
 
 後續恢復主畫面比例：同一13項套件在視窗檢查中核對桌機1.65:1／窄容器1.3:1，避免再次以視窗高度壓短。光學、拖曳、觸控、三個控制及小型參考檢查沿用；較矮視窗允許自然捲動。
+
+## 4.2 第一區真正平面反射（2026-11-05）
+
+同一`tests/unit-4.2-reflection-stage.test.cjs`現為15項（含外層）。新增多視角的等距虛像、向量反射方向、反射相機位置／紋理投影及發光面與光源重合；以實際開關前後像素驗證燈頭外沒有額外柔邊材質高光。既有光錐、兩側條件、視角反光、同場景PNG、開關、自由拖曳、版面／觸控與失敗備援均保留。`mirror-rays.json`、`mirror-aperture.json`保存幾何誤差及有限亮區取樣。
+
+整頁針對性回歸沿用`CHROMIUM_PATH=/usr/bin/chromium node --test --test-skip-pattern='入口、|潛望鏡素材' tests/unit-4.2-completion.test.cjs`。生成圖不參與光學驗證；正式正面PNG直接從新場景擷取。

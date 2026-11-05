@@ -23,7 +23,7 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
     await context.route(/\/assets\/(laser-reflection|reversible-light|periscope|mirror-image|mirror-distance|curved-mirrors)\.js/,r=>r.fulfill({contentType:'application/javascript',body:''}));
     await context.route('**/assets/reflection-3d.js*',async r=>{
       const response=await r.fetch(),s=await response.text(),anchor='  const duration = 1150;';assert.ok(s.includes(anchor));
-      await r.fulfill({response,body:s.replace(anchor,`  window.__surfaceLab={scene,camera,lamps,spotLights,mirrorTile,paperTile,mirrorCenter,paperCenter,stations,framingPoints,lampLenses,lampIndicators,renderer,fitCamera,getAzimuth:()=>cameraAzimuth,getPolar:()=>cameraPolar};\n${anchor}`)});
+      await r.fulfill({response,body:s.replace(anchor,`  window.__surfaceLab={scene,camera,lamps,spotLights,mirrorTile,paperTile,mirrorCenter,paperCenter,stations,framingPoints,lampLenses,lampIndicators,renderer,fitCamera,mirrorReflection,getAzimuth:()=>cameraAzimuth,getPolar:()=>cameraPolar};\n${anchor}`)});
     });
   };
   const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});await setup(context);
@@ -62,12 +62,56 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
       });
       const outgoing=b.stations[0].surface.clone().sub(b.stations[0].source).normalize().reflect(n);
       const observer=b.camera.getWorldDirection(new V()).negate();
-      return{offset,cones,alignment:outgoing.dot(observer),dimensions:[b.mirrorTile,b.paperTile].map(x=>[x.geometry.parameters.width,x.geometry.parameters.depth]),lights:b.spotLights.map(x=>[x.angle,x.decay,x.penumbra]),roughness:[b.mirrorTile.material.roughness,b.paperTile.material.roughness]};
+      return{offset,cones,alignment:outgoing.dot(observer),dimensions:[b.mirrorTile,b.paperTile].map(x=>[x.geometry.parameters.width,x.geometry.parameters.depth]),lights:b.spotLights.map(x=>[x.angle,x.decay,x.penumbra]),planarMirror:b.mirrorReflection.surface.material.isShaderMaterial,mirrorReflectance:b.mirrorReflection.surface.material.uniforms.reflectance.value};
     });
     result.offset[0].forEach((v,i)=>close(v,result.offset[1][i]));close(result.alignment,1);
     assert.deepEqual(result.dimensions[0],result.dimensions[1]);assert.deepEqual(result.lights[0],result.lights[1]);
-    assert.ok(result.cones.every(m=>m>0.1));assert.ok(result.roughness[0]<result.roughness[1]);
+    assert.ok(result.cones.every(m=>m>0.1));assert.equal(result.planarMirror,true);assert.ok(result.mirrorReflectance>0&&result.mirrorReflectance<=1);
     fs.writeFileSync(path.join(dir,'geometry.json'),JSON.stringify(result,null,2));
+  });
+
+  await t.test('燈頭發光面與光源重合；鏡像等距且反射光符合幾何定律',async()=>{
+    const geometry=[];
+    for(const name of ['front','left','right']){
+      await view(name);
+      const measured=await page.evaluate(()=>{
+        const b=window.__surfaceLab,V=b.mirrorCenter.constructor,n=new V(0,1,0),h=b.mirrorCenter.y;
+        const observer=b.camera.getWorldDirection(new V()).negate();
+        const aperture=b.lamps[0].localToWorld(new V(0,.125,0));
+        const virtual=aperture.clone();virtual.y=2*h-aperture.y;
+        const hit=virtual.clone().addScaledVector(observer,(h-virtual.y)/observer.y);
+        const incident=hit.clone().sub(aperture).normalize(),outgoing=incident.clone().reflect(n);
+        const mainProjection=virtual.clone().project(b.camera);
+        const reflectedProjection=aperture.clone().project(b.mirrorReflection.camera);
+        const texture=hit.clone().applyMatrix4(b.mirrorReflection.textureMatrix);
+        return{sourceError:aperture.distanceTo(b.stations[0].source),equalDistance:Math.abs((aperture.y-h)-(h-virtual.y)),rayError:outgoing.distanceTo(observer),cameraHeightError:Math.abs(b.camera.position.y+b.mirrorReflection.camera.position.y-2*h),texture:[texture.x,texture.y],reflected:[(reflectedProjection.x+1)/2,(reflectedProjection.y+1)/2],main:[mainProjection.x,mainProjection.y],hitProjection:hit.clone().project(b.camera).toArray(),mirrorDepthWrite:b.mirrorReflection.surface.material.depthWrite};
+      });
+      geometry.push(measured);close(measured.sourceError,0,1e-9);close(measured.equalDistance,0);close(measured.rayError,0,1e-9);close(measured.cameraHeightError,0,1e-9);
+      measured.texture.forEach((v,i)=>close(v,measured.reflected[i],1e-6));measured.main.forEach((v,i)=>close(v,measured.hitProjection[i],1e-6));
+    }
+    fs.writeFileSync(path.join(dir,'mirror-rays.json'),JSON.stringify(geometry,null,2));
+  });
+
+  await t.test('鏡面亮區來自有限燈頭鏡像，不會在整個受照區加上柔邊高光',async()=>{
+    await view('front');
+    const positions=await page.evaluate(()=>{
+      const b=window.__surfaceLab,V=b.mirrorCenter.constructor,n=new V(0,1,0),eye=b.camera.getWorldDirection(new V()).negate(),ray=eye.clone().negate().reflect(n),aperture=b.lamps[0].localToWorld(new V(0,.125,0)),axis=b.stations[0].surface.clone().sub(aperture).normalize();
+      const samples=[];
+      for(let y=0;y<31;y++)for(let x=0;x<45;x++){
+        const p=b.mirrorCenter.clone();p.x+=(x/44-.5)*2.4;p.z+=(y/30-.5)*1.75;
+        const distance=aperture.clone().sub(p).dot(axis)/ray.dot(axis),hit=p.clone().addScaledVector(ray,distance),radius=hit.distanceTo(aperture),q=p.clone().project(b.camera);
+        samples.push({uv:[(q.x+1)/2,(1-q.y)/2],radius});
+      }
+      return samples;
+    });
+    await toggle(0,false);await toggle(1,false);const off=PNG.sync.read(await canvas.screenshot());
+    await toggle(0,true);const on=PNG.sync.read(await canvas.screenshot());
+    const brightness=(im,[u,v])=>{const x=Math.round(u*im.width),y=Math.round(v*im.height),i=(y*im.width+x)*4;return .2126*im.data[i]+.7152*im.data[i+1]+.0722*im.data[i+2];};
+    const gains=positions.map(p=>({...p,gain:brightness(on,p.uv)-brightness(off,p.uv)}));
+    const center=gains.filter(p=>p.radius<.12),outside=gains.filter(p=>p.radius>.32);
+    assert.ok(center.length>3&&center.every(p=>p.gain>100));
+    assert.ok(outside.every(p=>Math.abs(p.gain)<3),'燈頭外不應出現額外材質高光');
+    fs.writeFileSync(path.join(dir,'mirror-aperture.json'),JSON.stringify({center: center.map(p=>p.gain),outsideMax:Math.max(...outside.map(p=>Math.abs(p.gain)))},null,2));
   });
 
   await t.test('四種開關組合的燈頭、實際光源、按鈕狀態一致',async()=>{

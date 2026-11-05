@@ -1,4 +1,5 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
+import { createSurfaceMirror, directApertureEmission } from './surface-mirror.mjs?v=planar-mirror-20261105';
 
 const canvas = document.querySelector('#reflection-3d-scene');
 if (!canvas) throw new Error('Reflection scene canvas is missing.');
@@ -87,7 +88,7 @@ try {
     frame: standard('#84918e', { metalness: 0.42, roughness: 0.36 }),
     lampBody: standard('#35433d', { metalness: 0.2, roughness: 0.48 }),
     lampTrim: standard('#60736a', { metalness: 0.25, roughness: 0.4 }),
-    mirror: new THREE.MeshPhysicalMaterial({ color: '#dce4e2', metalness: 0.96, roughness: 0.035, clearcoat: 0.65, clearcoatRoughness: 0.03 }),
+    mirror: standard('#7c8885', { metalness: 0, roughness: 1 }),
     mirrorBacking: standard('#7c8885', { metalness: 0.3, roughness: 0.38 }),
   };
 
@@ -147,6 +148,8 @@ try {
   stationBase(paperCenter, mats.mirrorBacking);
   // A flat polished mirror tile and a visually flat sheet of matte paper.
   const mirrorTile = addBox(scene, [2.45, 0.025, 1.8], [mirrorCenter.x, 0.1175, mirrorCenter.z], mats.mirror, false, true);
+  const mirrorReflection = createSurfaceMirror(mirrorCenter, 2.45, 1.8);
+  scene.add(mirrorReflection.surface);
 
   const roughTextureCanvas = document.createElement('canvas');
   roughTextureCanvas.width = 512;
@@ -236,7 +239,8 @@ try {
     const target = station.surface.clone();
     const direction = target.clone().sub(station.source).normalize();
     const lamp = new THREE.Group();
-    lamp.position.copy(station.source);
+    // The emitting disk, not the housing origin, is the optical source.
+    lamp.position.copy(station.source).addScaledVector(direction, -0.125 * 1.15);
     lamp.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
     lamp.scale.setScalar(1.15);
     scene.add(lamp);
@@ -247,11 +251,12 @@ try {
     const head = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.15, 0.2, 28), mats.lampTrim);
     head.position.y = 0.02;
     lamp.add(head);
-    const lensMaterial = new THREE.MeshStandardMaterial({ color: '#35423a', emissive: '#fff0b8', emissiveIntensity: 0, roughness: 0.18, side: THREE.DoubleSide });
+    const lensMaterial = new THREE.MeshStandardMaterial({ color: '#35423a', emissive: '#ffffff', emissiveIntensity: 0, roughness: 0.18, side: THREE.DoubleSide });
     const lens = new THREE.Mesh(new THREE.CircleGeometry(0.16, 36), lensMaterial);
     lens.position.y = 0.125;
     lens.rotation.x = -Math.PI / 2;
     lamp.add(lens);
+    directApertureEmission(lensMaterial, direction, .12, .45);
     lampLenses.push(lensMaterial);
     const rim = new THREE.Mesh(new THREE.TorusGeometry(0.165, 0.022, 10, 36), mats.lampTrim);
     rim.position.y = 0.13;
@@ -288,27 +293,11 @@ try {
     for (const x of [bounds.min.x, bounds.max.x]) for (const y of [bounds.min.y, bounds.max.y]) for (const z of [bounds.min.z, bounds.max.z]) framingPoints.push(new THREE.Vector3(x, y, z));
   }
 
-  // A uniform ambient environment keeps the polished surface readable.
-  // Flashlight models are excluded; the direct spotlight provides the glint.
-  const mirrorEnvironmentTarget = new THREE.WebGLCubeRenderTarget(128, {
-    generateMipmaps: true,
-    minFilter: THREE.LinearMipmapLinearFilter
-  });
-  const mirrorEnvironmentCamera = new THREE.CubeCamera(0.1, 24, mirrorEnvironmentTarget);
-  mirrorEnvironmentCamera.position.set(mirrorCenter.x, 0.14, mirrorCenter.z);
-  const mirrorEnvironmentScene = new THREE.Scene();
-  mirrorEnvironmentScene.background = scene.background;
-  mats.mirror.envMap = mirrorEnvironmentTarget.texture;
-  mats.mirror.envMapIntensity = 0.35;
-  const refreshMirrorEnvironment = () => {
-    // Reflect only the bright background. The direct spotlight still reaches
-    // the mirror in the main scene, but flashlight models cannot appear in it.
-    mirrorEnvironmentCamera.update(renderer, mirrorEnvironmentScene);
-  };
-  refreshMirrorEnvironment();
-
   const duration = 1150;
-  const render = () => renderer.render(scene, camera);
+  const render = () => {
+    mirrorReflection.update(renderer, scene, camera);
+    renderer.render(scene, camera);
+  };
   const updateViewControls = () => {
     const normalizedAzimuth = Math.atan2(Math.sin(cameraAzimuth), Math.cos(cameraAzimuth));
     const isFront = Math.abs(normalizedAzimuth) < 0.001 && Math.abs(cameraPolar - frontPolar) < 0.001;
@@ -370,8 +359,9 @@ try {
     illuminationLevels[index] = level;
     spotLights[index].intensity = 17 * level;
     sourceGlows[index].intensity = 0.35 * level;
-    lampLenses[index].color.set(level > 0 ? '#fff2bf' : '#35423a');
-    lampLenses[index].emissiveIntensity = 2.5 * level;
+    // Radiance of a finite circular aperture; its far-field on-axis intensity
+    // matches the spotlight (I = L * area). This is not a drawn mirror glint.
+    lampLenses[index].emissiveIntensity = 17 / (Math.PI * (0.16 * 1.15) ** 2) * level;
     lampIndicators[index].emissiveIntensity = 1.4 * level;
     render();
   };
@@ -405,7 +395,6 @@ try {
     updateLightControls();
     if (reducedMotion.matches) {
       setIllumination(index, targetLevel);
-      refreshMirrorEnvironment();
       return;
     }
     const startedAt = performance.now();
@@ -414,7 +403,6 @@ try {
       const eased = 1 - Math.pow(1 - progress, 3);
       setIllumination(index, startLevel + (targetLevel - startLevel) * eased);
       if (progress < 1) animationFrames[index] = requestAnimationFrame(animate);
-      else refreshMirrorEnvironment();
     };
     animationFrames[index] = requestAnimationFrame(animate);
   };
@@ -474,7 +462,7 @@ try {
     roughBump.dispose();
     surfaceLabelTextures.forEach((texture) => texture.dispose());
     woodTexture.dispose();
-    mirrorEnvironmentTarget.dispose();
+    mirrorReflection.dispose();
     renderer.dispose();
   }, { once: true });
 } catch (error) {
