@@ -1,0 +1,13 @@
+{
+  "base": "4fd37ff3328010d5a5520458f7470cfdc44013cb",
+  "checks": {
+    "card-01": true,
+    "card-02": true,
+    "card-03": true,
+    "card-04": true,
+    "card-05": true,
+    "card-06": true,
+    "quiz": true,
+    "script-tags": true
+  }
+}

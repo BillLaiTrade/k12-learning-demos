@@ -1,0 +1,187 @@
+{
+  "results": [
+    {
+      "width": 1440,
+      "state": "normal",
+      "label": "✦單元小測",
+      "fontSize": "14.08px",
+      "fontWeight": "400",
+      "padding": "14px 11px 10px",
+      "marginTop": "8px",
+      "color": "rgb(121, 91, 32)",
+      "borderTop": "1px solid rgb(215, 225, 221)",
+      "borderLeftColor": "rgba(0, 0, 0, 0)",
+      "background": "rgba(0, 0, 0, 0)",
+      "star": {
+        "width": "24px",
+        "height": "24px",
+        "background": "rgb(245, 233, 201)",
+        "color": "rgb(121, 91, 32)",
+        "borderRadius": "50%"
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "state": "selected",
+      "targetTop": 22.34375,
+      "routeBottom": 464.3125,
+      "label": "✦單元小測",
+      "fontSize": "14.08px",
+      "fontWeight": "750",
+      "padding": "14px 11px 10px",
+      "marginTop": "8px",
+      "color": "rgb(121, 91, 32)",
+      "borderTop": "1px solid rgb(215, 225, 221)",
+      "borderLeftColor": "rgb(192, 145, 57)",
+      "background": "rgb(248, 240, 221)",
+      "star": {
+        "width": "24px",
+        "height": "24px",
+        "background": "rgb(245, 233, 201)",
+        "color": "rgb(121, 91, 32)",
+        "borderRadius": "50%"
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "state": "selected",
+      "targetTop": 22.34375,
+      "routeBottom": 464.3125,
+      "label": "✦單元小測",
+      "fontSize": "14.08px",
+      "fontWeight": "750",
+      "padding": "14px 11px 10px",
+      "marginTop": "8px",
+      "color": "rgb(121, 91, 32)",
+      "borderTop": "1px solid rgb(215, 225, 221)",
+      "borderLeftColor": "rgb(192, 145, 57)",
+      "background": "rgb(248, 240, 221)",
+      "star": {
+        "width": "24px",
+        "height": "24px",
+        "background": "rgb(245, 233, 201)",
+        "color": "rgb(121, 91, 32)",
+        "borderRadius": "50%"
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "state": "selected",
+      "targetTop": 21.78125,
+      "routeBottom": 464.3125,
+      "label": "✦單元小測",
+      "fontSize": "14.08px",
+      "fontWeight": "750",
+      "padding": "14px 11px 10px",
+      "marginTop": "8px",
+      "color": "rgb(121, 91, 32)",
+      "borderTop": "1px solid rgb(215, 225, 221)",
+      "borderLeftColor": "rgb(192, 145, 57)",
+      "background": "rgb(248, 240, 221)",
+      "star": {
+        "width": "24px",
+        "height": "24px",
+        "background": "rgb(245, 233, 201)",
+        "color": "rgb(121, 91, 32)",
+        "borderRadius": "50%"
+      }
+    },
+    {
+      "width": 820,
+      "height": 900,
+      "state": "selected",
+      "targetTop": 22.375,
+      "routeBottom": 525.53125,
+      "label": "✦單元小測",
+      "fontSize": "14.08px",
+      "fontWeight": "750",
+      "padding": "14px 11px 10px",
+      "marginTop": "8px",
+      "color": "rgb(121, 91, 32)",
+      "borderTop": "1px solid rgb(215, 225, 221)",
+      "borderLeftColor": "rgb(192, 145, 57)",
+      "background": "rgb(248, 240, 221)",
+      "star": {
+        "width": "24px",
+        "height": "24px",
+        "background": "rgb(245, 233, 201)",
+        "color": "rgb(121, 91, 32)",
+        "borderRadius": "50%"
+      }
+    },
+    {
+      "width": 760,
+      "height": 900,
+      "state": "selected",
+      "targetTop": 109.71875,
+      "routeBottom": 82.65625,
+      "label": "✦單元小測",
+      "fontSize": "14.08px",
+      "fontWeight": "750",
+      "padding": "7px 10px",
+      "marginTop": "0px",
+      "color": "rgb(121, 91, 32)",
+      "borderTop": "1px solid rgb(192, 145, 57)",
+      "borderLeftColor": "rgb(192, 145, 57)",
+      "background": "rgb(248, 240, 221)",
+      "star": {
+        "width": "24px",
+        "height": "24px",
+        "background": "rgb(245, 233, 201)",
+        "color": "rgb(121, 91, 32)",
+        "borderRadius": "50%"
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "state": "selected",
+      "targetTop": 110.296875,
+      "routeBottom": 82.65625,
+      "label": "✦單元小測",
+      "fontSize": "14.08px",
+      "fontWeight": "750",
+      "padding": "7px 10px",
+      "marginTop": "0px",
+      "color": "rgb(121, 91, 32)",
+      "borderTop": "1px solid rgb(192, 145, 57)",
+      "borderLeftColor": "rgb(192, 145, 57)",
+      "background": "rgb(248, 240, 221)",
+      "star": {
+        "width": "24px",
+        "height": "24px",
+        "background": "rgb(245, 233, 201)",
+        "color": "rgb(121, 91, 32)",
+        "borderRadius": "50%"
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "state": "selected",
+      "targetTop": 110.4375,
+      "routeBottom": 82.65625,
+      "label": "✦單元小測",
+      "fontSize": "14.08px",
+      "fontWeight": "750",
+      "padding": "7px 10px",
+      "marginTop": "0px",
+      "color": "rgb(121, 91, 32)",
+      "borderTop": "1px solid rgb(192, 145, 57)",
+      "borderLeftColor": "rgb(192, 145, 57)",
+      "background": "rgb(248, 240, 221)",
+      "star": {
+        "width": "24px",
+        "height": "24px",
+        "background": "rgb(245, 233, 201)",
+        "color": "rgb(121, 91, 32)",
+        "borderRadius": "50%"
+      }
+    }
+  ],
+  "errors": [],
+  "quizFlow": "incomplete/correct/reset passed"
+}
