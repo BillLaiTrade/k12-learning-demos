@@ -152,9 +152,6 @@
     #moon-model-canvas { cursor: grab; touch-action: none; }
     #moon-model-canvas:focus-visible { outline: 3px solid #e9c76d; outline-offset: -4px; }
     .moon-world-label { position: absolute; transform: translate(-50%,-100%); padding: 2px 6px; border-radius: 5px; background: #09162bbf; color: #f1f4ef; font-size: .84rem; font-weight: 650; pointer-events: none; white-space: nowrap; }
-    .moon-observer-link { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-    .moon-observer-link path { fill: none; stroke: #9edbcd; stroke-width: 1.2; }
-    .moon-observer-label { color: #a9f2dd; font-size: .76rem; }
     .moon-eye-heading { display: flex; align-items: center; gap: 8px; }
     .moon-eye-mark { display: inline-block; color: #78ddc3; position: absolute; top: 14px; left: 50%; transform: translateX(-50%); pointer-events: none; }
     .moon-eye-caption { position: absolute; bottom: 12px; left: 5px; right: 5px; margin: 0; color: #e3efeb; text-align: center; font-size: .8rem; pointer-events: none; }
@@ -545,9 +542,7 @@
                       <h3 id="moon-main-heading">月球如何把陽光反射過來？</h3>
                       <div class="moon-space-frame">
                         <canvas id="moon-model-canvas" tabindex="-1" aria-disabled="true" aria-label="月球繞地球運行，陽光經月面反射到觀察者眼睛的3D模型" aria-describedby="moon-model-instructions"></canvas>
-                        <svg class="moon-observer-link" aria-hidden="true"><path/></svg>
                         <span class="moon-world-label" data-moon-label="sun">太陽</span><span class="moon-world-label" data-moon-label="moon">月球</span><span class="moon-world-label" data-moon-label="earth">地球</span>
-                        <span class="moon-world-label moon-observer-label" data-moon-label="observer">地球上的我們</span>
                       </div>
                     </section>
                     <section class="moon-view-card" aria-labelledby="moon-eye-heading">
@@ -566,7 +561,7 @@
                   <div class="moon-ray-legend" aria-label="光路顏色"><span>陽光</span><span>月面反射的光</span></div>
                   <p class="moon-model-note">為了看清光路，天體大小、距離、軌道傾斜與運行速度經過調整；線條為光路示意。</p>
                   <details class="moon-model-details"><summary>模型說明與素材來源</summary>
-                    <p>月面會把部分陽光反射到不同方向，圖中只畫出少量光路。右圖由同一個3D月球，依人物眼睛的位置繪出；亮面範圍不代表月光亮度。</p>
+                    <p>太陽採暖金色作辨識示意。月面會把部分陽光反射到不同方向，圖中只畫出少量光路。右圖由同一個3D月球，依人物眼睛的位置繪出；亮面範圍不代表月光亮度。</p>
                     <p>軌道以圓形近似，傾斜程度已放大；真實月球軌道相對地球公轉平面的傾角約5°。人物表示可看見月球的觀察位置，會隨月球方向調整，並非固定城市的天空；未模擬地照，也不作月相時刻或日月食預測。</p>
                     <p>貼圖：<a href="https://svs.gsfc.nasa.gov/4720/" target="_blank" rel="noopener">NASA／GSFC／ASU（月球）</a>、<a href="https://threejs.org/" target="_blank" rel="noopener">Three.js（地球）</a>、<a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope（太陽）</a>，太陽貼圖採 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>。</p>
                   </details>
@@ -875,7 +870,7 @@
       }
     })();
   </script>
-  <script type="module" src="assets/moon-reflection-lab.js?v=reflection-play-20261105"></script>
+  <script type="module" src="assets/moon-reflection-lab.js?v=solar-gold-20261105"></script>
   <script type="module" src="assets/scene-loader.js?v=no-view-reset-20261105"></script>
   <script type="module" src="assets/light-speed-timer.js?v=clear-results-on-start-20261029"></script>
 </body>

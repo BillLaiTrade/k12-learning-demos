@@ -17,9 +17,9 @@ export async function createMoonLab(root){
   function planet(name,map){const material=new THREE.ShaderMaterial({uniforms:{map:{value:map},lightDirection:{value:new THREE.Vector3(...LIGHT)}},vertexShader:vertex,fragmentShader:fragment});const mesh=new THREE.Mesh(new THREE.SphereGeometry(RADII[name],72,48),material);scene.add(mesh);bodies[name]=mesh;return mesh;}
   const earth=planet('earth',earthMap);earth.position.fromArray(EARTH);earth.rotation.set(0,-.7,.41);
   const moon=planet('moon',moonMap);moon.layers.enable(1);
-  const sun=new THREE.Mesh(new THREE.SphereGeometry(RADII.sun,72,48),new THREE.ShaderMaterial({uniforms:{map:{value:sunMap}},vertexShader:vertex,fragmentShader:'uniform sampler2D map;varying vec2 vUv;void main(){vec3 t=texture2D(map,vUv).rgb;float detail=dot(t,vec3(.2126,.7152,.0722));gl_FragColor=vec4(vec3(1.,.94,.77)*(.6+detail*.65),1.);\n#include <colorspace_fragment>\n}'}));sun.position.fromArray(SUN);bodies.sun=sun;scene.add(sun);
+  const sun=new THREE.Mesh(new THREE.SphereGeometry(RADII.sun,72,48),new THREE.ShaderMaterial({uniforms:{map:{value:sunMap}},vertexShader:vertex,fragmentShader:'uniform sampler2D map;varying vec2 vUv;void main(){vec3 t=texture2D(map,vUv).rgb;float detail=dot(t,vec3(.2126,.7152,.0722));gl_FragColor=vec4(vec3(1.,.48,.065)*(.9+detail*.35),1.);\n#include <colorspace_fragment>\n}'}));sun.position.fromArray(SUN);bodies.sun=sun;scene.add(sun);
   const glowCanvas=document.createElement('canvas');glowCanvas.width=glowCanvas.height=128;
-  const ctx=glowCanvas.getContext('2d'),g=ctx.createRadialGradient(64,64,30,64,64,64);g.addColorStop(0,'rgba(255,244,204,.22)');g.addColorStop(1,'rgba(255,244,204,0)');ctx.fillStyle=g;ctx.fillRect(0,0,128,128);
+  const ctx=glowCanvas.getContext('2d'),g=ctx.createRadialGradient(64,64,36,64,64,64);g.addColorStop(0,'rgba(255,184,28,.6)');g.addColorStop(.65,'rgba(255,145,8,.18)');g.addColorStop(1,'rgba(255,134,0,0)');ctx.fillStyle=g;ctx.fillRect(0,0,128,128);
   const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(glowCanvas),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));glow.scale.setScalar(RADII.sun*2.5);sun.add(glow);
   let seed=41;const stars=[];for(let i=0;i<90;i++){seed=(seed*1664525+1013904223)>>>0;const x=(seed/4294967296-.5)*32;seed=(seed*1664525+1013904223)>>>0;stars.push(x,(seed/4294967296-.5)*25,-19);}
   const starGeometry=new THREE.BufferGeometry();starGeometry.setAttribute('position',new THREE.Float32BufferAttribute(stars,3));scene.add(new THREE.Points(starGeometry,new THREE.PointsMaterial({color:'#9aaebd',size:.035,transparent:true,opacity:.45})));
@@ -68,13 +68,11 @@ export async function createMoonLab(root){
     if(!canDraw())return;
     const width=canvas.clientWidth,height=canvas.clientHeight;
     const project=point=>{const p=new THREE.Vector3(...point).project(camera);return{x:(p.x+1)*width/2,y:(1-p.y)*height/2};};
-    const moonPixel=project(readout.positions.moon),earthPixel=project(EARTH),eyePixel=project(readout.observer.eye),pixelsPerUnit=width/(camera.right-camera.left);
+    const moonPixel=project(readout.positions.moon),earthPixel=project(EARTH),pixelsPerUnit=width/(camera.right-camera.left);
     const occupied=[{left:moonPixel.x-RADII.moon*pixelsPerUnit-4,right:moonPixel.x+RADII.moon*pixelsPerUnit+4,top:moonPixel.y-RADII.moon*pixelsPerUnit-4,bottom:moonPixel.y+RADII.moon*pixelsPerUnit+4},{left:earthPixel.x-RADII.earth*pixelsPerUnit-4,right:earthPixel.x+RADII.earth*pixelsPerUnit+4,top:earthPixel.y-RADII.earth*pixelsPerUnit-4,bottom:earthPixel.y+RADII.earth*pixelsPerUnit+4}];
     const sunPixel=project([SUN[0]+RADII.sun-.25,1.8,0]);label('[data-moon-label="sun"]',sunPixel.x,sunPixel.y,occupied);
     label('[data-moon-label="moon"]',moonPixel.x,moonPixel.y-RADII.moon*pixelsPerUnit-10,occupied);
     label('[data-moon-label="earth"]',earthPixel.x+RADII.earth*pixelsPerUnit+32,earthPixel.y+9,occupied);
-    label('[data-moon-label="observer"]',eyePixel.x+42,eyePixel.y-30,occupied);
-    const observerLabel=root.querySelector('[data-moon-label="observer"]'),leader=root.querySelector('.moon-observer-link');leader.setAttribute('viewBox','0 0 '+width+' '+height);leader.querySelector('path').setAttribute('d','M '+eyePixel.x+' '+eyePixel.y+' L '+parseFloat(observerLabel.style.left)+' '+(parseFloat(observerLabel.style.top)+3));
     const segments=[...paths.incident,paths.reflected,paths.reflected];
     packets.forEach((mesh,i)=>{const segment=segments[i];mesh.visible=!!segment;if(segment){const t=(elapsed*.6+i*.21)%1;mesh.position.fromArray(add(segment.start,scale(sub(segment.end,segment.start),t)));}});
     renderer.render(scene,camera);eyeRenderer.render(scene,eyeCamera);
