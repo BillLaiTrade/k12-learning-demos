@@ -55,7 +55,7 @@ export function createMicroscopeModel(canvas,onProject){
  const floor=mesh(new THREE.PlaneGeometry(1800,1800),new THREE.ShadowMaterial({opacity:.19}),440,757,0);floor.rotation.x=-Math.PI/2;floor.castShadow=false;floor.receiveShadow=true;
  let queued=0,currentStep=null;
  function project(x,y,z=0){const p=new THREE.Vector3(x,-y,z).project(camera);return[(p.x+1)*380,(1-p.y)*390];}
- function render(){queued=0;const b=canvas.getBoundingClientRect();if(!b.width||!b.height)return;renderer.setSize(b.width,b.height,false);renderer.render(scene,camera);onProject?.();}
+ function render(){queued=0;const b=canvas.getBoundingClientRect();if(!b.width||!b.height)return;camera.left=-390*b.width/b.height;camera.right=390*b.width/b.height;camera.updateProjectionMatrix();renderer.setSize(b.width,b.height,false);renderer.render(scene,camera);onProject?.();}
  const request=()=>{if(!queued)queued=requestAnimationFrame(render);};
  const observer=new ResizeObserver(request);observer.observe(canvas);
  request();

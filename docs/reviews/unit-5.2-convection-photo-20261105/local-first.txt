@@ -1,0 +1,48 @@
+✖ 5.2 conduction: cookware scene, material drag and live readings (70.32616ms)
+▶ 5.2 convection: fluid movement, mode changes and observation lifecycle
+  ✔ starts with a real distinction between water and a room, without a premature conclusion (83.325751ms)
+  ✖ both sides rise near the source, move continuously and use the same relative-warmth key (647.419421ms)
+  ✔ photographic scenes keep animated arrows in the fluid and not inside the heater (50.306218ms)
+  ✔ pause freezes actual rendered positions and screenshots; resume preserves progress (930.249679ms)
+  ✔ switching the fluid cancels old animation, clears the discovery and resets observations (583.329628ms)
+  ✔ keyboard, rapid actions and background interruptions leave no delayed restart (421.87327ms)
+  ✔ radiation, insulation and the integrated quiz still work independently (1476.134763ms)
+  ✔ all supported viewports keep explanatory text, controls and the actual fluid scene readable (626.80731ms)
+  ✔ a failed image can be retried, and a late response cannot reset a different running mode (1921.35258ms)
+  ✔ real frames keep moving with both motion preferences and touch can pause/reset (4311.524824ms)
+✖ 5.2 convection: fluid movement, mode changes and observation lifecycle (12189.016715ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 9
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12630.488591
+
+✖ failing tests:
+
+test at tests/unit-5.2-conduction.test.cjs:3:1
+✖ 5.2 conduction: cookware scene, material drag and live readings (70.32616ms)
+  browserType.launch: Executable doesn't exist at /home/agent/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell
+  ╔════════════════════════════════════════════════════════════╗
+  ║ Looks like Playwright was just installed or updated.       ║
+  ║ Please run the following command to download new browsers: ║
+  ║                                                            ║
+  ║     npx playwright install                                 ║
+  ║                                                            ║
+  ║ <3 Playwright Team                                         ║
+  ╚════════════════════════════════════════════════════════════╝
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-conduction.test.cjs:6:31) {
+    name: 'Error',
+    log: []
+  }
+
+test at tests/unit-5.2-convection.test.cjs:26:10
+✖ both sides rise near the source, move continuously and use the same relative-warmth key (647.419421ms)
+  TypeError: Cannot read properties of undefined (reading 'position')
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-convection.test.cjs:28:178)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-convection.test.cjs:26:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)

@@ -1,0 +1,80 @@
+/* Desktop workspace: one active experiment, adjacent scene and response. */
+.duo-quiz{container:duo-workbook / inline-size}
+.duo-workspace-tabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;scroll-margin-top:14px}
+.duo-quiz .duo-workspace-tabs button{min-height:44px;border:1px solid #c5d6ca;border-radius:12px;background:#fff;color:#244d3b;font-size:.95rem;font-weight:750;padding:8px 16px}
+.duo-quiz .duo-workspace-tabs button[aria-selected=true]{background:#176c52;border-color:#176c52;color:white}
+.duo-quiz .duo-panel{padding:0;border:0;margin:0;background:none}
+.duo-probe-layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px;align-items:start}
+.duo-probe-controls{min-width:0;display:flex;flex-direction:column;gap:12px}
+.duo-quiz .duo-probe-presets{order:1;flex-direction:column;align-items:stretch;margin:0}
+.duo-quiz .duo-probe-presets>span{font-size:.8rem;font-weight:700}
+.duo-quiz .duo-probe-controls .duo-lamp-row{display:grid;grid-template-columns:1fr;gap:10px;margin:0;order:0}
+.duo-quiz .duo-probe-controls .duo-hint{order:2;margin:0;font-size:.8rem}
+.duo-quiz .duo-enter-challenge{order:3;border:0;border-radius:12px;padding:10px;background:#176c52;color:white;font-weight:750}
+.duo-series-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:10px}
+.duo-quiz .duo-question-nav{display:grid;grid-template-columns:repeat(6,minmax(44px,1fr));gap:7px;margin:0;flex:1;max-width:370px}
+.duo-quiz .duo-question-nav button{min-height:44px;padding:6px;font-size:.95rem}
+.duo-series-meta{display:flex;align-items:center;gap:12px;flex-shrink:0;font-size:.8rem;color:#386148}
+.duo-quiz .duo-new-set{min-height:44px;padding:6px 12px;font-size:.85rem}
+.duo-quiz .duo-task{margin:0 0 10px;border-left:4px solid #c29336;padding-left:10px;line-height:1.55}
+.duo-quiz .duo-task>strong{font-size:1rem}
+.duo-quiz .duo-conditions{padding:0;margin:0 0 12px;background:none;border:0}
+.duo-quiz .duo-condition-flow{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.duo-quiz .duo-condition-flow>li{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:5px;padding:8px;min-height:44px;background:#eff4e6}
+.duo-quiz .duo-condition-flow h4{margin:0;font-size:.8rem;color:#365440;font-weight:650}
+.duo-quiz .duo-condition-flow h4::after{content:'：'}
+.duo-quiz .duo-condition-flow b{font-size:.85rem}
+.duo-quiz .duo-condition-flow small{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.duo-quiz .duo-condition-flow>li:not(:last-child)::after{top:calc(50% - 12px);bottom:auto;right:-19px;content:'→'}
+.duo-source-pair{gap:6px}.duo-source-pair>span{gap:4px}
+.duo-source-pair i{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.duo-source-pair>span+span::before{content:'＋';font-size:.8rem;color:#365440}
+.duo-quiz .duo-challenge-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:14px;align-items:start}
+.duo-quiz .duo-scene,.duo-quiz form{padding:12px;border:1px solid #c5d6bd;border-radius:13px;background:#fffefa}
+.duo-workspace-heading{font-size:1rem;line-height:1.4;margin:0 0 10px;color:#244d3b}
+.duo-quiz .duo-stage{aspect-ratio:1.5}
+.duo-quiz .duo-stage-state{left:auto;max-width:calc(100% - 18px);right:9px;padding:5px 8px;font-size:.7rem;line-height:1.5}
+.duo-quiz .duo-stage-state>span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.duo-quiz .duo-scene figcaption{display:flex;flex-direction:column;align-items:flex-start;gap:1px;font-size:.72rem;margin-top:6px}
+.duo-scene-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.duo-quiz .duo-scene-actions button{min-height:44px;padding:7px 10px;border:1px solid #bdcdbb;border-radius:10px;background:#fff;color:#315a42;font-size:.8rem;flex:1}
+.duo-quiz form legend{font-size:.85rem;line-height:1.5;margin-bottom:7px}
+.duo-quiz .duo-colour-options{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.duo-quiz .duo-answer{position:relative;min-height:44px;justify-content:center;gap:5px;padding:6px 3px;font-size:.85rem;line-height:1.5}
+.duo-answer input{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.duo-answer:focus-within{outline:2px solid #176c52;outline-offset:2px}
+.duo-answer:has(input[aria-invalid=true]){outline:2px solid #b55842;outline-offset:2px}
+.duo-quiz .duo-answer i{width:9px;height:9px}
+.duo-quiz form .duo-reasons{margin-top:12px;padding-top:0;border:0}
+.duo-quiz .duo-reasons>legend{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.duo-quiz .duo-reason-fields{grid-template-columns:1fr;gap:8px}
+.duo-quiz .duo-reasons label{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:8px;align-items:center;font-size:.79rem;line-height:1.5}
+.duo-quiz .duo-reasons select{margin:0;font-size:.85rem;padding:7px 6px}
+.duo-quiz .duo-actions{margin-top:12px;display:block}
+.duo-quiz .duo-actions>p{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.duo-quiz .duo-actions button{width:100%;min-width:0;min-height:44px;padding:9px 10px;background:#176c52;color:#fff;box-shadow:none;font-size:.95rem}
+#unit-quiz .duo-actions button:not(:disabled){background:#176c52;box-shadow:none}
+.duo-feedback-placeholder{margin:9px 0 0;font-size:.75rem;line-height:1.6;color:#66775f}
+.duo-quiz .duo-feedback{margin-top:10px;padding:9px 10px;font-size:.78rem;line-height:1.6}
+.duo-quiz .duo-feedback p{margin:4px 0 0}
+.duo-explanation{margin-top:7px;font-size:.78rem;line-height:1.7;color:#365440}
+.duo-explanation summary{cursor:pointer;font-weight:650;min-height:28px;padding:3px 0}
+.duo-explanation p{margin:7px 0 0}
+.duo-quiz .duo-question-footer{margin-top:12px;padding-top:10px;border-top:1px solid #d3ddcc;gap:8px}
+.duo-quiz .duo-question-footer button{min-height:44px;font-size:.85rem;padding:7px 10px}
+.duo-quiz .duo-question-footer>p{font-size:.75rem}
+.duo-reset-note{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.duo-quiz .duo-notes{margin-top:10px}
+@container duo-workbook (max-width:680px){
+ .duo-quiz .duo-challenge-grid,.duo-probe-layout{grid-template-columns:1fr}
+ .duo-series-toolbar{flex-wrap:wrap;gap:8px}.duo-series-meta{width:100%;justify-content:space-between}
+ .duo-quiz .duo-question-nav{max-width:none}.duo-quiz .duo-condition-flow{gap:16px}
+ .duo-quiz .duo-condition-flow>li{padding:7px 4px}.duo-quiz .duo-condition-flow>li:not(:last-child)::after{right:-15px}
+ .duo-quiz .duo-condition-flow h4{font-size:.73rem}.duo-quiz .duo-condition-flow b{font-size:.78rem}
+ .duo-quiz .duo-question-footer>p{order:3;width:100%;text-align:center}
+ .duo-workspace-tabs{scroll-margin-top:110px}
+}
+@container duo-workbook (max-width:400px){
+ .duo-quiz .duo-question-nav{grid-template-columns:repeat(3,minmax(44px,1fr))}
+ .duo-quiz .duo-colour-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

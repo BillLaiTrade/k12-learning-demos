@@ -1,0 +1,617 @@
+{
+  "records": [
+    {
+      "width": 1440,
+      "viewportHeight": 900,
+      "step": "objective",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        }
+      ],
+      "height": 667.6875,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 430
+    },
+    {
+      "width": 1440,
+      "viewportHeight": 900,
+      "step": "eyepiece",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        }
+      ],
+      "height": 667.6875,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 430
+    },
+    {
+      "width": 1440,
+      "viewportHeight": 900,
+      "step": "both",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        }
+      ],
+      "height": 667.6875,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 430
+    },
+    {
+      "width": 1366,
+      "viewportHeight": 768,
+      "step": "objective",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        }
+      ],
+      "height": 637.046875,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 399.359375
+    },
+    {
+      "width": 1366,
+      "viewportHeight": 768,
+      "step": "eyepiece",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        }
+      ],
+      "height": 637.046875,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 399.359375
+    },
+    {
+      "width": 1366,
+      "viewportHeight": 768,
+      "step": "both",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        }
+      ],
+      "height": 637.046875,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 399.359375
+    },
+    {
+      "width": 1024,
+      "viewportHeight": 768,
+      "step": "objective",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        }
+      ],
+      "height": 637.046875,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 399.359375
+    },
+    {
+      "width": 1024,
+      "viewportHeight": 768,
+      "step": "eyepiece",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        }
+      ],
+      "height": 637.046875,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 399.359375
+    },
+    {
+      "width": 1024,
+      "viewportHeight": 768,
+      "step": "both",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "14px",
+          "inside": true
+        }
+      ],
+      "height": 637.046875,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 399.359375
+    },
+    {
+      "width": 760,
+      "viewportHeight": 900,
+      "step": "objective",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        }
+      ],
+      "height": 713.734375,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 310
+    },
+    {
+      "width": 760,
+      "viewportHeight": 900,
+      "step": "eyepiece",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        }
+      ],
+      "height": 713.734375,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 310
+    },
+    {
+      "width": 760,
+      "viewportHeight": 900,
+      "step": "both",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        }
+      ],
+      "height": 713.734375,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 310
+    },
+    {
+      "width": 390,
+      "viewportHeight": 844,
+      "step": "objective",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        }
+      ],
+      "height": 732.9375,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 310
+    },
+    {
+      "width": 390,
+      "viewportHeight": 844,
+      "step": "eyepiece",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        }
+      ],
+      "height": 732.9375,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 310
+    },
+    {
+      "width": 390,
+      "viewportHeight": 844,
+      "step": "both",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        }
+      ],
+      "height": 732.9375,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 310
+    },
+    {
+      "width": 320,
+      "viewportHeight": 844,
+      "step": "objective",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        }
+      ],
+      "height": 777.9375,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 310
+    },
+    {
+      "width": 320,
+      "viewportHeight": 844,
+      "step": "eyepiece",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        }
+      ],
+      "height": 798.65625,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 310
+    },
+    {
+      "width": 320,
+      "viewportHeight": 844,
+      "step": "both",
+      "letters": [
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        },
+        {
+          "tag": "SPAN",
+          "xScale": 1,
+          "yScale": 1,
+          "font": "12px",
+          "inside": true
+        }
+      ],
+      "height": 798.65625,
+      "inside": true,
+      "stepsInWindow": true,
+      "overflow": false,
+      "clipped": [],
+      "scene": 310
+    }
+  ],
+  "errors": []
+}

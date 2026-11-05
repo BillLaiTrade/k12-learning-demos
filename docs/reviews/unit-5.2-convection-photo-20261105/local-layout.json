@@ -1,0 +1,678 @@
+{
+  "base": "http://127.0.0.1:8765",
+  "rows": [
+    {
+      "width": 1440,
+      "height": 900,
+      "medium": "water",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 251.5,
+          "right": 390.5,
+          "height": 44,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "air",
+          "left": 390.5,
+          "right": 251.5,
+          "height": 44,
+          "textWidth": 75.171875
+        },
+        {
+          "id": "convection-play",
+          "left": 19,
+          "right": 649,
+          "height": 47.578125,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "convection-reset",
+          "left": 141,
+          "right": 527,
+          "height": 47.578125,
+          "textWidth": 30.078125
+        }
+      ],
+      "state": {
+        "medium": "water",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 263.765625,
+        "height": 22
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "medium": "air",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 251.5,
+          "right": 390.5,
+          "height": 44,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "air",
+          "left": 390.5,
+          "right": 251.5,
+          "height": 44,
+          "textWidth": 75.171875
+        },
+        {
+          "id": "convection-play",
+          "left": 19,
+          "right": 649,
+          "height": 47.578125,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "convection-reset",
+          "left": 141,
+          "right": 527,
+          "height": 47.578125,
+          "textWidth": 30.078125
+        }
+      ],
+      "state": {
+        "medium": "air",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 279.28125,
+        "height": 22
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "medium": "water",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 251.5,
+          "right": 390.5,
+          "height": 44,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "air",
+          "left": 390.5,
+          "right": 251.5,
+          "height": 44,
+          "textWidth": 75.171875
+        },
+        {
+          "id": "convection-play",
+          "left": 19,
+          "right": 649,
+          "height": 47.578125,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "convection-reset",
+          "left": 141,
+          "right": 527,
+          "height": 47.578125,
+          "textWidth": 30.078125
+        }
+      ],
+      "state": {
+        "medium": "water",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 263.765625,
+        "height": 22
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "medium": "air",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 251.5,
+          "right": 390.5,
+          "height": 44,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "air",
+          "left": 390.5,
+          "right": 251.5,
+          "height": 44,
+          "textWidth": 75.171875
+        },
+        {
+          "id": "convection-play",
+          "left": 19,
+          "right": 649,
+          "height": 47.578125,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "convection-reset",
+          "left": 141,
+          "right": 527,
+          "height": 47.578125,
+          "textWidth": 30.078125
+        }
+      ],
+      "state": {
+        "medium": "air",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 279.28125,
+        "height": 22
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "medium": "water",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 251.5,
+          "right": 390.5,
+          "height": 44,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "air",
+          "left": 390.5,
+          "right": 251.5,
+          "height": 44,
+          "textWidth": 75.171875
+        },
+        {
+          "id": "convection-play",
+          "left": 19,
+          "right": 649,
+          "height": 47.578125,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "convection-reset",
+          "left": 141,
+          "right": 527,
+          "height": 47.578125,
+          "textWidth": 30.078125
+        }
+      ],
+      "state": {
+        "medium": "water",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 263.765625,
+        "height": 22
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "medium": "air",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 251.5,
+          "right": 390.5,
+          "height": 44,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "air",
+          "left": 390.5,
+          "right": 251.5,
+          "height": 44,
+          "textWidth": 75.171875
+        },
+        {
+          "id": "convection-play",
+          "left": 19,
+          "right": 649,
+          "height": 47.578125,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "convection-reset",
+          "left": 141,
+          "right": 527,
+          "height": 47.578125,
+          "textWidth": 30.078125
+        }
+      ],
+      "state": {
+        "medium": "air",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 279.28125,
+        "height": 22
+      }
+    },
+    {
+      "width": 820,
+      "height": 900,
+      "medium": "water",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 116,
+          "right": 255,
+          "height": 44,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "air",
+          "left": 255,
+          "right": 116,
+          "height": 44,
+          "textWidth": 75.171875
+        },
+        {
+          "id": "convection-play",
+          "left": 19,
+          "right": 378,
+          "height": 47.578125,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "convection-reset",
+          "left": 141,
+          "right": 256,
+          "height": 47.578125,
+          "textWidth": 30.078125
+        }
+      ],
+      "state": {
+        "medium": "water",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 263.765625,
+        "height": 22
+      }
+    },
+    {
+      "width": 820,
+      "height": 900,
+      "medium": "air",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 116,
+          "right": 255,
+          "height": 44,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "air",
+          "left": 255,
+          "right": 116,
+          "height": 44,
+          "textWidth": 75.171875
+        },
+        {
+          "id": "convection-play",
+          "left": 19,
+          "right": 378,
+          "height": 47.578125,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "convection-reset",
+          "left": 141,
+          "right": 256,
+          "height": 47.578125,
+          "textWidth": 30.078125
+        }
+      ],
+      "state": {
+        "medium": "air",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 279.28125,
+        "height": 22
+      }
+    },
+    {
+      "width": 760,
+      "height": 900,
+      "medium": "water",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 150.5,
+          "right": 289.5,
+          "height": 44,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "air",
+          "left": 289.5,
+          "right": 150.5,
+          "height": 44,
+          "textWidth": 75.171875
+        },
+        {
+          "id": "convection-play",
+          "left": 19,
+          "right": 447,
+          "height": 47.578125,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "convection-reset",
+          "left": 141,
+          "right": 325,
+          "height": 47.578125,
+          "textWidth": 30.078125
+        }
+      ],
+      "state": {
+        "medium": "water",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 263.765625,
+        "height": 22
+      }
+    },
+    {
+      "width": 760,
+      "height": 900,
+      "medium": "air",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 150.5,
+          "right": 289.5,
+          "height": 44,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "air",
+          "left": 289.5,
+          "right": 150.5,
+          "height": 44,
+          "textWidth": 75.171875
+        },
+        {
+          "id": "convection-play",
+          "left": 19,
+          "right": 447,
+          "height": 47.578125,
+          "textWidth": 60.140625
+        },
+        {
+          "id": "convection-reset",
+          "left": 141,
+          "right": 325,
+          "height": 47.578125,
+          "textWidth": 30.078125
+        }
+      ],
+      "state": {
+        "medium": "air",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 279.28125,
+        "height": 22
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "medium": "water",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 17,
+          "right": 165.5,
+          "height": 44,
+          "textWidth": 57.578125
+        },
+        {
+          "id": "air",
+          "left": 165.5,
+          "right": 17,
+          "height": 44,
+          "textWidth": 71.96875
+        },
+        {
+          "id": "convection-play",
+          "left": 13,
+          "right": 168,
+          "height": 44,
+          "textWidth": 56.328125
+        },
+        {
+          "id": "convection-reset",
+          "left": 168,
+          "right": 13,
+          "height": 44,
+          "textWidth": 28.171875
+        }
+      ],
+      "state": {
+        "medium": "water",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 239.34375,
+        "height": 19
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "medium": "air",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 17,
+          "right": 165.5,
+          "height": 44,
+          "textWidth": 57.578125
+        },
+        {
+          "id": "air",
+          "left": 165.5,
+          "right": 17,
+          "height": 44,
+          "textWidth": 71.96875
+        },
+        {
+          "id": "convection-play",
+          "left": 13,
+          "right": 168,
+          "height": 44,
+          "textWidth": 56.328125
+        },
+        {
+          "id": "convection-reset",
+          "left": 168,
+          "right": 13,
+          "height": 44,
+          "textWidth": 28.171875
+        }
+      ],
+      "state": {
+        "medium": "air",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 253.421875,
+        "height": 19
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "medium": "water",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 17,
+          "right": 130.5,
+          "height": 44,
+          "textWidth": 57.578125
+        },
+        {
+          "id": "air",
+          "left": 130.5,
+          "right": 17,
+          "height": 44,
+          "textWidth": 71.96875
+        },
+        {
+          "id": "convection-play",
+          "left": 13,
+          "right": 133,
+          "height": 44,
+          "textWidth": 56.328125
+        },
+        {
+          "id": "convection-reset",
+          "left": 133,
+          "right": 13,
+          "height": 44,
+          "textWidth": 28.171875
+        }
+      ],
+      "state": {
+        "medium": "water",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 197.109375,
+        "height": 43.625
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "medium": "air",
+      "overflow": false,
+      "controls": [
+        {
+          "id": "water",
+          "left": 17,
+          "right": 130.5,
+          "height": 44,
+          "textWidth": 57.578125
+        },
+        {
+          "id": "air",
+          "left": 130.5,
+          "right": 17,
+          "height": 44,
+          "textWidth": 71.96875
+        },
+        {
+          "id": "convection-play",
+          "left": 13,
+          "right": 133,
+          "height": 44,
+          "textWidth": 56.328125
+        },
+        {
+          "id": "convection-reset",
+          "left": 133,
+          "right": 13,
+          "height": 44,
+          "textWidth": 28.171875
+        }
+      ],
+      "state": {
+        "medium": "air",
+        "playing": "false",
+        "stage": "ready",
+        "assets": "ready",
+        "elapsed": "0.000",
+        "started": "false"
+      },
+      "text": {
+        "width": 197.109375,
+        "height": 43.625
+      }
+    }
+  ],
+  "errors": []
+}
