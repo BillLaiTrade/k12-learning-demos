@@ -1,0 +1,387 @@
+{
+  "records": [
+    {
+      "width": 1440,
+      "rows": [
+        {
+          "id": "s1",
+          "title": "針孔如何形成倒立像？",
+          "subtitle": "小孔成像：光的直進與物像位置",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s2",
+          "title": "平行光通過凸透鏡後，方向會怎麼變？",
+          "subtitle": "凸透鏡：外形、折射與焦點",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s3",
+          "title": "凸透鏡如何成像，物體遠近又會怎麼影響像？",
+          "subtitle": "凸透鏡成像：物距與像的位置、大小及性質",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s4",
+          "title": "凸透鏡什麼時候能當放大鏡？",
+          "subtitle": "放大鏡的應用：物體位置與觀看效果",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s5",
+          "title": "換成凹透鏡，平行光的方向會怎麼變？",
+          "subtitle": "凹透鏡：外形、折射與焦點",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s6",
+          "title": "凹透鏡形成什麼像？",
+          "subtitle": "凹透鏡成像：物距與像的位置、大小及性質",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s7",
+          "title": "眼睛如何看清楚遠近的物體？",
+          "subtitle": "眼睛的成像：水晶體調節與視網膜",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s8",
+          "title": "近視與遠視，如何用眼鏡矯正？",
+          "subtitle": "屈光狀態與眼鏡矯正：會聚位置與視網膜",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s9",
+          "title": "顯微鏡如何讓兩組透鏡接力放大？",
+          "subtitle": "複式顯微鏡：物鏡與目鏡的成像關係",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "rows": [
+        {
+          "id": "s1",
+          "title": "針孔如何形成倒立像？",
+          "subtitle": "小孔成像：光的直進與物像位置",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s2",
+          "title": "平行光通過凸透鏡後，方向會怎麼變？",
+          "subtitle": "凸透鏡：外形、折射與焦點",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s3",
+          "title": "凸透鏡如何成像，物體遠近又會怎麼影響像？",
+          "subtitle": "凸透鏡成像：物距與像的位置、大小及性質",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s4",
+          "title": "凸透鏡什麼時候能當放大鏡？",
+          "subtitle": "放大鏡的應用：物體位置與觀看效果",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s5",
+          "title": "換成凹透鏡，平行光的方向會怎麼變？",
+          "subtitle": "凹透鏡：外形、折射與焦點",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s6",
+          "title": "凹透鏡形成什麼像？",
+          "subtitle": "凹透鏡成像：物距與像的位置、大小及性質",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s7",
+          "title": "眼睛如何看清楚遠近的物體？",
+          "subtitle": "眼睛的成像：水晶體調節與視網膜",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s8",
+          "title": "近視與遠視，如何用眼鏡矯正？",
+          "subtitle": "屈光狀態與眼鏡矯正：會聚位置與視網膜",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s9",
+          "title": "顯微鏡如何讓兩組透鏡接力放大？",
+          "subtitle": "複式顯微鏡：物鏡與目鏡的成像關係",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "rows": [
+        {
+          "id": "s1",
+          "title": "針孔如何形成倒立像？",
+          "subtitle": "小孔成像：光的直進與物像位置",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s2",
+          "title": "平行光通過凸透鏡後，方向會怎麼變？",
+          "subtitle": "凸透鏡：外形、折射與焦點",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s3",
+          "title": "凸透鏡如何成像，物體遠近又會怎麼影響像？",
+          "subtitle": "凸透鏡成像：物距與像的位置、大小及性質",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s4",
+          "title": "凸透鏡什麼時候能當放大鏡？",
+          "subtitle": "放大鏡的應用：物體位置與觀看效果",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s5",
+          "title": "換成凹透鏡，平行光的方向會怎麼變？",
+          "subtitle": "凹透鏡：外形、折射與焦點",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s6",
+          "title": "凹透鏡形成什麼像？",
+          "subtitle": "凹透鏡成像：物距與像的位置、大小及性質",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s7",
+          "title": "眼睛如何看清楚遠近的物體？",
+          "subtitle": "眼睛的成像：水晶體調節與視網膜",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s8",
+          "title": "近視與遠視，如何用眼鏡矯正？",
+          "subtitle": "屈光狀態與眼鏡矯正：會聚位置與視網膜",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s9",
+          "title": "顯微鏡如何讓兩組透鏡接力放大？",
+          "subtitle": "複式顯微鏡：物鏡與目鏡的成像關係",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "rows": [
+        {
+          "id": "s1",
+          "title": "針孔如何形成倒立像？",
+          "subtitle": "小孔成像：光的直進與物像位置",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s2",
+          "title": "平行光通過凸透鏡後，方向會怎麼變？",
+          "subtitle": "凸透鏡：外形、折射與焦點",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s3",
+          "title": "凸透鏡如何成像，物體遠近又會怎麼影響像？",
+          "subtitle": "凸透鏡成像：物距與像的位置、大小及性質",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s4",
+          "title": "凸透鏡什麼時候能當放大鏡？",
+          "subtitle": "放大鏡的應用：物體位置與觀看效果",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s5",
+          "title": "換成凹透鏡，平行光的方向會怎麼變？",
+          "subtitle": "凹透鏡：外形、折射與焦點",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s6",
+          "title": "凹透鏡形成什麼像？",
+          "subtitle": "凹透鏡成像：物距與像的位置、大小及性質",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s7",
+          "title": "眼睛如何看清楚遠近的物體？",
+          "subtitle": "眼睛的成像：水晶體調節與視網膜",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s8",
+          "title": "近視與遠視，如何用眼鏡矯正？",
+          "subtitle": "屈光狀態與眼鏡矯正：會聚位置與視網膜",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        },
+        {
+          "id": "s9",
+          "title": "顯微鏡如何讓兩組透鏡接力放大？",
+          "subtitle": "複式顯微鏡：物鏡與目鏡的成像關係",
+          "subtitleVisible": true,
+          "inside": true,
+          "headBeforeBody": true,
+          "clipped": false,
+          "operational": false
+        }
+      ]
+    }
+  ],
+  "hintsNearControls": true,
+  "microscopeExplanationAfterScene": true,
+  "errors": []
+}
