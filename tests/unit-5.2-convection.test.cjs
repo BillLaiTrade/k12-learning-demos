@@ -57,6 +57,24 @@ test('5.2 convection: fluid movement, mode changes and observation lifecycle',{t
   await ready(page);await page.clock.runFor(600);assert.equal((await state()).elapsed,'0.000');await play.click();await page.clock.runFor(450);assert.ok(Number((await state()).elapsed)>0);
   await reset.click();assert.equal((await state()).medium,'air');assert.equal((await state()).stage,'ready');assert.equal(await play.textContent(),'開始觀察');
  });
+ await t.test('clicking each appliance starts or resumes without toggling off or multiplying animation loops',async()=>{
+  const heater=page.locator('#convection-heater');
+  for(const [medium,device]of [['water','電熱板'],['air','暖氣機']]){
+   await page.locator(`button[data-medium=${medium}]`).click();await ready(page);await reset.click();
+   assert.match(await heater.getAttribute('aria-label'),new RegExp(device));
+   assert.match(await page.locator('#convection-note').textContent(),new RegExp('點擊'+device));
+   await page.locator('#convection-apparatus').click({position:{x:25,y:25}});await page.clock.runFor(200);
+   assert.equal((await state()).elapsed,'0.000');
+   await heater.click();const before=await points();await page.clock.runFor(300);assert.notDeepEqual(await points(),before);
+   const elapsed=Number((await state()).elapsed);await heater.click();await heater.click();await page.clock.runFor(300);
+   assert.equal((await state()).playing,'true');assert.ok(Number((await state()).elapsed)-elapsed<.36);
+   await play.click();const paused=(await state()).elapsed;await heater.click();await page.clock.runFor(200);
+   assert.ok(Number((await state()).elapsed)>Number(paused));
+   await reset.click();await heater.focus();await page.keyboard.press('Enter');await page.clock.runFor(200);assert.equal((await state()).playing,'true');
+   await reset.click();await heater.focus();await page.keyboard.press('Space');await page.clock.runFor(200);assert.equal((await state()).playing,'true');
+   await reset.click();await page.clock.runFor(200);assert.equal((await state()).elapsed,'0.000');
+  }
+ });
  await t.test('keyboard, rapid actions and background interruptions leave no delayed restart',async()=>{
   await play.focus();await page.keyboard.press('Enter');await page.clock.runFor(300);
   await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});assert.equal((await state()).playing,'false');const before=await points();await page.clock.runFor(700);assert.deepEqual(await points(),before);
@@ -76,7 +94,7 @@ test('5.2 convection: fluid movement, mode changes and observation lifecycle',{t
  await t.test('all supported viewports keep explanatory text, controls and the actual fluid scene readable',async()=>{
   for(const [width,height]of [[1440,900],[1366,768],[1280,720],[820,900],[760,900],[390,844],[320,568]]){
    await page.setViewportSize({width,height});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,`${width}px overflow`);
-   for(const selector of ['#convection-play','#convection-reset','button[data-medium=water]','button[data-medium=air]']){const box=await page.locator(selector).boundingBox();assert.ok(box.height>=44);assert.ok(box.x>=0&&box.x+box.width<=width);}
+   for(const selector of ['#convection-play','#convection-reset','#convection-heater','button[data-medium=water]','button[data-medium=air]']){const box=await page.locator(selector).boundingBox();assert.ok(box.height>=44);assert.ok(box.x>=0&&box.x+box.width<=width);}
    assert.ok(await page.locator('#convection-note').evaluate(n=>parseFloat(getComputedStyle(n).fontSize)>=13));assert.ok((await page.locator('#convection-apparatus').boundingBox()).height>100);
   }assert.deepEqual(errors,[]);
  });
@@ -87,7 +105,7 @@ test('5.2 convection: fluid movement, mode changes and observation lifecycle',{t
    await p.route('**/convection-water.webp*',route=>failed?route.abort():route.continue());
    await p.goto(url);
    for(let i=0;i<100&&await p.locator('#convection-lab').getAttribute('data-assets')!=='error';i++)await new Promise(resolve=>setTimeout(resolve,50));
-   assert.equal(await p.locator('#convection-play').isDisabled(),true);
+   assert.equal(await p.locator('#convection-play').isDisabled(),true);assert.equal(await p.locator('#convection-heater').isDisabled(),true);await p.locator('#convection-heater').dispatchEvent('click');assert.equal(await p.locator('#convection-lab').getAttribute('data-playing'),'false');
    assert.equal(await p.locator('#convection-retry').isVisible(),true);
    failed=false;await p.locator('#convection-retry').click();await ready(p);
    assert.equal(await p.locator('#convection-lab').getAttribute('data-stage'),'ready');
@@ -95,7 +113,7 @@ test('5.2 convection: fluid movement, mode changes and observation lifecycle',{t
    await p.route('**/convection-air.webp*',async route=>{intercepted=true;await held;await route.continue();});
    await p.locator('button[data-medium=air]').click();
    for(let i=0;i<100&&!intercepted;i++)await new Promise(resolve=>setTimeout(resolve,25));
-   assert.equal(intercepted,true);assert.equal(await p.locator('#convection-play').isDisabled(),true);
+   assert.equal(intercepted,true);assert.equal(await p.locator('#convection-play').isDisabled(),true);assert.equal(await p.locator('#convection-heater').isDisabled(),true);await p.locator('#convection-heater').dispatchEvent('click');assert.equal(await p.locator('#convection-lab').getAttribute('data-playing'),'false');
    await p.locator('button[data-medium=water]').click();await ready(p);await p.locator('#convection-play').click();
    await p.waitForTimeout(200);release();await p.waitForTimeout(350);
    assert.equal(await p.locator('#convection-lab').getAttribute('data-medium'),'water');
@@ -108,11 +126,11 @@ test('5.2 convection: fluid movement, mode changes and observation lifecycle',{t
   }finally{await context.close();}
  });
  await t.test('real frames keep moving with both motion preferences and touch can pause/reset',async()=>{
-  for(const reducedMotion of ['no-preference','reduce']){
-   const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,reducedMotion});
-   try{const p=await context.newPage();await p.goto(url);await p.locator('button[data-medium=air]').tap();await ready(p);await p.locator('#convection-play').tap();await p.waitForTimeout(500);
+  for(const reducedMotion of ['no-preference','reduce'])for(const width of [390,320]){
+   const context=await browser.newContext({viewport:{width,height:844},hasTouch:true,reducedMotion});
+   try{const p=await context.newPage();await p.goto(url);for(const medium of ['water','air']){await p.locator(`button[data-medium=${medium}]`).tap();await ready(p);await p.locator('#convection-heater').tap();await p.waitForTimeout(500);
     const trace=p.locator('[data-flow-arrow] .convection-arrow-head').first(),before=await trace.getAttribute('transform');await p.waitForTimeout(300);assert.notEqual(await trace.getAttribute('transform'),before);
-    await p.locator('#convection-play').tap();const held=await trace.getAttribute('transform');await p.waitForTimeout(250);assert.equal(await trace.getAttribute('transform'),held);await p.locator('#convection-reset').tap();assert.equal(await p.locator('#convection-lab').getAttribute('data-stage'),'ready');
+    await p.locator('#convection-play').tap();const held=await trace.getAttribute('transform');await p.waitForTimeout(250);assert.equal(await trace.getAttribute('transform'),held);await p.locator('#convection-reset').tap();assert.equal(await p.locator('#convection-lab').getAttribute('data-stage'),'ready');}
    }finally{await context.close();}
   }
  });

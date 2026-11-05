@@ -1,0 +1,21 @@
+▶ 5.2 convection: fluid movement, mode changes and observation lifecycle
+  ✔ starts with a real distinction between water and a room, without a premature conclusion (69.21147ms)
+  ✔ both sides rise near the source, move continuously and use the same relative-warmth key (9753.42887ms)
+  ✔ photographic scenes keep animated arrows in the fluid and not inside the heater (56.262656ms)
+  ✔ pause freezes actual rendered positions and screenshots; resume preserves progress (864.768587ms)
+  ✔ switching the fluid cancels old animation, clears the discovery and resets observations (563.038238ms)
+  ✔ clicking each appliance starts or resumes without toggling off or multiplying animation loops (2691.724342ms)
+  ✔ keyboard, rapid actions and background interruptions leave no delayed restart (353.810694ms)
+  ✔ radiation, insulation and the integrated quiz still work independently (1242.513364ms)
+  ✔ all supported viewports keep explanatory text, controls and the actual fluid scene readable (453.075502ms)
+  ✔ a failed image can be retried, and a late response cannot reset a different running mode (1466.439762ms)
+  ✔ real frames keep moving with both motion preferences and touch can pause/reset (6584.246608ms)
+✔ 5.2 convection: fluid movement, mode changes and observation lifecycle (25131.534418ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25526.771664
