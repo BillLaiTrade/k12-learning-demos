@@ -12,7 +12,6 @@ const fireButtons = [
 const status = document.querySelector('#reflection-status');
 const fallback = document.querySelector('#reflection-fallback');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const viewButtons = [...document.querySelectorAll('[data-reflection-view]')];
 const viewStatus = document.querySelector('#reflection-view-status');
 
 try {
@@ -40,7 +39,6 @@ try {
   let cameraAzimuth = Math.atan2(cameraOffset.x, cameraOffset.z);
   let cameraPolar = Math.acos(cameraOffset.y / cameraDistance);
   const frontPolar = cameraPolar;
-  const viewPresets = { front: 0, left: -38 * Math.PI / 180, right: 38 * Math.PI / 180 };
   const framingPoints = [];
   let pointerDrag = null;
   const fitCamera = (targetCamera, aspect) => {
@@ -313,22 +311,11 @@ try {
   const render = () => renderer.render(scene, camera);
   const updateViewControls = () => {
     const normalizedAzimuth = Math.atan2(Math.sin(cameraAzimuth), Math.cos(cameraAzimuth));
-    const current = Object.keys(viewPresets).find(key => Math.abs(normalizedAzimuth - viewPresets[key]) < 0.001 && Math.abs(cameraPolar - frontPolar) < 0.001);
-    viewButtons.forEach(button => {
-      const pressed = String(button.dataset.reflectionView === current);
-      if (button.getAttribute('aria-pressed') !== pressed) button.setAttribute('aria-pressed', pressed);
-    });
-    const label = '目前觀看位置：' + (current ? { front: '正面', left: '稍向左', right: '稍向右' }[current] : '自由觀看');
+    const isFront = Math.abs(normalizedAzimuth) < 0.001 && Math.abs(cameraPolar - frontPolar) < 0.001;
+    const label = '目前觀看位置：' + (isFront ? '正面' : '自由觀看');
     if (viewStatus.textContent !== label) viewStatus.textContent = label;
-    canvas.dataset.view = current || 'free';
+    canvas.dataset.view = isFront ? 'front' : 'free';
   };
-  viewButtons.forEach(button => button.addEventListener('click', () => {
-    cameraAzimuth = viewPresets[button.dataset.reflectionView];
-    cameraPolar = frontPolar;
-    updateCamera();
-    updateViewControls();
-    render();
-  }));
   const raycaster = new THREE.Raycaster();
   const pointerPosition = new THREE.Vector2();
   const flashlightIndexAtPointer = (event) => {
@@ -434,7 +421,7 @@ try {
   fireButtons.forEach((button, index) => button.addEventListener('click', () => toggleLight(index)));
   const applyReference = () => {
     if (referenceMatchButton.disabled) return;
-    cameraAzimuth = viewPresets.front;
+    cameraAzimuth = 0;
     cameraPolar = frontPolar;
     updateCamera();
     updateViewControls();
@@ -445,7 +432,6 @@ try {
     updateLightControls();
     render();
     canvas.focus({ preventScroll: true });
-    canvas.scrollIntoView({ block: 'center', behavior: reducedMotion.matches ? 'instant' : 'smooth' });
   };
   // Some touch browsers suppress the compatibility click after a 3D drag.
   // Accept a stationary native touch release, without treating scrolling as
@@ -473,7 +459,7 @@ try {
     if (handledReferenceTouch && (event.pointerType === 'touch' || event.detail > 0)) { handledReferenceTouch = false; return; }
     applyReference();
   });
-  [...fireButtons, ...viewButtons, referenceMatchButton].forEach(button => { button.disabled = false; });
+  [...fireButtons, referenceMatchButton].forEach(button => { button.disabled = false; });
   updateLightControls();
   updateViewControls();
   canvas.dataset.ready = 'true';
@@ -496,7 +482,7 @@ try {
   canvas.hidden = true;
   comparison.hidden = true;
   fallback.hidden = false;
-  [...fireButtons, ...viewButtons, referenceMatchButton].forEach((button) => { button.disabled = true; });
+  [...fireButtons, referenceMatchButton].forEach((button) => { button.disabled = true; });
   canvas.dataset.ready = 'error';
   status.textContent = '目前裝置無法呈現 3D 場景；請閱讀卡片說明了解反射差異。';
 }
