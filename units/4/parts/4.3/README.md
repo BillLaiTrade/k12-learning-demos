@@ -518,3 +518,9 @@ node --test --test-concurrency=1 tests/unit-4.3-depth-model.test.mjs tests/unit-
 ## 移除目前位置文字（2026-11-05）
 
 依使用者A決定，移除頂部「目前位置」段落及對應更新語句，保留側欄反白、同源標題、原進度條與所有實驗／小測。格式及導覽9項通過；見`docs/decisions/unit-4.3-remove-position.md`及`docs/reviews/unit-4.3-remove-position-20261105/`。
+
+## 十項盤點後統一修訂（2026-11-05）
+
+依使用者逐項選擇，第1～6、9、10項採A，第7項採B，第8項暫緩。統一手動開始帶回實驗圖，等待第五區雙光抵達才呈現結論，第六區結論配合已繪出的空槽／有水／遮擋狀態。同步第二區與第六區對話、科學條件、第四區剖面短註及共通模型說明去重。第五區原對話及操作提示保持。
+
+新增`tests/unit-4.3-ten-decisions.test.cjs`；配合既有十一項、最終操作、格式及模型回歸。詳見`docs/decisions/unit-4.3-ten-review.md`。不新增素材、依賴或手機排版，維持第四階段。

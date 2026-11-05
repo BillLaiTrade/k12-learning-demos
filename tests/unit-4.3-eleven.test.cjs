@@ -39,7 +39,7 @@ test('4.3 eleven approved choices: controls, evidence, concise copy and desktop 
   await scroll(p,'#exit-lab');await p.locator('#exit-angle').fill('0');await p.locator('#exit-start').click();await p.clock.runFor(4000);assert.equal(await p.locator('#exit-out-value').textContent(),'0.0°');assert.match(await p.locator('#exit-finding').textContent(),/方向不偏折/);assert.equal(await p.locator('#exit-transmission-condition').isVisible(),false);
   assert.match(await p.locator('.return-direction-note').textContent(),/顏色僅用來區分前進方向/);assert.equal(await p.locator('.cart-setting-note').count(),2);for(const id of ['oblique','exit'])assert.match(await p.locator(`#${id}-explanation .cart-setting-note`).textContent(),/固定斜射類比.*上圖設定獨立/);
   for(const id of[2,3,4]){const text=await p.locator(`#s${id}`).textContent();assert.doesNotMatch(text,/波前/);assert.match(text,/小車為類比，不代表光受到摩擦/);}
-  assert.match(await p.locator('#s6 .dialogue').first().textContent(),/硬幣沒動，加水後還會被槽壁擋住嗎/);assert.match(await p.locator('.depth-takeaway').textContent(),/光出水轉向.*眼睛沿直線回推.*較淺/);
+  assert.match(await p.locator('#s6 .dialogue').first().textContent(),/池裡的硬幣看起來離水面很近/);assert.match(await p.locator('.depth-takeaway').textContent(),/空槽.*直線.*槽壁擋住/);
   assert.equal(await p.locator('#depth-input').inputValue(),'0');assert.equal(await p.locator('.lesson-card').count(),6);assert.equal(await p.locator('form').count(),1);
  });
  await t.test('3 and 5: no-op selections/keys/drop retain grades; replay conceals then restores grades unless order changes',async()=>{

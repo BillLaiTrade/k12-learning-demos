@@ -1,6 +1,7 @@
 import {mediumSelector} from './medium-selector.mjs?v=20261103-concept1';
 import {geometry,clampAngle,angleFromSource,arrow,reciprocalSnapshot} from './return-refraction-model.mjs?v=20261105-review1';
 import {createReciprocalView} from './return-refraction-view.mjs?v=20261103-roles1';
+import {revealExperiment} from './experiment-viewport.mjs?v=20261105-eleven1';
 const root=document.querySelector('#return-lab');
 const $=s=>root.querySelector(s),scene=$('#return-scene'),devices=$('#return-devices'),picture=$('#return-background'),input=$('#return-angle');
 const keys=['a','b'],lights={a:false,b:false},photos=new Map();
@@ -56,7 +57,6 @@ function render(){
  const angleDescription=both?`空氣側${g.airAngle.toFixed(1)}度，${g.name}側${angle}度`:lights.a?`入射角${g.airAngle.toFixed(1)}度，折射角${angle}度`:lights.b?`入射角${angle}度，折射角${g.airAngle.toFixed(1)}度`:'兩支光源關閉';
  scene.setAttribute('aria-label',`空氣在上方，${g.name}在下方。${angleDescription}，角度皆從法線量起。A紅光${lights.a?'開啟':'關閉'}，B藍光${lights.b?'開啟':'關閉'}。`);
  input.disabled=state!=='ready';$('#return-reset').disabled=state!=='ready';selectorControl.render(requested);drawBeams();
- $('#return-finding').textContent=both?'往返光路重合，方向相反':!active?'分別開啟 A、B，再比較兩個方向':lights.b?'B → M → A：從下方射回空氣':'A → M → B：從空氣射入下方';
  $('#return-route').textContent=both?'A → M → B　／　B → M → A':lights.b?`光速慢 → 快；入射角 ${angle}° → 折射角 ${g.airAngle.toFixed(1)}°`:lights.a?`光速快 → 慢；入射角 ${g.airAngle.toFixed(1)}° → 折射角 ${angle}°`:`空氣側 ${g.airAngle.toFixed(1)}°｜${g.name}側 ${angle}°`;
  $('#return-status').classList.toggle('visually-hidden',state!=='error');$('#return-status').textContent=state==='loading'?'正在準備實驗場景……':state==='error'?'場景未能載入，請重試或切換介質。':'點擊開關光源；拖動 A 或 B 調角，另一端自動對準。';
 }
@@ -69,6 +69,10 @@ function drawBeams(){
   group.querySelectorAll('.return-direction').forEach((head,i)=>{const segment=snap.segments[i],at=key==='a'?.32:.36,size=Math.max(12,8/ratio),length=Math.hypot(segment.to[0]-segment.from[0],segment.to[1]-segment.from[1]);head.setAttribute('d',segment.fraction>=at+size/length?arrow(segment.from,segment.to,at,size):'');});
   root.dataset[`progress${key.toUpperCase()}`]=String(Math.min(1,playback[key].elapsed/snap.durationMs));
  }
+ const active=state==='ready'&&(lights.a||lights.b),both=active&&lights.a&&lights.b;
+ const complete=both&&keys.every(key=>reciprocalSnapshot(g,key,playback[key].elapsed).complete);
+ const finding=both?(complete?'往返光路重合，方向相反':'觀察兩束光的路徑與方向'):!active?'分別開啟 A、B，再比較兩個方向':lights.b?'B → M → A：從下方射回空氣':'A → M → B：從空氣射入下方';
+ if($('#return-finding').textContent!==finding)$('#return-finding').textContent=finding;
 }
 function stopAnimation(){cancelAnimationFrame(frame);frame=0;lastTime=0;}
 function tick(now){
@@ -85,7 +89,7 @@ function resumeAnimation(){
  if(running&&inView&&!document.hidden){lastTime=performance.now();frame=requestAnimationFrame(tick);}
 }
 function restartActive(){stopAnimation();for(const key of keys)playback[key].elapsed=0;render();resumeAnimation();}
-function toggle(key){if(state!=='ready')return;lights[key]=!lights[key];playback[key].elapsed=0;render();resumeAnimation();}
+function toggle(key){if(state!=='ready')return;if(!lights[key])revealExperiment($('#return-viewport'),$('.return-control-deck'));lights[key]=!lights[key];playback[key].elapsed=0;render();resumeAnimation();}
 function setAngle(value){if(state!=='ready')return;const next=clampAngle(value);if(next===angle)return;angle=next;restartActive();}
 for(const key of keys)$(`#return-toggle-${key}`).onclick=()=>toggle(key);
 $('#return-reset').onclick=()=>{stopAnimation();lights.a=lights.b=false;playback.a.elapsed=playback.b.elapsed=0;angle=30;render();root.dataset.playback='complete';};input.oninput=()=>setAngle(Number(input.value));
