@@ -1,0 +1,37 @@
+{
+  "copy": "重點整理｜兩組凸透鏡，接力放大\n\n透過目鏡看到的是相對標本\n上下、左右相反的放大虛像。\n\n物鏡先形成倒立、放大的中間實像；目鏡再放大，方向不再倒轉。",
+  "characters": 74,
+  "records": [
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "width": 778,
+      "height": 168.734375,
+      "overflow": false,
+      "clipped": false
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "width": 328,
+      "height": 185.96875,
+      "overflow": false,
+      "clipped": false
+    },
+    {
+      "viewport": [
+        320,
+        844
+      ],
+      "width": 258,
+      "height": 185.96875,
+      "overflow": false,
+      "clipped": false
+    }
+  ],
+  "errors": []
+}
