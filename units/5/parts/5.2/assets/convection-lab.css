@@ -1,4 +1,5 @@
 /* Fourth block: water and room sections share a qualitative flow overlay. */
+#card-04 .card-main{container-type:normal}
 #convection-lab{container:convection / inline-size;background:#fffdf7;border-color:#cedbc8}
 #convection-lab .panel-toolbar{justify-content:space-between;padding:13px 16px;background:#f1f5ed}
 .convection-workspace{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:0}

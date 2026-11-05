@@ -1,13 +1,13 @@
 ▶ 5.2 convection: fluid movement, mode changes and observation lifecycle
-  ✔ starts with a real distinction between water and a room, without a premature conclusion (95.235257ms)
-  ✔ both sides rise near the source, move continuously and use the same relative-warmth key (6091.749264ms)
-  ✔ pause freezes actual rendered positions and screenshots; resume preserves progress (550.854771ms)
-  ✔ switching the fluid cancels old animation, clears the discovery and resets observations (393.2852ms)
-  ✔ keyboard, rapid actions and background interruptions leave no delayed restart (351.357739ms)
-  ✔ radiation, insulation and the integrated quiz still work independently (1264.977314ms)
-  ✔ all supported viewports keep explanatory text, controls and the actual fluid scene readable (438.412666ms)
-  ✔ real frames keep moving with both motion preferences and touch can pause/reset (3604.868583ms)
-✔ 5.2 convection: fluid movement, mode changes and observation lifecycle (13636.625141ms)
+  ✔ starts with a real distinction between water and a room, without a premature conclusion (101.676088ms)
+  ✔ both sides rise near the source, move continuously and use the same relative-warmth key (6158.792747ms)
+  ✔ pause freezes actual rendered positions and screenshots; resume preserves progress (505.61284ms)
+  ✔ switching the fluid cancels old animation, clears the discovery and resets observations (358.967696ms)
+  ✔ keyboard, rapid actions and background interruptions leave no delayed restart (270.930632ms)
+  ✔ radiation, insulation and the integrated quiz still work independently (1239.771924ms)
+  ✔ all supported viewports keep explanatory text, controls and the actual fluid scene readable (451.399542ms)
+  ✔ real frames keep moving with both motion preferences and touch can pause/reset (3671.475118ms)
+✔ 5.2 convection: fluid movement, mode changes and observation lifecycle (13693.269909ms)
 ℹ tests 9
 ℹ suites 0
 ℹ pass 9
@@ -15,4 +15,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 13963.865265
+ℹ duration_ms 14072.98501

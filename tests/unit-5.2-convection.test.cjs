@@ -32,6 +32,10 @@ test('5.2 convection: fluid movement, mode changes and observation lifecycle',{t
  await t.test('pause freezes actual rendered positions and screenshots; resume preserves progress',async()=>{
   await play.click();const before=await points(),time=(await state()).elapsed;await page.clock.runFor(1000);assert.deepEqual(await points(),before);assert.equal((await state()).elapsed,time);
   const first=await root.screenshot();await page.clock.runFor(500);assert.equal(first.equals(await root.screenshot()),true);
+  for(const id of ['convection-play','convection-status','convection-note','convection-step-1']){
+   const text=await page.locator('#'+id).evaluate(n=>{const range=document.createRange();range.selectNodeContents(n);const r=range.getBoundingClientRect();return {width:r.width,height:r.height};});
+   assert.ok(text.width>10&&text.height>10,`${id}: dynamic text has a real layout after pausing`);
+  }
   await play.click();await page.clock.runFor(400);assert.notDeepEqual(await points(),before);
  });
  await t.test('switching the fluid cancels old animation, clears the discovery and resets observations',async()=>{
