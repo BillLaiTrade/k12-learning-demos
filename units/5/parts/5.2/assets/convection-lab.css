@@ -8,7 +8,7 @@
 .convection-scene{position:relative;min-width:0;margin:0;aspect-ratio:1000/660;background:#ecece0}
 #convection-lab .scene-svg{width:100%;height:auto;max-height:none;aspect-ratio:1000/660;opacity:0}
 #convection-lab[data-assets=ready] .scene-svg{opacity:1}
-.convection-heater-label{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);margin:0;padding:4px 15px;border-radius:10px;background:#fffdf0eb;box-shadow:0 1px 4px #3c442414;color:#334f37;font-size:.85rem;font-weight:700;white-space:nowrap}
+.convection-heater-label{pointer-events:none;position:absolute;bottom:12px;left:50%;transform:translateX(-50%);margin:0;padding:4px 15px;border-radius:10px;background:#fffdf0eb;box-shadow:0 1px 4px #3c442414;color:#334f37;font-size:.85rem;font-weight:700;white-space:nowrap}
 #convection-lab:not([data-assets=ready]) .convection-heater-label{display:none}
 #convection-motion{pointer-events:none}.convection-flow-line{fill:none;stroke-width:10;stroke-opacity:.21;stroke-linecap:round;stroke-linejoin:round}
 .convection-arrow-tail{fill:none;stroke-width:11;stroke-opacity:.9;stroke-linecap:round;stroke-linejoin:round}.convection-arrow-head{stroke:#fff9e8;stroke-width:1.4;stroke-linejoin:round;paint-order:stroke fill}
@@ -26,3 +26,10 @@
 #convection-lab button:focus-visible,.convection-explanation summary:focus-visible{outline:3px solid #bc612b;outline-offset:3px}
 @media(max-width:700px){.convection-toolbar{padding:12px}.convection-tabs{width:100%}.convection-tabs button{min-width:0;flex:1;padding:9px 13px;font-size:.9rem}.convection-key{gap:7px 13px;padding:10px 12px;font-size:.78rem}.convection-key span:first-child{padding-right:12px}#convection-lab .convection-control-row{padding:11px 12px 13px;gap:10px}#convection-lab .lab-controls{gap:8px}#convection-lab .lab-controls button{min-width:100px;padding:9px 14px;font-size:.88rem}#convection-lab .observation{margin-inline:12px;padding:12px;font-size:.88rem}.convection-short-note{margin-inline:12px;font-size:.74rem}.convection-explanation{margin-inline:12px;font-size:.8rem}.convection-heater-label{bottom:7px;padding:3px 11px;font-size:.76rem}}
 @media(max-width:420px){.convection-key{column-gap:12px}.convection-key span:first-child{flex-basis:100%;justify-content:center;border-right:0;padding:0}.convection-control-row{align-items:flex-start!important;flex-direction:column}.convection-status{font-size:.76rem}#convection-lab .lab-controls{display:grid;grid-template-columns:1fr 1fr;width:100%}#convection-lab .lab-controls button{width:100%;min-width:0}.convection-heater-label{bottom:5px;font-size:.72rem}}
+
+/* Native button follows the appliance in each photograph, with a 44px touch target. */
+#convection-lab .convection-heater-hit{position:absolute;left:21%;top:70%;width:59%;height:22%;min-height:44px;margin:0;padding:0;border:2px solid transparent;border-radius:12px;background:transparent;box-shadow:none;cursor:pointer;touch-action:manipulation}
+#convection-lab[data-medium=air] .convection-heater-hit{left:37%;top:65%;width:26%;height:20%}
+#convection-lab .convection-heater-hit:disabled{cursor:wait}
+@media(hover:hover){#convection-lab .convection-heater-hit:not(:disabled):hover{border-color:#426b50b0;box-shadow:0 0 0 3px #fffdf570}}
+#convection-lab .convection-heater-hit:focus-visible{outline:3px solid #bc612b;outline-offset:3px}

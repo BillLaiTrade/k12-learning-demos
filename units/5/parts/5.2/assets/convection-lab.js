@@ -6,6 +6,7 @@
   if (!root) return;
   const $ = id => document.getElementById(id);
   const play = $('convection-play');
+  const heater = $('convection-heater');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const paths = ['left', 'right'].map(side => ({node:$(`convection-${side}`), length:0}));
   const arrows = [...root.querySelectorAll('[data-flow-arrow]')].map(node => ({
@@ -23,8 +24,8 @@
     ]
   };
   const copy = {
-    water:{name:'水',scene:'玻璃容器中的水',heater:'底部加熱',hint:'沿著箭頭，觀察受熱處的水與周圍的水各往哪裡移動。'},
-    air:{name:'空氣',scene:'房間剖面',heater:'暖氣機',hint:'空氣本身看不見；箭頭顯示暖氣機附近與房間周圍空氣的流動。'}
+    water:{name:'水',scene:'玻璃容器中的水',heater:'底部加熱',device:'電熱板',hint:'沿著箭頭，觀察受熱處的水與周圍的水各往哪裡移動。'},
+    air:{name:'空氣',scene:'房間剖面',heater:'暖氣機',device:'暖氣機',hint:'空氣本身看不見；箭頭顯示暖氣機附近與房間周圍空氣的流動。'}
   };
   const assets = Object.fromEntries(['water','air'].map(key => [key,{
     image:$(`convection-${key}-photo`), source:$(`convection-${key}-photo`).dataset.src,
@@ -71,14 +72,17 @@
     setText('convection-step-1',!started?'受熱處的流體會往哪裡動？':`受熱的${text.name}膨脹，密度變小，逐漸上升。`);
     setText('convection-step-2',time<3?'流到上方後，會往哪裡去？':`較暖的${text.name}流向周圍，並向較冷的周圍散熱。`);
     setText('convection-step-3',time<6?'周圍的流體會怎麼補入？':`較冷、密度較大的${text.name}下沉，補入下方受熱處，形成循環。`);
-    const note=!started?'按下「開始觀察」，留意受熱處與兩側的流動。'
+    const note=!started?`點擊${text.device}或按下「開始觀察」，留意受熱處與兩側的流動。`
       :time<3?`受熱的${text.name}膨脹、密度變小，逐漸上升。`
       :time<6?`較暖的${text.name}向周圍流動，並向較冷的周圍散熱。`
       :`受熱的${text.name}上升，周圍較冷的${text.name}下沉補入，形成循環。`;
     setText('convection-note',note);
     setText('convection-status',!started?'尚未開始':playing?'觀察進行中':'觀察已暫停');
     setText('convection-play',playing?'暫停觀察':time>0?'繼續觀察':'開始觀察');
-    play.disabled=asset.status!=='ready';play.setAttribute('aria-pressed',String(playing));
+    heater.disabled=play.disabled=asset.status!=='ready';
+    const heaterAction=`點擊${text.device}，開始或繼續觀察${text.name}的流動`;
+    heater.setAttribute('aria-label',heaterAction);heater.title=heaterAction;
+    play.setAttribute('aria-pressed',String(playing));
     $('convection-discovery').hidden=time<12;
     $('convection-apparatus').setAttribute('aria-label',`${text.scene}：${text.heater}，${started?'箭頭顯示中央上升、兩側下沉的自然對流示意。':'尚未開始觀察。'}`);
     setText('convection-loading-text',asset.status==='error'?'觀察場景未能載入，請重新載入或切換另一種流體。':'觀察場景載入中…');
@@ -102,10 +106,12 @@
     }catch{if(request!==asset.request)return;asset.status='error';}
     if(key===medium)render();
   }
-  play.addEventListener('click',()=>{
-    if(assets[medium].status!=='ready')return;
-    if(playing){stop();return;}playing=true;previous=null;render();frame=requestAnimationFrame(tick);
-  });
+  function start(){
+    if(playing||assets[medium].status!=='ready')return;
+    playing=true;previous=null;render();frame=requestAnimationFrame(tick);
+  }
+  play.addEventListener('click',()=>{if(playing)stop();else start();});
+  heater.addEventListener('click',start);
   $('convection-reset').addEventListener('click',reset);
   root.querySelectorAll('button[data-medium]').forEach(button=>button.addEventListener('click',()=>{
     if(medium===button.dataset.medium)return;
