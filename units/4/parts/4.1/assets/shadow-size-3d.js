@@ -329,7 +329,7 @@ if (canvas) {
     const maxPosition = 100;
     const zFromPosition = (position) => THREE.MathUtils.lerp(nearLightZ, nearScreenZ, position / maxPosition);
     const positionFromZ = (z) => THREE.MathUtils.mapLinear(z, nearLightZ, nearScreenZ, minPosition, maxPosition);
-    const updateReadout = (position, dragging = false) => {
+    const updateReadout = (position) => {
       const value = THREE.MathUtils.clamp(position, minPosition, maxPosition);
       const nearLight = value <= 28;
       const nearScreen = value >= 72;
@@ -338,10 +338,11 @@ if (canvas) {
         : nearScreen
           ? '球目前靠近屏幕，屏幕上的影子較小。'
           : '球目前位於光源與屏幕之間，可以前後移動，比較影子的大小。';
-      if (dragging) status.textContent = '拖曳球體前後移動，屏幕影子會即時改變。';
-      else if (nearLight) status.textContent = '球體目前靠近光源，屏幕上的影子較大。';
-      else if (nearScreen) status.textContent = '球體目前靠近屏幕，影子較小。';
-      else status.textContent = '球體在光源與屏幕之間，影子大小隨位置改變。';
+      status.textContent = nearLight
+        ? '球體目前靠近光源。'
+        : nearScreen
+          ? '球體目前靠近屏幕。'
+          : '球體目前位於導軌中段。';
     };
     blocker.position.z = zFromPosition(minPosition);
     updateReadout(minPosition);
@@ -389,7 +390,7 @@ if (canvas) {
       if (!raycaster.ray.intersectPlane(depthPlane, depthIntersection)) return;
       const position = positionFromZ(depthIntersection.z);
       blocker.position.z = zFromPosition(THREE.MathUtils.clamp(position, minPosition, maxPosition));
-      updateReadout(position, true);
+      updateReadout(position);
     };
     const pinchDistance = () => {
       const points = [...pointers.values()];

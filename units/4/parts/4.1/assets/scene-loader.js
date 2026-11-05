@@ -38,7 +38,7 @@ const scenes = [
     canvas: '#shadow-size-3d-scene',
     root: '#card-05 .visual',
     notice: '#shadow-size-load-failure',
-    load: () => import('./shadow-size-3d.js?v=unavailable-state-20261104'),
+    load: () => import('./shadow-size-3d.js?v=size-position-copy-20261105'),
     showUnavailable(root) {
       root.querySelector('#shadow-size-scene-status').textContent = failureMessage;
       root.querySelector('#shadow-size-feedback').textContent = '立體畫面暫時無法操作，請重新整理頁面後再試。';
