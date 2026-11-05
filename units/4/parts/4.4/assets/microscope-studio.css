@@ -73,3 +73,31 @@
 .micro-tools { background:#405a49; border-bottom:1px solid #758971; }
 .micro-viewer { gap:17px; }
 .micro-view-copy { color:#617153; }
+
+/* Steps, tools, model, viewer and current explanation share one window. */
+.micro-workspace > .micro-steps { grid-column:1 / -1; margin:0; padding:10px 12px; background:#f5f7eb; border-bottom:1px solid #bbc9ad; gap:8px; }
+.micro-workspace > .micro-steps button { padding:8px; min-height:42px; }
+.micro-workspace > .micro-status { grid-column:1 / -1; margin:0; border-left:0; border-top:1px solid #bdcbb0; padding:10px 14px; font-size:.82rem; }
+.micro-stage { height:clamp(300px,52svh,430px); }
+.micro-scene { height:100%; }
+.micro-viewer { gap:10px; padding:14px 12px; justify-content:flex-start; }
+.micro-viewer h3 { font-size:.93rem; }
+.micro-viewer > p { font-size:.75rem; }
+.micro-preview { width:min(100%,150px); max-height:174px; margin:0 auto; }
+.micro-original { padding-top:9px; }
+.micro-original svg { height:36px; width:22px; }
+@container (max-width:640px) {
+ .micro-stage { height:clamp(240px,37svh,310px); }
+ .micro-workspace > .micro-steps { padding:8px; gap:5px; }
+ .micro-workspace > .micro-steps button { padding:7px 3px; font-size:.75rem; }
+ .micro-viewer { padding:10px 12px; gap:6px 12px; grid-template-columns:minmax(0,1fr) 112px; }
+ .micro-preview { width:100%; margin:0; }
+ .micro-viewer .micro-view-copy { font-size:.72rem; }
+ .micro-workspace > .micro-status { font-size:.75rem; padding:8px 11px; }
+ .micro-key { font-size:.65rem; padding:7px 10px; }
+}
+@container (max-width:350px) {
+ .micro-viewer { grid-template-columns:minmax(0,1fr) 94px; gap:5px 8px; }
+ .micro-viewer h3 { font-size:.8rem; }
+ .micro-viewer .micro-badge { padding:5px; font-size:.7rem; }
+}

@@ -73,6 +73,7 @@ if(root){
    out+=`<path data-micro-ray data-point="${r.point}" class="micro-ray" d="${coords(pts)}" stroke="${color}" marker-mid="url(#m9-${marker})" marker-end="url(#m9-${marker})"/>`;
    if(step!=='objective')out+=`<path class="micro-ray extension" d="${coords([ocular,[g.virtual,g.total*r.objectHeight]])}" stroke="${color}"/>`;
   }
+  $('#microscope-scene').setAttribute('preserveAspectRatio',model?'none':'xMidYMid meet');
   $('#microscope-scene').innerHTML=out;
   const first=step==='objective';
   $('[data-micro-view-title]').textContent=first?'物鏡形成的中間像':'透過目鏡看到的圖案';
@@ -90,5 +91,5 @@ if(root){
  }
  root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.set==='micro')step=b.dataset.value;else if(b.hasAttribute('data-micro-rays'))rays=!rays;else if(b.dataset.microPoint)point=b.dataset.microPoint;else if(b.hasAttribute('data-micro-reset')){step='objective';rays=false;point='both';}else return;render();});
  render();
- import('./microscope-model.mjs?v=20261105-micro-polish2').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
+ import('./microscope-model.mjs?v=20261105-micro-window3').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
 }
