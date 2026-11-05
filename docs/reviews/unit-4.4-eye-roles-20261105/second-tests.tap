@@ -1,0 +1,176 @@
+TAP version 13
+# Subtest: 角膜固定、晶狀體獨立調節，同一物點兩條光在視網膜各自成像
+ok 1 - 角膜固定、晶狀體獨立調節，同一物點兩條光在視網膜各自成像
+  ---
+  duration_ms: 0.753001
+  type: 'test'
+  ...
+# Subtest: 兩段折射與傳播分別遵循等效薄透鏡關係，光不穿到視網膜後
+ok 2 - 兩段折射與傳播分別遵循等效薄透鏡關係，光不穿到視網膜後
+  ---
+  duration_ms: 1.129782
+  type: 'test'
+  ...
+# Subtest: 切近時保留調節而暫時失焦；調厚恢復清楚，切遠後需恢復較扁
+ok 3 - 切近時保留調節而暫時失焦；調厚恢復清楚，切遠後需恢復較扁
+  ---
+  duration_ms: 0.173758
+  type: 'test'
+  ...
+# Subtest: 調節的厚度、會聚作用連續增強，光斑與模糊程度隨失焦連續改變
+ok 4 - 調節的厚度、會聚作用連續增強，光斑與模糊程度隨失焦連續改變
+  ---
+  duration_ms: 0.734343
+  type: 'test'
+  ...
+# Subtest: 輸入範圍受限，遠近切換保留光路與物點偏好
+ok 5 - 輸入範圍受限，遠近切換保留光路與物點偏好
+  ---
+  duration_ms: 0.148681
+  type: 'test'
+  ...
+# Subtest: 第七區：柔和剖面、固定視網膜、手動調節與連動成像
+    # Subtest: 預設正常看遠、主圖與放大窗分開，補充收合且沒有舊的一鍵對焦
+    ok 1 - 預設正常看遠、主圖與放大窗分開，補充收合且沒有舊的一鍵對焦
+      ---
+      duration_ms: 161.0422
+      type: 'test'
+      ...
+    # Subtest: 先看眼球再調整，三部位的作用說明位於操作下方且只有一個對焦狀態
+    not ok 2 - 先看眼球再調整，三部位的作用說明位於操作下方且只有一個對焦狀態
+      ---
+      duration_ms: 1130.927154
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-4.4-eye-studio.test.cjs:13:10'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected "actual" to be strictly unequal to:
+        
+        'rgb(220, 233, 196)'
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 'rgb(220, 233, 196)'
+      actual: 'rgb(220, 233, 196)'
+      operator: 'notStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4-eye-studio.test.cjs:21:80)
+        async Test.run (node:internal/test_runner/test:1409:7)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4-eye-studio.test.cjs:13:2)
+        async Test.run (node:internal/test_runner/test:1409:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      ...
+    # Subtest: 主圖實際繪成立體模型，調節改變玻璃厚度且眼球與視網膜固定
+    ok 3 - 主圖實際繪成立體模型，調節改變玻璃厚度且眼球與視網膜固定
+      ---
+      duration_ms: 1927.941975
+      type: 'test'
+      ...
+    # Subtest: 改看近處不偷改調節；調厚後清楚，改回遠方需減少會聚
+    ok 4 - 改看近處不偷改調節；調厚後清楚，改回遠方需減少會聚
+      ---
+      duration_ms: 2260.678775
+      type: 'test'
+      ...
+    # Subtest: 調節過程影像逐步清楚；隱藏光路不改成像與遠近、物點偏好
+    ok 5 - 調節過程影像逐步清楚；隱藏光路不改成像與遠近、物點偏好
+      ---
+      duration_ms: 3677.153521
+      type: 'test'
+      ...
+    # Subtest: 鍵盤可調節和操作補充；第八區矯正仍獨立運作
+    ok 6 - 鍵盤可調節和操作補充；第八區矯正仍獨立運作
+      ---
+      duration_ms: 1499.169427
+      type: 'test'
+      ...
+    # Subtest: 八種尺寸下光路與標籤完整，操作緊接主圖、說明在下方且互不遮擋
+    ok 7 - 八種尺寸下光路與標籤完整，操作緊接主圖、說明在下方且互不遮擋
+      ---
+      duration_ms: 23659.835084
+      type: 'test'
+      ...
+    # Subtest: 手機原生滑桿可觸控調節，不移動視網膜
+    ok 8 - 手機原生滑桿可觸控調節，不移動視網膜
+      ---
+      duration_ms: 5469.335364
+      type: 'test'
+      ...
+    # Subtest: 立體顯示不可用時，剖面和調節仍可操作
+    ok 9 - 立體顯示不可用時，剖面和調節仍可操作
+      ---
+      duration_ms: 4004.429539
+      type: 'test'
+      ...
+    # Subtest: 沒有遺失資源、重複ID或瀏覽器例外
+    ok 10 - 沒有遺失資源、重複ID或瀏覽器例外
+      ---
+      duration_ms: 239.488313
+      type: 'test'
+      ...
+    1..10
+not ok 6 - 第七區：柔和剖面、固定視網膜、手動調節與連動成像
+  ---
+  duration_ms: 59398.418374
+  type: 'test'
+  location: '/workspace/k12-learning-demos/tests/unit-4.4-eye-studio.test.cjs:2:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: 小孔依相似三角形反轉上下端
+ok 7 - 小孔依相似三角形反轉上下端
+  ---
+  duration_ms: 0.656638
+  type: 'test'
+  ...
+# Subtest: 凸透鏡大小、正倒立及焦點邊界
+ok 8 - 凸透鏡大小、正倒立及焦點邊界
+  ---
+  duration_ms: 0.362961
+  type: 'test'
+  ...
+# Subtest: 不同高度入射的同物點光線交於同一像點
+ok 9 - 不同高度入射的同物點光線交於同一像點
+  ---
+  duration_ms: 0.238695
+  type: 'test'
+  ...
+# Subtest: 真實物體透過單一凹透鏡形成正立縮小虛像
+ok 10 - 真實物體透過單一凹透鏡形成正立縮小虛像
+  ---
+  duration_ms: 0.10087
+  type: 'test'
+  ...
+# Subtest: 移動屏幕改變光斑範圍，不移動實際像點
+ok 11 - 移動屏幕改變光斑範圍，不移動實際像點
+  ---
+  duration_ms: 0.125908
+  type: 'test'
+  ...
+# Subtest: 眼睛調節及兩段眼鏡光路回到固定視網膜
+ok 12 - 眼睛調節及兩段眼鏡光路回到固定視網膜
+  ---
+  duration_ms: 0.272406
+  type: 'test'
+  ...
+# Subtest: 顯微鏡中間像在目鏡焦距內且連續放大
+ok 13 - 顯微鏡中間像在目鏡焦距內且連續放大
+  ---
+  duration_ms: 0.100219
+  type: 'test'
+  ...
+# Subtest: 眼睛分別追蹤兩個物點，各束光分開成倒立像
+ok 14 - 眼睛分別追蹤兩個物點，各束光分開成倒立像
+  ---
+  duration_ms: 0.15461
+  type: 'test'
+  ...
+1..14
+# tests 24
+# suites 0
+# pass 22
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 59685.126489
