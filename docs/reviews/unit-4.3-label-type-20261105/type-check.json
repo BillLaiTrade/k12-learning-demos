@@ -1,0 +1,250 @@
+{
+  "fonts": {
+    "fonts": [
+      {
+        "familyName": "Noto Sans CJK TC",
+        "postScriptName": "NotoSansCJKtc-Regular",
+        "isCustomFont": false,
+        "glyphCount": 3
+      }
+    ]
+  },
+  "style": {
+    "family": "\"Noto Sans TC\", \"PingFang TC\", \"Microsoft JhengHei\", \"Noto Sans CJK TC\", sans-serif",
+    "weight": "500",
+    "stroke": "none",
+    "spacing": "1.04px"
+  },
+  "cases": [
+    {
+      "width": 1440,
+      "labels": [
+        {
+          "text": "介質甲",
+          "b": {
+            "x": 106.44602966308594,
+            "width": 81.10795593261719
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        },
+        {
+          "text": "介質乙",
+          "b": {
+            "x": 142.446044921875,
+            "width": 81.10795593261719
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        },
+        {
+          "text": "介質丙",
+          "b": {
+            "x": 106.44602966308594,
+            "width": 81.10795593261719
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        },
+        {
+          "text": "介質丁",
+          "b": {
+            "x": 142.446044921875,
+            "width": 81.10795593261719
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        }
+      ]
+    },
+    {
+      "width": 1366,
+      "labels": [
+        {
+          "text": "介質甲",
+          "b": {
+            "x": 106.44602966308594,
+            "width": 81.10795593261719
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        },
+        {
+          "text": "介質乙",
+          "b": {
+            "x": 142.446044921875,
+            "width": 81.10795593261719
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        },
+        {
+          "text": "介質丙",
+          "b": {
+            "x": 106.44602966308594,
+            "width": 81.10795593261719
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        },
+        {
+          "text": "介質丁",
+          "b": {
+            "x": 142.446044921875,
+            "width": 81.10795593261719
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "labels": [
+        {
+          "text": "介質甲",
+          "b": {
+            "x": 106.44602966308594,
+            "width": 81.10795593261719
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        },
+        {
+          "text": "介質乙",
+          "b": {
+            "x": 142.446044921875,
+            "width": 81.10795593261719
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        },
+        {
+          "text": "介質丙",
+          "b": {
+            "x": 106.44602966308594,
+            "width": 81.10795593261719
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        },
+        {
+          "text": "介質丁",
+          "b": {
+            "x": 142.446044921875,
+            "width": 81.10795593261719
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "labels": [
+        {
+          "text": "介質甲",
+          "b": {
+            "x": 106.46728515625,
+            "width": 81.0654067993164
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        },
+        {
+          "text": "介質乙",
+          "b": {
+            "x": 142.46731567382812,
+            "width": 81.0654067993164
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        },
+        {
+          "text": "介質丙",
+          "b": {
+            "x": 106.46728515625,
+            "width": 81.0654067993164
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        },
+        {
+          "text": "介質丁",
+          "b": {
+            "x": 142.46731567382812,
+            "width": 81.0654067993164
+          },
+          "plate": {
+            "x": 88,
+            "width": 190
+          },
+          "fits": true,
+          "overlap": false
+        }
+      ]
+    }
+  ],
+  "graded": "correct",
+  "errors": []
+}
