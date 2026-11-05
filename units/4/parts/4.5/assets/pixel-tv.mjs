@@ -1,4 +1,4 @@
-import {WIDTH,HEIGHT,QUICK_POINTS,DEFAULT_INDEX,sourcePixels,currentPixel,renderPixels,rgbaPixels,pixelAt,colourCss,colourName,sameColour,neighbourhood,moveSelection,observationText,loupeLayout,sampleDragIndex} from './pixel-tv-observer-model.mjs?v=tv-three-20261105';
+import {WIDTH,HEIGHT,QUICK_POINTS,DEFAULT_INDEX,sourcePixels,currentPixel,renderPixels,rgbaPixels,pixelAt,colourCss,colourName,sameColour,neighbourhood,moveSelection,observationText,loupeLayout,sampleDragIndex} from './pixel-tv-observer-model.mjs?v=tv-flow-20261105';
 export function initialisePixelTv(root){
  if(root.dataset.ready==='true')return;
  const $=s=>root.querySelector(s),source=sourcePixels();
@@ -26,12 +26,12 @@ export function initialisePixelTv(root){
   comparison.hidden=state.mode!=='colour';screenRoom.hidden=state.mode!=='screen';workbench.hidden=state.mode!=='inspect';layout=state.mode;
  }
  function screenSummary(){
-  const v=state.screenValues;if(v.every(n=>n===255))return'三種色光都保留，調整後與原圖相同。';if(v.every(n=>n===0))return'三種色光都關閉，畫面呈黑色。';
+  const v=state.screenValues;if(v.every(n=>n===255))return'目前保留全部色光，畫面與原圖相同。';if(v.every(n=>n===0))return'三種色光都關閉，畫面呈黑色。';
   return v.map((n,c)=>['紅光','綠光','藍光'][c]+(n===0?'已關閉':n===255?'保留原值':'減少一半')).join('；')+'。';
  }
  function screenEffect(){
   const v=state.screenValues;
-  if(v.every(n=>n===255))return'尚未減少任何色光，因此畫面與原圖相同。';
+  if(v.every(n=>n===255))return'';
   if(v.every(n=>n===0))return'紅、綠、藍三種色光全部關閉，沒有色光送出，因此整幅圖呈黑色。';
   if(v.every(n=>n===128))return'三種色光都減少一半，因此白雲變灰、整幅圖變暗；各像素原本的 RGB 比例保持相同。';
   const changed=v.flatMap((n,c)=>n===255?[]:[['紅光','綠光','藍光'][c]+(n===0?'關閉':'減少一半')]);
@@ -92,7 +92,7 @@ export function initialisePixelTv(root){
   root.querySelectorAll('[data-channel-row]').forEach((row,c)=>{const label=row.querySelector('label');label.firstChild.textContent=state.mode==='screen'?`${['紅光','綠光','藍光'][c]} ${['R','G','B'][c]}`:`${['紅','綠','藍'][c]} ${['R','G','B'][c]}`;row.setAttribute('role','group');row.setAttribute('aria-label',`${['紅光','綠光','藍光'][c]}${state.mode==='screen'?'整圖調整選項':'數值調整'}`);if(state.mode==='screen')label.removeAttribute('for');else label.setAttribute('for',`tv-rgb-${c}`);});
   root.querySelectorAll('[data-tv-value]').forEach((input,c)=>input.setAttribute('aria-label',state.mode==='screen'?`${['紅光','綠光','藍光'][c]}整圖強度，0關閉，255保留原圖`:`${['紅光 R','綠光 G','藍光 B'][c]} 數值，0到255`));
   root.querySelectorAll('[data-tv-preset]').forEach(b=>{const n=Number(b.dataset.tvPreset),name=['紅光','綠光','藍光'][Number(b.dataset.channel)],meaning=state.mode==='screen'?(n===0?'關閉':n===128?'減少一半':'保留'):(n===0?'關閉':n===128?'中':'最亮');b.querySelector('small').textContent=meaning;b.setAttribute('aria-label',state.mode==='screen'?`${name}：${meaning}`:`${name}設為${n}，${meaning}`);});
-  if(state.mode==='screen'){const message=screenSummary(),effect=screenEffect();if($('[data-tv-screen-summary]').textContent!==message)$('[data-tv-screen-summary]').textContent=message;if($('[data-tv-screen-effect]').textContent!==effect)$('[data-tv-screen-effect]').textContent=effect;}
+  if(state.mode==='screen'){const message=screenSummary(),effect=screenEffect(),result=$('.tv-screen-result'),adjusted=state.screenValues.some(n=>n!==255);result.dataset.adjusted=String(adjusted);result.querySelector('h5').hidden=!adjusted;$('[data-tv-screen-effect]').hidden=!adjusted;if($('[data-tv-screen-summary]').textContent!==message)$('[data-tv-screen-summary]').textContent=message;if($('[data-tv-screen-effect]').textContent!==effect)$('[data-tv-screen-effect]').textContent=effect;}
   $('[data-tv-pixel-values]').textContent=`目前像素：R ${after[0]}・G ${after[1]}・B ${after[2]}`;
   $('[data-tv-reset]').textContent=state.mode==='colour'?'還原這組顏色':'還原整幅圖';$('[data-tv-input-error]').hidden=true;
   const nextFrameKey=state.mode==='inspect'?'inspect':state.mode+':'+config.values.join(',')+(state.mode==='colour'?':'+before.join(','):'');

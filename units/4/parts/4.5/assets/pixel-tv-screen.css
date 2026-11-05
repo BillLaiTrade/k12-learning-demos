@@ -19,10 +19,12 @@
 .tv-screen-room .tv-channel-row input,.tv-screen-room .tv-channel-row button strong{display:none}
 .tv-screen-room .tv-channel-row button{min-height:44px}
 .tv-screen-room .tv-channel-row button small{font-size:.86rem;line-height:1.5}
-.tv-screen-result{grid-column:1/-1;margin:0;padding:12px;border:1px solid #c5d5c0;border-radius:10px;background:#f3f7ec;color:#365a3c;font-size:.86rem;line-height:1.7}
+.tv-screen-result{margin:12px 0 0;padding:12px;border:1px solid #c5d5c0;border-radius:10px;background:#f3f7ec;color:#365a3c;font-size:.86rem;line-height:1.7}
 .tv-screen-result h5{margin:0;font-size:.95rem;color:#19593f}
 .tv-screen-result p{margin:6px 0 0}
 .tv-screen-result .tv-screen-settings{font-weight:600}
+.tv-screen-result[data-adjusted=false]{padding:0;border:0;background:transparent}
+.tv-screen-result[data-adjusted=false] .tv-screen-settings{margin:0;font-weight:400}
 .tv-screen-room .tv-pixel-values{display:none}
 .tv-screen-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid #d4dec9}
 .tv-screen-footer>p{margin:0;color:#365a3c;font-size:.86rem;line-height:1.7;min-width:0}
