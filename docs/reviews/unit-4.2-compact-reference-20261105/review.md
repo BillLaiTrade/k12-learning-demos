@@ -22,3 +22,7 @@ CHROMIUM_PATH=/usr/bin/chromium COMPLETION_CAPTURE_DIR=/tmp/unit42-compact-integ
 ```
 
 生成示意圖只用於核可版面，正式參考與3D反光仍來自原實際場景。生成示意沒有作為光學幾何或像素驗證依據。舊版較大參考圖紀錄另保留於unit-4.2-free-view-reference-20261105。
+
+## 後續恢復原比例
+
+使用者核可恢復主畫面長寬比。僅調整第一區樣式：桌機1.65:1、窄容器1.3:1，不再以視窗高度壓短；頁面只更新CSS快取版本，正文、按鈕、圖片與3D程式均未變。13項套件通過，比例斷言納入原有五種視窗檢查；750px寬的主畫面高度恢復約455px，同時保留小型參考與原操作。量測與測試輸出見natural-viewport.json、natural-tests.txt。短視窗可自然捲動，不以硬性同窗要求犧牲比例。

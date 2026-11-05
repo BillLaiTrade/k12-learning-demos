@@ -1,0 +1,142 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "stage": {
+      "top": 11.8125,
+      "bottom": 766.296875,
+      "width": 778,
+      "height": 754.484375
+    },
+    "main": {
+      "top": 85.8125,
+      "bottom": 540.34375,
+      "width": 750,
+      "height": 454.53125
+    },
+    "button": {
+      "top": 33.8125,
+      "bottom": 77.8125,
+      "width": 131.515625,
+      "height": 44
+    },
+    "reference": {
+      "top": 620.34375,
+      "bottom": 742.296875,
+      "width": 200,
+      "height": 121.953125
+    }
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "stage": {
+      "top": 11.8125,
+      "bottom": 766.296875,
+      "width": 778,
+      "height": 754.484375
+    },
+    "main": {
+      "top": 85.8125,
+      "bottom": 540.34375,
+      "width": 750,
+      "height": 454.53125
+    },
+    "button": {
+      "top": 33.8125,
+      "bottom": 77.8125,
+      "width": 131.515625,
+      "height": 44
+    },
+    "reference": {
+      "top": 620.34375,
+      "bottom": 742.296875,
+      "width": 200,
+      "height": 121.953125
+    }
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "stage": {
+      "top": 12.390625,
+      "bottom": 717.796875,
+      "width": 697,
+      "height": 705.40625
+    },
+    "main": {
+      "top": 86.390625,
+      "bottom": 491.84375,
+      "width": 669,
+      "height": 405.453125
+    },
+    "button": {
+      "top": 34.390625,
+      "bottom": 78.390625,
+      "width": 131.515625,
+      "height": 44
+    },
+    "reference": {
+      "top": 571.84375,
+      "bottom": 693.796875,
+      "width": 200,
+      "height": 121.953125
+    }
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "stage": {
+      "top": 90.953125,
+      "bottom": 570.421875,
+      "width": 328,
+      "height": 479.46875
+    },
+    "main": {
+      "top": 158.953125,
+      "bottom": 395.875,
+      "width": 308,
+      "height": 236.921875
+    },
+    "button": {
+      "top": 107.953125,
+      "bottom": 151.953125,
+      "width": 113.25,
+      "height": 44
+    },
+    "reference": {
+      "top": 481.984375,
+      "bottom": 542.90625,
+      "width": 99.265625,
+      "height": 60.921875
+    }
+  },
+  {
+    "width": 320,
+    "height": 667,
+    "stage": {
+      "top": 91.25,
+      "bottom": 568.140625,
+      "width": 258,
+      "height": 476.890625
+    },
+    "main": {
+      "top": 193.265625,
+      "bottom": 376.328125,
+      "width": 238,
+      "height": 183.0625
+    },
+    "button": {
+      "top": 142.265625,
+      "bottom": 186.265625,
+      "width": 113.25,
+      "height": 44
+    },
+    "reference": {
+      "top": 478.28125,
+      "bottom": 524.78125,
+      "width": 75.46875,
+      "height": 46.5
+    }
+  }
+]

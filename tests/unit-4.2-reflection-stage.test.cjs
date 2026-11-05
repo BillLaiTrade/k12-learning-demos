@@ -186,7 +186,7 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
     }
   });
 
-  await t.test('常見桌機與手機視窗可同時看到主畫面、按鈕及小型參考',async()=>{
+  await t.test('主畫面維持原比例，常見視窗可同時看到操作及小型參考',async()=>{
     const measurements=[];
     for(const [width,height] of [[1440,900],[1366,768],[1024,768],[390,844],[320,667]]){
       await page.setViewportSize({width,height});await view('front');
@@ -195,6 +195,7 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
       await page.screenshot({clip:{x:0,y:0,width:1,height:1}});
       const layout=await page.evaluate(()=>{const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return{top:r.top,bottom:r.bottom,width:r.width,height:r.height};};return{width:innerWidth,height:innerHeight,stage:rect('.reflection-stage'),main:rect('#reflection-3d-scene'),button:rect('#reflection-match-reference'),reference:rect('#reflection-reference-image')};});
       measurements.push(layout);
+      close(layout.main.width/layout.main.height,layout.stage.width<=520?1.3:1.65,.005);
       assert.ok(layout.stage.top>=0&&layout.stage.bottom<=height,JSON.stringify(layout));
       assert.ok(layout.button.bottom<=layout.main.top,'對照按鈕在主畫面上方');
       assert.equal(await page.locator('#reflection-match-reference').evaluate(e=>{const r=e.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===e;}),true,'按鈕未被行動版導覽遮住');

@@ -10,7 +10,7 @@
 #card-01 .reflection-match-button:focus-visible { outline: 3px solid #176b5370; outline-offset: 2px; }
 #card-01 .reflection-scene-wrap { position: relative; }
 #card-01 .reflection-drag-hint { position: absolute; z-index: 1; top: 9px; right: 9px; padding: 4px 7px; border-radius: 7px; background: #fffdf8d9; color: #526b5d; font-size: .73rem; pointer-events: none; }
-#card-01 #reflection-3d-scene { height: clamp(220px, 40svh, 340px); touch-action: none; }
+#card-01 #reflection-3d-scene { height: auto; aspect-ratio: 1.65; touch-action: none; }
 #card-01 .reflection-stage .reflection-controls { gap: 10px; padding: 10px 12px; }
 #card-01 .reflection-fire { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 5px 12px; min-height: 48px; border: 1px solid #bdcdc4; background: #edf2ed; color: #42594e; box-shadow: none; text-align: center; }
 #card-01 .reflection-fire small { font-size: .8rem; opacity: 1; }
@@ -29,7 +29,7 @@
   #card-01 .reflection-main-heading { padding: 7px; }
   #card-01 #reflection-view-status { font-size: .76rem; padding: 5px 6px; }
   #card-01 .reflection-match-button { font-size: .76rem; padding: 8px; }
-  #card-01 #reflection-3d-scene { height: clamp(200px, 34svh, 280px); }
+  #card-01 #reflection-3d-scene { aspect-ratio: 1.3; }
   #card-01 .reflection-drag-hint { top: 6px; right: 6px; font-size: .65rem; }
   #card-01 .reflection-stage .reflection-controls { gap: 8px; padding: 8px; }
   #card-01 .reflection-fire { flex-direction: column; gap: 2px; font-size: .8rem; }
