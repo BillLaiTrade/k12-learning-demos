@@ -134,6 +134,23 @@
     .control-button[aria-pressed="true"], .choice[aria-pressed="true"] { border-color: var(--green); background: var(--green-pale); box-shadow: inset 0 0 0 1px var(--green); }
     .control-button .hint { display: block; color: var(--muted); font-size: .78rem; }
     .scene-panel[hidden] { display: none; }
+    .moon-explanation { margin-top: 22px; border: 1px solid #d8e3d5; border-radius: 16px; background: linear-gradient(120deg, #fffefa, #f5f8f0); overflow: hidden; }
+    .moon-explanation > summary { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 17px 20px; list-style: none; cursor: pointer; color: #284d3d; font-size: 1.06rem; font-weight: 750; }
+    .moon-explanation > summary::-webkit-details-marker { display: none; }
+    .moon-explanation > summary::after { content: '＋'; display: grid; place-items: center; width: 30px; height: 30px; flex: none; border-radius: 50%; background: #e5eee0; }
+    .moon-explanation[open] > summary { border-bottom: 1px solid #e1e9dc; }
+    .moon-explanation[open] > summary::after { content: '−'; }
+    .moon-explanation > summary:focus-visible { outline: 3px solid #d8ae58; outline-offset: -4px; }
+    .moon-explanation-body { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 24px; align-items: center; padding: 20px 22px; }
+    .moon-explanation figure { min-width: 0; margin: 0; }
+    .moon-reflection-diagram { display: block; width: 100%; height: auto; border: 1px solid #e1dbca; border-radius: 12px; background: #f2eee5; }
+    .moon-explanation figcaption { margin-top: 9px; color: #647166; font-size: .8rem; }
+    .moon-reflection-copy { min-width: 0; }
+    .moon-reflection-copy p { margin: 0 0 15px; }
+    .moon-reflection-copy p:last-child { margin-bottom: 0; }
+    .moon-reflection-copy strong { color: #226344; }
+    @media (max-width: 1100px) { .moon-explanation-body { grid-template-columns: minmax(0, 1fr); gap: 16px; } .moon-explanation figure { width: min(100%, 440px); margin-inline: auto; } }
+    @media (max-width: 700px) { .moon-explanation > summary { padding: 15px 13px; font-size: .95rem; } .moon-explanation-body { padding: 16px 13px; } }
     .night-experiment { margin-top: 16px; }
     .night-switches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 12px; }
     .light-switch { display: grid; grid-template-columns: 38px minmax(0, 1fr) 46px auto; align-items: center; gap: 10px; min-width: 0; min-height: 76px; padding: 11px 13px; border: 1px solid var(--line); border-radius: 15px; background: #fbfcf8; color: var(--ink); text-align: left; }
@@ -490,6 +507,46 @@
               <div class="path-legend" id="path-legend" aria-live="polite"></div>
               <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="sr-only">小葵</span></span><p id="night-feedback" aria-live="polite"></p></div>
             </div>
+            <details class="moon-explanation" id="moon-reflection-explanation">
+              <summary>月球是怎麼反射太陽光的？</summary>
+              <div class="moon-explanation-body">
+                <figure>
+                  <svg class="moon-reflection-diagram" viewBox="0 0 480 390" role="img" aria-labelledby="moon-reflection-title moon-reflection-desc">
+                    <title id="moon-reflection-title">陽光經月球反射後到達地球</title>
+                    <desc id="moon-reflection-desc">太陽在左上，照亮月球朝向太陽的一側。月面同一處向不同方向反射光，其中一條光路朝向左下方地球上的觀察者。</desc>
+                    <defs>
+                      <radialGradient id="moon-sun-fill"><stop stop-color="#fff2b5"/><stop offset="1" stop-color="#efb745"/></radialGradient>
+                      <clipPath id="moon-surface-clip"><circle cx="365" cy="140" r="52"/></clipPath>
+                      <marker id="moon-sun-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#b87516"/></marker>
+                      <marker id="moon-reflected-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#387e9a"/></marker>
+                    </defs>
+                    <circle cx="75" cy="140" r="37" fill="url(#moon-sun-fill)" stroke="#d89a2e" stroke-width="2"/>
+                    <g stroke="#e4b44d" stroke-width="3" stroke-linecap="round"><path d="M75 89V81M75 191V199M24 140H16M126 140H134M39 104L33 98M111 176L117 182M39 176L33 182M111 104L117 98"/></g>
+                    <text x="75" y="220" text-anchor="middle" fill="#68501e" font-size="21" font-weight="700">太陽</text>
+                    <text x="202" y="100" text-anchor="middle" fill="#92611b" font-size="18">陽光</text>
+                    <g fill="none" stroke="#b87516" stroke-width="3" marker-end="url(#moon-sun-arrow)"><path d="M125 120H317"/><path d="M140 140H313"/><path d="M125 160H317"/></g>
+                    <circle cx="365" cy="140" r="52" fill="#68736f"/>
+                    <path d="M365 88A52 52 0 0 0 365 192Z" fill="#e4dfcf"/>
+                    <g clip-path="url(#moon-surface-clip)" fill="#b0b4a8" opacity=".55"><circle cx="336" cy="116" r="10"/><circle cx="348" cy="158" r="8"/><circle cx="322" cy="147" r="5"/><circle cx="371" cy="103" r="6"/><circle cx="390" cy="166" r="11"/></g>
+                    <circle cx="365" cy="140" r="52" fill="none" stroke="#818b80" stroke-width="2"/>
+                    <text x="365" y="220" text-anchor="middle" fill="#455d51" font-size="21" font-weight="700">月球</text>
+                    <circle cx="317" cy="160" r="5" fill="#387e9a"/>
+                    <g fill="none" stroke="#387e9a" stroke-width="2.8" marker-end="url(#moon-reflected-arrow)"><path d="M317 160L255 70"/><path d="M317 160L220 202"/><path d="M317 160L317 251"/><path d="M317 160L205 267" stroke-width="4"/></g>
+                    <text x="328" y="279" fill="#346f86" font-size="17">反射到不同方向</text>
+                    <circle cx="175" cy="305" r="42" fill="#8ec4cf" stroke="#628f9a" stroke-width="2"/>
+                    <path d="M143 279L164 272L182 287L171 304L151 300ZM183 309L203 302L211 321L190 340L179 329Z" fill="#7ca57a"/>
+                    <circle cx="205" cy="267" r="5" fill="#314c41"/><path d="M205 272L210 282M210 277L218 277" stroke="#314c41" stroke-width="3" stroke-linecap="round"/>
+                    <text x="175" y="371" text-anchor="middle" fill="#455d51" font-size="21" font-weight="700">地球上的我們</text>
+                  </svg>
+                  <figcaption>箭頭表示光的傳播方向；天體大小、距離與位置不按比例繪製。</figcaption>
+                </figure>
+                <div class="moon-reflection-copy">
+                  <p><strong>陽光先照到月球。</strong><br>太陽是光源。我們看到的月光，主要來自月球反射的太陽光。</p>
+                  <p><strong>月面會反射部分陽光。</strong><br>月球表面並不平滑，反射光會朝不同方向散開。</p>
+                  <p><strong>其中一部分反射光到達地球。</strong><br>當這些光進入我們的眼睛，我們就看見月亮。</p>
+                </div>
+              </div>
+            </details>
           </div>
         </section>
 
