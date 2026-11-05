@@ -1,4 +1,4 @@
-import {WIDTH,HEIGHT,QUICK_POINTS,DEFAULT_INDEX,sourcePixels,currentPixel,renderPixels,rgbaPixels,pixelAt,colourCss,colourName,sameColour,groupOutline,neighbourhood,moveSelection,observationText,loupeLayout,sampleDragIndex} from './pixel-tv-observer-model.mjs?v=tv-sample-20261105';
+import {WIDTH,HEIGHT,QUICK_POINTS,DEFAULT_INDEX,sourcePixels,currentPixel,renderPixels,rgbaPixels,pixelAt,colourCss,colourName,sameColour,groupOutline,neighbourhood,moveSelection,observationText,loupeLayout,sampleDragIndex} from './pixel-tv-observer-model.mjs?v=tv-sample-point-20261105';
 export function initialisePixelTv(root){
  if(root.dataset.ready==='true')return;
  const $=s=>root.querySelector(s),source=sourcePixels();
@@ -16,7 +16,7 @@ export function initialisePixelTv(root){
  function positionLenses(){
   pictures.forEach((picture,i)=>{
    const size=picture.getBoundingClientRect().width;if(size<60)return;
-   const p=loupeLayout(state.selected,size,placements[i]);placements[i]=p.side;
+   const p=loupeLayout(state.selected,size,placements[0]);placements[i]=p.side;
    const figure=picture.closest('figure'),lens=figure.querySelector('[data-tv-loupe]'),target=figure.querySelector('[data-tv-sample-handle]');
    Object.assign(lens.style,{left:`${p.left}px`,top:`${p.top}px`,width:`${p.diameter}px`,height:`${p.diameter}px`});
    const x=(state.selected%WIDTH+.5)/WIDTH*size,y=(Math.floor(state.selected/WIDTH)+.5)/HEIGHT*size,left=Math.max(0,Math.min(size-44,x-22)),top=Math.max(0,Math.min(size-44,y-22));
