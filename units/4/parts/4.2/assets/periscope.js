@@ -11,14 +11,15 @@ if(root) {
   let scenePixels=null, lastViewKey='', pending=0, dragging=null;
   const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
   let pulse=null,pulseFrame=0,pulseEndTimer=0,pulseUnlockTimer=0,nextPulseAt=0,pulseCount=0;
+  root.dataset.ready='loading';
   const sceneImage=new Image();
   sceneImage.src=new URL('periscope/submarine-scene.webp?v=2',import.meta.url).href;
   sceneImage.onload=()=>{
     const source=document.createElement('canvas');source.width=900;source.height=760;
     const sctx=source.getContext('2d',{willReadFrequently:true});sctx.drawImage(sceneImage,0,0,900,760);
-    scenePixels=sctx.getImageData(0,0,900,760).data;lastViewKey='';render();root.dataset.ready='true';
+    scenePixels=sctx.getImageData(0,0,900,760).data;lastViewKey='';root.dataset.ready='true';render();
   };
-  sceneImage.onerror=()=>{feedback('場景素材未載入，請重新整理頁面後再挑戰。','try');root.dataset.ready='error';};
+  sceneImage.onerror=()=>{root.dataset.ready='error';feedback('場景素材未載入，請重新整理頁面後再挑戰。','try');render();};
   function feedback(text,kind='') {$('#periscope-feedback').textContent=text;$('#periscope-feedback').dataset.state=kind;}
   function point(p) {return p.slice(0,2).map(n=>n.toFixed(2)).join(',');}
   function drawPath(el,points,color,{reverse=false,muted=false,arrows=true}={}) {
@@ -69,7 +70,7 @@ if(root) {
     const busy=Boolean(pulse),waiting=performance.now()<nextPulseAt;
     root.dataset.pulseStatus=busy?'running':waiting?'cooldown':'idle';
     const button=$('#periscope-pulse');
-    button.hidden=state.stage===2;button.disabled=busy||waiting;
+    button.hidden=state.stage===2;button.disabled=!scenePixels||busy||waiting;
     $('.periscope-pulse-label').textContent=busy?'視線追蹤中':waiting?'稍後可再試':'追蹤目前視線';
     $('.periscope-pulse-invite').textContent=busy?'看看光在哪裡轉彎或停下':waiting?'調整鏡片，再試一次':'點一下，看看光走到哪裡';
     $('#periscope-trace-action').hidden=state.stage===2;
@@ -104,7 +105,7 @@ if(root) {
   }
   function emitPulse() {
     const now=performance.now();
-    if(state.stage===2 || pulse || dragging || document.hidden || now<nextPulseAt)return;
+    if(!scenePixels || state.stage===2 || pulse || dragging || document.hidden || now<nextPulseAt)return;
     const duration=reducedMotion.matches?STATIC_FLASH_MS:FLASH_MS;
     const shot={ray:traceSightline(state.angles),opacity:reducedMotion.matches?1:0};
     pulse=shot;nextPulseAt=now+duration+REST_MS;root.dataset.pulseId=String(++pulseCount);
@@ -165,8 +166,9 @@ if(root) {
     pending=0;
     const info=observe(state.angles), messages={blocked:'視線被管壁或鏡背擋住',boat:info.target?'船的駕駛艙已在中央':'看見船了，再調整一下',sky:'目前主要看見天空',sea:'目前主要看見海面'};
     root.dataset.phase=String(state.stage);root.dataset.angles=state.angles.join(',');root.dataset.view=info.kind;root.dataset.target=String(info.target);root.dataset.completed=state.done.join(',');root.dataset.signal=String(state.signal);
-    $('#periscope-view-state').textContent=messages[info.kind];$('#periscope-view-state').dataset.kind=info.kind;
-    $('#periscope-view').setAttribute('aria-label',messages[info.kind]+'。'+(info.blocked?'部分視線受到遮擋。':''));
+    const viewMessage=scenePixels?messages[info.kind]:root.dataset.ready==='error'?'場景素材未載入，請重新整理頁面再試。':'正在準備觀察窗…';
+    $('#periscope-view-state').textContent=viewMessage;$('#periscope-view-state').dataset.kind=scenePixels?info.kind:root.dataset.ready;
+    $('#periscope-view').setAttribute('aria-label',viewMessage+'。'+(info.blocked?'部分視線受到遮擋。':''));
     $('#periscope-view-copy').textContent=state.stage===2?'鏡片固定，保留剛才看見的景象作對照。':info.kind==='blocked'?'鏡子未把外界的光送進眼睛。看看光在哪裡被擋住。':info.blocked/(info.clear+info.blocked)>.3?'邊緣的暗區是管壁或有限鏡片造成的遮擋。':'試著微轉鏡片，觀察船、天空與海面如何移動。';
     $$('.periscope-steps button').forEach((b,i)=>{b.disabled=i>0&&!state.done[i-1];b.setAttribute('aria-selected',String(i===state.stage));b.tabIndex=i===state.stage?0:-1;b.dataset.complete=String(state.done[i]);});
     $('#periscope-panel').setAttribute('aria-labelledby',`periscope-tab-${state.stage}`);
@@ -174,7 +176,8 @@ if(root) {
     $$('[data-prediction]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.prediction===state.prediction)));
     updatePulseControls();
     $('#periscope-signal').hidden=state.stage!==2;$('#periscope-signal').disabled=!state.prediction;$('#periscope-signal').setAttribute('aria-pressed',String(state.signal));$('#periscope-signal').textContent=state.signal?'關閉訊號光':'發送訊號光';
-    const check=$('#periscope-check'),checkHost=state.stage===2?$('.periscope-footer'):$('#periscope-design-action');
+    const check=$('#periscope-check');check.disabled=!scenePixels;
+    const checkHost=state.stage===2?$('.periscope-footer'):$('#periscope-design-action');
     if(check.parentElement!==checkHost)checkHost.prepend(check);
     $('.periscope-footer').hidden=state.stage!==2&&!state.done[state.stage];
     $('#periscope-check').textContent=['檢查我的設計','檢查修復結果','確認我的預測'][state.stage];
@@ -251,6 +254,7 @@ if(root) {
   });
   $('#periscope-next').addEventListener('click',()=>{enterStage(state.stage+1);$('#periscope-panel').scrollIntoView({block:'start',behavior:'smooth'});});
   $('#periscope-check').addEventListener('click',()=>{
+    if(!scenePixels)return;
     const info=observe(state.angles);
     if(state.stage===0) {
       if(!info.target){feedback('還沒對準船的駕駛艙。看看觀察窗：目前是天空、海面，還是被管壁擋住？','try');return;}

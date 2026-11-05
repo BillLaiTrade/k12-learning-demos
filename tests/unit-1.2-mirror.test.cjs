@@ -11,7 +11,7 @@ const sub=(a,b)=>a.map((v,i)=>v-b[i]);
 const dot=(a,b)=>a.reduce((v,n,i)=>v+n*b[i],0);
 const unit=a=>{const n=Math.hypot(...a);return a.map(v=>v/n);};
 const dir=path.resolve(__dirname,'..');
-const artifacts='/tmp/unit1-card3-stacked';
+const artifacts=process.env.MIRROR_CAPTURE_DIR||'/tmp/unit1-card3-stacked';
 let model;
 
 test('第三區距離模型：2公尺反射＋3公尺入眼，對應5公尺直達光',async t=>{
@@ -61,8 +61,8 @@ test('第三區上下同時對照、整熊觀察及銜接第四區',{timeout:180
   fs.mkdirSync(artifacts,{recursive:true});
   const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:dir,stdio:['ignore','pipe','pipe']});t.after(()=>server.kill());
   const port=await new Promise((resolve,reject)=>{let out='';const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{out+=d;const m=out.match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.once('error',reject);});
-  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});t.after(()=>browser.close());
-  const url=`http://127.0.0.1:${port}/units/4/parts/4.2/#card-03`,errors=[];
+  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader'],...(process.env.LESSON_USE_PROXY?{proxy:{server:process.env.HTTPS_PROXY}}:{})});t.after(()=>browser.close());
+  const url=new URL('units/4/parts/4.2/#card-03',process.env.LESSON_BASE_URL||`http://127.0.0.1:${port}/`).href,errors=[];
   const monitor=p=>{p.on('pageerror',e=>errors.push(e.message));p.on('requestfailed',r=>errors.push(r.url()));p.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});};
   const page=await browser.newPage({viewport:{width:1440,height:1200}});monitor(page);
   async function open(p){await p.goto(url,{waitUntil:'networkidle'});await p.locator('#reference-eye[data-ready=true]').waitFor();await p.locator('#trial-eye[data-ready=true]').waitFor();}
@@ -101,7 +101,7 @@ test('第三區上下同時對照、整熊觀察及銜接第四區',{timeout:180
     return {hash:hash>>>0,opaque,bounds};
   }));}
   await t.test('初始上下兩排同時呈現；移除切換、鼻尖標記與散光',async()=>{
-    await expect(section.locator('.comparison-row-title')).toHaveText(['有鏡子','撤鏡，放入真熊']);
+    await expect(section.locator('.comparison-row-title')).toHaveText(['鏡前的熊，經反射看見','對照的熊，直接看見']);
     await expect(section.locator('.comparison-row-title span')).toHaveCount(0);
     await expect(page.locator('#comparison-reference')).toHaveAttribute('data-mode','mirror');await expect(page.locator('#comparison-trial')).toHaveAttribute('data-mode','direct');
     await expect(page.locator('#reference-side [data-side=mirror]')).toBeVisible();await expect(page.locator('#trial-side [data-side=mirror]')).toBeHidden();
@@ -168,13 +168,17 @@ test('第三區上下同時對照、整熊觀察及銜接第四區',{timeout:180
       if(width===390)await capture('mobile');if(width===1440)await capture('desktop');
     }
   });
-  await t.test('圖面只保留主要標籤，文字解釋與第四區入口放在圖下',async()=>{
-    const top=await section.locator('.comparison-column-headings').evaluate(e=>e.textContent);assert.ok(top.includes('光的路徑')&&top.includes('小葵看到的熊'));
-    await expect(section.locator('.comparison-equation')).toHaveText('3＋2＝5公尺');await expect(section.locator('.mirror-explanation')).toContainText('沿圖示光路量取');await expect(section.locator('.comparison-next')).toContainText('比較物距與像距');
+  await t.test('圖下說明光路總長與虛像位置，保留短對話及模型限制',async()=>{
+    await expect(section.locator('.comparison-column-headings span')).toHaveText(['光怎麼進入眼睛','小葵看到的熊']);
+    await expect(section.locator('.comparison-path-equation')).toHaveText(['反射前2公尺＋反射後3公尺＝5公尺','到原鏡面位置2公尺＋再到眼睛3公尺＝5公尺']);
+    await expect(section.locator('.comparison-backtrace')).toContainText('先走3公尺到鏡面');
+    await expect(section.locator('.comparison-transition')).toContainText('放一隻同樣大小的真熊');
+    await expect(section.locator('.comparison-takeaway')).toHaveText('上排是轉過彎的5公尺，下排是直達的5公尺。');
     const explanation=section.locator('.mirror-explanation');
     assert.equal(await explanation.locator('.dialogue').count(),2);
-    await expect(explanation.locator('.dialogue--xiaokui')).toContainText('為什麼熊看起來在鏡後');
-    await expect(explanation.locator('.dialogue:not(.dialogue--xiaokui)')).toContainText('從反射點再往鏡後延長2公尺');
+    await expect(explanation.locator('.dialogue--xiaokui')).toContainText('鏡子在這條視線的3公尺處，熊卻像是在5公尺外');
+    await expect(explanation.locator('.dialogue:not(.dialogue--xiaokui)')).toContainText('沿入眼光的來向往回延長');
+    await expect(explanation.locator('.comparison-clarification')).toContainText('沿圖示光路量取');
     await expect(explanation.locator('.comparison-clarification')).toContainText('不代表光真的通過鏡後');
     assert.equal(await explanation.locator(':scope > p:not(.comparison-clarification),h3,.comparison-bridge').count(),0);
     assert.ok((await explanation.innerText()).replace(/\s/g,'').length<170,'說明維持短對話，不回到長段落');
@@ -196,16 +200,26 @@ test('第三區上下同時對照、整熊觀察及銜接第四區',{timeout:180
       }
     }
   });
-  await t.test('滑鼠與鍵盤前往第四區，量距及往返錨點正常',async()=>{
-    const link=page.locator('#mirror-next-activity');await expect(link).toHaveAttribute('href','#card-04');await link.click();await expect(page).toHaveURL(/#card-04$/);
-    await page.locator('#object-distance').fill('20');await page.locator('#object-distance').dispatchEvent('input');await expect(page.locator('#image-distance-value')).toHaveText('20 cm');await verify();
-    await page.locator('.route a[href="#card-03"]').click();await expect(page).toHaveURL(/#card-03$/);await link.focus();await page.keyboard.press('Enter');await expect(page).toHaveURL(/#card-04$/);
+  async function moveBear(p,distance){
+    const bear=p.locator('#distance-side-object');await bear.focus();await bear.press('Home');
+    for(let n=10;n<distance;n+=10)await bear.press('Shift+ArrowLeft');
+    await expect(bear).toHaveAttribute('aria-valuenow',String(distance));
+    await expect(p.locator('#distance-object-measure-label')).toHaveText(`物距 ${distance} cm`);
+    await expect(p.locator('#distance-image-measure-label')).toHaveText(`像距 ${distance} cm`);
+    await expect(p.locator('#distance-front-status')).toHaveText(`物體離鏡面 ${distance} cm｜虛像在鏡後 ${distance} cm`);
+  }
+  await t.test('既有路線以滑鼠及鍵盤往返第三四區，直接操作小熊量距',async()=>{
+    const link=page.locator('.route a[href="#card-04"]');await link.click();await expect(page).toHaveURL(/#card-04$/);
+    await moveBear(page,20);await verify();
+    await page.locator('.route a[href="#card-03"]').click();await expect(page).toHaveURL(/#card-03$/);
+    await link.focus();await page.keyboard.press('Enter');await expect(page).toHaveURL(/#card-04$/);
+    await expect(page.locator('#card-04 input[type=range],#object-distance,#image-distance-value,#mirror-next-activity')).toHaveCount(0);
     const bounds=await section.locator('.mirror-explanation').boundingBox(),picture=await page.locator('#comparison-trial').boundingBox();assert.ok(bounds.y>picture.y+picture.height);
   });
-  await t.test('手機真實觸控閱讀與下一區連結；減少動態模式呈現相同內容',async()=>{
+  await t.test('窄版觸控閱讀及路線導覽，減少動態模式呈現相同內容',async()=>{
     const c=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true,reducedMotion:'reduce'}),p=await c.newPage();monitor(p);
     try{await open(p);await verify(p);const initial=await raster(p);assert.deepEqual(initial[0],initial[1]);await capture('mobile-touch',p);
-      await p.locator('#mirror-next-activity').tap();await expect(p).toHaveURL(/#card-04$/);await p.locator('#object-distance').fill('30');await p.locator('#object-distance').dispatchEvent('input');await expect(p.locator('#image-distance-value')).toHaveText('30 cm');await verify(p);
+      await p.locator('.route a[href="#card-04"]').tap();await expect(p).toHaveURL(/#card-04$/);await moveBear(p,30);await verify(p);
     }finally{await c.close();}
   });
   await t.test('慢速素材載入後兩種情境仍固定，不產生重複ID或程式錯誤',async()=>{
@@ -215,9 +229,9 @@ test('第三區上下同時對照、整熊觀察及銜接第四區',{timeout:180
       assert.deepEqual(await p.evaluate(()=>{const ids=[...document.querySelectorAll('[id]')].map(e=>e.id);return ids.filter((id,i)=>ids.indexOf(id)!==i);}),[]);
     }finally{release();await c.close();}
   });
-  await t.test('相關單元入口與1.1頁面可正常載入，1.2離頁無錯誤',async()=>{
+  await t.test('相關單元入口與4.1頁面可正常載入，4.2離頁無錯誤',async()=>{
     const p=await browser.newPage();monitor(p);
-    try{for(const target of [new URL('../../index.html',url).href,new URL('../1.1/',url).href]){
+    try{for(const target of [new URL('../../index.html',url).href,new URL('../4.1/',url).href]){
       const response=await p.goto(target,{waitUntil:'networkidle'});assert.equal(response.status(),200);await expect(p.locator('h1').first()).toBeVisible();assert.ok((await p.title()).length>0);
     }}finally{await p.close();}
     await page.goto('about:blank');await page.waitForTimeout(100);assert.deepEqual(errors,[]);

@@ -1,17 +1,17 @@
-import {createEyeModel} from './eye-model.mjs?v=20261104-eye-depth2';
+import {createEyeModel} from './eye-model.mjs?v=20261105-eye-roles1';
 import {EYE,initialEye,changeEye,eyeState} from './eye-optics.mjs?v=20261104-eye1';
 const root=document.querySelector('[data-eye-lab]');
 if(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],svg=$('[data-eye-scene]'),preview=$('[data-eye-preview]');
- const red='#d6654c',blue='#3989b2',Y=220,SY=160,CX=302,LX=CX+353*EYE.lens;
+ const red='#d65b47',blue='#2588ba',Y=220,SY=160,CX=302,LX=CX+353*EYE.lens;
  let state=initialEye(),model=null;
  try{model=createEyeModel($('[data-eye-model]'));root.dataset.eyeRender='3d';}catch{root.dataset.eyeRender='fallback';}
  const n=v=>Number(v.toFixed(3)),point=(x,y)=>`${n(x)} ${n(y)}`,wall=y=>655-.0025*(y-Y)**2;
- const label=(x,y,w,text,tx,ty)=>`<g><path class="eye-leader" d="M${x} ${y+23}L${x} ${ty-20}L${tx} ${ty}"/><circle cx="${tx}" cy="${ty}" r="3.5" fill="#41684b"/><text class="eye-label" x="${x}" y="${y+7}" text-anchor="middle">${text}</text></g>`;
+ const label=(x,y,name,role,tx,ty)=>`<g><path class="eye-leader" d="M${x} ${y+67}L${x} ${ty-20}L${tx} ${ty}"/><circle cx="${tx}" cy="${ty}" r="3.5" fill="#41684b"/><text class="eye-label" x="${x}" y="${y+7}" text-anchor="middle">${name}</text><text class="eye-role-label" x="${x}" y="${y+53}" text-anchor="middle">${role}</text></g>`;
  function draw(g){
   const sourceX=state.distance==='far'?64:155,h=16+20*state.accommodation/100,retina=[];
   for(let y=100;y<=340;y+=4)retina.push([wall(y),y]);
-  const retinaPath=retina.map(([x,y],i)=>`${i?'L':'M'}${point(x,y)}`).join('')+retina.toReversed().map(([x,y])=>`L${point(x+11,y)}`).join('')+'Z';
+  const retinaPath=retina.map(([x,y],i)=>`${i?'L':'M'}${point(x,y)}`).join('')+retina.toReversed().map(([x,y])=>`L${point(x+6,y)}`).join('')+'Z';
   const back=offset=>retina.map(([x,y])=>`L${point(x+offset,y)}`).join('');
   let out=`<defs>
   <linearGradient id="eye7-shell" x2="1" y2="1"><stop stop-color="#b9cf9a"/><stop offset=".5" stop-color="#ecf2d5"/><stop offset="1" stop-color="#91b185"/></linearGradient>
@@ -40,7 +40,9 @@ if(root){
    }
    for(const name of ['top','bottom'].filter(name=>state.point==='both'||name===state.point)){const a=g.rays.filter(r=>r.name===name),y=Y+(a[0].retinaY+a[1].retinaY)/2*SY;out+=`<ellipse cx="${wall(y)}" cy="${y}" rx="3" ry="${Math.max(3,g.spread*SY/2+2)}" fill="${name==='top'?red:blue}" opacity=".22"/>`;}
   }
-  out+=label(254,81,100,'角膜',287,177)+label(392,40,212,state.accommodation<40?'水晶體較扁':state.accommodation>65?'水晶體較厚':'水晶體調節中',LX,174)+label(613,80,218,'視網膜・固定',wall(143)+7,143);
+  out+=label(236,62,'角膜','主要會聚',287,177)+label(405,45,'水晶體','調節會聚',LX,174)+label(611,62,'視網膜','接收影像',wall(165)+3,165);
+  const hitYs=g.rays.map(r=>Y+r.retinaY*SY),top=Math.min(...hitYs)-8,bottom=Math.max(...hitYs)+8;
+  out+=`<g data-eye-image-region><path class="eye-region-bracket" d="M667 ${n(top)}H674Q680 ${n(top)} 680 ${n(top+6)}V${n(bottom-6)}Q680 ${n(bottom)} 674 ${n(bottom)}H667M680 220H691"/><rect x="691" y="204" width="65" height="32" rx="7" class="eye-region-box"/><text x="723.5" y="226" text-anchor="middle" class="eye-region-label">成像區</text></g>`;
   svg.innerHTML=out;
   const message=g.clear?'光在視網膜上各自成像，圖案清楚。':`尚未對焦：會聚位置在視網膜${g.position==='behind'?'後':'前'}，視網膜上的圖案模糊。`;
   svg.setAttribute('aria-label',`${state.distance==='far'?'看遠方':'看近處'}，${message}眼球與視網膜固定，水晶體厚度可調。`);
@@ -55,8 +57,7 @@ if(root){
   const toggle=$('[data-eye-rays]');toggle.setAttribute('aria-pressed',String(state.rays));toggle.textContent=state.rays?'隱藏輔助光路':'顯示輔助光路';
   const input=$('[data-eye-accommodation]');input.value=state.accommodation;input.style.setProperty('--eye-progress',state.accommodation+'%');input.setAttribute('aria-valuetext',`${state.accommodation<40?'水晶體較扁':state.accommodation>65?'水晶體較厚':'水晶體調節中'}，${g.clear?'已對焦':'尚未對焦'}`);
   const status=$('[data-eye-status]');status.textContent=`${state.distance==='far'?'看遠方':'看近處'}・${g.clear?'已對焦':'尚未對焦'}`;status.dataset.clear=g.clear;
-  $('[data-eye-badge]').textContent=g.clear?'清楚・倒立的像':'模糊・尚未對焦';
-  $('[data-eye-copy]').textContent=g.clear?'同一物點的光，在視網膜上各自成像。':`會聚位置在視網膜${g.position==='behind'?'後':'前'}，試著${g.position==='behind'?'增加':'減少'}水晶體的會聚作用。`;
+  $('[data-eye-copy]').textContent=g.clear?'光在視網膜上成像，圖案清楚。':`會聚位置在視網膜${g.position==='behind'?'後':'前'}，試著${g.position==='behind'?'增加':'減少'}水晶體的會聚作用。`;
   $('[data-eye-adjust]').textContent=state.accommodation<40?'水晶體較扁，會聚作用較弱。':state.accommodation>65?'水晶體較厚，會聚作用較強。':'水晶體厚薄與會聚作用正在改變。';
   Object.assign(root.dataset,{ready:'true',distance:state.distance,accommodation:state.accommodation,clear:g.clear,focus:g.focus,position:g.position,rays:state.rays,point:state.point,retina:EYE.retina,lensPosition:EYE.lens});
  }

@@ -1,0 +1,520 @@
+TAP version 13
+# Subtest: 4.2 fifth activity: approved three-step comparison, exact optics and interactions
+    # Subtest: normal is radial and perpendicular to the surface; both reflection angles agree
+    ok 1 - normal is radial and perpendicular to the surface; both reflection angles agree
+      ---
+      duration_ms: 2.722262
+      type: 'test'
+      ...
+    # Subtest: toy appearance magnification follows the stated near/far mirror model
+    ok 2 - toy appearance magnification follows the stated near/far mirror model
+      ---
+      duration_ms: 0.317147
+      type: 'test'
+      ...
+    # Subtest: all three stages and three mirror columns are visible together in the approved order
+    ok 3 - all three stages and three mirror columns are visible together in the approved order
+      ---
+      duration_ms: 8610.601603
+      type: 'test'
+      ...
+    # Subtest: normal switch affects all three diagrams together; pointer and keyboard restore it
+    ok 4 - normal switch affects all three diagrams together; pointer and keyboard restore it
+      ---
+      duration_ms: 2720.782138
+      type: 'test'
+      ...
+    # Subtest: bear moves near/far repeatedly; image orientation, condition and button agree
+    ok 5 - bear moves near/far repeatedly; image orientation, condition and button agree
+      ---
+      duration_ms: 2179.947218
+      type: 'test'
+      ...
+    # Subtest: three-column alignment, shared section structure and no clipped text at eight widths
+    ok 6 - three-column alignment, shared section structure and no clipped text at eight widths
+      ---
+      duration_ms: 1246.029054
+      type: 'test'
+      ...
+    # Subtest: touch, reduced motion, model notes and neighboring activities remain usable
+    ok 7 - touch, reduced motion, model notes and neighboring activities remain usable
+      ---
+      duration_ms: 12812.24367
+      type: 'test'
+      ...
+    1..7
+ok 1 - 4.2 fifth activity: approved three-step comparison, exact optics and interactions
+  ---
+  duration_ms: 30918.897266
+  type: 'test'
+  ...
+# Subtest: 第三區距離模型：2公尺反射＋3公尺入眼，對應5公尺直達光
+    # Subtest: 中央光路精確為2、3、2、5公尺，物像等距且共線
+    ok 1 - 中央光路精確為2、3、2、5公尺，物像等距且共線
+      ---
+      duration_ms: 1.704828
+      type: 'test'
+      ...
+    # Subtest: 81個瞳孔位置的反射向量與直達光方向相同，入眼線不穿過原熊
+    ok 2 - 81個瞳孔位置的反射向量與直達光方向相同，入眼線不穿過原熊
+      ---
+      duration_ms: 3.642658
+      type: 'test'
+      ...
+    # Subtest: 同一寬取景顯示近處實體熊與遠處對照熊，遠近及落地位置合理
+    ok 3 - 同一寬取景顯示近處實體熊與遠處對照熊，遠近及落地位置合理
+      ---
+      duration_ms: 1.00592
+      type: 'test'
+      ...
+    # Subtest: 桌面近裁切先於透視除法，來源與虛像的對應角色正確
+    ok 4 - 桌面近裁切先於透視除法，來源與虛像的對應角色正確
+      ---
+      duration_ms: 0.345899
+      type: 'test'
+      ...
+    1..4
+ok 2 - 第三區距離模型：2公尺反射＋3公尺入眼，對應5公尺直達光
+  ---
+  duration_ms: 10.084613
+  type: 'test'
+  ...
+# Subtest: 第三區上下同時對照、整熊觀察及銜接第四區
+    # Subtest: 初始上下兩排同時呈現；移除切換、鼻尖標記與散光
+    not ok 1 - 初始上下兩排同時呈現；移除切換、鼻尖標記與散光
+      ---
+      duration_ms: 5012.270311
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:103:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        expect(locator).toHaveText(expected) failed
+        
+        Locator: locator('#card-03').locator('.comparison-row-title')
+        Timeout: 5000ms
+        - Expected  - 2
+        + Received  + 2
+        
+          Array [
+        -   "有鏡子",
+        -   "撤鏡，放入真熊",
+        +   "鏡前的熊，經反射看見",
+        +   "對照的熊，直接看見",
+          ]
+        
+        Call log:
+          - Expect "to.have.text.array" with timeout 5000ms
+          - waiting for locator('#card-03').locator('.comparison-row-title')
+            14 × locator resolved to 2 elements
+        
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        captureRawStack (/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/lib/coreBundle.js:9681:17)
+        callMatcherAsStep (/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/lib/matchers/expect.js:13310:57)
+        Object.toHaveText (/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/lib/matchers/expect.js:13300:23)
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:104:60)
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:103:11)
+      ...
+    # Subtest: 實際SVG光路、距離標籤與全熊畫布一致，遠近兩隻玩偶完整且不互相遮擋
+    ok 2 - 實際SVG光路、距離標籤與全熊畫布一致，遠近兩隻玩偶完整且不互相遮擋
+      ---
+      duration_ms: 100.467689
+      type: 'test'
+      ...
+    # Subtest: 六種寬度的距離標籤留出完整淨空，不遮光線、鏡面、人物與玩偶
+    not ok 3 - 六種寬度的距離標籤留出完整淨空，不遮光線、鏡面、人物與玩偶
+      ---
+      duration_ms: 245.373222
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:131:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        320px visual clearance
+        + actual - expected
+        
+        + [
+        +   'reference-side 2公尺: near-shape',
+        +   'reference-side 2公尺: optical path',
+        +   'reference-side 2公尺: far-shape',
+        +   'reference-side 2公尺: optical path',
+        +   'trial-side 2公尺: far-shape',
+        +   'trial-side 2公尺: optical path'
+        + ]
+        - []
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+      actual:
+        0: 'reference-side 2公尺: near-shape'
+        1: 'reference-side 2公尺: optical path'
+        2: 'reference-side 2公尺: far-shape'
+        3: 'reference-side 2公尺: optical path'
+        4: 'trial-side 2公尺: far-shape'
+        5: 'trial-side 2公尺: optical path'
+      operator: 'deepStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:157:14)
+        async Test.run (node:internal/test_runner/test:1409:7)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:131:3)
+        async Test.run (node:internal/test_runner/test:1409:7)
+        async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+      ...
+    # Subtest: 320／390／650／768／1024／1440px皆維持上下兩列、左右對應欄
+    ok 4 - 320／390／650／768／1024／1440px皆維持上下兩列、左右對應欄
+      ---
+      duration_ms: 4853.499045
+      type: 'test'
+      ...
+    # Subtest: 圖面只保留主要標籤，文字解釋與第四區入口放在圖下
+    not ok 5 - 圖面只保留主要標籤，文字解釋與第四區入口放在圖下
+      ---
+      duration_ms: 22.58477
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:171:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        The expression evaluated to a falsy value:
+        
+          assert.ok(top.includes('光的路徑')&&top.includes('小葵看到的熊'))
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:172:102)
+        async Test.run (node:internal/test_runner/test:1409:7)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:171:3)
+        async Test.run (node:internal/test_runner/test:1409:7)
+        async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+      ...
+    # Subtest: 滑鼠與鍵盤前往第四區，量距及往返錨點正常
+    not ok 6 - 滑鼠與鍵盤前往第四區，量距及往返錨點正常
+      ---
+      duration_ms: 5003.27362
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:199:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        expect(locator).toHaveAttribute(expected) failed
+        
+        Locator: locator('#mirror-next-activity')
+        Expected: "#card-04"
+        Timeout: 5000ms
+        Error: element(s) not found
+        
+        Call log:
+          - Expect "to.have.attribute.value" with timeout 5000ms
+          - waiting for locator('#mirror-next-activity')
+        
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        captureRawStack (/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/lib/coreBundle.js:9681:17)
+        callMatcherAsStep (/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/lib/matchers/expect.js:13310:57)
+        Object.toHaveAttribute (/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/lib/matchers/expect.js:13300:23)
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:200:73)
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:199:11)
+      ...
+    # Subtest: 手機真實觸控閱讀與下一區連結；減少動態模式呈現相同內容
+    not ok 7 - 手機真實觸控閱讀與下一區連結；減少動態模式呈現相同內容
+      ---
+      duration_ms: 38108.516333
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:205:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        locator.tap: Timeout 30000ms exceeded.
+        Call log:
+        [2m  - waiting for locator('#mirror-next-activity')[22m
+        
+      code: 'ERR_TEST_FAILURE'
+      name: 'TimeoutError'
+      stack: |-
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:208:48)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:205:3)
+      ...
+    # Subtest: 慢速素材載入後兩種情境仍固定，不產生重複ID或程式錯誤
+    ok 8 - 慢速素材載入後兩種情境仍固定，不產生重複ID或程式錯誤
+      ---
+      duration_ms: 10262.998287
+      type: 'test'
+      ...
+    # Subtest: 相關單元入口與1.1頁面可正常載入，1.2離頁無錯誤
+    not ok 9 - 相關單元入口與1.1頁面可正常載入，1.2離頁無錯誤
+      ---
+      duration_ms: 1510.765372
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:218:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        
+        404 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 404
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:221:76)
+        async Test.run (node:internal/test_runner/test:1409:7)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:218:3)
+        async Test.run (node:internal/test_runner/test:1409:7)
+        async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+      ...
+    1..9
+not ok 3 - 第三區上下同時對照、整熊觀察及銜接第四區
+  ---
+  duration_ms: 77302.476138
+  type: 'test'
+  location: '/workspace/k12-learning-demos/tests/unit-1.2-mirror.test.cjs:60:1'
+  failureType: 'subtestsFailed'
+  error: '6 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: 潛望鏡有限鏡面、管壁與反向傳播
+    # Subtest: 36×36 組鏡面角度：反射分量、有限尺寸及閉合管道
+    ok 1 - 36×36 組鏡面角度：反射分量、有限尺寸及閉合管道
+      ---
+      duration_ms: 51.627609
+      type: 'test'
+      ...
+    # Subtest: 船、海面、天空、完全與局部遮擋；離軸視線不穿透管壁
+    ok 2 - 船、海面、天空、完全與局部遮擋；離軸視線不穿透管壁
+      ---
+      duration_ms: 23.35375
+      type: 'test'
+      ...
+    # Subtest: 1296 組角度的提示一律從眼睛出發，內部與觀察窗中央視線重合
+    ok 3 - 1296 組角度的提示一律從眼睛出發，內部與觀察窗中央視線重合
+      ---
+      duration_ms: 46.934116
+      type: 'test'
+      ...
+    # Subtest: 整束提示只短暫亮起與淡出，沒有循環或移動光段
+    ok 4 - 整束提示只短暫亮起與淡出，沒有循環或移動光段
+      ---
+      duration_ms: 1.909529
+      type: 'test'
+      ...
+    # Subtest: 441 條不同入眼方向的視線，各自獨立反向反射後回到眼睛
+    ok 5 - 441 條不同入眼方向的視線，各自獨立反向反射後回到眼睛
+      ---
+      duration_ms: 12.584594
+      type: 'test'
+      ...
+    1..5
+ok 4 - 潛望鏡有限鏡面、管壁與反向傳播
+  ---
+  duration_ms: 141.370428
+  type: 'test'
+  ...
+# Subtest: 潛望鏡實際操作、畫面與三階段評量
+    # Subtest: 初始狀態、未作答、未對準不通關；沒有角度滑桿
+    ok 1 - 初始狀態、未作答、未對準不通關；沒有角度滑桿
+      ---
+      duration_ms: 4906.377148
+      type: 'test'
+      ...
+    # Subtest: 兩片鏡子拖曳靈敏度為原本 35%，碰邊界可立即回調，穿過中心不跳動
+    ok 2 - 兩片鏡子拖曳靈敏度為原本 35%，碰邊界可立即回調，穿過中心不跳動
+      ---
+      duration_ms: 21535.437944
+      type: 'test'
+      ...
+    # Subtest: 兩片鏡子實際拖曳；天空／海面連續改變，偏太多會被擋
+    ok 3 - 兩片鏡子實際拖曳；天空／海面連續改變，偏太多會被擋
+      ---
+      duration_ms: 10101.404495
+      type: 'test'
+      ...
+    # Subtest: 觀察窗像素由獨立完整三維視線核對；暗邊確實來自遮擋
+    ok 4 - 觀察窗像素由獨立完整三維視線核對；暗邊確實來自遮擋
+      ---
+      duration_ms: 1508.110723
+      type: 'test'
+      ...
+    # Subtest: 第一關只檢查實際對準：沒有順序題，角度不對不能通過，改動設計須重檢
+    ok 5 - 第一關只檢查實際對準：沒有順序題，角度不對不能通過，改動設計須重檢
+      ---
+      duration_ms: 1525.163288
+      type: 'test'
+      ...
+    # Subtest: 修復任務只靠實際旋轉鏡片通關，沒有選擇題或延伸問題
+    ok 6 - 修復任務只靠實際旋轉鏡片通關，沒有選擇題或延伸問題
+      ---
+      duration_ms: 11911.815909
+      type: 'test'
+      ...
+    # Subtest: 反向訊號、原路重合、先預測後驗證；三階段完成
+    ok 7 - 反向訊號、原路重合、先預測後驗證；三階段完成
+      ---
+      duration_ms: 14990.521857
+      type: 'test'
+      ...
+    # Subtest: 只保留畫面拖曳操作，沒有獨立微調列或按鈕
+    ok 8 - 只保留畫面拖曳操作，沒有獨立微調列或按鈕
+      ---
+      duration_ms: 5758.647135
+      type: 'test'
+      ...
+    # Subtest: 五種實際角度：提示都從觀察口開始，錯誤時不跳接到船或上方鏡片
+    ok 9 - 五種實際角度：提示都從觀察口開始，錯誤時不跳接到船或上方鏡片
+      ---
+      duration_ms: 13205.474273
+      type: 'test'
+      ...
+    # Subtest: 整條實際光路短暫亮起再熄滅，沒有箭頭、移動光點或常駐路線
+    ok 10 - 整條實際光路短暫亮起再熄滅，沒有箭頭、移動光點或常駐路線
+      ---
+      duration_ms: 2812.772852
+      type: 'test'
+      ...
+    # Subtest: 拖動或鏡片方向鍵操作立即收起提示光，後續重繪不留下舊路線
+    not ok 11 - 拖動或鏡片方向鍵操作立即收起提示光，後續重繪不留下舊路線
+      ---
+      duration_ms: 8023.664291
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-1.2-periscope.test.cjs:261:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        expect(locator).toHaveAttribute(expected) failed
+        
+        Locator:  locator('#unit-quiz')
+        Expected: "cooldown"
+        Received: "idle"
+        Timeout:  5000ms
+        
+        Call log:
+          - Expect "to.have.attribute.value" with timeout 5000ms
+          - waiting for locator('#unit-quiz')
+            14 × locator resolved to <section id="unit-quiz" data-phase="0" data-view="boat" data-ready="true" data-pulse-id="7" class="lesson-card" data-angles="44,45" data-target="false" data-signal="false" data-pulse-status="idle" aria-labelledby="periscope-title" data-completed="false,false,false">…</section>
+               - unexpected value "idle"
+        
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        captureRawStack (/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/lib/coreBundle.js:9681:17)
+        callMatcherAsStep (/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/lib/matchers/expect.js:13310:57)
+        Object.toHaveAttribute (/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/lib/matchers/expect.js:13300:23)
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-periscope.test.cjs:263:100)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-periscope.test.cjs:261:3)
+      ...
+    # Subtest: 移除額外提示與分關重設；視線追蹤撞壁仍有短暫光斑
+    ok 12 - 移除額外提示與分關重設；視線追蹤撞壁仍有短暫光斑
+      ---
+      duration_ms: 2376.269306
+      type: 'test'
+      ...
+    # Subtest: 減少動態以短暫靜態全光路呈現；換關取消舊淡出與計時器
+    ok 13 - 減少動態以短暫靜態全光路呈現；換關取消舊淡出與計時器
+      ---
+      duration_ms: 6484.226401
+      type: 'test'
+      ...
+    # Subtest: 鍵盤邊界與取消拖曳不會留下卡住狀態
+    ok 14 - 鍵盤邊界與取消拖曳不會留下卡住狀態
+      ---
+      duration_ms: 3049.817413
+      type: 'test'
+      ...
+    # Subtest: 1440／1280／1024／768／390 px 版面、素材與鄰區操作
+    ok 15 - 1440／1280／1024／768／390 px 版面、素材與鄰區操作
+      ---
+      duration_ms: 7898.344479
+      type: 'test'
+      ...
+    # Subtest: 真實觸控拖曳完成第一關，沒有額外填答與頁面溢位
+    ok 16 - 真實觸控拖曳完成第一關，沒有額外填答與頁面溢位
+      ---
+      duration_ms: 10249.076219
+      type: 'test'
+      ...
+    # Subtest: 離開頁面時先釋放 GPU 資源，再關閉繪圖器，不產生例外
+    ok 17 - 離開頁面時先釋放 GPU 資源，再關閉繪圖器，不產生例外
+      ---
+      duration_ms: 484.083448
+      type: 'test'
+      ...
+    1..17
+not ok 5 - 潛望鏡實際操作、畫面與三階段評量
+  ---
+  duration_ms: 138186.826717
+  type: 'test'
+  location: '/workspace/k12-learning-demos/tests/unit-1.2-periscope.test.cjs:88:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: 1.2 reversible light reuses the reflection laboratory
+    # Subtest: independent reflection, front surface and reciprocal endpoint checks at every supported angle
+    ok 1 - independent reflection, front surface and reciprocal endpoint checks at every supported angle
+      ---
+      duration_ms: 2.424473
+      type: 'test'
+      ...
+    # Subtest: section 02 keeps its actual drag and keyboard, with initial angle inherited
+    ok 2 - section 02 keeps its actual drag and keyboard, with initial angle inherited
+      ---
+      duration_ms: 15086.942849
+      type: 'test'
+      ...
+    # Subtest: angle sectors and arcs are absent before light, after off-state angle changes and after reset
+    ok 3 - angle sectors and arcs are absent before light, after off-state angle changes and after reset
+      ---
+      duration_ms: 15816.579142
+      type: 'test'
+      ...
+    # Subtest: actual device clicks independently traverse all four light states without a record step
+    ok 4 - actual device clicks independently traverse all four light states without a record step
+      ---
+      duration_ms: 9439.574114
+      type: 'test'
+      ...
+    # Subtest: red, blue and simultaneous illumination all change the actual rendered scene
+    ok 5 - red, blue and simultaneous illumination all change the actual rendered scene
+      ---
+      duration_ms: 30844.796341
+      type: 'test'
+      ...
+    # Subtest: dragging A changes angle without toggling either source; pointer cancellation and background clicks are inert
+    ok 6 - dragging A changes angle without toggling either source; pointer cancellation and background clicks are inert
+      ---
+      duration_ms: 15231.718779
+      type: 'test'
+      ...
+    # Subtest: keyboard switches, live angle controls and reset reflect the independent state
+    ok 7 - keyboard switches, live angle controls and reset reflect the independent state
+      ---
+      duration_ms: 386.004445
+      type: 'test'
+      ...
+    # Subtest: independent controls and device labels fit five widths
+    ok 8 - independent controls and device labels fit five widths
+      ---
+      duration_ms: 7489.779691
+      type: 'test'
+      ...
+    # Subtest: real touch taps toggle the devices; fallback diagram and native switches remain usable
+    ok 9 - real touch taps toggle the devices; fallback diagram and native switches remain usable
+      ---
+      duration_ms: 18720.344926
+      type: 'test'
+      ...
+    1..9
+ok 6 - 1.2 reversible light reuses the reflection laboratory
+  ---
+  duration_ms: 115375.914707
+  type: 'test'
+  ...
+1..6
+# tests 57
+# suites 0
+# pass 48
+# fail 9
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 363864.508691

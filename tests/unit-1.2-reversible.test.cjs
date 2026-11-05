@@ -49,7 +49,7 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
     server.stdout.on('data', data => { output += data; const m = output.match(/port (\d+)/); if (m) { clearTimeout(timer); resolve(m[1]); } });
     server.once('error', reject);
   });
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'], ...(process.env.LESSON_USE_PROXY ? {proxy: {server: process.env.HTTPS_PROXY}} : {}) });
   t.after(() => browser.close());
   const page = await browser.newPage({ viewport: { width: 1440, height: 1050 } });
   const errors = [];
@@ -64,7 +64,7 @@ test('1.2 reversible light reuses the reflection laboratory', { timeout: 120000 
     assert.ok(source.includes('bench = createLaserBench(canvas);'));
     await route.fulfill({ response, body: source.replace('bench = createLaserBench(canvas);', 'bench = createLaserBench(canvas); window.__testReverseBench = bench;') });
   });
-  const url = `http://127.0.0.1:${port}/units/4/parts/4.2/#card-06`;
+  const url = new URL('units/4/parts/4.2/#card-06', process.env.LESSON_BASE_URL || `http://127.0.0.1:${port}/`).href;
   await page.goto(url, { waitUntil: 'networkidle' });
   const section = page.locator('#card-06');
   const canvas = page.locator('#reverse-scene');

@@ -30,10 +30,10 @@ if(section) {
       find(name).replaceChildren(node('rect',{x:-width/2,y:-height/2,width,height,rx:compact?9:12,fill:color}),label);
     }
     distanceLabel('distance-three',[ray.eye,ray.hit],'3公尺','#c9e6fb',.43);
-    distanceLabel('distance-two',[ray.image,ray.hit],'2公尺','#fbd3ae',.33,{compact:true,gap:10});
+    distanceLabel('distance-two',[ray.image,ray.hit],'2公尺','#fbd3ae',.4,{compact:true,side:-1,gap:12});
     if(mirror) {
-      // Match the two compact labels below their own light-path segments.
-      distanceLabel('distance-incoming',[ray.source,ray.hit],'2公尺','#fbd3ae',.33,{compact:true,side:-1,gap:10});
+      // Keep matching labels above the two short segments, clear of the bears.
+      distanceLabel('distance-incoming',[ray.source,ray.hit],'2公尺','#fbd3ae',.4,{compact:true,gap:12});
     }
     svg.dataset.mode=mode;svg.dataset.eye=COMPARISON.eye.join(',');svg.dataset.source=COMPARISON.source.join(',');svg.dataset.image=COMPARISON.image.join(',');svg.dataset.hit=ray.hit.join(',');
     svg.dataset.distances=JSON.stringify(distances);

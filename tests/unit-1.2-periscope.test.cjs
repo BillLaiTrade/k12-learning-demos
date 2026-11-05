@@ -1,4 +1,5 @@
 const {test}=require('node:test');
+const fs=require('node:fs');
 const assert=require('node:assert/strict');
 const {spawn}=require('node:child_process');
 const path=require('node:path');
@@ -89,11 +90,11 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
   const server=spawn('python',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:root,stdio:['ignore','pipe','pipe']});
   t.after(()=>server.kill());
   const port=await new Promise((resolve,reject)=>{let out='';const timer=setTimeout(()=>reject(new Error('server timeout')),5000);server.stdout.on('data',d=>{out+=d;const m=out.match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.once('error',reject);});
-  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader']});t.after(()=>browser.close());
+  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||undefined,args:['--use-angle=swiftshader','--enable-unsafe-swiftshader'],...(process.env.LESSON_USE_PROXY?{proxy:{server:process.env.HTTPS_PROXY}}:{})});t.after(()=>browser.close());
   const page=await browser.newPage({viewport:{width:1440,height:1100}}),errors=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('requestfailed',r=>errors.push(r.url()));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
-  const url=`http://127.0.0.1:${port}/units/4/parts/4.2/#unit-quiz`;
-  await page.goto(url,{waitUntil:'networkidle'});const quiz=page.locator('#unit-quiz');await expect(quiz).toHaveAttribute('data-ready','true');
+  const url=new URL('units/4/parts/4.2/#unit-quiz',process.env.LESSON_BASE_URL||`http://127.0.0.1:${port}/`).href;
+  await page.goto(url,{waitUntil:'networkidle'});const quiz=page.locator('#unit-quiz');await expect(quiz).toHaveAttribute('data-ready','true',{timeout:15000});
   const angles=async()=>JSON.parse('['+await quiz.getAttribute('data-angles')+']');
   async function setAngle(i,n){
     await page.locator(`#periscope-mirror-${i}`).evaluate((el,n)=>{el.dispatchEvent(new KeyboardEvent('keydown',{key:'Home',bubbles:true}));for(let s=30;s<n-.01;s+=.5)el.dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));},n);
@@ -220,7 +221,7 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await quiz.screenshot({path:'/tmp/periscope-review/completed-desktop.png'});
     assert.equal(await page.locator('#periscope-restart').count(),0);
     // 重新載入只用於隔離後續測試；產品不提供整份重來控制。
-    await page.reload({waitUntil:'networkidle'});await expect(quiz).toHaveAttribute('data-ready','true');assert.deepEqual(await angles(),[38,51]);await expect(quiz).toHaveAttribute('data-phase','0');await expect(quiz).toHaveAttribute('data-completed','false,false,false');await expect(page.locator('[data-stage="1"]')).toBeDisabled();
+    await page.reload({waitUntil:'networkidle'});await expect(quiz).toHaveAttribute('data-ready','true',{timeout:15000});assert.deepEqual(await angles(),[38,51]);await expect(quiz).toHaveAttribute('data-phase','0');await expect(quiz).toHaveAttribute('data-completed','false,false,false');await expect(page.locator('[data-stage="1"]')).toBeDisabled();
   });
   await t.test('只保留畫面拖曳操作，沒有獨立微調列或按鈕',async()=>{
     assert.equal(await page.locator('#periscope-fine,[data-fine]').count(),0);
@@ -258,12 +259,40 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');await expect(page.locator('#periscope-light')).toBeEmpty();await expect(page.locator('#periscope-normal')).toHaveCount(0);
     await expect(button).toBeDisabled();await expect(button).toBeEnabled();await expect(quiz).toHaveAttribute('data-pulse-status','idle');
   });
-  await t.test('拖動或鏡片方向鍵操作立即收起提示光，後續重繪不留下舊路線',async()=>{
-    const button=page.locator('#periscope-pulse');await button.click();await expect(quiz).toHaveAttribute('data-pulse-status','running');
-    await drag(0,44);await expect(page.locator('#periscope-light')).toBeEmpty();await expect(quiz).toHaveAttribute('data-pulse-status','cooldown');
-    await page.waitForTimeout(350);await expect(page.locator('#periscope-light')).toBeEmpty();
-    await expect(button).toBeEnabled();await button.click();await page.locator('#periscope-mirror-0').press('ArrowRight');await expect(page.locator('#periscope-light')).toBeEmpty();
-    await expect(button).toBeEnabled();
+  await t.test('在輸入事件當下取消提示光；長拖曳可跨過冷卻期限且不留下舊路線',async()=>{
+    const button=page.locator('#periscope-pulse');await expect(button).toBeEnabled();
+    await page.evaluate(()=>{
+      const root=document.querySelector('#unit-quiz'),button=document.querySelector('#periscope-pulse'),mirror=document.querySelector('#periscope-mirror-0');
+      const evidence={shots:[],inputs:[]};window.__pulseCancellation=evidence;
+      const snapshot=event=>({event,time:performance.now(),status:root.dataset.pulseStatus,lines:document.querySelector('#periscope-light').childElementCount});
+      const shot=()=>evidence.shots.push({...snapshot('click'),duration:matchMedia('(prefers-reduced-motion: reduce)').matches?700:950});
+      const before=e=>evidence.inputs.push(snapshot(`${e.type}:before`));
+      const after=e=>evidence.inputs.push(snapshot(`${e.type}:after`));
+      button.addEventListener('click',shot);
+      for(const type of ['pointerdown','keydown']){mirror.addEventListener(type,before,true);mirror.addEventListener(type,after);}
+      evidence.dispose=()=>{button.removeEventListener('click',shot);for(const type of ['pointerdown','keydown']){mirror.removeEventListener(type,before,true);mirror.removeEventListener(type,after);}};
+    });
+    try{
+      await button.click();await expect(quiz).toHaveAttribute('data-pulse-status','running');
+      await drag(0,44);await expect(page.locator('#periscope-light')).toBeEmpty();
+      const pointer=await page.evaluate(()=>({shot:window.__pulseCancellation.shots[0],inputs:window.__pulseCancellation.inputs.filter(e=>e.event.startsWith('pointerdown'))}));
+      assert.equal(pointer.inputs.length,2);assert.equal(pointer.inputs[1].lines,0,'pointerdown clears light within the same input event');
+      // The old check ran after scroll/layout, twelve pointer moves and a render.
+      // Read the cancellation at pointerdown, before a slow drag can outlast the 2050ms deadline.
+      const elapsed=pointer.inputs[1].time-pointer.shot.time,deadline=pointer.shot.duration+1100;
+      assert.equal(pointer.inputs[1].status,elapsed<deadline?'cooldown':'idle');
+      await expect(button).toBeEnabled();
+      // One browser task proves early keyboard cancellation without racing the short flash.
+      await button.evaluate(el=>{el.click();document.querySelector('#periscope-mirror-0').dispatchEvent(new KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));});
+      const keyboard=await page.evaluate(()=>window.__pulseCancellation.inputs.filter(e=>e.event.startsWith('keydown')));
+      assert.equal(keyboard.at(-2).status,'running');assert.equal(keyboard.at(-1).status,'cooldown');assert.equal(keyboard.at(-1).lines,0);
+      await expect(button).toBeDisabled();await page.waitForTimeout(350);await expect(page.locator('#periscope-light')).toBeEmpty();
+      await expect(button).toBeEnabled();await expect(quiz).toHaveAttribute('data-pulse-status','idle');
+      // Exercise an actual key press as well as the synchronous cancellation sample.
+      await button.click();await page.locator('#periscope-mirror-0').press('ArrowRight');await expect(page.locator('#periscope-light')).toBeEmpty();await expect(button).toBeEnabled();
+      const evidence=await page.evaluate(()=>({shots:window.__pulseCancellation.shots,inputs:window.__pulseCancellation.inputs}));
+      const captureDir=process.env.PERISCOPE_CAPTURE_DIR||'/tmp/periscope-review';fs.mkdirSync(captureDir,{recursive:true});fs.writeFileSync(path.join(captureDir,'cancellation-timing.json'),JSON.stringify(evidence,null,2));
+    }finally{await page.evaluate(()=>{window.__pulseCancellation.dispose();delete window.__pulseCancellation;});}
   });
   await t.test('移除額外提示與分關重設；視線追蹤撞壁仍有短暫光斑',async()=>{
     assert.equal(await page.locator('#periscope-hint,#periscope-hint-copy,#periscope-reset-stage,#periscope-normal,#periscope-restart').count(),0);
@@ -313,7 +342,7 @@ test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t
     await page.locator('#reverse-toggle-a').click();
   });
   await t.test('真實觸控拖曳完成第一關，沒有額外填答與頁面溢位',async()=>{
-    const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});const p=await context.newPage();await p.goto(url,{waitUntil:'networkidle'});await expect(p.locator('#unit-quiz')).toHaveAttribute('data-ready','true');
+    const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});const p=await context.newPage();await p.goto(url,{waitUntil:'networkidle'});await expect(p.locator('#unit-quiz')).toHaveAttribute('data-ready','true',{timeout:15000});
     const scene=p.locator('#periscope-scene'),session=await context.newCDPSession(p);
     await scene.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await expect.poll(async()=>{const a=await scene.boundingBox();await p.waitForTimeout(100);const b=await scene.boundingBox();return Math.abs(a.y-b.y)<.5;}).toBe(true);
     const position=async(i,angle)=>scene.evaluate((el,{i,angle})=>{const a=angle*Math.PI/180,pt=new DOMPoint(565+60*Math.cos(a),(i===0?190:590)+60*Math.sin(a)).matrixTransform(el.getScreenCTM());return{x:pt.x,y:pt.y};},{i,angle});
