@@ -97,3 +97,7 @@ button.primary:hover, .rank-quiz .rank-play:hover, .rank-quiz .rank-check:hover 
   .route-inner a.quiz-nav { margin-top: 0; padding-top: 7px; }
   .lesson-card, .unit-quiz, #unit-quiz { scroll-margin-top: 0; }
 }
+
+/* Keep operating instructions beside the apparatus, separate from lesson subtitles. */
+.oblique-source-help { margin: 0 var(--lab-inset, 28px) 8px; color: var(--muted); font-size: .84rem; line-height: 1.6; }
+#exit-lab[data-angle="0"] #exit-transmission-condition { display: none; }

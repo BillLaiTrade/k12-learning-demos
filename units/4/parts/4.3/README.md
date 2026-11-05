@@ -508,3 +508,7 @@ node --test --test-concurrency=1 tests/unit-4.3-depth-model.test.mjs tests/unit-
 ## 依4.1統一格式（2026-11-05）
 
 使用者指定以4.1為版型基準。新增`assets/lesson-format.css`對齊1120px頁寬、圖文頁首、中文字型／容器字級、閱讀位置與進度條、導覽、卡片、小測、48px共用頭像與控制按鈕。原293段靜態文字、六區與唯一四層小測HTML、許願池候選1及所有光學／實驗控制器保持；`lesson.mjs`只增加進度條顯示同步。版型專項`tests/unit-4.3-format41.test.cjs`直接比對4.1／4.3四種桌電／筆電尺寸的計算樣式，搭配既有格式、互動及實際水位回歸。詳見`docs/decisions/unit-4.3-format41.md`與`docs/reviews/unit-4.3-format41-20261105/`。
+
+## 標題／副標／操作分工（2026-11-05）
+
+依五點共通規則，第二區改開放疑問並同步導覽；第二至五區副標改概念與比較焦點。第三區操作短註移至圖上方，阿公改引導觀察；第二區用桌電／筆電的「左右捲動」。第四區「斜射且發生折射時」移到結果圖例，0°不顯示斜射條件。原控制器、模型、素材與小測保持；四桌面／16組條件走讀及原格式／互動12項通過。見`docs/decisions/unit-4.3-heading-roles.md`及`docs/reviews/unit-4.3-heading-roles-20261105/`。

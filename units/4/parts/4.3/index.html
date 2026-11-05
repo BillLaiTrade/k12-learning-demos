@@ -41,7 +41,7 @@
   <script type="module" src="assets/depth-lab.mjs?v=20261105-eleven1"></script>
   <link rel="stylesheet" href="assets/layer-speed-quiz.css?v=20261105-labeltype1">
   <script type="module" src="assets/layer-speed-quiz.mjs?v=20261105-labelalign1"></script>
-  <link rel="stylesheet" href="assets/lesson-format.css?v=20261105-format41a">
+  <link rel="stylesheet" href="assets/lesson-format.css?v=20261105-headingrules1">
   <script type="module" src="assets/lesson.mjs?v=20261105-format41a">
 </script>
 </head>
@@ -77,7 +77,7 @@
 </a>
         <a href="#s2">
 <b>02</b>
-<span>光變慢了，為什麼沒有轉彎？</span>
+<span>光正對水面照下去，會轉彎嗎？</span>
 </a>
         <a href="#s3">
 <b>03</b>
@@ -137,7 +137,7 @@
   </div>
 </section>
 <section class="lesson-card" id="s2" aria-labelledby="heading-2">
-  <header class="lesson-head"><span class="lesson-number">02</span><div><h2 id="heading-2">光變慢了，為什麼沒有轉彎？</h2><p>加入空氣對照，觀察速度與方向</p></div></header>
+  <header class="lesson-head"><span class="lesson-number">02</span><div><h2 id="heading-2">光正對水面照下去，會轉彎嗎？</h2><p>垂直入射：光速與前進方向的比較</p></div></header>
   <div class="lesson-body card-main">
     <div class="dialogue-sequence">
       <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光路沒有轉彎，可是怎麼看出光變慢了？</p></div>
@@ -146,8 +146,8 @@
     <div class="lab" id="normal-lab" data-state="loading" aria-label="全程空氣對照與垂直射入水、玻璃的三組光路示意">
       <ol class="normal-steps" aria-label="光束穿越的觀察步驟"><li data-normal-stage="1"><b>1</b>發射光束</li><li data-normal-stage="2"><b>2</b>跨越介面</li><li data-normal-stage="3"><b>3</b>比較同一瞬間</li></ol>
       <p class="normal-distance-summary"><span>模型總路程</span><strong><output id="normal-distance">150 萬公里</output></strong><small id="normal-route-split">水／玻璃組：空氣 75 萬公里 ＋ 介質 75 萬公里</small></p>
-      <p class="normal-pan-hint">↔ 左右滑動，對照空氣、水與玻璃的光路。</p>
-      <div class="normal-viewport" id="normal-viewport" role="region" tabindex="0" aria-label="垂直入射實驗桌，窄螢幕可左右滑動">
+      <p class="normal-pan-hint">↔ 左右捲動，對照空氣、水與玻璃的光路。</p>
+      <div class="normal-viewport" id="normal-viewport" role="region" tabindex="0" aria-label="垂直入射實驗桌，窄螢幕可左右捲動">
         <div class="normal-table">
           <img id="normal-background" src="assets/normal-incidence-half-air-bench.png" width="1536" height="1024" alt="寫實木桌上的三組等長光路剖面示意：左側全程為空氣，中間由空氣進入水，右側由空氣進入實心透明玻璃，三個光源位於同一高度。">
           <h3 class="normal-name air">全程空氣<small>對照組</small></h3><h3 class="normal-name water">空氣 → 水</h3><h3 class="normal-name glass">空氣 → 玻璃</h3>
@@ -204,14 +204,15 @@
   </div>
 </section>
 <section class="lesson-card" id="s3" aria-labelledby="heading-3">
-  <header class="lesson-head"><span class="lesson-number">03</span><div><h2 id="heading-3">光斜著進入，會往哪裡偏？</h2><p>直接在光路上，看懂方向與角度的變化</p></div></header>
+  <header class="lesson-head"><span class="lesson-number">03</span><div><h2 id="heading-3">光斜著進入，會往哪裡偏？</h2><p>斜射與折射：入射角與折射角的關係</p></div></header>
   <div class="lesson-body card-main">
     <div class="dialogue-sequence">
       <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光斜著進入水時，是在哪裡轉向的？</p></div>
-      <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>調整入射角，再點燈發射。角度與轉向說明會直接出現在光路上。</p></div>
+      <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>沿著光路找到交界，再比較進入水或玻璃前後的方向與角度。</p></div>
     </div>
     <div class="lab integrated-lab" id="oblique-lab" data-state="loading" data-explained="false" aria-label="發射後直接顯示角度與說明的光路實驗">
       <div class="oblique-experiment">
+        <p class="oblique-source-help" id="oblique-source-help">拖曳光源調整角度；點擊光源發射。</p>
         <div class="oblique-table" id="oblique-viewport">
           <div class="integrated-stage">
             <svg id="oblique-scene" class="integrated-scene" viewBox="0 0 1200 820" role="group" aria-label="點擊光源發射，拖曳或方向鍵調整入射角。"></svg>
@@ -279,7 +280,7 @@
 <span class="lesson-number">04</span>
 <div>
 <h2 id="heading-4">光由水或玻璃射回空氣，方向又會怎樣？</h2>
-<p>斜射且發生折射時：由慢進入快，偏離法線</p>
+<p>折射方向：光由水、玻璃進入空氣</p>
 </div>
 </header>
 <div class="lesson-body card-main">
@@ -308,7 +309,7 @@
               <p class="integrated-equation" aria-label="折射角與入射角比較"><span class="angle-out"><small>折射角</small><output id="exit-out-value">41.8°</output></span><b data-comparison>&gt;</b><span class="angle-in"><small>入射角</small><output id="exit-in-value">30°</output></span></p>
               <p class="integrated-reason" data-finding-reason>折射角變大，光線更遠離法線。</p>
             </div>
-            <p class="integrated-legend" hidden><span>角度皆從法線量起</span><span data-reference-note><i aria-hidden="true"></i>原方向延長線<span class="legend-extra">（比較參考）</span></span></p>
+            <p class="integrated-legend" hidden><span id="exit-transmission-condition">斜射且發生折射時</span><span>角度皆從法線量起</span><span data-reference-note><i aria-hidden="true"></i>原方向延長線<span class="legend-extra">（比較參考）</span></span></p>
           </div>
           <div class="integrated-controls">
             <div class="oblique-actions" role="group" aria-label="發射與重設光束"><button id="exit-start" type="button" class="primary" disabled><span aria-hidden="true">▶</span><span>發射光束</span></button><button id="exit-reset" type="button" disabled>↻ 重設</button></div>
@@ -367,7 +368,7 @@
 <span class="lesson-number">05</span>
 <div>
 <h2 id="heading-5">折射光路能倒著走嗎？</h2>
-<p>光路可逆：交換起點與終點，觀察原路返回</p>
+<p>反向傳播：正反方向的折射光路比較</p>
 </div>
 </header>
 <div class="lesson-body card-main">

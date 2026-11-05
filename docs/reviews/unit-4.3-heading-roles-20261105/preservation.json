@@ -1,0 +1,10 @@
+{
+  "baseline": "c6736efc21ab08b8e989dfffe5e11694505d94ed",
+  "changed_course_files": [
+    "units/4/parts/4.3/index.html",
+    "units/4/parts/4.3/assets/lesson-format.css"
+  ],
+  "all_models_controllers_MJS_original_experiment_CSS_and_images_identical": true,
+  "only_header_copy_dialogue3_nearby_hints_and_condition_placement_changed": true,
+  "six_sections_and_one_quiz_kept": true
+}

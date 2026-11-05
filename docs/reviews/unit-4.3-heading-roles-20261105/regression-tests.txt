@@ -1,0 +1,22 @@
+▶ 4.3 eleven approved choices: controls, evidence, concise copy and desktop presentation
+  ✔ 2: explicit mouse/keyboard/lamp playback reveals the apparatus and controls before advancing (3334.347553ms)
+  ✔ 4: all three carts auto resume after viewport/tab interruption; explicit closing stays stopped on reopen (6448.014971ms)
+  ✔ 6-11: preconditions, conditional transmission, colour key, fixed analogy and depth narrative use short visible copy (737.362789ms)
+  ✔ 3 and 5: no-op selections/keys/drop retain grades; replay conceals then restores grades unless order changes (5516.792063ms)
+  ✔ desktop and laptop preserve visible controls, short notes and readable evidence at four sizes (5347.107816ms)
+✔ 4.3 eleven approved choices: controls, evidence, concise copy and desktop presentation (25402.946877ms)
+✔ 1: sixth-section edge visibility is physically shared through preview, detail and fallback (9956.913415ms)
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (223.534534ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (889.24179ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (10360.389606ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (572.673536ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (16237.887325ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 36558.607461
