@@ -1,0 +1,82 @@
+{
+  "records": [
+    {
+      "width": 1440,
+      "id": 7,
+      "overflow": false,
+      "noteBelow": true,
+      "noteInside": true,
+      "noteUnclipped": true,
+      "controlsBelow": true
+    },
+    {
+      "width": 1440,
+      "id": 8,
+      "overflow": false,
+      "noteBelow": true,
+      "noteInside": true,
+      "noteUnclipped": true,
+      "controlsBelow": true
+    },
+    {
+      "width": 1024,
+      "id": 7,
+      "overflow": false,
+      "noteBelow": true,
+      "noteInside": true,
+      "noteUnclipped": true,
+      "controlsBelow": true
+    },
+    {
+      "width": 1024,
+      "id": 8,
+      "overflow": false,
+      "noteBelow": true,
+      "noteInside": true,
+      "noteUnclipped": true,
+      "controlsBelow": true
+    },
+    {
+      "width": 390,
+      "id": 7,
+      "overflow": false,
+      "noteBelow": true,
+      "noteInside": true,
+      "noteUnclipped": true,
+      "controlsBelow": true
+    },
+    {
+      "width": 390,
+      "id": 8,
+      "overflow": false,
+      "noteBelow": true,
+      "noteInside": true,
+      "noteUnclipped": true,
+      "controlsBelow": true
+    },
+    {
+      "width": 320,
+      "id": 7,
+      "overflow": false,
+      "noteBelow": true,
+      "noteInside": true,
+      "noteUnclipped": true,
+      "controlsBelow": true
+    },
+    {
+      "width": 320,
+      "id": 8,
+      "overflow": false,
+      "noteBelow": true,
+      "noteInside": true,
+      "noteUnclipped": true,
+      "controlsBelow": true
+    }
+  ],
+  "notesPersist": true,
+  "retinalImageStillInverted": true,
+  "eye7Focus": true,
+  "eye8Table": true,
+  "disclosureKeyboard": true,
+  "errors": []
+}

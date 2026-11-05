@@ -108,3 +108,9 @@
  .eye-scene .eye-role-label { font-size:28px; }
  .eye-scene .eye-caption { font-size:26px; }
 }
+
+.eye-perception-note { grid-column:1 / -1; margin:0; padding:11px 16px; border-top:1px solid #c0cfad; background:#f5f7eb; color:#405b43; font-size:.8rem; line-height:1.75; }
+.eye-perception-note strong { font-weight:750; }
+@container (max-width:640px) {
+ .eye-perception-note { padding:10px 12px; font-size:.75rem; }
+}
