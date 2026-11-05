@@ -1554,3 +1554,14 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.2-
 
 雙光源專項在測試頁停用文件平滑捲動，並在實體指標操作前要求畫布完整入鏡，避免跳區捲動尚未停止時取得負的螢幕座標；不改產品捲動設定、指標命中或光學斷言。
 軟體3D繪圖的整套總預算調整為180秒，與鏡像及潛望鏡相同；個別產品計時與操作斷言不變。
+
+## 4.2 第一區前四項畫面改善（2026-11-05）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.2-reflection-stage.test.cjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.2-completion.test.cjs
+```
+
+第一區專項7項（含外層）：兩側實際Three.js光源條件、360條光錐邊緣光線落在材料內、初始反射方向與相機一致、四種獨立開關／燈頭／按鈕回饋、三視角下取樣渲染像素、切換保留器材位置及開燈狀態、拖曳／取消／鍵盤回正、六種尺寸幾何與44px目標、手機原生觸控及一般動態。單區套件隔離未測的其他3D活動；整頁整合另由completion的7項確認。
+
+`REFLECTION_CAPTURE_DIR`保存三視角、桌機／手機畫面與geometry.json／pixels.json。`LESSON_BASE_URL`支援公開站；使用環境代理時設`LESSON_USE_PROXY=1`。測試只在攔截的模組回應內讀取實際場景，正式產品不暴露測試API。開關色彩採等待實際計算樣式後比對，保留狀態與物理燈光斷言。
