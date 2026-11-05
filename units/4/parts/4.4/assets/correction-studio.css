@@ -40,3 +40,21 @@
 .eye-scene .correction-source-title { font-size:19px; font-weight:650; }
 .eye-scene .correction-source-point { font-size:17px; font-weight:500; }
 .eye-scene .correction-incoming-label { font-size:17px; font-weight:500; fill:#506d52; }
+
+.correction-comparison>h3 { margin-bottom:10px; }
+.correction-table-help { margin:0 0 14px; color:#526b4c; font-size:.82rem; line-height:1.7; }
+.correction-comparison tbody tr { cursor:pointer; }
+.correction-comparison tbody th,.correction-comparison tbody td { padding:6px; }
+.correction-comparison tbody tr:hover>* { background:#edf3e3; }
+.correction-comparison tbody tr[data-active=true]>* { background:#e2edce; }
+.correction-comparison button { display:block; width:100%; min-height:44px; padding:8px 5px; border:1px solid #cad8bd; border-radius:8px; background:#fffef5; color:#31543d; font:inherit; font-weight:650; line-height:1.5; overflow-wrap:anywhere; }
+.correction-comparison button:hover { background:#f5f8ed; border-color:#8faa76; }
+.correction-comparison button[aria-pressed=true] { background:#d3e4bb; border-color:#74925a; color:#274d36; box-shadow:inset 0 0 0 1px #74925a; }
+.correction-comparison button:focus-visible { outline:3px solid #c78e31; outline-offset:2px; }
+@container (max-width:640px) {
+ .correction-table-help { font-size:.75rem; }
+ .correction-comparison tbody th,.correction-comparison tbody td { padding:6px 3px; }
+ .correction-comparison button { padding:6px 1px; }
+ .correction-comparison button span { display:block; white-space:nowrap; }
+ .correction-comparison button:focus-visible { outline-offset:0; }
+}

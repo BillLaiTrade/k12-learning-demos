@@ -5,6 +5,7 @@ if(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],svg=$('[data-correction-scene]'),preview=$('[data-correction-preview]');
  const red='#d65b47',blue='#2588ba',CX=302,LX=365.54,SX=CX+353*SPECTACLE,Y=220,SY=160,n=v=>Number(v.toFixed(3)),pt=(x,y)=>`${n(x)} ${n(y)}`;
  const kinds={normal:'正常眼睛',myopia:'近視模型',hyperopia:'遠視模型'},lenses={none:'未加鏡片',concave:'凹透鏡',convex:'凸透鏡'};
+ const matchedLens={normal:'none',myopia:'concave',hyperopia:'convex'};
  let state=initialCorrection(),model=null;
  try{model=createEyeModel($('[data-correction-model]'),{correction:true});root.dataset.eyeRender='3d';}catch{root.dataset.eyeRender='fallback';}
  const leader=(x,y,name,tx,ty)=>`<g><path class="eye-leader" d="M${x} ${y+12}V${ty-15}L${tx} ${ty}"/><circle cx="${tx}" cy="${ty}" r="3" fill="#41684b"/><text class="eye-label" x="${x}" y="${y}" text-anchor="middle">${name}</text></g>`;
@@ -52,9 +53,9 @@ if(root){
   const status=$('[data-correction-status]');status.textContent=g.clear?(state.lens==='none'?'正常眼睛・清楚成像':'已矯正・清楚成像'):'尚未清楚成像';status.dataset.clear=g.clear;
   $('[data-correction-copy]').textContent=g.clear?'同一物點的光，\n在視網膜上會聚。':g.position==='before'?'會聚位置在視網膜前，\n光到達時已再次散開。':'光到達視網膜時，\n尚未會聚成清楚像點。';
   $('[data-correction-explanation]').textContent=state.lens==='none'?(state.kind==='normal'?'眼睛的會聚能力與眼軸長度配合，能在視網膜上清楚成像。':state.kind==='myopia'?'此模型眼軸較長，光先在視網膜前會聚。':'此模型眼軸較短，光到達視網膜時尚未會聚。'):`${lenses[state.lens]}先${state.lens==='concave'?'使光束較發散':'增加光束的會聚作用'}，${g.clear?'再由眼睛會聚到視網膜。':`整體會聚位置${state.lens==='concave'?'往後':'往前'}移，目前仍未落在視網膜上。`}`;
-  $$('[data-correction-row]').forEach(r=>{r.dataset.active=String(r.dataset.correctionRow===state.kind);});
+  $$('[data-correction-row]').forEach(row=>{const kind=row.dataset.correctionRow;row.dataset.active=String(kind===state.kind);row.querySelectorAll('[data-correction-case]').forEach(b=>{const lens=b.dataset.correctionCase==='bare'?'none':matchedLens[kind];b.setAttribute('aria-pressed',String(state.kind===kind&&state.lens===lens));});});
   Object.assign(root.dataset,{ready:'true',kind:state.kind,lens:state.lens,point:state.point,rays:state.rays,clear:g.clear,position:g.position,focus:g.focus,retina:g.retina,power:g.power});
  }
- root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-correction-reset'))state=initialCorrection();else if(b.hasAttribute('data-correction-rays'))state=changeCorrection(state,'rays',!state.rays);else{const key=['kind','lens','point'].find(k=>b.hasAttribute(`data-correction-${k}`));if(!key)return;state=changeCorrection(state,key,b.getAttribute(`data-correction-${key}`));}render();});
+ root.addEventListener('click',e=>{const row=e.target.closest('[data-correction-row]');if(row){const mode=e.target.closest('[data-correction-case]')?.dataset.correctionCase||e.target.closest('[data-correction-view]')?.dataset.correctionView||'bare';state=changeCorrection(state,'kind',row.dataset.correctionRow);if(mode==='corrected')state=changeCorrection(state,'lens',matchedLens[state.kind]);render();return;}const b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-correction-reset'))state=initialCorrection();else if(b.hasAttribute('data-correction-rays'))state=changeCorrection(state,'rays',!state.rays);else{const key=['kind','lens','point'].find(k=>b.hasAttribute(`data-correction-${k}`));if(!key)return;state=changeCorrection(state,key,b.getAttribute(`data-correction-${key}`));}render();});
  render();
 }

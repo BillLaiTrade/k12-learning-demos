@@ -1,0 +1,77 @@
+{
+  "records": [
+    {
+      "width": 1440,
+      "kind": "normal",
+      "lens": "none",
+      "overflow": false,
+      "clipped": [],
+      "touch": true
+    },
+    {
+      "width": 1440,
+      "kind": "myopia",
+      "lens": "concave",
+      "overflow": false,
+      "clipped": [],
+      "touch": true
+    },
+    {
+      "width": 1440,
+      "kind": "hyperopia",
+      "lens": "convex",
+      "overflow": false,
+      "clipped": [],
+      "touch": true
+    },
+    {
+      "width": 390,
+      "kind": "normal",
+      "lens": "none",
+      "overflow": false,
+      "clipped": [],
+      "touch": true
+    },
+    {
+      "width": 390,
+      "kind": "myopia",
+      "lens": "concave",
+      "overflow": false,
+      "clipped": [],
+      "touch": true
+    },
+    {
+      "width": 390,
+      "kind": "hyperopia",
+      "lens": "convex",
+      "overflow": false,
+      "clipped": [],
+      "touch": true
+    },
+    {
+      "width": 320,
+      "kind": "normal",
+      "lens": "none",
+      "overflow": false,
+      "clipped": [],
+      "touch": true
+    },
+    {
+      "width": 320,
+      "kind": "myopia",
+      "lens": "concave",
+      "overflow": false,
+      "clipped": [],
+      "touch": true
+    },
+    {
+      "width": 320,
+      "kind": "hyperopia",
+      "lens": "convex",
+      "overflow": false,
+      "clipped": [],
+      "touch": true
+    }
+  ],
+  "errors": []
+}
