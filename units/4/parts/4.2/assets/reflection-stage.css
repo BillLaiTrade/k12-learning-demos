@@ -1,69 +1,40 @@
-/* First activity only: material comparison and accessible viewing controls. */
-#card-01 .reflection-stage { background: #fffdf8; container: reflection-stage / inline-size; }
-#card-01 .reflection-comparison { display: block; padding: 14px; }
+/* First activity: keep free viewing, light controls and reference together. */
+#card-01 .reflection-stage { background: #fffdf8; container: reflection-stage / inline-size; box-shadow: none; }
+#card-01 .reflection-comparison { display: block; padding: 12px 12px 0; }
 #card-01 .reflection-comparison[hidden] { display: none; }
-#card-01 .reflection-main-panel { min-width: 0; overflow: hidden; border: 1px solid #c9d6cf; border-radius: 15px; background: #e7e9e6; }
-#card-01 .reflection-main-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 7px; padding: 11px 12px; background: #f7f9f4; }
-#card-01 #reflection-view-status { margin: 0; padding: 5px 8px; border-radius: 8px; background: #e3eedf; color: #244d3b; font-size: .88rem; font-weight: 750; line-height: 1.4; }
-#card-01 .reflection-main-heading > span { color: #5c7166; font-size: .78rem; }
-#card-01 #reflection-3d-scene { height: auto; aspect-ratio: 1.65; touch-action: none; }
-#card-01 .reflection-reference { min-width: 0; margin: 18px 0; padding: 18px; border: 1px solid #c9d6cf; border-radius: 16px; background: #f4f7ef; }
-#card-01 .reflection-reference-heading h3 { margin: 0; color: #244d3b; font-size: 1.1rem; line-height: 1.4; }
-#card-01 .reflection-reference-heading p { margin: 4px 0 0; color: #526b5d; font-size: .78rem; }
-#card-01 #reflection-reference-image { display: block; width: 100%; max-width: 640px; height: auto; margin: 14px auto; border: 1px solid #d2dcd1; border-radius: 10px; background: #e7e9e6; }
-#card-01 .reflection-reference-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-#card-01 .reflection-reference-actions > span { color: #526b5d; font-size: .8rem; }
-#card-01 .reflection-match-button { min-height: 44px; padding: 10px 16px; border: 0; border-radius: 11px; background: #176b53; color: #fff; font-size: .9rem; font-weight: 750; touch-action: manipulation; }
+#card-01 .reflection-main-panel { min-width: 0; overflow: hidden; border: 1px solid #c9d6cf; border-radius: 13px; background: #e7e9e6; }
+#card-01 .reflection-main-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 7px; padding: 8px 10px; background: #f7f9f4; }
+#card-01 #reflection-view-status { margin: 0; padding: 5px 8px; border-radius: 8px; background: #e3eedf; color: #244d3b; font-size: .84rem; font-weight: 750; line-height: 1.4; }
+#card-01 .reflection-match-button { min-height: 44px; padding: 9px 12px; border: 0; border-radius: 10px; background: #176b53; color: #fff; font-size: .84rem; font-weight: 750; touch-action: manipulation; }
 #card-01 .reflection-match-button:hover { background: #105640; }
 #card-01 .reflection-match-button:focus-visible { outline: 3px solid #176b5370; outline-offset: 2px; }
-#card-01 .reflection-reference-notes { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid #cbd9cc; color: #355846; font-size: .8rem; line-height: 1.65; }
-#card-01 .reflection-stage-labels { justify-content: space-between; gap: 8px; }
-#card-01 .reflection-stage-labels span { flex: 1 1 140px; justify-content: center; }
-#card-01 .reflection-stage .reflection-controls { gap: 10px; padding: 8px 14px 14px; }
-#card-01 .reflection-fire {
-  min-height: 58px;
-  border: 1px solid #bdcdc4;
-  background: #edf2ed;
-  color: #42594e;
-  box-shadow: none;
-  text-align: center;
-}
+#card-01 .reflection-scene-wrap { position: relative; }
+#card-01 .reflection-drag-hint { position: absolute; z-index: 1; top: 9px; right: 9px; padding: 4px 7px; border-radius: 7px; background: #fffdf8d9; color: #526b5d; font-size: .73rem; pointer-events: none; }
+#card-01 #reflection-3d-scene { height: auto; aspect-ratio: 1.65; touch-action: none; }
+#card-01 .reflection-stage .reflection-controls { gap: 10px; padding: 10px 12px; }
+#card-01 .reflection-fire { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 5px 12px; min-height: 48px; border: 1px solid #bdcdc4; background: #edf2ed; color: #42594e; box-shadow: none; text-align: center; }
 #card-01 .reflection-fire small { font-size: .8rem; opacity: 1; }
-#card-01 .reflection-fire[aria-pressed="true"] {
-  border-color: #176b53;
-  background: #176b53;
-  color: #fff;
-  box-shadow: 0 3px 8px #176b5326;
-}
+#card-01 .reflection-fire[aria-pressed="true"] { border-color: #176b53; background: #176b53; color: #fff; box-shadow: 0 3px 8px #176b5326; }
 #card-01 .reflection-fire:hover { border-color: #176b53; }
 #card-01 .reflection-fire[aria-pressed="true"]:hover { background: #105640; }
-#card-01 .reflection-view-controls {
-  padding: 12px 14px 14px;
-  border-top: 1px solid #dce5dc;
-  background: #f7f9f4;
-}
-#card-01 .reflection-view-heading { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 8px; font-size: .84rem; font-weight: 750; color: #405a4f; }
-#card-01 .reflection-view-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-#card-01 .reflection-view-button { min-width: 0; min-height: 44px; padding: 8px 4px; border: 1px solid #c7d5c9; border-radius: 11px; background: #fff; color: #3d5549; font-size: .86rem; font-weight: 750; }
-#card-01 .reflection-view-button[aria-pressed="true"] { border-color: #176b53; background: #e5efe5; color: #176b53; box-shadow: inset 0 0 0 1px #176b53; }
-#card-01 .reflection-view-button:focus-visible { outline: 3px solid #176b5370; outline-offset: 2px; }
-#card-01 .reflection-view-hint { margin: 9px 0 0; color: #64756b; font-size: .8rem; }
 #card-01 .reflection-fire:disabled,
-#card-01 .reflection-view-button:disabled,
 #card-01 .reflection-match-button:disabled { opacity: .55; cursor: default; }
-@media (max-width: 700px) {
-  #card-01 #reflection-3d-scene { aspect-ratio: 1.3; }
-  #card-01 .reflection-stage-labels { padding: 10px; gap: 6px; }
-  #card-01 .reflection-stage-labels span { flex: 1 1 0; min-width: 0; padding: 6px 3px; gap: 4px; font-size: .73rem; }
-  #card-01 .reflection-stage .reflection-controls { padding: 6px 10px 12px; gap: 8px; }
-  #card-01 .reflection-fire { font-size: .84rem; }
-  #card-01 .reflection-view-controls { padding: 11px 10px 12px; }
-}
+#card-01 .reflection-reference { display: grid; grid-template-columns: 200px minmax(0, 1fr); align-items: center; gap: 16px; min-width: 0; margin: 0 12px 12px; padding: 10px; border: 1px solid #c9d6cf; border-radius: 12px; background: #f4f7ef; }
+#card-01 #reflection-reference-image { display: block; width: 100%; height: auto; margin: 0; border: 1px solid #d2dcd1; border-radius: 9px; background: #e7e9e6; }
+#card-01 .reflection-reference-copy { min-width: 0; }
+#card-01 .reflection-reference-copy h3 { margin: 0 0 5px; color: #244d3b; font-size: 1rem; line-height: 1.4; }
+#card-01 .reflection-reference-copy p { margin: 4px 0 0; color: #526b5d; font-size: .8rem; line-height: 1.55; }
 @container reflection-stage (max-width: 520px) {
-  #card-01 .reflection-comparison { padding: 10px; }
-  #card-01 .reflection-main-heading { padding: 9px; }
-}
-@media (max-width: 700px) {
-  #card-01 .reflection-reference { padding: 12px; }
-  #card-01 .reflection-reference-heading h3 { font-size: 1rem; }
+  #card-01 .reflection-comparison { padding: 8px 8px 0; }
+  #card-01 .reflection-main-heading { padding: 7px; }
+  #card-01 #reflection-view-status { font-size: .76rem; padding: 5px 6px; }
+  #card-01 .reflection-match-button { font-size: .76rem; padding: 8px; }
+  #card-01 #reflection-3d-scene { aspect-ratio: 1.3; }
+  #card-01 .reflection-drag-hint { top: 6px; right: 6px; font-size: .65rem; }
+  #card-01 .reflection-stage .reflection-controls { gap: 8px; padding: 8px; }
+  #card-01 .reflection-fire { flex-direction: column; gap: 2px; font-size: .8rem; }
+  #card-01 .reflection-fire small { font-size: .73rem; }
+  #card-01 .reflection-reference { grid-template-columns: minmax(0, 34%) minmax(0, 1fr); gap: 10px; margin: 0 8px 8px; padding: 8px; }
+  #card-01 .reflection-reference-copy h3 { font-size: .9rem; margin-bottom: 3px; }
+  #card-01 .reflection-reference-copy p { font-size: .72rem; line-height: 1.5; }
 }
