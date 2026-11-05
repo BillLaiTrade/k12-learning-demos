@@ -73,3 +73,5 @@
 2026-11-04像素電視觀察室：image_gen另製海灣圖exec-34155ff2-2d14-46e6-9038-c79ff3793e4b.png（1254×1254），原檔保存在pixel-tv-harbour-source.png。build-pixel-tv-picture.cjs平均取樣96×96並簡化為3842色，產生pixel-tv-harbour.png、pixel-tv-harbour-no-red.png及pixel-tv-picture.mjs。新pixel-tv-observer-model.mjs、Canvas2D與3×3子像素檢視共用此資料，關閉通道精確設0，其餘不變；結果圖非生成或CSS濾鏡。舊pixel-tv-model及概念SVG保留歷史。無新套件／WebGL依賴。
 
 2026-11-05觀察室四項修正：初始看像素／白雲，主圖框與放大鏡標同一3×3位置，局部按實際合成色顯示，RGB條紋僅留在下方組成區。第二步依原始RGB完全相同選群組，352白色像素整組變色，輪廓由同一資料即時計算。不改任何圖片，靜態初始也顯白雲與其RGB。pixel-tv-harbour-no-red.png保留歷史與模型驗證，不再作初始備援；原單格及全圖關紅初始規格已由unit-4.5-observer-focus決策取代。
+
+2026-11-05續修：主圖放大鏡改為90×90 Canvas與圓框鏡柄，取同一3×3原圖／目前像素；右側改單一色塊與RGB數值控制。兩圖輪廓一致，海面快速點metadata改RGB(0,96,240)共37格，建置腳本同步，原PNG與RGB資料未改。群組直接設RGB，整圖依通道數值比例改，數值非光功率。無JS鏡面以同一資料靜態色塊呈現。無新增素材或依賴；見unit-4.5-real-loupe-rgb決策。
