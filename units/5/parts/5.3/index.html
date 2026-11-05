@@ -28,6 +28,8 @@
   <link rel="stylesheet" href="assets/heat-quantity.css?v=quiz-nav-2">
   <link rel="stylesheet" href="assets/calorie-lab.css?v=calc-layout-2">
   <link rel="stylesheet" href="../../assets/unit-format.css?v=20261105">
+  <link rel="stylesheet" href="assets/heat-stage-lab.css?v=stages-1">
+  <script type="module" src="assets/heat-stage-lab.js?v=stages-1"></script>
   <script type="module" src="assets/heat-quantity.js?v=format-1"></script>
   <script type="module" src="assets/calorie-lab.js?v=calc-layout-3"></script>
 </head>
@@ -106,18 +108,31 @@
         <section class="lesson-card" id="card-02" aria-labelledby="title-02">
           <header class="lesson-head"><span class="card-number">02</span><div class="card-heading"><h2 id="title-02">同一杯水，吸收不同熱量會怎麼變？</h2><p class="card-intro">熱量與溫升：固定質量，比較吸收熱量</p></div></header>
           <div class="card-main">
-            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>「如果水量不變，多吸收一些熱，溫度會怎麼變？」</p></div>
-            <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>「先選吸收的熱量，再觀察溫度。記得比較的是『升高幾度』，不是只看最後幾度。」</p></div>
-            <div class="experiment" id="heat-lab" data-mode="heat" data-total="1000" data-ymax="45">
-              <div class="lab-heading"><h3>一杯水的熱量紀錄</h3><span class="condition-chip">100 g 水・初溫 20°C</span></div>
-              <div class="setting-row"><label for="heat-target">預計吸收熱量</label><input id="heat-target" data-setting type="range" min="500" max="2000" step="250" value="1000"><output for="heat-target" data-setting-label>1,000 cal</output></div>
-              <div class="experiment-view"><div class="apparatus-grid" data-apparatus></div><div class="graph-panel"><h4>吸收熱量與溫度</h4><svg data-graph viewBox="0 0 380 280" role="img" aria-label="水的溫度隨吸收熱量增加的關係圖。"></svg><p class="graph-caption">橫軸是吸收的熱量，縱軸是溫度。</p></div></div>
-              <div class="experiment-controls"><button type="button" class="action" data-play>開始加熱</button><button type="button" class="secondary" data-reset>重來</button><button type="button" class="secondary" data-record disabled>記下結果</button><span class="run-status" data-status role="status">準備好，從 20°C 開始。</span></div>
-              <div class="record-wrap" data-record-wrap hidden><table><caption>我的比較紀錄（最近六筆）</caption><thead><tr><th scope="col">條件</th><th scope="col">吸收熱量</th><th scope="col">末溫</th><th scope="col">升溫</th></tr></thead><tbody data-records></tbody></table></div>
-              <p class="lab-note">水吸收的熱量直接計入水中；忽略容器吸熱與向外散熱。動畫時間不代表實際加熱時間。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>水量一樣，吸收的熱量加倍，升高的溫度會怎麼變？</p></div>
+            <div class="unit-panel heat-stage-lab" id="heat-lab" data-phase="loading" data-playing="false" data-records="0">
+              <div class="lab-heading"><h3>固定水量，追蹤升溫</h3><span class="condition-chip">100 g 水・初溫 20°C</span></div>
+              <ol class="heat-stage-steps" aria-label="累計水吸收熱量的觀察節點"><li data-heat-stage="500"><b aria-hidden="true">○</b><span>500 cal</span></li><li data-heat-stage="1000"><b aria-hidden="true">○</b><span>1,000 cal</span></li><li data-heat-stage="2000"><b aria-hidden="true">○</b><span>2,000 cal</span></li><li class="heat-stage-estimate">累計水吸收熱量・模型估算</li></ol>
+              <div class="heat-stage-workbench">
+                <figure class="calorie-apparatus-view">
+                  <div class="calorie-photo">
+                    <img id="heat-stage-apparatus" src="assets/calorie-water-apparatus.webp" width="1536" height="1024" alt="AI 生成器材情境：同一份100 g水置於加熱攪拌器上，浸水探針連接數位溫度計，觀察分段加熱。">
+                    <span class="calorie-photo-label">同一份 100 g 水</span>
+                    <span class="calorie-heater-light" aria-hidden="true"></span>
+                    <button class="calorie-heater" id="heat-stage-heater" type="button" aria-label="開始加熱，分段觀察水吸收的熱量" disabled></button>
+                    <div class="calorie-meter-screen" id="heat-stage-meter-screen" aria-hidden="true" hidden><span id="heat-stage-meter">20.0</span><small>°C</small></div>
+                    <div class="calorie-scene-loading" id="heat-stage-loading">正在準備器材畫面…</div>
+                  </div>
+                  <figcaption id="heat-stage-heater-status">等待開始觀察</figcaption>
+                </figure>
+                <div class="heat-stage-plot"><h4>吸收熱量與溫升</h4><svg id="heat-stage-graph" viewBox="0 0 380 275" role="img" aria-label="水吸收熱量與溫升的觀察圖；尚未開始。"></svg><p>溫升＝目前水溫－20°C</p><div class="heat-stage-energy"><span>目前累計吸熱量（模型）</span><strong><output id="heat-stage-energy" aria-live="off">0</output> cal</strong></div></div>
+              </div>
+              <div class="calorie-actions"><button class="action" id="heat-stage-play" type="button" disabled>開始加熱</button><button class="secondary" id="heat-stage-retry" type="button" hidden>重新載入器材</button><span>AI 器材示意・動畫已加速</span></div>
+              <p class="calorie-observation-note" id="heat-stage-status" role="status">正在準備器材畫面…</p>
+              <div class="heat-stage-record-panel" id="heat-stage-record-panel" hidden><h3>把三次觀察放在一起</h3><table class="heat-stage-record-table"><thead><tr><th scope="col">累計水吸收熱量</th><th scope="col">水溫</th><th scope="col">從 20°C 升高</th></tr></thead><tbody id="heat-stage-records"></tbody></table></div>
+              <div class="dialogue" id="heat-stage-conclusion" hidden><span class="speaker" aria-label="阿公"></span><p>水量相同、沒有狀態改變時，吸收熱量加倍，升高的溫度也約加倍。</p></div>
+              <p class="heat-stage-note">熱量為模型估算；容器吸熱與散熱另計。器材為 AI 情境示意，動畫已加速。</p>
             </div>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>「100 g 水吸收 1,000 cal，從 20°C 升到 30°C；吸收兩倍的熱量，就升高兩倍的溫度！」</p></div>
-            <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>「在同樣水量、沒有相變的條件下，吸收熱量和升溫成正比。30°C 減去 20°C，升溫才是 10°C。」</p></div>
+            <details class="relation heat-stage-assumptions"><summary>模型條件</summary><p>另取100 g、20°C的水，沿用第一區器材，假設充分攪拌且水與玻璃容器同溫。以水的近似比熱計算水吸熱，並分開計入容器吸熱與向20°C環境散熱；20 W有效供熱、42 J/°C容器熱容量與0.5 W/°C散熱係數均為教學設定，非實測校正。</p><p>各節點是從20°C起算的累計水吸熱量，並非各段新增量，也不等於加熱器總供能。溫度計提供水溫，熱量由模型估算；圖表以溫升呈現。</p><p>全程使用相同加熱設定與50倍動畫加速；每段長短由模型決定。節點停下時保留該觀察時刻，按「繼續加熱」才推進，不模擬等待冷卻、探針遲滯與停熱餘熱。重新觀察會清除三筆紀錄並從初溫開始。</p></details>
           </div>
         </section>
 

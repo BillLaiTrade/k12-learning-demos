@@ -107,14 +107,16 @@ test('5.3 共通格式、導覽連動與原有活動回歸', {timeout:180000}, a
     assert.equal(await page.locator('#calorie-conclusion').isHidden(),true);
   });
 
-  await t.test('三組實驗可完成、記錄、改條件重來；生活應用可切換',async()=>{
-    for(const [id,expected]of [['heat-lab',['30.0']],['mass-lab',['30.0','25.0']],['material-lab',['25.0','42.7']]]){
+  await t.test('第二區分段自動記錄，原質量／材料比較與生活應用保持',async()=>{
+    await page.locator('#heat-stage-play').click();await page.clock.runFor(3000);
+    assert.equal(await page.locator('#heat-lab').getAttribute('data-records'),'1');
+    assert.equal(await page.locator('#heat-stage-meter').textContent(),'25.0');
+    for(const [id,expected]of [['mass-lab',['30.0','25.0']],['material-lab',['25.0','42.7']]]){
       const lab=page.locator(`#${id}`);await lab.locator('[data-play]').click();await page.clock.runFor(6500);
       assert.equal(await lab.getAttribute('data-phase'),'complete');assert.deepEqual(await lab.locator('[data-temperature]').allTextContents(),expected);
       await lab.locator('[data-record]').click();assert.equal(await lab.locator('[data-records] tr').count(),1);
       const setting=lab.locator('[data-setting]');
-      if(id==='heat-lab')await setting.evaluate(n=>{n.value='2000';n.dispatchEvent(new Event('input',{bubbles:true}));});
-      else await setting.selectOption(id==='mass-lab'?'300':'copper');
+      await setting.selectOption(id==='mass-lab'?'300':'copper');
       assert.equal(await lab.getAttribute('data-phase'),'ready');assert.equal(await lab.locator('[data-records] tr').count(),1);
     }
     for(const key of ['bottle','coast','pan']){await page.locator(`[data-application="${key}"]`).click();assert.equal(await page.locator(`[data-application="${key}"]`).getAttribute('aria-pressed'),'true');assert.ok((await page.locator('#application-content').textContent()).length>40);}

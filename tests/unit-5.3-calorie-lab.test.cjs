@@ -23,7 +23,7 @@ test('5.3 第一區：100 g 水、揭示順序、中斷與器材失敗恢復',{t
     await page.clock.runFor(1000);assert.equal(await page.locator('#calorie-end').textContent(),'20.0');
     assert.equal(await page.locator('#calorie-reset').count(),0);
     const heater=page.locator('#calorie-heater');
-    const light=()=>page.locator('.calorie-heater-light').evaluate(n=>getComputedStyle(n).backgroundColor);
+    const light=()=>root.locator('.calorie-heater-light').evaluate(n=>getComputedStyle(n).backgroundColor);
     const offColor=await light();
     await capture('ready-1366');await heater.press('Enter');await page.clock.runFor(2500);
     assert.notEqual(await light(),offColor);assert.equal(await heater.isDisabled(),true);
