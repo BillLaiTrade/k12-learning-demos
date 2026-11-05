@@ -104,6 +104,7 @@ if(root){
   $('[data-micro-badge]').textContent=first?'倒立・放大的實像':'倒立・放大的虛像';
   $('[data-micro-copy]').textContent=first?'中間像形成在鏡筒內，這裡沒有放置屏幕。':'目鏡把中間像當作觀察對象，圖案相對原物仍倒立。';
   $('#micro-result').textContent={objective:'① 物鏡先把原物形成倒立、放大的實像；這個像就是中間像。',eyepiece:'② 中間像位於目鏡焦距內，目鏡像放大鏡一樣觀察它，眼睛看見放大的虛像。',both:'③ 兩組透鏡接力：物鏡先成中間像，目鏡再觀察它；最終像仍相對原物倒立。'}[step];
+  all('[data-micro-card]').forEach(b=>{const selected=view===b.dataset.microCard;b.setAttribute('aria-pressed',String(selected));b.closest('section').dataset.active=String(selected);});
   all('[data-set=micro]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.value===step)));
   $('[data-micro-rays]').setAttribute('aria-pressed',String(rays));$('[data-micro-rays]').textContent=rays?'隱藏輔助光路':'顯示輔助光路';
   all('[data-micro-point]').forEach(b=>{b.disabled=!rays;b.setAttribute('aria-pressed',String(b.dataset.microPoint===point));});
@@ -114,6 +115,7 @@ if(root){
  function selectLens(lens){step=lens;view=lens;render();}
  root.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.microCard){selectLens(b.dataset.microCard);$(`[data-set=micro][data-value="${b.dataset.microCard}"]`).focus({preventScroll:true});$('.micro-workspace').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});return;}
   if(b.dataset.microLens){selectLens(b.dataset.microLens);return;}
   if(b.dataset.set==='micro'){step=b.dataset.value;view=step==='both'?'whole':step;}
   else if(b.hasAttribute('data-micro-overview')){step='both';view='whole';}
