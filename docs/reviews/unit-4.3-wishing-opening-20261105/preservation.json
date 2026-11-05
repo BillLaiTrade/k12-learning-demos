@@ -2,7 +2,9 @@
   "baseline": "695193f9",
   "checks": {
     "main_identical": true,
-    "old_image_reference_retained": true,
-    "only_page_and_entry_changed": true
-  }
+    "PNG_identical_to_selected_candidate1": true,
+    "share_image_matches_header": true,
+    "share_alt_matches_header": true
+  },
+  "image_sha256": "e0bf9416b70ee8ddcf9af1bb01518cdcd06f254e90fa30719ccbb92f6750f819"
 }

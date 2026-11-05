@@ -503,4 +503,4 @@ node --test --test-concurrency=1 tests/unit-4.3-depth-model.test.mjs tests/unit-
 
 ## 許願池生活開場（2026-11-05）
 
-依使用者核可，標題改為「光進入水中，會發生什麼變化？」，以小葵與阿公散步經過許願池、觀察水底硬幣的生活情境引出看似／實際位置問題。同步章節入口與文字分享資訊，標題兩行語意完整。六區、小測及光學程式保持；三張新圖先呈現候選，選定前保留舊頁首圖及原分享圖片。詳見`docs/decisions/unit-4.3-wishing-opening.md`與`docs/reviews/unit-4.3-wishing-opening-20261105/`。
+依使用者核可，標題改為「光進入水中，會發生什麼變化？」，以小葵與阿公散步經過許願池、觀察水底硬幣的生活情境引出看似／實際位置問題。同步章節入口與文字分享資訊，標題兩行語意完整。六區、小測及光學程式保持；三張新圖呈現候選後，使用者選定候選1；頁首及分享預覽已改用同一張許願池近景圖，原生成檔與另外兩候選保留。詳見`docs/decisions/unit-4.3-wishing-opening.md`與`docs/reviews/unit-4.3-wishing-opening-20261105/`。
