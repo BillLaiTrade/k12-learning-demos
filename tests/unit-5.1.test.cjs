@@ -91,7 +91,7 @@ test('5.1 temperature lesson in a real browser', { timeout: 45000 }, async t => 
     assert.equal(await page.evaluate(async src=>{const img=new Image();img.src=new URL(src,location.href);await img.decode();return img.naturalWidth>1000;},source),true);
     assert.match(await text('.parallax-apparatus-labels'),/刻度/);
     assert.match(await text('.parallax-apparatus-labels'),/液面/);
-    assert.match(await text('.parallax-lens-label'),/液面頂端/);
+    assert.equal(await text('.parallax-lens-label'),'讀取位置');
     for(const view of ['high','low','level']){
       await page.locator(`button[data-view=${view}]`).click();
       await page.locator('#parallax-eye').scrollIntoViewIfNeeded();

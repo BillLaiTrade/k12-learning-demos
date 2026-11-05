@@ -1,0 +1,28 @@
+✔ temperature model preserves physical teaching constraints (4.734781ms)
+▶ water lab functional and visual checks in Chromium
+  ✔ matches approved composition and starts with safe fixed apparatus (248.406487ms)
+  ✔ both thermometer views have calibrated one-degree marks and numbered Celsius scales (114.378599ms)
+  ✔ ice falls, floats, cools water and lowers both liquid views (6648.437743ms)
+  ✔ heater warms water continuously and can stop independently of the probe lag (2263.852354ms)
+  ✔ ice stops the heater and reset clears all animation and state (1004.432031ms)
+  ✔ keyboard and reduced motion preferences keep all operations usable (148.983633ms)
+  ✔ repeated controls remain bounded at both temperature limits (22434.773759ms)
+  ✔ desktop and narrow layouts retain controls, annotations and insets without overlap (495.454657ms)
+✔ water lab functional and visual checks in Chromium (34813.470951ms)
+▶ 5.1 temperature lesson in a real browser
+  ✔ loads the complete lesson, images, and navigation (222.718487ms)
+  ✔ observer perspective changes while the physical meniscus and one-degree marks stay fixed (291.021098ms)
+  ✔ illustrated apparatus and clear labels match the existing lab and stay visible at all views (376.455121ms)
+  ✔ dragging the eye is continuous, clamped, and supports cancel and keyboard (590.323353ms)
+  ✔ mobile touch moves the eye and leaves scrolling available outside the handle (1766.343505ms)
+  ✔ assessment uses physical instruments and the real shared character portraits (61.802035ms)
+  ✔ fits desktop and narrow windows and links back to the unit (499.321363ms)
+✔ 5.1 temperature lesson in a real browser (5332.173219ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35209.547094

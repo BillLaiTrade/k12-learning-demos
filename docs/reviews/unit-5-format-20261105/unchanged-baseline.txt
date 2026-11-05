@@ -1,0 +1,106 @@
+✔ temperature model preserves physical teaching constraints (3.139178ms)
+▶ water lab functional and visual checks in Chromium
+  ✔ matches approved composition and starts with safe fixed apparatus (188.563755ms)
+  ✔ both thermometer views have calibrated one-degree marks and numbered Celsius scales (81.377546ms)
+  ✖ ice falls, floats, cools water and lowers both liquid views (410.517338ms)
+  ✖ heater warms water continuously and can stop independently of the probe lag (20757.432652ms)
+  ✖ ice stops the heater and reset clears all animation and state (98.010434ms)
+  ✔ keyboard and reduced motion preferences keep all operations usable (611.735787ms)
+  ✔ repeated controls remain bounded at both temperature limits (23900.909651ms)
+  ✔ desktop and narrow layouts retain controls, annotations and insets without overlap (550.802137ms)
+✖ water lab functional and visual checks in Chromium (47920.58588ms)
+▶ 5.1 temperature lesson in a real browser
+  ✔ loads the complete lesson, images, and navigation (237.083401ms)
+  ✔ observer perspective changes while the physical meniscus and one-degree marks stay fixed (246.419918ms)
+  ✖ illustrated apparatus and clear labels match the existing lab and stay visible at all views (34.502675ms)
+  ✔ dragging the eye is continuous, clamped, and supports cancel and keyboard (582.147947ms)
+  ✔ mobile touch moves the eye and leaves scrolling available outside the handle (924.804011ms)
+  ✔ assessment uses physical instruments and the real shared character portraits (54.482636ms)
+  ✔ fits desktop and narrow windows and links back to the unit (423.732143ms)
+✖ 5.1 temperature lesson in a real browser (3631.328033ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 12
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 48334.734651
+
+✖ failing tests:
+
+test at tests/unit-5.1-water-lab.test.cjs:107:11
+✖ ice falls, floats, cools water and lowers both liquid views (410.517338ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /液柱下降/. Input:
+  
+  '水正在冷卻，液柱逐漸下降。'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1-water-lab.test.cjs:118:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1-water-lab.test.cjs:107:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '水正在冷卻，液柱逐漸下降。',
+    expected: /液柱下降/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.1-water-lab.test.cjs:141:11
+✖ heater warms water continuously and can stop independently of the probe lag (20757.432652ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(middle.water>start.water)
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1-water-lab.test.cjs:146:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1-water-lab.test.cjs:141:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.1-water-lab.test.cjs:152:11
+✖ ice stops the heater and reset clears all animation and state (98.010434ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1-water-lab.test.cjs:153:31)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1-water-lab.test.cjs:152:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.1.test.cjs:87:11
+✖ illustrated apparatus and clear labels match the existing lab and stay visible at all views (34.502675ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /液面頂端/. Input:
+  
+  '讀取位置'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1.test.cjs:94:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1.test.cjs:87:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '讀取位置',
+    expected: /液面頂端/,
+    operator: 'match',
+    diff: 'simple'
+  }
