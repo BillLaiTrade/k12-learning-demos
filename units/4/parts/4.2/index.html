@@ -93,6 +93,7 @@
     @media(max-width:760px){.route a.quiz-nav{margin:0 0 0 4px;border-top:1px solid var(--line);padding:7px 10px}.route a.quiz-nav[aria-current=step]{border-color:#d9a74f}}
   </style>
   <link rel="stylesheet" href="assets/lesson-layout.css?v=align-4.1-20261105">
+  <link rel="stylesheet" href="assets/reflection-stage.css?v=surface-compare-20261105">
 </head>
 <body>
   <header class="shell masthead">
@@ -136,12 +137,21 @@
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>因為它們表面的平滑程度不同。鏡面平滑，反光比較集中；霧面紙的表面有細小凹凸，反光就比較分散。</p></div>
             <p class="prompt">分別開啟左右手電筒，從目前視角比較鏡面與霧面紙的反光。</p>
             <figure class="reflection-stage">
-              <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="左右分開的兩座 3D 反射實驗台：左邊是平面鏡，右邊是霧面白紙，兩個表面前方各有對應標籤；各有一支手電筒以相同角度照射。開啟後觀察兩種表面的反光。" aria-describedby="reflection-status"></canvas>
+              <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="左右並排的 3D 反射實驗：左邊是平面鏡，右邊是霧面白紙，兩支手電筒以相同條件照射。拖曳畫面或選擇下方觀看位置，比較兩種表面的反光。" aria-describedby="reflection-status reflection-view-status" data-ready="loading"></canvas>
               <p class="reflection-fallback" id="reflection-fallback" hidden>這個 3D 實驗場景無法在目前裝置顯示；你仍可閱讀下方的觀察說明。</p>
               <div class="reflection-stage-labels" aria-hidden="true"><span><i class="reflection-dot-smooth"></i>平面鏡・鏡面反射</span><span><i class="reflection-dot-rough"></i>霧面紙・漫反射</span></div>
               <div class="reflection-controls">
-                <button class="reflection-fire" id="reflection-fire-mirror" type="button" aria-pressed="false"><span>左側手電筒</span><small>開啟手電筒</small></button>
-                <button class="reflection-fire" id="reflection-fire-paper" type="button" aria-pressed="false"><span>右側手電筒</span><small>開啟手電筒</small></button>
+                <button class="reflection-fire" id="reflection-fire-mirror" type="button" aria-pressed="false" aria-label="開啟鏡面手電筒" disabled><span>鏡面手電筒</span><small>已關閉</small></button>
+                <button class="reflection-fire" id="reflection-fire-paper" type="button" aria-pressed="false" aria-label="開啟霧面紙手電筒" disabled><span>霧面紙手電筒</span><small>已關閉</small></button>
+              </div>
+              <div class="reflection-view-controls">
+                <div class="reflection-view-heading"><span>觀看位置</span><span id="reflection-view-status" aria-live="polite">正面</span></div>
+                <div class="reflection-view-options" role="group" aria-label="選擇觀看位置">
+                  <button class="reflection-view-button" type="button" data-reflection-view="front" aria-pressed="true" disabled>正面</button>
+                  <button class="reflection-view-button" type="button" data-reflection-view="left" aria-pressed="false" disabled>稍向左</button>
+                  <button class="reflection-view-button" type="button" data-reflection-view="right" aria-pressed="false" disabled>稍向右</button>
+                </div>
+                <p class="reflection-view-hint">也可以拖曳畫面，比較換個位置後的反光。</p>
               </div>
             </figure>
               <p class="reflection-status visually-hidden" id="reflection-status" aria-live="polite">左右手電筒目前都已關閉。</p>
@@ -468,7 +478,7 @@
   <script type="module" src="assets/mirror-distance.js?v=visual-polish-20261029"></script>
   <script type="module" src="assets/curved-mirrors.js?v=distance-observation-20261030"></script>
   <script type="module" src="assets/mirror-image.js?v=clearance-20261105"></script>
-  <script type="module" src="assets/reflection-3d.js?v=46"></script>
+  <script type="module" src="assets/reflection-3d.js?v=surface-compare-20261105"></script>
   <script type="module" src="assets/laser-reflection.js?v=availability-20261105"></script>
   <script type="module" src="assets/reversible-light.js?v=trim-notes-20261030"></script>
   <script type="module" src="assets/periscope.js?v=availability-20261105"></script>

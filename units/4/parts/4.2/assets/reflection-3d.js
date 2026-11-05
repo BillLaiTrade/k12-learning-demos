@@ -10,6 +10,8 @@ const fireButtons = [
 const status = document.querySelector('#reflection-status');
 const fallback = document.querySelector('#reflection-fallback');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const viewButtons = [...document.querySelectorAll('[data-reflection-view]')];
+const viewStatus = document.querySelector('#reflection-view-status');
 
 try {
   const scene = new THREE.Scene();
@@ -22,55 +24,70 @@ try {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.18;
+  renderer.toneMappingExposure = 0.95;
   // This comparison should show the reflected light patterns without dark
   // cast shadows from the lamps and stands.
   renderer.shadowMap.enabled = false;
 
-  const camera = new THREE.PerspectiveCamera(39, 1, 0.1, 45);
-  const cameraTarget = new THREE.Vector3(-0.05, 0.38, 0);
-  const cameraOffset = new THREE.Vector3(-3.0, 3.6, 9.2);
+  // Parallel viewing rays keep both samples equally sized and the initial
+  // specular alignment consistent when the responsive viewport changes size.
+  const camera = new THREE.OrthographicCamera(-4, 4, 2.5, -2.5, 0.1, 45);
+  const cameraTarget = new THREE.Vector3(0, 0.65, -0.35);
+  const cameraOffset = new THREE.Vector3(0, 6.4, 7.63);
   const cameraDistance = cameraOffset.length();
   let cameraAzimuth = Math.atan2(cameraOffset.x, cameraOffset.z);
   let cameraPolar = Math.acos(cameraOffset.y / cameraDistance);
+  const frontPolar = cameraPolar;
+  const viewPresets = { front: 0, left: -38 * Math.PI / 180, right: 38 * Math.PI / 180 };
+  const framingPoints = [];
   let pointerDrag = null;
-  const updateCamera = (distance = cameraDistance) => {
+  const updateCamera = () => {
     const sinPolar = Math.sin(cameraPolar);
     camera.position.set(
-      cameraTarget.x + Math.sin(cameraAzimuth) * sinPolar * distance,
-      cameraTarget.y + Math.cos(cameraPolar) * distance,
-      cameraTarget.z + Math.cos(cameraAzimuth) * sinPolar * distance
+      cameraTarget.x + Math.sin(cameraAzimuth) * sinPolar * cameraDistance,
+      cameraTarget.y + Math.cos(cameraPolar) * cameraDistance,
+      cameraTarget.z + Math.cos(cameraAzimuth) * sinPolar * cameraDistance
     );
     camera.lookAt(cameraTarget);
+    camera.updateMatrixWorld();
+    if (framingPoints.length) {
+      const points = framingPoints.map(point => point.clone().applyMatrix4(camera.matrixWorldInverse));
+      const xs = points.map(point => point.x), ys = points.map(point => point.y);
+      const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+      const aspect = canvas.clientWidth / Math.max(1, canvas.clientHeight);
+      const height = Math.max(maxY - minY, (maxX - minX) / aspect) * 1.12;
+      const centerX = (minX + maxX) / 2, centerY = (minY + maxY) / 2;
+      camera.left = centerX - height * aspect / 2;
+      camera.right = centerX + height * aspect / 2;
+      camera.bottom = centerY - height / 2;
+      camera.top = centerY + height / 2;
+      camera.updateProjectionMatrix();
+    }
   };
   updateCamera();
 
-  scene.add(new THREE.HemisphereLight('#ffffff', '#c1c6c3', 0.78));
-  scene.add(new THREE.AmbientLight('#ffffff', 1.1));
-  const keyLight = new THREE.DirectionalLight('#ffffff', 0.55);
+  scene.add(new THREE.HemisphereLight('#ffffff', '#a9b5ab', 0.5));
+  scene.add(new THREE.AmbientLight('#ffffff', 0.45));
+  const keyLight = new THREE.DirectionalLight('#ffffff', 0.3);
   keyLight.position.set(-1.5, 7, 4.5);
   keyLight.castShadow = true;
   keyLight.shadow.mapSize.set(1024, 1024);
   keyLight.shadow.bias = -0.0003;
   scene.add(keyLight);
-  const fillLight = new THREE.DirectionalLight('#e6eceb', 0.16);
+  const fillLight = new THREE.DirectionalLight('#e6eceb', 0.1);
   fillLight.position.set(3, 4, -5);
   scene.add(fillLight);
 
   const standard = (color, options = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.68, ...options });
   const surfaceBaseColor = '#f6f6f3';
   const mats = {
-    tableTop: new THREE.MeshPhysicalMaterial({ color: '#c4a57c', roughness: 0.48, metalness: 0.015, clearcoat: 0.16, clearcoatRoughness: 0.58 }),
+    tableTop: new THREE.MeshPhysicalMaterial({ color: '#c4a57c', roughness: 0.96, metalness: 0, clearcoat: 0 }),
     tableEdge: standard('#67503b', { roughness: 0.58 }),
     frame: standard('#84918e', { metalness: 0.42, roughness: 0.36 }),
-    lampBody: standard('#171b1a', { metalness: 0.32, roughness: 0.38 }),
-    lampTrim: standard('#303735', { metalness: 0.55, roughness: 0.34 }),
-    // Match the paper's neutral base tint while retaining a narrow mirror
-    // highlight; the environment map supplies reflections from the lab scene.
-    mirror: new THREE.MeshPhysicalMaterial({ color: surfaceBaseColor, metalness: 0.94, roughness: 0.035, clearcoat: 1, clearcoatRoughness: 0.02 }),
+    lampBody: standard('#35433d', { metalness: 0.2, roughness: 0.48 }),
+    lampTrim: standard('#60736a', { metalness: 0.25, roughness: 0.4 }),
+    mirror: new THREE.MeshPhysicalMaterial({ color: '#dce4e2', metalness: 0.96, roughness: 0.035, clearcoat: 0.65, clearcoatRoughness: 0.03 }),
     mirrorBacking: standard('#7c8885', { metalness: 0.3, roughness: 0.38 }),
-    paper: new THREE.MeshStandardMaterial({ color: surfaceBaseColor, roughness: 0.9, side: THREE.DoubleSide }),
-    paperFrame: standard('#66776e', { metalness: 0.22, roughness: 0.5 }),
   };
 
   const woodCanvas = document.createElement('canvas');
@@ -111,45 +128,50 @@ try {
   };
 
   // Two separate experiment blocks share one table and use matched light geometry.
-  const table = addBox(scene, [8.8, 0.22, 4.15], [0, -0.18, 0], mats.tableTop);
+  const table = addBox(scene, [8.0, 0.22, 3.9], [0, -0.18, 0], mats.tableTop);
   table.receiveShadow = true;
-  addBox(scene, [8.8, 0.14, 4.15], [0, -0.36, 0], mats.tableEdge);
-  for (const x of [-3.7, 3.7]) {
+  addBox(scene, [8.0, 0.14, 3.9], [0, -0.36, 0], mats.tableEdge);
+  for (const x of [-3.5, 3.5]) {
     for (const z of [-1.55, 1.55]) addBox(scene, [0.16, 0.66, 0.16], [x, -0.75, z], mats.tableEdge);
   }
 
-  const mirrorCenter = new THREE.Vector3(-1.8, 0.114, 0);
-  const paperCenter = new THREE.Vector3(1.8, 0.114, 0);
+  const mirrorCenter = new THREE.Vector3(-1.85, 0.13, 0);
+  const paperCenter = new THREE.Vector3(1.85, 0.13, 0);
   const stationBase = (center, accent) => {
     // Keep the raised mounts from producing heavy black patches on the desk.
-    addBox(scene, [1.9, 0.12, 1.55], [center.x, -0.005, center.z], mats.frame, false, true);
-    addBox(scene, [1.7, 0.035, 1.35], [center.x, 0.072, center.z], accent, false, true);
+    addBox(scene, [2.7, 0.12, 2.1], [center.x, -0.005, center.z], mats.frame, false, true);
+    addBox(scene, [2.55, 0.035, 1.95], [center.x, 0.072, center.z], accent, false, true);
   };
   stationBase(mirrorCenter, mats.mirrorBacking);
   stationBase(paperCenter, mats.mirrorBacking);
   // A flat polished mirror tile and a visually flat sheet of matte paper.
-  const mirrorTile = addBox(scene, [1.55, 0.025, 1.18], [mirrorCenter.x, 0.102, mirrorCenter.z], mats.mirror, false, true);
+  const mirrorTile = addBox(scene, [2.45, 0.025, 1.8], [mirrorCenter.x, 0.1175, mirrorCenter.z], mats.mirror, false, true);
 
   const roughTextureCanvas = document.createElement('canvas');
-  roughTextureCanvas.width = 256;
-  roughTextureCanvas.height = 256;
+  roughTextureCanvas.width = 512;
+  roughTextureCanvas.height = 512;
   const roughContext = roughTextureCanvas.getContext('2d');
   roughContext.fillStyle = '#ffffff';
-  roughContext.fillRect(0, 0, 256, 256);
+  roughContext.fillRect(0, 0, 512, 512);
   let seed = 19;
   const random = () => { seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; };
-  for (let i = 0; i < 1800; i += 1) {
-    const shade = random() > 0.52 ? '255,255,255' : '38,42,40';
-    roughContext.fillStyle = `rgba(${shade},${0.035 + random() * 0.11})`;
-    const size = 1 + random() * 4;
-    roughContext.fillRect(random() * 256, random() * 256, size, size);
+  for (let i = 0; i < 8500; i += 1) {
+    const x = random() * 512, y = random() * 512;
+    roughContext.strokeStyle = `rgba(90,84,65,${0.025 + random() * 0.09})`;
+    roughContext.lineWidth = 0.5 + random();
+    roughContext.beginPath();
+    roughContext.moveTo(x, y);
+    roughContext.lineTo(x + 2 + random() * 6, y + (random() - 0.5) * 5);
+    roughContext.stroke();
   }
   const roughTexture = new THREE.CanvasTexture(roughTextureCanvas);
   roughTexture.colorSpace = THREE.SRGBColorSpace;
   roughTexture.wrapS = roughTexture.wrapT = THREE.RepeatWrapping;
-  roughTexture.repeat.set(2, 1.4);
-  const roughMaterial = new THREE.MeshStandardMaterial({ map: roughTexture, color: surfaceBaseColor, roughness: 0.98, metalness: 0, side: THREE.DoubleSide });
-  addBox(scene, [1.55, 0.018, 1.18], [paperCenter.x, 0.102, paperCenter.z], roughMaterial, false, true);
+  const roughBump = roughTexture.clone();
+  roughBump.colorSpace = THREE.NoColorSpace;
+  roughBump.needsUpdate = true;
+  const roughMaterial = new THREE.MeshStandardMaterial({ map: roughTexture, bumpMap: roughBump, bumpScale: 0.001, color: surfaceBaseColor, roughness: 1, metalness: 0, side: THREE.DoubleSide });
+  const paperTile = addBox(scene, [2.45, 0.018, 1.8], [paperCenter.x, 0.121, paperCenter.z], roughMaterial, false, true);
   const surfaceLabelTextures = [];
   const addSurfaceLabel = (center, title) => {
     const labelCanvas = document.createElement('canvas');
@@ -172,30 +194,33 @@ try {
     texture.colorSpace = THREE.SRGBColorSpace;
     surfaceLabelTextures.push(texture);
     const tag = new THREE.Group();
-    tag.position.set(center.x, 0.12, 1.16);
+    tag.position.set(center.x, 0.12, 1.38);
     tag.rotation.x = -Math.PI / 4;
     const backing = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.56, 0.56),
+      new THREE.PlaneGeometry(1.96, 0.56),
       new THREE.MeshBasicMaterial({ color: '#c3cbc4', toneMapped: false, side: THREE.DoubleSide })
     );
     tag.add(backing);
     const label = new THREE.Mesh(
-      new THREE.PlaneGeometry(1.5, 0.52),
+      new THREE.PlaneGeometry(1.9, 0.52),
       new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, toneMapped: false })
     );
     label.position.z = 0.003;
     tag.add(label);
     scene.add(tag);
+    tag.updateWorldMatrix(true, true);
+    const bounds = new THREE.Box3().setFromObject(tag);
+    for (const x of [bounds.min.x, bounds.max.x]) for (const y of [bounds.min.y, bounds.max.y]) for (const z of [bounds.min.z, bounds.max.z]) framingPoints.push(new THREE.Vector3(x, y, z));
   };
   addSurfaceLabel(mirrorCenter, '平面鏡');
   addSurfaceLabel(paperCenter, '霧面白紙');
   // Aim the plane mirror's reflected beam toward the initial observer so the
   // specular reflection is clear as soon as the left flashlight is switched on.
   // The second lamp keeps the same incident direction to isolate surface texture.
-  const initialViewDirection = camera.position.clone().sub(mirrorCenter).normalize();
+  const initialViewDirection = camera.position.clone().sub(cameraTarget).normalize();
   const mirrorReflectionDirection = initialViewDirection.clone();
   const incidentTowardMirror = mirrorReflectionDirection.clone().reflect(new THREE.Vector3(0, 1, 0));
-  const mirrorSource = mirrorCenter.clone().addScaledVector(incidentTowardMirror, -3.2);
+  const mirrorSource = mirrorCenter.clone().addScaledVector(incidentTowardMirror, -2.8);
   const sourceOffset = mirrorSource.clone().sub(mirrorCenter);
   const stations = [
     { surface: mirrorCenter, source: mirrorSource },
@@ -203,6 +228,7 @@ try {
   ];
   const lamps = [];
   const lampLenses = [];
+  const lampIndicators = [];
   const sourceGlows = [];
   const spotLights = [];
   for (const station of stations) {
@@ -220,20 +246,29 @@ try {
     const head = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.15, 0.2, 28), mats.lampTrim);
     head.position.y = 0.02;
     lamp.add(head);
-    const lensMaterial = new THREE.MeshStandardMaterial({ color: '#fff4d6', emissive: '#ffc653', emissiveIntensity: 0, roughness: 0.18 });
+    const lensMaterial = new THREE.MeshStandardMaterial({ color: '#35423a', emissive: '#fff0b8', emissiveIntensity: 0, roughness: 0.18, side: THREE.DoubleSide });
     const lens = new THREE.Mesh(new THREE.CircleGeometry(0.16, 36), lensMaterial);
     lens.position.y = 0.125;
+    lens.rotation.x = -Math.PI / 2;
     lamp.add(lens);
     lampLenses.push(lensMaterial);
     const rim = new THREE.Mesh(new THREE.TorusGeometry(0.165, 0.022, 10, 36), mats.lampTrim);
     rim.position.y = 0.13;
+    rim.rotation.x = -Math.PI / 2;
     lamp.add(rim);
+    const indicatorMaterial = new THREE.MeshStandardMaterial({ color: '#465b4c', emissive: '#ffdb88', emissiveIntensity: 0, roughness: 0.4 });
+    const indicator = new THREE.Mesh(new THREE.CylinderGeometry(0.222, 0.211, 0.045, 32), indicatorMaterial);
+    indicator.position.y = 0.075;
+    lamp.add(indicator);
+    lampIndicators.push(indicatorMaterial);
     lamps.push(lamp);
-    const sourceGlow = new THREE.PointLight('#ffffff', 0, 1.4);
+    const sourceGlow = new THREE.PointLight('#fff0c7', 0, 0.65);
     sourceGlow.position.copy(station.source);
     scene.add(sourceGlow);
     sourceGlows.push(sourceGlow);
-    const spotLight = new THREE.SpotLight('#ffffff', 0, 9, 0.28, 0.42, 1.4);
+    // A matched narrow cone fits on each enlarged tile, rather than lighting
+    // conspicuous patches on the wood in front of the samples.
+    const spotLight = new THREE.SpotLight('#ffffff', 0, 9, 0.12, 0.45, 2);
     spotLight.position.copy(station.source);
     spotLight.target.position.copy(target);
     spotLight.castShadow = true;
@@ -242,12 +277,18 @@ try {
     scene.add(spotLight, spotLight.target);
     spotLights.push(spotLight);
     station.target = target;
-
+    lamp.updateWorldMatrix(true, true);
+    const bounds = new THREE.Box3().setFromObject(lamp);
+    for (const x of [bounds.min.x, bounds.max.x]) for (const y of [bounds.min.y, bounds.max.y]) for (const z of [bounds.min.z, bounds.max.z]) framingPoints.push(new THREE.Vector3(x, y, z));
+  }
+  for (const tile of [mirrorTile, paperTile]) {
+    tile.updateWorldMatrix(true, true);
+    const bounds = new THREE.Box3().setFromObject(tile);
+    for (const x of [bounds.min.x, bounds.max.x]) for (const y of [bounds.min.y, bounds.max.y]) for (const z of [bounds.min.z, bounds.max.z]) framingPoints.push(new THREE.Vector3(x, y, z));
   }
 
-  // Capture the nearby scene as a dynamic environment map for the mirror.
-  // This supplies actual reflected surroundings instead of rendering an
-  // unlit, fully metallic surface as black.
+  // A uniform ambient environment keeps the polished surface readable.
+  // Flashlight models are excluded; the direct spotlight provides the glint.
   const mirrorEnvironmentTarget = new THREE.WebGLCubeRenderTarget(128, {
     generateMipmaps: true,
     minFilter: THREE.LinearMipmapLinearFilter
@@ -257,7 +298,7 @@ try {
   const mirrorEnvironmentScene = new THREE.Scene();
   mirrorEnvironmentScene.background = scene.background;
   mats.mirror.envMap = mirrorEnvironmentTarget.texture;
-  mats.mirror.envMapIntensity = 1.25;
+  mats.mirror.envMapIntensity = 0.35;
   const refreshMirrorEnvironment = () => {
     // Reflect only the bright background. The direct spotlight still reaches
     // the mirror in the main scene, but flashlight models cannot appear in it.
@@ -265,9 +306,25 @@ try {
   };
   refreshMirrorEnvironment();
 
-  let startedAt = 0;
   const duration = 1150;
   const render = () => renderer.render(scene, camera);
+  const updateViewControls = () => {
+    const current = Object.keys(viewPresets).find(key => Math.abs(cameraAzimuth - viewPresets[key]) < 0.001 && Math.abs(cameraPolar - frontPolar) < 0.001);
+    viewButtons.forEach(button => {
+      const pressed = String(button.dataset.reflectionView === current);
+      if (button.getAttribute('aria-pressed') !== pressed) button.setAttribute('aria-pressed', pressed);
+    });
+    const label = current ? { front: '正面', left: '稍向左', right: '稍向右' }[current] : '自由觀看';
+    if (viewStatus.textContent !== label) viewStatus.textContent = label;
+    canvas.dataset.view = current || 'free';
+  };
+  viewButtons.forEach(button => button.addEventListener('click', () => {
+    cameraAzimuth = viewPresets[button.dataset.reflectionView];
+    cameraPolar = frontPolar;
+    updateCamera();
+    updateViewControls();
+    render();
+  }));
   const raycaster = new THREE.Raycaster();
   const pointerPosition = new THREE.Vector2();
   const flashlightIndexAtPointer = (event) => {
@@ -298,9 +355,10 @@ try {
     if (Math.hypot(event.clientX - pointerDrag.startX, event.clientY - pointerDrag.startY) > 6) pointerDrag.moved = true;
     pointerDrag.x = event.clientX;
     pointerDrag.y = event.clientY;
-    cameraAzimuth -= deltaX * 0.008;
-    cameraPolar = THREE.MathUtils.clamp(cameraPolar + deltaY * 0.008, 0.2, 1.48);
-    updateCamera(cameraDistance * (camera.aspect < 1.1 ? 1.08 : 1));
+    cameraAzimuth = THREE.MathUtils.clamp(cameraAzimuth - deltaX * 0.006, -Math.PI / 4, Math.PI / 4);
+    cameraPolar = THREE.MathUtils.clamp(cameraPolar + deltaY * 0.006, 0.55, 1.1);
+    updateCamera();
+    updateViewControls();
     render();
   });
   const endPointerDrag = (event) => {
@@ -308,16 +366,20 @@ try {
     const clickedFlashlight = event.type === 'pointerup' && !pointerDrag.moved ? flashlightIndexAtPointer(event) : -1;
     pointerDrag = null;
     canvas.classList.remove('is-dragging');
+    if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
     if (clickedFlashlight >= 0) toggleLight(clickedFlashlight);
   };
   canvas.addEventListener('pointerup', endPointerDrag);
   canvas.addEventListener('pointercancel', endPointerDrag);
+  canvas.addEventListener('lostpointercapture', () => { pointerDrag = null; canvas.classList.remove('is-dragging'); });
   const illuminationLevels = [0, 0];
   const setIllumination = (index, level) => {
     illuminationLevels[index] = level;
-    spotLights[index].intensity = 75 * level;
-    sourceGlows[index].intensity = 0.65 * level;
-    lampLenses[index].emissiveIntensity = 1.8 * level;
+    spotLights[index].intensity = 17 * level;
+    sourceGlows[index].intensity = 0.35 * level;
+    lampLenses[index].color.set(level > 0 ? '#fff2bf' : '#35423a');
+    lampLenses[index].emissiveIntensity = 2.5 * level;
+    lampIndicators[index].emissiveIntensity = 1.4 * level;
     render();
   };
 
@@ -325,11 +387,7 @@ try {
     const { width, height } = canvas.getBoundingClientRect();
     if (!width || !height) return;
     renderer.setSize(width, height, false);
-    camera.aspect = width / height;
-    camera.fov = camera.aspect < 1.1 ? 46 : 39;
-    const zoom = camera.aspect < 1.1 ? 1.08 : 1;
-    updateCamera(cameraDistance * zoom);
-    camera.updateProjectionMatrix();
+    updateCamera();
     render();
   };
   new ResizeObserver(resize).observe(canvas);
@@ -339,8 +397,9 @@ try {
   const illuminated = [false, false];
   const updateLightControls = () => {
     illuminated.forEach((isOn, index) => {
-      fireButtons[index].querySelector('small').textContent = `${isOn ? '關閉' : '開啟'}手電筒`;
+      fireButtons[index].querySelector('small').textContent = isOn ? '已開啟' : '已關閉';
       fireButtons[index].setAttribute('aria-pressed', String(isOn));
+      fireButtons[index].setAttribute('aria-label', `${isOn ? '關閉' : '開啟'}${index === 0 ? '鏡面' : '霧面紙'}手電筒`);
     });
     status.textContent = `照向平面鏡的手電筒${illuminated[0] ? '已開啟' : '已關閉'}；照向霧面紙的手電筒${illuminated[1] ? '已開啟' : '已關閉'}。`;
   };
@@ -366,12 +425,17 @@ try {
     animationFrames[index] = requestAnimationFrame(animate);
   };
   fireButtons.forEach((button, index) => button.addEventListener('click', () => toggleLight(index)));
+  [...fireButtons, ...viewButtons].forEach(button => { button.disabled = false; });
+  updateLightControls();
+  updateViewControls();
+  canvas.dataset.ready = 'true';
 
   window.addEventListener('resize', resize);
   window.addEventListener('pagehide', () => {
     animationFrames.forEach((frame) => cancelAnimationFrame(frame));
     // Dispose GPU resources while their renderer property cache still exists.
     roughTexture.dispose();
+    roughBump.dispose();
     surfaceLabelTextures.forEach((texture) => texture.dispose());
     woodTexture.dispose();
     mirrorEnvironmentTarget.dispose();
@@ -381,6 +445,7 @@ try {
   console.error('Unable to initialize the 3D reflection scene:', error);
   canvas.hidden = true;
   fallback.hidden = false;
-  fireButtons.forEach((button) => { button.disabled = true; });
+  [...fireButtons, ...viewButtons].forEach((button) => { button.disabled = true; });
+  canvas.dataset.ready = 'error';
   status.textContent = '目前裝置無法呈現 3D 場景；請閱讀卡片說明了解反射差異。';
 }
