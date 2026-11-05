@@ -70,11 +70,6 @@ if(root){
   }
   const left=project(axis-30,Y(g.intermediate)),right=project(axis+30,Y(g.intermediate));
   out+=`<path data-micro-image-plane d="M${left[0]} ${left[1]}L${right[0]} ${right[1]}" stroke="#f1dba2" stroke-width="2.3" stroke-dasharray="4 5"/>`;
-  if(step==='objective'){
-   const f=at(-g.objective.f),twoF=at(-2*g.objective.f),x=objective[0]-82;
-   out+=`<path data-micro-object-range d="M${x} ${f[1]}V${twoF[1]}M${x-5} ${f[1]}h10M${x-5} ${twoF[1]}h10" stroke="#e3c888" stroke-width="1.5" fill="none"/>`;
-   for(const [p,name]of [[f,'F'],[twoF,'2F']]){const [fx,fy]=position([x-24,p[1]]);labels+=`<span class="micro-focus-label" style="left:${fx}%;top:${fy}%">${name}</span>`;}
-  }
   if(step!=='objective'&&view!=='objective'){
    const focusOnLeft=view==='eyepiece'&&box.width>=300,f=at(g.ocularFocus),x=ocular[0]+(focusOnLeft?-82:box.width<420?240:72);
    out+=`<path d="M${x} ${ocular[1]}V${f[1]}m-6 0h12M${x-6} ${ocular[1]}h12" stroke="#e3c888" fill="none" stroke-width="1.5"/>`;
