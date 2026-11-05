@@ -3,7 +3,7 @@ const root=document.querySelector('#microscope-lab');
 if(root){
  const $=s=>root.querySelector(s),all=s=>[...root.querySelectorAll(s)],g=microscopeGeometry();
  const red='#ec8b6d',blue='#6dbde3',axis=432,k=1.1,Y=s=>550-s*k;
- let step='objective',rays=false,point='both',model=null,view='whole';
+ let step='objective',rays=true,point='both',model=null,view='whole';
  const symbol=(x,y,h,inverted=false)=>{
   const w=Math.max(4,h*.22),radius=Math.max(3,h*.18),stem=Math.max(2,h*.055);
   return `<g transform="translate(${x} ${y})${inverted?' rotate(180)':''}"><path d="M0 ${-h}V${h}" stroke="#8ca778" stroke-width="${stem}"/><path d="M0 ${-h-w}L${-w} ${-h+w}H${w}Z" fill="${red}"/><circle cy="${h}" r="${radius}" fill="${blue}"/></g>`;
@@ -119,7 +119,7 @@ if(root){
   else if(b.hasAttribute('data-micro-overview')){step='both';view='whole';}
   else if(b.hasAttribute('data-micro-rays'))rays=!rays;
   else if(b.dataset.microPoint)point=b.dataset.microPoint;
-  else if(b.hasAttribute('data-micro-reset')){step='objective';view='whole';rays=false;point='both';}
+  else if(b.hasAttribute('data-micro-reset')){step='objective';view='whole';rays=true;point='both';}
   else return;render();
  });
  new ResizeObserver(render).observe($('.micro-stage'));
