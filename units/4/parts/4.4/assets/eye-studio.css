@@ -109,8 +109,23 @@
  .eye-scene .eye-caption { font-size:26px; }
 }
 
-.eye-perception-note { grid-column:1 / -1; margin:0; padding:11px 16px; border-top:1px solid #c0cfad; background:#f5f7eb; color:#405b43; font-size:.8rem; line-height:1.75; }
-.eye-perception-note strong { font-weight:750; }
+.eye-inversion-key { padding:10px 8px; border:1px solid #dec78d; border-radius:9px; background:#fff5dc; }
+.eye-inversion-key p { display:flex; align-items:center; justify-content:center; gap:5px; margin:4px 0 0; font-size:.75rem; line-height:1.65; color:#4b543c; }
+.eye-inversion-key .eye-inversion-title { margin:0 0 5px; color:#6d5224; font-size:.8rem; font-weight:750; }
+.eye-point-red,.eye-point-blue { flex:none; width:7px; height:7px; border-radius:50%; background:#d66950; }
+.eye-point-blue { background:#3f8cb6; }
+.eye-perception-note { grid-column:1 / -1; display:flex; align-items:flex-start; gap:14px; margin:0; padding:18px 20px; border-top:2px solid #c7a456; background:#fff5dc; color:#40533c; }
+.eye-perception-tag { flex:none; padding:4px 9px; border:1px solid #d8bc7b; border-radius:5px; background:#f3dfaa; color:#634a20; font-size:.75rem; font-weight:750; line-height:1.6; }
+.eye-perception-note h4 { margin:0; font-size:1rem; font-weight:800; line-height:1.6; color:#3b5137; }
+.eye-perception-note br { display:none; }
+.eye-perception-note p { margin:7px 0 0; font-size:.85rem; line-height:1.8; }
 @container (max-width:640px) {
- .eye-perception-note { padding:10px 12px; font-size:.75rem; }
+ .eye-inversion-key { grid-column:1 / -1; grid-row:5; margin-top:5px; }
+ .eye-inversion-key p { font-size:.8rem; }
+ .eye-image-copy { grid-column:1 / -1; grid-row:6; }
+ .eye-perception-note { display:block; padding:15px 13px; }
+ .eye-perception-tag { display:inline-block; margin-bottom:8px; }
+ .eye-perception-note h4 { font-size:.95rem; }
+ .eye-perception-note br { display:inline; }
+ .eye-perception-note p { font-size:.82rem; }
 }
