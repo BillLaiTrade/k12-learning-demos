@@ -195,3 +195,7 @@
 科學核對：[OpenStax University Physics Vol.2 §1.6](https://openstax.org/books/university-physics-volume-2/pages/1-6-mechanisms-of-heat-transfer)，2026-11-05靜態頁HTTP200，確認對流為流體宏觀移動攜帶能量，以及自然對流與浮力／密度差的關係。圖像為本專案自行繪製SVG，未複製教材插圖。
 
 其餘五區與小測逐字保留；只從原共用腳本拆出第四區，輻射、保溫及小測功能保留並回歸。詳見`docs/reviews/unit-5.2-convection-20261105/`。本次為第四階段製作，第四至六區不因格式完成而自動視為全部核可。
+
+## 2026-11-05：第二區等待手動開始
+
+依使用者最新指示，第二區不再因進入畫面或拖動鋁塊而自動開始。原暫停控制初始顯示「開始觀察」；按下後才更新原熱交換模型。開始前讀值保持A60°C／B20°C、時間0；可先調整位置／貼合，但無傳熱動畫。重來也回到等待開始，暫停時拖曳不再自動續看。本次取代此前自動開始的核可做法，熱交換模型及場景圖保持。第二區解除重複inline-size容器以保留窄版重來後的動態文字／儀表可見性。決策與本輪檢查見`docs/decisions/unit-5.2-balance-manual-start.md`及`docs/reviews/unit-5.2-balance-start-20261105/`。

@@ -12,7 +12,6 @@ if (root) {
   let frame = 0;
   let previous = null;
   let drag = null;
-  let hasViewed = false;
   let lastPaint = null;
 
   function text(id, value) {
@@ -96,7 +95,7 @@ if (root) {
     }
 
     const flow = $('balance-flow');
-    flow.toggleAttribute('hidden', !touching || sample.pairClose);
+    flow.toggleAttribute('hidden', !state.started || !touching || sample.pairClose);
     flow.setAttribute('transform', `translate(${state.positions.a},0)`);
     flow.style.opacity = String(sample.flowStrength);
     // Animate only short traces: no drawn rail, bridge or connecting rod.
@@ -110,8 +109,8 @@ if (root) {
 
     let badge, note;
     if (phase === 'ready') {
-      badge = '尚未接觸';
-      note = '室溫 25°C；兩塊金屬分開時，也會和周圍交換熱。';
+      badge = '尚未開始';
+      note = '可先拖曳兩塊鋁塊調整位置，再按「開始觀察」。';
     } else if (phase === 'separated') {
       badge = '與環境交換熱';
       note = '兩塊已分開，溫度仍緩慢變化，逐漸接近 25°C 室溫。';
@@ -135,12 +134,13 @@ if (root) {
       const trend = phase === 'ready' ? '初始溫度' : phase === 'paused' ? '讀數暫停' : phase === 'complete' ? '溫度穩定' : Math.abs(rate) < 0.003 ? '變化緩慢' : rate > 0 ? '升溫中' : '降溫中';
       text('balance-trend-' + key, trend);
     }
-    pause.hidden = !state.started || sample.complete;
-    pause.textContent = state.paused ? '繼續觀察' : '暫停觀察';
-    pause.setAttribute('aria-pressed', String(state.paused));
+    pause.hidden = sample.complete;
+    pause.textContent = !state.started ? '開始觀察' : state.paused ? '繼續觀察' : '暫停觀察';
+    pause.setAttribute('aria-pressed', String(state.playing));
   }
 
   function tick(now) {
+    if (!state.playing) return;
     const dt = previous === null ? 0 : Math.max(0, Math.min(0.05, (now - previous) / 1000));
     previous = now;
     state.elapsed += dt;
@@ -167,7 +167,7 @@ if (root) {
     stop();
     state.elapsed = 0;
     state.temperatures = initialTemperatures();
-    state.started = hasViewed;
+    state.started = false;
     state.paused = false;
     state.positions = { a: -28, b: 28 };
     syncPlayback();
@@ -186,9 +186,6 @@ if (root) {
 
   function move(side, offset) {
     state.positions = moveBlock(state.positions, side, offset);
-    hasViewed = true;
-    state.started = true;
-    state.paused = false;
     syncPlayback();
   }
 
@@ -252,7 +249,10 @@ if (root) {
   }
 
   pause.addEventListener('click', () => {
-    state.paused = !state.paused;
+    if (!state.started) {
+      state.started = true;
+      state.paused = false;
+    } else state.paused = !state.paused;
     syncPlayback();
   });
   $('balance-reset').addEventListener('click', reset);
@@ -264,12 +264,4 @@ if (root) {
     }
   });
   render();
-  const observer = new IntersectionObserver(entries => {
-    if (!entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.2)) return;
-    hasViewed = true;
-    state.started = true;
-    syncPlayback();
-    observer.disconnect();
-  }, { threshold: 0.2 });
-  observer.observe(root);
 }

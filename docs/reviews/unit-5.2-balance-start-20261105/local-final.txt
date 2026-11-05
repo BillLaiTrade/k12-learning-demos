@@ -1,0 +1,20 @@
+▶ 5.2 equilibrium: ambient exchange, faster contact and dragging
+  ✔ viewing and moving either block never start heat exchange without pressing start (579.91714ms)
+  ✔ separated blocks drift towards the room and can be paused (1482.992762ms)
+  ✔ contact is faster than room exchange and does not restart the readings (1713.58833ms)
+  ✔ separating still changes temperatures; recontact continues rather than resets (2837.44771ms)
+  ✔ near equal block temperatures are not full room equilibrium (7314.462344ms)
+  ✔ only room equilibrium stops the model at 25°C and survives recontact (34382.649554ms)
+  ✔ drags, collision limits, instrument labels and overlay hit areas still work (1797.97724ms)
+  ✔ pause, backgrounding and reset keep the physical state continuous (638.096062ms)
+  ✔ desktop and laptop retain readable drag controls and other blocks stay independent (2719.089141ms)
+  ✔ real touch input and real-time flow work with both motion preferences (4909.954509ms)
+✔ 5.2 equilibrium: ambient exchange, faster contact and dragging (59237.704084ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 59569.988013

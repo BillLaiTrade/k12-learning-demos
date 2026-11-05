@@ -1,5 +1,5 @@
 /* Approved heat-equilibrium scene: scoped to the second learning block. */
-#card-02 .card-main{padding-bottom:24px}
+#card-02 .card-main{padding-bottom:24px;container-type:normal}
 #card-02 .dialogue:first-child{margin-top:0}
 #card-02 .dialogue:last-child{margin-bottom:0}
 .balance-panel{max-width:780px;margin:22px auto;border:1px solid #bfceb9;border-radius:18px;overflow:hidden;background:#fffef7}

@@ -1,0 +1,35 @@
+▶ 5.2 equilibrium: ambient exchange, faster contact and dragging
+  ✔ viewing and moving either block never start heat exchange without pressing start (798.993363ms)
+  ✔ separated blocks drift towards the room and can be paused (1612.457665ms)
+  ✔ contact is faster than room exchange and does not restart the readings (1735.971361ms)
+  ✔ separating still changes temperatures; recontact continues rather than resets (3065.258437ms)
+  ✔ near equal block temperatures are not full room equilibrium (7565.678977ms)
+  ✔ only room equilibrium stops the model at 25°C and survives recontact (36494.008983ms)
+  ✔ drags, collision limits, instrument labels and overlay hit areas still work (1789.227788ms)
+  ✔ pause, backgrounding and reset keep the physical state continuous (668.693526ms)
+  ✔ desktop and laptop retain readable drag controls and other blocks stay independent (2662.086479ms)
+  ✔ real touch input and real-time flow work with both motion preferences (5118.320507ms)
+✔ 5.2 equilibrium: ambient exchange, faster contact and dragging (62859.485538ms)
+▶ 5.2 first block: three environments and in-water thermometers
+  ✔ starts with three clean scenes, pending observations and authentic portraits (174.44365ms)
+  ✔ matching scales, immersed bulbs and synchronized liquid/readout levels (1329.450102ms)
+  ✔ 25°C: A releases heat and B absorbs heat; pause freezes readouts (1302.680472ms)
+  ✔ 5°C: both release heat and scene/captions change together (1279.758579ms)
+  ✔ 70°C: even the initially hot cup absorbs heat; both arrows point inward (1281.827985ms)
+  ✔ copper paths cross cup boundaries and pulses move, pause and resume with the model (6354.513929ms)
+  ✔ reset and switching environment during playback cancel old observations (724.564757ms)
+  ✔ same displayed temperature removes heat flow and replay starts cleanly (9741.45071ms)
+  ✔ keyboard and reduced motion preserve all basic controls (682.207ms)
+  ✔ in-scene instruments and controls fit desktop, tablet and phone widths (1366.003995ms)
+  ✔ real rendered flow keeps moving with either motion preference and freezes only when paused (4384.972014ms)
+  ✔ real mobile taps change scene, play, pause and restart (931.624585ms)
+  ✔ remaining learning blocks and quiz still operate independently (829.761677ms)
+✔ 5.2 first block: three environments and in-water thermometers (31765.471213ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 63241.698791
