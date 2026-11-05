@@ -1,6 +1,6 @@
 # 4.3 標題、副標與操作提示分工
 
-2026-11-05（臺北）。使用者依[五點統一規則](learning-block-heading-subtitle-rules.md)要求檢查後，核可「按照建議修改」。依序處理第二區大標、第二至五區副標、第三區操作提示／對話及第二區桌面捲動用語。其餘內容保持。
+2026-11-05（臺北）。使用者依[五點統一規則](https://github.com/BillLaiTrade/k12/blob/main/docs/decisions/learning-block-heading-subtitle-rules.md)要求檢查後，核可「按照建議修改」。依序處理第二區大標、第二至五區副標、第三區操作提示／對話及第二區桌面捲動用語。其餘內容保持。
 
 | 區 | 大標 | 副標 |
 | --- | --- | --- |
