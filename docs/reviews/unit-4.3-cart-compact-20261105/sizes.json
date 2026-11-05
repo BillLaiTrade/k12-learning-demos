@@ -1,0 +1,138 @@
+[
+  {
+    "width": 1366,
+    "id": "normal",
+    "before": {
+      "width": 778,
+      "height": 489.28125
+    },
+    "after": {
+      "x": 465,
+      "y": 363.4375,
+      "right": 1185,
+      "bottom": 748.0625,
+      "width": 720,
+      "height": 384.625
+    },
+    "height_reduction_percent": 21.4
+  },
+  {
+    "width": 1366,
+    "id": "oblique",
+    "before": {
+      "width": 778,
+      "height": 487.28125
+    },
+    "after": {
+      "x": 465,
+      "y": 363.765625,
+      "right": 1185,
+      "bottom": 748.390625,
+      "width": 720,
+      "height": 384.625
+    },
+    "height_reduction_percent": 21.1
+  },
+  {
+    "width": 1024,
+    "id": "normal",
+    "before": {
+      "width": 697,
+      "height": 457
+    },
+    "after": {
+      "x": 278,
+      "y": 363.0625,
+      "right": 975,
+      "bottom": 739.703125,
+      "width": 697,
+      "height": 376.640625
+    },
+    "height_reduction_percent": 17.6
+  },
+  {
+    "width": 1024,
+    "id": "oblique",
+    "before": {
+      "width": 697,
+      "height": 455
+    },
+    "after": {
+      "x": 278,
+      "y": 363.046875,
+      "right": 975,
+      "bottom": 739.6875,
+      "width": 697,
+      "height": 376.640625
+    },
+    "height_reduction_percent": 17.2
+  },
+  {
+    "width": 1280,
+    "id": "normal",
+    "before": {
+      "width": 778,
+      "height": 489.28125
+    },
+    "after": {
+      "x": 422,
+      "y": 339.25,
+      "right": 1142,
+      "bottom": 723.875,
+      "width": 720,
+      "height": 384.625
+    },
+    "height_reduction_percent": 21.4
+  },
+  {
+    "width": 1280,
+    "id": "oblique",
+    "before": {
+      "width": 778,
+      "height": 487.28125
+    },
+    "after": {
+      "x": 422,
+      "y": 339.484375,
+      "right": 1142,
+      "bottom": 724.109375,
+      "width": 720,
+      "height": 384.625
+    },
+    "height_reduction_percent": 21.1
+  },
+  {
+    "width": 1440,
+    "id": "normal",
+    "before": {
+      "width": 778,
+      "height": 489.28125
+    },
+    "after": {
+      "x": 502,
+      "y": 429.4375,
+      "right": 1222,
+      "bottom": 814.0625,
+      "width": 720,
+      "height": 384.625
+    },
+    "height_reduction_percent": 21.4
+  },
+  {
+    "width": 1440,
+    "id": "oblique",
+    "before": {
+      "width": 778,
+      "height": 487.28125
+    },
+    "after": {
+      "x": 502,
+      "y": 429.765625,
+      "right": 1222,
+      "bottom": 814.390625,
+      "width": 720,
+      "height": 384.625
+    },
+    "height_reduction_percent": 21.1
+  }
+]
