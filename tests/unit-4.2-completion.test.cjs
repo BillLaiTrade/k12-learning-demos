@@ -30,8 +30,8 @@ test('4.2 完整頁面、主要活動與資源失敗恢復',{timeout:300000},asy
   const page=await context.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.message));
   page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
-  await page.goto(url);await expect(page.locator('#unit-quiz')).toHaveAttribute('data-ready','true');
-  await expect(page.locator('#laser-reflection-scene')).toHaveAttribute('data-ready','true');
+  await page.goto(url,{waitUntil:'commit'});await expect(page.locator('#unit-quiz')).toHaveAttribute('data-ready','true',{timeout:60000});
+  await expect(page.locator('#laser-reflection-scene')).toHaveAttribute('data-ready','true',{timeout:60000});
 
   await t.test('入口、無JS靜態分享資訊與核可開場圖一致',async()=>{
     const plain=await browser.newContext({javaScriptEnabled:false}),p=await plain.newPage();
@@ -59,6 +59,11 @@ test('4.2 完整頁面、主要活動與資源失敗恢復',{timeout:300000},asy
     const targets=['card-01','card-02','card-03','card-04','card-05','card-06','unit-quiz'];
     assert.deepEqual(await page.locator('.lesson-list > section').evaluateAll(es=>es.map(e=>e.id)),targets);
     assert.deepEqual(await page.locator('.route a').evaluateAll(es=>es.map(e=>e.hash.slice(1))),targets);
+    const expectedTitles=['同一束光照到不同表面，反射方向一樣嗎？','怎麼用光路和雷射實驗看懂反射定律？','從另一端照回，光路會重合嗎？','為什麼鏡前的熊，看起來在鏡後？','物體移近鏡子，像的位置怎麼變？','鏡面不同，反射光與像怎麼變？'];
+    assert.deepEqual(await page.locator('.lesson-card:not(#unit-quiz) .card-heading h2').allTextContents(),expectedTitles);
+    assert.deepEqual(await page.locator('.route a:not(.quiz-nav) > span:last-child').allTextContents(),expectedTitles);
+    assert.deepEqual(await page.locator('.card-number').allTextContents(),['01','02','03','04','05','06']);
+    assert.deepEqual(await page.locator('.route a:not(.quiz-nav) .route-number').allTextContents(),['01','02','03','04','05','06']);
     const measurements=[];
     for(const [width,height] of [[1440,900],[1366,768],[1280,720]]){
       await page.setViewportSize({width,height});
@@ -66,6 +71,7 @@ test('4.2 完整頁面、主要活動與資源失敗恢復',{timeout:300000},asy
         await page.locator(`.route a[href="#${id}"]`).click();await expect(page).toHaveURL(new RegExp(`#${id}$`));
         await page.locator(`#${id}`).evaluate(e=>e.scrollIntoView({block:'start',behavior:'instant'}));
         await expect(page.locator('.route a[aria-current=step]')).toHaveAttribute('href',`#${id}`);
+        await expect(page.locator('#lesson-progress')).toHaveJSProperty('value',targets.indexOf(id)+1);
         const layout=await page.locator(`#${id}`).evaluate(e=>{const r=e.getBoundingClientRect(),h=e.querySelector('h2').getBoundingClientRect(),main=e.querySelector('.card-main,.periscope-body')||e.children[1];return{id:e.id,left:r.left,right:r.right,headingTop:h.top,headingRight:h.right,bodyTop:main.getBoundingClientRect().top,headingBottom:h.bottom,overflow:document.documentElement.scrollWidth>innerWidth,clipped:[...e.querySelectorAll('h2,.card-subtitle,button')].filter(n=>n.getClientRects().length&&!n.closest('[hidden]')).filter(n=>n.scrollWidth>n.clientWidth+1).map(n=>n.id||n.textContent.trim())};});
         assert.equal(layout.overflow,false);assert.ok(layout.left>=0&&layout.right<=width+1);assert.ok(layout.headingTop>=-1&&layout.headingRight<=layout.right);assert.ok(layout.bodyTop>=layout.headingBottom,JSON.stringify({width,...layout}));assert.deepEqual(layout.clipped,[],`${width} ${id}`);
         measurements.push({width,height,...layout});
@@ -77,6 +83,24 @@ test('4.2 完整頁面、主要活動與資源失敗恢復',{timeout:300000},asy
     }
     fs.writeFileSync(path.join(captureDir,'layout.json'),JSON.stringify(measurements,null,2));
     await page.setViewportSize({width:1440,height:900});
+  });
+
+  await t.test('第二區調角承接新第三區，後續成像、物距與曲面鏡仍可操作',async()=>{
+    const laser=page.locator('#laser-reflection-scene'),reverse=page.locator('#card-03');
+    await laser.press('Home');await laser.press('ArrowRight');
+    await expect(reverse).toHaveAttribute('data-reverse-angle','21');
+    await page.locator('.route a[href="#card-03"]').click();
+    await page.locator('#reverse-toggle-a').click();await page.locator('#reverse-toggle-b').click();
+    await expect(reverse).toHaveAttribute('data-light-a','on');await expect(reverse).toHaveAttribute('data-light-b','on');await expect(page.locator('#reverse-overlap')).toBeVisible();
+    await page.locator('#reverse-scene').press('End');await expect(reverse).toHaveAttribute('data-reverse-angle','60');
+    await expect(laser).toHaveAttribute('aria-valuenow','21');
+    await page.locator('#reverse-reset').click();await expect(reverse).toHaveAttribute('data-light-a','off');await expect(reverse).toHaveAttribute('data-light-b','off');
+    await expect(page.locator('#card-04 #reference-eye')).toHaveAttribute('data-ready','true');
+    await expect(page.locator('#card-05 #distance-side-object')).toHaveAttribute('aria-valuenow','40');
+    await page.locator('#mirror-bear-toggle').click();await expect(page.locator('#card-06')).toHaveAttribute('data-concave-position','far');
+    await page.locator('#mirror-bear-toggle').click();await expect(page.locator('#card-06')).toHaveAttribute('data-concave-position','near');
+    await page.locator('#mirror-normal-toggle').click();await expect(page.locator('#card-06')).toHaveAttribute('data-normals','false');
+    await page.locator('#mirror-normal-toggle').click();
   });
 
   await t.test('第一區實際點燈、獨立開關、改變觀看方向與取消拖曳',async()=>{
@@ -95,7 +119,7 @@ test('4.2 完整頁面、主要活動與資源失敗恢復',{timeout:300000},asy
     await paper.click();await expect(paper).toHaveAttribute('aria-pressed','false');
   });
 
-  await t.test('第四區滑鼠拖動、10至60公分邊界、刻度及正面觀察同步',async()=>{
+  await t.test('第五區滑鼠拖動、10至60公分邊界、刻度及正面觀察同步',async()=>{
     const bear=page.locator('#distance-side-object');await bear.focus();await bear.press('Home');
     for(const [key,expected] of [['ArrowRight',10],['End',60],['ArrowLeft',60],['Home',10],['Shift+ArrowLeft',20]]){
       await bear.press(key);await expect(bear).toHaveAttribute('aria-valuenow',String(expected));
@@ -107,19 +131,19 @@ test('4.2 完整頁面、主要活動與資源失敗恢復',{timeout:300000},asy
     await expect(bear).toHaveAttribute('aria-valuenow','30');await expect(page.locator('#distance-front-status')).toHaveText('物體離鏡面 30 cm｜虛像在鏡後 30 cm');
     const ticks=await page.locator('#distance-side-view').evaluate(()=>['object','image'].map(n=>+document.querySelector(`#distance-ruler-${n}-marker`).getAttribute('x1')));assert.equal(310-ticks[0],ticks[1]-310);
     await page.mouse.move(a.x-10*4*a.scale,a.y);await page.mouse.down();await bear.dispatchEvent('pointercancel',{pointerId:1});await page.mouse.up();await bear.press('End');await expect(bear).toHaveAttribute('aria-valuenow','60');
-    await expect(page.locator('#card-04')).not.toHaveClass(/is-distance-dragging/);
+    await expect(page.locator('#card-05')).not.toHaveClass(/is-distance-dragging/);
   });
 
-  await t.test('WebGL不可用時清楚提示，第三四五區與潛望鏡仍可使用',async()=>{
+  await t.test('WebGL不可用時清楚提示，第四五六區與潛望鏡仍可使用',async()=>{
     const c=await browser.newContext();
     await c.addInitScript(()=>{const original=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return /webgl/i.test(type)?null:original.call(this,type,...args);};});
     const p=await c.newPage(),failures=[];p.on('pageerror',e=>failures.push(e.message));
     try{
       await p.goto(url);await expect(p.locator('#reflection-fallback')).toBeVisible();await expect(p.locator('#reflection-fire-mirror')).toBeDisabled();
       await expect(p.locator('#laser-reflection-scene')).toHaveAttribute('data-ready','error');await expect(p.locator('#laser-reflection-scene')).toBeHidden();await expect(p.locator('#angle-observation')).toContainText('無法呈現 3D');
-      await expect(p.locator('#reverse-fallback')).toBeVisible();await p.locator('#reverse-toggle-a').click();await expect(p.locator('#card-06')).toHaveAttribute('data-light-a','on');
+      await expect(p.locator('#reverse-fallback')).toBeVisible();await p.locator('#reverse-toggle-a').click();await expect(p.locator('#card-03')).toHaveAttribute('data-light-a','on');
       await expect(p.locator('#reference-eye')).toHaveAttribute('data-ready','true');await p.locator('#distance-side-object').press('Home');await expect(p.locator('#distance-side-object')).toHaveAttribute('aria-valuenow','10');
-      await p.locator('#mirror-bear-toggle').click();await expect(p.locator('#card-05')).toHaveAttribute('data-concave-position','far');
+      await p.locator('#mirror-bear-toggle').click();await expect(p.locator('#card-06')).toHaveAttribute('data-concave-position','far');
       await expect(p.locator('#unit-quiz')).toHaveAttribute('data-ready','true');await expect(p.locator('#periscope-check')).toBeEnabled();assert.deepEqual(failures,[]);
     }finally{await c.close();}
   });

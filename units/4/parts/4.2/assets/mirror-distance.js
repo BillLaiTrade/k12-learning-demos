@@ -1,4 +1,4 @@
-const section = document.querySelector('#card-04');
+const section = document.querySelector('#card-05');
 
 if (section) {
   const svg = section.querySelector('#distance-side-view');

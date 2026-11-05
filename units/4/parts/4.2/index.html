@@ -52,7 +52,7 @@
     @media(max-width:440px){.laser-angle-readout{gap:6px;font-size:.8rem}.laser-angle-readout span{padding:7px 8px}}
   </style>
   <style>
-    #card-03 .mirror-views,#card-04 .mirror-views{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+    #card-04 .mirror-views,#card-05 .mirror-views{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
     .mirror-view{min-width:0;margin:0;overflow:hidden;border:1px solid var(--line);border-radius:13px;background:#fff}
     .mirror-view h3{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0;padding:9px 12px;background:#e8f3f8;color:#23465a;font-size:.95rem;line-height:1.35}
     .mirror-view h3 small{flex:0 0 auto;padding:3px 8px;border-radius:999px;background:#fff;color:#176b53;font-size:.74rem;font-weight:800}
@@ -69,14 +69,14 @@
     #distance-side-object[data-input="pointer"]:focus-visible{outline:none}
     #distance-side-view .ruler-active-band{fill:#e1eee3;fill-opacity:.8}
     #distance-front-object,#distance-front-reflection{transition:transform .2s ease-out}
-    #card-04.is-distance-dragging #distance-front-object,#card-04.is-distance-dragging #distance-front-reflection{transition:none}
-    @media(max-width:1050px){#card-03 .mirror-views,#card-04 .mirror-views{grid-template-columns:minmax(0,1fr)}}
+    #card-05.is-distance-dragging #distance-front-object,#card-05.is-distance-dragging #distance-front-reflection{transition:none}
+    @media(max-width:1050px){#card-04 .mirror-views,#card-05 .mirror-views{grid-template-columns:minmax(0,1fr)}}
 
 
   </style>
-  <link rel="stylesheet" href="assets/mirror-image.css?v=full-width-20261101">
-  <link rel="stylesheet" href="assets/mirror-distance.css?v=visual-polish-20261029">
-  <link rel="stylesheet" href="assets/curved-mirrors.css?v=full-width-20261101">
+  <link rel="stylesheet" href="assets/mirror-image.css?v=activity-order-20261105">
+  <link rel="stylesheet" href="assets/mirror-distance.css?v=activity-order-20261105">
+  <link rel="stylesheet" href="assets/curved-mirrors.css?v=activity-order-20261105">
   <link rel="stylesheet" href="assets/reversible-light.css?v=trim-notes-20261030">
   <link rel="stylesheet" href="assets/periscope.css?v=8">
   <style>
@@ -114,10 +114,10 @@
         <div class="route-inner">
           <a href="#card-01" aria-current="step"><span class="route-number">01</span><span>同一束光照到不同表面，反射方向一樣嗎？</span></a>
           <a href="#card-02"><span class="route-number">02</span><span>怎麼用光路和雷射實驗看懂反射定律？</span></a>
-          <a href="#card-03"><span class="route-number">03</span><span>為什麼鏡前的熊，看起來在鏡後？</span></a>
-          <a href="#card-04"><span class="route-number">04</span><span>物體移近鏡子，像的位置怎麼變？</span></a>
-          <a href="#card-05"><span class="route-number">05</span><span>鏡面不同，反射光與像怎麼變？</span></a>
-          <a href="#card-06"><span class="route-number">06</span><span>從另一端照回，光路會重合嗎？</span></a>
+          <a href="#card-03"><span class="route-number">03</span><span>從另一端照回，光路會重合嗎？</span></a>
+          <a href="#card-04"><span class="route-number">04</span><span>為什麼鏡前的熊，看起來在鏡後？</span></a>
+          <a href="#card-05"><span class="route-number">05</span><span>物體移近鏡子，像的位置怎麼變？</span></a>
+          <a href="#card-06"><span class="route-number">06</span><span>鏡面不同，反射光與像怎麼變？</span></a>
           <a class="quiz-nav" href="#unit-quiz"><span class="route-number" aria-hidden="true">✦</span><span>幫小葵完成潛望鏡</span></a>
         </div>
       </nav>
@@ -212,8 +212,34 @@
             </div>
           </div>
         </section>
-        <section class="lesson-card" id="card-03" data-presentation="simultaneous">
-          <header class="card-heading"><span class="card-number">03</span><div class="card-heading-copy"><h2>為什麼鏡前的熊，看起來在鏡後？</h2><p class="card-subtitle">反射與直視對照</p></div></header>
+        <section class="lesson-card" id="card-03" data-light-a="off" data-light-b="off">
+          <header class="card-heading"><span class="card-number">03</span><div class="card-heading-copy"><h2>從另一端照回，光路會重合嗎？</h2><p class="card-subtitle">光路可逆：比較正反方向的路徑</p></div></header>
+          <div class="card-main">
+            <p>點擊 A、B 發射器，分別開關紅光與藍光，比較兩個方向的反射路徑。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我可以分別開啟紅光和藍光，看看它們走的路一不一樣嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>可以。點擊哪一支，就開關那一支；兩支一起開啟時，觀察光路是否重合。</p></div>
+            <div class="reverse-switches" role="group" aria-label="獨立開關兩支發射器">
+              <button type="button" class="reverse-switch reverse-switch-b" id="reverse-toggle-b" aria-pressed="false">開啟 B 藍光</button>
+              <button type="button" class="reverse-switch reverse-switch-a" id="reverse-toggle-a" aria-pressed="false">開啟 A 紅光</button>
+            </div>
+            <div class="reverse-lab">
+              <div class="reverse-stage">
+                <canvas id="reverse-scene" role="slider" tabindex="0" aria-label="點擊 A 或 B 發射器開關紅光與藍光；拖動 A 或用方向鍵調角，A 與 B 鍵可開關對應光源" aria-valuemin="20" aria-valuemax="60" aria-valuenow="30" aria-describedby="reverse-lock-note"></canvas>
+                <div class="reverse-device-label" id="reverse-label-a"><strong>A 紅光發射器</strong><small id="reverse-status-a">已關閉</small></div>
+                <div class="reverse-device-label" id="reverse-label-b"><strong>B 藍光發射器</strong><small id="reverse-status-b">已關閉</small></div>
+                <div class="reverse-device-label reverse-m-label" id="reverse-label-m"><strong>M 反射點</strong></div>
+                <div class="reverse-overlap" id="reverse-overlap" hidden>紅藍光路重合</div>
+                <div class="reverse-fallback" id="reverse-fallback" hidden><p id="reverse-fallback-message"></p><svg id="reverse-fallback-svg" viewBox="0 0 400 325" role="img" aria-label="光路可逆的替代俯視圖"></svg></div>
+              </div>
+              <div class="reverse-lab-footer"><span id="reverse-lock-note">點擊器材開關光源；拖動 A 可調整方向。</span><span class="reverse-angle-readout"><span class="reverse-incident-angle">入射角</span>＝<span class="reverse-reflected-angle">反射角</span>＝<output id="reverse-angle-value" aria-label="目前入射角與反射角">30°</output></span><button type="button" id="reverse-reset">↻ 重新設定</button></div>
+            </div>
+            <div class="reverse-paths"><div><small>A 紅光路徑</small><strong>A → M → B</strong><span id="reverse-path-a-status">已關閉</span></div><div><small>B 藍光路徑</small><strong>B → M → A</strong><span id="reverse-path-b-status">已關閉</span></div></div>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>原來把光照過來的方向倒過來，它還是會沿著原來的路走回去！從 A 照到 B，也能從 B 沿原路照回 A。</p></div>
+            <noscript><p>請啟用 JavaScript 點選 A、B 發射器。紅光沿 A→M→B，藍光沿 B→M→A，各自遵守反射定律。</p></noscript>
+          </div>
+        </section>
+        <section class="lesson-card" id="card-04" data-presentation="simultaneous">
+          <header class="card-heading"><span class="card-number">04</span><div class="card-heading-copy"><h2>為什麼鏡前的熊，看起來在鏡後？</h2><p class="card-subtitle">反射與直視對照</p></div></header>
           <div class="card-main">
             <p class="comparison-intro">小熊反射的光再經鏡面反射進入眼睛，卻看起來像從鏡後傳來。對照有鏡子與撤鏡後放入真熊的情境，觀察光路與眼中景象的對應。</p>
             <div class="comparison-column-headings" aria-hidden="true"><span>光怎麼進入眼睛</span><span>小葵看到的熊</span></div>
@@ -303,8 +329,8 @@
             </div>
           </div>
         </section>
-        <section class="lesson-card" id="card-04">
-          <header class="card-heading"><span class="card-number">04</span><div class="card-heading-copy"><h2>物體移近鏡子，像的位置怎麼變？</h2><p class="card-subtitle">物距與像距：觀察平面鏡的等距關係</p></div></header>
+        <section class="lesson-card" id="card-05">
+          <header class="card-heading"><span class="card-number">05</span><div class="card-heading-copy"><h2>物體移近鏡子，像的位置怎麼變？</h2><p class="card-subtitle">物距與像距：觀察平面鏡的等距關係</p></div></header>
           <div class="card-main">
             <p>固定鏡面，直接拖動左圖面向鏡子的小熊，調整它的遠近。右側成像與兩側距離刻度會同步更新。</p>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我把物體往鏡子移，像會留在原地嗎？</p></div>
@@ -351,8 +377,8 @@
             <p class="visual-caption" id="distance-observation" aria-live="polite">尺以鏡面為 0；物體與像分居鏡面兩側。移動小熊，觀察兩個標記是否保持等距。虛像位置是畫面參考刻度，不能用實體尺直接量取。</p>
           </div>
         </section>
-        <section class="lesson-card" id="card-05" data-normals="true" data-concave-position="near">
-          <header class="card-heading"><span class="card-number">05</span><div class="card-heading-copy"><h2>鏡面不同，反射光與像怎麼變？</h2><p class="card-subtitle">平面鏡與曲面鏡：比較光路與成像</p></div></header>
+        <section class="lesson-card" id="card-06" data-normals="true" data-concave-position="near">
+          <header class="card-heading"><span class="card-number">06</span><div class="card-heading-copy"><h2>鏡面不同，反射光與像怎麼變？</h2><p class="card-subtitle">平面鏡與曲面鏡：比較光路與成像</p></div></header>
           <div class="card-main">
             <p>反射定律也適用於凹面鏡和凸面鏡；鏡面各處的法線方向，決定光往哪裡反射。接著比較三種鏡面的像，並觀察凹面鏡成像如何隨物體位置改變。</p>
             <section class="mirror-step" aria-labelledby="mirror-step-1">
@@ -388,32 +414,6 @@
               <p>凹面鏡形成的像，大小與正倒立會隨物體與鏡面的距離改變。倒立的像也可能放大或與物體同大，並非都縮小。</p>
             </details>
             <noscript><p>請啟用 JavaScript 查看光路與小熊。平面鏡使平行光反射後仍平行，凹面鏡使近軸平行光會聚，凸面鏡使其發散；每一道光都遵守反射定律。</p></noscript>
-          </div>
-        </section>
-        <section class="lesson-card" id="card-06" data-light-a="off" data-light-b="off">
-          <header class="card-heading"><span class="card-number">06</span><div class="card-heading-copy"><h2>從另一端照回，光路會重合嗎？</h2><p class="card-subtitle">光路可逆：比較正反方向的路徑</p></div></header>
-          <div class="card-main">
-            <p>點擊 A、B 發射器，分別開關紅光與藍光，比較兩個方向的反射路徑。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我可以分別開啟紅光和藍光，看看它們走的路一不一樣嗎？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>可以。點擊哪一支，就開關那一支；兩支一起開啟時，觀察光路是否重合。</p></div>
-            <div class="reverse-switches" role="group" aria-label="獨立開關兩支發射器">
-              <button type="button" class="reverse-switch reverse-switch-b" id="reverse-toggle-b" aria-pressed="false">開啟 B 藍光</button>
-              <button type="button" class="reverse-switch reverse-switch-a" id="reverse-toggle-a" aria-pressed="false">開啟 A 紅光</button>
-            </div>
-            <div class="reverse-lab">
-              <div class="reverse-stage">
-                <canvas id="reverse-scene" role="slider" tabindex="0" aria-label="點擊 A 或 B 發射器開關紅光與藍光；拖動 A 或用方向鍵調角，A 與 B 鍵可開關對應光源" aria-valuemin="20" aria-valuemax="60" aria-valuenow="30" aria-describedby="reverse-lock-note"></canvas>
-                <div class="reverse-device-label" id="reverse-label-a"><strong>A 紅光發射器</strong><small id="reverse-status-a">已關閉</small></div>
-                <div class="reverse-device-label" id="reverse-label-b"><strong>B 藍光發射器</strong><small id="reverse-status-b">已關閉</small></div>
-                <div class="reverse-device-label reverse-m-label" id="reverse-label-m"><strong>M 反射點</strong></div>
-                <div class="reverse-overlap" id="reverse-overlap" hidden>紅藍光路重合</div>
-                <div class="reverse-fallback" id="reverse-fallback" hidden><p id="reverse-fallback-message"></p><svg id="reverse-fallback-svg" viewBox="0 0 400 325" role="img" aria-label="光路可逆的替代俯視圖"></svg></div>
-              </div>
-              <div class="reverse-lab-footer"><span id="reverse-lock-note">點擊器材開關光源；拖動 A 可調整方向。</span><span class="reverse-angle-readout"><span class="reverse-incident-angle">入射角</span>＝<span class="reverse-reflected-angle">反射角</span>＝<output id="reverse-angle-value" aria-label="目前入射角與反射角">30°</output></span><button type="button" id="reverse-reset">↻ 重新設定</button></div>
-            </div>
-            <div class="reverse-paths"><div><small>A 紅光路徑</small><strong>A → M → B</strong><span id="reverse-path-a-status">已關閉</span></div><div><small>B 藍光路徑</small><strong>B → M → A</strong><span id="reverse-path-b-status">已關閉</span></div></div>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>原來把光照過來的方向倒過來，它還是會沿著原來的路走回去！從 A 照到 B，也能從 B 沿原路照回 A。</p></div>
-            <noscript><p>請啟用 JavaScript 點選 A、B 發射器。紅光沿 A→M→B，藍光沿 B→M→A，各自遵守反射定律。</p></noscript>
           </div>
         </section>
         <section class="lesson-card" id="unit-quiz" aria-labelledby="periscope-title">
@@ -501,13 +501,13 @@
       cards.forEach(card => observer.observe(card));
     }
   </script>
-  <script type="module" src="assets/mirror-distance.js?v=visual-polish-20261029"></script>
-  <script type="module" src="assets/curved-mirrors.js?v=distance-observation-20261030"></script>
-  <script type="module" src="assets/mirror-image.js?v=clearance-20261105"></script>
+  <script type="module" src="assets/mirror-distance.js?v=activity-order-20261105"></script>
+  <script type="module" src="assets/curved-mirrors.js?v=activity-order-20261105"></script>
+  <script type="module" src="assets/mirror-image.js?v=activity-order-20261105"></script>
   <script type="module" src="assets/reflection-3d.js?v=surfaces-experiment-20261105"></script>
   <script type="module" src="assets/surface-directions.js?v=surface-flow-20261105"></script>
   <script type="module" src="assets/laser-reflection.js?v=exhibit-20261105"></script>
-  <script type="module" src="assets/reversible-light.js?v=trim-notes-20261030"></script>
+  <script type="module" src="assets/reversible-light.js?v=activity-order-20261105"></script>
   <script type="module" src="assets/periscope.js?v=availability-20261105"></script>
 </body>
 </html>

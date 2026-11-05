@@ -1,7 +1,7 @@
 import {COMPARISON,comparisonRay,opticalDistances,sidePath} from './mirror-comparison.mjs?v=4';
 import {createComparisonView} from './mirror-comparison-view.mjs?v=4';
 
-const section=document.getElementById('card-03');
+const section=document.getElementById('card-04');
 if(section) {
   const ns='http://www.w3.org/2000/svg',ray=comparisonRay(),distances=opticalDistances();
   const node=(name,attributes)=>{const element=document.createElementNS(ns,name);for(const [key,value] of Object.entries(attributes))element.setAttribute(key,value);return element;};

@@ -2,7 +2,7 @@ import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import { createLaserBench } from './laser-bench.js';
 import { reciprocalPath } from './planar-reflection.mjs';
 
-const section = document.querySelector('#card-06');
+const section = document.querySelector('#card-03');
 const canvas = section.querySelector('#reverse-scene');
 const prior = document.querySelector('#laser-reflection-scene');
 const clamp = n => Math.round(Math.max(20, Math.min(60, n)));

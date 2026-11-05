@@ -1,0 +1,17 @@
+{
+  "card-01 content preserved as card-01": true,
+  "card-02 content preserved as card-02": true,
+  "card-03 content preserved as card-04": true,
+  "card-04 content preserved as card-05": true,
+  "card-05 content preserved as card-06": true,
+  "card-06 content preserved as card-03": true,
+  "quiz unchanged": true,
+  "mirror-image.js only selector changed": true,
+  "mirror-distance.js only selector changed": true,
+  "curved-mirrors.js only selector changed": true,
+  "reversible-light.js only selector changed": true,
+  "mirror-image.css only selector changed": true,
+  "mirror-distance.css only selector changed": true,
+  "curved-mirrors.css only selector changed": true,
+  "optical models and first activity unchanged": true
+}

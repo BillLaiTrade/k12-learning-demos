@@ -1,6 +1,6 @@
 import { MIRRORS, OPTICS, reflectionAt, mirrorOutline, imageExample, visibleRayEnd } from './curved-mirrors-geometry.mjs?v=three-steps-20261029';
 
-const section = document.querySelector('#card-05');
+const section = document.querySelector('#card-06');
 const normalToggle = section.querySelector('#mirror-normal-toggle');
 const bearToggle = section.querySelector('#mirror-bear-toggle');
 const colors = { in: '#328463', out: '#e58a36', normal: '#287bd0' };
