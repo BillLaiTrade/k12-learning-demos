@@ -1,8 +1,8 @@
-import {WIDTH,HEIGHT,QUICK_POINTS,DEFAULT_INDEX,sourcePixels,currentPixel,renderPixels,rgbaPixels,pixelAt,colourCss,colourName,sameColour,groupOutline,neighbourhood,moveSelection,observationText,loupeLayout,sampleDragIndex} from './pixel-tv-observer-model.mjs?v=tv-compare-20261105';
+import {WIDTH,HEIGHT,QUICK_POINTS,DEFAULT_INDEX,sourcePixels,currentPixel,renderPixels,rgbaPixels,pixelAt,colourCss,colourName,sameColour,neighbourhood,moveSelection,observationText,loupeLayout,sampleDragIndex} from './pixel-tv-observer-model.mjs?v=tv-clean-20261105';
 export function initialisePixelTv(root){
  if(root.dataset.ready==='true')return;
  const $=s=>root.querySelector(s),source=sourcePixels();
- const state={mode:'inspect',selected:DEFAULT_INDEX,colourValues:pixelAt(source,DEFAULT_INDEX),screenValues:[255,255,255],showOutline:true};
+ const state={mode:'inspect',selected:DEFAULT_INDEX,colourValues:pixelAt(source,DEFAULT_INDEX),screenValues:[255,255,255]};
  const pictures=[...root.querySelectorAll('[data-tv-picture]')],contexts=pictures.map(c=>c.getContext('2d'));
  const lenses=[...root.querySelectorAll('[data-tv-loupe-canvas]')],lensContexts=lenses.map(c=>c.getContext('2d'));
  if([...contexts,...lensContexts].some(c=>!c))throw new Error('Canvas2D unavailable');
@@ -14,7 +14,7 @@ export function initialisePixelTv(root){
   [$('.tv-selected-summary'),'[data-tv-after-summary]'],[$('[data-tv-controls]'),'[data-tv-after-editor]'],
   [$('[data-tv-reset]'),'[data-tv-after-reset]'],[$('.tv-quick-points'),'[data-tv-compare-selection]'],
   [$('[data-tv-position]'),'[data-tv-compare-tools]'],[$('[data-tv-sample-status]'),'[data-tv-compare-tools]'],
-  [$('[data-tv-instruction]'),'[data-tv-compare-scope]'],[$('.tv-gallery-actions'),'[data-tv-compare-scope]']
+  [$('[data-tv-instruction]'),'[data-tv-compare-scope]']
  ].map(([node,slot])=>{const home=document.createComment('pixel TV layout home');node.before(home);return{node,home,slot:$(slot)}});
  let comparing=false;
  function layoutMode(){
@@ -25,8 +25,8 @@ export function initialisePixelTv(root){
  }
  const values=()=>state.mode==='screen'?state.screenValues:state.colourValues;
  const settings=()=>({mode:state.mode,selected:state.selected,values:values()});
- let groupIndex=-1,matches=[],outline='',drag=null,dragFrame=0,pendingDrag=null,frameKey='',visible=source;
- const placements=[null,null],groups=new Map(),outlines=new Map();
+ let groupIndex=-1,matches=[],drag=null,dragFrame=0,pendingDrag=null,frameKey='',visible=source;
+ const placements=[null,null],groups=new Map();
  for(let i=0;i<WIDTH*HEIGHT;i++){const key=pixelAt(source,i).join(',');if(!groups.has(key))groups.set(key,[]);groups.get(key).push(i);}
  function sampleStatus(){const status=$('[data-tv-sample-status]');status.textContent=drag?'取樣中':'已選定';status.dataset.active=String(!!drag);}
  function positionLenses(){
@@ -45,7 +45,6 @@ export function initialisePixelTv(root){
  function render(){
   const config=settings(),before=pixelAt(source,state.selected),after=currentPixel(source,state.selected,config),x=state.selected%WIDTH,y=Math.floor(state.selected/WIDTH),point=QUICK_POINTS.find(p=>p.index===state.selected);
   if(groupIndex!==state.selected){matches=groups.get(before.join(','));groupIndex=state.selected;}
-  if(state.mode==='colour'&&state.showOutline){const key=before.join(',');if(!outlines.has(key))outlines.set(key,groupOutline(matches));outline=outlines.get(key);}
   root.dataset.mode=state.mode;root.dataset.selected=String(state.selected);root.dataset.targetCount=String(matches.length);layoutMode();
   root.querySelectorAll('[data-tv-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tvMode===state.mode)));
   $('[data-tv-current-figure]').hidden=state.mode==='inspect';$('[data-tv-controls]').hidden=state.mode==='inspect';$('[data-tv-adjust-selected]').hidden=state.mode!=='inspect';
@@ -65,9 +64,7 @@ export function initialisePixelTv(root){
   }
   $('[data-tv-current-title]').textContent=state.mode==='colour'?'同色像素調整後':'整幅圖調整後';
   $('[data-tv-instruction]').textContent=state.mode==='inspect'?'拖曳圖上的小取樣框，查看像素與 RGB；放開後選定。':state.mode==='colour'?`原圖中相同 RGB 的 ${matches.length} 格會一起變色，其餘保持原樣。`:'拖曳任一小取樣框看像素；右側調整整台電視的 RGB 強度。';
-  $('[data-tv-outline]').hidden=state.mode!=='colour';$('[data-tv-outline]').setAttribute('aria-pressed',String(state.showOutline));$('[data-tv-outline]').textContent=`範圍標示：${state.showOutline?'開啟':'關閉'}`;
   for(const figure of root.querySelectorAll('.tv-picture-figure')){
-   figure.querySelector('[data-tv-group-outline]').setAttribute('d',state.mode==='colour'&&state.showOutline?outline:'');
    const region=figure.querySelector('[data-tv-region]'),cell=figure.querySelector('[data-tv-selected-cell]');
    region.setAttribute('x',Math.max(0,x-2));region.setAttribute('y',Math.max(0,y-2));region.setAttribute('width',Math.min(WIDTH-1,x+2)-Math.max(0,x-2)+1);region.setAttribute('height',Math.min(HEIGHT-1,y+2)-Math.max(0,y-2)+1);cell.setAttribute('x',x);cell.setAttribute('y',y);
   }
@@ -95,7 +92,6 @@ export function initialisePixelTv(root){
  root.querySelectorAll('[data-tv-preset]').forEach(b=>b.addEventListener('click',()=>setChannel(Number(b.dataset.channel),Number(b.dataset.tvPreset))));
  root.querySelectorAll('[data-tv-value]').forEach((input,c)=>{input.addEventListener('input',()=>{if(input.value.trim()===''||!setChannel(c,Number(input.value))){input.setAttribute('aria-invalid','true');$('[data-tv-input-error]').hidden=false;}});input.addEventListener('blur',()=>{if(input.getAttribute('aria-invalid')==='true'){input.value=String(values()[c]);input.setAttribute('aria-invalid','false');$('[data-tv-input-error]').hidden=true;}});});
  $('[data-tv-reset]').addEventListener('click',()=>{cancelDrag();if(state.mode==='screen')state.screenValues=[255,255,255];else state.colourValues=pixelAt(source,state.selected);render();});
- $('[data-tv-outline]').addEventListener('click',()=>{state.showOutline=!state.showOutline;render();});
  function keyboard(e){if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'].includes(e.key))return;e.preventDefault();cancelDrag();select(moveSelection(state.selected,e.key));}
  function applyDrag(){if(!drag||!pendingDrag)return;const p=pendingDrag;pendingDrag=null;const rect=pictures[drag.index].getBoundingClientRect();if(rect.width<60)return cancelDrag();select(sampleDragIndex(p.x,p.y,rect,drag.grabX,drag.grabY));}
  function clearDrag(){const previous=drag;if(!previous)return;drag=null;pendingDrag=null;cancelAnimationFrame(dragFrame);dragFrame=0;delete root.dataset.dragging;delete previous.element.dataset.dragging;sampleStatus();if(previous.element.hasPointerCapture(previous.pointerId))previous.element.releasePointerCapture(previous.pointerId);}

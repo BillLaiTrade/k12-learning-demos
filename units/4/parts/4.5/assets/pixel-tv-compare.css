@@ -9,10 +9,8 @@
 .tv-compare-tools{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 .tv-colour-comparison .tv-position{margin:0;font-size:.76rem}
 .tv-colour-comparison .tv-sample-status{position:static;white-space:nowrap}
-.tv-compare-scope{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.tv-compare-scope{grid-column:1/-1}
 .tv-colour-comparison .tv-instruction{margin:0;text-align:left;font-size:.84rem}
-.tv-colour-comparison .tv-gallery-actions{margin:0;flex-shrink:0}
-.tv-colour-comparison .tv-gallery-actions button{padding:7px 10px}
 .tv-comparison-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px;align-items:stretch}
 .tv-compare-panel{min-width:0;display:grid;grid-template-rows:subgrid;grid-row:span 5;gap:12px;padding:14px;border:1px solid #bdd0b5;border-radius:13px;background:#fffefa}
 .tv-compare-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -51,9 +49,7 @@
 @container tv-comparison (max-width:620px){
  .tv-compare-toolbar{grid-template-columns:minmax(0,1fr);padding:10px;gap:8px}
  .tv-compare-tools{justify-content:flex-start}
- .tv-compare-scope{align-items:flex-start;gap:8px}
  .tv-colour-comparison .tv-instruction{font-size:.8rem}
- .tv-colour-comparison .tv-gallery-actions button{padding:7px;font-size:.75rem}
  .tv-comparison-columns{gap:10px}
  .tv-compare-panel{display:contents}
  .tv-compare-head{padding:9px 7px;background:#edf4e5;border:1px solid #c5d5c0;border-radius:9px;align-items:flex-start;flex-wrap:wrap;gap:3px 6px}
