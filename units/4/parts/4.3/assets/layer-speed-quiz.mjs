@@ -84,7 +84,7 @@ if(root){
           <path d="M${plateX+10} ${cy-23}H${plateX+plateWidth-10}" stroke="#fffef5" stroke-width="1.7"/>
           ${[plateX+9,plateX+plateWidth-9].map(x=>`<circle cx="${x}" cy="${cy}" r="3.1" fill="url(#rank-rim)" stroke="#a58c4e" stroke-width=".5"/><path d="M${x-1.6} ${cy}h3.2" stroke="#8f753c" stroke-width=".7"/>`).join('')}
         </g>
-        <text class="rank-medium-name" data-center-x="${left+113}" data-compact-x="${left+77}" x="${left+113}" y="${cy+font*.35}" text-anchor="middle" font-size="${font}">${names[i]}</text>
+        <text class="rank-medium-name" x="${left+77}" y="${cy+font*.35}" text-anchor="middle" font-size="${font}">${names[i]}</text>
         <g class="rank-speed-badge" visibility="hidden"><text x="${left+174}" y="${cy+font*.27}" text-anchor="middle" font-size="${font*.72}"></text></g>
       </g>`;}).join('')}
       <g class="rank-construction" aria-hidden="true">${question.geometry.layers.map(layer=>{
@@ -140,8 +140,6 @@ if(root){
       const label=i===question.geometry.order[0]?'最快':i===question.geometry.order.at(-1)?'最慢':'';
       badge.setAttribute('visibility',shown&&label?'visible':'hidden');
       badge.querySelector('text').textContent=label;
-      const name=badge.parentElement.querySelector('.rank-medium-name');
-      name.setAttribute('x',shown&&label?name.dataset.compactX:name.dataset.centerX);
     });
     root.dataset.elapsedMs=elapsed;
     root.dataset.arrived=String(snapshot.complete);renderFeedback();
