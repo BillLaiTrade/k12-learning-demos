@@ -1,0 +1,128 @@
+{
+  "records": [
+    {
+      "width": 1440,
+      "step": "objective",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 1440,
+      "step": "eyepiece",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 1440,
+      "step": "both",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "step": "objective",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "step": "eyepiece",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 1024,
+      "step": "both",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 760,
+      "step": "objective",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 760,
+      "step": "eyepiece",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 760,
+      "step": "both",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 390,
+      "step": "objective",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 390,
+      "step": "eyepiece",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 390,
+      "step": "both",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "step": "objective",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "step": "eyepiece",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    },
+    {
+      "width": 320,
+      "step": "both",
+      "overflow": false,
+      "separate": true,
+      "svgFits": true,
+      "clipped": []
+    }
+  ],
+  "pointPreferences": true,
+  "reset": true,
+  "keyboard": true,
+  "errors": []
+}

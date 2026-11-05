@@ -78,7 +78,7 @@ if (root) {
     }
     for (const [side, socketX, probeX] of [['a', 319, 330], ['b', 669, 580]]) {
       const end = probeX + state.positions[side];
-      const path = `M${socketX} 208C${socketX - 40} 239 ${end - 25} 252 ${end} 282`;
+      const path = `M${socketX} 208C${socketX - 40} 239 ${end - 25} 252 ${end} 282.7`;
       $(side === 'a' ? 'balance-probe-leader' : 'balance-probe-lead-b').setAttribute('d', path);
       $('balance-cable-shadow-' + side).setAttribute('d', path);
       $('balance-cable-highlight-' + side).setAttribute('d', path);
@@ -106,13 +106,13 @@ if (root) {
 
     let badge, note;
     if (phase === 'ready') {
-      badge = '尚未開始';
+      badge = touching ? '已貼合，待開始' : '尚未開始';
       note = '可先拖曳兩塊鋁塊調整位置，再按「開始觀察」。';
     } else if (phase === 'separated') {
       badge = '與環境交換熱';
       note = '兩塊已分開，溫度仍緩慢變化，逐漸接近 25°C 室溫。';
     } else if (phase === 'paused') {
-      badge = '觀察已暫停';
+      badge = touching ? '已貼合，已暫停' : '觀察已暫停';
       note = '觀察已暫停；可繼續觀察，或直接拖曳金屬。';
     } else if (phase === 'complete') {
       badge = '整體熱平衡';

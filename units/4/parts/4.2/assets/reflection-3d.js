@@ -2,6 +2,8 @@ import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 
 const canvas = document.querySelector('#reflection-3d-scene');
 if (!canvas) throw new Error('Reflection scene canvas is missing.');
+const referenceCanvas = document.querySelector('#reflection-reference-scene');
+const comparison = document.querySelector('.reflection-comparison');
 
 const fireButtons = [
   document.querySelector('#reflection-fire-mirror'),
@@ -20,14 +22,19 @@ try {
   scene.background = new THREE.Color('#e7e9e6');
   scene.fog = new THREE.Fog('#e7e9e6', 11, 22);
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+  // Render both cameras through one default framebuffer. This preserves the
+  // exact same tone mapping/color pipeline in both visible Canvas 2D views.
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+  renderer.setPixelRatio(1);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 0.95;
   // This comparison should show the reflected light patterns without dark
   // cast shadows from the lamps and stands.
   renderer.shadowMap.enabled = false;
+  const mainContext = canvas.getContext('2d');
+  const referenceContext = referenceCanvas.getContext('2d');
+  if (!mainContext || !referenceContext) throw new Error('Comparison canvases are unavailable.');
 
   // Parallel viewing rays keep both samples equally sized and the initial
   // specular alignment consistent when the responsive viewport changes size.
@@ -36,11 +43,24 @@ try {
   const cameraOffset = new THREE.Vector3(0, 6.4, 7.63);
   const cameraDistance = cameraOffset.length();
   let cameraAzimuth = Math.atan2(cameraOffset.x, cameraOffset.z);
-  let cameraPolar = Math.acos(cameraOffset.y / cameraDistance);
-  const frontPolar = cameraPolar;
+  const cameraPolar = Math.acos(cameraOffset.y / cameraDistance);
   const viewPresets = { front: 0, left: -38 * Math.PI / 180, right: 38 * Math.PI / 180 };
   const framingPoints = [];
   let pointerDrag = null;
+  const fitCamera = (targetCamera, aspect) => {
+    targetCamera.updateMatrixWorld();
+    if (!framingPoints.length) return;
+    const points = framingPoints.map(point => point.clone().applyMatrix4(targetCamera.matrixWorldInverse));
+    const xs = points.map(point => point.x), ys = points.map(point => point.y);
+    const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
+    const height = Math.max(maxY - minY, (maxX - minX) / aspect) * 1.12;
+    const centerX = (minX + maxX) / 2, centerY = (minY + maxY) / 2;
+    targetCamera.left = centerX - height * aspect / 2;
+    targetCamera.right = centerX + height * aspect / 2;
+    targetCamera.bottom = centerY - height / 2;
+    targetCamera.top = centerY + height / 2;
+    targetCamera.updateProjectionMatrix();
+  };
   const updateCamera = () => {
     const sinPolar = Math.sin(cameraPolar);
     camera.position.set(
@@ -49,20 +69,7 @@ try {
       cameraTarget.z + Math.cos(cameraAzimuth) * sinPolar * cameraDistance
     );
     camera.lookAt(cameraTarget);
-    camera.updateMatrixWorld();
-    if (framingPoints.length) {
-      const points = framingPoints.map(point => point.clone().applyMatrix4(camera.matrixWorldInverse));
-      const xs = points.map(point => point.x), ys = points.map(point => point.y);
-      const minX = Math.min(...xs), maxX = Math.max(...xs), minY = Math.min(...ys), maxY = Math.max(...ys);
-      const aspect = canvas.clientWidth / Math.max(1, canvas.clientHeight);
-      const height = Math.max(maxY - minY, (maxX - minX) / aspect) * 1.12;
-      const centerX = (minX + maxX) / 2, centerY = (minY + maxY) / 2;
-      camera.left = centerX - height * aspect / 2;
-      camera.right = centerX + height * aspect / 2;
-      camera.bottom = centerY - height / 2;
-      camera.top = centerY + height / 2;
-      camera.updateProjectionMatrix();
-    }
+    fitCamera(camera, canvas.clientWidth / Math.max(1, canvas.clientHeight));
   };
   updateCamera();
 
@@ -306,21 +313,37 @@ try {
   };
   refreshMirrorEnvironment();
 
+  // One scene, two cameras, two viewports. The fixed front view is only redrawn
+  // when illumination or layout changes, never when the main camera rotates.
+  const referenceCamera = camera.clone();
+  const renderReference = () => {
+    const { width, height } = referenceCanvas;
+    renderer.setViewport(canvas.width, 0, width, height);
+    renderer.setScissor(canvas.width, 0, width, height);
+    renderer.render(scene, referenceCamera);
+    referenceContext.drawImage(renderer.domElement, canvas.width, renderer.domElement.height - height, width, height, 0, 0, width, height);
+  };
   const duration = 1150;
-  const render = () => renderer.render(scene, camera);
+  const render = (updateReference = false) => {
+    renderer.setScissorTest(true);
+    if (updateReference) renderReference();
+    renderer.setViewport(0, 0, canvas.width, canvas.height);
+    renderer.setScissor(0, 0, canvas.width, canvas.height);
+    renderer.render(scene, camera);
+    mainContext.drawImage(renderer.domElement, 0, renderer.domElement.height - canvas.height, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+  };
   const updateViewControls = () => {
-    const current = Object.keys(viewPresets).find(key => Math.abs(cameraAzimuth - viewPresets[key]) < 0.001 && Math.abs(cameraPolar - frontPolar) < 0.001);
+    const current = Object.keys(viewPresets).find(key => Math.abs(cameraAzimuth - viewPresets[key]) < 0.001);
     viewButtons.forEach(button => {
       const pressed = String(button.dataset.reflectionView === current);
       if (button.getAttribute('aria-pressed') !== pressed) button.setAttribute('aria-pressed', pressed);
     });
-    const label = current ? { front: '正面', left: '稍向左', right: '稍向右' }[current] : '自由觀看';
+    const label = '目前觀看位置：' + (current ? { front: '正面', left: '稍向左', right: '稍向右' }[current] : '自由觀看');
     if (viewStatus.textContent !== label) viewStatus.textContent = label;
     canvas.dataset.view = current || 'free';
   };
   viewButtons.forEach(button => button.addEventListener('click', () => {
     cameraAzimuth = viewPresets[button.dataset.reflectionView];
-    cameraPolar = frontPolar;
     updateCamera();
     updateViewControls();
     render();
@@ -351,12 +374,10 @@ try {
       return;
     }
     const deltaX = event.clientX - pointerDrag.x;
-    const deltaY = event.clientY - pointerDrag.y;
     if (Math.hypot(event.clientX - pointerDrag.startX, event.clientY - pointerDrag.startY) > 6) pointerDrag.moved = true;
     pointerDrag.x = event.clientX;
     pointerDrag.y = event.clientY;
     cameraAzimuth = THREE.MathUtils.clamp(cameraAzimuth - deltaX * 0.006, -Math.PI / 4, Math.PI / 4);
-    cameraPolar = THREE.MathUtils.clamp(cameraPolar + deltaY * 0.006, 0.55, 1.1);
     updateCamera();
     updateViewControls();
     render();
@@ -380,17 +401,27 @@ try {
     lampLenses[index].color.set(level > 0 ? '#fff2bf' : '#35423a');
     lampLenses[index].emissiveIntensity = 2.5 * level;
     lampIndicators[index].emissiveIntensity = 1.4 * level;
-    render();
+    render(true);
   };
 
   const resize = () => {
     const { width, height } = canvas.getBoundingClientRect();
     if (!width || !height) return;
-    renderer.setSize(width, height, false);
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
+    const mainWidth = Math.max(1, Math.round(width * pixelRatio)), mainHeight = Math.max(1, Math.round(height * pixelRatio));
+    const referenceWidth = Math.max(1, Math.round(referenceCanvas.clientWidth * pixelRatio));
+    const referenceHeight = Math.max(1, Math.round(referenceCanvas.clientHeight * pixelRatio));
+    if (canvas.width !== mainWidth || canvas.height !== mainHeight) { canvas.width = mainWidth; canvas.height = mainHeight; }
+    if (referenceCanvas.width !== referenceWidth || referenceCanvas.height !== referenceHeight) { referenceCanvas.width = referenceWidth; referenceCanvas.height = referenceHeight; }
+    renderer.setSize(mainWidth + referenceWidth, Math.max(mainHeight, referenceHeight), false);
     updateCamera();
-    render();
+    fitCamera(referenceCamera, referenceWidth / referenceHeight);
+    render(true);
   };
-  new ResizeObserver(resize).observe(canvas);
+  cameraAzimuth = viewPresets.left;
+  const resizeObserver = new ResizeObserver(resize);
+  resizeObserver.observe(canvas);
+  resizeObserver.observe(referenceCanvas);
   resize();
 
   const animationFrames = [0, 0];
@@ -429,10 +460,13 @@ try {
   updateLightControls();
   updateViewControls();
   canvas.dataset.ready = 'true';
+  referenceCanvas.dataset.ready = 'true';
 
   window.addEventListener('resize', resize);
   window.addEventListener('pagehide', () => {
     animationFrames.forEach((frame) => cancelAnimationFrame(frame));
+    resizeObserver.disconnect();
+    window.removeEventListener('resize', resize);
     // Dispose GPU resources while their renderer property cache still exists.
     roughTexture.dispose();
     roughBump.dispose();
@@ -444,6 +478,8 @@ try {
 } catch (error) {
   console.error('Unable to initialize the 3D reflection scene:', error);
   canvas.hidden = true;
+  comparison.hidden = true;
+  referenceCanvas.dataset.ready = 'error';
   fallback.hidden = false;
   [...fireButtons, ...viewButtons].forEach((button) => { button.disabled = true; });
   canvas.dataset.ready = 'error';

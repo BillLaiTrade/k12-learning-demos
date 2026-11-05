@@ -2,7 +2,7 @@
 (() => {
  const root=document.querySelector('.pixel-tv-quiz');
  if(!root)return;
- const source=new URL('./pixel-tv.mjs?v=tv-clean-20261105',document.currentScript.src);
+ const source=new URL('./pixel-tv.mjs?v=tv-three-20261105',document.currentScript.src);
  const note=root.querySelector('[data-tv-load-note]');
  const message=root.querySelector('[data-tv-load-message]');
  const retry=root.querySelector('[data-tv-retry]');

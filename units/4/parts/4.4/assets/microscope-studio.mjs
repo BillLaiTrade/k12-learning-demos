@@ -3,7 +3,7 @@ const root=document.querySelector('#microscope-lab');
 if(root){
  const $=s=>root.querySelector(s),all=s=>[...root.querySelectorAll(s)],g=microscopeGeometry();
  const red='#ec8b6d',blue='#6dbde3',axis=432,k=1.1,Y=s=>550-s*k;
- let step='objective',rays=false,point='both';
+ let step='objective',rays=false,point='both',model=null;
  const symbol=(x,y,h,inverted=false)=>{
   const w=Math.max(4,h*.22),radius=Math.max(3,h*.18),stem=Math.max(2,h*.055);
   return `<g transform="translate(${x} ${y})${inverted?' rotate(180)':''}"><path d="M0 ${-h}V${h}" stroke="#8ca778" stroke-width="${stem}"/><path d="M0 ${-h-w}L${-w} ${-h+w}H${w}Z" fill="${red}"/><circle cy="${h}" r="${radius}" fill="${blue}"/></g>`;
@@ -19,7 +19,6 @@ if(root){
  ${[['red',red],['blue',blue]].map(([id,c])=>`<marker id="m9-${id}" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0 0L6 3L0 6Z" fill="${c}"/></marker>`).join('')}
  </defs>
  <rect width="760" height="780" fill="url(#m9-wall)"/>
- <text x="380" y="38" text-anchor="middle" class="micro-small">顯微鏡構造與成像剖面示意</text>
  <ellipse cx="472" cy="744" rx="205" ry="18" fill="#1b3026" opacity=".45"/>
  <path d="M479 320C627 283 661 356 648 467L621 680H541L569 455Q582 379 480 387Z" fill="url(#m9-body)" stroke="#9ca98e" stroke-width="2"/>
  <path d="M571 356Q631 343 623 451L598 659" fill="none" stroke="#fff7db" stroke-opacity=".5" stroke-width="7"/>
@@ -47,27 +46,28 @@ if(root){
  <ellipse cx="432" cy="550" rx="16" ry="5" fill="url(#m9-glass)" stroke="#b1dbce"/><path d="M414 562h36" stroke="#b4a65e" stroke-width="3"/>
  <path d="M432 155V670" stroke="#e0e6d4" stroke-width="1" stroke-dasharray="6 7" opacity=".5"/>
  <path d="M409 144Q432 123 455 144Q432 165 409 144Z" fill="#fff9e5" stroke="#263f2f" stroke-width="2"/><circle cx="432" cy="144" r="7" fill="#355a40"/>
- <text x="432" y="112" text-anchor="middle" class="micro-small">眼睛</text>
- ${label(246,182,76,'目鏡','M322 199L391 214')}
- ${label(255,414,76,'鏡筒','M331 431L394 431')}
- ${label(267,541,76,'物鏡','M343 558L413 550')}
- ${label(142,660,160,'載物臺與玻片','M302 678L345 641')}
- ${label(491,695,76,'照明','M491 712L462 684')}
- <path d="M515 220V330M508 220h14M508 330h14" fill="none" stroke="#ead17d" stroke-width="2"/><circle cx="515" cy="330" r="3" fill="#ead17d"/><text x="529" y="337" fill="#f1d684" font-size="22">F</text>
- ${label(540,232,187,'目鏡的焦距內','M515 249H540')}
- <text x="380" y="769" class="micro-small" text-anchor="middle">剖面與圖案為教學示意，非器材尺寸比例</text>`;
+ `;
  function render(){
   root.dataset.step=step;root.dataset.rays=String(rays);root.dataset.point=point;
-  let out=hardware;
-  const dim=step==='eyepiece'?'micro-muted':'';
-  out+=`<g class="${dim}"><rect x="86" y="535" width="144" height="94" rx="10" fill="#fff8e6" stroke="#bdc9ab"/><text x="158" y="562" class="micro-label" text-anchor="middle">原物（示意）</text>${symbol(158,597,12)}<path d="M230 594L428 638" class="micro-leader" stroke-dasharray="5 5"/></g>`;
-  out+=`<rect x="86" y="243" width="145" height="151" rx="10" fill="#fff8e6" stroke="#bdc9ab"/><text x="158" y="272" class="micro-label" text-anchor="middle">中間像</text>${symbol(158,333,36,true)}<path d="M231 299L401 ${Y(g.intermediate)}H470" class="micro-leader" stroke-dasharray="5 5"/>`;
-  out+=`<path data-micro-image-plane d="M402 ${Y(g.intermediate)}H471" stroke="#f1e8bd" stroke-width="2" stroke-dasharray="5 4"/>`;
-  out+=label(534,365,213,'中間像｜倒立實像',`M534 382L485 382L470 ${Y(g.intermediate)}`);
+  const project=(x,y)=>model?model.project(x,y):[x,y];
+  const at=(s,h=0)=>project(axis+h,Y(s));
+  let out=model?hardware.slice(0,hardware.indexOf('</defs>')+8):hardware;
+  const ocular=at(g.separation),image=at(g.intermediate),objective=at(0);
+  if(model){const eye=at(g.eye+4);out+=`<path d="M${eye[0]-20} ${eye[1]}q20 -18 40 0q-20 18 -40 0Z" fill="#fff8e6" stroke="#76917a" stroke-width="2"/><circle cx="${eye[0]}" cy="${eye[1]}" r="6" fill="#355a40"/>`;}
+  for(const [name,p,active]of [['目鏡',ocular,step!=='objective'],['中間像',image,true],['物鏡',objective,step!=='eyepiece']]){
+   const x=p[0]-170,y=p[1]-18;
+   out+=`<g opacity="${active?1:.45}">${label(x,y,98,name,`M${x+98} ${y+18}H${p[0]-30}`)}</g>`;
+  }
+  const left=project(axis-30,Y(g.intermediate)),right=project(axis+30,Y(g.intermediate));
+  out+=`<path data-micro-image-plane d="M${left[0]} ${left[1]}L${right[0]} ${right[1]}" stroke="#f1dba2" stroke-width="2.3" stroke-dasharray="4 5"/>`;
+  if(step!=='objective'){
+   const f=at(g.ocularFocus),x=ocular[0]+72;
+   out+=`<path d="M${x} ${ocular[1]}V${f[1]}m-6 0h12M${x-6} ${ocular[1]}h12" stroke="#e3c888" fill="none" stroke-width="1.5"/><text x="${x+13}" y="${f[1]+6}" fill="#f2d89e" font-size="22">F</text>`;
+  }
   if(rays)for(const r of g.rays){
    if(point!=='both'&&point!==r.point)continue;
    const color=r.point==='top'?red:blue,marker=r.point==='top'?'red':'blue';
-   const coords=pts=>pts.map((p,i)=>`${i?'L':'M'}${(axis+p[1]).toFixed(2)} ${Y(p[0]).toFixed(2)}`).join('');
+   const coords=pts=>pts.map((p,i)=>`${i?'L':'M'}${at(p[0],p[1]).map(n=>n.toFixed(2)).join(' ')}`).join('');
    const middle=[g.intermediate,g.first.m*r.objectHeight],ocular=[g.separation,r.ocularHeight];
    const pts=step==='objective'?[[-g.objective.u,r.objectHeight],[0,r.lensHeight],middle]:step==='eyepiece'?[middle,ocular,[g.eye,r.eyeHeight]]:[[-g.objective.u,r.objectHeight],[0,r.lensHeight],middle,ocular,[g.eye,r.eyeHeight]];
    out+=`<path data-micro-ray data-point="${r.point}" class="micro-ray" d="${coords(pts)}" stroke="${color}" marker-mid="url(#m9-${marker})" marker-end="url(#m9-${marker})"/>`;
@@ -84,8 +84,11 @@ if(root){
   all('[data-set=micro]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.value===step)));
   $('[data-micro-rays]').setAttribute('aria-pressed',String(rays));$('[data-micro-rays]').textContent=rays?'隱藏輔助光路':'顯示輔助光路';
   all('[data-micro-point]').forEach(b=>{b.disabled=!rays;b.setAttribute('aria-pressed',String(b.dataset.microPoint===point));});
+  $('.micro-key').hidden=!rays;
+  if(model)model.update(step);
   root.dataset.ready='true';
  }
  root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.set==='micro')step=b.dataset.value;else if(b.hasAttribute('data-micro-rays'))rays=!rays;else if(b.dataset.microPoint)point=b.dataset.microPoint;else if(b.hasAttribute('data-micro-reset')){step='objective';rays=false;point='both';}else return;render();});
  render();
+ import('./microscope-model.mjs?v=20261105-micro-polish2').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
 }

@@ -1,0 +1,45 @@
+▶ 5.2 equilibrium: ambient exchange, faster contact and dragging
+  ✔ approved photo layers load, meters stay fixed and both blocks use the same material (450.753466ms)
+  ✖ visible top and front edges meet continuously when dragging either block into contact (332.429448ms)
+  ✔ viewing and moving either block never start heat exchange without pressing start (474.871262ms)
+  ✔ separated blocks drift towards the room and can be paused (1991.325728ms)
+  ✔ contact is faster than room exchange and does not restart the readings (2086.639298ms)
+  ✔ separating still changes temperatures; recontact continues rather than resets (3358.52007ms)
+  ✔ near equal block temperatures are not full room equilibrium (7352.386099ms)
+  ✔ only room equilibrium stops the model at 25°C and survives recontact (37017.996957ms)
+  ✔ drags, collision limits, instrument labels and overlay hit areas still work (1755.835675ms)
+  ✔ pause, backgrounding and reset keep the physical state continuous (647.768469ms)
+  ✔ desktop and laptop retain readable drag controls and other blocks stay independent (3057.5875ms)
+  ✔ real touch input and real-time flow work with both motion preferences (5099.070465ms)
+  ✔ an unavailable photograph blocks the experiment and retry restores actual assets (925.806631ms)
+  ✔ slow photo loading never starts the model or accepts hidden dragging (518.075623ms)
+✖ 5.2 equilibrium: ambient exchange, faster contact and dragging (66078.701103ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 13
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 66498.331301
+
+✖ failing tests:
+
+test at tests/unit-5.2-balance.test.cjs:34:10
+✖ visible top and front edges meet continuously when dragging either block into contact (332.429448ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Math.abs(a.x+a.width-b.x)<.5)
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-balance.test.cjs:42:169)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-balance.test.cjs:34:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

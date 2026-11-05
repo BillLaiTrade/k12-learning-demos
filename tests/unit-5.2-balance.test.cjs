@@ -24,13 +24,30 @@ test('5.2 equilibrium: ambient exchange, faster contact and dragging',{timeout:2
  await t.test('approved photo layers load, meters stay fixed and both blocks use the same material',async()=>{
   const images=await root.locator('image[data-balance-asset]').evaluateAll(ns=>ns.map(n=>({key:n.dataset.balanceAsset,href:n.getAttribute('href')})));
   assert.equal(images.length,5);assert.equal(images.filter(n=>n.key==='metal').length,2);assert.equal(new Set(images.filter(n=>n.key==='metal').map(n=>n.href)).size,1);
-  for(const {key,href}of images){const size=await page.evaluate(async src=>{const i=new Image();i.src=src;await i.decode();return [i.naturalWidth,i.naturalHeight]},href);assert.deepEqual(size,({background:[1706,922],metal:[1610,977],meter:[1484,1060]})[key]);}
+  for(const {key,href}of images){const size=await page.evaluate(async src=>{const i=new Image();i.src=src;await i.decode();return [i.naturalWidth,i.naturalHeight]},href);assert.deepEqual(size,({background:[1706,922],metal:[1609,977],meter:[1484,1060]})[key]);}
   const positions=await root.locator('.balance-meter').evaluateAll(ns=>ns.map(n=>n.getBoundingClientRect().x));
   await drag('a',20);assert.deepEqual(await root.locator('.balance-meter').evaluateAll(ns=>ns.map(n=>n.getBoundingClientRect().x)),positions);
-  assert.match(await page.locator('#balance-probe-leader').getAttribute('d'),new RegExp(`${330+Number((await state()).offsetA)} 282$`));
+  assert.match(await page.locator('#balance-probe-leader').getAttribute('d'),new RegExp(`${330+Number((await state()).offsetA)} 282.7$`));
   await reset(false);
  });
 
+ await t.test('visible top and front edges meet continuously when dragging either block into contact',async()=>{
+  const edges=await page.locator('.balance-metal-photo').first().evaluate(async svg=>{
+   const box=svg.viewBox.baseVal,image=new Image();image.src=svg.querySelector('image').getAttribute('href');await image.decode();
+   const canvas=document.createElement('canvas');canvas.width=image.naturalWidth;canvas.height=image.naturalHeight;const ctx=canvas.getContext('2d');ctx.drawImage(image,0,0);
+   return [.02,.15,.3,.5,.75,.98].flatMap(y=>[.002,.998].map(x=>ctx.getImageData(Math.floor(box.x+x*box.width),Math.floor(box.y+y*box.height),1,1).data[3]));
+  });assert.ok(edges.every(alpha=>alpha>=245),'the actual metal is opaque at both side edges, including the back/top corners');
+  for(const side of ['a','b']){
+   await reset(false);await contact(side);const s=await state();assert.equal(s.touching,'true');assert.equal(s.gap,'0');
+   const viewport=side=>page.locator('#balance-block-'+side+' .balance-metal-photo').evaluate(svg=>{const v=svg.viewBox.baseVal,m=svg.getScreenCTM(),a=new DOMPoint(v.x,v.y).matrixTransform(m),b=new DOMPoint(v.x+v.width,v.y+v.height).matrixTransform(m);return{x:a.x,y:a.y,width:b.x-a.x,height:b.y-a.y};});
+   // Nested SVG getBoundingClientRect includes the bitmap's cropped transparent margins.
+   // Project the visible viewBox, whose edge opacity is checked above.
+   const a=await viewport('a'),b=await viewport('b');assert.ok(Math.abs(a.x+a.width-b.x)<.5);assert.ok(Math.abs(a.y-b.y)<.01);assert.ok(Math.abs(a.height-b.height)<.01);
+   assert.match(await page.locator('#balance-status-label').textContent(),/已貼合/);await page.clock.runFor(1000);assert.deepEqual(await readings(),{a:60,b:20});
+   await capture('full-edge-contact-'+side);await page.locator('#balance-pause').click();await page.clock.runFor(700);assert.ok((await readings()).a<60&&(await readings()).b>20);
+   await page.locator('#balance-pause').click();await drag(side,side==='a'?-15:15);assert.equal((await state()).touching,'false');
+  }await reset(false);
+ });
  await t.test('viewing and moving either block never start heat exchange without pressing start',async()=>{
   assert.equal((await state()).started,'false');await page.clock.runFor(3000);assert.deepEqual(await readings(),{a:60,b:20});
   assert.equal(await page.locator('#balance-play').count(),0);assert.equal(await root.locator('[role=slider]').count(),2);assert.match(await page.locator('.balance-room').textContent(),/25°C/);
@@ -99,10 +116,10 @@ test('5.2 equilibrium: ambient exchange, faster contact and dragging',{timeout:2
  await t.test('an unavailable photograph blocks the experiment and retry restores actual assets',async()=>{
   const p=await context.newPage();
   try{
-   await p.route('**/balance-aluminum.webp*',r=>r.fulfill({status:503,body:'temporarily unavailable'}));await p.goto(url);
+   await p.route('**/balance-aluminum*.webp*',r=>r.fulfill({status:503,body:'temporarily unavailable'}));await p.goto(url);
    await p.waitForFunction(()=>document.querySelector('#balance-lab').dataset.assets==='error');assert.equal(await p.locator('#balance-pause').isDisabled(),true);assert.equal(await p.locator('#balance-retry').isVisible(),true);
    await p.locator('#balance-block-a').focus();await p.keyboard.press('End');assert.equal(await p.locator('#balance-lab').getAttribute('data-touching'),'false');assert.equal(await p.locator('#balance-lab').getAttribute('data-elapsed'),'0');
-   await p.unroute('**/balance-aluminum.webp*');await p.locator('#balance-retry').click();await p.waitForFunction(()=>document.querySelector('#balance-lab').dataset.assets==='ready');
+   await p.unroute('**/balance-aluminum*.webp*');await p.locator('#balance-retry').click();await p.waitForFunction(()=>document.querySelector('#balance-lab').dataset.assets==='ready');
    assert.equal(await p.locator('#balance-pause').isEnabled(),true);assert.equal(await p.locator('#balance-lab').getAttribute('data-started'),'false');await p.locator('#balance-pause').click();await p.clock.runFor(400);assert.ok(Number(await p.locator('#balance-lab').getAttribute('data-temperature-a'))<60);
   }finally{await p.close();}
  });

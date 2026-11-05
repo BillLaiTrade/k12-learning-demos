@@ -1,0 +1,24 @@
+▶ 5.2 equilibrium: ambient exchange, faster contact and dragging
+  ✔ approved photo layers load, meters stay fixed and both blocks use the same material (547.050569ms)
+  ✔ visible top and front edges meet continuously when dragging either block into contact (2359.858015ms)
+  ✔ viewing and moving either block never start heat exchange without pressing start (447.332194ms)
+  ✔ separated blocks drift towards the room and can be paused (1748.065983ms)
+  ✔ contact is faster than room exchange and does not restart the readings (1958.899831ms)
+  ✔ separating still changes temperatures; recontact continues rather than resets (3175.910404ms)
+  ✔ near equal block temperatures are not full room equilibrium (7401.594414ms)
+  ✔ only room equilibrium stops the model at 25°C and survives recontact (36637.863943ms)
+  ✔ drags, collision limits, instrument labels and overlay hit areas still work (1893.691106ms)
+  ✔ pause, backgrounding and reset keep the physical state continuous (656.881876ms)
+  ✔ desktop and laptop retain readable drag controls and other blocks stay independent (3278.465776ms)
+  ✔ real touch input and real-time flow work with both motion preferences (5324.535359ms)
+  ✔ an unavailable photograph blocks the experiment and retry restores actual assets (969.301619ms)
+  ✔ slow photo loading never starts the model or accepts hidden dragging (496.174516ms)
+✔ 5.2 equilibrium: ambient exchange, faster contact and dragging (67894.043214ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 68270.758851
