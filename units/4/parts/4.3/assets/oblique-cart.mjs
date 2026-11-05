@@ -1,3 +1,4 @@
+import {mountCartPlayback} from './cart-playback.mjs?v=20261105-eleven1';
 // Differential-wheel analogy only: the light model never uses friction.
 function initCart(prefix, { initialAngle = 40, upperSpeed = 100, lowerSpeed = 55, finishY = 260 } = {}) {
 const details = document.querySelector(`#${prefix}-explanation`);
@@ -27,12 +28,7 @@ const end = samples.at(-1).time;
 const crossing = samples.find(p => p.y >= boundary);
 document.querySelector(`#${prefix}-cart-normal`).setAttribute('d', `M${crossing.x} 18V315`);
 document.querySelector(`#${prefix}-cart-normal-label`).setAttribute('x', crossing.x + 10);
-let elapsed = 0, started = 0, frame = 0, state = 'idle';
-function visible() {
-  const box = details.getBoundingClientRect();
-  return details.open && box.bottom > 0 && box.top < innerHeight;
-}
-function draw() {
+function draw({elapsed,state}) {
   const index = Math.min(samples.length - 1, Math.floor(elapsed / (step * 1000)));
   const p = samples[index];
   cart.setAttribute('transform', `translate(${p.x} ${p.y}) rotate(${-p.angle * 180 / Math.PI})`);
@@ -45,42 +41,7 @@ function draw() {
     : '斜著前進，兩輪速度相同。';
   if (caption.textContent !== text) caption.textContent = text;
 }
-function stop() {
-  cancelAnimationFrame(frame); frame = 0;
-  if (state === 'running') {
-    elapsed = Math.min(end, performance.now() - started);
-    state = elapsed >= end ? 'complete' : 'paused';
-    draw();
-  }
-  button.disabled = false;
-  button.textContent = state === 'paused' ? '繼續小車示範' : state === 'complete' ? '再看一次小車示範' : '播放小車示範';
-}
-function tick(now) {
-  if (document.hidden || !visible()) { stop(); return; }
-  elapsed = Math.min(end, Math.max(0, now - started));
-  if (elapsed >= end) state = 'complete';
-  draw();
-  if (state === 'complete') stop();
-  else frame = requestAnimationFrame(tick);
-}
-function play() {
-  if (state === 'running' || !details.open || document.hidden) return;
-  if (state !== 'paused') elapsed = 0;
-  state = 'running'; started = performance.now() - elapsed;
-  button.disabled = true; draw(); frame = requestAnimationFrame(tick);
-}
-button.addEventListener('click', play);
-details.addEventListener('toggle', () => {
-  if (!details.open) stop();
-  else if (!matchMedia('(prefers-reduced-motion: reduce)').matches) play();
-});
-document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
-if ('IntersectionObserver' in window) new IntersectionObserver(entries => {
-  // Entries can describe the position before a click scrolls the control onscreen.
-  if (!entries[0].isIntersecting && !visible()) stop();
-}).observe(details);
-// Without motion (including no JavaScript), the accompanying copy states all stages.
-draw();
+mountCartPlayback({details,button,scene:details.querySelector('.oblique-cart-scene'),cart,duration:end,draw});
 
 // Material names follow the fourth experiment; the cart remains a qualitative analogy.
 if (accelerating) {

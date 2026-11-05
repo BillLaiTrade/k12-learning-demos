@@ -1,0 +1,45 @@
+▶ 4.3 exit cart demonstrates staggered acceleration and turning
+  ✔ rigid axle turns only while one wheel is faster, then keeps the new direction (1512.772875ms)
+  ✔ the upper water or glass follows the selector, lower air and qualitative motion stay correct (342.684444ms)
+  ✔ replay, folding, leaving the viewport and hidden document stop without an empty loop (899.092775ms)
+  ✔ normal motion opens automatically; reduced motion remains explicit and keyboard accessible (2310.428173ms)
+  ✔ seven widths and native phone touch keep the scene, copy and replay control readable (5008.836424ms)
+  ✔ the second-section straight cart and optical experiment retain their independent behavior (1704.050067ms)
+✔ 4.3 exit cart demonstrates staggered acceleration and turning (14276.752579ms)
+▶ 4.3 approved desktop and laptop interactions, captions and four-layer evidence
+  ✔ 1 and 2 auto resume only automatic pauses and keep manual/comparison freezes (3927.186299ms)
+  ✔ 3 and 4 distinguish preview from playing without altering selected settings (2010.959984ms)
+  ✔ 5 independent reciprocal fronts, correct slider roles, pause and reset (2189.24689ms)
+  ✔ four-layer pool remains a real mouse return target; only Left/Right reorders; feedback gives one measured pair (2821.445407ms)
+  ✔ desktop/laptop bounds and final presentation at 1440,1366,1280,1024 (5345.757739ms)
+✔ 4.3 approved desktop and laptop interactions, captions and four-layer evidence (18671.346011ms)
+✔ 6 real two-second paired water frames, eye co-control, takeover, full detail and worker fallback (13408.08315ms)
+▶ 4.3 normal incidence desk and folding explanation work as approved
+  ✔ idle scene has no emitted light, dotted particles, autoplay or open explanation (226.526193ms)
+  ✔ continuous beams launch together and stay on the same axis across the interface (1483.056145ms)
+  ✔ pause freezes both fronts and resume continues the saved progress (219.38803ms)
+  ✔ air arrival pauses exactly once at one common instant, even across many frames (827.182436ms)
+  ✔ continuing the comparison finishes all three rays without a second automatic stop (624.071353ms)
+  ✔ same launch button starts a fresh run and offscreen or hidden pages preserve progress (2731.186195ms)
+  ✔ native folding control works by keyboard and the cart moves straight, slows and stops when folded (1416.677034ms)
+  ✔ seven widths keep controls readable, with only the apparatus scrolling on phones (5319.489304ms)
+  ✔ failed artwork disables firing, retry recovers, and other sections remain usable (5272.923161ms)
+  ✔ opening the explanation starts the analogy with normal motion preferences (1765.990913ms)
+  ✔ phone touch can fire, pause and expand the explanation (2026.611463ms)
+✔ 4.3 normal incidence desk and folding explanation work as approved (24255.489581ms)
+▶ 4.3 oblique cart demonstrates staggered slowing and turning
+  ✔ rigid axle turns only while one wheel is slower, then keeps the new direction (1492.499434ms)
+  ✔ replay, folding, leaving the viewport and hidden document stop without an empty loop (935.106166ms)
+  ✔ normal motion opens automatically; reduced motion remains explicit and keyboard accessible (2245.961856ms)
+  ✔ seven widths and native phone touch keep the scene, copy and replay control readable (5653.768976ms)
+  ✔ the second-section straight cart and optical experiment retain their independent behavior (1745.831997ms)
+✔ 4.3 oblique cart demonstrates staggered slowing and turning (14035.561021ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (13346.199583ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 101864.204777

@@ -32,18 +32,35 @@ export function depthGeometry(depth = DEPTH_INITIAL.depth, eyeX = DEPTH_INITIAL.
   depth = clamp(Number.isFinite(depth) ? depth : DEPTH_INITIAL.depth, 0, 100);
   eyeX = clamp(Number.isFinite(eyeX) ? eyeX : DEPTH_INITIAL.eyeX, 210, 340);
   const center = solveCoinRay(depth, eyeX);
-  const samples = [-12, -8, -4, 0, 4, 8, 12].map(dx => solveCoinRay(depth, eyeX, TANK.coinX + dx));
-  const visibleSamples = samples.filter(r => r.visible);
-  const status = !visibleSamples.length ? 'hidden' : visibleSamples.length === samples.length ? 'visible' : 'partial';
-  const representative = center.visible ? center : visibleSamples[0] || center;
+  // In this fixed, centred viewing plane, the opening crossing increases
+  // monotonically across the coin. Use its true rim, not seven sample points:
+  // even a thin visible crescent must have the same status in both views.
+  const farX=TANK.coinX-TANK.coinRadius,nearX=TANK.coinX+TANK.coinRadius;
+  const far=solveCoinRay(depth,eyeX,farX),near=solveCoinRay(depth,eyeX,nearX);
+  let visibleEnd=farX;
+  if(near.visible)visibleEnd=nearX;
+  else if(far.visible){
+    let low=farX,high=nearX;
+    for(let i=0;i<40;i++){const x=(low+high)/2;if(solveCoinRay(depth,eyeX,x).visible)low=x;else high=x;}
+    visibleEnd=low;
+  }
+  const status=visibleEnd-farX<1e-7?'hidden':near.visible?'visible':'partial';
+  const visibleInterval=status==='hidden'?null:[farX,visibleEnd];
+  const representative=center.visible?center:status==='partial'?solveCoinRay(depth,eyeX,(farX+visibleEnd)/2):center;
   // If only an edge of the coin is visible, construct the image of that same
   // visible point, rather than extending a blocked ray from the coin's centre.
-  const rays = [-.3, .3].map(offset => solveCoinRay(depth, eyeX + offset, representative.coin[0]));
+  let pupil=.3;
+  let rays=[-.3,.3].map(offset=>solveCoinRay(depth,eyeX+offset,representative.coin[0]));
+  // At the first sliver, keep both construction rays inside the admitted
+  // bundle instead of extending one ray that is actually blocked by the rim.
+  for(let i=0;status!=='hidden'&&rays.some(r=>!r.visible)&&i<16;i++){
+    pupil/=2;rays=[-pupil,pupil].map(offset=>solveCoinRay(depth,eyeX+offset,representative.coin[0]));
+  }
   const slopes = rays.map(r => (r.hit[0] - r.eye[0]) / (depth - r.eye[1]));
   const apparentY = depth === 0 ? 0 : depth + (rays[1].hit[0] - rays[0].hit[0]) / (slopes[0] - slopes[1]);
   const apparent = [rays[0].hit[0] + slopes[0] * (apparentY - depth), apparentY];
   return { depth, eyeX, coin: center.coin, eye: center.eye, center, rays, apparent,
-    apparentDepth: depth - apparentY, status, representative };
+    apparentDepth: depth - apparentY, status, visibleInterval, representative };
 }
 
 export function observerCamera(g, aspect = 1.4) {

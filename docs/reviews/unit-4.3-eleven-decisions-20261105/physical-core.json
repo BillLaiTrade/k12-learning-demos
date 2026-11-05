@@ -1,0 +1,8 @@
+{
+  "TANK": true,
+  "DEPTH_INITIAL": true,
+  "solveCoinRay": true,
+  "observerCamera": true,
+  "cameraDirection": true,
+  "traceViewRay": true
+}

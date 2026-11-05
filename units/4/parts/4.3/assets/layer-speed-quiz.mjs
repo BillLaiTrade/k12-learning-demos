@@ -144,7 +144,7 @@ if(root){
       name.setAttribute('x',shown&&label?name.dataset.compactX:name.dataset.centerX);
     });
     root.dataset.elapsedMs=elapsed;
-    root.dataset.arrived=String(snapshot.complete);
+    root.dataset.arrived=String(snapshot.complete);renderFeedback();
   }
 
   function controls(){
@@ -156,6 +156,7 @@ if(root){
     play.textContent=state==='running'?'光束前進中…':state==='suspended'?'回到畫面後續播':elapsed>0?'▶ 重播光束':'▶ 發射光束';
     check.disabled=!observed||state==='running'||state==='suspended';
     q('#rank-play-state').textContent=state==='running'?'觀察光通過每一層時的方向。':state==='suspended'?'保留目前進度，回到畫面後繼續。':observed?'光路已保留，可直接比較。':'先發射光束，再比較四層光路。';
+    renderFeedback();
     const description=q('#rank-scene-desc');
     description.textContent=observed?`四層介面互相平行。${question.geometry.layers.map(layer=>`${names[layer.id]}為${kindNames[question.materials[layer.id].kind]}，其中光線與法線夾角約${layer.angle.toFixed(1)}度`).join('；')}。只比較甲、乙、丙、丁，不包括光源所在的空氣。`:'尚未完成發射。四層介面互相平行，只比較介質甲、乙、丙、丁。';
   }
@@ -190,16 +191,26 @@ if(root){
       button.setAttribute('aria-label',`第${i+1}個位置${i===0?'，最快':i===names.length-1?'，最慢':''}，${id===null?'尚未放入介質':names[id]}`);
       const position=`<span class="rank-slot-position" aria-hidden="true">${i+1}${i===0?' · 最快':i===names.length-1?' · 最慢':''}</span>`;
       button.innerHTML=position+`<span class="rank-slot-content">${id===null?'<span class="rank-slot-placeholder" aria-hidden="true">⇩</span>':`<span class="rank-grip" aria-hidden="true">⠿</span><span>${names[id]}</span>`}</span>`;
-      delete button.dataset.result;
+
     });
     tokens.forEach((button,i)=>{button.hidden=order.includes(i);button.setAttribute('aria-pressed',String(selected===i));});
     q('.rank-pool').dataset.empty=String(order.every(id=>id!==null));
     help.textContent=selected===null?defaultHelp:`已選取${names[selected]}，點選排序位置放入。`;
+    renderFeedback();
     if(focusSlot!==null)slots[focusSlot].focus({preventScroll:true});
   }
+  function renderFeedback(){
+    const showing=state!=='running'&&state!=='suspended';
+    result.hidden=!showing;
+    const comparison=compareLayers(question.geometry,order);
+    slots.forEach((slot,i)=>{
+      if(showing&&revealed&&comparison.complete)slot.dataset.result=comparison.positions[i]?'correct':'retry';
+      else delete slot.dataset.result;
+    });
+  }
   function changed(){revealed=false;result.textContent='';delete result.dataset.result;draw();}
-  function place(medium,slot){order=placeLayer(order,medium,slot);selected=null;changed();renderOrder(slot);}
-  function returnLayer(slot){const id=order[slot];order[slot]=null;selected=null;changed();renderOrder();if(id!==null)tokens[id].focus({preventScroll:true});}
+  function place(medium,slot){const nextOrder=placeLayer(order,medium,slot),different=nextOrder.some((id,i)=>id!==order[i]);selected=null;if(different){order=nextOrder;changed();}renderOrder(slot);}
+  function returnLayer(slot){const id=order[slot];selected=null;if(id!==null){order[slot]=null;changed();}renderOrder();if(id!==null)tokens[id].focus({preventScroll:true});}
   function activate(button){
     if(!button)return;
     if(button.hasAttribute('data-rank-medium')){const id=Number(button.dataset.rankMedium);selected=selected===id?null:id;renderOrder();}

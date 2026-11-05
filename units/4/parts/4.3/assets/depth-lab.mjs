@@ -1,7 +1,7 @@
-import { depthGeometry, clamp, TANK, DEPTH_INITIAL } from './depth-model.mjs?v=20261104-review1';
+import { depthGeometry, clamp, TANK, DEPTH_INITIAL } from './depth-model.mjs?v=20261105-eleven1';
 import { eyeArtwork } from './depth-eye-art.mjs?v=20261104-review1';
-import { createTextures } from './depth-observer.mjs?v=20261105-review1';
-import { createObserverRenderer } from './depth-observer-client.mjs?v=20261105-review1';
+import { createTextures } from './depth-observer.mjs?v=20261105-eleven1';
+import { createObserverRenderer } from './depth-observer-client.mjs?v=20261105-eleven1';
 
 const root = document.querySelector('#depth-lab');
 if (root) {
@@ -176,12 +176,12 @@ if (root) {
     const wall=observerResult.frontWallBounds,wallLabel=q('.depth-front-wall');
     wallLabel.hidden=!wall||wall.height*canvas.clientHeight<32;
     if(!wallLabel.hidden)Object.assign(wallLabel.style,{left:`${(wall.x+wall.width/2)*100}%`,top:`${(wall.y+wall.height*.72)*100}%`,bottom:'auto',transform:'translate(-50%,-50%)'});
-    const visible=observerResult.coinPixels>0;
-    const state=visible?(g.depth===0?'空槽・可以直接看見':g.status==='partial'?'可以看見部分硬幣':'可以看見硬幣'):g.depth===0?'空槽・看不到硬幣':'槽壁遮住・看不到硬幣';
+    const visible=g.status!=='hidden';
+    const state=visible?(g.status==='partial'?`${g.depth===0?'空槽・':''}可以看見部分硬幣`:g.depth===0?'空槽・可以直接看見':'可以看見硬幣'):g.depth===0?'空槽・看不到硬幣':'槽壁遮住・看不到硬幣';
     q('#depth-visibility').textContent=state; q('#depth-visibility').dataset.visible=visible?'visible':'hidden';
     q('#depth-view-result').textContent=visible?(g.depth>0?'光出水後轉向，越過前側槽壁進入眼睛；硬幣仍在原處。':'觀看位置較近，光可直接越過槽緣進入眼睛。'):g.depth===0?'前側槽壁擋住硬幣的光，光還沒進入眼睛。':'光仍被前側槽壁擋住；繼續加水，比較光路是否能越過槽緣。';
     canvas.setAttribute('aria-label',`這隻眼睛看到的畫面：${waterState(g.depth)}、眼睛${eyeState(g.eyeX)}的視野。${state}。`);
-    canvas.dataset.coinPixels=observerResult.coinPixels; canvas.dataset.depth=g.depth;canvas.dataset.eyeX=g.eyeX;
+    canvas.dataset.coinPixels=observerResult.coinPixels; canvas.dataset.depth=g.depth;canvas.dataset.eyeX=g.eyeX;canvas.dataset.visibility=g.status;
     canvas.dataset.coinBounds=JSON.stringify(observerResult.bounds);
     q('#depth-live').textContent=`${waterState(g.depth)}，${state}；硬幣實際位置不變。`;
   }

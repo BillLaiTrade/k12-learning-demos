@@ -1,3 +1,4 @@
+import {revealExperiment,experimentVisible} from './experiment-viewport.mjs?v=20261105-eleven1';
 import {geometry,snapshot,durationMs,clampAngle} from './single-refraction-model.mjs?v=20261103-fit2';
 import {mediumSelector} from './medium-selector.mjs?v=20261103-concept1';
 import {mountScene} from './integrated-refraction-scene.mjs?v=20261103-fit2';
@@ -25,8 +26,8 @@ function mountSingleLab(prefix,reverse){
   start.querySelector('span:last-child').textContent=state==='preview'?'播放此設定':state==='complete'?'再次發射':state==='running'?'重新發射':'發射光束';status.textContent={loading:'正在準備實驗場景……',error:`${requested==='water'?'水':'玻璃'}場景未能載入，請重試或切換介質。`,idle:'調整入射角，再點燈發射；角度與說明會直接出現在光路上。',running:'光束正在前進。',suspended:'回到實驗畫面後會繼續發射。',preview:'光路與角度已更新，可直接比較或再次發射。',complete:'光路已展開，角度與說明顯示在同一場景內。'}[state];
  }
  function stop(){cancelAnimationFrame(frame);frame=0;}
- function tick(now){if(state!=='running')return;elapsed=Math.min(duration(),Math.max(0,now-startTime));render();if(elapsed>=duration()){state='complete';frame=0;controls();}else frame=requestAnimationFrame(tick);}
- function play(restart=true){if(state==='loading'||state==='error')return;stop();if(restart)elapsed=0;state='running';startTime=performance.now()-elapsed;render();controls();frame=requestAnimationFrame(tick);}
+ function tick(now){if(state!=='running')return;if(document.hidden||!experimentVisible(stage)){suspend();return;}elapsed=Math.min(duration(),Math.max(0,now-startTime));render();if(elapsed>=duration()){state='complete';frame=0;controls();}else frame=requestAnimationFrame(tick);}
+ function play(restart=true){if(state==='loading'||state==='error')return;stop();if(restart){revealExperiment(stage,$('.integrated-controls'));elapsed=0;}state=document.hidden||!experimentVisible(stage)?'suspended':'running';startTime=performance.now()-elapsed;render();controls();if(state==='running')frame=requestAnimationFrame(tick);}
  function suspend(){if(state!=='running')return;stop();elapsed=Math.min(duration(),Math.max(0,performance.now()-startTime));state=elapsed>=duration()?'complete':'suspended';render();controls();}
  function resume(){if(state==='suspended'&&intersecting&&!document.hidden)play(false);}
  function setAngle(value){if(input.disabled)return;const next=Math.round(Math.min(40,clampAngle(value)));input.value=next;if(next===angle)return;stop();angle=next;if(state==='idle')elapsed=0;else{state='preview';elapsed=duration();}configure();render();controls();}

@@ -1,4 +1,4 @@
-import {renderObserverPixels} from './depth-observer.mjs?v=20261105-review1';
+import {renderObserverPixels} from './depth-observer.mjs?v=20261105-eleven1';
 
 // At most one worker frame and one newest pending state. Camera geometry is
 // unchanged; only raster resolution changes during interaction.
@@ -29,7 +29,7 @@ export function createObserverRenderer(canvas,onFrame){
     if(pending||detail)requestAnimationFrame(pump);
   }
   function connect(){
-    worker=new Worker(new URL('./depth-observer-worker.mjs?v=20261105-review1',import.meta.url),{type:'module'});
+    worker=new Worker(new URL('./depth-observer-worker.mjs?v=20261105-eleven1',import.meta.url),{type:'module'});
     canvas.dataset.renderer='worker';
     worker.onmessage=({data})=>{
       const job=busy;if(!job||job.id!==data.id)return;
