@@ -135,3 +135,9 @@
 .micro-map .micro-map-fallback { display:none; }
 .micro-lab[data-micro-render=fallback] .micro-map-fallback { display:block; }
 .micro-lab[data-micro-render=fallback] .micro-map img { display:none; }
+
+.micro-conclusion { margin-top:16px; padding:18px 20px; border:1px solid #b5c8a5; border-left:4px solid #7f9c63; border-radius:12px; background:#eaf1dd; }
+.micro-conclusion h3 { margin:0 0 10px; font-size:1rem; }
+.micro-conclusion p { margin:8px 0 0; font-size:.88rem; line-height:1.85; }
+.micro-conclusion .micro-real-lenses { font-size:.76rem; color:#596d4b; }
+@container (max-width:640px) { .micro-conclusion { padding:15px; } }
