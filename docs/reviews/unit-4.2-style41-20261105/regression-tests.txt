@@ -1,0 +1,101 @@
+▶ 4.2 fifth activity: approved three-step comparison, exact optics and interactions
+  ✔ normal is radial and perpendicular to the surface; both reflection angles agree (4.021694ms)
+  ✔ toy appearance magnification follows the stated near/far mirror model (0.558542ms)
+  ✔ all three stages and three mirror columns are visible together in the approved order (12731.996982ms)
+  ✔ normal switch affects all three diagrams together; pointer and keyboard restore it (4190.949477ms)
+  ✔ bear moves near/far repeatedly; image orientation, condition and button agree (3607.071316ms)
+  ✔ three-column alignment, shared section structure and no clipped text at eight widths (2078.755991ms)
+  ✔ touch, reduced motion, model notes and neighboring activities remain usable (18355.288271ms)
+✔ 4.2 fifth activity: approved three-step comparison, exact optics and interactions (46061.155173ms)
+▶ 第三區距離模型：2公尺反射＋3公尺入眼，對應5公尺直達光
+  ✔ 中央光路精確為2、3、2、5公尺，物像等距且共線 (1.665488ms)
+  ✔ 81個瞳孔位置的反射向量與直達光方向相同，入眼線不穿過原熊 (9.498948ms)
+  ✔ 同一寬取景顯示近處實體熊與遠處對照熊，遠近及落地位置合理 (0.910198ms)
+  ✔ 桌面近裁切先於透視除法，來源與虛像的對應角色正確 (0.440099ms)
+✔ 第三區距離模型：2公尺反射＋3公尺入眼，對應5公尺直達光 (16.649454ms)
+▶ 第三區上下同時對照、整熊觀察及銜接第四區
+  ✔ 初始上下兩排同時呈現；移除切換、鼻尖標記與散光 (4913.997252ms)
+  ✔ 實際SVG光路、距離標籤與全熊畫布一致，遠近兩隻玩偶完整且不互相遮擋 (281.8344ms)
+  ✔ 六種寬度的距離標籤留出完整淨空，不遮光線、鏡面、人物與玩偶 (5898.634773ms)
+  ✔ 320／390／650／768／1024／1440px皆維持上下兩列、左右對應欄 (5829.249022ms)
+  ✔ 圖下說明光路總長與虛像位置，保留短對話及模型限制 (6254.209391ms)
+  ✔ 既有路線以滑鼠及鍵盤往返第三四區，直接操作小熊量距 (682.541537ms)
+  ✔ 窄版觸控閱讀及路線導覽，減少動態模式呈現相同內容 (10437.561863ms)
+  ✔ 慢速素材載入後兩種情境仍固定，不產生重複ID或程式錯誤 (12916.974412ms)
+  ✔ 相關單元入口與4.1頁面可正常載入，4.2離頁無錯誤 (24092.9263ms)
+✔ 第三區上下同時對照、整熊觀察及銜接第四區 (84792.943938ms)
+▶ 潛望鏡有限鏡面、管壁與反向傳播
+  ✔ 36×36 組鏡面角度：反射分量、有限尺寸及閉合管道 (112.00022ms)
+  ✔ 船、海面、天空、完全與局部遮擋；離軸視線不穿透管壁 (79.613539ms)
+  ✔ 1296 組角度的提示一律從眼睛出發，內部與觀察窗中央視線重合 (60.809439ms)
+  ✔ 整束提示只短暫亮起與淡出，沒有循環或移動光段 (1.796897ms)
+  ✔ 441 條不同入眼方向的視線，各自獨立反向反射後回到眼睛 (26.725338ms)
+✔ 潛望鏡有限鏡面、管壁與反向傳播 (285.497941ms)
+▶ 潛望鏡實際操作、畫面與三階段評量
+  ✔ 初始狀態、未作答、未對準不通關；沒有角度滑桿 (4435.823435ms)
+  ✔ 兩片鏡子拖曳靈敏度為原本 35%，碰邊界可立即回調，穿過中心不跳動 (21219.977865ms)
+  ✔ 兩片鏡子實際拖曳；天空／海面連續改變，偏太多會被擋 (8729.301626ms)
+  ✔ 觀察窗像素由獨立完整三維視線核對；暗邊確實來自遮擋 (1226.731762ms)
+  ✔ 第一關只檢查實際對準：沒有順序題，角度不對不能通過，改動設計須重檢 (1211.920146ms)
+  ✔ 修復任務只靠實際旋轉鏡片通關，沒有選擇題或延伸問題 (13000.451377ms)
+  ✔ 反向訊號、原路重合、先預測後驗證；三階段完成 (15638.787538ms)
+  ✔ 只保留畫面拖曳操作，沒有獨立微調列或按鈕 (5176.036365ms)
+  ✔ 五種實際角度：提示都從觀察口開始，錯誤時不跳接到船或上方鏡片 (13770.028304ms)
+  ✔ 整條實際光路短暫亮起再熄滅，沒有箭頭、移動光點或常駐路線 (2433.268813ms)
+  ✔ 在輸入事件當下取消提示光；長拖曳可跨過冷卻期限且不留下舊路線 (8796.193491ms)
+  ✔ 移除額外提示與分關重設；視線追蹤撞壁仍有短暫光斑 (2592.698342ms)
+  ✔ 減少動態以短暫靜態全光路呈現；換關取消舊淡出與計時器 (7771.601028ms)
+  ✔ 鍵盤邊界與取消拖曳不會留下卡住狀態 (2736.255188ms)
+  ✔ 1440／1280／1024／768／390 px 版面、素材與鄰區操作 (8151.669342ms)
+  ✔ 真實觸控拖曳完成第一關，沒有額外填答與頁面溢位 (12056.15274ms)
+  ✔ 離開頁面時先釋放 GPU 資源，再關閉繪圖器，不產生例外 (940.223095ms)
+✔ 潛望鏡實際操作、畫面與三階段評量 (146053.854009ms)
+▶ 1.2 reversible light reuses the reflection laboratory
+  ✔ independent reflection, front surface and reciprocal endpoint checks at every supported angle (4.211447ms)
+  ✖ section 02 keeps its actual drag and keyboard, with initial angle inherited (14665.686582ms)
+  ✔ angle sectors and arcs are absent before light, after off-state angle changes and after reset (18936.565508ms)
+  ✔ actual device clicks independently traverse all four light states without a record step (6089.667204ms)
+  ✔ red, blue and simultaneous illumination all change the actual rendered scene (26376.342303ms)
+  ✔ dragging A changes angle without toggling either source; pointer cancellation and background clicks are inert (12042.527583ms)
+  ✔ keyboard switches, live angle controls and reset reflect the independent state (298.059175ms)
+  ✔ independent controls and device labels fit five widths (6063.261751ms)
+  ✔ real touch taps toggle the devices; fallback diagram and native switches remain usable (20596.512167ms)
+✖ 1.2 reversible light reuses the reflection laboratory (108859.076358ms)
+▶ 4.2 完整頁面、主要活動與資源失敗恢復
+  ✔ 入口、無JS靜態分享資訊與核可開場圖一致 (1905.152604ms)
+  ✔ 六區與唯一小測、三種桌機筆電尺寸的路線及標頭可用 (39273.630626ms)
+  ✔ 第一區實際點燈、獨立開關、改變觀看方向與取消拖曳 (11345.931144ms)
+  ✔ 第四區滑鼠拖動、10至60公分邊界、刻度及正面觀察同步 (4037.776306ms)
+  ✔ WebGL不可用時清楚提示，第三四五區與潛望鏡仍可使用 (6725.142483ms)
+  ✔ 潛望鏡素材延遲、失敗與重新載入，不把未就緒畫面判定成功 (67295.08687ms)
+✔ 4.2 完整頁面、主要活動與資源失敗恢復 (151176.793153ms)
+ℹ tests 64
+ℹ suites 0
+ℹ pass 62
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 541214.922448
+
+✖ failing tests:
+
+test at tests/unit-1.2-reversible.test.cjs:115:11
+✖ section 02 keeps its actual drag and keyboard, with initial angle inherited (14665.686582ms)
+  AssertionError [ERR_ASSERTION]: Physical pointer must actually hit the emitter
+
+  false !== true
+
+      at dragEmitter (/workspace/k12-learning-demos/tests/unit-1.2-reversible.test.cjs:93:12)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-reversible.test.cjs:120:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-1.2-reversible.test.cjs:115:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

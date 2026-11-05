@@ -1,0 +1,19 @@
+▶ 1.2 reversible light reuses the reflection laboratory
+  ✔ independent reflection, front surface and reciprocal endpoint checks at every supported angle (8.63ms)
+  ✔ section 02 keeps its actual drag and keyboard, with initial angle inherited (7156.535991ms)
+  ✔ angle sectors and arcs are absent before light, after off-state angle changes and after reset (12739.916381ms)
+  ✔ actual device clicks independently traverse all four light states without a record step (6189.681646ms)
+  ✔ red, blue and simultaneous illumination all change the actual rendered scene (25354.951629ms)
+  ✔ dragging A changes angle without toggling either source; pointer cancellation and background clicks are inert (6590.229971ms)
+  ✔ keyboard switches, live angle controls and reset reflect the independent state (338.116589ms)
+  ✔ independent controls and device labels fit five widths (32880.593249ms)
+  ✔ real touch taps toggle the devices; fallback diagram and native switches remain usable (20468.444319ms)
+✔ 1.2 reversible light reuses the reflection laboratory (124786.408972ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 125788.970512
