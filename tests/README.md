@@ -1619,3 +1619,11 @@ MOON_CAPTURE預設/tmp/unit41-reflection-play，保存雙視窗與整區截圖�
 新圖解以實際SVG路徑與表面輪廓獨立驗證三組入射／反射端點、相同入射方向、局部法向反射公式、反射角、方向分布及不穿過相鄰表面。播放／重播、減少動態、與3D狀態互不影響、無JavaScript完整靜態SVG、無WebGL仍可播放圖解均涵蓋。`surface-rays.json`保存實際SVG幾何，`stage-*`與`explanation-*`分別保存主畫面與輔助圖。
 
 整頁回歸仍使用`CHROMIUM_PATH=/usr/bin/chromium node --test --test-skip-pattern='入口、|潛望鏡素材' tests/unit-4.2-completion.test.cjs`，驗證導覽、實際燈具點擊與拖曳、第四區及WebGL備援。
+
+## 4.2 可見播放與輔助圖解精緻化（2026-11-05）
+
+沿用第一區14項專項。播放案例改成一般／減少動態兩種偏好都須有可見階段，使用Playwright clock固定在入射、接觸、反射時讀取實際SVG像素、線條及進度；初始與播放中的像素需有明顯差異，結束後恢復完整圖形。保留重播、鍵盤、偏好切換及主實驗狀態不變檢查；手機原生觸控在3D拖曳後再點播放。移除舊版reduce直接無動畫即完成的錯誤期待。
+
+`playback-visual.json`保存兩種偏好的變動像素數，`playback-*-incident.png`保存實際入射階段；完成SVG須與播放前一致。其餘幾何、開關、比例、無JS／無WebGL及整頁回歸保留。
+
+本次最終針對性回歸使用`node --test --test-skip-pattern='實際像素|自由拖曳保留|恢復上下|回到正面重設|自由實驗常駐' tests/unit-4.2-reflection-stage.test.cjs`，9項（含外層）。上方3D程式與樣式段未改動。播放器在獨立頁面於模組載入前安裝時鐘，整頁手機案例另確認3D拖曳後可用原生觸控播放；前景分頁與畫面提交後的樣式檢查避免背景節流／容器樣式未呈現造成誤讀。
