@@ -1,0 +1,8 @@
+{
+  "baseline": "695193f9",
+  "checks": {
+    "main_identical": true,
+    "old_image_reference_retained": true,
+    "only_page_and_entry_changed": true
+  }
+}
