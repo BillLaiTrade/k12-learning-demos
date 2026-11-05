@@ -57,7 +57,7 @@ main.shell{padding-bottom:76px}.section-top{display:flex;align-items:end;justify
 #s5 .path-preview [data-receiver-label]{font-size:.72rem!important;line-height:1.5!important}
 @media(max-width:700px){.pixel-tv-quiz .tv-quick-points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.pixel-tv-quiz .tv-quick-points h3{grid-column:1/-1}}
 
-@media(min-width:761px){.route{z-index:auto;align-self:start;margin:0;border:0;background:transparent;overflow-x:hidden;overflow-y:auto;backdrop-filter:none}.route-inner{display:grid;width:auto;overflow:visible;gap:4px;padding:0}.route-inner a,.route-inner a.quiz-nav{display:grid;align-items:start;gap:8px;margin:0;padding:10px 11px;border:1px solid transparent;border-left:3px solid transparent;border-radius:0 10px 10px 0;max-width:none;font-size:.88rem;color:var(--muted);font-weight:400;background:transparent;box-shadow:none}.route-inner a span{overflow:visible;text-overflow:clip;white-space:normal}.route-inner a b,.route-inner a.quiz-nav b{color:var(--green);font-weight:700}.route-inner a[aria-current=step]{border-left-color:var(--green);background:#e7eee0;color:#315a46;font-weight:750}}
+@media(min-width:761px){.route{z-index:auto;align-self:start;margin:0;border:0;background:transparent;overflow-x:hidden;overflow-y:auto;backdrop-filter:none}.route-inner{display:grid;width:auto;overflow:visible;gap:4px;padding:0}.route-inner a,.route-inner a.quiz-nav{display:grid;align-items:start;gap:8px;margin:0;padding:10px 11px;border:1px solid transparent;border-left:3px solid transparent;border-radius:0 10px 10px 0;max-width:none;font-size:.88rem;color:var(--muted);font-weight:400;background:transparent;box-shadow:none}.route-inner a span{overflow:visible;text-overflow:clip;white-space:normal}.route-inner a b,.route-inner a.quiz-nav b{color:var(--green);font-weight:700}.route-inner a[aria-current=step]{border-color:transparent;border-left-color:var(--green);background:#e7eee0;color:#315a46;font-weight:750}}
 @supports(grid-template-rows:subgrid){.pixel-tv-quiz .tv-gallery{grid-template-rows:auto auto;row-gap:0}.pixel-tv-quiz .tv-picture-figure{display:grid;grid-template-rows:subgrid;grid-row:span 2}}
 html{scroll-padding-top:0}
 /* Readable reference-sized labels use natural card flow, rather than shrinking. */
@@ -68,10 +68,13 @@ html{scroll-padding-top:0}
 #s5 .path-workspace{container-type:inline-size}
 @container(max-width:600px){#s5 .path-workspace .stage{--path-preview-width:130px;height:450px;min-height:450px;aspect-ratio:auto}#s5 .path-workspace .stage>[data-studio],#s5 .path-workspace .scene-fallback{top:190px;bottom:24px;height:calc(100% - 214px)}#s5 .path-workspace .scene-tools{top:10px;left:10px;right:150px;flex-direction:column;align-items:flex-start}#s5 .path-preview{top:10px;right:10px}}
 @media(max-width:700px){#s4 .surface-workspace .surface-controls{grid-template-columns:minmax(0,1fr)}#s4 [data-surface-lights],#s4 [data-surface-materials]{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.route-inner a.quiz-nav b{color:var(--green)}
-.route-inner a.quiz-nav[aria-current=step]{border-left-color:var(--green);background:#e7eee0;color:#315a46;box-shadow:none;font-weight:750}
+/* Booklet entries share 4.1's gold marker and selected state. */
+.route-inner a.quiz-nav{margin-top:8px;border-top:1px solid var(--line);padding-top:14px;color:#795b20;font-weight:400}
+.route-inner a.quiz-nav:hover,.route-inner a.quiz-nav:focus-visible{border-color:var(--line);outline:2px solid transparent}
+.route-inner a.quiz-nav b{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#f5e9c9;color:#795b20}
+.route-inner a.quiz-nav[aria-current=step]{border-left-color:#c09139;background:#f8f0dd;color:#795b20;box-shadow:none;font-weight:750}
 :is(#s1,#s2,#s3,#s4,#s5) .lab .scene-tools button{box-shadow:none}
-@media(max-width:760px){.route-inner a.quiz-nav[aria-current=step]{border-color:var(--green)}}
+@media(max-width:760px){.route-inner a.quiz-nav[aria-current=step]{border-color:var(--green);border-top-color:var(--line);border-left-color:#c09139}}
 @media(min-width:761px){.route{overflow-x:auto}}
 @media(max-width:520px){:is(#s1,#s2,#s3,#s4,#s5) .lab .scene-tools button{font-size:.84rem;padding:9px 12px}}
 :is(#s1,#s2,#s3,#s4,#s5) .lab .scene-tools button,:is(#s1,#s2,#s3,#s4,#s5) .lab-controls .choice-row button{line-height:1.72}
