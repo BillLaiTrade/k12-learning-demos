@@ -161,10 +161,6 @@
 .micro-compare-arrow { color:#647f53; font-size:22px; line-height:1; }
 .micro-viewer .micro-badge { padding:6px; font-size:.75rem; }
 .micro-viewer .micro-view-copy { font-size:.73rem; line-height:1.7; }
-.micro-handoff { margin:16px 0; padding:15px 18px; border:1px solid #c9b16a; border-radius:12px; background:#fbefcc; text-align:center; }
-.micro-handoff h3 { font-size:1rem; line-height:1.7; margin:0 0 4px; }
-.micro-handoff h3 span { display:inline-grid; place-items:center; width:26px; height:26px; border-radius:50%; background:#355c41; color:#fff9df; }
-.micro-handoff p { margin:0; font-size:.86rem; font-weight:700; }
 @container (max-width:640px) {
  .micro-a-callout { left:8px; top:44px; width:96px; padding:5px; }
  .micro-a-callout figcaption strong { font-size:12px; }
@@ -181,9 +177,6 @@
  .micro-compare-arrow::after { content:'→'; font-size:18px; }
  .micro-viewer .micro-compare-cell p { font-size:.7rem; }
  .micro-viewer .micro-view-copy { font-size:.7rem; }
- .micro-handoff { padding:12px; }
- .micro-handoff h3 { font-size:.9rem; }
- .micro-handoff p { font-size:.8rem; }
 }
 
 .micro-specimen-intro { display:flex; flex-wrap:wrap; align-items:baseline; gap:5px 14px; margin:0 0 12px; line-height:1.7; font-size:.84rem; }
