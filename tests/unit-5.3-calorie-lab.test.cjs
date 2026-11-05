@@ -30,6 +30,11 @@ test('5.3 第一區：100 g 水、揭示順序、中斷與器材失敗恢復',{t
     assert.equal(await root.getAttribute('data-phase'),'running');assert.equal(await conclusion.isHidden(),true);
     const current=Number(await page.locator('#calorie-end').textContent());assert.ok(current>20&&current<21);
     assert.equal(await page.locator('#calorie-meter').textContent(),current.toFixed(1));assert.equal(await button.isDisabled(),true);await capture('running-1366');
+    for(let i=0;i<10;i++){
+      await page.clock.runFor(100);
+      const values=await root.evaluate(n=>({temperature:Number(n.querySelector('#calorie-end').textContent),rise:n.querySelector('#calorie-rise').textContent}));
+      assert.equal(values.rise,(values.temperature-20).toFixed(1));
+    }
     await page.clock.runFor(4000);assert.equal(await root.getAttribute('data-phase'),'complete');
     assert.equal(await conclusion.isVisible(),true);assert.equal(await page.locator('#calorie-end').textContent(),'21.0');
     assert.equal(await page.locator('#calorie-rise').textContent(),'1.0');assert.equal(await page.locator('#calorie-heat').textContent(),'100');

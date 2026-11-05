@@ -8,7 +8,8 @@ function render(){
   const state=calorieObservationAt(elapsed),temperature=state.temperature.toFixed(1);
   get('calorie-meter').textContent=temperature;
   get('calorie-end').textContent=temperature;
-  get('calorie-rise').textContent=state.rise.toFixed(1);
+  // 算式以畫面讀值相減，避免兩個數各自四捨五入產生顯示差異。
+  get('calorie-rise').textContent=(Number(temperature)-CALORIE_SETUP.initial).toFixed(1);
   get('calorie-heat').textContent=state.waterCalories.toFixed(0);
   root.dataset.temperature=String(state.temperature);
   root.dataset.waterCalories=String(state.waterCalories);
