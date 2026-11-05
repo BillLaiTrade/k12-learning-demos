@@ -1,0 +1,107 @@
+{
+  "base": "http://127.0.0.1:8765",
+  "rows": [
+    {
+      "width": 1366,
+      "medium": "water",
+      "bounds": {
+        "x": 599.953125,
+        "y": 262.109375,
+        "width": 457.828125,
+        "height": 112.671875
+      },
+      "scene": {
+        "x": 437,
+        "y": -96.390625,
+        "width": 776,
+        "height": 512.15625
+      },
+      "playingAfterDeviceClick": true
+    },
+    {
+      "width": 1366,
+      "medium": "air",
+      "bounds": {
+        "x": 724.109375,
+        "y": 538.5,
+        "width": 201.75,
+        "height": 102.421875
+      },
+      "scene": {
+        "x": 437,
+        "y": 205.609375,
+        "width": 776,
+        "height": 512.15625
+      },
+      "playingAfterDeviceClick": true
+    },
+    {
+      "width": 390,
+      "medium": "water",
+      "bounds": {
+        "x": 100.453125,
+        "y": 332.171875,
+        "width": 192.328125,
+        "height": 47.328125
+      },
+      "scene": {
+        "x": 32,
+        "y": 181.5625,
+        "width": 326,
+        "height": 215.15625
+      },
+      "playingAfterDeviceClick": true
+    },
+    {
+      "width": 390,
+      "medium": "air",
+      "bounds": {
+        "x": 152.609375,
+        "y": 585.40625,
+        "width": 84.75,
+        "height": 44
+      },
+      "scene": {
+        "x": 32,
+        "y": 445.5625,
+        "width": 326,
+        "height": 215.15625
+      },
+      "playingAfterDeviceClick": true
+    },
+    {
+      "width": 320,
+      "medium": "water",
+      "bounds": {
+        "x": 85.75,
+        "y": 657.921875,
+        "width": 151.03125,
+        "height": 44
+      },
+      "scene": {
+        "x": 32,
+        "y": 539.65625,
+        "width": 256,
+        "height": 168.953125
+      },
+      "playingAfterDeviceClick": true
+    },
+    {
+      "width": 320,
+      "medium": "air",
+      "bounds": {
+        "x": 126.71875,
+        "y": 589.46875,
+        "width": 66.546875,
+        "height": 44
+      },
+      "scene": {
+        "x": 32,
+        "y": 479.65625,
+        "width": 256,
+        "height": 168.953125
+      },
+      "playingAfterDeviceClick": true
+    }
+  ]
+}
