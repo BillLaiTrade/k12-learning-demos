@@ -150,3 +150,44 @@
 .micro-concepts section:has(.micro-card-button:focus-visible) { outline:3px solid #c99a3c; outline-offset:3px; }
 .micro-concepts .micro-card-button:focus-visible { outline:0; }
 .micro-concepts h3::after { content:' ↗'; color:#6c8756; font-size:.85em; }
+
+/* One A image is shared by both stages; the comparison explains its new role. */
+.micro-a-callout { position:absolute; z-index:3; left:12px; top:50px; width:136px; margin:0; padding:8px; border:2px solid #c7a958; border-radius:10px; background:#fff8e4; color:#35533b; text-align:center; pointer-events:none; box-shadow:0 3px 12px #20372820; }
+.micro-a-callout figcaption strong { display:block; font-size:14px; line-height:1.4; }
+.micro-a-callout figcaption span { display:block; font-size:10px; color:#7c714c; }
+.micro-a-callout svg { display:block; width:65px; height:64px; margin:3px auto; }
+.micro-a-callout p { margin:0; padding:3px 2px; border-radius:12px; background:#dfeacb; font-size:11px; line-height:1.6; font-weight:700; }
+.micro-lab[data-view=eyepiece] .micro-a-callout { top:auto; bottom:12px; }
+.micro-lab[data-view=objective] .micro-map { top:auto; bottom:12px; }
+.micro-viewer { display:flex; gap:6px; padding:12px; }
+.micro-comparison { display:grid; grid-template-columns:1fr; justify-items:center; gap:3px; }
+.micro-compare-cell { display:flex; flex-direction:column; align-items:center; min-width:0; width:100%; }
+.micro-viewer .micro-compare-cell p { margin:0; font-size:.77rem; line-height:1.5; font-weight:650; }
+.micro-preview,.micro-before { display:block; width:116px; height:134px; max-height:none; margin:0; aspect-ratio:200 / 230; border:0; border-radius:0; background:none; box-shadow:none; }
+.micro-compare-arrow { color:#647f53; font-size:22px; line-height:1; }
+.micro-viewer .micro-badge { padding:6px; font-size:.75rem; }
+.micro-viewer .micro-view-copy { font-size:.73rem; line-height:1.7; }
+.micro-handoff { margin:16px 0; padding:15px 18px; border:1px solid #c9b16a; border-radius:12px; background:#fbefcc; text-align:center; }
+.micro-handoff h3 { font-size:1rem; line-height:1.7; margin:0 0 4px; }
+.micro-handoff h3 span { display:inline-grid; place-items:center; width:26px; height:26px; border-radius:50%; background:#355c41; color:#fff9df; }
+.micro-handoff p { margin:0; font-size:.86rem; font-weight:700; }
+@container (max-width:640px) {
+ .micro-a-callout { left:8px; top:44px; width:96px; padding:5px; }
+ .micro-a-callout figcaption strong { font-size:12px; }
+ .micro-a-callout figcaption span { font-size:9px; }
+ .micro-a-callout svg { width:48px; height:46px; margin:2px auto; }
+ .micro-a-callout p { font-size:10px; padding:2px; }
+ .micro-lab[data-view=eyepiece] .micro-a-callout { bottom:8px; }
+ .micro-lab[data-view=objective] .micro-map { bottom:8px; }
+ .micro-viewer { display:flex; padding:8px 10px; gap:4px; }
+ .micro-viewer .micro-compare-note { display:none; }
+ .micro-comparison { grid-template-columns:minmax(0,1fr) 16px minmax(0,1fr); width:100%; align-items:center; gap:4px; }
+ .micro-preview,.micro-before { width:64px; height:74px; }
+ .micro-compare-arrow { font-size:0; }
+ .micro-compare-arrow::after { content:'→'; font-size:18px; }
+ .micro-viewer .micro-compare-cell p { font-size:.7rem; }
+ .micro-viewer .micro-view-copy { font-size:.7rem; }
+ .micro-handoff { padding:12px; }
+ .micro-handoff h3 { font-size:.9rem; }
+ .micro-handoff p { font-size:.8rem; }
+}

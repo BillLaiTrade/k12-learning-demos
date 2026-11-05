@@ -27,9 +27,9 @@
   <link rel="stylesheet" href="assets/light-speed-lab.css?v=20261101-controls2">
   <script type="module" src="assets/light-speed-lab.mjs?v=20261105-tenreview1"></script>
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
-  <script type="module" src="assets/normal-incidence-lab.mjs?v=20261105-eleven1"></script>
+  <script type="module" src="assets/normal-incidence-lab.mjs?v=20261105-cartlayout1"></script>
   <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-cart1">
-  <script type="module" src="assets/oblique-cart.mjs?v=20261105-eleven1"></script>
+  <script type="module" src="assets/oblique-cart.mjs?v=20261105-cartlayout1"></script>
   <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261105-eleven1"></script>
   <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-inline1">
   <script type="module" src="assets/return-refraction-lab.mjs?v=20261105-tenreview1"></script>
@@ -41,7 +41,7 @@
   <script type="module" src="assets/depth-lab.mjs?v=20261105-tenreview1"></script>
   <link rel="stylesheet" href="assets/layer-speed-quiz.css?v=20261105-labeltype1">
   <script type="module" src="assets/layer-speed-quiz.mjs?v=20261105-tenreview1"></script>
-  <link rel="stylesheet" href="assets/lesson-format.css?v=20261105-headingrules1">
+  <link rel="stylesheet" href="assets/lesson-format.css?v=20261105-cartlayout1">
   <script type="module" src="assets/lesson.mjs?v=20261105-remove-position1">
 </script>
 </head>
@@ -167,13 +167,13 @@
       <noscript><p>總路程150萬公里，全程空氣約需5秒；前半空氣、後半水約需5.83秒；前半空氣、後半玻璃約需6.25秒。垂直入射時方向不偏折。啟用JavaScript後可發射與暫停比較。</p></noscript>
     </div>
     <p class="normal-takeaway"><strong>觀察結果：</strong>光由空氣垂直進入水或玻璃時，速度變慢，方向不變。</p>
-    <details class="normal-explanation" id="normal-explanation">
+    <details class="normal-explanation cart-explanation" id="normal-explanation" data-compact-cart>
       <summary>為什麼變慢，卻沒有轉向？</summary>
       <div class="normal-explanation-body">
-        <div class="normal-analogy-grid">
-          <div>
+        <div class="normal-analogy-grid cart-analogy-grid">
+          <div class="cart-demo">
             <div class="normal-cart-scene">
-              <svg viewBox="0 0 520 340" role="img" aria-label="小車雙輪並排，同時由平滑地面進入較難前進的區域，一起變慢，方向不變。">
+              <svg viewBox="0 -40 520 380" role="img" aria-label="小車雙輪並排，同時由平滑地面進入較難前進的區域，一起變慢，方向不變。">
                 <defs>
                   <linearGradient id="cart-tire" x1="0" x2="1"><stop stop-color="#20272b"/><stop offset=".3" stop-color="#4a5053"/><stop offset=".65" stop-color="#252b2e"/><stop offset="1" stop-color="#11181c"/></linearGradient>
                   <linearGradient id="cart-axle" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e5bb7e"/><stop offset=".4" stop-color="#c59151"/><stop offset=".65" stop-color="#d3a267"/><stop offset="1" stop-color="#94612f"/></linearGradient>
@@ -181,8 +181,9 @@
                   <pattern id="cart-rough" width="17" height="19" patternUnits="userSpaceOnUse"><path d="m2 5 3-1m5 9 2 2m-9 1 2-2" stroke="#a7804e" stroke-width="1.2" opacity=".27"/><path d="m12 3 2 1m-6 5 2-1" stroke="#fff4d6" stroke-width="2" opacity=".6"/></pattern>
                   <pattern id="cart-tread" width="8" height="9" patternUnits="userSpaceOnUse"><path d="M0 2h8m-8 5h8" stroke="#89908e" stroke-width="1" opacity=".35"/></pattern>
                 </defs>
-                <rect width="520" height="340" fill="#f2eee5"/><path d="M0 160H520V340H0Z" fill="#d8bd94"/><path d="M0 160H520V340H0Z" fill="url(#cart-rough)"/><path d="M0 160H520" stroke="#b89d77" stroke-width="3"/>
-                <text x="20" y="31" fill="#6d756b" font-size="18">平滑地面</text><text x="20" y="316" fill="#6d624f" font-size="18">較難前進的地面</text>
+                <rect y="-40" width="520" height="380" fill="#f2eee5"/><path d="M0 160H520V340H0Z" fill="#d8bd94"/><path d="M0 160H520V340H0Z" fill="url(#cart-rough)"/><path d="M0 160H520" stroke="#b89d77" stroke-width="3"/>
+                <text x="20" y="1" fill="#6d756b" font-size="18">平滑地面</text><text x="500" y="326" text-anchor="end" fill="#6d624f" font-size="18">較難前進的地面</text>
+                <text x="272" y="27" fill="#487c62" font-size="18">法線</text>
                 <path d="M260 18V310" stroke="#487c62" stroke-width="2" stroke-dasharray="7 6"/><path d="m253 301 7 10 7-10" fill="none" stroke="#487c62" stroke-width="2"/>
                 <g id="normal-cart" transform="translate(0 82)">
                   <ellipse cx="260" cy="12" rx="107" ry="36" fill="#4a4533" opacity=".14"/>
@@ -192,12 +193,14 @@
                 </g>
               </svg>
             </div>
-            <p class="normal-cart-caption" id="normal-cart-status" role="status">兩輪並排，朝交界直直前進。</p>
-            <button class="normal-cart-action" id="normal-cart-play" type="button">播放小車示範</button>
+            <div class="cart-demo-controls">
+            <p class="normal-cart-caption" id="normal-cart-status" role="status">兩輪等速，直直前進。</p>
+            <button class="normal-cart-action" id="normal-cart-play" type="button">播放示範</button>
+            </div>
           </div>
-          <div class="normal-cart-copy"><p><strong>兩輪同時進入較慢的區域，一起變慢，仍直直前進。</strong></p><p>光沿法線進入另一種介質時，也會速度改變、方向不變。</p><p class="normal-analogy-note">小車為類比，不代表光受到摩擦。</p></div>
+          <div class="normal-cart-copy cart-analogy-copy"><p><strong>兩輪同時變慢，沒有一側先慢下來，因此保持直行。</strong></p><p class="cart-light-link"><span>對應光</span>沿法線入射時，方向不變。</p></div>
         </div>
-        <p class="note">法線是垂直介面的參考線；本次光沿法線入射，因此法線與光路重合。</p>
+        <div class="cart-analogy-notes"><p class="normal-analogy-note">小車為類比，不代表光受到摩擦。</p></div>
       </div>
     </details>
   </div>
@@ -233,13 +236,13 @@
       </div>
       <noscript><p>光由空氣進入水或玻璃，由快變慢，斜射時偏向法線，折射角較小。0°時不偏折。啟用JavaScript後可切換介質、發射並直接在光路上觀察角度與說明。</p></noscript>
     </div>
-    <details class="oblique-explanation" id="oblique-explanation">
+    <details class="oblique-explanation cart-explanation" id="oblique-explanation" data-compact-cart>
       <summary>為什麼斜著進入，就會轉向？</summary>
       <div class="oblique-explanation-body">
-        <div class="oblique-analogy-grid">
-          <div>
+        <div class="oblique-analogy-grid cart-analogy-grid">
+          <div class="cart-demo">
             <div class="oblique-cart-scene">
-              <svg viewBox="0 0 520 340" role="img" aria-label="小車斜著前進，一側輪子先進入較難前進的地面而變慢，整體轉向；兩輪都進入後沿新方向前進。">
+              <svg viewBox="0 -40 520 380" role="img" aria-label="小車斜著前進，一側輪子先進入較難前進的地面而變慢，整體轉向；兩輪都進入後沿新方向前進。">
                 <defs>
                   <linearGradient id="oblique-cart-tire" x1="0" x2="1"><stop stop-color="#20272b"/><stop offset=".3" stop-color="#4a5053"/><stop offset=".65" stop-color="#252b2e"/><stop offset="1" stop-color="#11181c"/></linearGradient>
                   <linearGradient id="oblique-cart-axle" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e5bb7e"/><stop offset=".4" stop-color="#c59151"/><stop offset=".65" stop-color="#d3a267"/><stop offset="1" stop-color="#94612f"/></linearGradient>
@@ -247,9 +250,9 @@
                   <pattern id="oblique-cart-rough" width="17" height="19" patternUnits="userSpaceOnUse"><path d="m2 5 3-1m5 9 2 2m-9 1 2-2" stroke="#a7804e" stroke-width="1.2" opacity=".27"/><path d="m12 3 2 1m-6 5 2-1" stroke="#fff4d6" stroke-width="2" opacity=".6"/></pattern>
                   <pattern id="oblique-cart-tread" width="8" height="9" patternUnits="userSpaceOnUse"><path d="M0 2h8m-8 5h8" stroke="#89908e" stroke-width="1" opacity=".35"/></pattern>
                 </defs>
-                <rect width="520" height="340" fill="#f2eee5"/><path d="M0 160H520V340H0Z" fill="#d8bd94"/><path d="M0 160H520V340H0Z" fill="url(#oblique-cart-rough)"/><path d="M0 160H520" stroke="#b89d77" stroke-width="3"/>
-                <text x="20" y="31" fill="#6d756b" font-size="18">平滑地面</text><text x="20" y="316" fill="#6d624f" font-size="18">較難前進的地面</text>
-                <path id="oblique-cart-normal" stroke="#487c62" stroke-width="2" stroke-dasharray="7 6"/><text id="oblique-cart-normal-label" y="27" fill="#487c62" font-size="18">法線</text>
+                <rect y="-40" width="520" height="380" fill="#f2eee5"/><path d="M0 160H520V340H0Z" fill="#d8bd94"/><path d="M0 160H520V340H0Z" fill="url(#oblique-cart-rough)"/><path d="M0 160H520" stroke="#b89d77" stroke-width="3"/>
+                <text x="20" y="1" fill="#6d756b" font-size="18">平滑地面</text><text x="500" y="326" text-anchor="end" fill="#6d624f" font-size="18">較難前進的地面</text>
+                <path id="oblique-cart-normal" stroke="#487c62" stroke-width="2" stroke-dasharray="7 6"/><text id="oblique-cart-normal-label" y="-5" dx="48" fill="#487c62" font-size="18">法線</text>
                 <path id="oblique-cart-trail" fill="none" stroke="#64826a" stroke-width="3" opacity=".55"/>
                 <g id="oblique-cart" transform="translate(145 67) rotate(-40)">
                   <ellipse cy="12" rx="97" ry="31" fill="#4a4533" opacity=".14"/>
@@ -260,16 +263,17 @@
                 </g>
               </svg>
             </div>
-            <p class="cart-setting-note">固定斜射類比・與上圖設定獨立</p>
-            <p class="oblique-cart-caption" id="oblique-cart-status" role="status">斜著前進，兩輪速度相同。</p>
-            <button class="oblique-cart-action" id="oblique-cart-play" type="button">播放小車示範</button>
+            <div class="cart-demo-controls">
+            <p class="oblique-cart-caption" id="oblique-cart-status" role="status">兩輪等速，斜向前進。</p>
+            <button class="oblique-cart-action" id="oblique-cart-play" type="button">播放示範</button>
+            </div>
           </div>
-          <div class="oblique-cart-copy">
-            <p><strong>一側先進入、先變慢，小車便轉向；兩輪都進入後，沿新方向前進。</strong></p>
-            <p>光由較快的空氣進入較慢的水或玻璃，光路偏向法線，折射角變小。沿法線入射（0°）時，速度改變，方向不偏折。</p>
+          <div class="oblique-cart-copy cart-analogy-copy">
+            <p><strong>一輪先變慢，兩輪暫時不同速，因此轉向。</strong></p>
+            <p class="cart-light-link"><span>對應光</span>斜射進入較慢介質時，偏向法線。</p>
           </div>
         </div>
-        <p class="oblique-model-note">小車為類比，不代表光受到摩擦。</p>
+        <div class="cart-analogy-notes"><p class="cart-analogy-note">小車為類比，不代表光受到摩擦。</p><p class="cart-setting-note">固定斜射類比・與上圖設定獨立</p></div>
       </div>
     </details>
   </div>

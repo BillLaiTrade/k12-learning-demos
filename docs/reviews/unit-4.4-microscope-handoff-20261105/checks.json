@@ -1,0 +1,846 @@
+{
+  "records": [
+    {
+      "width": 1440,
+      "height": 900,
+      "view": "objective",
+      "windowHeight": 667.6875,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "原物",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "2F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意物鏡形成的實像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "原物 → 物鏡 → A",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "返回全貌",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目前位置",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "view": "eyepiece",
+      "windowHeight": 667.6875,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "眼睛",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意目鏡觀察的物體",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A → 目鏡 → 眼睛",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "返回全貌",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目前位置",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "view": "whole",
+      "windowHeight": 667.6875,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "目鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意連接兩段的同一個像",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "view": "objective",
+      "windowHeight": 637.046875,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "原物",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "2F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意物鏡形成的實像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "原物 → 物鏡 → A",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "返回全貌",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目前位置",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "view": "eyepiece",
+      "windowHeight": 637.046875,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "眼睛",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意目鏡觀察的物體",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A → 目鏡 → 眼睛",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "返回全貌",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目前位置",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "view": "whole",
+      "windowHeight": 637.046875,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "目鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意連接兩段的同一個像",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "view": "objective",
+      "windowHeight": 637.046875,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "原物",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "2F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意物鏡形成的實像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "原物 → 物鏡 → A",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "返回全貌",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目前位置",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "view": "eyepiece",
+      "windowHeight": 637.046875,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "眼睛",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意目鏡觀察的物體",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A → 目鏡 → 眼睛",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "返回全貌",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目前位置",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "view": "whole",
+      "windowHeight": 637.046875,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "目鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意連接兩段的同一個像",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "height": 900,
+      "view": "objective",
+      "windowHeight": 715.25,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "原物",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "2F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意物鏡形成的實像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "原物 → 物鏡 → A",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "返回全貌",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目前位置",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "height": 900,
+      "view": "eyepiece",
+      "windowHeight": 715.25,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "眼睛",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意目鏡觀察的物體",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A → 目鏡 → 眼睛",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "返回全貌",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目前位置",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 760,
+      "height": 900,
+      "view": "whole",
+      "windowHeight": 715.25,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "目鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意連接兩段的同一個像",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "view": "objective",
+      "windowHeight": 724.296875,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "原物",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "2F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意物鏡形成的實像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "原物 → 物鏡 → A",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "返回全貌",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目前位置",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "view": "eyepiece",
+      "windowHeight": 724.296875,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "眼睛",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意目鏡觀察的物體",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A → 目鏡 → 眼睛",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "返回全貌",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目前位置",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "view": "whole",
+      "windowHeight": 745.890625,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "目鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意連接兩段的同一個像",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 844,
+      "view": "objective",
+      "windowHeight": 769.296875,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "原物",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "2F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意物鏡形成的實像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "原物 → 物鏡 → A",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "返回全貌",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目前位置",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 844,
+      "view": "eyepiece",
+      "windowHeight": 790.890625,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "眼睛",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意目鏡觀察的物體",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A → 目鏡 → 眼睛",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "返回全貌",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目前位置",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 844,
+      "view": "whole",
+      "windowHeight": 790.890625,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "目鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "A 中間像放大示意連接兩段的同一個像",
+          "inside": true,
+          "normal": true
+        }
+      ]
+    }
+  ],
+  "sharedA": true,
+  "errors": []
+}

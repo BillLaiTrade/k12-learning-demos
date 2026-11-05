@@ -1,0 +1,11 @@
+{
+  "baseline": "e74355a53be7af472c5ef1165d566e5e8431644e",
+  "upper_program_and_geometry_unchanged": {
+    "units/4/parts/4.2/assets/reflection-3d.js": "53b202489d5319c060af41f3dde957b03a908df1f6cda0056ec6de4b13149997",
+    "units/4/parts/4.2/assets/surface-directions.mjs": "d94b4601c9515c5fd0e99598eef675eea81bc161e1e68f25e332236208e93178"
+  },
+  "upper_figure_unchanged": true,
+  "upper_style_prefix_unchanged": true,
+  "other_sections_unchanged": true,
+  "unique_html_ids": true
+}

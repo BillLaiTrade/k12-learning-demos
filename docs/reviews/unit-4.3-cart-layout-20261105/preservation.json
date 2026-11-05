@@ -1,0 +1,16 @@
+{
+  "base": "d3a10a120d43965aa46f0b728ad3797fcae20520",
+  "preserved_sections": [
+    1,
+    4,
+    5,
+    6,
+    7
+  ],
+  "preserved_model_and_image_files": 20,
+  "opt_in_compact_carts": [
+    "normal",
+    "oblique"
+  ],
+  "optical_models_changed": false
+}
