@@ -11,7 +11,7 @@
   const paths = ['left', 'right'].map(side => ({node:$(`convection-${side}`), length:0}));
   const arrows = [...root.querySelectorAll('[data-flow-arrow]')].map(node => ({
     node, path:paths[node.dataset.flowArrow === 'left' ? 0 : 1], phase:Number(node.dataset.phase),
-    tail:node.querySelector('.convection-arrow-tail'), head:node.querySelector('.convection-arrow-head')
+    outline:node.querySelector('.convection-arrow-outline'), tail:node.querySelector('.convection-arrow-tail'), head:node.querySelector('.convection-arrow-head')
   }));
   const routes = {
     water: [
@@ -32,14 +32,14 @@
     status:'idle', request:0
   }]));
   let medium = 'water', time = 0, playing = false, frame = 0, previous = null;
-  const warm = [206,125,62], cool = [85,126,145];
+  const warm = [206,125,62], cool = [47,99,140];
   function setText(id, text) { const node=$(id); if(node.textContent!==text)node.textContent=text; }
   function configureRoutes() {
     paths.forEach((path,i)=>{path.node.setAttribute('d',routes[medium][i]);path.length=path.node.getTotalLength();});
     $('convection-motion').setAttribute('clip-path',`url(#convection-${medium}-mask)`);
   }
   function drawArrows() {
-    arrows.forEach(({node,path,phase,tail,head})=>{
+    arrows.forEach(({node,path,phase,outline,tail,head})=>{
       const progress=(time/12+phase)%1, end=progress*path.length, length=medium==='water'?108:145;
       const points=[];
       for(let i=0;i<=8;i++){
@@ -47,11 +47,12 @@
         const p=path.node.getPointAtLength(distance);
         points.push(`${i?'L':'M'}${p.x.toFixed(2)} ${p.y.toFixed(2)}`);
       }
-      tail.setAttribute('d',points.join(''));
+      const trail=points.join('');
+      outline.setAttribute('d',trail);tail.setAttribute('d',trail);
       const p=path.node.getPointAtLength(end), next=path.node.getPointAtLength((end+2)%path.length);
       const angle=Math.atan2(next.y-p.y,next.x-p.x)*180/Math.PI;
       head.setAttribute('transform',`translate(${p.x.toFixed(2)} ${p.y.toFixed(2)}) rotate(${angle.toFixed(1)})`);
-      const warmth=Math.max(0,Math.min(1,1-Math.abs(p.x-500)/310));
+      const warmth=Math.max(0,Math.min(1,1-Math.abs(p.x-500)/170));
       head.setAttribute('fill',`rgb(${cool.map((v,i)=>Math.round(v+(warm[i]-v)*warmth)).join(',')})`);
       node.dataset.progress=progress.toFixed(4);
     });
@@ -66,7 +67,7 @@
     $('convection-air-scene').toggleAttribute('hidden',medium!=='air');
     $('convection-power-off').toggleAttribute('hidden',started);
     setText('convection-heater-label',text.heater);setText('convection-hint',text.hint);
-    $('convection-motion').setAttribute('opacity',started&&asset.status==='ready'?Math.min(1,.3+time/2):'0');
+    $('convection-motion').setAttribute('opacity',started&&asset.status==='ready'?'1':'0');
     root.querySelectorAll('button[data-medium]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.medium===medium)));
     drawArrows();
     setText('convection-step-1',!started?'受熱處的流體會往哪裡動？':`受熱的${text.name}膨脹，密度變小，逐漸上升。`);
