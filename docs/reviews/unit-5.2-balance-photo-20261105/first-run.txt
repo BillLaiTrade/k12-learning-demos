@@ -1,0 +1,68 @@
+▶ 5.2 equilibrium: ambient exchange, faster contact and dragging
+  ✔ approved photo layers load, meters stay fixed and both blocks use the same material (600.18894ms)
+  ✔ viewing and moving either block never start heat exchange without pressing start (653.245472ms)
+  ✔ separated blocks drift towards the room and can be paused (1586.61222ms)
+  ✔ contact is faster than room exchange and does not restart the readings (1706.459075ms)
+  ✔ separating still changes temperatures; recontact continues rather than resets (2934.082122ms)
+  ✔ near equal block temperatures are not full room equilibrium (7115.184594ms)
+  ✔ only room equilibrium stops the model at 25°C and survives recontact (34130.749339ms)
+  ✔ drags, collision limits, instrument labels and overlay hit areas still work (1750.096283ms)
+  ✔ pause, backgrounding and reset keep the physical state continuous (644.881454ms)
+  ✔ desktop and laptop retain readable drag controls and other blocks stay independent (2594.078155ms)
+  ✖ real touch input and real-time flow work with both motion preferences (33060.845326ms)
+  ✖ an unavailable photograph blocks the experiment and retry restores actual assets (1072.131038ms)
+  ✔ slow photo loading never starts the model or accepts hidden dragging (400.649398ms)
+✖ 5.2 equilibrium: ambient exchange, faster contact and dragging (89916.051026ms)
+▶ 5.2 first block: three environments and in-water thermometers
+  ✔ starts with three clean scenes, pending observations and authentic portraits (175.334468ms)
+  ✔ matching scales, immersed bulbs and synchronized liquid/readout levels (1549.646963ms)
+  ✔ 25°C: A releases heat and B absorbs heat; pause freezes readouts (1324.290568ms)
+  ✔ 5°C: both release heat and scene/captions change together (1283.820731ms)
+  ✔ 70°C: even the initially hot cup absorbs heat; both arrows point inward (1266.393238ms)
+  ✔ copper paths cross cup boundaries and pulses move, pause and resume with the model (6156.195792ms)
+  ✔ reset and switching environment during playback cancel old observations (599.675282ms)
+  ✔ same displayed temperature removes heat flow and replay starts cleanly (9051.456371ms)
+  ✔ keyboard and reduced motion preserve all basic controls (643.84549ms)
+  ✔ in-scene instruments and controls fit desktop, tablet and phone widths (1355.369242ms)
+  ✔ real rendered flow keeps moving with either motion preference and freezes only when paused (4316.434408ms)
+  ✔ real mobile taps change scene, play, pause and restart (785.070808ms)
+  ✔ remaining learning blocks and quiz still operate independently (799.600593ms)
+✔ 5.2 first block: three environments and in-water thermometers (31133.890103ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 25
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 90318.68969
+
+✖ failing tests:
+
+test at tests/unit-5.2-balance.test.cjs:88:10
+✖ real touch input and real-time flow work with both motion preferences (33060.845326ms)
+  page.waitForFunction: Timeout 30000ms exceeded.
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-balance.test.cjs:92:116)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-balance.test.cjs:88:2) {
+    name: 'TimeoutError',
+    log: []
+  }
+
+test at tests/unit-5.2-balance.test.cjs:99:10
+✖ an unavailable photograph blocks the experiment and retry restores actual assets (1072.131038ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Number(await p.locator('#balance-lab').getAttribute('data-temperature-a'))<60)
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-balance.test.cjs:106:229)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-balance.test.cjs:99:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
