@@ -514,3 +514,7 @@ node --test --test-concurrency=1 tests/unit-4.3-depth-model.test.mjs tests/unit-
 依五點共通規則，第二區改開放疑問並同步導覽；第二至五區副標改概念與比較焦點。第三區操作短註移至圖上方，阿公改引導觀察；第二區用桌電／筆電的「左右捲動」。第四區「斜射且發生折射時」移到結果圖例，0°不顯示斜射條件。原控制器、模型、素材與小測保持；四桌面／16組條件走讀及原格式／互動12項通過。見`docs/decisions/unit-4.3-heading-roles.md`及`docs/reviews/unit-4.3-heading-roles-20261105/`。
 
 本輪同步採用新版S03：六區導覽正文直接讀取右側h2，以觀察器連動標題變更；HTML不再維護第二份標題。aria-labelledby對應原h2，編號、錨點與小測入口保持。第三區左右問法已統一；格式檢查補逐字比對與改名連動。
+
+## 移除目前位置文字（2026-11-05）
+
+依使用者A決定，移除頂部「目前位置」段落及對應更新語句，保留側欄反白、同源標題、原進度條與所有實驗／小測。格式及導覽9項通過；見`docs/decisions/unit-4.3-remove-position.md`及`docs/reviews/unit-4.3-remove-position-20261105/`。

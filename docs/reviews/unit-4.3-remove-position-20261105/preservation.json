@@ -1,0 +1,10 @@
+{
+  "baseline": "eb979e74891f235b8ef166de40af09b48d0ca93e",
+  "only_removed_position_paragraph_and_its_update": true,
+  "reading_bar_and_sidebar_highlight_retained": true,
+  "original_models_experiment_controllers_images_and_lesson_content_unchanged": true,
+  "changed_course_files": [
+    "units/4/parts/4.3/index.html",
+    "units/4/parts/4.3/assets/lesson.mjs"
+  ]
+}

@@ -48,8 +48,7 @@ test('4.3 shared lesson format keeps navigation and content usable',{timeout:900
   for(let i=1;i<=7;i++){
    await page.locator(`.route a[href="#s${i}"]`).click();
    await page.waitForFunction(i=>document.querySelector('.route a[aria-current="step"]')?.hash===`#s${i}`,i);
-   const expected=i===7?'目前位置：單元小測':`目前位置：第 ${String(i).padStart(2,'0')}／06 個學習區塊`;
-   assert.equal(await page.locator('#route-progress').innerText(),expected);
+   assert.equal(await page.locator('#route-progress').count(),0);
   }
  });
  await t.test('desktop, laptop and narrow screens retain unclipped headings and controls',async()=>{

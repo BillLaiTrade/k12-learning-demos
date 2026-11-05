@@ -46,7 +46,7 @@ test('4.3 format matches 4.1 while the original experiments remain usable',{time
   }
  });
  await t.test('reading progress and existing anchor links follow all six sections and the quiz',async()=>{
-  await p.setViewportSize({width:1366,height:768});for(let i=1;i<=7;i++){await p.locator(`.route a[href="#s${i}"]`).click();await p.waitForFunction(i=>document.querySelector('.route a[aria-current="step"]')?.hash===`#s${i}`,i);assert.equal(await p.locator('#lesson-progress').getAttribute('max'),'6');assert.equal(await p.locator('#lesson-progress').evaluate(e=>e.value),Math.min(6,i));assert.equal(await p.locator('#route-progress').textContent(),i===7?'目前位置：單元小測':`目前位置：第 ${String(i).padStart(2,'0')}／06 個學習區塊`);}
+  await p.setViewportSize({width:1366,height:768});for(let i=1;i<=7;i++){await p.locator(`.route a[href="#s${i}"]`).click();await p.waitForFunction(i=>document.querySelector('.route a[aria-current="step"]')?.hash===`#s${i}`,i);assert.equal(await p.locator('#lesson-progress').getAttribute('max'),'6');assert.equal(await p.locator('#lesson-progress').evaluate(e=>e.value),Math.min(6,i));assert.equal(await p.locator('#route-progress').count(),0);}
  });
  await t.test('shared buttons preserve primary/secondary states, focus and source controls',async()=>{
   const green='rgb(23, 107, 83)';for(const id of['race-start','normal-start','oblique-start','exit-start','depth-fill','rank-play','rank-check']){const v=await p.locator('#'+id).evaluate(e=>({bg:getComputedStyle(e).backgroundColor,r:getComputedStyle(e).borderRadius}));assert.equal(v.bg,green,id);assert.equal(v.r,'13px',id);}
