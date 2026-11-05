@@ -1,5 +1,5 @@
 import {LIGHTS,FILTERS,rgbCss} from './color-model.mjs';
-import {initialiseDuoProbe} from './duo-probe.mjs?v=duo-desk-20261105';
+import {initialiseDuoProbe} from './duo-probe.mjs?v=probe-result-20261105';
 import {PAPER_TYPES,COLOUR_OPTIONS,TRANSMISSION_OPTIONS,REFLECTION_OPTIONS,INITIAL_SERIES,newQuestionSeries,challengeSignal,expectedAnswer,checkPrediction} from './duo-quiz-model.mjs?v=duo-series-20261104';
 
 const colourName=key=>COLOUR_OPTIONS.find(o=>o[0]===key)?.[1]||key;

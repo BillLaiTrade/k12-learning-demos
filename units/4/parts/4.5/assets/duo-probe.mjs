@@ -1,5 +1,5 @@
-import {MIX_SETUP,SOURCE_LINEAR} from './mix-optics.mjs';
-import {PRIMARY_KEYS,PROBE_SETUP} from './duo-quiz-model.mjs?v=duo-free-torches-20261104';
+import {MIX_SETUP,SOURCE_LINEAR,footprint} from './mix-optics.mjs';
+import {PRIMARY_KEYS,PROBE_SETUP,COLOUR_OPTIONS,colourKey} from './duo-quiz-model.mjs?v=duo-free-torches-20261104';
 import {LIGHTS} from './color-model.mjs';
 
 // The same lens/pivot coordinates as section 3's PNG fallback.
@@ -49,6 +49,28 @@ export function initialiseDuoProbe(root){
  function paint(){frame=0;const data=pixels.data,P=PROBE_SETUP,centres=lamps.map(s=>[s.x*P.width,s.y*P.height]),sources=lamps.map(s=>SOURCE_LINEAR[PRIMARY_KEYS.indexOf(s.colour)]);
   for(let y=0;y<canvas.height;y++)for(let x=0;x<canvas.width;x++){const px=(x+.5)/canvas.width*P.width,py=(y+.5)/canvas.height*P.height,a=lamps[0].on?clamp((1-Math.hypot(px-centres[0][0],py-centres[0][1])/P.radius)/P.edge,0,1):0,b=lamps[1].on?clamp((1-Math.hypot(px-centres[1][0],py-centres[1][1])/P.radius)/P.edge,0,1):0,at=(y*canvas.width+x)*4;for(let c=0;c<3;c++)data[at+c]=Math.round(255*srgb(MIX_SETUP.ambient+MIX_SETUP.exposure*(a*sources[0][c]+b*sources[1][c])));data[at+3]=255;}
   ctx.putImageData(pixels,0,0);
+  updateObservation();
+ }
+ function updateObservation(){
+  const result=$('[data-probe-result]'),active=lamps.filter(s=>s.on),name=key=>COLOUR_OPTIONS.find(c=>c[0]===key)[1],css=rgb=>`rgb(${rgb.join(', ')})`,setText=(node,text)=>{if(node.textContent!==text)node.textContent=text;};
+  const sample=(x,y)=>{const at=(clamp(Math.floor(y*canvas.height),0,canvas.height-1)*canvas.width+clamp(Math.floor(x*canvas.width),0,canvas.width-1))*4;return[...pixels.data.slice(at,at+3)];};
+  lamps.forEach((lamp,i)=>{const chip=$(`[data-probe-source="${i}"]`),rgb=SOURCE_LINEAR[PRIMARY_KEYS.indexOf(lamp.colour)].map(v=>Math.round(255*srgb(PROBE_SETUP.ambient+PROBE_SETUP.exposure*v)));chip.dataset.on=String(lamp.on);chip.querySelector('i').style.backgroundColor=css(rgb);setText(chip.querySelector('[data-source-name]'),LIGHTS[lamp.colour].name+(lamp.on?'':'（關閉）'));});
+  let phase,label,note,swatches;
+  if(!active.length){phase='off';label='無色光';note='兩盞燈皆關閉，目前沒有色光照到白幕。';swatches=[sample(.5,.5)];}
+  else if(active.length===1){const lamp=active[0],index=lamps.indexOf(lamp);phase='single';label=name(lamp.colour);note=`目前只有手電筒 ${index?'B':'A'} 的${LIGHTS[lamp.colour].name}照到白幕。`;swatches=[sample(lamp.x,lamp.y)];}
+  else{
+   const [a,b]=lamps,distance=Math.hypot((a.x-b.x)*PROBE_SETUP.width,(a.y-b.y)*PROBE_SETUP.height),overlaps=distance<2*PROBE_SETUP.radius-1e-7;
+   if(!overlaps){phase='apart';label='尚未重疊';note=`光斑尚未重疊，白幕上分別呈${name(a.colour)}、${name(b.colour)}。`;swatches=lamps.map(s=>sample(s.x,s.y));}
+   else{
+    const x=Math.floor((a.x+b.x)/2*canvas.width),y=Math.floor((a.y+b.y)/2*canvas.height);let best=null,score=0;
+    for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const px=(clamp(x+dx,0,canvas.width-1)+.5)/canvas.width,py=(clamp(y+dy,0,canvas.height-1)+.5)/canvas.height,weight=Math.min(footprint(px,py,a),footprint(px,py,b));if(weight>score){score=weight;best=[px,py];}}
+    if(!best){phase='edge';label='邊緣接近';note='光斑邊緣剛開始接觸，繼續靠近可比較混色。';swatches=[sample((a.x+b.x)/2,(a.y+b.y)/2)];}
+    else{phase=distance<1e-7?'together':'overlap';label=name(colourKey(LIGHTS[a.colour].rgb.map((v,c)=>v+LIGHTS[b.colour].rgb[c])));note=phase==='together'?`兩束光完全重疊，重疊處呈${label}。`:a.colour===b.colour?`兩束${LIGHTS[a.colour].name}重疊後仍呈${label}；未重疊處也是${label}。`:`重疊處呈${label}；未重疊處仍是${name(a.colour)}、${name(b.colour)}。`;swatches=[sample(...best)];}
+   }
+  }
+  result.dataset.phase=phase;setText($('[data-probe-operator]'),phase==='apart'?'／':'＋');setText($('[data-probe-result-name]'),label);setText($('[data-probe-result-note]'),note);
+  [0,1].forEach(i=>{const swatch=$(`[data-probe-result-swatch="${i}"]`);swatch.hidden=!swatches[i];if(swatches[i])swatch.style.backgroundColor=css(swatches[i]);});
+  canvas.setAttribute('aria-describedby','duo-probe-result-note');result.hidden=false;
  }
  function update(){
   root.dataset.probe=JSON.stringify(lamps);root.dataset.probePreset=preset;root.dataset.probeDragging=String(!!drag?.moved);
