@@ -1,0 +1,73 @@
+▶ 5.2 equilibrium: ambient exchange, faster contact and dragging
+  ✔ observation waits until the block is seen, with a visible room temperature (364.980559ms)
+  ✔ separated blocks drift towards the room and can be paused (1662.520911ms)
+  ✔ contact is faster than room exchange and does not restart the readings (1764.80511ms)
+  ✔ separating still changes temperatures; recontact continues rather than resets (3056.671352ms)
+  ✔ near equal block temperatures are not full room equilibrium (7208.405631ms)
+  ✔ only room equilibrium stops the model at 25°C and survives recontact (36382.163239ms)
+  ✔ drags, collision limits, instrument labels and overlay hit areas still work (1765.248026ms)
+  ✔ pause, backgrounding and reset keep the physical state continuous (602.272506ms)
+  ✔ desktop and laptop retain readable drag controls and other blocks stay independent (2513.684269ms)
+  ✔ real touch input and real-time flow work with both motion preferences (4837.544843ms)
+✔ 5.2 equilibrium: ambient exchange, faster contact and dragging (61849.580141ms)
+▶ 5.2 conduction: cookware scene, material drag and live readings
+  ✔ waits for explicit heating after becoming visible and uses the existing real avatars (406.643554ms)
+  ✔ pan, joint and distal LCDs follow the same model and correct heating order (2125.225724ms)
+  ✔ pause freezes actual readouts and flow, then resume continues (302.005594ms)
+  ✔ valid dragging swaps the whole photo and joint inset and restarts fair comparison (4607.155441ms)
+  ✔ invalid or cancelled drag does not switch material or leave a ghost (400.523014ms)
+  ✔ click and keyboard are usable alternatives; reset keeps chosen material (383.426672ms)
+  ✔ steady temperatures retain a gradient and continuous transfer, never labelled equilibrium (11382.778767ms)
+  ✔ background pauses without resetting, and other learning blocks stay independent (768.447578ms)
+  ✔ desktop and laptop layout, sensor labels and assets fit the scene (486.350187ms)
+  ✔ real-time movement and real touch work under both motion preferences (6470.738829ms)
+✔ 5.2 conduction: cookware scene, material drag and live readings (29057.697031ms)
+▶ 5.2 convection: fluid movement, mode changes and observation lifecycle
+  ✔ starts with a real distinction between water and a room, without a premature conclusion (116.432841ms)
+  ✔ both sides rise near the source, move continuously and use the same relative-warmth key (6858.872006ms)
+  ✔ pause freezes actual rendered positions and screenshots; resume preserves progress (543.169833ms)
+  ✔ switching the fluid cancels old animation, clears the discovery and resets observations (400.151571ms)
+  ✔ keyboard, rapid actions and background interruptions leave no delayed restart (309.489128ms)
+  ✔ radiation, insulation and the integrated quiz still work independently (1271.234087ms)
+  ✖ all supported viewports keep explanatory text, controls and the actual fluid scene readable (61.657029ms)
+  ✔ real frames keep moving with both motion preferences and touch can pause/reset (3800.736862ms)
+✖ 5.2 convection: fluid movement, mode changes and observation lifecycle (14430.604543ms)
+▶ 5.2 first block: three environments and in-water thermometers
+  ✔ starts with three clean scenes, pending observations and authentic portraits (144.342989ms)
+  ✔ matching scales, immersed bulbs and synchronized liquid/readout levels (1289.183916ms)
+  ✔ 25°C: A releases heat and B absorbs heat; pause freezes readouts (1264.037561ms)
+  ✔ 5°C: both release heat and scene/captions change together (1236.429706ms)
+  ✔ 70°C: even the initially hot cup absorbs heat; both arrows point inward (1252.660675ms)
+  ✔ copper paths cross cup boundaries and pulses move, pause and resume with the model (6057.91116ms)
+  ✔ reset and switching environment during playback cancel old observations (581.873922ms)
+  ✔ same displayed temperature removes heat flow and replay starts cleanly (9049.404076ms)
+  ✔ keyboard and reduced motion preserve all basic controls (581.69479ms)
+  ✔ in-scene instruments and controls fit desktop, tablet and phone widths (1228.285175ms)
+  ✔ real rendered flow keeps moving with either motion preference and freezes only when paused (4075.6202ms)
+  ✔ real mobile taps change scene, play, pause and restart (787.555554ms)
+  ✔ remaining learning blocks and quiz still operate independently (693.077059ms)
+✔ 5.2 first block: three environments and in-water thermometers (29366.804014ms)
+ℹ tests 45
+ℹ suites 0
+ℹ pass 43
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 74037.084982
+
+✖ failing tests:
+
+test at tests/unit-5.2-convection.test.cjs:60:10
+✖ all supported viewports keep explanatory text, controls and the actual fluid scene readable (61.657029ms)
+  locator.boundingBox: Error: strict mode violation: locator('[data-medium=air]') resolved to 2 elements:
+      1) <div class="lab-panel" data-medium="air" data-stage="ready" id="convection-lab" data-playing="false" data-elapsed="0.000" data-started="false">…</div> aka getByText('觀察哪一種流體？水槽中的水房間裡的空氣 房間剖面 暖氣機加熱附近的空氣 沿著流動找線索受熱處的流體會往哪裡動？流到上方後，會往哪裡去？周圍的流體會怎麼補入？ 較')
+      2) <button type="button" data-medium="air" aria-pressed="true">房間裡的空氣</button> aka getByRole('button', { name: '房間裡的空氣' })
+  
+  Call log:
+  [2m  - waiting for locator('[data-medium=air]')[22m
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-convection.test.cjs:63:149)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-convection.test.cjs:60:2) {
+    log: [ "  - waiting for locator('[data-medium=air]')" ]
+  }

@@ -1,0 +1,636 @@
+{
+  "base": "http://127.0.0.1:8765",
+  "rows": [
+    {
+      "unit": "5.1",
+      "width": 1440,
+      "height": 900,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "measurement",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    },
+    {
+      "unit": "5.1",
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "measurement",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    },
+    {
+      "unit": "5.1",
+      "width": 1280,
+      "height": 720,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "measurement",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    },
+    {
+      "unit": "5.1",
+      "width": 820,
+      "height": 900,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "measurement",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    },
+    {
+      "unit": "5.1",
+      "width": 760,
+      "height": 900,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "measurement",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    },
+    {
+      "unit": "5.1",
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "measurement",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    },
+    {
+      "unit": "5.1",
+      "width": 320,
+      "height": 568,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "measurement",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    },
+    {
+      "unit": "5.2",
+      "width": 1440,
+      "height": 900,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-04",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-05",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-06",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    },
+    {
+      "unit": "5.2",
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-04",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-05",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-06",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    },
+    {
+      "unit": "5.2",
+      "width": 1280,
+      "height": 720,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-04",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-05",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-06",
+          "stack": true,
+          "width": true,
+          "padding": "25px 28px 21px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    },
+    {
+      "unit": "5.2",
+      "width": 820,
+      "height": 900,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-04",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-05",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-06",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    },
+    {
+      "unit": "5.2",
+      "width": 760,
+      "height": 900,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-04",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-05",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-06",
+          "stack": true,
+          "width": true,
+          "padding": "25px 21px 21px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    },
+    {
+      "unit": "5.2",
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-04",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-05",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-06",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    },
+    {
+      "unit": "5.2",
+      "width": 320,
+      "height": 568,
+      "overflow": false,
+      "cards": [
+        {
+          "id": "card-01",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-02",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-03",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-04",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-05",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        },
+        {
+          "id": "card-06",
+          "stack": true,
+          "width": true,
+          "padding": "18px",
+          "sub": "15.04px"
+        }
+      ],
+      "avatars": true,
+      "hero": true
+    }
+  ],
+  "errors": []
+}

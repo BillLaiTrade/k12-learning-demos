@@ -2,7 +2,6 @@
   'use strict';
   const $ = id => document.getElementById(id);
   const states = {
-    convection: {time:0, playing:false, medium:'water'},
     radiation: {time:0, playing:false, shield:false},
     insulation: {time:0, playing:false}
   };
@@ -12,16 +11,6 @@
     return Math.abs(value-ambient)<.05?ambient:value;
   };
   const degrees = t => `${t.toFixed(1)}°C`;
-  function renderConvection() {
-    const s=states.convection;
-    $('convection-fluid').setAttribute('fill',s.medium==='water'?'#e0eef2':'#f1f1e5');
-    $('convection-note').textContent=`${s.medium==='water'?'水':'空氣'}受熱後，較暖、密度較小的部分上升，周圍較冷的${s.medium==='water'?'水':'空氣'}補入。`;
-    document.querySelectorAll('[data-flow-particle]').forEach(n=>{
-      const path=$(`convection-${n.dataset.flowParticle}`), length=path.getTotalLength();
-      const p=path.getPointAtLength(((s.time*.12+Number(n.dataset.phase))%1)*length);
-      n.setAttribute('cx',p.x);n.setAttribute('cy',p.y);
-    });
-  }
   function renderRadiation() {
     const s=states.radiation;
     $('radiation-shield').toggleAttribute('hidden',!s.shield);
@@ -42,7 +31,7 @@
     $('insulation-coat').toggleAttribute('hidden',!wall);$('insulation-silver').toggleAttribute('hidden',!reflect);
     $('insulation-conduction').textContent=wall?'減少':'原先';$('insulation-convection').textContent=air?'減少':'原先';$('insulation-radiation').textContent=reflect?'減少':'原先';
   }
-  const renderers={convection:renderConvection,radiation:renderRadiation,insulation:renderInsulation};
+  const renderers={radiation:renderRadiation,insulation:renderInsulation};
   function renderOne(id) {
     renderers[id]();
     const button=$(`${id}-play`), label=states[id].playing?'暫停觀察':states[id].time>0?'繼續觀察':'開始觀察';
@@ -69,10 +58,6 @@
     $(`${id}-play`).addEventListener('click',()=>{states[id].playing=!states[id].playing;renderOne(id);start();});
     $(`${id}-reset`).addEventListener('click',()=>reset(id));
   });
-  document.querySelectorAll('[data-medium]').forEach(button=>button.addEventListener('click',()=>{
-    states.convection.medium=button.dataset.medium;
-    document.querySelectorAll('[data-medium]').forEach(n=>n.setAttribute('aria-pressed',String(n===button)));reset('convection');
-  }));
   $('radiation-shield-toggle').addEventListener('click',()=>{states.radiation.shield=!states.radiation.shield;renderRadiation();});
   ['wall','air','reflect'].forEach(id=>$(`insulation-${id}`).addEventListener('change',()=>reset('insulation')));
   document.addEventListener('visibilitychange',()=>{if(document.hidden){Object.values(states).forEach(s=>{s.playing=false;});cancelAnimationFrame(frame);frame=0;last=null;renderAll();}});
