@@ -26,10 +26,10 @@
   <link rel="stylesheet" href="assets/lesson-base.css">
   <link rel="stylesheet" href="assets/lesson-layout.css">
   <link rel="stylesheet" href="assets/heat-quantity.css?v=format-1">
-  <link rel="stylesheet" href="assets/calorie-lab.css?v=water100-1">
+  <link rel="stylesheet" href="assets/calorie-lab.css?v=calc-layout-2">
   <link rel="stylesheet" href="../../assets/unit-format.css?v=20261105">
   <script type="module" src="assets/heat-quantity.js?v=format-1"></script>
-  <script type="module" src="assets/calorie-lab.js?v=water100-1"></script>
+  <script type="module" src="assets/calorie-lab.js?v=calc-layout-2"></script>
 </head>
 <body>
   <header class="shell masthead"><div class="brand-row"><a class="brand" href="../../index.html">← 溫度與熱</a><span class="crumb">國二上・熱量與比熱</span></div>
@@ -66,30 +66,36 @@
                   <div class="calorie-photo">
                     <img id="calorie-apparatus" src="assets/calorie-water-apparatus.webp" width="1536" height="1024" alt="AI 生成的器材情境示意：燒杯內約 100 mL 的水，置於加熱攪拌器上；浸入水中的溫度探針連接數位溫度計。">
                     <span class="calorie-photo-label">已量取 100 g 水</span>
+                    <span class="calorie-heater-light" aria-hidden="true"></span>
+                    <button class="calorie-heater" id="calorie-heater" type="button" aria-label="開始加熱：從 20°C 觀察至 21°C" title="開始加熱" disabled></button>
                     <div class="calorie-meter-screen" id="calorie-meter-screen" aria-hidden="true" hidden><span id="calorie-meter">20.0</span><small>°C</small></div>
                     <div class="calorie-scene-loading" id="calorie-scene-loading">正在準備器材畫面…</div>
                   </div>
                   <figcaption id="calorie-heater-status">等待開始觀察</figcaption>
                 </figure>
-                <div class="calorie-temperature-panel" aria-label="水溫前後比較">
-                  <h4>水溫的變化</h4>
-                  <div class="calorie-temperature-values"><div><span>起始</span><strong>20.0 <small>°C</small></strong></div><b aria-hidden="true">→</b><div><span>目前</span><strong><output id="calorie-end">20.0</output> <small>°C</small></strong></div></div>
-                  <div class="calorie-rise-track" aria-hidden="true"><span></span></div>
-                  <div class="calorie-rise-value"><span>從初溫升高</span><strong><output id="calorie-rise">0.0</output> °C</strong></div>
-                  <p>顯示至 0.1°C；升高 1°C 後停止加熱。</p>
+                <div class="calorie-temperature-panel" aria-label="水溫差計算">
+                  <h4>升高了幾度？</h4>
+                  <div class="calorie-difference">
+                    <div><b aria-hidden="true"></b><span>目前水溫</span><strong><output id="calorie-end">20.0</output> °C</strong></div>
+                    <div><b>−</b><span>起始水溫</span><strong>20.0 °C</strong></div>
+                    <div class="calorie-difference-result"><b>＝</b><span>升高</span><strong><output id="calorie-rise">0.0</output> °C</strong></div>
+                  </div>
+                  <p>目前水溫 − 起始水溫 ＝ 溫升</p>
                 </div>
               </div>
-              <div class="calorie-actions"><button class="action" id="calorie-transfer" type="button" disabled>開始加熱</button><button class="secondary" id="calorie-reset" type="button" disabled>重來</button><button class="secondary" id="calorie-retry" type="button" hidden>重新載入器材</button><span>AI 器材示意・動畫已加速</span></div>
+              <div class="calorie-actions"><button class="action" id="calorie-transfer" type="button" disabled>開始加熱</button><button class="secondary" id="calorie-retry" type="button" hidden>重新載入器材</button><span>AI 器材示意・動畫已加速</span></div>
               <p class="calorie-observation-note" id="calorie-observation" role="status">正在準備器材畫面…</p>
               <div class="calorie-result" id="calorie-conclusion" hidden>
+                <div class="dialogue" id="calorie-definition"><span class="speaker" aria-label="阿公"></span><p>熱量可以用「卡」記錄，符號是 cal。讓 1 g 水升高 1°C 所需的熱量，約是 1 cal。</p></div>
                 <div class="calorie-unit-bridge">
-                  <h3>用「卡」記錄水吸收的熱量</h3>
-                  <div class="calorie-bridge-row"><strong>100 g 水</strong><span>升高 1°C</span><strong>約 <output id="calorie-heat">100</output> cal</strong></div>
-                  <p class="calorie-bridge-hint">水量與吸收熱量一起除以 100，升高的溫度相同</p>
-                  <div class="calorie-bridge-row"><strong>1 g 水</strong><span>升高 1°C</span><strong>約 1 cal</strong></div>
-                  <p class="calorie-energy-note">水吸收的熱量為模型估算；溫度計讀的是溫度。加熱器供應的能量，還有一部分用於容器吸熱與向環境散熱。</p>
+                  <h3>共同條件：水都升高 1°C</h3>
+                  <table class="calorie-comparison"><caption class="calorie-table-caption">水都升高 1°C，水量與所需熱量一起變成 100 倍</caption><thead><tr><th scope="col">水量</th><th scope="col">約需吸收的熱量</th></tr></thead><tbody>
+                    <tr><th scope="row">1 g 水</th><td>1 cal</td></tr>
+                    <tr class="calorie-scale-row" aria-hidden="true"><td>↓ × 100</td><td>↓ × 100</td></tr>
+                    <tr><th scope="row">100 g 水</th><td><output id="calorie-heat">100</output> cal</td></tr>
+                  </tbody></table>
+                  <p class="calorie-energy-note">熱量依模型估算；溫度計提供水溫讀值。</p>
                 </div>
-                <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>讓 1 g 水升高 1°C 所需的熱量，約是 1 cal，也就是 1 卡。°C 記錄溫度，cal 記錄熱量。</p></div>
               </div>
             </div>
             <details class="relation calorie-assumptions"><summary>器材與模型條件</summary><p>先將空燒杯在電子秤上歸零，再量取 100 g 水。溫度探針浸入水中，不碰杯底或杯壁，並以攪拌使水溫較均勻。畫面呈現的是生成的虛擬器材，並非實驗錄影。</p><p>模型分開計算水吸熱、玻璃容器吸熱與向 20°C 環境散熱；假設水與容器充分達到同溫。採水的近似比熱、容器熱容量 42 J/°C、有效供熱 20 W、散熱係數 0.5 W/°C；有效供熱不等於加熱板的額定功率。</p><p>動畫加速 4 倍，到 21°C 停熱；完成後保留當次讀值，不繼續模擬冷卻，也不呈現探針反應延遲與停熱後餘熱。100 g 水吸收約 100 cal 是模型換算，沒有將溫度計當作熱量計。</p></details>
