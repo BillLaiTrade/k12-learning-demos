@@ -1,0 +1,821 @@
+{
+  "cases": [
+    {
+      "width": 1440,
+      "height": 900,
+      "states": [
+        {
+          "state": "idle",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "wrong",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "correct",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "replay",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "replayed",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "next",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 563.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "states": [
+        {
+          "state": "idle",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "wrong",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "correct",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "replay",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "replayed",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "next",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 526.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "states": [
+        {
+          "state": "idle",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "wrong",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "correct",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "replay",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "replayed",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "next",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 483.02001953125,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "states": [
+        {
+          "state": "idle",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "wrong",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "correct",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "replay",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "replayed",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        },
+        {
+          "state": "next",
+          "names": [
+            {
+              "text": "介質甲",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質乙",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丙",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            },
+            {
+              "text": "介質丁",
+              "x": 147,
+              "screenX": 358.0974884033203,
+              "fits": true,
+              "overlap": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

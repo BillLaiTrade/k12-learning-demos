@@ -1,0 +1,14 @@
+▶ 4.3 medium names stay in one fixed column through grading, replay and new questions
+  ✔ 1440×900: idle, wrong, correct, replay and next question (4664.691455ms)
+  ✔ 1366×768: idle, wrong, correct, replay and next question (4733.809679ms)
+  ✔ 1280×720: idle, wrong, correct, replay and next question (4732.201418ms)
+  ✔ 1024×768: idle, wrong, correct, replay and next question (4310.92471ms)
+✔ 4.3 medium names stay in one fixed column through grading, replay and new questions (22616.809861ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23737.070991

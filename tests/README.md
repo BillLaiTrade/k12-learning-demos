@@ -1,3 +1,7 @@
+## 4.3 名牌固定對齊（2026-11-05）
+
+`unit-4.3-label-alignment.test.cjs`驗四桌面尺寸的待機、錯誤、正確、重播中／後與換題；名稱座標保持同欄且沒有與最快／最慢標記重疊。`LABEL_ALIGNMENT_CAPTURE_DIR`輸出截圖與alignment.json；沿用公開網址與代理參數。
+
 ## 4.3 依4.1統一格式（2026-11-05）
 
 `unit-4.3-format41.test.cjs`在四種桌電／筆電尺寸直接比對4.1／4.3的同類元件計算樣式，另驗舊錨點與閱讀進度、主次按鈕和鍵盤焦點；`FORMAT41_CAPTURE_DIR`輸出代表截圖及layout.json。沿用`LESSON_BASE_URL`與`LESSON_USE_PROXY`供公開檢查。共用格式、11項互動及實際水位由既有測試回歸，沒有改科學模型。
