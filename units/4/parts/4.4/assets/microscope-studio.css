@@ -191,3 +191,20 @@
  .micro-handoff h3 { font-size:.9rem; }
  .micro-handoff p { font-size:.8rem; }
 }
+
+.micro-specimen-intro { display:flex; flex-wrap:wrap; align-items:baseline; gap:5px 14px; margin:0 0 12px; line-height:1.7; font-size:.84rem; }
+.micro-specimen-intro span { font-size:.78rem; color:#5c7250; }
+.micro-viewer .micro-direction { color:#6d713f; font-size:10px; font-weight:500; line-height:1.5; }
+
+.micro-image-conclusion { margin-top:16px; padding:18px 20px; border:1px solid #c8ac60; border-left:5px solid #b88a2b; border-radius:12px; background:#fff4d6; }
+.micro-image-conclusion .micro-conclusion-kicker { margin:0 0 9px; font-size:.78rem; font-weight:700; color:#7c5c20; }
+.micro-image-conclusion h3 { margin:0; font-size:1.08rem; line-height:1.8; }
+.micro-image-conclusion h3 strong { display:block; color:#7a4b20; }
+.micro-image-conclusion p { margin:10px 0 0; font-size:.85rem; line-height:1.9; }
+@container (max-width:640px) {
+ .micro-preview,.micro-before { width:82px; height:94px; }
+ .micro-image-conclusion { padding:16px; }
+ .micro-image-conclusion h3 { font-size:1rem; }
+}
+
+@container (max-width:350px) { .micro-stage { height:clamp(240px,35svh,296px); } }

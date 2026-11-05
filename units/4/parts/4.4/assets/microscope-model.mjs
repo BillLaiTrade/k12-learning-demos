@@ -1,3 +1,4 @@
+import {drawSpecimen} from './microscope-specimen.mjs?v=20261105-micro-specimen10';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 
 // Fixed cutaway geometry. Optical overlays are projected from the same world
@@ -48,7 +49,10 @@ export function createMicroscopeModel(canvas,onProject){
  const open=mesh(new THREE.CylinderGeometry(20.5,20.5,52,64,1,true,Math.PI/2,Math.PI),ivory,432,542);objective.visible=false;
  cylinder(21,4,gold,432,566);cylinder(13,12,dark,432,574);
  const objglass=mesh(new THREE.SphereGeometry(1,48,24),glass,432,550);objglass.scale.set(16,4,16);
- const sample=box(7,1,7,mat('#d98261',{emissive:'#b45f47',emissiveIntensity:.25}),432,638,0);
+ const specimenCanvas=document.createElement('canvas');specimenCanvas.width=specimenCanvas.height=512;
+ const specimenCtx=specimenCanvas.getContext('2d');specimenCtx.translate(256,256);specimenCtx.scale(2,2);drawSpecimen(specimenCtx);
+ const specimenTexture=new THREE.CanvasTexture(specimenCanvas);specimenTexture.colorSpace=THREE.SRGBColorSpace;
+ const sample=mesh(new THREE.PlaneGeometry(11.2,11.2),new THREE.MeshBasicMaterial({map:specimenTexture,transparent:true,side:THREE.DoubleSide,depthWrite:false}),432,638);sample.rotation.set(-Math.PI/2,0,-Math.PI/2);sample.castShadow=false;
  // Small point markers identify the original and its image; they are overlays.
  for(const [x,y,color]of [[436,638,'#ec8b6d'],[428,638,'#6dbde3'],[420,286,'#ec8b6d'],[444,286,'#6dbde3']]){
   const mark=mesh(new THREE.SphereGeometry(3,20,12),new THREE.MeshBasicMaterial({color}),x,y,0);mark.castShadow=false;mark.receiveShadow=false;
@@ -91,6 +95,6 @@ export function createMicroscopeModel(canvas,onProject){
    }
    request();
   },
-  dispose(){observer.disconnect();if(queued)cancelAnimationFrame(queued);const materials=new Set();scene.traverse(o=>{o.geometry?.dispose();if(o.material)materials.add(o.material);});for(const m of materials)m.dispose();environment.dispose();renderer.dispose();}
+  dispose(){observer.disconnect();if(queued)cancelAnimationFrame(queued);const materials=new Set();scene.traverse(o=>{o.geometry?.dispose();if(o.material)materials.add(o.material);});for(const m of materials)m.dispose();specimenTexture.dispose();environment.dispose();renderer.dispose();}
  };
 }
