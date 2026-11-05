@@ -93,7 +93,7 @@
     @media(max-width:760px){.route a.quiz-nav{margin:0 0 0 4px;border-top:1px solid var(--line);padding:7px 10px}.route a.quiz-nav[aria-current=step]{border-color:#d9a74f}}
   </style>
   <link rel="stylesheet" href="assets/lesson-layout.css?v=align-4.1-20261105">
-  <link rel="stylesheet" href="assets/reflection-stage.css?v=surface-compare-20261105">
+  <link rel="stylesheet" href="assets/reflection-stage.css?v=front-reference-20261105">
 </head>
 <body>
   <header class="shell masthead">
@@ -137,7 +137,17 @@
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>因為它們表面的平滑程度不同。鏡面平滑，反光比較集中；霧面紙的表面有細小凹凸，反光就比較分散。</p></div>
             <p class="prompt">分別開啟左右手電筒，從目前視角比較鏡面與霧面紙的反光。</p>
             <figure class="reflection-stage">
-              <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="左右並排的 3D 反射實驗：左邊是平面鏡，右邊是霧面白紙，兩支手電筒以相同條件照射。拖曳畫面或選擇下方觀看位置，比較兩種表面的反光。" aria-describedby="reflection-status reflection-view-status" data-ready="loading"></canvas>
+              <div class="reflection-comparison">
+                <div class="reflection-main-panel">
+                  <div class="reflection-main-heading"><h3 id="reflection-view-status" aria-live="polite">目前觀看位置：稍向左</h3><span>↔ 可左右拖曳</span></div>
+                  <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="目前觀看位置的 3D 反射實驗：左邊是平面鏡，右邊是霧面白紙，兩支手電筒以相同條件照射。左右拖曳或選擇下方觀看位置，並與固定正面參考比較反光。" aria-describedby="reflection-status reflection-view-status" data-ready="loading"></canvas>
+                </div>
+                <aside class="reflection-reference" aria-labelledby="reflection-reference-title">
+                  <div class="reflection-reference-heading"><h3 id="reflection-reference-title">正面參考</h3><p>相同燈光・固定正面</p></div>
+                  <canvas id="reflection-reference-scene" role="img" aria-label="固定正面的平面鏡與霧面白紙；與主畫面共用手電筒開關，觀看方向保持不變。" aria-describedby="reflection-status"></canvas>
+                  <div class="reflection-reference-notes"><p>對照正面與目前視角</p><p>觀察反光如何隨位置改變</p></div>
+                </aside>
+              </div>
               <p class="reflection-fallback" id="reflection-fallback" hidden>這個 3D 實驗場景無法在目前裝置顯示；你仍可閱讀下方的觀察說明。</p>
               <div class="reflection-stage-labels" aria-hidden="true"><span><i class="reflection-dot-smooth"></i>平面鏡・鏡面反射</span><span><i class="reflection-dot-rough"></i>霧面紙・漫反射</span></div>
               <div class="reflection-controls">
@@ -145,13 +155,13 @@
                 <button class="reflection-fire" id="reflection-fire-paper" type="button" aria-pressed="false" aria-label="開啟霧面紙手電筒" disabled><span>霧面紙手電筒</span><small>已關閉</small></button>
               </div>
               <div class="reflection-view-controls">
-                <div class="reflection-view-heading"><span>觀看位置</span><span id="reflection-view-status" aria-live="polite">正面</span></div>
+                <div class="reflection-view-heading"><span>觀看位置</span><span>主畫面</span></div>
                 <div class="reflection-view-options" role="group" aria-label="選擇觀看位置">
-                  <button class="reflection-view-button" type="button" data-reflection-view="front" aria-pressed="true" disabled>正面</button>
-                  <button class="reflection-view-button" type="button" data-reflection-view="left" aria-pressed="false" disabled>稍向左</button>
+                  <button class="reflection-view-button" type="button" data-reflection-view="front" aria-pressed="false" disabled>正面</button>
+                  <button class="reflection-view-button" type="button" data-reflection-view="left" aria-pressed="true" disabled>稍向左</button>
                   <button class="reflection-view-button" type="button" data-reflection-view="right" aria-pressed="false" disabled>稍向右</button>
                 </div>
-                <p class="reflection-view-hint">也可以拖曳畫面，比較換個位置後的反光。</p>
+                <p class="reflection-view-hint">左右拖曳主畫面，比較不同位置的反光。</p>
               </div>
             </figure>
               <p class="reflection-status visually-hidden" id="reflection-status" aria-live="polite">左右手電筒目前都已關閉。</p>
@@ -473,12 +483,33 @@
   </main>
   <footer class="shell"><a href="../../index.html">回到光學單元學習路線</a>　·　接下來：光進入不同介質會怎樣？</footer>
   <script>
-    const cards=[...document.querySelectorAll(".lesson-card")],routeLinks=[...document.querySelectorAll(".route a")],progress=document.querySelector("#lesson-progress"),progressCopy=document.querySelector("#progress-copy");if("IntersectionObserver" in window){const observer=new IntersectionObserver(function(entries){const visible=entries.filter(function(entry){return entry.isIntersecting}).sort(function(a,b){return b.intersectionRatio-a.intersectionRatio})[0];if(!visible)return;const index=cards.indexOf(visible.target);routeLinks.forEach(function(link,i){if(i===index)link.setAttribute("aria-current","step");else link.removeAttribute("aria-current")});progress.value=index+1;progressCopy.textContent=index===6?"正在進行單元小測":"正在探索第 "+(index+1)+" 段"}, {rootMargin:"-15% 0px -65% 0px",threshold:[0,.2,.5]});cards.forEach(function(card){observer.observe(card)})}
+    const cards = [...document.querySelectorAll('.lesson-card')];
+    const routeLinks = [...document.querySelectorAll('.route a')];
+    const progress = document.querySelector('#lesson-progress');
+    const progressCopy = document.querySelector('#progress-copy');
+    const syncReadingPosition = () => {
+      // Observer entries describe changes, not every currently visible card.
+      // Read current geometry so rapid jumps cannot select an earlier card.
+      const readingLine = window.innerHeight * .15;
+      let index = cards.findIndex(card => card.getBoundingClientRect().bottom > readingLine);
+      if (index < 0) index = cards.length - 1;
+      routeLinks.forEach((link, i) => {
+        if (i === index) link.setAttribute('aria-current', 'step');
+        else link.removeAttribute('aria-current');
+      });
+      progress.value = index + 1;
+      progressCopy.textContent = index === 6 ? '正在進行單元小測' : '正在探索第 ' + (index + 1) + ' 段';
+    };
+    syncReadingPosition();
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(syncReadingPosition, { rootMargin: '-15% 0px -65% 0px', threshold: [0, .2, .5] });
+      cards.forEach(card => observer.observe(card));
+    }
   </script>
   <script type="module" src="assets/mirror-distance.js?v=visual-polish-20261029"></script>
   <script type="module" src="assets/curved-mirrors.js?v=distance-observation-20261030"></script>
   <script type="module" src="assets/mirror-image.js?v=clearance-20261105"></script>
-  <script type="module" src="assets/reflection-3d.js?v=surface-compare-20261105"></script>
+  <script type="module" src="assets/reflection-3d.js?v=front-reference-20261105"></script>
   <script type="module" src="assets/laser-reflection.js?v=availability-20261105"></script>
   <script type="module" src="assets/reversible-light.js?v=trim-notes-20261030"></script>
   <script type="module" src="assets/periscope.js?v=availability-20261105"></script>
