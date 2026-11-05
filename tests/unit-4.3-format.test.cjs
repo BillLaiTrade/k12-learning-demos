@@ -28,7 +28,7 @@ test('4.3 shared lesson format keeps navigation and content usable',{timeout:900
   assert.equal(await page.locator('.unit-quiz .lesson-number').count(),0);
   assert.equal(await page.locator('.quiz-kicker').innerText(),'單元小測');
   assert.equal(await page.locator('form').count(),1);
-  assert.equal(await page.locator('.lesson-card .dialogue .speaker').count(),12);
+  assert.equal(await page.locator('.lesson-card .dialogue .speaker').count(),13);
   assert.equal(await page.locator('#rank-lab').count(),1);
   for(let i=1;i<=7;i++)assert.equal(await page.locator(`#s${i}`).count(),1);
   assert.equal(await page.locator('#unit-quiz').count(),1);

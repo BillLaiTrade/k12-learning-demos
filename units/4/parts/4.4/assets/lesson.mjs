@@ -1,4 +1,4 @@
-import {imageFor,rayAt,eyeModel,microscope} from './optics.mjs';
+import {imageFor,rayAt,eyeModel} from './optics.mjs';
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 const RED='#c46548',BLUE='#387fa6',GOLD='#aa7c3e';
 const fmt=n=>Math.abs(n-Math.round(n))<.05?Math.round(n).toString():n.toFixed(1);
@@ -137,30 +137,6 @@ $$('[data-lab]').forEach(root=>{
  render();
 });
 function sizeText(size){return {equal:'等大',larger:'放大',smaller:'縮小'}[size];}
-let microStep='objective';
-function drawMicro(){
- const root=$('#microscope-lab'),g=microscope(),id='micro',X1=230,X2=530,Y=195,k=.8;
- const map=x=>X1+x*k,objectX=map(-80),middleX=map(g.first.v),finalX=map(g.separation+g.second.v);
- let out=defs(id)+`<rect width="900" height="440" rx="12" fill="url(#${id}-wall)"/><path class="optical-axis" d="M25 ${Y}H875"/>`;
- // Lens drawing uses its own axis 180; translate to the microscope axis.
- out+=`<g transform="translate(0 15)">${lens(X1,id)+lens(map(g.separation),id)}</g>`;
- out+=symbol(objectX,Y,.25)+text(objectX,75,'原物','device-label','middle')+symbol(middleX,Y,g.first.m*.25)+text(middleX,75,'中間像','device-label','middle');
- out+=text(X1,355,'物鏡','device-label','middle')+text(map(g.separation),355,'目鏡','device-label','middle')+eyeIcon(840,Y)+text(840,245,'眼睛','dim-label','middle');
- if(microStep!=='eyepiece')for(const h of [-22,22])out+=line([objectX,Y-8.75],[X1,Y+h],RED,false,id)+line([X1,Y+h],[middleX,Y+g.first.m*(-8.75)],RED,false,id);
- if(microStep!=='objective'){
-  const oy=g.first.m*(-8.75);
-  for(const h of [-27,27]){
-   const slope=(h-oy)/g.eyepieceU-h/g.eyepieceF;
-   out+=line([middleX,Y+oy],[map(g.separation),Y+h],BLUE,false,id)+line([map(g.separation),Y+h],[835,Y+h+(835-map(g.separation))/k*slope],BLUE,false,id)+line([map(g.separation),Y+h],[finalX,Y+g.second.m*oy],BLUE,true);
-  }
-  out+=symbol(finalX,Y,g.total*.25,true)+text(finalX,405,'最終虛像（仍倒立）','dim-label','middle');
- }
- out+=text(450,30,'物鏡先成像，目鏡再觀察這個像','device-label','middle');$('#microscope-scene').innerHTML=out;
- $('#micro-result').textContent={objective:'物鏡把原物形成倒立放大的實像，這是中間像。',eyepiece:'中間像位於目鏡焦距內；目鏡把它進一步放大，眼睛看見虛像。',both:'同一套光路接力成像：物鏡先成倒立的中間像，目鏡再放大，最終像仍相對原物倒立。'}[microStep];
- root.dataset.ready='true';
- $$('[data-set=micro]',root).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.value===microStep)));
-}
-$$('[data-set=micro]').forEach(b=>b.addEventListener('click',()=>{microStep=b.dataset.value;drawMicro();}));$('[data-micro-reset]').addEventListener('click',()=>{microStep='objective';drawMicro();});drawMicro();
 const quiz=$('#quiz'),result=$('#quiz-result');
 const answers=['1','0','2','1'],reviewTargets=$$('fieldset',quiz).map(f=>f.dataset.review);
 const explanations=['上下端的光各自沿直線穿過小孔，落在屏幕相反高度。','物體在焦距外向透鏡靠近時，清楚實像離透鏡更遠、變大，仍是倒立。','虛像的位置由入眼光線的反向延長線判斷；光沒有真的在那裡會聚。','凹透鏡先改變入眼光束，使整體光路在視網膜上成像。'];
