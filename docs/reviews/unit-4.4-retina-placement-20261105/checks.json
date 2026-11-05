@@ -1,0 +1,127 @@
+{
+  "records": [
+    {
+      "width": 1440,
+      "lab": 7,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "noteInViewer": true,
+      "captionNotVisible": true
+    },
+    {
+      "width": 1440,
+      "lab": 8,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "noteInViewer": true,
+      "captionNotVisible": true
+    },
+    {
+      "width": 1024,
+      "lab": 7,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "noteInViewer": true,
+      "captionNotVisible": true
+    },
+    {
+      "width": 1024,
+      "lab": 8,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "noteInViewer": true,
+      "captionNotVisible": true
+    },
+    {
+      "width": 760,
+      "lab": 7,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "noteInViewer": true,
+      "captionNotVisible": true
+    },
+    {
+      "width": 760,
+      "lab": 8,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "noteInViewer": true,
+      "captionNotVisible": true
+    },
+    {
+      "width": 390,
+      "lab": 7,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "noteInViewer": true,
+      "captionNotVisible": true
+    },
+    {
+      "width": 390,
+      "lab": 8,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "noteInViewer": true,
+      "captionNotVisible": true
+    },
+    {
+      "width": 320,
+      "lab": 7,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "noteInViewer": true,
+      "captionNotVisible": true
+    },
+    {
+      "width": 320,
+      "lab": 8,
+      "noteBelowImage": true,
+      "noteBeforeControls": true,
+      "visible": true,
+      "redBelowBlue": true,
+      "overflow": false,
+      "clipped": [],
+      "noteInViewer": true,
+      "captionNotVisible": true
+    }
+  ],
+  "nearFocus": true,
+  "myopiaCorrection": true,
+  "errors": []
+}
