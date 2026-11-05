@@ -180,6 +180,9 @@ if (root) {
     const state=visible?(g.status==='partial'?`${g.depth===0?'空槽・':''}可以看見部分硬幣`:g.depth===0?'空槽・可以直接看見':'可以看見硬幣'):g.depth===0?'空槽・看不到硬幣':'槽壁遮住・看不到硬幣';
     q('#depth-visibility').textContent=state; q('#depth-visibility').dataset.visible=visible?'visible':'hidden';
     q('#depth-view-result').textContent=visible?(g.depth>0?'光出水後轉向，越過前側槽壁進入眼睛；硬幣仍在原處。':'觀看位置較近，光可直接越過槽緣進入眼睛。'):g.depth===0?'前側槽壁擋住硬幣的光，光還沒進入眼睛。':'光仍被前側槽壁擋住；繼續加水，比較光路是否能越過槽緣。';
+    q('.depth-takeaway').textContent=g.depth===0
+      ?visible?'硬幣沒有移動。空槽中，光沿直線越過槽緣進入眼睛。':'硬幣沒有移動。空槽中，光沿直線前進，被槽壁擋住。'
+      :visible?'硬幣沒有移動。光出水轉向，眼睛沿直線回推，所以看起來較淺。':'硬幣沒有移動。光出水時折射，仍被槽壁擋住，尚未進入眼睛。';
     canvas.setAttribute('aria-label',`這隻眼睛看到的畫面：${waterState(g.depth)}、眼睛${eyeState(g.eyeX)}的視野。${state}。`);
     canvas.dataset.coinPixels=observerResult.coinPixels; canvas.dataset.depth=g.depth;canvas.dataset.eyeX=g.eyeX;canvas.dataset.visibility=g.status;
     canvas.dataset.coinBounds=JSON.stringify(observerResult.bounds);

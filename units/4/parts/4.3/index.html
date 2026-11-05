@@ -25,22 +25,22 @@
   <title>光進入水中，會發生什麼變化？｜4.3 光的折射與視深</title>
   <link rel="stylesheet" href="assets/lesson.css?v=20261105-eleven1">
   <link rel="stylesheet" href="assets/light-speed-lab.css?v=20261101-controls2">
-  <script type="module" src="assets/light-speed-lab.mjs?v=20261105-review1"></script>
+  <script type="module" src="assets/light-speed-lab.mjs?v=20261105-tenreview1"></script>
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
   <script type="module" src="assets/normal-incidence-lab.mjs?v=20261105-eleven1"></script>
   <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-cart1">
   <script type="module" src="assets/oblique-cart.mjs?v=20261105-eleven1"></script>
   <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261105-eleven1"></script>
   <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-inline1">
-  <script type="module" src="assets/return-refraction-lab.mjs?v=20261105-review1"></script>
+  <script type="module" src="assets/return-refraction-lab.mjs?v=20261105-tenreview1"></script>
   <link rel="stylesheet" href="assets/light-beam.css?v=20261103-fit2">
   <link rel="stylesheet" href="assets/refraction-flow.css?v=20261103-fit2">
 <link rel="stylesheet" href="assets/integrated-refraction.css?v=20261103-fit2">
   <link rel="stylesheet" href="assets/return-refraction-refresh.css?v=20261103-inline1">
   <link rel="stylesheet" href="assets/depth-lab.css?v=20261104-water-guide1">
-  <script type="module" src="assets/depth-lab.mjs?v=20261105-eleven1"></script>
+  <script type="module" src="assets/depth-lab.mjs?v=20261105-tenreview1"></script>
   <link rel="stylesheet" href="assets/layer-speed-quiz.css?v=20261105-labeltype1">
-  <script type="module" src="assets/layer-speed-quiz.mjs?v=20261105-labelalign1"></script>
+  <script type="module" src="assets/layer-speed-quiz.mjs?v=20261105-tenreview1"></script>
   <link rel="stylesheet" href="assets/lesson-format.css?v=20261105-headingrules1">
   <script type="module" src="assets/lesson.mjs?v=20261105-remove-position1">
 </script>
@@ -140,8 +140,8 @@
   <header class="lesson-head"><span class="lesson-number">02</span><div><h2 id="heading-2">光變慢了，方向也會改變嗎？</h2><p>垂直入射：觀察光速與方向的變化</p></div></header>
   <div class="lesson-body card-main">
     <div class="dialogue-sequence">
-      <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光路沒有轉彎，可是怎麼看出光變慢了？</p></div>
-      <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>讓一束光全程走在空氣中，同時發射、同時比較。</p></div>
+      <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>原來光在水裡比較慢。那正對水面照進去，方向也會改變嗎？</p></div>
+      <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>我們用全程走空氣的光作對照，讓三束光同時出發、走一樣長的路，比較方向和快慢。</p></div>
     </div>
     <div class="lab" id="normal-lab" data-state="loading" aria-label="全程空氣對照與垂直射入水、玻璃的三組光路示意">
       <ol class="normal-steps" aria-label="光束穿越的觀察步驟"><li data-normal-stage="1"><b>1</b>發射光束</li><li data-normal-stage="2"><b>2</b>跨越介面</li><li data-normal-stage="3"><b>3</b>比較同一瞬間</li></ol>
@@ -166,7 +166,7 @@
       <button id="normal-retry" type="button" hidden>重新載入實驗桌</button>
       <noscript><p>總路程150萬公里，全程空氣約需5秒；前半空氣、後半水約需5.83秒；前半空氣、後半玻璃約需6.25秒。垂直入射時方向不偏折。啟用JavaScript後可發射與暫停比較。</p></noscript>
     </div>
-    <p class="normal-takeaway"><strong>觀察結果：</strong>光進入水或玻璃後變慢，方向仍保持筆直。</p>
+    <p class="normal-takeaway"><strong>觀察結果：</strong>光由空氣垂直進入水或玻璃時，速度變慢，方向不變。</p>
     <details class="normal-explanation" id="normal-explanation">
       <summary>為什麼變慢，卻沒有轉向？</summary>
       <div class="normal-explanation-body">
@@ -269,7 +269,7 @@
             <p>光由較快的空氣進入較慢的水或玻璃，光路偏向法線，折射角變小。沿法線入射（0°）時，速度改變，方向不偏折。</p>
           </div>
         </div>
-        <p class="oblique-model-note">小車為類比，不代表光受到摩擦。光路與角度由代表模型計算，水與玻璃的代表折射率分別為4/3與1.5；不要求計算公式。器材及光跡非實際比例，穿越動畫採共同慢動作、非實際秒數，省略介面的部分反射。</p>
+        <p class="oblique-model-note">小車為類比，不代表光受到摩擦。</p>
       </div>
     </details>
   </div>
@@ -299,6 +299,7 @@
 </div>
     <div class="lab integrated-lab" id="exit-lab" data-state="loading" data-explained="false" aria-label="發射後直接顯示角度與說明的光路實驗">
       <div class="oblique-experiment">
+        <p class="oblique-source-help" id="exit-diagram-note">剖面示意</p>
         <div class="oblique-table" id="exit-viewport">
           <div class="integrated-stage">
             <svg id="exit-scene" class="integrated-scene" viewBox="0 0 1200 820" role="group" aria-label="點擊光源發射，拖曳或方向鍵調整入射角。"></svg>
@@ -321,7 +322,7 @@
       <noscript><p>光由水或玻璃進入空氣，由慢變快，斜射時偏離法線，折射角較大。0°時不偏折。啟用JavaScript後可切換介質、發射並直接在光路上觀察角度與說明。</p></noscript>
     </div>
     <details class="oblique-explanation" id="exit-explanation">
-      <summary>為什麼從水或玻璃射回空氣，會偏離法線？</summary>
+      <summary>斜射且發生折射時，光為什麼偏離法線？</summary>
       <div class="oblique-explanation-body">
         <div class="oblique-analogy-grid">
           <div>
@@ -356,7 +357,7 @@
             <p>斜射且發生折射時，光由上方較慢的<span data-cart-medium>水</span>進入下方較快的空氣，光路偏離法線，折射角變大。沿法線入射（0°）時，速度改變，方向不偏折。</p>
           </div>
         </div>
-        <p class="oblique-model-note">小車為類比，不代表光受到摩擦。光路與角度由代表模型計算，水與玻璃的代表折射率分別為4/3與1.5；不要求計算公式。器材及光跡非實際比例，穿越動畫採共同慢動作、非實際秒數，省略介面的部分反射。</p>
+        <p class="oblique-model-note">小車為類比，不代表光受到摩擦。</p>
       </div>
     </details>
 
@@ -453,13 +454,13 @@
 <span class="speaker">
 <span class="visually-hidden">小葵</span>
 </span>
-<p>硬幣沒動，加水後還會被槽壁擋住嗎？</p>
+<p>池裡的硬幣看起來離水面很近，它真的浮起來了嗎？</p>
 </div>
 <div class="dialogue">
 <span class="speaker">
 <span class="visually-hidden">阿公</span>
 </span>
-<p>先固定觀看位置再加水，看看光能不能越過槽壁，再比較硬幣的實際位置與看似位置。</p>
+<p>先把硬幣和觀看位置固定，慢慢加水，比較眼睛看到的位置，和硬幣實際的位置是不是一樣。</p>
 </div>
 </div>
 <div id="depth-lab" data-state="ready" data-depth="0" data-eye-x="300">
@@ -489,7 +490,7 @@
 <div class="depth-controls" role="group" aria-label="加水與放水觀察">
 <div class="depth-actions"><button id="depth-fill" type="button" title="持續加水至滿槽">↑ 加水觀察</button><button id="depth-drain" type="button" title="持續放水至空槽" disabled>↓ 放水觀察</button></div>
 </div>
-<p class="depth-takeaway">硬幣沒有移動。光出水轉向，眼睛沿直線回推，所以看起來較淺。</p>
+<p class="depth-takeaway">硬幣沒有移動。空槽中，光沿直線前進，被槽壁擋住。</p>
 </div>
 </div>
 <p id="depth-view-relationship" class="visually-hidden">這隻眼睛的觀看位置，對應「這隻眼睛看到的畫面」。拖曳眼睛，兩個畫面會同步更新。</p>
@@ -532,7 +533,7 @@
   </main>
   <footer class="lesson-footer"><div class="shell">
 <p class="footer-brand">國二上・自然科學</p>
-<p>折射示意省略介面的部分反射。圖中尺寸與光點為教學示意；第一、二區的光束依設定路程與代表光速計時，其餘動畫時間為教學示意。</p>
+<p>光路與角度採代表模型：水與玻璃的代表折射率分別為4/3與1.5，不要求計算公式。圖中器材、光點與光跡為示意，非實際比例；折射示意省略介面的部分反射。第一、二區依模型路程與代表光速計時，其餘動畫採教學慢動作。</p>
 <p>參考：<a href="https://openstax.org/books/college-physics-2e/pages/25-3-the-law-of-refraction">OpenStax：折射與視深</a> · <a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001823">自然科學領域課綱</a>
 </p>
 <a href="#s1">回到第一個探索 ↑</a>

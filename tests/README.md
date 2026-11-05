@@ -1607,3 +1607,7 @@ MOON_CAPTURE預設/tmp/unit41-reflection-play，保存雙視窗與整區截圖�
 同一`tests/unit-4.2-reflection-stage.test.cjs`現為15項（含外層）。新增多視角的等距虛像、向量反射方向、反射相機位置／紋理投影及發光面與光源重合；以實際開關前後像素驗證燈頭外沒有額外柔邊材質高光。既有光錐、兩側條件、視角反光、同場景PNG、開關、自由拖曳、版面／觸控與失敗備援均保留。`mirror-rays.json`、`mirror-aperture.json`保存幾何誤差及有限亮區取樣。
 
 整頁針對性回歸沿用`CHROMIUM_PATH=/usr/bin/chromium node --test --test-skip-pattern='入口、|潛望鏡素材' tests/unit-4.2-completion.test.cjs`。生成圖不參與光學驗證；正式正面PNG直接從新場景擷取。
+
+## 4.3 十項逐項決定後的統一修訂（2026-11-05）
+
+`unit-4.3-ten-decisions.test.cjs`覆蓋第一區／第五區／四層小測的手動開始帶回圖與控制、四桌面尺寸、第一區鍵盤繼續、離屏返回不捲頁與手動暫停保留、雙光全部抵達才呈現結論及改角／換介質後重新等待、第六區七組空槽／有水／可見／遮擋狀態。可用`TEN_CAPTURE_DIR`保存視口、狀態及畫面證據。自動分頁暫停與備援渲染仍由既有eleven及final-review套件覆蓋；本輪不變動科學模型。

@@ -1,0 +1,51 @@
+[
+  {
+    "depth": 0,
+    "eyeX": 300,
+    "status": "hidden",
+    "canvas": "hidden",
+    "text": "硬幣沒有移動。空槽中，光沿直線前進，被槽壁擋住。"
+  },
+  {
+    "depth": 0,
+    "eyeX": 210,
+    "status": "visible",
+    "canvas": "visible",
+    "text": "硬幣沒有移動。空槽中，光沿直線越過槽緣進入眼睛。"
+  },
+  {
+    "depth": 0,
+    "eyeX": 250,
+    "status": "partial",
+    "canvas": "partial",
+    "text": "硬幣沒有移動。空槽中，光沿直線越過槽緣進入眼睛。"
+  },
+  {
+    "depth": 20,
+    "eyeX": 340,
+    "status": "hidden",
+    "canvas": "hidden",
+    "text": "硬幣沒有移動。光出水時折射，仍被槽壁擋住，尚未進入眼睛。"
+  },
+  {
+    "depth": 70,
+    "eyeX": 300,
+    "status": "partial",
+    "canvas": "partial",
+    "text": "硬幣沒有移動。光出水轉向，眼睛沿直線回推，所以看起來較淺。"
+  },
+  {
+    "depth": 100,
+    "eyeX": 210,
+    "status": "visible",
+    "canvas": "visible",
+    "text": "硬幣沒有移動。光出水轉向，眼睛沿直線回推，所以看起來較淺。"
+  },
+  {
+    "depth": 0,
+    "eyeX": 300,
+    "status": "hidden",
+    "canvas": "hidden",
+    "text": "硬幣沒有移動。空槽中，光沿直線前進，被槽壁擋住。"
+  }
+]

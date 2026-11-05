@@ -1,0 +1,194 @@
+[
+  {
+    "width": 1366,
+    "kind": "race",
+    "stage": {
+      "x": 436,
+      "y": 7.5625,
+      "width": 778,
+      "height": 299.34375
+    },
+    "controls": {
+      "x": 436,
+      "y": 324.90625,
+      "width": 778,
+      "height": 44.765625
+    }
+  },
+  {
+    "width": 1366,
+    "kind": "return",
+    "stage": {
+      "x": 408,
+      "y": 7.796875,
+      "width": 834,
+      "height": 569.890625
+    },
+    "controls": {
+      "x": 408,
+      "y": 577.6875,
+      "width": 834,
+      "height": 136.625
+    }
+  },
+  {
+    "width": 1366,
+    "kind": "quiz",
+    "stage": {
+      "x": 429,
+      "y": 8.28125,
+      "width": 792,
+      "height": 396
+    },
+    "controls": {
+      "x": 429,
+      "y": 404.28125,
+      "width": 792,
+      "height": 65
+    }
+  },
+  {
+    "width": 1024,
+    "kind": "race",
+    "stage": {
+      "x": 278,
+      "y": 8.453125,
+      "width": 697,
+      "height": 268.171875
+    },
+    "controls": {
+      "x": 278,
+      "y": 294.625,
+      "width": 697,
+      "height": 44.765625
+    }
+  },
+  {
+    "width": 1024,
+    "kind": "return",
+    "stage": {
+      "x": 250,
+      "y": 7.765625,
+      "width": 753,
+      "height": 514.546875
+    },
+    "controls": {
+      "x": 250,
+      "y": 522.3125,
+      "width": 753,
+      "height": 136.625
+    }
+  },
+  {
+    "width": 1024,
+    "kind": "quiz",
+    "stage": {
+      "x": 271,
+      "y": 8.015625,
+      "width": 711,
+      "height": 355.5
+    },
+    "controls": {
+      "x": 271,
+      "y": 363.515625,
+      "width": 711,
+      "height": 65
+    }
+  },
+  {
+    "width": 1280,
+    "kind": "race",
+    "stage": {
+      "x": 393,
+      "y": 8.46875,
+      "width": 778,
+      "height": 299.34375
+    },
+    "controls": {
+      "x": 393,
+      "y": 325.8125,
+      "width": 778,
+      "height": 44.765625
+    }
+  },
+  {
+    "width": 1280,
+    "kind": "return",
+    "stage": {
+      "x": 365,
+      "y": 8.328125,
+      "width": 834,
+      "height": 567.375
+    },
+    "controls": {
+      "x": 365,
+      "y": 575.703125,
+      "width": 834,
+      "height": 136.625
+    }
+  },
+  {
+    "width": 1280,
+    "kind": "quiz",
+    "stage": {
+      "x": 386,
+      "y": 7.71875,
+      "width": 792,
+      "height": 396
+    },
+    "controls": {
+      "x": 386,
+      "y": 403.71875,
+      "width": 792,
+      "height": 65
+    }
+  },
+  {
+    "width": 1440,
+    "kind": "race",
+    "stage": {
+      "x": 473,
+      "y": 7.5625,
+      "width": 778,
+      "height": 299.34375
+    },
+    "controls": {
+      "x": 473,
+      "y": 324.90625,
+      "width": 778,
+      "height": 44.765625
+    }
+  },
+  {
+    "width": 1440,
+    "kind": "return",
+    "stage": {
+      "x": 445,
+      "y": 7.796875,
+      "width": 834,
+      "height": 569.890625
+    },
+    "controls": {
+      "x": 445,
+      "y": 577.6875,
+      "width": 834,
+      "height": 136.625
+    }
+  },
+  {
+    "width": 1440,
+    "kind": "quiz",
+    "stage": {
+      "x": 466,
+      "y": 8.28125,
+      "width": 792,
+      "height": 396
+    },
+    "controls": {
+      "x": 466,
+      "y": 404.28125,
+      "width": 792,
+      "height": 65
+    }
+  }
+]

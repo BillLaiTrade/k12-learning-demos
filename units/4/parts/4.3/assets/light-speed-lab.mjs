@@ -1,4 +1,5 @@
 import {distanceKm, media, arrivalMs, durationMs, snapshot} from './light-speed-model.mjs';
+import {revealExperiment,experimentVisible} from './experiment-viewport.mjs?v=20261105-eleven1';
 
 const root = document.querySelector('#speed-lab');
 const $ = selector => root.querySelector(selector);
@@ -6,6 +7,7 @@ const start = $('#race-start'), pause = $('#race-pause');
 const stateLabel = $('#race-state'), status = $('#race-status'), timer = $('#race-time');
 const image = $('#race-background'), retry = $('#race-retry');
 const scene = $('#race-scene');
+const viewport = $('.race-viewport');
 const position = {start:448, end:1590, rows:[177,337,506]};
 let state = 'loading', elapsed = 0, startTime = 0, frame = 0, pauseReason='',inView=true;
 
@@ -68,17 +70,23 @@ function render() {
 function stopFrame() { cancelAnimationFrame(frame); frame = 0; }
 function tick(now) {
   if (state !== 'running') return;
+  if(document.hidden||!experimentVisible(viewport)){freeze('automatic');return;}
   elapsed = Math.min(durationMs,Math.max(0,now-startTime));
   render();
   if (elapsed >= durationMs) {
     state='complete';frame=0;controls();
-    status.textContent='相同路程下，空氣中的光先到，接著是水，最後是這種玻璃。再按「同時發光」可重新比較。';
+    status.textContent='三道光皆已到達，可重新比較。';
   } else frame=requestAnimationFrame(tick);
 }
-function play(fromBeginning = false) {
+function play(fromBeginning = false, manual = false) {
   if (state==='loading' || state==='error') return;
   stopFrame();
+  if(manual)revealExperiment(viewport,$('.race-console'));
   if(fromBeginning || state==='complete' || state==='idle')elapsed=0;
+  if(document.hidden||!experimentVisible(viewport)){
+    state='paused';pauseReason='automatic';render();controls();
+    status.textContent='回到實驗畫面後會繼續觀察。';return;
+  }
   state='running';pauseReason='';startTime=performance.now()-elapsed;render();controls();
   status.textContent='三道光同時前進；按「暫停觀察」，比較同一瞬間走過的距離。';
   frame=requestAnimationFrame(tick);
@@ -87,13 +95,13 @@ function freeze(reason='manual') {
   if(state!=='running')return;
   stopFrame();elapsed=Math.min(durationMs,Math.max(0,performance.now()-startTime));
   state=elapsed>=durationMs?'complete':'paused';pauseReason=state==='paused'?reason:'';render();controls();
-  status.textContent=state==='complete'?'三道光皆已到達，再按「同時發光」可重新比較。':'三道光定格在同一瞬間。按「繼續觀察」接著看，不計入暫停的時間。';
+  status.textContent=state==='complete'?'三道光皆已到達，可重新比較。':'三道光定格在同一瞬間。按「繼續觀察」接著看，不計入暫停的時間。';
 }
-start.onclick=()=>play(true);
-pause.onclick=()=>state==='paused'?play():freeze();
+start.onclick=()=>play(true,true);
+pause.onclick=()=>state==='paused'?play(false,true):freeze();
 const resumeAutomatic=()=>{if(state==='paused'&&pauseReason==='automatic'&&inView&&!document.hidden)play();};
 document.addEventListener('visibilitychange',()=>{if(document.hidden)freeze('automatic');else resumeAutomatic();});
-if('IntersectionObserver' in window)new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;if(inView)resumeAutomatic();else freeze('automatic');},{threshold:0}).observe(root);
+if('IntersectionObserver' in window)new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;if(inView)resumeAutomatic();else freeze('automatic');},{threshold:0}).observe(viewport);
 async function prepare() {
   state='loading';pauseReason='';elapsed=0;stopFrame();render();controls();retry.hidden=true;
   try {

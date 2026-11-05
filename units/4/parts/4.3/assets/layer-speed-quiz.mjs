@@ -1,9 +1,11 @@
 import {createLayerDeck, layerSnapshot, placeLayer, compareLayers, invertedLayerPair, LAYER_NAMES} from './layer-speed-model.mjs?v=20261105-random1';
+import {revealExperiment,experimentVisible} from './experiment-viewport.mjs?v=20261105-eleven1';
 
 const root=document.querySelector('#rank-lab');
 if(root){
   const q=selector=>root.querySelector(selector), svg=q('#rank-scene');
   const play=q('#rank-play'), sourceTrigger=q('#rank-source-trigger'), check=q('#rank-check'), form=q('#quiz');
+  const stage=q('.rank-stage');
   const next=document.querySelector('#rank-new'), result=q('#quiz-result'), help=q('#rank-sort-help');
   const slots=[...root.querySelectorAll('[data-rank-slot]')], tokens=[...root.querySelectorAll('[data-rank-medium]')];
   const deck=createLayerDeck(), names=LAYER_NAMES.map(name=>`介質${name}`);
@@ -161,14 +163,16 @@ if(root){
   function stop(){cancelAnimationFrame(frame);frame=0;}
   function tick(now){
     if(state!=='running')return;
+    if(document.hidden||!experimentVisible(stage)){suspend();return;}
     elapsed=Math.min(question.geometry.durationMs,Math.max(0,now-startTime));draw();
     if(elapsed>=question.geometry.durationMs){frame=0;observed=true;state='complete';controls();}
     else frame=requestAnimationFrame(tick);
   }
-  function start(restart=true){
+  function start(restart=true,manual=false){
+    if(manual)revealExperiment(stage,q('.rank-playback'));
     stop();if(restart)elapsed=0;
     state='running';startTime=performance.now()-elapsed;draw();controls();
-    if(document.hidden||!inView){state='suspended';controls();}else frame=requestAnimationFrame(tick);
+    if(document.hidden||!experimentVisible(stage)){state='suspended';controls();}else frame=requestAnimationFrame(tick);
   }
   function suspend(){
     if(state!=='running')return;
@@ -177,9 +181,9 @@ if(root){
     draw();controls();
   }
   function resume(){if(state==='suspended'&&inView&&!document.hidden)start(false);}
-  play.addEventListener('click',()=>start(true));
-  sourceTrigger.addEventListener('click',()=>{if(!sourceTrigger.disabled)start(true);});
-  new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;if(inView)resume();else suspend();},{threshold:0}).observe(root);
+  play.addEventListener('click',()=>start(true,true));
+  sourceTrigger.addEventListener('click',()=>{if(!sourceTrigger.disabled)start(true,true);});
+  new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;if(inView)resume();else suspend();},{threshold:0}).observe(stage);
   document.addEventListener('visibilitychange',()=>{if(document.hidden)suspend();else resume();});
 
   function renderOrder(focusSlot=null){

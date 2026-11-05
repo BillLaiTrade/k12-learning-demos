@@ -1,0 +1,36 @@
+▶ 4.3 eleven approved choices: controls, evidence, concise copy and desktop presentation
+  ✔ 2: explicit mouse/keyboard/lamp playback reveals the apparatus and controls before advancing (3434.944007ms)
+  ✔ 4: all three carts auto resume after viewport/tab interruption; explicit closing stays stopped on reopen (13735.42762ms)
+  ✔ 6-11: preconditions, conditional transmission, colour key, fixed analogy and depth narrative use short visible copy (2951.451546ms)
+  ✔ 3 and 5: no-op selections/keys/drop retain grades; replay conceals then restores grades unless order changes (13418.352964ms)
+  ✔ desktop and laptop preserve visible controls, short notes and readable evidence at four sizes (6001.908308ms)
+✔ 4.3 eleven approved choices: controls, evidence, concise copy and desktop presentation (45206.041389ms)
+✔ 1: sixth-section edge visibility is physically shared through preview, detail and fallback (10774.08674ms)
+▶ 4.3 approved desktop and laptop interactions, captions and four-layer evidence
+  ✔ 1 and 2 auto resume only automatic pauses and keep manual/comparison freezes (4423.543614ms)
+  ✔ 3 and 4 distinguish preview from playing without altering selected settings (2126.671026ms)
+  ✔ 5 independent reciprocal fronts, correct slider roles, pause and reset (2106.784948ms)
+  ✔ four-layer pool remains a real mouse return target; only Left/Right reorders; feedback gives one measured pair (2897.754653ms)
+  ✔ desktop/laptop bounds and final presentation at 1440,1366,1280,1024 (5277.579411ms)
+✔ 4.3 approved desktop and laptop interactions, captions and four-layer evidence (18872.499473ms)
+✔ 6 real two-second paired water frames, eye co-control, takeover, full detail and worker fallback (15603.435625ms)
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (953.480574ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (1685.382217ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (42958.244774ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (648.865278ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (55399.329645ms)
+▶ 4.3 approved playback visibility and comparison timing
+  ✔ manual launch reveals apparatus and controls at four desktop and laptop sizes (37952.270348ms)
+  ✔ automatic viewport resumes preserve scroll position and manual pauses (15394.874598ms)
+  ✔ reciprocal conclusion waits for both complete paths and resets after changes (7280.701987ms)
+✔ 4.3 approved playback visibility and comparison timing (64000.887327ms)
+✔ depth takeaway agrees with the paired view for empty, occluded and visible water states (12325.880665ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 225949.978376
