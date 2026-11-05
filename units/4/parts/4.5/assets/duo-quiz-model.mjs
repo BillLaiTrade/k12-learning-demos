@@ -19,7 +19,7 @@ export const PAPER_TYPES=Object.freeze({
  white:{name:'白紙',rgb:MATERIALS.white.rgb,css:'#eceee9'},black:{name:'黑紙',rgb:MATERIALS.black.rgb,css:'#26302e'}
 });
 export const COLOUR_OPTIONS=Object.freeze([['white','白色','#e5e7df'],['red','紅色','#df6256'],['green','綠色','#4d9e69'],['blue','藍色','#5281cc'],['yellow','黃色','#d7b73d'],['cyan','青色','#4ca8a6'],['magenta','洋紅色','#bb62a0'],['dark','很暗','#26302e']]);
-export const TRANSMISSION_OPTIONS=Object.freeze([['red','紅光'],['green','綠光'],['blue','藍光'],['yellow','紅、綠光'],['cyan','綠、藍光'],['magenta','紅、藍光'],['white','紅、綠、藍光（白光）']]);
+export const TRANSMISSION_OPTIONS=Object.freeze([['red','紅光'],['green','綠光'],['blue','藍光'],['yellow','黃光'],['cyan','青光'],['magenta','洋紅光'],['white','白光']]);
 export const REFLECTION_OPTIONS=Object.freeze([['much','較多被反射'],['some','只有部分較多被反射'],['little','反射很少']]);
 const MASK_COLOURS={1:'red',2:'green',4:'blue',3:'yellow',6:'cyan',5:'magenta',7:'white',0:'dark'};
 export const INITIAL_QUESTION=Object.freeze({id:'red-green/green/red',lights:['red','green'],filter:'green',paper:'red'});

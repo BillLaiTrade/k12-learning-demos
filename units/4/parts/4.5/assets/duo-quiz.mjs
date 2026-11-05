@@ -1,6 +1,6 @@
 import {rgbCss} from './color-model.mjs';
 import {initialiseDuoProbe} from './duo-probe.mjs?v=single-change-20261105';
-import {DUO_LIGHTS as LIGHTS,DUO_FILTERS as FILTERS,QUESTION_FOCUS,PAPER_TYPES,COLOUR_OPTIONS,TRANSMISSION_OPTIONS,REFLECTION_OPTIONS,INITIAL_SERIES,newQuestionSeries,challengeSignal,expectedAnswer,checkPrediction} from './duo-quiz-model.mjs?v=single-change-20261105';
+import {DUO_LIGHTS as LIGHTS,DUO_FILTERS as FILTERS,QUESTION_FOCUS,PAPER_TYPES,COLOUR_OPTIONS,TRANSMISSION_OPTIONS,REFLECTION_OPTIONS,INITIAL_SERIES,newQuestionSeries,challengeSignal,expectedAnswer,checkPrediction} from './duo-quiz-model.mjs?v=mixed-colour-options-20261105';
 
 const colourName=key=>COLOUR_OPTIONS.find(o=>o[0]===key)?.[1]||key;
 export function challengeDiagram(q,signal,lit){
