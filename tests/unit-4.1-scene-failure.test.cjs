@@ -86,7 +86,7 @@ test('4.1 第四、五區載入失敗與正常操作', {timeout: 240000}, async 
       await f.page.locator('.booklet-route-link').click();
       await f.page.waitForFunction(() => !document.querySelector('#shadow-theatre-load-failure').hidden);
       assert.equal(await f.page.locator('#shadow-theatre-view-hint').innerText(), '立體畫面暫時無法操作，請重新整理頁面後再試。');
-      await f.page.waitForFunction(() => document.querySelector('#progress-copy').textContent === '目前位於單元小測');
+      await f.page.waitForFunction(() => document.querySelector('.booklet-route-link').getAttribute('aria-current') === 'step');
       assert.equal(await f.page.locator('#light-speed-tap').isEnabled(), true);
       assert.deepEqual(f.errors, []);
       records.push({case:'no WebGL', states});

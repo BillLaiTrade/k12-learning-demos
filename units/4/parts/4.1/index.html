@@ -63,11 +63,6 @@
     main { padding: 0 0 76px; }
     .section-top { align-items: end; margin: 0 0 18px; }
     .section-top h2 { margin: 0; font-size: 1.32rem; }
-    .progress-copy { color: var(--muted); font-size: .9rem; white-space: nowrap; }
-    progress { display: block; width: 100%; height: 8px; margin: 12px 0 0; border: 0; border-radius: 99px; overflow: hidden; }
-    progress::-webkit-progress-bar { background: #dfe7df; }
-    progress::-webkit-progress-value { background: var(--green); border-radius: 99px; }
-    progress::-moz-progress-bar { background: var(--green); border-radius: 99px; }
     .lesson-layout { display: grid; grid-template-columns: minmax(205px, 250px) minmax(0, 1fr); gap: 34px; align-items: start; }
     @media (max-width: 1100px) and (min-width: 761px) { .lesson-layout { grid-template-columns: 205px minmax(0, 1fr); gap: 24px; } }
     .route { position: sticky; top: 18px; max-height: calc(100svh - 36px); overflow-y: auto; padding: 8px 10px 12px 0; scrollbar-width: thin; }
@@ -382,7 +377,6 @@
       .brand-row { align-items: flex-start; }
       .section-top { align-items: start; }
       .section-top h2 { font-size: 1.15rem; }
-      .progress-copy { font-size: .82rem; }
       .visual { padding: 9px; }
       .speed-row { grid-template-columns: 54px minmax(0, 1fr) 88px; gap: 7px; font-size: .82rem; }
       .light-switch { grid-template-columns: 34px minmax(0, 1fr) 40px auto; gap: 8px; padding: 10px; }
@@ -419,8 +413,7 @@
   </header>
   <main class="shell">
     <div class="section-top">
-      <div><h2>沿著探索路線，一步步認識光</h2><progress id="lesson-progress" max="6" value="1" aria-label="學習路線閱讀進度"></progress></div>
-      <span class="progress-copy" id="progress-copy">目前在第 1 段，共 6 段</span>
+      <div><h2>沿著探索路線，一步步認識光</h2></div>
     </div>
     <div class="lesson-layout">
       <nav class="route" aria-label="探索路線">
@@ -775,14 +768,10 @@
       const cards = [...document.querySelectorAll('.lesson-card')];
       const routeLinks = [...document.querySelectorAll('.route a:not(.booklet-route-link)')];
       const bookletLink = document.querySelector('.booklet-route-link');
-      const progress = document.querySelector('#lesson-progress');
-      const progressCopy = document.querySelector('#progress-copy');
       const setCurrent = (id) => {
         if (id === 'unit-booklet') {
           routeLinks.forEach((link) => link.removeAttribute('aria-current'));
           bookletLink.setAttribute('aria-current', 'step');
-          progress.value = cards.length;
-          progressCopy.textContent = '目前位於單元小測';
           return;
         }
         const index = cards.findIndex((card) => card.id === id);
@@ -792,8 +781,6 @@
           if (link.hash === `#${id}`) link.setAttribute('aria-current', 'step');
           else link.removeAttribute('aria-current');
         });
-        progress.value = index + 1;
-        progressCopy.textContent = `目前在第 ${index + 1} 段，共 ${cards.length} 段`;
       };
       if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
