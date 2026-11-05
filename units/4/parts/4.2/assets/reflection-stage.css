@@ -1,18 +1,22 @@
 /* First activity only: material comparison and accessible viewing controls. */
 #card-01 .reflection-stage { background: #fffdf8; container: reflection-stage / inline-size; }
-#card-01 .reflection-comparison { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1.1fr); align-items: stretch; gap: 12px; padding: 14px; }
+#card-01 .reflection-comparison { display: block; padding: 14px; }
 #card-01 .reflection-comparison[hidden] { display: none; }
 #card-01 .reflection-main-panel { min-width: 0; overflow: hidden; border: 1px solid #c9d6cf; border-radius: 15px; background: #e7e9e6; }
 #card-01 .reflection-main-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 7px; padding: 11px 12px; background: #f7f9f4; }
 #card-01 #reflection-view-status { margin: 0; padding: 5px 8px; border-radius: 8px; background: #e3eedf; color: #244d3b; font-size: .88rem; font-weight: 750; line-height: 1.4; }
 #card-01 .reflection-main-heading > span { color: #5c7166; font-size: .78rem; }
-#card-01 #reflection-3d-scene { height: auto; aspect-ratio: 1.4; touch-action: pan-y; }
-#card-01 .reflection-reference { display: flex; flex-direction: column; min-width: 0; gap: 12px; padding: 13px 12px; border: 1px solid #c9d6cf; border-radius: 15px; background: #f1f5ed; }
+#card-01 #reflection-3d-scene { height: auto; aspect-ratio: 1.65; touch-action: none; }
+#card-01 .reflection-reference { min-width: 0; margin: 18px 0; padding: 18px; border: 1px solid #c9d6cf; border-radius: 16px; background: #f4f7ef; }
 #card-01 .reflection-reference-heading h3 { margin: 0; color: #244d3b; font-size: 1.1rem; line-height: 1.4; }
 #card-01 .reflection-reference-heading p { margin: 4px 0 0; color: #526b5d; font-size: .78rem; }
-#card-01 #reflection-reference-scene { display: block; width: 100%; height: auto; aspect-ratio: 1.65; border: 1px solid #d2dcd1; border-radius: 10px; background: #e7e9e6; }
-#card-01 .reflection-reference-notes { margin-top: auto; padding-top: 12px; border-top: 1px solid #cbd9cc; color: #355846; font-size: .8rem; line-height: 1.65; }
-#card-01 .reflection-reference-notes p { margin: 0; }
+#card-01 #reflection-reference-image { display: block; width: 100%; max-width: 640px; height: auto; margin: 14px auto; border: 1px solid #d2dcd1; border-radius: 10px; background: #e7e9e6; }
+#card-01 .reflection-reference-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+#card-01 .reflection-reference-actions > span { color: #526b5d; font-size: .8rem; }
+#card-01 .reflection-match-button { min-height: 44px; padding: 10px 16px; border: 0; border-radius: 11px; background: #176b53; color: #fff; font-size: .9rem; font-weight: 750; touch-action: manipulation; }
+#card-01 .reflection-match-button:hover { background: #105640; }
+#card-01 .reflection-match-button:focus-visible { outline: 3px solid #176b5370; outline-offset: 2px; }
+#card-01 .reflection-reference-notes { margin: 12px 0 0; padding-top: 10px; border-top: 1px solid #cbd9cc; color: #355846; font-size: .8rem; line-height: 1.65; }
 #card-01 .reflection-stage-labels { justify-content: space-between; gap: 8px; }
 #card-01 .reflection-stage-labels span { flex: 1 1 140px; justify-content: center; }
 #card-01 .reflection-stage .reflection-controls { gap: 10px; padding: 8px 14px 14px; }
@@ -45,8 +49,10 @@
 #card-01 .reflection-view-button:focus-visible { outline: 3px solid #176b5370; outline-offset: 2px; }
 #card-01 .reflection-view-hint { margin: 9px 0 0; color: #64756b; font-size: .8rem; }
 #card-01 .reflection-fire:disabled,
-#card-01 .reflection-view-button:disabled { opacity: .55; cursor: default; }
+#card-01 .reflection-view-button:disabled,
+#card-01 .reflection-match-button:disabled { opacity: .55; cursor: default; }
 @media (max-width: 700px) {
+  #card-01 #reflection-3d-scene { aspect-ratio: 1.3; }
   #card-01 .reflection-stage-labels { padding: 10px; gap: 6px; }
   #card-01 .reflection-stage-labels span { flex: 1 1 0; min-width: 0; padding: 6px 3px; gap: 4px; font-size: .73rem; }
   #card-01 .reflection-stage .reflection-controls { padding: 6px 10px 12px; gap: 8px; }
@@ -54,13 +60,10 @@
   #card-01 .reflection-view-controls { padding: 11px 10px 12px; }
 }
 @container reflection-stage (max-width: 520px) {
-  #card-01 .reflection-comparison { grid-template-columns: minmax(0, 1fr); padding: 10px; gap: 10px; }
+  #card-01 .reflection-comparison { padding: 10px; }
   #card-01 .reflection-main-heading { padding: 9px; }
-  #card-01 #reflection-3d-scene { aspect-ratio: 1.45; }
-  #card-01 .reflection-reference { gap: 8px; padding: 10px; }
-  #card-01 .reflection-reference-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 5px; }
+}
+@media (max-width: 700px) {
+  #card-01 .reflection-reference { padding: 12px; }
   #card-01 .reflection-reference-heading h3 { font-size: 1rem; }
-  #card-01 .reflection-reference-heading p { margin: 0; }
-  #card-01 #reflection-reference-scene { aspect-ratio: 2.2; }
-  #card-01 .reflection-reference-notes { margin-top: 0; padding-top: 7px; font-size: .76rem; }
 }
