@@ -1,5 +1,5 @@
 import {createEyeModel} from './eye-model.mjs?v=20261105-eye-roles1';
-import {EYE,initialEye,changeEye,eyeState} from './eye-optics.mjs?v=20261104-eye1';
+import {EYE,initialEye,changeEye,eyeState,accommodationFor} from './eye-optics.mjs?v=20261104-eye1';
 const root=document.querySelector('[data-eye-lab]');
 if(root){
  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)],svg=$('[data-eye-scene]'),preview=$('[data-eye-preview]');
@@ -55,13 +55,14 @@ if(root){
   $$('[data-eye-distance]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.eyeDistance===state.distance)));
   $$('[data-eye-point]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.eyePoint===state.point));b.disabled=!state.rays;});
   const toggle=$('[data-eye-rays]');toggle.setAttribute('aria-pressed',String(state.rays));toggle.textContent=state.rays?'隱藏輔助光路':'顯示輔助光路';
+  const target=Math.round(accommodationFor(state.distance)),mark=$('[data-eye-clear]');mark.style.left=`calc(${target}% + ${10-target*.2}px)`;mark.dataset.target=target;mark.setAttribute('aria-label',`${state.distance==='far'?'看遠方':'看近處'}的清楚像：點選快速對焦`);
   const input=$('[data-eye-accommodation]');input.value=state.accommodation;input.style.setProperty('--eye-progress',state.accommodation+'%');input.setAttribute('aria-valuetext',`${state.accommodation<40?'水晶體較扁':state.accommodation>65?'水晶體較厚':'水晶體調節中'}，${g.clear?'已對焦':'尚未對焦'}`);
   const status=$('[data-eye-status]');status.textContent=`${state.distance==='far'?'看遠方':'看近處'}・${g.clear?'已對焦':'尚未對焦'}`;status.dataset.clear=g.clear;
   $('[data-eye-copy]').textContent=g.clear?'光在視網膜上成像，圖案清楚。':`會聚位置在視網膜${g.position==='behind'?'後':'前'}，試著${g.position==='behind'?'增加':'減少'}水晶體的會聚作用。`;
   $('[data-eye-adjust]').textContent=state.accommodation<40?'水晶體較扁，會聚作用較弱。':state.accommodation>65?'水晶體較厚，會聚作用較強。':'水晶體厚薄與會聚作用正在改變。';
   Object.assign(root.dataset,{ready:'true',distance:state.distance,accommodation:state.accommodation,clear:g.clear,focus:g.focus,position:g.position,rays:state.rays,point:state.point,retina:EYE.retina,lensPosition:EYE.lens});
  }
- root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-eye-reset'))state=initialEye();else if(b.hasAttribute('data-eye-distance'))state=changeEye(state,'distance',b.dataset.eyeDistance);else if(b.hasAttribute('data-eye-point'))state=changeEye(state,'point',b.dataset.eyePoint);else if(b.hasAttribute('data-eye-rays'))state=changeEye(state,'rays',!state.rays);else return;render();});
+ root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.hasAttribute('data-eye-reset'))state=initialEye();else if(b.hasAttribute('data-eye-clear'))state=changeEye(state,'accommodation',Math.round(accommodationFor(state.distance)));else if(b.hasAttribute('data-eye-distance'))state=changeEye(state,'distance',b.dataset.eyeDistance);else if(b.hasAttribute('data-eye-point'))state=changeEye(state,'point',b.dataset.eyePoint);else if(b.hasAttribute('data-eye-rays'))state=changeEye(state,'rays',!state.rays);else return;render();});
  $('[data-eye-accommodation]').addEventListener('input',e=>{state=changeEye(state,'accommodation',Number(e.target.value));render();});
  render();
 }

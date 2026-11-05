@@ -41,7 +41,14 @@
 .eye-distance { display:flex; gap:7px; }
 .eye-distance button { flex:1; padding:8px 9px; font-size:.9rem; background:#fffdf2; color:#32523b; min-height:44px; white-space:nowrap; }
 .eye-distance [aria-pressed=true] { background:#276345; border-color:#276345; color:#fffdf0; }
-.eye-slider-row { display:flex; align-items:center; gap:9px; font-size:.85rem; white-space:nowrap; }
+.eye-slider-row { display:flex; align-items:flex-end; gap:9px; font-size:.85rem; white-space:nowrap; }
+.eye-slider-row>span { display:flex; align-items:center; height:28px; }
+.eye-slider-track { position:relative; flex:1; min-width:30px; padding-top:24px; }
+.eye-slider-track input { display:block; width:100%; }
+.eye-clear-mark { position:absolute; z-index:2; top:0; transform:translateX(-50%); min-height:24px; padding:2px 7px; border:1px solid #d8b86c; border-radius:5px; background:#fff5d9; color:#936522; font-size:.68rem; line-height:18px; white-space:nowrap; box-shadow:0 1px 3px #745c1620; }
+.eye-clear-mark::after { content:''; position:absolute; top:100%; left:50%; height:14px; border-left:1px dashed #c99c42; pointer-events:none; }
+.eye-clear-mark:hover { background:#ffedb7; border-color:#bb8b31; }
+.eye-clear-mark:focus-visible { outline:3px solid #cead58; outline-offset:2px; }
 .eye-slider-row input { flex:1; min-width:30px; height:28px; margin:0; appearance:none; background:transparent; cursor:ew-resize; }
 .eye-slider-row input::-webkit-slider-runnable-track { height:7px; border:1px solid #b5bd91; border-radius:8px; background:linear-gradient(to right,#a3b477 var(--eye-progress),#dce0c5 var(--eye-progress)); }
 .eye-slider-row input::-webkit-slider-thumb { appearance:none; width:20px; height:20px; margin-top:-7px; border:2px solid #bf9c3c; border-radius:50%; background:linear-gradient(#f8dc86,#dfb956); box-shadow:0 2px 4px #556a3833; }
