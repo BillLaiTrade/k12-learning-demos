@@ -85,7 +85,7 @@ if(root){
   $('.micro-labels').innerHTML=labels;
   if(focused)$(`${focusWasLabel?'.micro-label':'.micro-pick'}[data-micro-lens="${focused}"]`)?.focus({preventScroll:true});
   $('[data-micro-scope]').textContent=view==='whole'?'目前觀察：完整成像':view==='objective'?'目前近看：物鏡成像':'目前近看：目鏡觀察';
-  $('[data-micro-process]').setAttribute('aria-label','完整成像關係：原物、物鏡、中間像、目鏡、眼睛。'+(view==='whole'?'目前觀察完整成像。':view==='objective'?'目前近看原物、物鏡與中間像。':'目前近看中間像、目鏡與眼睛。'));
+  $('[data-micro-process]').setAttribute('aria-label','完整成像關係，'+(view==='whole'?'目前觀察完整成像。':view==='objective'?'目前近看原物、物鏡與中間像。':'目前近看中間像、目鏡與眼睛。'));
   $('[data-micro-overview]').hidden=view==='whole';$('[data-micro-map]').hidden=view==='whole';
   if(model?.overview){const img=$('[data-micro-map-image]');if(!img.getAttribute('src'))img.src=model.overview;$('.micro-map-picture').style.aspectRatio=String(model.overviewAspect);}
   const region=$('[data-micro-map-region]'),regionBounds=model?model.overviewRegion(view):view==='objective'?[335,240,195,440]:[355,100,160,265];

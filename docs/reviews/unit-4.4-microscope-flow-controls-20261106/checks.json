@@ -1,0 +1,269 @@
+{
+  "records": [
+    {
+      "width": 390,
+      "height": 844,
+      "view": "whole",
+      "windowHeight": 751,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "目鏡",
+          "x": 219,
+          "y": 574.71875,
+          "w": 40.015625,
+          "h": 28,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "中間像",
+          "x": 219,
+          "y": 605.6015625,
+          "w": 52.015625,
+          "h": 22.796875,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "x": 219,
+          "y": 692.125,
+          "w": 40.015625,
+          "h": 28,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "x": 303.515625,
+          "y": 623.4453125,
+          "w": 6.234375,
+          "h": 16.796875,
+          "inside": true,
+          "normal": true
+        }
+      ],
+      "collisions": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "view": "objective",
+      "windowHeight": 751,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "中間像",
+          "x": 219,
+          "y": 330.8828125,
+          "w": 52.015625,
+          "h": 22.796875,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "x": 219,
+          "y": 467.328125,
+          "w": 40.015625,
+          "h": 28,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "草履蟲",
+          "x": 219,
+          "y": 516.2734375,
+          "w": 52.015625,
+          "h": 22.796875,
+          "inside": true,
+          "normal": true
+        }
+      ],
+      "collisions": []
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "view": "eyepiece",
+      "windowHeight": 751,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "眼睛",
+          "x": 219,
+          "y": 343.9921875,
+          "w": 40.015625,
+          "h": 22.796875,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目鏡",
+          "x": 219,
+          "y": 404.4375,
+          "w": 40.015625,
+          "h": 28,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "中間像",
+          "x": 219,
+          "y": 458.1484375,
+          "w": 52.015625,
+          "h": 22.796875,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "x": 150.375,
+          "y": 495.2265625,
+          "w": 6.234375,
+          "h": 16.796875,
+          "inside": true,
+          "normal": true
+        }
+      ],
+      "collisions": []
+    },
+    {
+      "width": 320,
+      "height": 844,
+      "view": "whole",
+      "windowHeight": 796,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "目鏡",
+          "x": 184,
+          "y": 382.015625,
+          "w": 40.015625,
+          "h": 28,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "中間像",
+          "x": 184,
+          "y": 412.8984375,
+          "w": 52.015625,
+          "h": 22.796875,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "x": 184,
+          "y": 499.421875,
+          "w": 40.015625,
+          "h": 28,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "x": 245.21875,
+          "y": 430.7421875,
+          "w": 6.234375,
+          "h": 16.796875,
+          "inside": true,
+          "normal": true
+        }
+      ],
+      "collisions": []
+    },
+    {
+      "width": 320,
+      "height": 844,
+      "view": "objective",
+      "windowHeight": 796,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "中間像",
+          "x": 184,
+          "y": 696.1796875,
+          "w": 52.015625,
+          "h": 22.796875,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "物鏡",
+          "x": 184,
+          "y": 832.625,
+          "w": 40.015625,
+          "h": 28,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "草履蟲",
+          "x": 184,
+          "y": 881.5703125,
+          "w": 52.015625,
+          "h": 22.796875,
+          "inside": true,
+          "normal": true
+        }
+      ],
+      "collisions": []
+    },
+    {
+      "width": 320,
+      "height": 844,
+      "view": "eyepiece",
+      "windowHeight": 796,
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "text": "眼睛",
+          "x": 184,
+          "y": 709.2890625,
+          "w": 40.015625,
+          "h": 22.796875,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "目鏡",
+          "x": 184,
+          "y": 769.734375,
+          "w": 40.015625,
+          "h": 28,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "中間像",
+          "x": 184,
+          "y": 823.4453125,
+          "w": 52.015625,
+          "h": 22.796875,
+          "inside": true,
+          "normal": true
+        },
+        {
+          "text": "F",
+          "x": 245.21875,
+          "y": 860.5234375,
+          "w": 6.234375,
+          "h": 16.796875,
+          "inside": true,
+          "normal": true
+        }
+      ],
+      "collisions": []
+    }
+  ],
+  "errors": []
+}
