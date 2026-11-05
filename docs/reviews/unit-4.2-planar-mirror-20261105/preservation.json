@@ -1,0 +1,15 @@
+{
+  "baseline": "d06d7251d64fac76a6e8bac4e8385d5d94351048",
+  "other_sections_identical": true,
+  "other_sections_sha256": "5d817417c6d7479b859179ba4a84b0f69230d1d5fca983be042e0943b89f78f0",
+  "approved_dialogues_unchanged": true,
+  "layout_css_unchanged": true,
+  "reference": {
+    "dimensions": [
+      1119,
+      678
+    ],
+    "sha256": "b640198cdf07c0af8644070dc2a0e13a36ca1698e0624e9c309cbb00ffb1c280",
+    "origin": "本活動新場景、雙燈開啟、正面直接渲染擷取，無後製調亮或生成圖"
+  }
+}
