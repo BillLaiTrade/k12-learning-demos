@@ -1,0 +1,17 @@
+{
+  "evidence": [
+    {
+      "motion": "reduce",
+      "changedPixels": 828
+    },
+    {
+      "motion": "no-preference",
+      "changedPixels": 1771
+    }
+  ],
+  "native": {
+    "writes": 0,
+    "animations": 24,
+    "elapsed": 550.02
+  }
+}

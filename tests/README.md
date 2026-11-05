@@ -1639,3 +1639,9 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-radiation.test.cjs
 `playback-visual.json`保存兩種偏好的變動像素數，`playback-*-incident.png`保存實際入射階段；完成SVG須與播放前一致。其餘幾何、開關、比例、無JS／無WebGL及整頁回歸保留。
 
 本次最終針對性回歸使用`node --test --test-skip-pattern='實際像素|自由拖曳保留|恢復上下|回到正面重設|自由實驗常駐' tests/unit-4.2-reflection-stage.test.cjs`，9項（含外層）。上方3D程式與樣式段未改動。播放器在獨立頁面於模組載入前安裝時鐘，整頁手機案例另確認3D拖曳後可用原生觸控播放；前景分頁與畫面提交後的樣式檢查避免背景節流／容器樣式未呈現造成誤讀。
+
+## 4.2 原生光路動畫與材質剖面（2026-11-05）
+
+第一區專項的播放案例改為取樣真正的Web Animations時間軸，確認24個transform效果共用起始時間、不同時間的實際SVG像素確實改變、結束恢復完整光路。以MutationObserver量測播放期間的幾何／樣式／子節點改寫數，排除階段邊界必要的aria狀態；預期為0，不把單一硬體的FPS當跨裝置保證。減少動態、重播、鍵盤、偏好切換與觸控回歸保留。幾何檢查改讀取實際SVG viewBox，不綁定舊構圖尺寸。
+
+`native-playback.json`保存兩種偏好的像素差異、原生效果數、時間軸進度及DOM改寫數；畫面與本次驗證見`docs/reviews/unit-4.2-surface-native-20261105/`。

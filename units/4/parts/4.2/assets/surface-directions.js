@@ -1,54 +1,36 @@
-import {surfaceDiagram} from './surface-directions.mjs?v=surfaces-experiment-20261105';
+import {surfaceDiagram} from './surface-directions.mjs?v=surface-native-20261105';
 
 const root = document.querySelector('#surface-explanation');
 const button = document.querySelector('#surface-play');
 const status = document.querySelector('#surface-play-status');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-// Recompute every ray from its local facet; the static SVG remains readable
-// when scripts are unavailable.
+const ns = 'http://www.w3.org/2000/svg';
+const create = (name, attributes) => {
+  const element = document.createElementNS(ns, name);
+  for (const [key,value] of Object.entries(attributes)) element.setAttribute(key,value);
+  return element;
+};
+const tracks = [];
+// Static paths are the accessible, no-script diagram. Prepare native animation
+// tracks once: no path, dash, marker or particle writes during animation frames.
 root.querySelectorAll('[data-surface]').forEach(panel => {
   const diagram = surfaceDiagram(panel.dataset.surface);
   const point = p => p.map(v => Number(v.toFixed(6))).join(' ');
-  panel.querySelector('.surface-profile').setAttribute('d', `M${diagram.profile.map(point).join('L')}L520 174L40 174Z`);
   panel.querySelectorAll('[data-surface-ray]').forEach((group,index) => {
-    const ray = diagram.rays[index], incoming = group.querySelector('.surface-incoming'), outgoing = group.querySelector('.surface-outgoing');
-    incoming.setAttribute('d', `M${point(ray.start)}L${point(ray.hit)}`);
-    outgoing.setAttribute('d', `M${point(ray.hit)}L${point(ray.end)}`);
-    incoming.dataset.start = ray.start;
-    incoming.dataset.hit = ray.hit;
-    outgoing.dataset.end = ray.end;
-    group.querySelector('.surface-contact').setAttribute('cx', ray.hit[0]);
-    group.querySelector('.surface-contact').setAttribute('cy', ray.hit[1]);
+    const ray = diagram.rays[index];
+    for (const [kind,start,end] of [['incoming',ray.start,ray.hit],['outgoing',ray.hit,ray.end]]) {
+      const path = group.querySelector('.surface-'+kind);
+      path.setAttribute('d',`M${point(start)}L${point(end)}`);
+      const dx=end[0]-start[0],dy=end[1]-start[1],length=Math.hypot(dx,dy);
+      const track = create('g',{class:'surface-native-track surface-native-'+kind,'aria-hidden':'true',transform:`translate(${start}) rotate(${Math.atan2(dy,dx)*180/Math.PI})`});
+      const line = create('path',{class:'surface-native-line',d:`M0 0H${length}`});
+      const tip = create('path',{class:'surface-native-tip',d:'M0 0L-21 -10.5L-16.1 0L-21 10.5Z'});
+      track.append(line,tip);group.querySelector('.surface-contact').before(track);
+      tracks.push({kind,line,tip,length});
+    }
+    const halo=create('circle',{class:'surface-contact-halo',cx:ray.hit[0],cy:ray.hit[1],r:12});
+    group.querySelector('.surface-contact').before(halo);
   });
-});
-const svgNamespace = 'http://www.w3.org/2000/svg';
-root.querySelectorAll('.surface-panel svg').forEach(svg => {
-  const guides = document.createElementNS(svgNamespace, 'g');
-  guides.setAttribute('aria-hidden', 'true');
-  svg.querySelectorAll('.surface-incoming,.surface-outgoing').forEach(path => {
-    const guide = document.createElementNS(svgNamespace, 'path');
-    guide.setAttribute('d', path.getAttribute('d'));
-    guide.setAttribute('class', 'surface-guide');
-    guides.append(guide);
-  });
-  svg.querySelector('.surface-profile').after(guides);
-});
-const rays = [...root.querySelectorAll('[data-surface-ray]')].map(group => {
-  const incoming = group.querySelector('.surface-incoming'), outgoing = group.querySelector('.surface-outgoing');
-  const hit = incoming.dataset.hit.split(',').map(Number);
-  const halo = document.createElementNS(svgNamespace, 'circle');
-  halo.setAttribute('class', 'surface-contact-halo');
-  halo.setAttribute('cx', hit[0]); halo.setAttribute('cy', hit[1]); halo.setAttribute('r', '11');
-  group.querySelector('.surface-contact').before(halo);
-  group.querySelector('.surface-contact').setAttribute('r', '4');
-  group.querySelector('.surface-pulse').setAttribute('r', '7');
-  return {
-    start: incoming.dataset.start.split(',').map(Number), hit,
-    end: outgoing.dataset.end.split(',').map(Number), incoming, outgoing,
-    incomingLength: incoming.getTotalLength(), outgoingLength: outgoing.getTotalLength(),
-    incomingMarker: incoming.getAttribute('marker-end'), outgoingMarker: outgoing.getAttribute('marker-end'),
-    pulse: group.querySelector('.surface-pulse')
-  };
 });
 const diagrams = root.querySelector('.surface-diagrams');
 const steps = [...root.querySelectorAll('[data-step]')];
@@ -59,84 +41,62 @@ const messages = {
   reflected: '光線反射：比較兩側反射方向的分布。',
   complete: '播放完成，可重播比較兩側反射方向。'
 };
-let frame = 0;
 const phase = value => {
-  if (root.dataset.phase === value) return;
-  root.dataset.phase = value;
-  if (messages[value]) status.textContent = messages[value];
-  const active = phases.indexOf(value);
+  root.dataset.phase=value;
+  status.textContent=messages[value];
+  const active=phases.indexOf(value);
   steps.forEach((step,index) => {
-    if (step.dataset.step === value) step.setAttribute('aria-current','step');
+    if (step.dataset.step===value) step.setAttribute('aria-current','step');
     else step.removeAttribute('aria-current');
-    step.dataset.done = String(value === 'complete' || (active >= 0 && index < active));
+    step.dataset.done=String(value==='complete' || (active>=0 && index<active));
   });
 };
-const draw = (ray,kind,progress) => {
-  const path = ray[kind], length = ray[kind+'Length'];
-  path.style.strokeDasharray = String(length);
-  path.style.strokeDashoffset = String(length * (1-progress));
-  path.style.opacity = progress > 0 ? '1' : '0';
-  path.setAttribute('marker-end', progress >= 1 ? ray[kind+'Marker'] : 'none');
-};
-const restore = () => {
-  rays.forEach(ray => {
-    for (const kind of ['incoming','outgoing']) {
-      ray[kind].style.removeProperty('stroke-dasharray');
-      ray[kind].style.removeProperty('stroke-dashoffset');
-      ray[kind].style.removeProperty('opacity');
-      ray[kind].setAttribute('marker-end',ray[kind+'Marker']);
-    }
-    ray.pulse.setAttribute('visibility','hidden');
-  });
+let animations=[],timers=[],generation=0;
+const clear = () => {
+  generation++;
+  timers.forEach(clearTimeout);timers=[];
+  animations.forEach(animation=>animation.cancel());animations=[];
 };
 const finish = () => {
-  cancelAnimationFrame(frame);
-  restore();
-  root.dataset.playing = 'false';
+  clear();
+  root.dataset.playing='false';
   diagrams.removeAttribute('aria-busy');
   phase('complete');
-  button.querySelector('.surface-play-label').textContent = '重播光路';
+  button.querySelector('.surface-play-label').textContent='重播光路';
 };
 const play = () => {
-  cancelAnimationFrame(frame);
-  root.dataset.playing = 'true';
+  clear();
+  const token=generation;
+  root.dataset.playing='true';
+  root.dataset.motion=reducedMotion.matches?'reduced':'full';
   diagrams.setAttribute('aria-busy','true');
-  button.querySelector('.surface-play-label').textContent = '重新播放';
-  button.querySelector('.surface-play-icon').textContent = '↻';
-  // Update immediately, even when reduced motion is enabled. That preference
-  // uses three discrete visual stages, rather than silently skipping playback.
-  root.dataset.phase = '';
+  button.querySelector('.surface-play-label').textContent='重新播放';
+  button.querySelector('.surface-play-icon').textContent='↻';
   phase('incident');
-  const reduced = reducedMotion.matches;
-  rays.forEach(ray => {
-    draw(ray,'incoming',reduced ? 1 : 0); draw(ray,'outgoing',0);
-    ray.pulse.setAttribute('visibility','hidden');
-  });
-  const started = performance.now();
-  let lastPhase = 'incident';
-  const animate = now => {
-    const elapsed = now-started;
-    if (elapsed >= 2700) { finish(); return; }
-    const current = elapsed < 1000 ? 'incident' : elapsed < 1500 ? 'contact' : 'reflected';
-    phase(current);
-    if (!reduced || current !== lastPhase) {
-      const progress = current === 'incident' ? Math.min(1,elapsed/1000) : current === 'contact' ? 0 : Math.min(1,(elapsed-1500)/1200);
-      rays.forEach(ray => {
-        draw(ray,'incoming',current === 'incident' && !reduced ? progress : 1);
-        draw(ray,'outgoing',current === 'reflected' ? (reduced ? 1 : progress) : 0);
-        if (reduced) { ray.pulse.setAttribute('visibility','hidden'); return; }
-        const from = current === 'incident' ? ray.start : ray.hit;
-        const to = current === 'incident' || current === 'contact' ? ray.hit : ray.end;
-        ray.pulse.setAttribute('cx',from[0]+(to[0]-from[0])*progress);
-        ray.pulse.setAttribute('cy',from[1]+(to[1]-from[1])*progress);
-        ray.pulse.setAttribute('fill',current === 'reflected' ? '#16826c' : '#b98218');
-        ray.pulse.setAttribute('visibility','visible');
-      });
-    }
-    lastPhase = current;
-    frame = requestAnimationFrame(animate);
-  };
-  frame = requestAnimationFrame(animate);
+  timers.push(setTimeout(()=>phase('contact'),1000),setTimeout(()=>phase('reflected'),1500));
+  if (reducedMotion.matches) {
+    // Discrete, visible stages; no moving/scaling geometry in this preference.
+    timers.push(setTimeout(finish,2700));
+    return;
+  }
+  const started=document.timeline.currentTime;
+  for (const {kind,line,tip,length} of tracks) {
+    const incoming=kind==='incoming',from=incoming?0:1500/2700,to=incoming?1000/2700:1;
+    const frames=(first,last)=>[
+      {transform:first,offset:0},
+      ...(!incoming?[{transform:first,offset:from}]:[]),
+      {transform:last,offset:to},
+      ...(incoming?[{transform:last,offset:1}]:[])
+    ];
+    const options={duration:2700,fill:'both',easing:'linear'};
+    const grow=line.animate(frames('scaleX(0)','scaleX(1)'),options);
+    const travel=tip.animate(frames('translateX(0px)',`translateX(${length}px)`),options);
+    grow.startTime=started;travel.startTime=started;
+    animations.push(grow,travel);
+  }
+  Promise.all(animations.map(animation=>animation.finished)).then(()=>{
+    if (generation===token) finish();
+  }).catch(error=>{if(error.name!=='AbortError') throw error;});
 };
 // A stationary touch release also handles browsers that omit the compatibility
 // click after dragging the 3D canvas. Ignore scrolling and duplicate clicks.
@@ -161,7 +121,7 @@ button.addEventListener('click',event => {
   play();
 });
 reducedMotion.addEventListener('change',() => { if(root.dataset.playing==='true') finish(); });
-window.addEventListener('pagehide',() => { cancelAnimationFrame(frame); },{once:true});
+window.addEventListener('pagehide',() => { if(root.dataset.playing==='true') finish(); else clear(); });
 root.dataset.phase = 'idle';
 button.disabled = false;
 root.dataset.ready = 'true';

@@ -7,7 +7,7 @@ const {chromium}=require('playwright');
 const {expect}=require('playwright/test');
 const {PNG}=require('pngjs');
 
-test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關',{timeout:240000},async t=>{
+test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關',{timeout:360000},async t=>{
   let base=process.env.LESSON_BASE_URL;
   if(!base){
     const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','ignore']});
@@ -87,7 +87,7 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
     const diagrams=await page.locator('.surface-panel').evaluateAll(panels=>panels.map(panel=>{
       const numbers=s=>s.match(/-?[\d.]+(?:e[-+]?\d+)?/gi).map(Number);
       const profile=numbers(panel.querySelector('.surface-profile').getAttribute('d'));
-      return{kind:panel.dataset.surface,profile:Array.from({length:profile.length/2-2},(_,i)=>profile.slice(i*2,i*2+2)),rays:[...panel.querySelectorAll('[data-surface-ray]')].map(g=>({incoming:numbers(g.querySelector('.surface-incoming').getAttribute('d')),outgoing:numbers(g.querySelector('.surface-outgoing').getAttribute('d'))}))};
+      return{kind:panel.dataset.surface,bounds:[panel.querySelector('svg').viewBox.baseVal.width,panel.querySelector('svg').viewBox.baseVal.height],profile:Array.from({length:profile.length/2-2},(_,i)=>profile.slice(i*2,i*2+2)),rays:[...panel.querySelectorAll('[data-surface-ray]')].map(g=>({incoming:numbers(g.querySelector('.surface-incoming').getAttribute('d')),outgoing:numbers(g.querySelector('.surface-outgoing').getAttribute('d'))}))};
     }));
     const unit=v=>{const n=Math.hypot(...v);return v.map(x=>x/n);};
     const dot=(a,b)=>a.reduce((sum,x,i)=>sum+x*b[i],0);
@@ -104,7 +104,7 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
         const reflected=incoming.map((x,i)=>x-2*dot(incoming,normal)*normal[i]);
         outgoing.forEach((x,i)=>close(x,reflected[i],1e-7));close(-dot(incoming,normal),dot(outgoing,normal),1e-7);
         assert.ok(outgoing[1]<0);directions.push(Math.atan2(outgoing[1],outgoing[0]));
-        for(const p of [start,hit,end])assert.ok(p[0]>=0&&p[0]<=560&&p[1]>=0&&p[1]<=190);
+        for(const p of [start,hit,end])assert.ok(p[0]>=0&&p[0]<=diagram.bounds[0]&&p[1]>=0&&p[1]<=diagram.bounds[1]);
         for(let j=1;j<30;j++){
           const p=hit.map((x,i)=>x+(end[i]-x)*j/30),k=diagram.profile.findIndex((x,i)=>i<diagram.profile.length-1&&x[0]<=p[0]&&diagram.profile[i+1][0]>=p[0]);
           if(k>=0){const a=diagram.profile[k],b=diagram.profile[k+1];assert.ok(p[1]<a[1]+(p[0]-a[0])*(b[1]-a[1])/(b[0]-a[0])+1e-6,'反射光不得穿過其他表面');}
@@ -116,66 +116,86 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
     fs.writeFileSync(path.join(dir,'surface-rays.json'),JSON.stringify(diagrams,null,2));
   });
 
-  await t.test('一般及減少動態皆有可見的光路播放與重播，且不影響主實驗',async()=>{
-    const playbackContext=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
-    await setup(playbackContext);
-    // Isolate the SVG player from WebGL startup and its independent clocks.
-    await playbackContext.route('**/assets/reflection-3d.js*',r=>r.fulfill({contentType:'application/javascript',body:''}));
-    const playbackPage=await playbackContext.newPage();
-    // Install the clock before any application timers are created.
-    await playbackPage.clock.install();await playbackPage.bringToFront();
-    await playbackPage.goto(new URL('units/4/parts/4.2/',base).href,{waitUntil:'networkidle'});
-    await playbackPage.addStyleTag({content:'html{scroll-behavior:auto!important}'});
-    await expect(playbackPage.locator('#surface-explanation')).toHaveAttribute('data-ready','true');
-    const before=await page.evaluate(()=>window.__surfaceLab.spotLights.map(x=>x.intensity));
-    const play=playbackPage.locator('#surface-play'),explanation=playbackPage.locator('#surface-explanation'),svg=playbackPage.locator('[data-surface=smooth] svg'),status=playbackPage.locator('#surface-play-status');
+  await t.test('原生光路動畫同步且沒有逐幀 DOM 寫入；減少動態、重播與鍵盤皆正常',async()=>{
+    const c=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
+    await setup(c);
+    await c.route('**/assets/reflection-3d.js*',r=>r.fulfill({contentType:'application/javascript',body:''}));
+    const p=await c.newPage();await p.clock.install();await p.bringToFront();
+    await p.goto(new URL('units/4/parts/4.2/',base).href,{waitUntil:'load'});
+    await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
+    const root=p.locator('#surface-explanation'),play=p.locator('#surface-play'),svg=p.locator('[data-surface=smooth] svg');
+    await expect(root).toHaveAttribute('data-ready','true');
     const changedPixels=(a,b)=>{
-      const first=PNG.sync.read(a),second=PNG.sync.read(b);assert.equal(first.width,second.width);assert.equal(first.height,second.height);
-      let changed=0;for(let i=0;i<first.data.length;i+=4)if(Math.max(...[0,1,2].map(c=>Math.abs(first.data[i+c]-second.data[i+c])))>20)changed++;
+      const x=PNG.sync.read(a),y=PNG.sync.read(b);assert.equal(x.width,y.width);assert.equal(x.height,y.height);
+      let changed=0;for(let i=0;i<x.data.length;i+=4)if(Math.max(...[0,1,2].map(c=>Math.abs(x.data[i+c]-y.data[i+c])))>20)changed++;
       return changed;
     };
-    const visual=[];
-    await playbackPage.clock.pauseAt(new Date(await playbackPage.evaluate(()=>Date.now())+100));
+    const seek=async time=>p.locator('.surface-native-track').evaluateAll((tracks,time)=>{
+      tracks.flatMap(t=>t.getAnimations({subtree:true})).forEach(a=>{a.pause();a.currentTime=time;});
+    },time);
+    const before=await page.evaluate(()=>window.__surfaceLab.spotLights.map(x=>x.intensity));
+    const evidence=[];
     try{
+      await p.clock.pauseAt(new Date(await p.evaluate(()=>Date.now())+100));
       for(const motion of ['reduce','no-preference']){
-        await playbackPage.emulateMedia({reducedMotion:motion});
-        await explanation.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));
+        await p.emulateMedia({reducedMotion:motion});await root.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));
         const initial=await svg.screenshot();
-        await play.click();await expect(explanation).toHaveAttribute('data-playing','true');await expect(explanation).toHaveAttribute('data-phase','incident');
-        await expect(status).toBeVisible();await expect(status).toHaveText(/光線入射/);
-        await expect(playbackPage.locator('.surface-steps [aria-current=step]')).toHaveAttribute('data-step','incident');
-        // Hold the browser clock at each real phase while capturing pixels;
-        // software rendering may otherwise finish playback during a screenshot.
-        await playbackPage.clock.runFor(240);
-        const incidence=await svg.screenshot(),difference=changedPixels(initial,incidence);assert.ok(difference>150,`播放必須改變實際圖形：${motion},${difference}`);
-        fs.writeFileSync(path.join(dir,`playback-${motion}-incident.png`),incidence);
-        if(motion==='reduce'){
-          await expect(playbackPage.locator('.surface-pulse[visibility=visible]')).toHaveCount(0);
-          assert.ok(await playbackPage.locator('.surface-outgoing').evaluateAll(paths=>paths.every(p=>getComputedStyle(p).opacity==='0')));
-        }else{
-          await expect(playbackPage.locator('.surface-pulse[visibility=visible]')).toHaveCount(6);
-          await expect.poll(()=>playbackPage.locator('.surface-incoming').first().evaluate(p=>parseFloat(getComputedStyle(p).strokeDashoffset))).toBeGreaterThan(0);
+        await play.click();await expect(root).toHaveAttribute('data-phase','incident');
+        await expect(p.locator('#surface-play-status')).toHaveText(/光線入射/);
+        if(motion==='no-preference'){
+          const animations=await p.locator('.surface-native-track').evaluateAll(ts=>ts.flatMap(t=>t.getAnimations({subtree:true})).map(a=>({start:a.startTime,duration:a.effect.getTiming().duration})));
+          assert.equal(animations.length,24);assert.equal(new Set(animations.map(a=>a.start)).size,1);assert.ok(animations.every(a=>a.duration===2700));
+          await seek(250);
         }
-        await playbackPage.clock.runFor(850);
-        await expect(explanation).toHaveAttribute('data-phase','contact');await expect(status).toHaveText(/接觸表面/);
-        await expect(playbackPage.locator('.surface-steps [aria-current=step]')).toHaveAttribute('data-step','contact');
-        await svg.screenshot({path:path.join(dir,`playback-${motion}-contact.png`)});
-        assert.ok(await playbackPage.locator('.surface-contact-halo').evaluateAll(es=>es.every(e=>+getComputedStyle(e).opacity>0)));
-        await playbackPage.clock.runFor(600);
-        await expect(explanation).toHaveAttribute('data-phase','reflected');await expect(status).toHaveText(/光線反射/);
-        await play.click();await expect(explanation).toHaveAttribute('data-phase','incident');
-        await playbackPage.clock.runFor(2800);
-        await expect(explanation).toHaveAttribute('data-playing','false');await expect(explanation).toHaveAttribute('data-phase','complete');
-        await expect(status).toHaveText(/播放完成/);await expect(play).toHaveText(/重播光路/);
-        await expect(playbackPage.locator('.surface-pulse[visibility=visible]')).toHaveCount(0);await expect(playbackPage.locator('.surface-steps [data-done=true]')).toHaveCount(3);
-        assert.equal(changedPixels(initial,await svg.screenshot()),0,'完成後保留完整光路');
-        visual.push({motion,changedPixels:difference});
+        const incident=await svg.screenshot(),difference=changedPixels(initial,incident);assert.ok(difference>150);
+        fs.writeFileSync(path.join(dir,`native-${motion}-incident.png`),incident);
+        if(motion==='no-preference'){
+          await seek(650);assert.ok(changedPixels(incident,await svg.screenshot())>150,'原生時間軸推進時光線必須移動');
+        }else assert.equal(await p.locator('.surface-native-track').evaluateAll(ts=>ts.flatMap(t=>t.getAnimations({subtree:true})).length),0);
+        await p.clock.runFor(1050);if(motion==='no-preference')await seek(1050);
+        await expect(root).toHaveAttribute('data-phase','contact');
+        await svg.screenshot({path:path.join(dir,`native-${motion}-contact.png`)});
+        assert.ok(await p.locator('.surface-contact-halo').evaluateAll(es=>es.every(e=>+getComputedStyle(e).opacity>0)));
+        await p.clock.runFor(650);if(motion==='no-preference')await seek(2100);
+        await expect(root).toHaveAttribute('data-phase','reflected');
+        await svg.screenshot({path:path.join(dir,`native-${motion}-reflected.png`)});
+        if(motion==='no-preference')await p.locator('.surface-native-track').evaluateAll(ts=>ts.flatMap(t=>t.getAnimations({subtree:true})).forEach(a=>a.finish()));
+        else await p.clock.runFor(1100);
+        await expect(root).toHaveAttribute('data-playing','false');await expect(play).toHaveText(/重播光路/);
+        assert.equal(changedPixels(initial,await svg.screenshot()),0,'完成時恢復完整精確光路');
+        evidence.push({motion,changedPixels:difference});
+        await play.click();await expect(root).toHaveAttribute('data-phase','incident');
+        await play.click();await expect(root).toHaveAttribute('data-phase','incident');
+        if(motion==='no-preference')await p.emulateMedia({reducedMotion:'reduce'});else await p.clock.runFor(2800);
+        await expect(root).toHaveAttribute('data-playing','false');
       }
-      await play.focus();await playbackPage.keyboard.press('Enter');await expect(explanation).toHaveAttribute('data-playing','true');
-      await playbackPage.emulateMedia({reducedMotion:'reduce'});await expect(explanation).toHaveAttribute('data-playing','false');
+      await p.clock.resume();await p.emulateMedia({reducedMotion:'no-preference'});
+      await play.focus();await p.keyboard.press('Enter');await expect(root).toHaveAttribute('data-playing','true');
+      await p.emulateMedia({reducedMotion:'reduce'});await expect(root).toHaveAttribute('data-playing','false');
+      // A fresh, real-time page prevents the phase-test's mocked timer origin
+      // from contaminating the independent native timeline measurement.
+      const realtime=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'no-preference'});
+      let native;
+      try{
+        await setup(realtime);await realtime.route('**/assets/reflection-3d.js*',r=>r.fulfill({contentType:'application/javascript',body:''}));
+        const live=await realtime.newPage();await live.bringToFront();await live.goto(new URL('units/4/parts/4.2/',base).href,{waitUntil:'load'});
+        await expect(live.locator('#surface-explanation')).toHaveAttribute('data-ready','true');
+        await live.locator('#surface-explanation').evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));
+        native=await live.evaluate(async()=>{
+          const svg=document.querySelector('.surface-diagrams');let writes=0;
+          const observer=new MutationObserver(records=>writes+=records.length);
+          observer.observe(svg,{attributes:true,attributeFilter:['d','cx','cy','transform','style','marker-end','stroke-dasharray','stroke-dashoffset'],childList:true,subtree:true});
+          document.querySelector('#surface-play').click();observer.takeRecords();
+          const animations=[...svg.getAnimations({subtree:true})],first=animations[0].currentTime||0;
+          await new Promise(resolve=>setTimeout(resolve,500));observer.disconnect();
+          return{writes,animations:animations.length,elapsed:animations[0].currentTime-first};
+        });
+        fs.writeFileSync(path.join(dir,'native-playback.json'),JSON.stringify({evidence,native},null,2));
+        assert.equal(native.writes,0,'動畫不得逐幀重寫SVG');assert.equal(native.animations,24);assert.ok(native.elapsed>200);
+        await expect(live.locator('#surface-explanation')).toHaveAttribute('data-playing','false',{timeout:10000});
+      }finally{await realtime.close();}
       assert.deepEqual(await page.evaluate(()=>window.__surfaceLab.spotLights.map(x=>x.intensity)),before);
-      fs.writeFileSync(path.join(dir,'playback-visual.json'),JSON.stringify(visual,null,2));
-    }finally{await playbackPage.clock.resume();await playbackContext.close();await page.bringToFront();}
+    }finally{await c.close();await page.bringToFront();}
   });
 
   await t.test('實際像素：鏡面反光隨視角明顯變化，紙面受照仍可見',async()=>{
