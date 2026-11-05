@@ -13,6 +13,8 @@ if (root) {
   let previous = null;
   let drag = null;
   let lastPaint = null;
+  let assetsReady = false;
+  let assetRequest = 0;
 
   function text(id, value) {
     if ($(id).textContent !== value) $(id).textContent = value;
@@ -74,25 +76,20 @@ if (root) {
       block.setAttribute('aria-valuenow', String(state.positions[side]));
       block.setAttribute('aria-valuetext', `${sample[side].toFixed(1)}°C，${touching ? '與另一塊貼合' : '與另一塊分開'}`);
     }
-    $('balance-probe-leader').setAttribute('d', `M${352 + state.positions.a} 221L${345 + state.positions.a} 205H216`);
-    $('balance-probe-dot').setAttribute('cx', String(352 + state.positions.a));
+    for (const [side, socketX, probeX] of [['a', 319, 330], ['b', 669, 580]]) {
+      const end = probeX + state.positions[side];
+      const path = `M${socketX} 208C${socketX - 40} 239 ${end - 25} 252 ${end} 282`;
+      $(side === 'a' ? 'balance-probe-leader' : 'balance-probe-lead-b').setAttribute('d', path);
+      $('balance-cable-shadow-' + side).setAttribute('d', path);
+      $('balance-cable-highlight-' + side).setAttribute('d', path);
+    }
+    $('balance-probe-dot').setAttribute('cx', String(330 + state.positions.a));
     digits('balance-digits-a', sample.a);
     digits('balance-digits-b', sample.b);
     text('balance-temp-a', `${sample.a.toFixed(1)}°C`);
     text('balance-temp-b', `${sample.b.toFixed(1)}°C`);
     svg.setAttribute('aria-label', `室溫 ${ROOM_C} 攝氏度的隔熱盒剖面。左右拖曳兩塊鋁塊，讓它們接觸或分開。鋁塊 A ${sample.a.toFixed(1)} 攝氏度，鋁塊 B ${sample.b.toFixed(1)} 攝氏度。${touching ? '兩塊直接接觸。' : '兩塊已分開，仍與環境交換熱。'}`);
-    for (const side of ['a', 'b']) {
-      for (const glaze of blocks[side].querySelectorAll('.balance-glaze')) {
-        glaze.setAttribute('fill', `url(#eq-${sample[side] >= ROOM_C ? 'warm' : 'cool'}-glaze)`);
-        glaze.style.opacity = String(Math.min(1, Math.abs(sample[side] - ROOM_C) / 35));
-      }
-    }
-    for (const tint of root.querySelectorAll('[data-temperature-tint]')) {
-      const value = sample[tint.dataset.temperatureTint];
-      const neutral = [209, 217, 215], target = value >= ROOM_C ? [226, 207, 185] : [183, 211, 217];
-      const strength = Math.min(1, Math.abs(value - ROOM_C) / 35);
-      tint.setAttribute('fill', `rgb(${neutral.map((v, i) => Math.round(v + (target[i] - v) * strength)).join(',')})`);
-    }
+    // Identical real metal keeps its natural silver appearance at both temperatures.
 
     const flow = $('balance-flow');
     flow.toggleAttribute('hidden', !state.started || !touching || sample.pairClose);
@@ -135,6 +132,7 @@ if (root) {
       text('balance-trend-' + key, trend);
     }
     pause.hidden = sample.complete;
+    pause.disabled = !assetsReady;
     pause.textContent = !state.started ? '開始觀察' : state.paused ? '繼續觀察' : '暫停觀察';
     pause.setAttribute('aria-pressed', String(state.playing));
   }
@@ -174,7 +172,7 @@ if (root) {
   }
 
   function syncPlayback() {
-    const canPlay = state.started && !state.paused && !balanceState(state.temperatures, state.positions.b - state.positions.a).complete;
+    const canPlay = assetsReady && state.started && !state.paused && !balanceState(state.temperatures, state.positions.b - state.positions.a).complete;
     if (!canPlay) stop();
     else if (!state.playing) {
       state.playing = true;
@@ -205,7 +203,7 @@ if (root) {
   for (const side of ['a', 'b']) {
     const block = blocks[side];
     block.addEventListener('pointerdown', event => {
-      if (event.button !== 0 || !event.isPrimary || drag) return;
+      if (!assetsReady || event.button !== 0 || !event.isPrimary || drag) return;
       const x = pointerX(event);
       if (x === null) return;
       event.preventDefault();
@@ -237,6 +235,7 @@ if (root) {
     block.addEventListener('pointercancel', finish);
     block.addEventListener('lostpointercapture', finish);
     block.addEventListener('keydown', event => {
+      if (!assetsReady) return;
       let offset;
       if (event.key === 'ArrowLeft') offset = state.positions[side] - (event.shiftKey ? 20 : 8);
       else if (event.key === 'ArrowRight') offset = state.positions[side] + (event.shiftKey ? 20 : 8);
@@ -249,6 +248,7 @@ if (root) {
   }
 
   pause.addEventListener('click', () => {
+    if (!assetsReady) return;
     if (!state.started) {
       state.started = true;
       state.paused = false;
@@ -264,4 +264,32 @@ if (root) {
     }
   });
   render();
+  const images = [...root.querySelectorAll('image[data-balance-asset]')];
+  const sources = Object.fromEntries(images.map(image => [image.dataset.balanceAsset, image.getAttribute('href')]));
+  async function loadAssets(retry = false) {
+    const request = ++assetRequest;
+    assetsReady = false;
+    root.dataset.assets = 'loading'; root.setAttribute('aria-busy', 'true');
+    $('balance-loading-text').textContent = '器材圖片載入中…'; $('balance-retry').hidden = true;
+    Object.values(blocks).forEach(block => { block.setAttribute('aria-disabled', 'true'); block.setAttribute('tabindex', '-1'); });
+    syncPlayback();
+    const urls = Object.fromEntries(Object.entries(sources).map(([key, source]) => [key, source + (retry ? `&retry=${request}` : '')]));
+    try {
+      await Promise.all(Object.values(urls).map(url => new Promise((resolve, reject) => {
+        const image = new Image(); image.onload = () => image.naturalWidth ? resolve() : reject(); image.onerror = reject; image.src = url;
+      })));
+      if (request !== assetRequest) return;
+      images.forEach(image => image.setAttribute('href', urls[image.dataset.balanceAsset]));
+      assetsReady = true; root.dataset.assets = 'ready'; root.setAttribute('aria-busy', 'false');
+      Object.values(blocks).forEach(block => { block.setAttribute('aria-disabled', 'false'); block.setAttribute('tabindex', '0'); });
+      render();
+    } catch {
+      if (request !== assetRequest) return;
+      root.dataset.assets = 'error'; root.setAttribute('aria-busy', 'false');
+      $('balance-loading-text').textContent = '器材圖片未能載入，請重新載入後再開始觀察。'; $('balance-retry').hidden = false;
+      render();
+    }
+  }
+  $('balance-retry').addEventListener('click', () => loadAssets(true));
+  loadAssets();
 }

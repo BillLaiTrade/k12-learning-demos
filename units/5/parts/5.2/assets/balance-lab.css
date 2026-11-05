@@ -39,3 +39,30 @@
  .balance-status{font-size:13px}
  .balance-note{font-size:11px;padding-inline:10px}
 }
+
+/* Approved photographic mockup: real textures, independent moving apparatus. */
+.balance-panel{max-width:900px;border-color:#b5c7a8;border-radius:20px;background:#fffdf7}
+.balance-toolbar{padding:15px 18px;background:linear-gradient(110deg,#f0f4e9,#f7f8ee);border-color:#dce4d4}
+.balance-toolbar strong{font-size:16px;color:#31543b}.balance-room{font-size:14px;padding:5px 12px;background:#fffef8}.balance-room b{font-size:16px}
+.balance-scene{position:relative;min-width:0;aspect-ratio:1000/540;background:#ede8d9}
+.balance-apparatus{width:100%;height:auto;aspect-ratio:1000/540;opacity:0}
+.balance-panel[data-assets=ready] .balance-apparatus{opacity:1}
+.balance-apparatus .unit{font-family:system-ui,sans-serif;font-size:17px;font-weight:600;fill:#2b3e2e}
+.balance-apparatus .block-name{font:28px Georgia,serif;fill:#4f5048;pointer-events:none}
+.balance-meter,.balance-cable{pointer-events:none}.balance-cable path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.balance-cable path:first-child{stroke:#151d16;stroke-opacity:.22;stroke-width:5}
+.balance-cable path:nth-child(2){stroke:#292f28;stroke-width:3.2}.balance-cable path:last-child{stroke:#a2a79a;stroke-opacity:.55;stroke-width:.8}
+.balance-block-outline{stroke:#316842;stroke-width:2.5;fill:transparent}
+.balance-material-note{padding:11px 16px;background:linear-gradient(100deg,#e9edda,#f2f3e6);border-top:1px solid #d4ddc5;text-align:center;color:#45603d;font-size:.86rem}
+.balance-controls{gap:14px;padding:17px 18px 10px}.balance-actions{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}
+.balance-actions button{min-height:44px;min-width:90px;border-radius:12px;font-size:14px;padding:9px 15px}
+#balance-pause{background:linear-gradient(145deg,#42653c,#315333);color:#fffdf5;border-color:#46663f;box-shadow:0 2px 5px #3d56331c;font-weight:750}
+#balance-pause:disabled{background:#d4dacd;color:#737d6d;border-color:#cad2c2;box-shadow:none;cursor:wait}
+.balance-state{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:3px 10px;border-radius:999px;background:#eaf0df;color:#58704b;font-size:.75rem;white-space:nowrap}
+.balance-drag-hint{font-size:.9rem;font-weight:600;line-height:1.65}.balance-drag-hint span{font-size:24px;margin-right:8px}
+.balance-status{padding:0 18px 9px;border:0;background:none;text-align:left;color:#607153;font-weight:400;font-size:.84rem}
+.balance-panel[data-phase=ready] .balance-status{display:none}.balance-note{margin:0 18px;padding:10px 0 14px;border-top:1px solid #e2e6d7;text-align:left;color:#69755e;font-size:.8rem;line-height:1.7}
+.balance-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:25px;text-align:center;background:linear-gradient(145deg,#f1f3e7,#e9e7d8);color:#486144;font-size:.9rem}.balance-loading p{margin:0}.balance-panel[data-assets=ready] .balance-loading{display:none}.balance-loading button{min-height:44px;padding:8px 16px;border:1px solid #aabc9b;border-radius:11px;background:#fffdf5;color:#375b36;font:inherit}
+@media(max-width:700px){.balance-toolbar{padding:12px 14px}.balance-conditions{justify-content:space-between}.balance-toolbar strong{font-size:14px}.balance-room,.balance-room b{font-size:13px}.balance-controls{flex-direction:column;align-items:stretch;padding:13px 12px 9px}.balance-drag-hint{flex-basis:auto;text-align:left;font-size:.84rem}.balance-actions{justify-content:flex-end;flex-wrap:nowrap}.balance-actions button{flex:0 1 auto;min-width:86px}.balance-state{margin-right:auto;font-size:.72rem}.balance-material-note{padding:9px 12px;font-size:.76rem}.balance-status{padding-inline:12px;font-size:.8rem}.balance-note{margin-inline:12px;font-size:.76rem}.balance-actions button{padding-inline:12px}}
+@media(max-width:520px){.balance-meter-readings{position:static;display:grid;grid-template-columns:1fr 1fr;gap:12px;width:auto;height:auto;padding:9px 14px;overflow:visible;clip-path:none;white-space:normal;border-bottom:1px solid #e0e5d6;background:#f6f7ec;font-size:.82rem;color:#607254}.balance-meter-readings>span{display:flex;align-items:baseline;gap:9px}.balance-meter-readings strong{color:#2c4833;font-size:1.1rem;font-weight:700;font-variant-numeric:tabular-nums}}
+@media(max-width:420px){.balance-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.balance-state{grid-column:1/-1;justify-self:start;margin:0}.balance-actions button{width:100%;min-width:0}}

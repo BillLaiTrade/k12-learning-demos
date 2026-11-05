@@ -1,0 +1,264 @@
+{
+  "base": "http://127.0.0.1:8765",
+  "rows": [
+    {
+      "width": 1440,
+      "height": 900,
+      "overflow": false,
+      "controls": [
+        {
+          "id": "balance-pause",
+          "left": 570,
+          "right": 118,
+          "height": 44.078125,
+          "textWidth": 56
+        },
+        {
+          "id": "balance-reset",
+          "left": 669,
+          "right": 19,
+          "height": 44.078125,
+          "textWidth": 28
+        }
+      ],
+      "state": {
+        "assets": "ready",
+        "phase": "ready",
+        "playing": "false",
+        "elapsed": "0",
+        "started": "false",
+        "environment": "25",
+        "pairClose": "false",
+        "temperatureA": "60",
+        "temperatureB": "20",
+        "touching": "false",
+        "gap": "56",
+        "offsetA": "-28",
+        "offsetB": "28",
+        "dragging": ""
+      }
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "overflow": false,
+      "controls": [
+        {
+          "id": "balance-pause",
+          "left": 570,
+          "right": 118,
+          "height": 44.078125,
+          "textWidth": 56
+        },
+        {
+          "id": "balance-reset",
+          "left": 669,
+          "right": 19,
+          "height": 44.078125,
+          "textWidth": 28
+        }
+      ],
+      "state": {
+        "assets": "ready",
+        "phase": "ready",
+        "playing": "false",
+        "elapsed": "0",
+        "started": "false",
+        "environment": "25",
+        "pairClose": "false",
+        "temperatureA": "60",
+        "temperatureB": "20",
+        "touching": "false",
+        "gap": "56",
+        "offsetA": "-28",
+        "offsetB": "28",
+        "dragging": ""
+      }
+    },
+    {
+      "width": 1280,
+      "height": 720,
+      "overflow": false,
+      "controls": [
+        {
+          "id": "balance-pause",
+          "left": 570,
+          "right": 118,
+          "height": 44.078125,
+          "textWidth": 56
+        },
+        {
+          "id": "balance-reset",
+          "left": 669,
+          "right": 19,
+          "height": 44.078125,
+          "textWidth": 28
+        }
+      ],
+      "state": {
+        "assets": "ready",
+        "phase": "ready",
+        "playing": "false",
+        "elapsed": "0",
+        "started": "false",
+        "environment": "25",
+        "pairClose": "false",
+        "temperatureA": "60",
+        "temperatureB": "20",
+        "touching": "false",
+        "gap": "56",
+        "offsetA": "-28",
+        "offsetB": "28",
+        "dragging": ""
+      }
+    },
+    {
+      "width": 820,
+      "height": 900,
+      "overflow": false,
+      "controls": [
+        {
+          "id": "balance-pause",
+          "left": 299,
+          "right": 118,
+          "height": 44.078125,
+          "textWidth": 56
+        },
+        {
+          "id": "balance-reset",
+          "left": 398,
+          "right": 19,
+          "height": 44.078125,
+          "textWidth": 28
+        }
+      ],
+      "state": {
+        "assets": "ready",
+        "phase": "ready",
+        "playing": "false",
+        "elapsed": "0",
+        "started": "false",
+        "environment": "25",
+        "pairClose": "false",
+        "temperatureA": "60",
+        "temperatureB": "20",
+        "touching": "false",
+        "gap": "56",
+        "offsetA": "-28",
+        "offsetB": "28",
+        "dragging": ""
+      }
+    },
+    {
+      "width": 760,
+      "height": 900,
+      "overflow": false,
+      "controls": [
+        {
+          "id": "balance-pause",
+          "left": 368,
+          "right": 118,
+          "height": 44.078125,
+          "textWidth": 56
+        },
+        {
+          "id": "balance-reset",
+          "left": 467,
+          "right": 19,
+          "height": 44.078125,
+          "textWidth": 28
+        }
+      ],
+      "state": {
+        "assets": "ready",
+        "phase": "ready",
+        "playing": "false",
+        "elapsed": "0",
+        "started": "false",
+        "environment": "25",
+        "pairClose": "false",
+        "temperatureA": "60",
+        "temperatureB": "20",
+        "touching": "false",
+        "gap": "56",
+        "offsetA": "-28",
+        "offsetB": "28",
+        "dragging": ""
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "overflow": false,
+      "controls": [
+        {
+          "id": "balance-pause",
+          "left": 13,
+          "right": 168,
+          "height": 44.078125,
+          "textWidth": 56
+        },
+        {
+          "id": "balance-reset",
+          "left": 168,
+          "right": 13,
+          "height": 44.078125,
+          "textWidth": 28
+        }
+      ],
+      "state": {
+        "assets": "ready",
+        "phase": "ready",
+        "playing": "false",
+        "elapsed": "0",
+        "started": "false",
+        "environment": "25",
+        "pairClose": "false",
+        "temperatureA": "60",
+        "temperatureB": "20",
+        "touching": "false",
+        "gap": "56",
+        "offsetA": "-28",
+        "offsetB": "28",
+        "dragging": ""
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "overflow": false,
+      "controls": [
+        {
+          "id": "balance-pause",
+          "left": 13,
+          "right": 133,
+          "height": 44.078125,
+          "textWidth": 56
+        },
+        {
+          "id": "balance-reset",
+          "left": 133,
+          "right": 13,
+          "height": 44.078125,
+          "textWidth": 28
+        }
+      ],
+      "state": {
+        "assets": "ready",
+        "phase": "ready",
+        "playing": "false",
+        "elapsed": "0",
+        "started": "false",
+        "environment": "25",
+        "pairClose": "false",
+        "temperatureA": "60",
+        "temperatureB": "20",
+        "touching": "false",
+        "gap": "56",
+        "offsetA": "-28",
+        "offsetB": "28",
+        "dragging": ""
+      }
+    }
+  ]
+}

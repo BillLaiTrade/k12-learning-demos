@@ -7,7 +7,7 @@ test('5.2 equilibrium: ambient exchange, faster contact and dragging',{timeout:2
  const context=await browser.newContext({viewport:{width:1440,height:1300},deviceScaleFactor:1.5}),page=await context.newPage(),errors=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(`${r.status()} ${r.url()}`);});
  const url=process.env.BALANCE_LAB_URL||`http://127.0.0.1:${port}/units/5/parts/5.2/index.html`;
- await page.clock.install({time:new Date(0)});await page.clock.pauseAt(new Date(1000));await page.goto(url);
+ await page.clock.install({time:new Date(0)});await page.clock.pauseAt(new Date(1000));await page.goto(url);await page.waitForFunction(()=>document.querySelector('#balance-lab').dataset.assets==='ready');
  const root=page.locator('#balance-lab'),state=()=>root.evaluate(n=>({...n.dataset}));
  const readings=()=>page.evaluate(()=>({a:Number(document.getElementById('balance-temp-a').textContent.replace('°C','')),b:Number(document.getElementById('balance-temp-b').textContent.replace('°C',''))}));
  const raw=async()=>{const s=await state();return{a:Number(s.temperatureA),b:Number(s.temperatureB)};};
@@ -15,11 +15,21 @@ test('5.2 equilibrium: ambient exchange, faster contact and dragging',{timeout:2
  const reset=async(start=true)=>{await page.locator('#balance-reset').click();if(start)await page.locator('#balance-pause').click();};
  async function drag(side,delta,anchor={}){
   await root.scrollIntoViewIfNeeded();const s=await state(),box=await page.locator('#balance-apparatus').boundingBox();
-  const x=box.x+((anchor.x??(side==='a'?340:555))+Number(s[side==='a'?'offsetA':'offsetB']))/1000*box.width,y=box.y+(anchor.y??298)/440*box.height;
+  const x=box.x+((anchor.x??(side==='a'?330:580))+Number(s[side==='a'?'offsetA':'offsetB']))/1000*box.width,y=box.y+(anchor.y??365)/540*box.height;
   await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+delta/1000*box.width,y,{steps:8});await page.mouse.up();
  }
  async function contact(side='a'){const s=await state();await drag(side,Number(s.gap)*(side==='a'?1:-1));}
  async function capture(name){if(!process.env.BALANCE_CAPTURE_DIR)return;await fs.mkdir(process.env.BALANCE_CAPTURE_DIR,{recursive:true});await page.mouse.move(0,0);await page.locator('#balance-reset').focus();await page.locator('#card-02').screenshot({path:path.join(process.env.BALANCE_CAPTURE_DIR,name+'.png')});}
+
+ await t.test('approved photo layers load, meters stay fixed and both blocks use the same material',async()=>{
+  const images=await root.locator('image[data-balance-asset]').evaluateAll(ns=>ns.map(n=>({key:n.dataset.balanceAsset,href:n.getAttribute('href')})));
+  assert.equal(images.length,5);assert.equal(images.filter(n=>n.key==='metal').length,2);assert.equal(new Set(images.filter(n=>n.key==='metal').map(n=>n.href)).size,1);
+  for(const {key,href}of images){const size=await page.evaluate(async src=>{const i=new Image();i.src=src;await i.decode();return [i.naturalWidth,i.naturalHeight]},href);assert.deepEqual(size,({background:[1706,922],metal:[1610,977],meter:[1484,1060]})[key]);}
+  const positions=await root.locator('.balance-meter').evaluateAll(ns=>ns.map(n=>n.getBoundingClientRect().x));
+  await drag('a',20);assert.deepEqual(await root.locator('.balance-meter').evaluateAll(ns=>ns.map(n=>n.getBoundingClientRect().x)),positions);
+  assert.match(await page.locator('#balance-probe-leader').getAttribute('d'),new RegExp(`${330+Number((await state()).offsetA)} 282$`));
+  await reset(false);
+ });
 
  await t.test('viewing and moving either block never start heat exchange without pressing start',async()=>{
   assert.equal((await state()).started,'false');await page.clock.runFor(3000);assert.deepEqual(await readings(),{a:60,b:20});
@@ -58,9 +68,9 @@ test('5.2 equilibrium: ambient exchange, faster contact and dragging',{timeout:2
   await drag('a',-25);await contact();await page.clock.runFor(1200);assert.deepEqual(await readings(),{a:25,b:25});assert.equal(await page.locator('#balance-flow').isVisible(),false);
  });
  await t.test('drags, collision limits, instrument labels and overlay hit areas still work',async()=>{
-  await reset();await drag('b',60);await contact('a');await page.clock.runFor(900);const s=await state(),r=await readings();assert.equal(await page.locator('#balance-probe-dot').getAttribute('cx'),String(352+Number(s.offsetA)));
+  await reset();await drag('b',60);await contact('a');await page.clock.runFor(900);const s=await state(),r=await readings();assert.equal(await page.locator('#balance-probe-dot').getAttribute('cx'),String(330+Number(s.offsetA)));
   for(const side of ['a','b'])assert.equal(await page.locator('#balance-digits-'+side).getAttribute('data-value'),r[side].toFixed(1));
-  await drag('a',-20,{x:440,y:303});assert.equal((await state()).touching,'false');await contact();await drag('a',-20,{x:352,y:221});assert.equal((await state()).touching,'false');await contact();
+  await drag('a',-20,{x:440,y:303});assert.equal((await state()).touching,'false');await contact();await drag('a',-20,{x:330,y:282});assert.equal((await state()).touching,'false');await contact();
   await drag('a',500);assert.equal((await state()).offsetA,(await state()).offsetB);
   await page.locator('#balance-block-a').focus();await page.keyboard.press('Home');assert.equal((await state()).offsetA,'-90');assert.equal((await state()).playing,'true');await page.keyboard.press('End');assert.equal((await state()).touching,'true');
  });
@@ -79,11 +89,30 @@ test('5.2 equilibrium: ambient exchange, faster contact and dragging',{timeout:2
   for(const reducedMotion of ['no-preference','reduce']){
    const ctx=await browser.newContext({viewport:{width:1440,height:1100},hasTouch:true,reducedMotion});
    try{
-    const p=await ctx.newPage();await p.goto(url);await p.locator('#balance-lab').scrollIntoViewIfNeeded();assert.equal(await p.locator('#balance-lab').getAttribute('data-started'),'false');const box=await p.locator('#balance-apparatus').boundingBox(),y=box.y+298/440*box.height,x=box.x+312/1000*box.width,delta=56/1000*box.width;
+    const p=await ctx.newPage();await p.goto(url);await p.locator('#balance-lab').scrollIntoViewIfNeeded();await p.waitForFunction(()=>document.querySelector('#balance-lab').dataset.assets==='ready');assert.equal(await p.locator('#balance-lab').getAttribute('data-started'),'false');const box=await p.locator('#balance-apparatus').boundingBox(),y=box.y+365/540*box.height,x=box.x+302/1000*box.width,delta=56/1000*box.width;
     const cdp=await ctx.newCDPSession(p);await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});for(let i=1;i<=8;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+delta*i/8,y}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});assert.equal(await p.locator('#balance-lab').getAttribute('data-touching'),'true');
-    await p.waitForTimeout(350);assert.equal(await p.locator('#balance-lab').getAttribute('data-started'),'false');assert.equal(await p.locator('#balance-temp-a').textContent(),'60.0°C');assert.equal(await p.locator('#balance-temp-b').textContent(),'20.0°C');await p.locator('#balance-pause').tap();const currentBox=await p.locator('#balance-apparatus').boundingBox();const clip={x:currentBox.x+415/1000*currentBox.width,y:currentBox.y+280/440*currentBox.height,width:132/1000*currentBox.width,height:48/440*currentBox.height};const before=await p.screenshot({clip});await p.waitForTimeout(350);assert.equal(before.equals(await p.screenshot({clip})),false);
+    await p.waitForTimeout(350);assert.equal(await p.locator('#balance-lab').getAttribute('data-started'),'false');assert.equal(await p.locator('#balance-temp-a').textContent(),'60.0°C');assert.equal(await p.locator('#balance-temp-b').textContent(),'20.0°C');await p.locator('#balance-pause').tap();const currentBox=await p.locator('#balance-apparatus').boundingBox();const clip={x:currentBox.x+415/1000*currentBox.width,y:currentBox.y+340/540*currentBox.height,width:132/1000*currentBox.width,height:52/540*currentBox.height};const before=await p.screenshot({clip});await p.waitForTimeout(350);assert.equal(before.equals(await p.screenshot({clip})),false);
     await p.locator('#balance-pause').click();const frozen=await p.locator('#balance-apparatus').screenshot();await p.waitForTimeout(300);assert.equal(frozen.equals(await p.locator('#balance-apparatus').screenshot()),true);
    }finally{await ctx.close();}
   }
+ });
+ await t.test('an unavailable photograph blocks the experiment and retry restores actual assets',async()=>{
+  const p=await context.newPage();
+  try{
+   await p.route('**/balance-aluminum.webp*',r=>r.fulfill({status:503,body:'temporarily unavailable'}));await p.goto(url);
+   await p.waitForFunction(()=>document.querySelector('#balance-lab').dataset.assets==='error');assert.equal(await p.locator('#balance-pause').isDisabled(),true);assert.equal(await p.locator('#balance-retry').isVisible(),true);
+   await p.locator('#balance-block-a').focus();await p.keyboard.press('End');assert.equal(await p.locator('#balance-lab').getAttribute('data-touching'),'false');assert.equal(await p.locator('#balance-lab').getAttribute('data-elapsed'),'0');
+   await p.unroute('**/balance-aluminum.webp*');await p.locator('#balance-retry').click();await p.waitForFunction(()=>document.querySelector('#balance-lab').dataset.assets==='ready');
+   assert.equal(await p.locator('#balance-pause').isEnabled(),true);assert.equal(await p.locator('#balance-lab').getAttribute('data-started'),'false');await p.locator('#balance-pause').click();await p.clock.runFor(400);assert.ok(Number(await p.locator('#balance-lab').getAttribute('data-temperature-a'))<60);
+  }finally{await p.close();}
+ });
+ await t.test('slow photo loading never starts the model or accepts hidden dragging',async()=>{
+  const p=await context.newPage();let release;const gate=new Promise(resolve=>release=resolve);
+  try{
+   await p.route('**/balance-*.webp*',async r=>{await gate;await r.continue();});await p.goto(url,{waitUntil:'domcontentloaded'});
+   assert.equal(await p.locator('#balance-lab').getAttribute('data-assets'),'loading');assert.equal(await p.locator('#balance-pause').isDisabled(),true);
+   await p.locator('#balance-block-a').focus();await p.keyboard.press('End');assert.equal(await p.locator('#balance-lab').getAttribute('data-elapsed'),'0');assert.equal(await p.locator('#balance-lab').getAttribute('data-touching'),'false');
+   release();await p.waitForFunction(()=>document.querySelector('#balance-lab').dataset.assets==='ready');assert.equal(await p.locator('#balance-lab').getAttribute('data-started'),'false');
+  }finally{release();await p.close();}
  });
 });
