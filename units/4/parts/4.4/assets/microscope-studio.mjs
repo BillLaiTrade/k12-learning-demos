@@ -8,7 +8,6 @@ if(root){
   const w=Math.max(4,h*.22),radius=Math.max(3,h*.18),stem=Math.max(2,h*.055);
   return `<g transform="translate(${x} ${y})${inverted?' rotate(180)':''}"><path d="M0 ${-h}V${h}" stroke="#8ca778" stroke-width="${stem}"/><path d="M0 ${-h-w}L${-w} ${-h+w}H${w}Z" fill="${red}"/><circle cy="${h}" r="${radius}" fill="${blue}"/></g>`;
  };
- const label=(x,y,w,t,path='')=>`${path?`<path d="${path}" class="micro-leader"/>`:''}<rect x="${x}" y="${y}" width="${w}" height="35" rx="7" fill="#fff9e6" stroke="#c1cbae"/><text x="${x+w/2}" y="${y+24}" class="micro-label" text-anchor="middle">${t}</text>`;
  const hardware=`<defs>
  <linearGradient id="m9-body"><stop stop-color="#a9b49d"/><stop offset=".25" stop-color="#fbf4dc"/><stop offset=".6" stop-color="#dcd4bc"/><stop offset="1" stop-color="#8d9d88"/></linearGradient>
  <linearGradient id="m9-dark"><stop stop-color="#172e26"/><stop offset=".45" stop-color="#5d7564"/><stop offset="1" stop-color="#1c382c"/></linearGradient>
@@ -54,16 +53,26 @@ if(root){
   let out=model?hardware.slice(0,hardware.indexOf('</defs>')+8):hardware;
   const ocular=at(g.separation),image=at(g.intermediate),objective=at(0);
   if(model){const eye=at(g.eye+4);out+=`<path d="M${eye[0]-20} ${eye[1]}q20 -18 40 0q-20 18 -40 0Z" fill="#fff8e6" stroke="#76917a" stroke-width="2"/><circle cx="${eye[0]}" cy="${eye[1]}" r="6" fill="#355a40"/>`;}
+  const box=$('.micro-stage').getBoundingClientRect();
+  const position=p=>{
+   if(model)return[p[0]/760*100,p[1]/780*100];
+   const scale=Math.min(box.width/760,box.height/780);
+   return[(p[0]*scale+(box.width-760*scale)/2)/box.width*100,(p[1]*scale+(box.height-780*scale)/2)/box.height*100];
+  };
+  let labels='';
   for(const [name,p,active]of [['目鏡',ocular,step!=='objective'],['中間像',image,true],['物鏡',objective,step!=='eyepiece']]){
-   const x=p[0]-170,y=p[1]-18;
-   out+=`<g opacity="${active?1:.45}">${label(x,y,98,name,`M${x+98} ${y+18}H${p[0]-30}`)}</g>`;
+   const [x,y]=position(p);
+   labels+=`<span class="micro-label" style="left:calc(${x}% - 24px);top:${y}%;opacity:${active?1:.45}">${name}</span>`;
   }
   const left=project(axis-30,Y(g.intermediate)),right=project(axis+30,Y(g.intermediate));
   out+=`<path data-micro-image-plane d="M${left[0]} ${left[1]}L${right[0]} ${right[1]}" stroke="#f1dba2" stroke-width="2.3" stroke-dasharray="4 5"/>`;
   if(step!=='objective'){
    const f=at(g.ocularFocus),x=ocular[0]+72;
-   out+=`<path d="M${x} ${ocular[1]}V${f[1]}m-6 0h12M${x-6} ${ocular[1]}h12" stroke="#e3c888" fill="none" stroke-width="1.5"/><text x="${x+13}" y="${f[1]+6}" fill="#f2d89e" font-size="22">F</text>`;
+   out+=`<path d="M${x} ${ocular[1]}V${f[1]}m-6 0h12M${x-6} ${ocular[1]}h12" stroke="#e3c888" fill="none" stroke-width="1.5"/>`;
+   const [fx,fy]=position([x+13,f[1]]);
+   labels+=`<span class="micro-focus-label" style="left:${fx}%;top:${fy}%">F</span>`;
   }
+  $('.micro-labels').innerHTML=labels;
   if(rays)for(const r of g.rays){
    if(point!=='both'&&point!==r.point)continue;
    const color=r.point==='top'?red:blue,marker=r.point==='top'?'red':'blue';
@@ -90,6 +99,7 @@ if(root){
   root.dataset.ready='true';
  }
  root.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.set==='micro')step=b.dataset.value;else if(b.hasAttribute('data-micro-rays'))rays=!rays;else if(b.dataset.microPoint)point=b.dataset.microPoint;else if(b.hasAttribute('data-micro-reset')){step='objective';rays=false;point='both';}else return;render();});
+ new ResizeObserver(render).observe($('.micro-stage'));
  render();
- import('./microscope-model.mjs?v=20261105-micro-window3').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
+ import('./microscope-model.mjs?v=20261105-micro-type4').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
 }

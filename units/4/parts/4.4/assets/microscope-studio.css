@@ -10,7 +10,6 @@
 .micro-tools button:disabled { opacity:.45; cursor:default; }
 .micro-scene { display:block; width:100%; height:auto; }
 .micro-scene text { font-family:inherit; }
-.micro-scene .micro-label { font-size:21px; font-weight:700; fill:#344b37; }
 .micro-scene .micro-small { font-size:18px; fill:#e9efdf; }
 .micro-scene .micro-leader { fill:none; stroke:#dfe6d4; stroke-width:1.5; }
 .micro-scene .micro-ray { fill:none; stroke-width:2.1; }
@@ -52,7 +51,6 @@
  .micro-tools { padding:8px; gap:5px; }
  .micro-tools button { font-size:.7rem; padding:6px 7px; }
  .micro-tools [data-micro-reset] { margin-left:0; }
- .micro-scene .micro-label { font-size:23px; }
  .micro-scene .micro-small { font-size:21px; }
 }
 @container (max-width:350px) {
@@ -66,7 +64,6 @@
 .micro-stage canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
 .micro-scene { position:relative; z-index:1; }
 .micro-lab[data-micro-render=fallback] .micro-stage canvas { display:none; }
-.micro-scene .micro-label { font-size:24px; font-weight:650; }
 .micro-scene .micro-leader { stroke:#d0d8c0; stroke-width:1.2; }
 .micro-key[hidden] { display:none; }
 .micro-key { padding:10px 15px; border-top:1px solid #82917c; }
@@ -100,4 +97,14 @@
  .micro-viewer { grid-template-columns:minmax(0,1fr) 94px; gap:5px 8px; }
  .micro-viewer h3 { font-size:.8rem; }
  .micro-viewer .micro-badge { padding:5px; font-size:.7rem; }
+}
+
+/* Text lives outside the projected SVG, so its glyphs never scale with the scene. */
+.micro-labels { position:absolute; inset:0; z-index:2; pointer-events:none; }
+.micro-labels .micro-label { position:absolute; transform:translate(-100%,-50%); padding:3px 10px; border:1px solid #c1cbae; border-radius:5px; background:#fff9e6; color:#344b37; font-size:14px; font-weight:650; line-height:1.4; white-space:nowrap; }
+.micro-labels .micro-label::after { content:''; position:absolute; left:100%; top:50%; width:18px; border-top:1px solid #d0d8c0; }
+.micro-focus-label { position:absolute; transform:translateY(-50%); color:#f2d89e; font-size:13px; line-height:1.4; }
+@container (max-width:640px) {
+ .micro-labels .micro-label { padding:2px 7px; font-size:12px; }
+ .micro-focus-label { font-size:12px; }
 }
