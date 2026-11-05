@@ -68,14 +68,14 @@ test('4.2 fifth activity: approved three-step comparison, exact optics and inter
     server.stdout.on('data', chunk => { output += chunk; const m = output.match(/port (\d+)/); if (m) { clearTimeout(timer); resolve(m[1]); } });
     server.once('error', reject);
   });
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'], ...(process.env.LESSON_USE_PROXY ? {proxy: {server: process.env.HTTPS_PROXY}} : {}) });
   t.after(() => browser.close());
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   const failures = [];
   page.on('pageerror', error => failures.push(error.message));
   page.on('requestfailed', request => failures.push(request.url()));
   page.on('response', response => { if (response.status() >= 400) failures.push(response.url()); });
-  const url = `http://127.0.0.1:${port}/units/4/parts/4.2/#card-05`;
+  const url = new URL('units/4/parts/4.2/#card-05', process.env.LESSON_BASE_URL || `http://127.0.0.1:${port}/`).href;
   await page.goto(url, { waitUntil: 'networkidle' });
   const section = page.locator('#card-05');
 

@@ -9,6 +9,21 @@ node --test --test-isolation=none --test-concurrency=1 tests/unit-4.3-layer-spee
 
 沿用LESSON_BASE_URL／LESSON_USE_PROXY與LAYER_CAPTURE_DIR；reload-cases.json記錄六次實際光路／角度／材質及正確排序。執行環境須允許本機HTTP與Chromium。
 
+## 4.2 全頁與第三區／潛望鏡檢查（2026-11-05）
+
+現行4.2是光學反射頁。`unit-1.2-mirror`、`unit-1.2-periscope`、`unit-1.2-curved-mirrors`及`unit-1.2-reversible`保留歷史檔名，實際網址已指向`/units/4/parts/4.2/`；舊`unit-4.2.test.cjs`等混合物分離測試屬現行2.2，不是本課。
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-1.2-mirror.test.cjs tests/unit-1.2-periscope.test.cjs tests/unit-1.2-curved-mirrors.test.cjs tests/unit-1.2-reversible.test.cjs tests/unit-4.2-completion.test.cjs
+```
+
+五套均支援`LESSON_BASE_URL`（站台根網址，例如`https://billlaitrade.github.io/k12-learning-demos/`）及`LESSON_USE_PROXY=1`（使用既有HTTPS_PROXY）；未指定根網址時自行啟動本機伺服器。`MIRROR_CAPTURE_DIR`、`PERISCOPE_CAPTURE_DIR`及`COMPLETION_CAPTURE_DIR`可分開保存公開／本機證據。潛望鏡既有截圖仍使用`/tmp/periscope-review/`，取消計時JSON使用指定的PERISCOPE_CAPTURE_DIR。
+
+第三區保留光路、投影、圖像像素與淨空斷言，更新為現行文案、既有路線、直接拖熊及4.1網址，不恢復已刪除的控制。潛望鏡取消檢查在pointerdown／keydown前後同一事件記錄狀態、時間與殘留光線，避免長拖曳後才讀取瞬間cooldown；另保留真實滑鼠／鍵盤與同步早期取消、期限恢復檢查。
+
+全頁專項補驗無JS分享HTML／圖片、三種桌機筆電尺寸、七段路線／標頭、第一區實際點燈／旋轉、第四區拖曳／邊界／取消、WebGL不可用時的各區隔離，以及潛望鏡素材延遲／失敗／重新載入。與四套既有專項合讀，不以單一全頁專項宣稱所有光學或全部小測已通過；結果以對應檢查紀錄為準。
+
+
 ## 4.3 逐項核可後統一改善（2026-11-05）
 
 本輪正式桌電／筆電檢查使用`unit-4.3-final-review.test.cjs`：離屏自動續播與手動／比較停格、第三四區預覽、第五區獨立漸進光束／角度角色、四卡全放後實際拖回再放入、只用左右鍵、單組角度回饋；1440×900、1366×768、1280×720、1024×768七區界線。第六區用真實時間記錄加放水與同步影格，驗眼睛不中斷、手動水位接管、返回續播、停止恢復細節與無worker備援。`FINAL_REVIEW_CAPTURE_DIR`保存畫面與water-frames.json；`LESSON_BASE_URL`、`LESSON_USE_PROXY`沿用。

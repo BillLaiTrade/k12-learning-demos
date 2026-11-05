@@ -1,0 +1,172 @@
+[
+  {
+    "path": "shared-assets/characters/dialogue-character-avatars.png",
+    "bytes": 1874920,
+    "sha256": "80f73548fd344c7a4c8d03a16323e7ed2770a970eab7c13212317ab5da28f626"
+  },
+  {
+    "path": "units/4/index.html",
+    "bytes": 4770,
+    "sha256": "f7aabe1d4ce356b8fcf22c82b180c27ecf4029ed78a905587a2eac7075faf0e2"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/curved-mirrors-geometry.mjs",
+    "bytes": 2586,
+    "sha256": "1602435be395cebab23df7604f89cbfe58ea5b3e145c1ef71361ac103ac58ef1"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/curved-mirrors.css",
+    "bytes": 6188,
+    "sha256": "d23f2ee7cedf004b2b258b0bcbb4f2a5cd88d599f16a5dfd246df79530d6bf0a"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/curved-mirrors.js",
+    "bytes": 13322,
+    "sha256": "6e936f2dd0c974f811e0352b92975a7c9d83808130445fffc7828c5c570415fa"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/laser-bench.js",
+    "bytes": 16325,
+    "sha256": "6e6d90bb948a2f1ab8a37e340664e6fab6486183bf5de6fd65dac52a76d75eaf"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/laser-reflection.js",
+    "bytes": 10005,
+    "sha256": "b1887d62986ec85f0e75e089aaba2b1764f441bcbf3c455736b5e9439c33a362"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror/dressing-mirror.webp",
+    "bytes": 36804,
+    "sha256": "9fc58e2177fa02112d96897d6e70208fade82ccfba03e9319485031475ed5608"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror/makeup-mirror.webp",
+    "bytes": 33658,
+    "sha256": "e64816af6d442c20455cef6b5e8321f6c5439ead19b5f8bad633ccc622db834e"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror/mirror-room-bg.webp",
+    "bytes": 41706,
+    "sha256": "1d9208d5dc94c5e5d8274df9d704cf1a8a1e2824447f6d9a33a17c6bd4f4e57c"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror/teddy-back.webp",
+    "bytes": 44046,
+    "sha256": "b1ead4f52eb6f6b0d7c3f630e2c4816b1a643fc138949bbf22d9977b97122338"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror/teddy-front.webp",
+    "bytes": 42680,
+    "sha256": "f733ae22007ad2e80f8a797a6ba3323d642e5b62964cf7ec9df39b8ec61bb391"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror/teddy-rear.webp",
+    "bytes": 136424,
+    "sha256": "9c45c763c7782c629a9790634a7f9e1d228640c46743355b3433d3ac7cb2d4fe"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror/teddy-side.webp",
+    "bytes": 95094,
+    "sha256": "0f6d51c7d4d6379130a96cacc99803b11d349638f57cffaea77e8a95c48276da"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror/traffic-mirror.webp",
+    "bytes": 91194,
+    "sha256": "b1736400b999f078ce00cb52c7ea61889a43cb3e1007d3bb11cf3b67876b780e"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror/xiaokui-profile.webp",
+    "bytes": 140200,
+    "sha256": "cb11e44094221568063ce0ef1e4392fc6b9d59bdc9cc11e9e0b4a073ce7a848a"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror-comparison-view.mjs",
+    "bytes": 4585,
+    "sha256": "4f474c70239b3985c7f5c9d194211d89f1322dac7d13ed7505b4f5d5404063b3"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror-comparison.mjs",
+    "bytes": 4526,
+    "sha256": "bf2da118dd5522bbd6cc249e21ccd2d936c14506dff71c02a91302a6da03c7c8"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror-distance.css",
+    "bytes": 1625,
+    "sha256": "e87d0dbcb39a708848c4ce9963192cb6c650e8922427a7ecb6324df28ed834c5"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror-distance.js",
+    "bytes": 5105,
+    "sha256": "93c35a71a28e11be053659b46658536f2c3965a3fb48e1d4afa4d41da15116c6"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror-image-geometry.mjs",
+    "bytes": 1780,
+    "sha256": "c017ddc0385bd3b671a034cb4434a35019055953cb06f725345f012120026204"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror-image.css",
+    "bytes": 4746,
+    "sha256": "c6c57ea5aaaedcee35e6f31182d6952aaff3a10214877c90f6e0f6bf89ba06d9"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/mirror-image.js",
+    "bytes": 3482,
+    "sha256": "1df7dfa3817a4016244a85ce3e7a79245ed826f11eff1947fa7f40047f03e212"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/optics-lab-opening.png",
+    "bytes": 2124481,
+    "sha256": "60c999f49301b66fd391ca5491c2dcb6519fe6d0e51c793d89cef35841c689d5"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/periscope/submarine-scene.webp",
+    "bytes": 166928,
+    "sha256": "47ebd4b14bbc25ef7da674ef9432ca6f0c10ec1fee0481bd3377c79329cbf64b"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/periscope-optics.mjs",
+    "bytes": 7104,
+    "sha256": "157c9e3fc7a1bc263f8ab5fcd172f4bc5fdf7b648a102fed3802d96de79270b3"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/periscope-pulse.mjs",
+    "bytes": 365,
+    "sha256": "8d0d094f9a34619c537f93a90a191e6e4614255e20e7cdcecac780377f7f4767"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/periscope.css",
+    "bytes": 10148,
+    "sha256": "94932213ae403225c6aa48d36247bf01ed36f923e030f2fe718bfa6046f05ea1"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/periscope.js",
+    "bytes": 20312,
+    "sha256": "871884d442f6ba76f73848a50c4f049823c326f3e620bb6db8f073ebba7012d9"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/planar-reflection.mjs",
+    "bytes": 1820,
+    "sha256": "1511d3d719bf253208b03730ba7f831141ef0d5da0fe39f2c5fb6ce6cce10ba5"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/reflection-3d.js",
+    "bytes": 18091,
+    "sha256": "daae32904a5a19f06496e9f61dedf4a5e33b7ac24d8f38c9ac71d60f7e55a5b8"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/reversible-light.css",
+    "bytes": 3842,
+    "sha256": "697939c3f2426c897e02c36268e4f7dee86f48aef0c2eba1c34db609c94c16be"
+  },
+  {
+    "path": "units/4/parts/4.2/assets/reversible-light.js",
+    "bytes": 15353,
+    "sha256": "028b0334a5e611e81ca55750cd1033207ad60ff0480fe2d13c63b0759f642e49"
+  },
+  {
+    "path": "units/4/parts/4.2/index.html",
+    "bytes": 77431,
+    "sha256": "f60e54c88a61873c6d6fa2d17ebdbdc467af48229ec25011484a0316c0b714d0"
+  }
+]

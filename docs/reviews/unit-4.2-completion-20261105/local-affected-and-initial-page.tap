@@ -1,0 +1,318 @@
+TAP version 13
+# Subtest: 第三區距離模型：2公尺反射＋3公尺入眼，對應5公尺直達光
+    # Subtest: 中央光路精確為2、3、2、5公尺，物像等距且共線
+    ok 1 - 中央光路精確為2、3、2、5公尺，物像等距且共線
+      ---
+      duration_ms: 2.098404
+      type: 'test'
+      ...
+    # Subtest: 81個瞳孔位置的反射向量與直達光方向相同，入眼線不穿過原熊
+    ok 2 - 81個瞳孔位置的反射向量與直達光方向相同，入眼線不穿過原熊
+      ---
+      duration_ms: 12.831388
+      type: 'test'
+      ...
+    # Subtest: 同一寬取景顯示近處實體熊與遠處對照熊，遠近及落地位置合理
+    ok 3 - 同一寬取景顯示近處實體熊與遠處對照熊，遠近及落地位置合理
+      ---
+      duration_ms: 1.649855
+      type: 'test'
+      ...
+    # Subtest: 桌面近裁切先於透視除法，來源與虛像的對應角色正確
+    ok 4 - 桌面近裁切先於透視除法，來源與虛像的對應角色正確
+      ---
+      duration_ms: 0.664136
+      type: 'test'
+      ...
+    1..4
+ok 1 - 第三區距離模型：2公尺反射＋3公尺入眼，對應5公尺直達光
+  ---
+  duration_ms: 22.182241
+  type: 'test'
+  ...
+# Subtest: 第三區上下同時對照、整熊觀察及銜接第四區
+    # Subtest: 初始上下兩排同時呈現；移除切換、鼻尖標記與散光
+    ok 1 - 初始上下兩排同時呈現；移除切換、鼻尖標記與散光
+      ---
+      duration_ms: 2682.723767
+      type: 'test'
+      ...
+    # Subtest: 實際SVG光路、距離標籤與全熊畫布一致，遠近兩隻玩偶完整且不互相遮擋
+    ok 2 - 實際SVG光路、距離標籤與全熊畫布一致，遠近兩隻玩偶完整且不互相遮擋
+      ---
+      duration_ms: 153.222024
+      type: 'test'
+      ...
+    # Subtest: 六種寬度的距離標籤留出完整淨空，不遮光線、鏡面、人物與玩偶
+    ok 3 - 六種寬度的距離標籤留出完整淨空，不遮光線、鏡面、人物與玩偶
+      ---
+      duration_ms: 5676.524389
+      type: 'test'
+      ...
+    # Subtest: 320／390／650／768／1024／1440px皆維持上下兩列、左右對應欄
+    ok 4 - 320／390／650／768／1024／1440px皆維持上下兩列、左右對應欄
+      ---
+      duration_ms: 4852.946141
+      type: 'test'
+      ...
+    # Subtest: 圖下說明光路總長與虛像位置，保留短對話及模型限制
+    ok 5 - 圖下說明光路總長與虛像位置，保留短對話及模型限制
+      ---
+      duration_ms: 4956.734807
+      type: 'test'
+      ...
+    # Subtest: 既有路線以滑鼠及鍵盤往返第三四區，直接操作小熊量距
+    ok 6 - 既有路線以滑鼠及鍵盤往返第三四區，直接操作小熊量距
+      ---
+      duration_ms: 582.952121
+      type: 'test'
+      ...
+    # Subtest: 窄版觸控閱讀及路線導覽，減少動態模式呈現相同內容
+    ok 7 - 窄版觸控閱讀及路線導覽，減少動態模式呈現相同內容
+      ---
+      duration_ms: 8389.43181
+      type: 'test'
+      ...
+    # Subtest: 慢速素材載入後兩種情境仍固定，不產生重複ID或程式錯誤
+    ok 8 - 慢速素材載入後兩種情境仍固定，不產生重複ID或程式錯誤
+      ---
+      duration_ms: 8808.612555
+      type: 'test'
+      ...
+    # Subtest: 相關單元入口與4.1頁面可正常載入，4.2離頁無錯誤
+    ok 9 - 相關單元入口與4.1頁面可正常載入，4.2離頁無錯誤
+      ---
+      duration_ms: 19292.013168
+      type: 'test'
+      ...
+    1..9
+ok 2 - 第三區上下同時對照、整熊觀察及銜接第四區
+  ---
+  duration_ms: 66543.524718
+  type: 'test'
+  ...
+# Subtest: 潛望鏡有限鏡面、管壁與反向傳播
+    # Subtest: 36×36 組鏡面角度：反射分量、有限尺寸及閉合管道
+    ok 1 - 36×36 組鏡面角度：反射分量、有限尺寸及閉合管道
+      ---
+      duration_ms: 38.341918
+      type: 'test'
+      ...
+    # Subtest: 船、海面、天空、完全與局部遮擋；離軸視線不穿透管壁
+    ok 2 - 船、海面、天空、完全與局部遮擋；離軸視線不穿透管壁
+      ---
+      duration_ms: 27.596462
+      type: 'test'
+      ...
+    # Subtest: 1296 組角度的提示一律從眼睛出發，內部與觀察窗中央視線重合
+    ok 3 - 1296 組角度的提示一律從眼睛出發，內部與觀察窗中央視線重合
+      ---
+      duration_ms: 39.891335
+      type: 'test'
+      ...
+    # Subtest: 整束提示只短暫亮起與淡出，沒有循環或移動光段
+    ok 4 - 整束提示只短暫亮起與淡出，沒有循環或移動光段
+      ---
+      duration_ms: 1.019397
+      type: 'test'
+      ...
+    # Subtest: 441 條不同入眼方向的視線，各自獨立反向反射後回到眼睛
+    ok 5 - 441 條不同入眼方向的視線，各自獨立反向反射後回到眼睛
+      ---
+      duration_ms: 11.012188
+      type: 'test'
+      ...
+    1..5
+ok 3 - 潛望鏡有限鏡面、管壁與反向傳播
+  ---
+  duration_ms: 120.727761
+  type: 'test'
+  ...
+# Subtest: 潛望鏡實際操作、畫面與三階段評量
+    # Subtest: 初始狀態、未作答、未對準不通關；沒有角度滑桿
+    ok 1 - 初始狀態、未作答、未對準不通關；沒有角度滑桿
+      ---
+      duration_ms: 3402.642814
+      type: 'test'
+      ...
+    # Subtest: 兩片鏡子拖曳靈敏度為原本 35%，碰邊界可立即回調，穿過中心不跳動
+    ok 2 - 兩片鏡子拖曳靈敏度為原本 35%，碰邊界可立即回調，穿過中心不跳動
+      ---
+      duration_ms: 20150.528192
+      type: 'test'
+      ...
+    # Subtest: 兩片鏡子實際拖曳；天空／海面連續改變，偏太多會被擋
+    ok 3 - 兩片鏡子實際拖曳；天空／海面連續改變，偏太多會被擋
+      ---
+      duration_ms: 9598.32166
+      type: 'test'
+      ...
+    # Subtest: 觀察窗像素由獨立完整三維視線核對；暗邊確實來自遮擋
+    ok 4 - 觀察窗像素由獨立完整三維視線核對；暗邊確實來自遮擋
+      ---
+      duration_ms: 1748.746301
+      type: 'test'
+      ...
+    # Subtest: 第一關只檢查實際對準：沒有順序題，角度不對不能通過，改動設計須重檢
+    ok 5 - 第一關只檢查實際對準：沒有順序題，角度不對不能通過，改動設計須重檢
+      ---
+      duration_ms: 1408.604774
+      type: 'test'
+      ...
+    # Subtest: 修復任務只靠實際旋轉鏡片通關，沒有選擇題或延伸問題
+    ok 6 - 修復任務只靠實際旋轉鏡片通關，沒有選擇題或延伸問題
+      ---
+      duration_ms: 11802.72597
+      type: 'test'
+      ...
+    # Subtest: 反向訊號、原路重合、先預測後驗證；三階段完成
+    ok 7 - 反向訊號、原路重合、先預測後驗證；三階段完成
+      ---
+      duration_ms: 15356.084394
+      type: 'test'
+      ...
+    # Subtest: 只保留畫面拖曳操作，沒有獨立微調列或按鈕
+    ok 8 - 只保留畫面拖曳操作，沒有獨立微調列或按鈕
+      ---
+      duration_ms: 6197.895607
+      type: 'test'
+      ...
+    # Subtest: 五種實際角度：提示都從觀察口開始，錯誤時不跳接到船或上方鏡片
+    ok 9 - 五種實際角度：提示都從觀察口開始，錯誤時不跳接到船或上方鏡片
+      ---
+      duration_ms: 13416.108068
+      type: 'test'
+      ...
+    # Subtest: 整條實際光路短暫亮起再熄滅，沒有箭頭、移動光點或常駐路線
+    ok 10 - 整條實際光路短暫亮起再熄滅，沒有箭頭、移動光點或常駐路線
+      ---
+      duration_ms: 2509.191012
+      type: 'test'
+      ...
+    # Subtest: 在輸入事件當下取消提示光；長拖曳可跨過冷卻期限且不留下舊路線
+    ok 11 - 在輸入事件當下取消提示光；長拖曳可跨過冷卻期限且不留下舊路線
+      ---
+      duration_ms: 7699.253077
+      type: 'test'
+      ...
+    # Subtest: 移除額外提示與分關重設；視線追蹤撞壁仍有短暫光斑
+    ok 12 - 移除額外提示與分關重設；視線追蹤撞壁仍有短暫光斑
+      ---
+      duration_ms: 2433.222499
+      type: 'test'
+      ...
+    # Subtest: 減少動態以短暫靜態全光路呈現；換關取消舊淡出與計時器
+    ok 13 - 減少動態以短暫靜態全光路呈現；換關取消舊淡出與計時器
+      ---
+      duration_ms: 6464.393523
+      type: 'test'
+      ...
+    # Subtest: 鍵盤邊界與取消拖曳不會留下卡住狀態
+    ok 14 - 鍵盤邊界與取消拖曳不會留下卡住狀態
+      ---
+      duration_ms: 2996.602655
+      type: 'test'
+      ...
+    # Subtest: 1440／1280／1024／768／390 px 版面、素材與鄰區操作
+    ok 15 - 1440／1280／1024／768／390 px 版面、素材與鄰區操作
+      ---
+      duration_ms: 10720.593239
+      type: 'test'
+      ...
+    # Subtest: 真實觸控拖曳完成第一關，沒有額外填答與頁面溢位
+    ok 16 - 真實觸控拖曳完成第一關，沒有額外填答與頁面溢位
+      ---
+      duration_ms: 10413.158703
+      type: 'test'
+      ...
+    # Subtest: 離開頁面時先釋放 GPU 資源，再關閉繪圖器，不產生例外
+    ok 17 - 離開頁面時先釋放 GPU 資源，再關閉繪圖器，不產生例外
+      ---
+      duration_ms: 422.730726
+      type: 'test'
+      ...
+    1..17
+ok 4 - 潛望鏡實際操作、畫面與三階段評量
+  ---
+  duration_ms: 137260.424638
+  type: 'test'
+  ...
+# Subtest: 4.2 完整頁面、主要活動與資源失敗恢復
+    # Subtest: 入口、無JS靜態分享資訊與核可開場圖一致
+    not ok 1 - 入口、無JS靜態分享資訊與核可開場圖一致
+      ---
+      duration_ms: 7185.328975
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-4.2-completion.test.cjs:36:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        expect(locator).toContainText(expected) failed
+        
+        Locator: locator('#unit-quiz noscript')
+        Expected substring: "需要 JavaScript"
+        Received string:    ""
+        Timeout: 5000ms
+        
+        Call log:
+          - Expect "to.have.text" with timeout 5000ms
+          - waiting for locator('#unit-quiz noscript')
+            14 × locator resolved to <noscript>…</noscript>
+               - unexpected value ""
+        
+      code: 'ERR_TEST_FAILURE'
+      stack: |-
+        captureRawStack (/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/lib/coreBundle.js:9681:17)
+        callMatcherAsStep (/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/lib/matchers/expect.js:13310:57)
+        Object.toContainText (/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/lib/matchers/expect.js:13300:23)
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.2-completion.test.cjs:53:54)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.2-completion.test.cjs:36:3)
+      ...
+    # Subtest: 六區與唯一小測、三種桌機筆電尺寸的路線及標頭可用
+    ok 2 - 六區與唯一小測、三種桌機筆電尺寸的路線及標頭可用
+      ---
+      duration_ms: 26567.653525
+      type: 'test'
+      ...
+    # Subtest: 第一區實際點燈、獨立開關、改變觀看方向與取消拖曳
+    ok 3 - 第一區實際點燈、獨立開關、改變觀看方向與取消拖曳
+      ---
+      duration_ms: 6317.941552
+      type: 'test'
+      ...
+    # Subtest: 第四區滑鼠拖動、10至60公分邊界、刻度及正面觀察同步
+    ok 4 - 第四區滑鼠拖動、10至60公分邊界、刻度及正面觀察同步
+      ---
+      duration_ms: 1213.827829
+      type: 'test'
+      ...
+    # Subtest: WebGL不可用時清楚提示，第三四五區與潛望鏡仍可使用
+    ok 5 - WebGL不可用時清楚提示，第三四五區與潛望鏡仍可使用
+      ---
+      duration_ms: 1904.64245
+      type: 'test'
+      ...
+    # Subtest: 潛望鏡素材延遲、失敗與重新載入，不把未就緒畫面判定成功
+    ok 6 - 潛望鏡素材延遲、失敗與重新載入，不把未就緒畫面判定成功
+      ---
+      duration_ms: 26375.074961
+      type: 'test'
+      ...
+    1..6
+not ok 5 - 4.2 完整頁面、主要活動與資源失敗恢復
+  ---
+  duration_ms: 79682.759292
+  type: 'test'
+  location: '/workspace/k12-learning-demos/tests/unit-4.2-completion.test.cjs:9:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..5
+# tests 46
+# suites 0
+# pass 44
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 284910.574312

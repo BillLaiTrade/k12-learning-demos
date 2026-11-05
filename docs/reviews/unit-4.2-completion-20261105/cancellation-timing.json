@@ -1,0 +1,63 @@
+{
+  "shots": [
+    {
+      "event": "click",
+      "time": 31517.5,
+      "status": "running",
+      "lines": 2,
+      "duration": 950
+    },
+    {
+      "event": "click",
+      "time": 34490.10000000009,
+      "status": "running",
+      "lines": 2,
+      "duration": 950
+    },
+    {
+      "event": "click",
+      "time": 36727.700000000186,
+      "status": "running",
+      "lines": 2,
+      "duration": 950
+    }
+  ],
+  "inputs": [
+    {
+      "event": "pointerdown:before",
+      "time": 32116.300000000047,
+      "status": "running",
+      "lines": 2
+    },
+    {
+      "event": "pointerdown:after",
+      "time": 32118,
+      "status": "cooldown",
+      "lines": 0
+    },
+    {
+      "event": "keydown:before",
+      "time": 34490.200000000186,
+      "status": "running",
+      "lines": 2
+    },
+    {
+      "event": "keydown:after",
+      "time": 34490.30000000005,
+      "status": "cooldown",
+      "lines": 0
+    },
+    {
+      "event": "keydown:before",
+      "time": 36778.10000000009,
+      "status": "running",
+      "lines": 2
+    },
+    {
+      "event": "keydown:after",
+      "time": 36778.30000000005,
+      "status": "cooldown",
+      "lines": 0
+    }
+  ]
+}

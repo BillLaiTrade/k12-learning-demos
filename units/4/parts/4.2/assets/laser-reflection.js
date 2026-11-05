@@ -7,7 +7,19 @@ import { laserPath } from './planar-reflection.mjs';
 const MIN_ANGLE = 20, MAX_ANGLE = 90;
 let angleDegrees = 30;
 
-const { scene, camera, renderer, centerPoint, reflectedRayLength, emitter, emitterBody, emitterStem, emitterFoot, pivot, incoming, reflected, setBeam, incomingSector, reflectedSector, incomingArc, outgoingArc, arc, setAngleSector, setThickArc, normalLabel, makeAngleLabel, updateAngleLabel, rayMaterial } = createLaserBench(canvas);
+let bench;
+try {
+  bench = createLaserBench(canvas);
+} catch (error) {
+  canvas.hidden = true;
+  canvas.style.display = 'none';
+  canvas.tabIndex = -1;
+  canvas.setAttribute('aria-disabled', 'true');
+  canvas.dataset.ready = 'error';
+  document.querySelector('#angle-observation').textContent = '目前裝置無法呈現 3D 雷射實驗。上方保留入射角與反射角皆為 30° 的示意圖；可重新整理頁面再試。';
+}
+if (bench) {
+const { scene, camera, renderer, centerPoint, reflectedRayLength, emitter, emitterBody, emitterStem, emitterFoot, pivot, incoming, reflected, setBeam, incomingSector, reflectedSector, incomingArc, outgoingArc, arc, setAngleSector, setThickArc, normalLabel, makeAngleLabel, updateAngleLabel, rayMaterial } = bench;
 
 function svgArc(radius, degrees, rightSide) {
   const steps = Math.max(5, Math.ceil(degrees / 3));
@@ -110,6 +122,7 @@ function resize() {
 }
 new ResizeObserver(resize).observe(canvas);
 resize();
+canvas.dataset.ready = 'true';
 
 const dragRaycaster = new THREE.Raycaster();
 const dragPointer = new THREE.Vector2();
@@ -174,3 +187,5 @@ canvas.addEventListener('keydown', (event) => {
   else return;
   event.preventDefault();
 });
+
+}

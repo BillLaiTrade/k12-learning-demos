@@ -1,0 +1,120 @@
+TAP version 13
+# Subtest: 4.2 fifth activity: approved three-step comparison, exact optics and interactions
+    # Subtest: normal is radial and perpendicular to the surface; both reflection angles agree
+    ok 1 - normal is radial and perpendicular to the surface; both reflection angles agree
+      ---
+      duration_ms: 2.415967
+      type: 'test'
+      ...
+    # Subtest: toy appearance magnification follows the stated near/far mirror model
+    ok 2 - toy appearance magnification follows the stated near/far mirror model
+      ---
+      duration_ms: 0.390039
+      type: 'test'
+      ...
+    # Subtest: all three stages and three mirror columns are visible together in the approved order
+    ok 3 - all three stages and three mirror columns are visible together in the approved order
+      ---
+      duration_ms: 8506.186188
+      type: 'test'
+      ...
+    # Subtest: normal switch affects all three diagrams together; pointer and keyboard restore it
+    ok 4 - normal switch affects all three diagrams together; pointer and keyboard restore it
+      ---
+      duration_ms: 3266.705594
+      type: 'test'
+      ...
+    # Subtest: bear moves near/far repeatedly; image orientation, condition and button agree
+    ok 5 - bear moves near/far repeatedly; image orientation, condition and button agree
+      ---
+      duration_ms: 1525.324553
+      type: 'test'
+      ...
+    # Subtest: three-column alignment, shared section structure and no clipped text at eight widths
+    ok 6 - three-column alignment, shared section structure and no clipped text at eight widths
+      ---
+      duration_ms: 1149.471567
+      type: 'test'
+      ...
+    # Subtest: touch, reduced motion, model notes and neighboring activities remain usable
+    ok 7 - touch, reduced motion, model notes and neighboring activities remain usable
+      ---
+      duration_ms: 12465.10772
+      type: 'test'
+      ...
+    1..7
+ok 1 - 4.2 fifth activity: approved three-step comparison, exact optics and interactions
+  ---
+  duration_ms: 29908.125146
+  type: 'test'
+  ...
+# Subtest: 1.2 reversible light reuses the reflection laboratory
+    # Subtest: independent reflection, front surface and reciprocal endpoint checks at every supported angle
+    ok 1 - independent reflection, front surface and reciprocal endpoint checks at every supported angle
+      ---
+      duration_ms: 4.435294
+      type: 'test'
+      ...
+    # Subtest: section 02 keeps its actual drag and keyboard, with initial angle inherited
+    ok 2 - section 02 keeps its actual drag and keyboard, with initial angle inherited
+      ---
+      duration_ms: 17374.447438
+      type: 'test'
+      ...
+    # Subtest: angle sectors and arcs are absent before light, after off-state angle changes and after reset
+    ok 3 - angle sectors and arcs are absent before light, after off-state angle changes and after reset
+      ---
+      duration_ms: 16263.203732
+      type: 'test'
+      ...
+    # Subtest: actual device clicks independently traverse all four light states without a record step
+    ok 4 - actual device clicks independently traverse all four light states without a record step
+      ---
+      duration_ms: 7753.151489
+      type: 'test'
+      ...
+    # Subtest: red, blue and simultaneous illumination all change the actual rendered scene
+    ok 5 - red, blue and simultaneous illumination all change the actual rendered scene
+      ---
+      duration_ms: 31250.302825
+      type: 'test'
+      ...
+    # Subtest: dragging A changes angle without toggling either source; pointer cancellation and background clicks are inert
+    ok 6 - dragging A changes angle without toggling either source; pointer cancellation and background clicks are inert
+      ---
+      duration_ms: 15391.118668
+      type: 'test'
+      ...
+    # Subtest: keyboard switches, live angle controls and reset reflect the independent state
+    ok 7 - keyboard switches, live angle controls and reset reflect the independent state
+      ---
+      duration_ms: 183.618733
+      type: 'test'
+      ...
+    # Subtest: independent controls and device labels fit five widths
+    ok 8 - independent controls and device labels fit five widths
+      ---
+      duration_ms: 7744.632861
+      type: 'test'
+      ...
+    # Subtest: real touch taps toggle the devices; fallback diagram and native switches remain usable
+    ok 9 - real touch taps toggle the devices; fallback diagram and native switches remain usable
+      ---
+      duration_ms: 20826.803065
+      type: 'test'
+      ...
+    1..9
+ok 2 - 1.2 reversible light reuses the reflection laboratory
+  ---
+  duration_ms: 118580.017671
+  type: 'test'
+  ...
+1..2
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 149566.712169
