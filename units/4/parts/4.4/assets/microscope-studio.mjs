@@ -4,7 +4,7 @@ const root=document.querySelector('#microscope-lab');
 if(root){
  const $=s=>root.querySelector(s),all=s=>[...root.querySelectorAll(s)],g=microscopeGeometry();
  const red='#ec8b6d',blue='#6dbde3',axis=432,k=1.1,Y=s=>550-s*k;
- let step='objective',rays=true,point='both',model=null,view='objective';
+ let step='both',rays=true,point='both',model=null,view='whole';
  const hardware=`<defs>
  <linearGradient id="m9-body"><stop stop-color="#a9b49d"/><stop offset=".25" stop-color="#fbf4dc"/><stop offset=".6" stop-color="#dcd4bc"/><stop offset="1" stop-color="#8d9d88"/></linearGradient>
  <linearGradient id="m9-dark"><stop stop-color="#172e26"/><stop offset=".45" stop-color="#5d7564"/><stop offset="1" stop-color="#1c382c"/></linearGradient>
@@ -63,8 +63,8 @@ if(root){
   let labels='';
   const targets=view==='objective'?[['中間像',image,true,null],['物鏡',objective,true,'objective'],['草履蟲',at(-g.objective.u),true,null]]:view==='eyepiece'?[['眼睛',at(g.eye+4),true,null],['目鏡',ocular,true,'eyepiece'],['中間像',image,true,null]]:[['目鏡',ocular,step!=='objective','eyepiece'],['中間像',image,true,null],['物鏡',objective,step!=='eyepiece','objective']];
   for(const [name,p,active,lens]of targets){
-   const [x,y]=position(p),attrs=`class="micro-label${view==='whole'?'':' micro-label-right'}" style="left:calc(${x}% ${view==='whole'?'-':'+'} 24px);top:${y}%;opacity:${active?1:.55}"`;
-   labels+=`<span class="micro-connector" style="left:calc(${x}% ${view==='whole'?'- 24':'+ 6'}px);top:${y}%"></span>`;
+   const [x,y]=position(p),rightLabel=view!=='whole'||box.width<420,labelOffset=view==='whole'&&box.height<320&&name==='目鏡'?-6:0,attrs=`class="micro-label${rightLabel?' micro-label-right':''}" style="left:calc(${x}% ${rightLabel?'+':'-'} 24px);top:calc(${y}% + ${labelOffset}px);opacity:${active?1:.55}"`;
+   labels+=`<span class="micro-connector" style="left:calc(${x}% ${rightLabel?'+ 6':'- 24'}px);top:${y}%"></span>`;
    labels+=lens?`<button type="button" ${attrs} data-micro-lens="${lens}" title="點選近看${name}" aria-label="近看${name}${lens==='objective'?'成像':'觀察'}">${name}</button>`:`<span ${attrs}>${name}</span>`;
    if(lens)labels+=`<button type="button" class="micro-pick" data-micro-lens="${lens}" style="left:${x}%;top:${y}%" aria-label="近看${name}剖面"></button>`;
   }
@@ -76,9 +76,9 @@ if(root){
    for(const [p,name]of [[f,'F'],[twoF,'2F']]){const [fx,fy]=position([x-24,p[1]]);labels+=`<span class="micro-focus-label" style="left:${fx}%;top:${fy}%">${name}</span>`;}
   }
   if(step!=='objective'&&view!=='objective'){
-   const f=at(g.ocularFocus),x=ocular[0]+(view==='eyepiece'?-82:72);
+   const focusOnLeft=view==='eyepiece'&&box.width>=300,f=at(g.ocularFocus),x=ocular[0]+(focusOnLeft?-82:box.width<420?240:72);
    out+=`<path d="M${x} ${ocular[1]}V${f[1]}m-6 0h12M${x-6} ${ocular[1]}h12" stroke="#e3c888" fill="none" stroke-width="1.5"/>`;
-   const [fx,fy]=position([x+(view==='eyepiece'?-22:13),f[1]]);
+   const [fx,fy]=position([x+(focusOnLeft?-22:13),f[1]]);
    labels+=`<span class="micro-focus-label" style="left:${fx}%;top:${fy}%">F</span>`;
   }
   const focused=document.activeElement?.dataset.microLens,focusWasLabel=document.activeElement?.classList.contains('micro-label');
@@ -89,7 +89,8 @@ if(root){
   out+=`<path data-micro-a-leader d="M${from[0]} ${from[1]}L${image[0]-20} ${image[1]}" stroke="#e7cb77" stroke-width="1.5" fill="none"/>`;
   $('.micro-labels').innerHTML=labels;
   if(focused)$(`${focusWasLabel?'.micro-label':'.micro-pick'}[data-micro-lens="${focused}"]`)?.focus({preventScroll:true});
-  $('[data-micro-detail-title]').hidden=view==='whole';$('[data-micro-detail-title]').textContent=view==='objective'?'原物 → 物鏡 → 中間像':'中間像 → 目鏡 → 眼睛';
+  $('[data-micro-scope]').textContent=view==='whole'?'目前觀察：完整成像':view==='objective'?'目前近看：物鏡成像':'目前近看：目鏡觀察';
+  $('[data-micro-process]').setAttribute('aria-label','完整成像關係：原物、物鏡、中間像、目鏡、眼睛。'+(view==='whole'?'目前觀察完整成像。':view==='objective'?'目前近看原物、物鏡與中間像。':'目前近看中間像、目鏡與眼睛。'));
   $('[data-micro-overview]').hidden=view==='whole';$('[data-micro-map]').hidden=view==='whole';
   if(model?.overview){const img=$('[data-micro-map-image]');if(!img.getAttribute('src'))img.src=model.overview;$('.micro-map-picture').style.aspectRatio=String(model.overviewAspect);}
   const region=$('[data-micro-map-region]'),regionBounds=model?model.overviewRegion(view):view==='objective'?[335,240,195,440]:[355,100,160,265];
@@ -107,7 +108,7 @@ if(root){
   $('#microscope-scene').innerHTML=out;
   const first=step==='objective',ocularStep=step==='eyepiece';
   $('[data-micro-a-role]').textContent=first?'物鏡形成的實像':ocularStep?'目鏡觀察的物體':'連接兩段的同一個像';
-  $('[data-micro-view-title]').textContent=first?'第一段：物鏡成像':ocularStep?'第二段：目鏡觀察':'完整接力：前後比較';
+  $('[data-micro-view-title]').textContent=first?'物鏡形成的中間像':ocularStep?'目鏡觀察中間像':'透過目鏡看到的影像';
   $('.micro-compare-note').textContent='草履蟲玻片・方向比較';
   $('[data-micro-before-label]').textContent=ocularStep?'同一個中間像':'玻片上的草履蟲';
   $('[data-micro-after-label]').textContent=first?'中間實像':'最後看見的虛像';
@@ -119,7 +120,7 @@ if(root){
   $('[data-micro-after-direction]').textContent='圓端朝下／口溝在左';
   $('[data-micro-badge]').textContent=first?'倒立・放大的實像':ocularStep?'不再倒轉・放大的虛像':'相對原物倒立・放大虛像';
   $('[data-micro-copy]').textContent=first?'中間像形成在鏡筒內，這裡沒有放置屏幕。':ocularStep?'目鏡放大同一個中間像，方向不再倒轉。':'同一個中間像，連接兩段成像。';
-  $('#micro-result').textContent={objective:'① 原物經物鏡，在鏡筒內形成中間實像。',eyepiece:'② 同一個中間像位於目鏡焦距內，成為目鏡觀察的物體。',both:'③ 兩段接力：物鏡形成的中間實像，就是目鏡接著觀察的物體。'}[step];
+  $('#micro-result').textContent={objective:'近看物鏡成像：原物經物鏡，在鏡筒內形成中間實像。',eyepiece:'近看目鏡觀察：同一個中間像位於目鏡焦距內，成為目鏡觀察的物體。',both:'完整成像：物鏡形成的中間實像，就是目鏡接著觀察的物體，兩段接力放大。'}[step];
   all('[data-micro-card]').forEach(b=>{const selected=view===b.dataset.microCard;b.setAttribute('aria-pressed',String(selected));b.closest('section').dataset.active=String(selected);});
   all('[data-set=micro]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.value===step)));
   $('[data-micro-rays]').setAttribute('aria-pressed',String(rays));$('[data-micro-rays]').textContent=rays?'隱藏輔助光路':'顯示輔助光路';
@@ -134,14 +135,14 @@ if(root){
   if(b.dataset.microCard){selectLens(b.dataset.microCard);$(`[data-set=micro][data-value="${b.dataset.microCard}"]`).focus({preventScroll:true});$('.micro-workspace').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});return;}
   if(b.dataset.microLens){selectLens(b.dataset.microLens);return;}
   if(b.dataset.set==='micro'){step=b.dataset.value;view=step==='both'?'whole':step;}
-  else if(b.hasAttribute('data-micro-overview')){step='both';view='whole';}
+  else if(b.hasAttribute('data-micro-overview')){step='both';view='whole';render();$('#micro-process-title').focus({preventScroll:true});return;}
   else if(b.hasAttribute('data-micro-rays'))rays=!rays;
   else if(b.dataset.microPoint)point=b.dataset.microPoint;
-  else if(b.hasAttribute('data-micro-reset')){step='objective';view='objective';rays=true;point='both';}
+  else if(b.hasAttribute('data-micro-reset')){step='both';view='whole';rays=true;point='both';}
   else return;render();
  });
  new ResizeObserver(render).observe($('.micro-stage'));
  $('[data-micro-a-symbol]').innerHTML=symbol(50,50,40,true);
  render();
- import('./microscope-model.mjs?v=20261105-micro-specimen10').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
+ import('./microscope-model.mjs?v=20261105-micro-scope14').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
 }

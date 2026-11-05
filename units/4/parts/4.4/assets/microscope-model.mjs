@@ -61,7 +61,7 @@ export function createMicroscopeModel(canvas,onProject){
  const plane=mesh(new THREE.RingGeometry(29,31,64),new THREE.MeshBasicMaterial({color:'#f4dfa4',transparent:true,opacity:.25,side:THREE.DoubleSide,depthWrite:false}),432,286);
  plane.rotation.x=-Math.PI/2;
  const floor=mesh(new THREE.PlaneGeometry(1800,1800),new THREE.ShadowMaterial({opacity:.19}),440,757,0);floor.rotation.x=-Math.PI/2;floor.castShadow=false;floor.receiveShadow=true;
- let queued=0,currentStep=null,currentView='objective',overview='',overviewCamera=null,overviewAspect=1,span=500,center=460;
+ let queued=0,currentStep=null,currentView='whole',overview='',overviewCamera=null,overviewAspect=1,span=780,center=425;
  let motion=null;
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  function frameCamera(width,height){
