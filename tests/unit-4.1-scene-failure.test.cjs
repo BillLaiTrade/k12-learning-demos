@@ -8,8 +8,8 @@ const root = path.resolve(__dirname, '..');
 const capture = process.env.UNIT41_FAILURE_CAPTURE || '/tmp/unit41-scene-failure';
 const message = '立體畫面未能載入，請重新整理頁面後再試。';
 const scenes = {
-  shadow: {file: 'shadow-3d.js', card: 'card-04', root: '#card-04 .lesson-body', canvas: '#shadow-3d-scene', notice: '#shadow-load-failure', status: '#shadow-scene-status', observation: '#shadow-xiaokui-observation', hint: '#shadow-view-hint', reset: '#shadow-view-reset'},
-  size: {file: 'shadow-size-3d.js', card: 'card-05', root: '#card-05 .visual', canvas: '#shadow-size-3d-scene', notice: '#shadow-size-load-failure', status: '#shadow-size-scene-status', observation: '#shadow-size-xiaokui-observation', hint: '#shadow-size-feedback', reset: '#shadow-size-view-reset'}
+  shadow: {file: 'shadow-3d.js', card: 'card-04', root: '#card-04 .lesson-body', canvas: '#shadow-3d-scene', notice: '#shadow-load-failure', status: '#shadow-scene-status', observation: '#shadow-xiaokui-observation', hint: '#shadow-view-hint'},
+  size: {file: 'shadow-size-3d.js', card: 'card-05', root: '#card-05 .visual', canvas: '#shadow-size-3d-scene', notice: '#shadow-size-load-failure', status: '#shadow-size-scene-status', observation: '#shadow-size-xiaokui-observation', hint: '#shadow-size-feedback'}
 };
 
 test('4.1 第四、五區載入失敗與正常操作', {timeout: 240000}, async t => {
@@ -118,7 +118,9 @@ test('4.1 第四、五區載入失敗與正常操作', {timeout: 240000}, async 
         await unavailable(p, other);
         await p.waitForFunction(() => !!window.__sceneTest, null, {timeout:45000});
         assert.equal(await p.locator(s.notice).isHidden(), true);
-        assert.equal(await p.locator(s.reset).isEnabled(), true);
+        await p.waitForFunction(selector => document.querySelector(selector).dataset.sceneState === 'ready', s.root);
+        assert.notEqual(await p.locator(s.canvas).getAttribute('aria-disabled'), 'true');
+        assert.equal(await p.locator('[id$="-view-reset"]').count(), 0);
         assert.equal(f.requests.filter(n => n === s.file).length, 1);
         await p.locator(s.canvas).evaluate(n => n.scrollIntoView({block:'center', behavior:'instant'}));
         if (kind === 'shadow') {
@@ -144,21 +146,28 @@ test('4.1 第四、五區載入失敗與正常操作', {timeout: 240000}, async 
           assert.equal(await p.locator(s.observation).innerText(), '球目前靠近屏幕，屏幕上的影子較小。');
         }
         const position = await p.evaluate(() => window.__sceneTest.blocker.position.toArray());
-        await p.locator(s.reset).click();
+        const originalCamera = await p.evaluate(() => window.__sceneTest.camera.position.toArray());
+        const box = await p.locator(s.canvas).boundingBox();
+        await p.mouse.move(box.x + 25, box.y + 25); await p.mouse.down();
+        await p.mouse.move(box.x + 65, box.y + 45, {steps:4}); await p.mouse.up();
+        const orbitedCamera = await p.evaluate(() => window.__sceneTest.camera.position.toArray());
+        assert.notDeepEqual(orbitedCamera, originalCamera);
+        await p.locator(s.canvas).dispatchEvent('wheel', {deltaY:100, bubbles:true});
+        assert.notDeepEqual(await p.evaluate(() => window.__sceneTest.camera.position.toArray()), orbitedCamera);
         assert.deepEqual(await p.evaluate(() => window.__sceneTest.blocker.position.toArray()), position);
         // Interrupt an active animation to ensure it cannot overwrite failure copy later.
         if (kind === 'shadow') await p.locator('#shadow-block-toggle').click();
-        await p.locator(s.reset).focus();
+        const focusSelector = kind === 'shadow' ? '#shadow-block-toggle' : '#moonlight-toggle';
+        await p.locator(focusSelector).focus();
         const scrollBefore = await p.evaluate(() => scrollY);
         await p.locator(s.canvas).dispatchEvent('webglcontextlost', {bubbles:false, cancelable:true});
         const failed = await unavailable(p, kind);
-        assert.equal(await p.evaluate(() => document.activeElement.id), s.notice.slice(1));
+        assert.equal(await p.evaluate(() => document.activeElement.id), kind === 'shadow' ? s.notice.slice(1) : 'moonlight-toggle');
         assert.ok(Math.abs(await p.evaluate(() => scrollY) - scrollBefore) < 2);
         const before = await p.evaluate(() => ({position:window.__sceneTest.blocker.position.toArray(), camera:window.__sceneTest.camera.position.toArray()}));
         await p.locator(s.canvas).dispatchEvent('pointerdown', {pointerId:1, clientX:100, clientY:100, bubbles:true});
         await p.locator(s.canvas).dispatchEvent('pointermove', {pointerId:1, clientX:200, clientY:200, bubbles:true});
         await p.locator(s.canvas).dispatchEvent('wheel', {deltaY:100, bubbles:true});
-        await p.locator(s.reset).evaluate(n => n.dispatchEvent(new MouseEvent('click', {bubbles:true})));
         await p.waitForTimeout(1200);
         assert.deepEqual(await p.evaluate(() => ({position:window.__sceneTest.blocker.position.toArray(), camera:window.__sceneTest.camera.position.toArray()})), before);
         assert.deepEqual(await unavailable(p, kind), failed);

@@ -4,7 +4,6 @@ const canvas = document.querySelector('#shadow-size-3d-scene');
 if (canvas) {
   const status = document.querySelector('#shadow-size-scene-status');
   const xiaokuiObservation = document.querySelector('#shadow-size-xiaokui-observation');
-  const resetButton = document.querySelector('#shadow-size-view-reset');
   let sceneUnavailable = false;
   canvas.addEventListener('webglcontextlost', () => { sceneUnavailable = true; });
 
@@ -358,14 +357,6 @@ if (canvas) {
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(canvas);
     resize();
-
-    const resetView = () => {
-      azimuth = initialOrbit.azimuth;
-      polar = initialOrbit.polar;
-      radius = initialOrbit.radius;
-      updateCamera();
-    };
-    resetButton.addEventListener('click', resetView);
 
     const pointers = new Map();
     let previousPoint = null;

@@ -90,7 +90,7 @@ test('4.1：六區頂部標頭、滿寬內容及原有操作',{timeout:360000},a
     await p.locator('#shadow-block-toggle').scrollIntoViewIfNeeded();await expect(p.locator('#shadow-block-toggle')).toBeEnabled({timeout:45000});
     await click('#shadow-block-toggle');await expect(p.locator('#shadow-block-toggle')).toHaveAttribute('aria-pressed','true');
     await click('#shadow-block-toggle');await expect(p.locator('#shadow-block-toggle')).toHaveAttribute('aria-pressed','false');
-    await p.locator('#shadow-size-3d-scene').scrollIntoViewIfNeeded();await expect(p.locator('#shadow-size-view-reset')).toBeEnabled({timeout:45000});
+    await p.locator('#shadow-size-3d-scene').scrollIntoViewIfNeeded();await expect(p.locator('#card-05 .visual')).toHaveAttribute('data-scene-state','ready',{timeout:45000});
     await p.waitForFunction(()=>!!window.__shadowSizeLayoutTest);
     await p.locator('#shadow-size-3d-scene').evaluate(el=>el.scrollIntoView({block:'center',behavior:'instant'}));
     const points=await p.evaluate(()=>{
@@ -104,7 +104,7 @@ test('4.1：六區頂部標頭、滿寬內容及原有操作',{timeout:360000},a
      for(let i=1;i<=6;i++)await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:points.a.x+(points.b.x-points.a.x)*i/6,y:points.a.y+(points.b.y-points.a.y)*i/6,id:1}]});
      await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
     }else{await p.mouse.move(points.a.x,points.a.y);await p.mouse.down();await p.mouse.move(points.b.x,points.b.y,{steps:6});await p.mouse.up();}
-    assert.ok(Math.abs(await p.evaluate(()=>window.__shadowSizeLayoutTest.blocker.position.z)-points.z)>.2,'球體沿導軌實際移動');await click('#shadow-size-view-reset');
+    assert.ok(Math.abs(await p.evaluate(()=>window.__shadowSizeLayoutTest.blocker.position.z)-points.z)>.2,'球體沿導軌實際移動');
     assert.equal(await p.locator('[data-scene-failed="true"]').count(),0);
     await click('#light-speed-tap');await p.waitForTimeout(120);await click('#light-speed-tap');await expect(p.locator('#light-speed-tap')).toHaveAttribute('data-phase','result');await expect(p.locator('#light-distance')).not.toHaveText('— 公里');
     await p.locator('#unit-booklet').scrollIntoViewIfNeeded();await expect(p.locator('#shadow-theatre-reset')).toBeEnabled({timeout:45000});await click('[data-prop-select="moon"]');await expect(p.locator('[data-prop-select="moon"]')).toHaveAttribute('aria-pressed','true');await click('#shadow-theatre-reset');

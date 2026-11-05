@@ -7,7 +7,6 @@ if (canvas) {
   const grandpaExplanation = document.querySelector('#shadow-grandpa-explanation');
   const toggle = document.querySelector('#shadow-block-toggle');
   const toggleLabel = document.querySelector('#shadow-toggle-label');
-  const resetButton = document.querySelector('#shadow-view-reset');
   let sceneUnavailable = false;
   canvas.addEventListener('webglcontextlost', () => { sceneUnavailable = true; });
 
@@ -449,14 +448,6 @@ if (canvas) {
       setObservation(nextState ? '球正滑進光路，屏幕上的影子慢慢出現了。' : '球正離開光路，屏幕上的影子慢慢淡去了。');
       grandpaExplanation.textContent = '一邊移動球，一邊比較屏幕哪些位置變暗或變亮。';
     });
-
-    const resetView = () => {
-      azimuth = initialOrbit.azimuth;
-      polar = initialOrbit.polar;
-      radius = initialOrbit.radius;
-      updateCamera();
-    };
-    resetButton.addEventListener('click', resetView);
 
     const pointers = new Map();
     let previousPoint = null;

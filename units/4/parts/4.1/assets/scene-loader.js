@@ -5,7 +5,7 @@ const scenes = [
     canvas: '#aperture-3d-scene',
     root: '#card-03 .aperture-lab',
     notice: '#aperture-load-failure',
-    load: () => import('./aperture-3d.js?v=straight-ray-apertures-20261029'),
+    load: () => import('./aperture-3d.js?v=no-view-reset-20261105'),
     showUnavailable(root) {
       root.querySelector('#aperture-result').textContent = failureMessage;
       root.querySelector('#aperture-xiaokui-observation').textContent = '請重新整理頁面後再試。';
@@ -24,7 +24,7 @@ const scenes = [
     canvas: '#shadow-3d-scene',
     root: '#card-04 .lesson-body',
     notice: '#shadow-load-failure',
-    load: () => import('./shadow-3d.js?v=loading-state-20261105'),
+    load: () => import('./shadow-3d.js?v=no-view-reset-20261105'),
     showUnavailable(root) {
       root.querySelector('#shadow-scene-status').textContent = failureMessage;
       root.querySelector('#shadow-toggle-label').textContent = '無法操作';
@@ -38,7 +38,7 @@ const scenes = [
     canvas: '#shadow-size-3d-scene',
     root: '#card-05 .visual',
     notice: '#shadow-size-load-failure',
-    load: () => import('./shadow-size-3d.js?v=size-position-copy-20261105'),
+    load: () => import('./shadow-size-3d.js?v=no-view-reset-20261105'),
     showUnavailable(root) {
       root.querySelector('#shadow-size-scene-status').textContent = failureMessage;
       root.querySelector('#shadow-size-feedback').textContent = '立體畫面暫時無法操作，請重新整理頁面後再試。';

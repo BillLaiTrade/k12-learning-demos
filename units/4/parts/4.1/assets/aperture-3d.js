@@ -333,13 +333,6 @@ if (canvas) {
     updateExperiment();
   });
 
-  const viewReset = () => {
-    azimuth = initialOrbit.azimuth;
-    polar = initialOrbit.polar;
-    radius = initialOrbit.radius;
-    updateCamera();
-  };
-  document.querySelector('#aperture-view-reset').addEventListener('click', viewReset);
   const activePointers = new Map();
   const pointerRaycaster = new THREE.Raycaster();
   let lastPointer = null;

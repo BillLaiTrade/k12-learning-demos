@@ -109,9 +109,6 @@
     #shadow-3d-scene.dragging-blocker { cursor: grabbing; }
     #shadow-size-3d-scene { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
     #shadow-size-3d-scene:active, #shadow-size-3d-scene.dragging-size-object { cursor: grabbing; }
-    .shadow-scene-actions { position: absolute; z-index: 2; top: 10px; left: 10px; }
-    .shadow-scene-action { min-height: 44px; padding: 9px 16px; border: 1px solid var(--line); border-radius: 13px; background: #fff; color: var(--ink); font-size: .9rem; font-weight: 750; }
-    .shadow-scene-action:hover, .shadow-scene-action:focus-visible { border-color: var(--green); outline: 2px solid rgb(23 107 83 / 12%); }
     .shadow-scene-status { position: absolute; right: 12px; bottom: 12px; max-width: min(80%, 420px); margin: 0; padding: 8px 12px; border: 1px solid #d7dfd3; border-radius: 11px; background: rgb(255 253 248 / 94%); color: #405851; font-size: .84rem; line-height: 1.4; box-shadow: 0 2px 8px #243a3512; }
     .shadow-controls { display: grid; grid-template-columns: minmax(0, 1fr) minmax(210px, 1.2fr) minmax(0, 1fr); align-items: center; gap: 12px; margin-top: 11px; }
     .shadow-fixed-label { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 8px; border: 1px solid var(--line); border-radius: 13px; background: #fffdf8; color: #52665d; font-size: .87rem; font-weight: 750; text-align: center; }
@@ -520,7 +517,6 @@
                 <p class="scene-load-failure" data-scene-loading role="status">立體畫面載入中，請稍候。</p>
                   <div class="aperture-scene-actions">
                     <button class="aperture-scene-action" type="button" id="aperture-reset" disabled data-scene-pending-control>重設位置</button>
-                    <button class="aperture-scene-action" type="button" id="aperture-view-reset" disabled data-scene-pending-control>重設視角</button>
                   </div>
                 </div>
                 <div class="aperture-height-control">
@@ -551,7 +547,6 @@
                 <canvas id="shadow-3d-scene" role="img" aria-label="可旋轉觀察的立體影子實驗：可直接拖曳球體沿導軌移動，觀察屏幕影子變化。" aria-describedby="shadow-scene-status shadow-view-hint" tabindex="-1" aria-disabled="true"></canvas>
                 <p class="scene-load-failure" id="shadow-load-failure" role="alert" tabindex="-1" hidden></p>
                 <p class="scene-load-failure" data-scene-loading role="status">立體畫面載入中，請稍候。</p>
-                <div class="shadow-scene-actions"><button class="shadow-scene-action" id="shadow-view-reset" type="button" disabled data-scene-pending-control>重設視角</button></div>
                 <p class="shadow-scene-status" id="shadow-scene-status" aria-live="polite">立體畫面載入中，請稍候。</p>
               </div>
               <div class="shadow-controls" role="group" aria-label="影子形成實驗控制">
@@ -583,7 +578,6 @@
                 <canvas id="shadow-size-3d-scene" role="img" aria-label="可旋轉觀察的立體影子大小實驗：直接拖曳球體沿光源到屏幕的方向前後移動，觀察屏幕上的影子大小變化。" aria-describedby="shadow-size-scene-status shadow-size-feedback" tabindex="-1" aria-disabled="true"></canvas>
                 <p class="scene-load-failure" id="shadow-size-load-failure" role="alert" tabindex="-1" hidden></p>
                 <p class="scene-load-failure" data-scene-loading role="status">立體畫面載入中，請稍候。</p>
-                <div class="shadow-scene-actions"><button class="shadow-scene-action" id="shadow-size-view-reset" type="button" disabled data-scene-pending-control>重設視角</button></div>
                 <p class="shadow-scene-status" id="shadow-size-scene-status" aria-live="polite">立體畫面載入中，請稍候。</p>
               </div>
               <p class="visual-caption" id="shadow-size-feedback" aria-live="polite">拖曳球體可調整前後位置；拖曳空白處可旋轉視角，滾輪可縮放。</p>
@@ -811,7 +805,7 @@
       }
     })();
   </script>
-  <script type="module" src="assets/scene-loader.js?v=size-position-copy-20261105"></script>
+  <script type="module" src="assets/scene-loader.js?v=no-view-reset-20261105"></script>
   <script type="module" src="assets/light-speed-timer.js?v=clear-results-on-start-20261029"></script>
 </body>
 </html>

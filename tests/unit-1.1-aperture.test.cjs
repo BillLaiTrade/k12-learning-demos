@@ -89,17 +89,23 @@ test('第三區實際器材、亮點、燈號與既有操作',{timeout:240000},a
     await expect(p.locator('#aperture-result')).toContainText('完整通過');await expect(p.locator('#aperture-result')).not.toContainText('排成一直線');
   });
   async function point(page,x,y){return page.locator('#aperture-3d-scene').evaluate((el,{x,y})=>{const a=window.__apertureTest,v=a.spot.position.clone().set(x,y,0).project(a.camera),r=el.getBoundingClientRect();return{x:r.x+(v.x+1)*r.width/2,y:r.y+(1-v.y)*r.height/2};},{x,y});}
-  await t.test('實際拖曳改變孔板前後／上下位置；重設視角保留狀態，重設位置恢復初始',async()=>{
+  await t.test('實際拖曳、旋轉及縮放正常；只保留重設位置且不還原鏡頭',async()=>{
     await p.locator('#aperture-reset').click();await canvas.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await p.waitForTimeout(250);
     const a=await point(p,0,1.59),b=await point(p,.65,1.28);await p.mouse.move(a.x,a.y);await p.mouse.down();assert.equal(await canvas.evaluate(e=>e.hasPointerCapture(1)),true);
     await p.mouse.move(b.x,b.y,{steps:10});await p.mouse.up();const moved=await check();assert.ok(Math.abs(moved.states[1].x)>.2);assert.ok(Math.abs(moved.states[1].height-.31)>.1);
-    await p.locator('#aperture-view-reset').click();assert.deepEqual((await check()).states,moved.states);
+    assert.equal(await p.locator('[id$="-view-reset"]').count(),0);
+    const beforeOrbit=await p.evaluate(()=>window.__apertureTest.camera.position.toArray());
+    await canvas.focus();await p.keyboard.press('ArrowLeft');
+    const orbited=await p.evaluate(()=>window.__apertureTest.camera.position.toArray());assert.notDeepEqual(orbited,beforeOrbit);
+    await canvas.dispatchEvent('wheel',{deltaY:-100,bubbles:true});
+    const zoomed=await p.evaluate(()=>window.__apertureTest.camera.position.toArray());assert.notDeepEqual(zoomed,orbited);assert.deepEqual((await check()).states,moved.states);
     await p.locator('#aperture-reset').click();assert.deepEqual((await check()).states,make([0,50,0]));
+    assert.deepEqual(await p.evaluate(()=>window.__apertureTest.camera.position.toArray()),zoomed);
   });
   await t.test('鍵盤調高低、五種尺寸及既有版面正常',async()=>{
     await p.locator('#aperture-offset').focus();await p.keyboard.press('Home');await check();await p.keyboard.press('End');await check();
     await p.locator('#aperture-reset').click();for(const width of [320,390,768,1024,1440]){await p.setViewportSize({width,height:1050});await check();assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));if(width===390)await shot('mobile');if(width===1440)await shot('desktop');}
-    assert.equal(await p.locator('.lesson-card').count(),6);assert.equal(await p.locator('#card-03 input').count(),1);assert.equal(await p.locator('#card-03 button').count(),5);
+    assert.equal(await p.locator('.lesson-card').count(),6);assert.equal(await p.locator('#card-03 input').count(),1);assert.equal(await p.locator('#card-03 button').count(),4);
   });
   await t.test('第二區開關、第六區計時與相鄰4.2入口回應回歸',async()=>{
     await p.bringToFront();await p.locator('#lamp-toggle').click();await expect(p.locator('#lamp-toggle')).toHaveAttribute('aria-pressed','false');await expect(p.locator('#night-feedback')).toContainText('關掉檯燈後');
