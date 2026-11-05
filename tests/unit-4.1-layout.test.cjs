@@ -7,7 +7,7 @@ const {chromium}=require('playwright');
 const {expect}=require('playwright/test');
 
 const root=path.resolve(__dirname,'..');
-const titles=['為什麼我們看得見東西？','今晚，哪些光讓小葵看得見？','光是怎麼前進的？','影子怎麼形成？','影子的大小如何改變？','光傳得有多快？'];
+const titles=['為什麼我們看得見東西？','今晚，哪些光讓小葵看得見？','光會自己繞路嗎？','牆上的影子，是怎麼冒出來的？','小小一顆球，為什麼影子這麼大？','光傳得有多快？'];
 const sizes=[[1440,900],[1366,768],[1024,768],[768,1024],[390,844],[320,740]];
 
 test('4.1：六區頂部標頭、滿寬內容及原有操作',{timeout:360000},async t=>{
