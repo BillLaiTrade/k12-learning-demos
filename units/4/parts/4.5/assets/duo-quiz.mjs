@@ -1,5 +1,5 @@
 import {LIGHTS,FILTERS,rgbCss} from './color-model.mjs';
-import {initialiseDuoProbe} from './duo-probe.mjs?v=duo-free-torches-20261104';
+import {initialiseDuoProbe} from './duo-probe.mjs?v=duo-desk-20261105';
 import {PAPER_TYPES,COLOUR_OPTIONS,TRANSMISSION_OPTIONS,REFLECTION_OPTIONS,INITIAL_SERIES,newQuestionSeries,challengeSignal,expectedAnswer,checkPrediction} from './duo-quiz-model.mjs?v=duo-series-20261104';
 
 const colourName=key=>COLOUR_OPTIONS.find(o=>o[0]===key)?.[1]||key;
@@ -17,8 +17,22 @@ export function challengeDiagram(q,signal,lit){
 }
 
 export function initialiseDuoQuiz(root){
+ if(root.dataset.ready==='true')return;
  const $=s=>root.querySelector(s),form=$('[data-quiz]'),feedback=$('[data-duo-feedback]');
  const probe=initialiseDuoProbe(root);
+ const viewButtons=[...root.querySelectorAll('[data-duo-view]')];
+ function showView(view,{focus=false,align=false}={}){
+  if(!['probe','challenge'].includes(view))return;
+  if(view==='challenge')probe.suspend();
+  root.dataset.view=view;
+  viewButtons.forEach(button=>{const active=button.dataset.duoView===view;button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;});
+  $('.duo-probe').hidden=view!=='probe';$('.duo-challenge').hidden=view!=='challenge';
+  const tab=$(`[data-duo-view="${view}"]`);if(focus)tab.focus({preventScroll:true});
+  if(align)$('.duo-workspace-tabs').scrollIntoView({block:'start',behavior:'auto'});
+  requestAnimationFrame(()=>dispatchEvent(new Event('resize')));
+ }
+ viewButtons.forEach(button=>{button.addEventListener('click',()=>showView(button.dataset.duoView));button.addEventListener('keydown',event=>{if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;event.preventDefault();const index=viewButtons.indexOf(button),next=event.key==='Home'?0:event.key==='End'?1:1-index;showView(viewButtons[next].dataset.duoView,{focus:true});});});
+ root.querySelectorAll('[data-duo-open]').forEach(button=>button.addEventListener('click',()=>showView(button.dataset.duoOpen,{focus:true,align:true})));
  const attempt=question=>({question,answer:{colour:'',transmission:'',reflection:''},tried:false});
  let attempts=INITIAL_SERIES.map(attempt),current=0,question=attempts[0].question,lit=false,studio=null,studioLoading=false,threeFailed=false;
  const readAnswer=()=>({colour:form.querySelector('[name=appearance]:checked')?.value||'',transmission:form.elements.transmission.value,reflection:form.elements.reflection.value});
@@ -45,7 +59,8 @@ export function initialiseDuoQuiz(root){
  }
  function fallback(){threeFailed=true;studio?.dispose();studio=null;$('[data-challenge-canvas]').hidden=true;$('[data-duo-fallback]').hidden=false;$('[data-scene-help]').textContent='目前以平面光路示意顯示；可繼續作答、開燈與換題。';root.dataset.renderer='diagram';$('[data-scene-labels]').hidden=true;}
  async function loadStudio(){if(studioLoading||threeFailed||studio)return;studioLoading=true;try{const module=await import('./duo-quiz-studio.mjs?v=duo-orbit-20261104');studio=module.createChallengeStudio($('[data-challenge-canvas]'),{unavailable:fallback,onLabels:placeLabels});$('[data-challenge-canvas]').hidden=false;$('[data-duo-fallback]').hidden=true;root.dataset.renderer='three';studio.update(question,challengeSignal(question),lit);dispatchEvent(new Event('resize'));}catch{fallback();}}
- function invalidate(){const state=attempts[current];state.answer=readAnswer();state.tried=false;feedback.hidden=true;feedback.replaceChildren();delete form.dataset.correct;form.querySelectorAll('[aria-invalid]').forEach(e=>e.removeAttribute('aria-invalid'));lit=false;updateScene();progress();}
+ function clearExplanation(){const explanation=$('[data-duo-explanation]');explanation.hidden=true;explanation.open=false;$('[data-duo-reason]').textContent='';}
+ function invalidate(){const state=attempts[current];state.answer=readAnswer();state.tried=false;feedback.hidden=true;feedback.replaceChildren();clearExplanation();$('[data-feedback-placeholder]').hidden=false;delete form.dataset.correct;form.querySelectorAll('[aria-invalid]').forEach(e=>e.removeAttribute('aria-invalid'));lit=false;updateScene();progress();}
  function renderQuestion(){
   question=attempts[current].question;
   root.dataset.question=JSON.stringify(question);$('[data-question-lights]').textContent=question.lights.map(key=>LIGHTS[key].name).join(' ＋ ');$('[data-question-filter]').textContent=question.filter==='clear'?'不放色片':FILTERS[question.filter].name;$('[data-filter-route]').textContent=question.filter==='clear'?'兩束光直接照到紙張':'兩束光都先通過這片色片';question.lights.forEach((key,i)=>{$(`[data-question-lamp="${i}"]`).textContent=LIGHTS[key].name;$(`[data-scene-label="${i?'b':'a'}"]`).textContent=`${i?'B':'A'} ${LIGHTS[key].name}`;});$('[data-scene-label=filter]').textContent=`② ${FILTERS[question.filter].name}`;$('[data-scene-label=paper]').textContent=`③ ${PAPER_TYPES[question.paper].name}`;$('[data-question-paper]').textContent=PAPER_TYPES[question.paper].name;
@@ -56,28 +71,28 @@ export function initialiseDuoQuiz(root){
  }
  const colours=$('[data-colour-options]');COLOUR_OPTIONS.forEach(([key,name,swatch])=>{const label=document.createElement('label');label.className='duo-answer';const input=document.createElement('input');input.type='radio';input.name='appearance';input.value=key;input.required=true;const dot=document.createElement('i');dot.style.backgroundColor=swatch;dot.setAttribute('aria-hidden','true');label.append(input,dot,document.createTextNode(name));colours.append(label);});
  for(const [selector,options]of[['[name=transmission]',TRANSMISSION_OPTIONS],['[name=reflection]',REFLECTION_OPTIONS]])for(const [value,label]of options){const option=document.createElement('option');option.value=value;option.textContent=label;$(selector).append(option);}
- $('[data-reproduce]').addEventListener('click',()=>probe.reproduce(question.lights));
- function selectQuestion(index){current=index;renderQuestion();$('[data-challenge-question]').focus({preventScroll:true});$('.duo-task').scrollIntoView({block:'start',behavior:'auto'});}
+ $('[data-reproduce]').addEventListener('click',()=>{showView('probe',{align:true});probe.reproduce(question.lights);});
+ function selectQuestion(index){if(index<0||index>=attempts.length)return;current=index;renderQuestion();$('[data-challenge-question]').focus({preventScroll:true});const r=$('.duo-task').getBoundingClientRect();if(r.top<0||r.bottom>innerHeight)$('.duo-workspace-tabs').scrollIntoView({block:'start',behavior:'auto'});}
  root.querySelectorAll('[data-question-tab]').forEach(button=>button.addEventListener('click',()=>selectQuestion(Number(button.dataset.questionTab))));
  $('[data-prev-question]').addEventListener('click',()=>selectQuestion(current-1));
  $('[data-next-question]').addEventListener('click',()=>selectQuestion(current+1));
  $('[data-new-set]').addEventListener('click',()=>{attempts=newQuestionSeries(Math.random,attempts.map(s=>s.question)).map(attempt);selectQuestion(0);});
  form.addEventListener('change',invalidate);
  function renderFeedback(){
-  const state=attempts[current],result=checkPrediction(question,state.answer);form.querySelectorAll('[aria-invalid]').forEach(e=>e.removeAttribute('aria-invalid'));delete form.dataset.correct;feedback.hidden=!state.tried;feedback.replaceChildren();lit=state.tried&&!result.missing.length;updateScene();
+  const state=attempts[current],result=checkPrediction(question,state.answer);form.querySelectorAll('[aria-invalid]').forEach(e=>e.removeAttribute('aria-invalid'));delete form.dataset.correct;feedback.hidden=!state.tried;feedback.replaceChildren();clearExplanation();$('[data-feedback-placeholder]').hidden=state.tried;lit=state.tried&&!result.missing.length;updateScene();
   if(!state.tried)return result;
   if(result.missing.length){feedback.dataset.kind='missing';feedback.textContent='請先預測外觀，並完成透射與反射的兩項依據，再開燈驗證。';const targets={colour:form.querySelector('[name=appearance]'),transmission:form.elements.transmission,reflection:form.elements.reflection};for(const key of result.missing)targets[key].setAttribute('aria-invalid','true');return result;}
   form.dataset.correct=String(result.correct);feedback.dataset.kind=result.correct?'correct':'retry';const expected=expectedAnswer(question);
   const lead=document.createElement('strong');lead.textContent=result.correct?'外觀與兩項依據都符合這次觀察。':'開燈觀察後，再對照你的推論。';const detail=document.createElement('p');detail.textContent=`外觀：${result.fields.colour?'符合':'再檢查'}；到達紙張的色光：${result.fields.transmission?'符合':'再檢查'}；反射情況：${result.fields.reflection?'符合':'再檢查'}。`;
-  const reason=document.createElement('p');reason.textContent=`${question.lights.map(key=>LIGHTS[key].name).join('與')}照過來，${question.filter==='clear'?'直接到達紙張':`經${FILTERS[question.filter].name}後主要透過${TRANSMISSION_OPTIONS.find(o=>o[0]===expected.transmission)[1]}`}；到達${PAPER_TYPES[question.paper].name}的光${expected.reflection==='little'?'只有極少部分被反射':REFLECTION_OPTIONS.find(o=>o[0]===expected.reflection)[1]}，所以看起來${expected.colour==='dark'?'很暗':'呈'+colourName(expected.colour)}。可回上方試光，再修改答案。`;
-  feedback.replaceChildren(lead,detail,reason);return result;
+  $('[data-duo-reason]').textContent=`${question.lights.map(key=>LIGHTS[key].name).join('與')}照過來，${question.filter==='clear'?'直接到達紙張':`經${FILTERS[question.filter].name}後主要透過${TRANSMISSION_OPTIONS.find(o=>o[0]===expected.transmission)[1]}`}；到達${PAPER_TYPES[question.paper].name}的光${expected.reflection==='little'?'只有極少部分被反射':REFLECTION_OPTIONS.find(o=>o[0]===expected.reflection)[1]}，所以看起來${expected.colour==='dark'?'很暗':'呈'+colourName(expected.colour)}。可切到自由試光查證，再修改答案。`;
+  $('[data-duo-explanation]').hidden=false;feedback.replaceChildren(lead,detail);return result;
  }
  form.addEventListener('submit',e=>{
   e.preventDefault();const state=attempts[current];state.answer=readAnswer();state.tried=true;const result=renderFeedback();progress();
   if(result.missing.length){const targets={colour:form.querySelector('[name=appearance]'),transmission:form.elements.transmission,reflection:form.elements.reflection};targets[result.missing[0]].focus();return;}
   requestAnimationFrame(()=>{const r=feedback.getBoundingClientRect();if(r.bottom>innerHeight-12||r.top<100)feedback.scrollIntoView({block:'center',behavior:'auto'});});
  });
- root.querySelectorAll('[data-quiz-pending]').forEach(e=>e.disabled=false);$('[data-duo-load-note]').hidden=true;root.dataset.ready=form.dataset.ready='true';root.dataset.renderer='diagram';renderQuestion();
+ root.querySelectorAll('[data-quiz-pending]').forEach(e=>e.disabled=false);$('[data-duo-load-note]').hidden=true;root.dataset.ready=form.dataset.ready='true';root.dataset.renderer='diagram';renderQuestion();showView('probe');
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){observer.disconnect();loadStudio();}},{rootMargin:'120px'});observer.observe($('[data-challenge-stage]'));
  addEventListener('pagehide',event=>{if(!event.persisted){probe.dispose();studio?.dispose();}},{once:true});
 }
