@@ -1,0 +1,10 @@
+{
+  "baseline": "93d238f8386dce9d60f9145c961052e7203d1560",
+  "JS_only_fixed_name_column_and_removed_conditional_shift": true,
+  "HTML_only_module_version": true,
+  "CSS_fonts_nameplates_materials_angles_light_paths_models_and_grading_unchanged": true,
+  "changed_course_files": [
+    "units/4/parts/4.3/assets/layer-speed-quiz.mjs",
+    "units/4/parts/4.3/index.html"
+  ]
+}
