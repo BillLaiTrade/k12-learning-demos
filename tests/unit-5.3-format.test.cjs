@@ -43,11 +43,11 @@ test('5.3 共通格式、導覽連動與原有活動回歸', {timeout:180000}, a
     assert.ok(entry.includes(`<h3 class="part-title">${h1}</h3>`));
   });
 
-  await t.test('六個導覽逐字對應正確區塊；標題更名即時連動',async()=>{
+  await t.test('五區導覽標題連動；小測固定名稱、共通樣式及活動說明同步',async()=>{
     const links=page.locator('.route a');assert.equal(await links.count(),6);
     for(let i=0;i<6;i++){
       const link=links.nth(i),hash=await link.getAttribute('href');
-      assert.equal(await link.locator('span').textContent(),await page.locator(`${hash} h2`).textContent());
+      assert.equal(await link.locator('span').textContent(),i===5?'單元小測':await page.locator(`${hash} h2`).textContent());
       await link.click();assert.equal(new URL(page.url()).hash,hash);
       const top=await page.locator(hash).evaluate(n=>n.getBoundingClientRect().top);assert.ok(top>=0&&top<160);
       await page.waitForFunction(hash=>document.querySelector(`.route a[href="${hash}"]`).getAttribute('aria-current')==='step',hash);
@@ -56,10 +56,27 @@ test('5.3 共通格式、導覽連動與原有活動回歸', {timeout:180000}, a
       const heading=page.locator(`#${id}`),original=await heading.textContent();
       const target=await heading.evaluate(n=>n.closest('section').id);
       await heading.evaluate(n=>{n.textContent='更名連動檢查：只有這裡改文字';});
-      await page.waitForFunction(target=>document.querySelector(`.route a[href="#${target}"] span`).textContent==='更名連動檢查：只有這裡改文字',target);
+      await page.waitForFunction(target=>{
+        const link=document.querySelector(`.route a[href="#${target}"]`);
+        return target==='unit-quiz'?link.querySelector('span').textContent==='單元小測'&&link.getAttribute('aria-label')==='單元小測：更名連動檢查：只有這裡改文字':link.querySelector('span').textContent==='更名連動檢查：只有這裡改文字';
+      },target);
       await heading.evaluate((n,text)=>{n.textContent=text;},original);
-      await page.waitForFunction(({target,original})=>document.querySelector(`.route a[href="#${target}"] span`).textContent===original,{target,original});
+      await page.waitForFunction(({target,original})=>{
+        const link=document.querySelector(`.route a[href="#${target}"]`);
+        return target==='unit-quiz'?link.title===original&&link.querySelector('span').textContent==='單元小測':link.querySelector('span').textContent===original;
+      },{target,original});
     }
+    const quiz=page.locator('.quiz-nav');
+    assert.equal(await page.locator('#quiz-title').textContent(),'幫小葵準備暖暖水袋');
+    await page.locator('.route a').first().click();
+    await page.waitForFunction(()=>!document.querySelector('.quiz-nav').hasAttribute('aria-current'));
+    const style=await quiz.evaluate(n=>{const s=getComputedStyle(n),b=getComputedStyle(n.querySelector('b'));return{font:s.fontSize,weight:s.fontWeight,padding:s.padding,margin:s.marginTop,color:s.color,bg:b.backgroundColor,iconWidth:b.width,iconHeight:b.height};});
+    assert.deepEqual(style,{font:'14.08px',weight:'400',padding:'14px 11px 10px',margin:'8px',color:'rgb(121, 91, 32)',bg:'rgb(245, 233, 201)',iconWidth:'24px',iconHeight:'24px'});
+    if(process.env.UNIT53_CAPTURE_DIR){await fs.mkdir(process.env.UNIT53_CAPTURE_DIR,{recursive:true});await page.locator('.route').screenshot({path:path.join(process.env.UNIT53_CAPTURE_DIR,'quiz-nav.png')});}
+    await quiz.click();
+    await page.waitForFunction(()=>document.querySelector('.quiz-nav').getAttribute('aria-current')==='step');
+    const active=await quiz.evaluate(n=>({background:getComputedStyle(n).backgroundColor,border:getComputedStyle(n).borderLeftColor}));
+    assert.deepEqual(active,{background:'rgb(248, 240, 221)',border:'rgb(192, 145, 57)'});
   });
 
   await t.test('五區均為上標頭下內容；三種桌機與兩種窄版可完整閱讀',async()=>{

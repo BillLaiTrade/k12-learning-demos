@@ -18,3 +18,8 @@
 /* 長導覽標題完整呈現；窄版可在橫向導覽內自然換行。 */
 .route-inner a span{min-width:0;overflow-wrap:anywhere}
 @media(max-width:760px){.route-inner a span{max-width:14rem;white-space:normal}.route-inner a b{flex-shrink:0}.route-inner a{align-items:flex-start}}
+/* 小測入口沿用4.1的固定名稱與導覽層級，活動名稱留在內容標頭。 */
+.route .route-inner a.quiz-nav{margin-top:8px;padding-top:14px;border-top:1px solid var(--line);color:#795b20;font-weight:400}
+.route .route-inner a.quiz-nav b{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#f5e9c9;color:#795b20}
+.route .route-inner a.quiz-nav[aria-current=step]{border-left-color:#c09139;background:#f8f0dd;color:#795b20;font-weight:750;box-shadow:none}
+@media(max-width:760px){.route .route-inner a.quiz-nav{margin:0;padding:7px 10px;border:1px solid var(--line)}.route .route-inner a.quiz-nav[aria-current=step]{border-color:#c09139}}
