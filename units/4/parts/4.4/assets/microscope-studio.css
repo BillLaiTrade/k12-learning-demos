@@ -60,3 +60,16 @@
  .micro-steps button span { display:block; }
  .micro-viewer h3 { font-size:.85rem; }
 }
+
+/* Keep the diagram quiet: a real cutaway model and three location labels. */
+.micro-stage { position:relative; isolation:isolate; background:radial-gradient(ellipse at 48% 42%,#6d8069,#405c4b 70%); }
+.micro-stage canvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.micro-scene { position:relative; z-index:1; }
+.micro-lab[data-micro-render=fallback] .micro-stage canvas { display:none; }
+.micro-scene .micro-label { font-size:24px; font-weight:650; }
+.micro-scene .micro-leader { stroke:#d0d8c0; stroke-width:1.2; }
+.micro-key[hidden] { display:none; }
+.micro-key { padding:10px 15px; border-top:1px solid #82917c; }
+.micro-tools { background:#405a49; border-bottom:1px solid #758971; }
+.micro-viewer { gap:17px; }
+.micro-view-copy { color:#617153; }
