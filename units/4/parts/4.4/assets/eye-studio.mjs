@@ -1,4 +1,4 @@
-import {createEyeModel} from './eye-model.mjs?v=20261105-correction1';
+import {createEyeModel} from './eye-model.mjs?v=20261105-correction2';
 import {EYE,initialEye,changeEye,eyeState,accommodationFor} from './eye-optics.mjs?v=20261104-eye1';
 const root=document.querySelector('[data-eye-lab]');
 if(root){

@@ -36,3 +36,5 @@
 }
 
 .correction-lab .eye-image-copy { white-space:pre-line; }
+
+.eye-scene .correction-distance-label { font-size:15px; font-weight:500; fill:#61765b; }
