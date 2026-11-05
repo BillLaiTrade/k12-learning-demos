@@ -102,9 +102,36 @@
 /* Text lives outside the projected SVG, so its glyphs never scale with the scene. */
 .micro-labels { position:absolute; inset:0; z-index:2; pointer-events:none; }
 .micro-labels .micro-label { position:absolute; transform:translate(-100%,-50%); padding:3px 10px; border:1px solid #c1cbae; border-radius:5px; background:#fff9e6; color:#344b37; font-size:14px; font-weight:650; line-height:1.4; white-space:nowrap; }
-.micro-labels .micro-label::after { content:''; position:absolute; left:100%; top:50%; width:18px; border-top:1px solid #d0d8c0; }
 .micro-focus-label { position:absolute; transform:translateY(-50%); color:#f2d89e; font-size:13px; line-height:1.4; }
 @container (max-width:640px) {
  .micro-labels .micro-label { padding:2px 7px; font-size:12px; }
  .micro-focus-label { font-size:12px; }
 }
+
+.micro-detail-title { position:absolute; top:12px; left:12px; z-index:4; padding:5px 10px; background:#fff8e5; border:1px solid #b8c7a5; border-radius:16px; font-size:.8rem; font-weight:700; }
+.micro-overview { position:absolute; top:12px; right:12px; z-index:4; min-height:32px; padding:5px 9px; border-color:#c1cfb2; border-radius:7px; background:#fffbed; color:#31553d; font-size:.75rem; }
+.micro-map { position:absolute; top:56px; left:12px; z-index:3; width:84px; margin:0; padding:5px; border:1px solid #abbfa0; border-radius:8px; background:#edf1e3; }
+.micro-map-picture { position:relative; aspect-ratio:760 / 780; overflow:hidden; border-radius:4px; }
+.micro-map img { position:absolute; inset:0; display:block; width:100%; height:100%; }
+.micro-map svg { position:absolute; inset:0; width:100%; height:100%; }
+.micro-map rect { fill:#f3d17822; stroke:#e0b84d; stroke-width:14; rx:12; }
+.micro-map figcaption { font-size:11px; text-align:center; line-height:1.5; margin-top:4px; }
+.micro-labels button.micro-label { min-height:28px; pointer-events:auto; cursor:zoom-in; font-family:inherit; }
+.micro-labels button.micro-label:hover { background:#fff0c7; border-color:#d1ae55; }
+.micro-labels .micro-pick { position:absolute; width:44px; height:44px; transform:translate(-50%,-50%); min-height:44px; padding:0; border:0; border-radius:50%; background:transparent; box-shadow:none; pointer-events:auto; cursor:zoom-in; }
+.micro-labels .micro-pick:hover { background:#f3d48322; }
+.micro-stage [hidden] { display:none!important; }
+@container (max-width:640px) {
+ .micro-detail-title { top:8px; left:8px; font-size:.72rem; padding:4px 7px; }
+ .micro-overview { top:8px; right:8px; min-height:29px; font-size:.68rem; padding:4px 6px; }
+ .micro-map { top:46px; left:8px; width:59px; padding:4px; }
+
+ .micro-map figcaption { font-size:9px; }
+}
+
+.micro-labels .micro-label-right { transform:translateY(-50%); }
+.micro-connector { position:absolute; width:18px; border-top:1px solid #d0d8c0; }
+
+.micro-map .micro-map-fallback { display:none; }
+.micro-lab[data-micro-render=fallback] .micro-map-fallback { display:block; }
+.micro-lab[data-micro-render=fallback] .micro-map img { display:none; }
