@@ -115,7 +115,7 @@ test('water lab functional and visual checks in Chromium',{timeout:150000},async
     assert.notEqual(await page.locator('#water-lab-cube-a').getAttribute('transform'),a);
     const now=await state();assert.ok(now.water<start.water);assert.ok(now.probe<start.probe);assert.ok(now.probe>now.water);
     assert.equal(now.heating,false);await sync();
-    assert.match(await page.locator('#water-lab-feedback').textContent(),/液柱下降/);
+    assert.match(await page.locator('#water-lab-feedback').textContent(),/液柱逐漸下降/);
     await page.clock.runFor(6500);
     const floating=await state();assert.ok(floating.ice>12);assert.ok(floating.water<now.water);
     const cube=await page.locator('#water-lab-cube-a').getAttribute('transform');

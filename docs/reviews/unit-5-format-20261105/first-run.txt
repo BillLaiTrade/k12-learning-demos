@@ -1,0 +1,168 @@
+▶ dual-scale temperature lesson in Chromium
+  ✔ starts with a general formula, number and unit controls, existing avatars and no range input (267.312187ms)
+  ✔ independent scales include the -40 intersection and have legible nonoverlapping labels (56.21875ms)
+  ✔ all five presets synchronize the intersection, readings and selected state (374.01681ms)
+  ✔ dragging the green line updates all readings, captures outside moves and clamps the range (626.204266ms)
+  ✔ green line supports keyboard adjustment and leaves unrelated apparatus clicks inert (347.298999ms)
+  ✔ warming and cooling support click, keyboard, hold and release without extra steps (1600.822636ms)
+  ✔ number and unit submission handles both directions, decimals and rounded approximations (636.868807ms)
+  ✔ invalid or out-of-range input leaves the instrument unchanged and can recover (856.187382ms)
+  ✔ responsive desktop and mobile layouts keep the complete new controls within the panel (2993.690485ms)
+  ✔ mobile touch supports press-and-hold, unit selection and numeric submission (2358.190496ms)
+✔ dual-scale temperature lesson in Chromium (11414.958624ms)
+✔ thermometer quiz model preserves calibration and independent feedback (2.366017ms)
+▶ physical thermometer assessment in Chromium
+  ✔ approved initial composition has real portraits, two tray objects and no identifying units (850.698096ms)
+  ✔ real drag can measure B first, blocks a second instrument and preserves B when returned (8802.705212ms)
+  ✔ engraved scales use different spacing while the same water gives consistent readings (7733.075705ms)
+  ✔ feedback distinguishes incomplete work, early reading, wrong units and wrong viewpoint (4971.202806ms)
+  ✔ cancel, invalid drop and keyboard pickup leave instruments and operation usable (3665.805007ms)
+  ✔ new challenge cancels active work and clears both drafts without changing teaching controls (13680.402427ms)
+  ✔ phone touch can take a physical object, return it and cancel a gesture (4360.302796ms)
+  ✔ desktop, tablet and phone layouts stay within the viewport and load every resource (620.354812ms)
+✔ physical thermometer assessment in Chromium (45297.600667ms)
+✔ temperature model preserves physical teaching constraints (3.065056ms)
+▶ water lab functional and visual checks in Chromium
+  ✔ matches approved composition and starts with safe fixed apparatus (187.703216ms)
+  ✔ both thermometer views have calibrated one-degree marks and numbered Celsius scales (74.83597ms)
+  ✖ ice falls, floats, cools water and lowers both liquid views (393.423042ms)
+  ✖ heater warms water continuously and can stop independently of the probe lag (20741.349983ms)
+  ✖ ice stops the heater and reset clears all animation and state (65.455191ms)
+  ✔ keyboard and reduced motion preferences keep all operations usable (254.270598ms)
+  ✔ repeated controls remain bounded at both temperature limits (23299.171856ms)
+  ✔ desktop and narrow layouts retain controls, annotations and insets without overlap (630.952654ms)
+✖ water lab functional and visual checks in Chromium (46640.275893ms)
+▶ 5.1 temperature lesson in a real browser
+  ✔ loads the complete lesson, images, and navigation (196.075945ms)
+  ✔ observer perspective changes while the physical meniscus and one-degree marks stay fixed (168.232624ms)
+  ✖ illustrated apparatus and clear labels match the existing lab and stay visible at all views (17.442446ms)
+  ✔ dragging the eye is continuous, clamped, and supports cancel and keyboard (484.073729ms)
+  ✔ mobile touch moves the eye and leaves scrolling available outside the handle (1607.921128ms)
+  ✔ assessment uses physical instruments and the real shared character portraits (40.464993ms)
+  ✔ fits desktop and narrow windows and links back to the unit (453.545936ms)
+✖ 5.1 temperature lesson in a real browser (3806.557611ms)
+▶ 5.2 equilibrium: ambient exchange, faster contact and dragging
+  ✔ observation waits until the block is seen, with a visible room temperature (162.472585ms)
+  ✔ separated blocks drift towards the room and can be paused (1443.294574ms)
+  ✔ contact is faster than room exchange and does not restart the readings (1537.814044ms)
+  ✔ separating still changes temperatures; recontact continues rather than resets (2802.921878ms)
+  ✔ near equal block temperatures are not full room equilibrium (7214.243859ms)
+  ✔ only room equilibrium stops the model at 25°C and survives recontact (35168.753684ms)
+  ✔ drags, collision limits, instrument labels and overlay hit areas still work (1953.109836ms)
+  ✔ pause, backgrounding and reset keep the physical state continuous (722.173327ms)
+  ✔ desktop and laptop retain readable drag controls and other blocks stay independent (2503.331611ms)
+  ✔ real touch input and real-time flow work with both motion preferences (4912.862525ms)
+✔ 5.2 equilibrium: ambient exchange, faster contact and dragging (59269.737487ms)
+▶ 5.2 conduction: cookware scene, material drag and live readings
+  ✔ waits for explicit heating after becoming visible and uses the existing real avatars (243.939638ms)
+  ✔ pan, joint and distal LCDs follow the same model and correct heating order (1926.824939ms)
+  ✔ pause freezes actual readouts and flow, then resume continues (261.522126ms)
+  ✔ valid dragging swaps the whole photo and joint inset and restarts fair comparison (4209.06102ms)
+  ✔ invalid or cancelled drag does not switch material or leave a ghost (401.965483ms)
+  ✔ click and keyboard are usable alternatives; reset keeps chosen material (279.380137ms)
+  ✔ steady temperatures retain a gradient and continuous transfer, never labelled equilibrium (11136.776541ms)
+  ✔ background pauses without resetting, and other learning blocks stay independent (760.066561ms)
+  ✔ desktop and laptop layout, sensor labels and assets fit the scene (482.737412ms)
+  ✔ real-time movement and real touch work under both motion preferences (6350.794463ms)
+✔ 5.2 conduction: cookware scene, material drag and live readings (26914.658143ms)
+▶ 5.2 first block: three environments and in-water thermometers
+  ✔ starts with three clean scenes, pending observations and authentic portraits (167.736315ms)
+  ✔ matching scales, immersed bulbs and synchronized liquid/readout levels (1226.661418ms)
+  ✔ 25°C: A releases heat and B absorbs heat; pause freezes readouts (1248.75285ms)
+  ✔ 5°C: both release heat and scene/captions change together (1209.977252ms)
+  ✔ 70°C: even the initially hot cup absorbs heat; both arrows point inward (1183.719141ms)
+  ✔ copper paths cross cup boundaries and pulses move, pause and resume with the model (5896.892192ms)
+  ✔ reset and switching environment during playback cancel old observations (616.076898ms)
+  ✔ same displayed temperature removes heat flow and replay starts cleanly (9466.328589ms)
+  ✔ keyboard and reduced motion preserve all basic controls (600.662278ms)
+  ✔ in-scene instruments and controls fit desktop, tablet and phone widths (1206.755284ms)
+  ✔ real rendered flow keeps moving with either motion preference and freezes only when paused (3810.922484ms)
+  ✔ real mobile taps change scene, play, pause and restart (714.411461ms)
+  ✔ remaining learning blocks and quiz still operate independently (663.674436ms)
+✔ 5.2 first block: three environments and in-water thermometers (29117.404095ms)
+ℹ tests 75
+ℹ suites 0
+ℹ pass 69
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 115415.820163
+
+✖ failing tests:
+
+test at tests/unit-5.1-water-lab.test.cjs:107:11
+✖ ice falls, floats, cools water and lowers both liquid views (393.423042ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /液柱下降/. Input:
+  
+  '水正在冷卻，液柱逐漸下降。'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1-water-lab.test.cjs:118:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1-water-lab.test.cjs:107:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '水正在冷卻，液柱逐漸下降。',
+    expected: /液柱下降/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.1-water-lab.test.cjs:141:11
+✖ heater warms water continuously and can stop independently of the probe lag (20741.349983ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(middle.water>start.water)
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1-water-lab.test.cjs:146:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1-water-lab.test.cjs:141:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.1-water-lab.test.cjs:152:11
+✖ ice stops the heater and reset clears all animation and state (65.455191ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1-water-lab.test.cjs:153:31)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1-water-lab.test.cjs:152:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.1.test.cjs:87:11
+✖ illustrated apparatus and clear labels match the existing lab and stay visible at all views (17.442446ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /液面頂端/. Input:
+  
+  '讀取位置'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1.test.cjs:94:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.1.test.cjs:87:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '讀取位置',
+    expected: /液面頂端/,
+    operator: 'match',
+    diff: 'simple'
+  }

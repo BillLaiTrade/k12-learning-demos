@@ -1,0 +1,12 @@
+{
+  "5.1": {
+    "teaching_bodies_preserved": 4,
+    "script_tags_preserved": true,
+    "asset_files_changed": false
+  },
+  "5.2": {
+    "teaching_bodies_preserved": 6,
+    "script_tags_preserved": true,
+    "asset_files_changed": false
+  }
+}
