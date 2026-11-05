@@ -1,0 +1,96 @@
+▶ 5.2 convection: fluid movement, mode changes and observation lifecycle
+  ✔ starts with a real distinction between water and a room, without a premature conclusion (193.710649ms)
+  ✔ both sides rise near the source, move continuously and use the same relative-warmth key (10913.264275ms)
+  ✔ photographic scenes keep animated arrows in the fluid and not inside the heater (84.153963ms)
+  ✔ pause freezes actual rendered positions and screenshots; resume preserves progress (1886.080715ms)
+  ✔ switching the fluid cancels old animation, clears the discovery and resets observations (576.427633ms)
+  ✔ clicking each appliance starts or resumes without toggling off or multiplying animation loops (3257.937257ms)
+  ✔ keyboard, rapid actions and background interruptions leave no delayed restart (409.526236ms)
+  ✔ radiation, insulation and the integrated quiz still work independently (1592.290167ms)
+  ✔ all supported viewports keep explanatory text, controls and the actual fluid scene readable (558.901444ms)
+  ✔ a failed image can be retried, and a late response cannot reset a different running mode (1651.807245ms)
+  ✔ real frames keep moving with both motion preferences and touch can pause/reset (13979.878522ms)
+✔ 5.2 convection: fluid movement, mode changes and observation lifecycle (36757.320091ms)
+▶ 5.2 radiation: one energy path, surface outcomes and conditional warming
+  ✔ manual start is required and the concept uses a single radiation-energy stream (219.454349ms)
+  ✔ travel precedes surface reflection/absorption, and heating begins only after absorption (1762.456066ms)
+  ✖ pause freezes the whole rendered illustration and resume keeps the same progress (680.540091ms)
+  ✖ repeated source clicks cannot stop the demo or multiply animation loops; reset clears all results (2514.353334ms)
+  ✔ keyboard and background interruptions are consistent and do not auto-resume (246.661355ms)
+  ✔ the reflection and absorption paths are distinct outcomes at the same surface point (11.385783ms)
+  ✔ insulation, convection and quiz remain independent after extracting radiation from the shared controller (2285.926733ms)
+  ✖ desktop, laptop and narrow layouts keep controls, condition and actual scenes in view (524.217659ms)
+  ✔ either photo may fail and retry without premature playback or loss of the other successful photo (2873.249932ms)
+  ✔ a late photo response after reset leaves the observation stopped at its beginning (1362.212508ms)
+  ✔ real touch under both motion preferences starts moving rays and pauses/resets actual frames (7175.586147ms)
+✖ 5.2 radiation: one energy path, surface outcomes and conditional warming (21436.171734ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 20
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37170.880517
+
+✖ failing tests:
+
+test at tests/unit-5.2-radiation.test.cjs:30:10
+✖ pause freezes the whole rendered illustration and resume keeps the same progress (680.540091ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-radiation.test.cjs:32:80)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-radiation.test.cjs:30:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.2-radiation.test.cjs:36:10
+✖ repeated source clicks cannot stop the demo or multiply animation loops; reset clears all results (2514.353334ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'warming'
+  - 'observed'
+  
+      at toStage (/workspace/k12-learning-demos/tests/unit-5.2-radiation.test.cjs:15:118)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-radiation.test.cjs:38:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-radiation.test.cjs:36:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'warming',
+    expected: 'observed',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.2-radiation.test.cjs:56:10
+✖ desktop, laptop and narrow layouts keep controls, condition and actual scenes in view (524.217659ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok((await page.locator('#radiation-ground').boundingBox()).height>=60)
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-radiation.test.cjs:61:89)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-radiation.test.cjs:56:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

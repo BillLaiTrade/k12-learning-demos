@@ -1619,3 +1619,11 @@ MOON_CAPTURE預設/tmp/unit41-reflection-play，保存雙視窗與整區截圖�
 新圖解以實際SVG路徑與表面輪廓獨立驗證三組入射／反射端點、相同入射方向、局部法向反射公式、反射角、方向分布及不穿過相鄰表面。播放／重播、減少動態、與3D狀態互不影響、無JavaScript完整靜態SVG、無WebGL仍可播放圖解均涵蓋。`surface-rays.json`保存實際SVG幾何，`stage-*`與`explanation-*`分別保存主畫面與輔助圖。
 
 整頁回歸仍使用`CHROMIUM_PATH=/usr/bin/chromium node --test --test-skip-pattern='入口、|潛望鏡素材' tests/unit-4.2-completion.test.cjs`，驗證導覽、實際燈具點擊與拖曳、第四區及WebGL備援。
+
+## 5.2 第五區：輻射、地表反射／吸收與定性受熱
+
+```bash
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-radiation.test.cjs
+```
+
+12項（含外層）檢查同一輻射能量路徑、手動開始／點太陽、先到達再吸收後揭露曲線、實際流光及曲線暫停像素、停續／重來、重複啟動防護、鍵盤／背景中斷、兩照片分別失敗重試與延遲載入、七種視窗、390／320px兩種動態偏好真實觸控，以及保溫、對流與原小測獨立運作。`RADIATION_LAB_URL`可指定公開網址，未設定則啟動本機伺服器。曲線不含實測溫度或時間刻度，不檢驗虛構地球溫度公式；科學條件及來源見本輪決策與review。前區回歸同步移除舊遮擋按鈕斷言，改查新停續／重來。

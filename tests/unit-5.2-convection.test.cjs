@@ -84,7 +84,7 @@ test('5.2 convection: fluid movement, mode changes and observation lifecycle',{t
  await t.test('radiation, insulation and the integrated quiz still work independently',async()=>{
   await page.locator('#radiation-play').click();await page.clock.runFor(400);const ray=await page.locator('#radiation-rays').getAttribute('stroke-dashoffset');
   await play.click();await reset.click();await page.clock.runFor(400);assert.notEqual(await page.locator('#radiation-rays').getAttribute('stroke-dashoffset'),ray);
-  await page.locator('#radiation-shield-toggle').click();assert.equal(await page.locator('#radiation-shield').isVisible(),true);await page.locator('#radiation-reset').click();
+  await page.locator('#radiation-play').click();const heldRay=await page.locator('#radiation-rays').getAttribute('stroke-dashoffset');await page.clock.runFor(200);assert.equal(await page.locator('#radiation-rays').getAttribute('stroke-dashoffset'),heldRay);await page.locator('#radiation-reset').click();
   await page.locator('#insulation-wall').check();await page.locator('#insulation-play').click();await page.clock.runFor(1800);
   const base=parseFloat(await page.locator('#insulation-base-temp').textContent()),design=parseFloat(await page.locator('#insulation-design-temp').textContent());assert.ok(design>base);await page.locator('#insulation-reset').click();
   await page.locator('#heat-quiz button[type=submit]').click();assert.match(await page.locator('#heat-quiz-result').textContent(),/先完成/);
