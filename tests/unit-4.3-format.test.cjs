@@ -37,6 +37,12 @@ test('4.3 shared lesson format keeps navigation and content usable',{timeout:900
   assert.equal(await page.locator('.brand-row .crumb').innerText(),'國二上・自然科學');
   const ids=await page.locator('[id]').evaluateAll(es=>es.map(e=>e.id));assert.equal(ids.length,new Set(ids).size);
   assert.equal(await page.locator('meta[property="og:image"]').count(),1);
+  for(let i=1;i<=6;i++)assert.equal(await page.locator(`.route a[href="#s${i}"] span`).textContent(),(await page.locator(`#heading-${i}`).textContent()).trim());
+  const originalHeading=await page.locator('#heading-3').textContent();
+  await page.locator('#heading-3').evaluate(e=>e.textContent='導覽連動測試');
+  await page.waitForFunction(()=>document.querySelector('.route a[href="#s3"] span').textContent==='導覽連動測試');
+  await page.locator('#heading-3').evaluate((e,text)=>e.textContent=text,originalHeading);
+  await page.waitForFunction(text=>document.querySelector('.route a[href="#s3"] span').textContent===text,originalHeading.trim());
  });
  await t.test('desktop sidebar follows each section and keeps the quiz out of the six-section count',async()=>{
   for(let i=1;i<=7;i++){
