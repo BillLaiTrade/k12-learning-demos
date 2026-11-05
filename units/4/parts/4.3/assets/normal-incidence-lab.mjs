@@ -1,5 +1,5 @@
 import {revealExperiment,experimentVisible} from './experiment-viewport.mjs?v=20261105-eleven1';
-import {mountCartPlayback} from './cart-playback.mjs?v=20261105-eleven1';
+import {mountCartPlayback} from './cart-playback.mjs?v=20261105-cartlayout1';
 import { layout, media, distanceKm, airDistanceKm, mediumDistanceKm, arrivalMs, boundaryMs, comparisonMs, durationMs, snapshot } from './normal-incidence-model.mjs?v=20261102-1500000-v1';
 
 const root=document.querySelector('#normal-lab');
@@ -121,7 +121,7 @@ const cartStatus=document.querySelector('#normal-cart-status'), cartPlay=documen
 function drawCart({elapsed:time,state}){
  const y=time<=1000?82+time*.078:160+Math.min(1800,time-1000)*.052;
  cart.setAttribute('transform',`translate(0 ${y})`);cart.dataset.y=String(y);
- const message=state==='complete'?'兩輪一起變慢，仍直直前進。':time>=1000?'兩輪同時進入較慢的區域，方向不變。':'兩輪並排，朝交界直直前進。';
+ const message=state==='complete'?'兩輪已變慢，仍直直前進。':time>=1000?'兩輪一起變慢，保持直行。':'兩輪等速，直直前進。';
  if(cartStatus.textContent!==message)cartStatus.textContent=message;
 }
 mountCartPlayback({details,button:cartPlay,scene:details.querySelector('.normal-cart-scene'),cart,duration:2800,draw:drawCart,onOpen:()=>freeze()});

@@ -1,0 +1,107 @@
+✔ 4.3 compact cart explanations preserve full wheels, readable labels and separate state from reasoning (51161.414258ms)
+▶ 4.3 eleven approved choices: controls, evidence, concise copy and desktop presentation
+  ✔ 2: explicit mouse/keyboard/lamp playback reveals the apparatus and controls before advancing (6961.630909ms)
+  ✔ 4: all three carts auto resume after viewport/tab interruption; explicit closing stays stopped on reopen (15765.909688ms)
+  ✔ 6-11: preconditions, conditional transmission, colour key, fixed analogy and depth narrative use short visible copy (1299.042077ms)
+  ✔ 3 and 5: no-op selections/keys/drop retain grades; replay conceals then restores grades unless order changes (17569.171248ms)
+  ✔ desktop and laptop preserve visible controls, short notes and readable evidence at four sizes (12459.482347ms)
+✔ 4.3 eleven approved choices: controls, evidence, concise copy and desktop presentation (64868.863594ms)
+✔ 1: sixth-section edge visibility is physically shared through preview, detail and fallback (23982.275643ms)
+▶ 4.3 exit cart demonstrates staggered acceleration and turning
+  ✔ rigid axle turns only while one wheel is faster, then keeps the new direction (2158.630356ms)
+  ✔ the upper water or glass follows the selector, lower air and qualitative motion stay correct (342.729872ms)
+  ✔ replay, folding, leaving the viewport and hidden document stop without an empty loop (1403.948627ms)
+  ✔ normal motion opens automatically; reduced motion remains explicit and keyboard accessible (12160.079193ms)
+  ✔ seven widths and native phone touch keep the scene, copy and replay control readable (18365.556356ms)
+  ✔ the second-section straight cart and optical experiment retain their independent behavior (2295.277901ms)
+✔ 4.3 exit cart demonstrates staggered acceleration and turning (40980.681247ms)
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (690.133275ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (1705.475914ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (13631.833385ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (678.401913ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (21085.916735ms)
+▶ 4.3 normal incidence desk and folding explanation work as approved
+  ✖ idle scene has no emitted light, dotted particles, autoplay or open explanation (199.235712ms)
+  ✔ continuous beams launch together and stay on the same axis across the interface (1581.606994ms)
+  ✔ pause freezes both fronts and resume continues the saved progress (291.462186ms)
+  ✔ air arrival pauses exactly once at one common instant, even across many frames (1024.837016ms)
+  ✔ continuing the comparison finishes all three rays without a second automatic stop (773.267719ms)
+  ✔ same launch button starts a fresh run and offscreen or hidden pages preserve progress (8697.147507ms)
+  ✔ native folding control works by keyboard and the cart moves straight, slows and stops when folded (2225.24226ms)
+  ✔ seven widths keep controls readable, with only the apparatus scrolling on phones (18484.403741ms)
+  ✔ failed artwork disables firing, retry recovers, and other sections remain usable (8600.166521ms)
+  ✔ opening the explanation starts the analogy with normal motion preferences (3627.699151ms)
+  ✔ phone touch can fire, pause and expand the explanation (7314.227399ms)
+✖ 4.3 normal incidence desk and folding explanation work as approved (57005.258746ms)
+▶ 4.3 oblique cart demonstrates staggered slowing and turning
+  ✔ rigid axle turns only while one wheel is slower, then keeps the new direction (2202.216194ms)
+  ✔ replay, folding, leaving the viewport and hidden document stop without an empty loop (1615.289513ms)
+  ✔ normal motion opens automatically; reduced motion remains explicit and keyboard accessible (11958.811548ms)
+  ✔ seven widths and native phone touch keep the scene, copy and replay control readable (14660.899313ms)
+  ✔ the second-section straight cart and optical experiment retain their independent behavior (4683.445061ms)
+✔ 4.3 oblique cart demonstrates staggered slowing and turning (40788.987016ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 36
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 309878.1771
+
+✖ failing tests:
+
+test at tests/unit-4.3-normal-lab.test.cjs:27:10
+✖ idle scene has no emitted light, dotted particles, autoplay or open explanation (199.235712ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /未放慢播放/. Input:
+  
+  '\n' +
+    '      為什麼變慢，卻沒有轉向？\n' +
+    '      \n' +
+    '        \n' +
+    '          \n' +
+    '            \n' +
+    '              \n' +
+    '                \n' +
+    '                  \n' +
+    '                  \n' +
+    '                  \n' +
+    '                  \n' +
+    '                  \n' +
+    '                \n' +
+    '                \n' +
+    '                平滑地面較難前進的地面\n' +
+    '                法線\n' +
+    '                \n' +
+    '                \n' +
+    '                  \n' +
+    '                  \n' +
+    '                  \n' +
+    '                  \n' +
+    '                \n' +
+    '              \n' +
+    '            \n' +
+    '            \n' +
+    '            兩輪等速，直直前進。\n' +
+    '            播放示範\n' +
+    '            \n' +
+    '          \n' +
+    '          兩輪同時變慢，沒有一側先慢下來，因此保持直行。對應光沿法線入射時，方向不變。\n' +
+    '        \n' +
+    '        小車為類比，不代表光受到摩擦。\n' +
+    '      \n' +
+    '    '
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-normal-lab.test.cjs:36:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.3-normal-lab.test.cjs:27:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '\n      為什麼變慢，卻沒有轉向？\n      \n        \n          \n            \n              \n                \n                  \n                  \n                  \n                  \n                  \n                \n                \n                平滑地面較難前進的地面\n                法線\n                \n                \n                  \n                  \n                  \n                  \n                \n              \n            \n            \n            兩輪等速，直直前進。\n            播放示範\n            \n          \n          兩輪同時變慢，沒有一側先慢下來，因此保持直行。對應光沿法線入射時，方向不變。\n        \n        小車為類比，不代表光受到摩擦。\n      \n    ',
+    expected: /未放慢播放/,
+    operator: 'match',
+    diff: 'simple'
+  }

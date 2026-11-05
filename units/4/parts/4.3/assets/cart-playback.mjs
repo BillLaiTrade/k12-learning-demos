@@ -3,12 +3,21 @@ import {experimentVisible,revealExperiment} from './experiment-viewport.mjs?v=20
 // Both kinds of wheel analogy share the same interruption policy. Closing the
 // explanation is deliberate; leaving the viewport or tab is automatic.
 export function mountCartPlayback({details,button,scene,cart,duration,draw,onOpen}){
+  const compact=details.hasAttribute('data-compact-cart');
+  if(compact){
+    const svg=scene.querySelector('svg');
+    const fitLabels=()=>{
+      const scale=svg.getBoundingClientRect().width/svg.viewBox.baseVal.width;
+      if(scale>0)svg.querySelectorAll('text').forEach(label=>label.style.fontSize=Math.max(18,12/scale)+'px');
+    };
+    new ResizeObserver(fitLabels).observe(scene);fitLabels();
+  }
   let elapsed=0,state='idle',pauseReason='',started=0,frame=0,opened=false;
   const visible=()=>details.open&&experimentVisible(scene);
   function publish(){
     cart.dataset.state=state;cart.dataset.elapsedMs=elapsed;cart.dataset.pauseReason=pauseReason;
     button.disabled=state==='running';
-    button.textContent=state==='paused'?'繼續小車示範':state==='complete'?'再看一次小車示範':'播放小車示範';
+    button.textContent=compact?{idle:'播放示範',running:'示範中…',paused:'繼續示範',complete:'再看一次'}[state]:state==='paused'?'繼續小車示範':state==='complete'?'再看一次小車示範':'播放小車示範';
     draw({elapsed,state});
   }
   function stop(reason='automatic'){

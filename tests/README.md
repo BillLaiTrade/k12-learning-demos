@@ -1619,3 +1619,7 @@ MOON_CAPTURE預設/tmp/unit41-reflection-play，保存雙視窗與整區截圖�
 新圖解以實際SVG路徑與表面輪廓獨立驗證三組入射／反射端點、相同入射方向、局部法向反射公式、反射角、方向分布及不穿過相鄰表面。播放／重播、減少動態、與3D狀態互不影響、無JavaScript完整靜態SVG、無WebGL仍可播放圖解均涵蓋。`surface-rays.json`保存實際SVG幾何，`stage-*`與`explanation-*`分別保存主畫面與輔助圖。
 
 整頁回歸仍使用`CHROMIUM_PATH=/usr/bin/chromium node --test --test-skip-pattern='入口、|潛望鏡素材' tests/unit-4.2-completion.test.cjs`，驗證導覽、實際燈具點擊與拖曳、第四區及WebGL備援。
+
+## 4.3 第二、三區小車版面（2026-11-05）
+
+`unit-4.3-cart-layout.test.cjs`以四桌面尺寸與七個動畫時刻檢查雙輪完整落在圖框內、圖內標籤至少12px且不與車輪重疊、右文頂部對齊、狀態與44px控制同列，以及播放／完成按鈕狀態。`CART_LAYOUT_CAPTURE_DIR`可保存畫面與量測。原`normal-lab`、`oblique-cart`與`exit-cart`回歸保留同時／先後變速的運動及中斷邏輯，不降低運動斷言。

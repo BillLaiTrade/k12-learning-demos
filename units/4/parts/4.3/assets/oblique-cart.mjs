@@ -1,4 +1,4 @@
-import {mountCartPlayback} from './cart-playback.mjs?v=20261105-eleven1';
+import {mountCartPlayback} from './cart-playback.mjs?v=20261105-cartlayout1';
 // Differential-wheel analogy only: the light model never uses friction.
 function initCart(prefix, { initialAngle = 40, upperSpeed = 100, lowerSpeed = 55, finishY = 260 } = {}) {
 const details = document.querySelector(`#${prefix}-explanation`);
@@ -35,7 +35,9 @@ function draw({elapsed,state}) {
   for (const key of ['x', 'y', 'angle', 'leftY', 'rightY']) cart.dataset[key] = String(p[key]);
   cart.dataset.state = state;
   trail.setAttribute('d', samples.filter((_, i) => i <= index && (i % 8 === 0 || i === index)).map((q, i) => `${i ? 'L' : 'M'}${q.x} ${q.y}`).join(''));
-  const text = p.rightY >= boundary
+  const text = details.hasAttribute('data-compact-cart')
+    ?p.rightY>=boundary?'兩輪已變慢，沿新方向前進。':p.leftY>=boundary?'左輪先進入、先變慢，開始轉向。':'兩輪等速，斜向前進。'
+    :p.rightY >= boundary
     ? accelerating ? '兩輪都已加速，沿新方向前進，更遠離法線。' : '兩輪都已變慢，沿新方向前進，更靠近法線。'
     : p.leftY >= boundary ? accelerating ? '左輪先進入、先加速；右輪仍較慢，小車開始轉向。' : '左輪先進入、先變慢；右輪仍較快，小車開始轉向。'
     : '斜著前進，兩輪速度相同。';

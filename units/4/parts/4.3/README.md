@@ -524,3 +524,7 @@ node --test --test-concurrency=1 tests/unit-4.3-depth-model.test.mjs tests/unit-
 依使用者逐項選擇，第1～6、9、10項採A，第7項採B，第8項暫緩。統一手動開始帶回實驗圖，等待第五區雙光抵達才呈現結論，第六區結論配合已繪出的空槽／有水／遮擋狀態。同步第二區與第六區對話、科學條件、第四區剖面短註及共通模型說明去重。第五區原對話及操作提示保持。
 
 新增`tests/unit-4.3-ten-decisions.test.cjs`；配合既有十一項、最終操作、格式及模型回歸。詳見`docs/decisions/unit-4.3-ten-review.md`。不新增素材、依賴或手機排版，維持第四階段。
+
+## 第二、三區小車說明精簡（2026-11-05）
+
+依使用者A方案，保留雙欄：左動畫與同列的狀態／播放控制，右側改為原因與一句光學對應，底部統一類比提醒。擴充可視範圍、補法線標籤並維持圖內文字可讀，車輪運動與光學模型保持；新版以data-compact-cart只套用第二、三區。第四區與其餘內容保留。見`docs/decisions/unit-4.3-cart-layout.md`及`tests/unit-4.3-cart-layout.test.cjs`。

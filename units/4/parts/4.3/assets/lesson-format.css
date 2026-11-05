@@ -101,3 +101,17 @@ button.primary:hover, .rank-quiz .rank-play:hover, .rank-quiz .rank-check:hover 
 /* Keep operating instructions beside the apparatus, separate from lesson subtitles. */
 .oblique-source-help { margin: 0 var(--lab-inset, 28px) 8px; color: var(--muted); font-size: .84rem; line-height: 1.6; }
 #exit-lab[data-angle="0"] #exit-transmission-condition { display: none; }
+
+/* Keep each cart's explanation beside the scene and its live controls together. */
+.cart-explanation .cart-analogy-grid { align-items: start; gap: 20px; }
+.cart-explanation .cart-analogy-copy { padding-top: 2px; }
+.cart-explanation .cart-analogy-copy p { margin: 0 0 16px; line-height: 1.75; }
+.cart-explanation .cart-light-link span { display: block; margin-bottom: 4px; color: var(--muted); font-size: .76rem; }
+.cart-demo-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; margin-top: 10px; }
+.cart-demo-controls > p { flex: 1; min-width: 0; min-height: 0; margin: 0; font-size: .79rem; line-height: 1.5; }
+.cart-demo-controls > button { flex: none; margin: 0; }
+.cart-analogy-notes { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 16px; margin-top: 14px; padding-top: 10px; border-top: 1px solid #e1e9dc; }
+.cart-analogy-notes > p { margin: 0; color: var(--muted); font-size: .76rem; line-height: 1.6; }
+@media (min-width: 901px) {
+  .cart-explanation .cart-analogy-grid { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+}
