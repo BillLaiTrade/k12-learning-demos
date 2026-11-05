@@ -1,0 +1,90 @@
+▶ 5.3 第一區：100 g 水、揭示順序、中斷與器材失敗恢復
+  ✔ 手動開始，器材與側邊讀值同源；開始前未揭示熱量與定義 (1959.249296ms)
+  ✔ 換區或背景中斷不自動續熱，舊結果不延遲寫回 (1152.05473ms)
+  ✔ 三組桌機與兩組窄版，器材讀值、結果及展開說明不裁切 (2142.93081ms)
+  ✔ 圖片慢載入／失敗時不能加熱，重試恢復且其他區仍可用 (1112.903474ms)
+✔ 5.3 第一區：100 g 水、揭示順序、中斷與器材失敗恢復 (8661.588211ms)
+▶ 5.3 共通格式、導覽連動與原有活動回歸
+  ✔ 靜態 HTML 的標題、摘要、分享圖及入口一致，不依賴 JS (95.225935ms)
+  ✔ 五區導覽標題連動；小測固定名稱、共通樣式及活動說明同步 (892.294621ms)
+  ✔ 五區均為上標頭下內容；三種桌機與兩種窄版可完整閱讀 (791.315518ms)
+  ✔ 第一區 100 g 水升溫、完成後介紹卡，重新觀察同步清除結果 (1874.589709ms)
+  ✔ 第二、三區自動記錄，原材料比較與生活應用保持 (5909.082433ms)
+  ✔ 原有四題小測可核對與重答；無載入或程式錯誤 (242.271203ms)
+✔ 5.3 共通格式、導覽連動與原有活動回歸 (11914.242557ms)
+▶ 5.3共用器材：可見動畫與兩區加熱狀態同步，停止不殘留
+  ✔ calorie-lab啟動、運行、到點及背景中斷的視覺回饋 (2152.524488ms)
+  ✔ heat-lab啟動、運行、到點及背景中斷的視覺回饋 (1093.264133ms)
+  ✔ 減少動態效果時保留讀值、燈號和實驗流程，攪拌與水面不運動 (1760.76192ms)
+✔ 5.3共用器材：可見動畫與兩區加熱狀態同步，停止不殘留 (7361.326625ms)
+▶ 5.3 第二區：分段加熱、自動紀錄、圖表、中斷與載入恢復
+  ✔ 只記錄觀察過的點，三次累計熱量對應正確水溫與溫升 (4845.735579ms)
+  ✔ 換區／背景中斷保留已完成紀錄，回來不自動加熱且可接續 (4760.269426ms)
+  ✔ 五種版面可讀，旋鈕及LCD在照片內，其他區與小測不受影響 (324.869692ms)
+  ✔ 器材慢載入或失敗時禁用兩入口，重試不會自行啟動 (867.847919ms)
+✔ 5.3 第二區：分段加熱、自動紀錄、圖表、中斷與載入恢復 (12497.419081ms)
+▶ 5.3第三區：同熱量不同水量、獨立停熱、自動紀錄與恢復
+  ✖ 先相同水量再加倍，水位與溫升同源，每杯到點各自停熱 (4492.975701ms)
+  ✔ 300g延伸、換區／背景中斷不自動續熱，不記錄未完成結果 (2989.818927ms)
+  ✖ 三桌機與兩窄版無頁面溢出，LCD／旋鈕不被遮住且至少44px (498.137636ms)
+  ✔ 減少動態效果仍能完成比較，水位不因加熱任意升高 (2239.49205ms)
+  ✔ 器材慢載入／失敗時禁用入口，重試恢復且其他區可用 (687.597495ms)
+✖ 5.3第三區：同熱量不同水量、獨立停熱、自動紀錄與恢復 (12523.909684ms)
+✔ 相同水吸熱1000cal，100／200／300g溫升10／5／10÷3°C，各自精確停熱 (1.497352ms)
+✔ 全段能量守恆，容器與散熱另計，單調升溫且不強制同時完成 (2.184161ms)
+✔ 非法質量與時間被拒絕 (0.732367ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 27
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22023.079131
+
+✖ failing tests:
+
+test at tests/unit-5.3-mass-comparison-lab.test.cjs:9:10
+✖ 先相同水量再加倍，水位與溫升同源，每杯到點各自停熱 (4492.975701ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Number((await root.getAttribute('data-a-heat')))<1000)
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-mass-comparison-lab.test.cjs:15:220)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-mass-comparison-lab.test.cjs:9:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.3-mass-comparison-lab.test.cjs:25:10
+✖ 三桌機與兩窄版無頁面溢出，LCD／旋鈕不被遮住且至少44px (498.137636ms)
+  AssertionError [ERR_ASSERTION]: 390 clipped
+  + actual - expected
+  
+  + [
+  +   '10.0°C',
+  +   '10.0°C',
+  +   '10.0°C',
+  +   '10.0°C'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-mass-comparison-lab.test.cjs:29:72)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-mass-comparison-lab.test.cjs:25:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ '10.0°C', '10.0°C', '10.0°C', '10.0°C' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
