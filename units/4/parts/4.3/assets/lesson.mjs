@@ -46,6 +46,8 @@ function updateNav(){
   const current=sections.filter(s=>s.getBoundingClientRect().top<=threshold).at(-1) || sections[0];
   links.forEach(a=>a.hash===`#${current.id}`?a.setAttribute('aria-current','step'):a.removeAttribute('aria-current'));
   $('#route-progress').textContent=current.id==='s7'?'目前位置：單元小測':`目前位置：第 ${String(sections.indexOf(current)+1).padStart(2,'0')}／06 個學習區塊`;
+  const readingProgress=$('#lesson-progress');
+  if(readingProgress)readingProgress.value=Math.min(6,sections.indexOf(current)+1);
   if(mobile && activeSection!==current){
     const link=links[sections.indexOf(current)], box=link.getBoundingClientRect(), viewport=routeInner.getBoundingClientRect();
     if(box.left<viewport.left || box.right>viewport.right)routeInner.scrollLeft+=box.left-viewport.left;

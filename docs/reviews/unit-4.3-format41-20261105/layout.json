@@ -1,0 +1,174 @@
+{
+  "data": [
+    {
+      "width": 1440,
+      "overflow": false,
+      "header": "光進入水中，會發生什麼變化？",
+      "sections": [
+        {
+          "id": "s1",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s2",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s3",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s4",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s5",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s6",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s7",
+          "width": 836,
+          "bad": false
+        }
+      ]
+    },
+    {
+      "width": 1366,
+      "overflow": false,
+      "header": "光進入水中，會發生什麼變化？",
+      "sections": [
+        {
+          "id": "s1",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s2",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s3",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s4",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s5",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s6",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s7",
+          "width": 836,
+          "bad": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "overflow": false,
+      "header": "光進入水中，會發生什麼變化？",
+      "sections": [
+        {
+          "id": "s1",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s2",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s3",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s4",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s5",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s6",
+          "width": 836,
+          "bad": false
+        },
+        {
+          "id": "s7",
+          "width": 836,
+          "bad": false
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "header": "光進入水中，會發生什麼變化？",
+      "sections": [
+        {
+          "id": "s1",
+          "width": 755,
+          "bad": false
+        },
+        {
+          "id": "s2",
+          "width": 755,
+          "bad": false
+        },
+        {
+          "id": "s3",
+          "width": 755,
+          "bad": false
+        },
+        {
+          "id": "s4",
+          "width": 755,
+          "bad": false
+        },
+        {
+          "id": "s5",
+          "width": 755,
+          "bad": false
+        },
+        {
+          "id": "s6",
+          "width": 755,
+          "bad": false
+        },
+        {
+          "id": "s7",
+          "width": 755,
+          "bad": false
+        }
+      ]
+    }
+  ],
+  "comparisons": 37,
+  "errors": []
+}

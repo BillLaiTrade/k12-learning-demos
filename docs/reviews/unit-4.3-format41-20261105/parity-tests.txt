@@ -1,0 +1,13 @@
+▶ 4.3 format matches 4.1 while the original experiments remain usable
+  ✔ four desktop/laptop viewports share computed typography, spacing, cards and controls (22300.978778ms)
+  ✔ reading progress and existing anchor links follow all six sections and the quiz (1250.162372ms)
+  ✔ shared buttons preserve primary/secondary states, focus and source controls (241.350296ms)
+✔ 4.3 format matches 4.1 while the original experiments remain usable (27009.533535ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27820.076927

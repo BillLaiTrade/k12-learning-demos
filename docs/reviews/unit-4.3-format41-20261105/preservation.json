@@ -1,0 +1,13 @@
+{
+  "baseline": "36da1bf794693de262ff772c20cb3627cd6f103f",
+  "course_html_identical": true,
+  "reference_41_identical": true,
+  "existing_changed_files": [
+    "units/4/parts/4.3/index.html",
+    "units/4/parts/4.3/assets/lesson.mjs"
+  ],
+  "other_existing_assets_identical": true,
+  "course_html_sha256": "e38b1c587f55e5596cc39d5aef36331017118b5e51fa17b38bcbbd6c338fe81a",
+  "all_static_text_identical": true,
+  "static_text_nodes": 293
+}

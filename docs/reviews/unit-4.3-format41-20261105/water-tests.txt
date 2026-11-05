@@ -1,0 +1,9 @@
+✔ 6 real two-second paired water frames, eye co-control, takeover, full detail and worker fallback (13188.531961ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13765.502976

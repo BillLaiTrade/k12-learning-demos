@@ -41,7 +41,8 @@
   <script type="module" src="assets/depth-lab.mjs?v=20261105-eleven1"></script>
   <link rel="stylesheet" href="assets/layer-speed-quiz.css?v=20261105-review1">
   <script type="module" src="assets/layer-speed-quiz.mjs?v=20261105-eleven1"></script>
-  <script type="module" src="assets/lesson.mjs?v=20261104-rank1">
+  <link rel="stylesheet" href="assets/lesson-format.css?v=20261105-format41a">
+  <script type="module" src="assets/lesson.mjs?v=20261105-format41a">
 </script>
 </head>
 <body>
@@ -50,8 +51,8 @@
 <a class="brand" href="../../index.html">← 光的反射、折射與成像</a>
 <span class="crumb">國二上・自然科學</span>
 </div>
-    <div class="hero">
-      <div>
+    <div class="hero-layout">
+      <div class="hero">
 <div class="eyebrow">學習內容 4.3｜光的折射與視深</div>
 <h1>光進入水中，<br>會發生什麼變化？</h1>
 <p class="hero-copy">小葵和阿公散步時，經過一座許願池。小葵看著清澈池水裡的硬幣，覺得它們好像離水面很近。可是，眼睛看到的位置，就是硬幣真正的位置嗎？隔著一層水，我們看到的景象會有什麼不同？</p>
@@ -61,10 +62,14 @@
 </figure>
     </div>
   </header>
-  <main class="shell lesson-layout">
+  <main class="shell">
+    <div class="section-top">
+      <div><h2>從光速與折射，解開水底硬幣的位置</h2><progress id="lesson-progress" max="6" value="1" aria-label="學習路線閱讀進度"></progress></div>
+      <p class="route-progress" id="route-progress" aria-live="polite">目前位置：第 01／06 個學習區塊</p>
+    </div>
+    <div class="lesson-layout">
     <nav class="route" aria-label="學習路徑">
       <p class="route-label">本單元的探索路線</p>
-      <p class="route-progress" id="route-progress" aria-live="polite">目前位置：第 01／06 個學習區塊</p>
       <div class="route-inner">
         <a href="#s1" aria-current="step">
 <b>01</b>
@@ -97,9 +102,6 @@
       </div>
     </nav>
     <div class="cards">
-      <div class="section-top">
-<h2>從光速與折射，解開水底硬幣的位置</h2>
-</div>
 <section class="lesson-card" id="s1" aria-labelledby="heading-1">
   <header class="lesson-head"><span class="lesson-number">01</span><div><h2 id="heading-1">光在不同介質中一樣快嗎？</h2><p>介質與光速：同時出發，比較傳播快慢</p></div></header>
   <div class="lesson-body card-main">
@@ -526,13 +528,14 @@
 </div>
 </section>
     </div>
+    </div>
   </main>
-  <footer class="shell">
+  <footer class="lesson-footer"><div class="shell">
 <p class="footer-brand">國二上・自然科學</p>
 <p>折射示意省略介面的部分反射。圖中尺寸與光點為教學示意；第一、二區的光束依設定路程與代表光速計時，其餘動畫時間為教學示意。</p>
 <p>參考：<a href="https://openstax.org/books/college-physics-2e/pages/25-3-the-law-of-refraction">OpenStax：折射與視深</a> · <a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001823">自然科學領域課綱</a>
 </p>
 <a href="#s1">回到第一個探索 ↑</a>
-</footer>
+</div></footer>
 </body>
 </html>

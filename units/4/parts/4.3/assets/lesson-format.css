@@ -1,0 +1,99 @@
+/* Common lesson presentation, matched to unit 4.1. Experiment geometry stays local. */
+:root {
+  --ink: #182326;
+  --muted: #59696b;
+  --line: #d7e1dd;
+  --paper: #f4f7f1;
+  --card: #fffefa;
+  --green: #176b53;
+  --green-pale: #e5f2e9;
+  --orange: #bc612b;
+  --orange-pale: #fff0e3;
+  --sun: #e9b64c;
+  --shadow: 0 14px 38px rgb(21 47 38 / 8%);
+  --lesson-font: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  font-family: var(--lesson-font);
+}
+body { font: 16px/1.7 var(--lesson-font); }
+.shell { width: min(1120px, calc(100% - 40px)); }
+.masthead { padding: 22px 0 12px; }
+.brand-row { gap: 16px; margin: 0; font-size: .9rem; font-weight: 750; }
+.brand { display: inline-flex; align-items: center; gap: 7px; }
+.crumb { font-size: inherit; font-weight: 500; }
+.hero-layout { display: grid; grid-template-columns: minmax(0, .9fr) minmax(320px, 1.1fr); align-items: center; gap: 32px; padding: 36px 0 28px; }
+.hero { display: block; min-width: 0; padding: 0; container-type: inline-size; }
+.eyebrow { font-size: .82rem; letter-spacing: .12em; }
+.hero h1 { margin: 8px 0 12px; font-size: clamp(1.7rem, 3.8vw, 3.05rem); font-size: clamp(1.7rem, 9.5cqi, 3.55rem); line-height: 1.18; letter-spacing: -.04em; }
+.hero-copy { margin: 0; color: var(--muted); font-size: 1.08rem; }
+.hero-cover { min-width: 0; box-shadow: var(--shadow); }
+.hero-cover img { aspect-ratio: 1672 / 941; }
+main.shell { padding-bottom: 76px; }
+.section-top { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 0 0 18px; padding: 0; }
+.section-top > div { min-width: 0; }
+.section-top h2 { font-size: 1.32rem; }
+.route-progress { margin: 0; color: var(--muted); font-size: .9rem; white-space: nowrap; }
+.section-top progress { display: block; width: 100%; height: 8px; margin: 12px 0 0; border: 0; border-radius: 99px; overflow: hidden; }
+.section-top progress::-webkit-progress-bar { background: #dfe7df; }
+.section-top progress::-webkit-progress-value { background: var(--green); border-radius: 99px; }
+.section-top progress::-moz-progress-bar { background: var(--green); border-radius: 99px; }
+.lesson-layout { padding-bottom: 0; }
+.route { top: 18px; max-height: calc(100svh - 36px); padding: 8px 10px 12px 0; font-family: inherit; }
+.route-label { margin: 0 0 8px; font-size: .76rem; }
+.route-inner a { font-size: .88rem; }
+.route-inner a b { font-weight: 700; }
+.route-inner a:hover, .route-inner a:focus-visible { outline: 2px solid transparent; }
+.route-inner a.quiz-nav { margin-top: 8px; padding-top: 14px; color: #795b20; }
+.route-inner a.quiz-nav b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #f5e9c9; color: #795b20; }
+.route-inner a.quiz-nav[aria-current="step"] { border-left-color: #c09139; background: #f8f0dd; color: #795b20; box-shadow: none; }
+.cards { display: grid; gap: 20px; }
+.lesson-card, .unit-quiz { margin: 0; scroll-margin-top: 22px; }
+.lesson-card { border-color: #d8e2da; }
+.dialogue .speaker { color: #315a46; font-weight: 800; }
+.dialogue .speaker::before { width: 48px; height: 48px; }
+.dialogue--xiaokui .speaker { color: #945523; }
+.unit-quiz { border-color: #ddd6c4; color: var(--ink); line-height: 1.7; box-shadow: var(--shadow); }
+.rank-quiz .quiz-head { display: flex; align-items: flex-start; gap: 18px; border-bottom-color: #e7e1d2; font-family: var(--lesson-font); line-height: 1.8; }
+.quiz-head > div { min-width: 0; flex: 1; }
+.quiz-mark { flex: 0 0 50px; }
+.quiz-head h2 { color: #243d35; font-size: clamp(1.15rem, 1.85vw, 1.5rem); line-height: 1.55; letter-spacing: -.02em; }
+.quiz-head .quiz-subtitle { margin: 9px 0 0; color: #64766c; font-size: .9rem; font-weight: 400; }
+.rank-quiz .quiz-body { padding: 20px; }
+#unit-quiz { scroll-margin-top: 22px; }
+button { padding: 9px 13px; border-color: var(--line); border-radius: 13px; color: var(--ink); text-align: left; }
+button:hover { filter: none; }
+:is(.race-actions, .normal-actions, .depth-actions) button,
+:is(#oblique-lab, #exit-lab) .oblique-actions button,
+.rank-quiz .rank-play, .rank-quiz .rank-check, .rank-quiz .rank-new,
+.normal-cart-action, .oblique-cart-action {
+  min-height: 44px; padding: 9px 16px; border: 1px solid var(--line); border-radius: 13px;
+  background: #fff; color: var(--ink); font-family: var(--lesson-font); font-size: .9rem;
+  font-weight: 750; box-shadow: none;
+}
+#depth-fill { border-color: var(--green); background: var(--green); color: #fff; box-shadow: none; }
+#depth-drain { border-color: var(--line); background: #fff; color: var(--ink); box-shadow: none; }
+button.primary,
+:is(.race-actions, .normal-actions, .depth-actions) button.primary,
+:is(#oblique-lab, #exit-lab) .oblique-actions button.primary,
+.rank-quiz .rank-play, .rank-quiz .rank-check { border-color: var(--green); background: var(--green); color: #fff; }
+:is(.race-actions, .normal-actions, .depth-actions) button:hover,
+:is(#oblique-lab, #exit-lab) .oblique-actions button:hover,
+.rank-quiz .rank-play:hover, .rank-quiz .rank-check:hover,
+.normal-cart-action:hover, .oblique-cart-action:hover { border-color: var(--green); outline: 2px solid rgb(23 107 83 / 12%); }
+button.primary:hover, .rank-quiz .rank-play:hover, .rank-quiz .rank-check:hover { background: #105640; }
+.lesson-card button:focus-visible, .lesson-card input:focus-visible { outline: 3px solid #c78e31; outline-offset: 3px; }
+.lesson-footer { padding: 22px 0 36px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; }
+@media (max-width: 1100px) and (min-width: 761px) {
+  .lesson-layout { grid-template-columns: 205px minmax(0, 1fr); gap: 24px; }
+}
+/* Keep the existing narrow-screen interactions; no new phone-specific layout. */
+@media (max-width: 760px) {
+  .shell { width: min(100% - 24px, 620px); }
+  .hero-layout { grid-template-columns: 1fr; gap: 16px; padding: 30px 0; }
+  .section-top { flex-wrap: wrap; }
+  .section-top h2 { font-size: 1.05rem; }
+  .route-progress { white-space: normal; }
+  .route { top: 0; max-height: none; padding: 10px 12px; }
+  .route-inner a { font-size: .86rem; }
+  .route-inner a.quiz-nav { margin-top: 0; padding-top: 7px; }
+  .lesson-card, .unit-quiz, #unit-quiz { scroll-margin-top: 0; }
+}

@@ -504,3 +504,7 @@ node --test --test-concurrency=1 tests/unit-4.3-depth-model.test.mjs tests/unit-
 ## 許願池生活開場（2026-11-05）
 
 依使用者核可，標題改為「光進入水中，會發生什麼變化？」，以小葵與阿公散步經過許願池、觀察水底硬幣的生活情境引出看似／實際位置問題。同步章節入口與文字分享資訊，標題兩行語意完整。六區、小測及光學程式保持；三張新圖呈現候選後，使用者選定候選1；頁首及分享預覽已改用同一張許願池近景圖，原生成檔與另外兩候選保留。詳見`docs/decisions/unit-4.3-wishing-opening.md`與`docs/reviews/unit-4.3-wishing-opening-20261105/`。
+
+## 依4.1統一格式（2026-11-05）
+
+使用者指定以4.1為版型基準。新增`assets/lesson-format.css`對齊1120px頁寬、圖文頁首、中文字型／容器字級、閱讀位置與進度條、導覽、卡片、小測、48px共用頭像與控制按鈕。原293段靜態文字、六區與唯一四層小測HTML、許願池候選1及所有光學／實驗控制器保持；`lesson.mjs`只增加進度條顯示同步。版型專項`tests/unit-4.3-format41.test.cjs`直接比對4.1／4.3四種桌電／筆電尺寸的計算樣式，搭配既有格式、互動及實際水位回歸。詳見`docs/decisions/unit-4.3-format41.md`與`docs/reviews/unit-4.3-format41-20261105/`。
