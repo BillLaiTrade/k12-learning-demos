@@ -1,0 +1,18 @@
+{
+  "fonts": {
+    "fonts": [
+      {
+        "familyName": "Noto Sans CJK TC",
+        "postScriptName": "NotoSansCJKtc-Bold",
+        "isCustomFont": false,
+        "glyphCount": 3
+      }
+    ]
+  },
+  "style": {
+    "family": "ui-sans-serif, system-ui, \"Noto Sans TC\", sans-serif",
+    "weight": "650",
+    "stroke": "rgb(255, 249, 226)",
+    "spacing": "normal"
+  }
+}

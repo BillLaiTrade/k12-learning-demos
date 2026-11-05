@@ -1,0 +1,10 @@
+{
+  "baseline": "f62eecd92fb8c3428817a75edfd6e44c72c26cc5",
+  "one_scoped_css_rule_only": true,
+  "HTML_only_stylesheet_version": true,
+  "all_lesson_text_geometry_images_models_controllers_unchanged": true,
+  "changed_course_files": [
+    "units/4/parts/4.3/assets/layer-speed-quiz.css",
+    "units/4/parts/4.3/index.html"
+  ]
+}

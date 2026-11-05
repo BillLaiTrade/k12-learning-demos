@@ -1,0 +1,1 @@
+Four desktop label layouts and correct-answer badges pass; rendered font: Noto Sans CJK TC
