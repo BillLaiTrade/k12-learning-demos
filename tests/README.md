@@ -1565,3 +1565,11 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.2-completion.test.cjs
 第一區專項7項（含外層）：兩側實際Three.js光源條件、360條光錐邊緣光線落在材料內、初始反射方向與相機一致、四種獨立開關／燈頭／按鈕回饋、三視角下取樣渲染像素、切換保留器材位置及開燈狀態、拖曳／取消／鍵盤回正、六種尺寸幾何與44px目標、手機原生觸控及一般動態。單區套件隔離未測的其他3D活動；整頁整合另由completion的7項確認。
 
 `REFLECTION_CAPTURE_DIR`保存三視角、桌機／手機畫面與geometry.json／pixels.json。`LESSON_BASE_URL`支援公開站；使用環境代理時設`LESSON_USE_PROXY=1`。測試只在攔截的模組回應內讀取實際場景，正式產品不暴露測試API。開關色彩採等待實際計算樣式後比對，保留狀態與物理燈光斷言。
+
+## 4.1 月球軌道與平行陽光（2026-11-05）
+
+```sh
+NODE_PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules node --test --test-reporter=spec tests/unit-4.1-moon-model.test.mjs tests/unit-4.1-moon-lab.test.cjs
+```
+
+模型3項驗證整圈固定距離／5.145°傾角／角度反解、72個位置對照獨立平行光月相公式、實際比例下無每月假遮擋及多點反射。對齊交點的額外情境驗證月球落入地影，以及月球視直徑稍小於太陽時保留部分日光，避免錯把環食當全食。瀏覽器專項6項含外層，涵蓋1366／1024px真實WebGL月球拖曳、點軌道、原生滑桿鍵盤、畫布方向鍵、六組月相／標籤避讓、真實地球視窗像素、旋轉／縮放、位置還原保留鏡頭、摺疊停畫／重開復用及WebGL／模組／貼圖／執行中context lost。MOON_CAPTURE可保存畫面及browser.json。只隔離其他四個3D模組與夜間圖片，三張天體貼圖真實載入，不作整課驗收。正式程式沒有測試API。

@@ -145,15 +145,18 @@
     .moon-lab { min-width: 0; }
     .moon-body-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
     .moon-body-controls button { min-height: 42px; padding: 8px 17px; border: 1px solid #cddcce; border-radius: 10px; background: #fffefa; color: #295744; font: inherit; font-size: .9rem; font-weight: 700; }
-    .moon-body-controls button[aria-pressed="true"] { background: #e5f0e0; border-color: #699271; box-shadow: inset 0 0 0 1px #699271; }
+    .moon-body-controls label { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 210px; color: #295744; font-size: .9rem; font-weight: 700; }
+    .moon-body-controls input { flex: 1; max-width: 340px; min-width: 100px; min-height: 42px; accent-color: #49765c; }
     .moon-body-controls button:last-child { margin-left: auto; }
-    .moon-body-controls button:disabled { opacity: .45; cursor: default; }
+    .moon-body-controls :disabled { opacity: .45; cursor: default; }
     .moon-body-controls button:focus-visible { outline: 3px solid #d8ae58; outline-offset: 2px; }
     .moon-space-frame { position: relative; overflow: hidden; border-radius: 16px; background: #060e1b; border: 1px solid #344b60; }
     #moon-model-canvas { display: block; width: 100%; height: 550px; cursor: grab; touch-action: none; }
     #moon-model-canvas:focus-visible { outline: 3px solid #e9c76d; outline-offset: -4px; }
     .moon-world-label { position: absolute; transform: translate(-50%,-100%); padding: 3px 9px; border: 1px solid #5b7285; border-radius: 8px; background: #0a1526e8; color: #e7f0f3; font-size: .82rem; pointer-events: none; }
     .moon-world-label.is-selected { border-color: #d5df90; color: #f2f6bd; }
+    .moon-orbit-label { background: #071321c9; border-color: #385668; font-size: .72rem; }
+    .moon-observer-label { padding: 2px 5px; font-size: .7rem; border-color: #79bca4; color: #bdebd7; }
     .moon-earth-view { position: absolute; right: 14px; bottom: 14px; width: clamp(140px,26%,190px); aspect-ratio: 1; border: 1px solid #657c91; border-radius: 12px; overflow: hidden; pointer-events: auto; }
     .moon-earth-view > span { position: absolute; top: 0; inset-inline: 0; padding: 5px; text-align: center; background: #07111ee8; color: #dceaf2; font-size: .76rem; }
     .moon-earth-view > small { position: absolute; bottom: 0; inset-inline: 0; padding: 4px; text-align: center; background: #07111ee8; color: #bfd5df; font-size: .72rem; }
@@ -532,27 +535,29 @@
               <summary>月球是怎麼反射太陽光的？</summary>
               <div class="moon-explanation-body">
                 <div class="moon-lab" data-moon-state="idle" aria-busy="false">
-                  <div class="moon-body-controls" role="group" aria-label="選取要移動的天體">
-                    <button type="button" data-moon-body="sun" aria-pressed="false" disabled>太陽</button>
-                    <button type="button" data-moon-body="earth" aria-pressed="false" disabled>地球</button>
-                    <button type="button" data-moon-body="moon" aria-pressed="true" disabled>月球</button>
-                    <button type="button" id="moon-positions-reset" disabled>還原天體位置</button>
+                  <div class="moon-body-controls" role="group" aria-label="調整月球軌道位置">
+                    <label for="moon-orbit-position">月球位置<input id="moon-orbit-position" type="range" min="0" max="360" step="1" value="95" aria-label="月球在軌道上的位置" disabled></label>
+                    <button type="button" id="moon-positions-reset" disabled>回到起始位置</button>
                   </div>
                   <div class="moon-space-frame">
-                    <canvas id="moon-model-canvas" tabindex="-1" aria-disabled="true" aria-label="可拖動太陽、地球與月球的3D天體模型" aria-describedby="moon-model-instructions moon-model-status"></canvas>
+                    <canvas id="moon-model-canvas" tabindex="-1" aria-disabled="true" aria-label="沿軌道拖動月球的3D天體模型" aria-describedby="moon-model-instructions moon-model-status"></canvas>
                     <span class="moon-world-label" data-moon-label="sun">太陽</span><span class="moon-world-label" data-moon-label="earth">地球</span><span class="moon-world-label" data-moon-label="moon">月球</span>
-                    <div class="moon-earth-view"><span>從地球看月球</span><small>可見亮面約 <output id="moon-phase-value">—</output></small></div>
+                    <span class="moon-world-label moon-orbit-label" data-moon-orbit-label>月球軌道 · 傾斜約 5°</span>
+                    <span class="moon-world-label moon-orbit-label" data-earth-orbit-label>地球公轉軌道（局部）</span>
+                    <span class="moon-world-label moon-observer-label" data-earth-observer-label>觀察方向</span>
+                    <div class="moon-earth-view"><span>從地球方向看月球</span><small>可見亮面約 <output id="moon-phase-value">—</output></small></div>
                     <p class="moon-model-message" id="moon-model-message" role="status">天體模型載入中，請稍候。</p>
                   </div>
                   <div class="moon-ray-legend" aria-label="光路顏色"><span>太陽照向月面的光</span><span>月面反射的部分光路</span></div>
-                  <p class="moon-model-status" id="moon-model-status" aria-live="polite">展開後可移動天體，觀察月面如何把陽光反射到地球方向。</p>
-                  <p class="moon-model-instructions" id="moon-model-instructions">拖曳天體調整位置；拖曳空白處轉動視角，滾輪縮放。也可先點選天體，再用方向鍵移動。</p>
+                  <p class="moon-model-status" id="moon-model-status" aria-live="polite">展開後可沿軌道移動月球，觀察受光月面與地球方向的關係。</p>
+                  <p class="moon-model-instructions" id="moon-model-instructions">沿軌道拖曳月球，也可點選軌道或調整「月球位置」。拖曳空白處轉動視角，滾輪縮放；選取畫面後可用方向鍵移動月球。</p>
                   <div class="moon-reflection-copy">
-                    <p><strong>太陽照亮月球的一側</strong>月球不會自己發出我們看到的月光，受光面隨太陽的位置改變。</p>
-                    <p><strong>月面把光反射到不同方向</strong>藍色細箭頭表示部分反射方向；能朝向地球的反射光路以較亮的藍色表示。</p>
-                    <p><strong>從地球看見受光月面</strong>比較右下方的月球視窗：朝向地球的受光面越多，看到的亮面範圍就越大。</p>
+                    <p><strong>太陽照亮月球的一側</strong>遠方照來的陽光近似平行，照亮月球朝向太陽的一側。</p>
+                    <p><strong>月面把光反射到不同方向</strong>受光月面的許多位置都會反射陽光；部分反射光朝地球傳播。</p>
+                    <p><strong>從地球看見受光月面</strong>月球沿軌道移動，我們看見受光月面的比例會改變，形成不同月相。</p>
                   </div>
-                  <p class="moon-model-note">天體大小與距離採教學比例，光點只示意方向而非實際速度，移動範圍不是實際軌道；光路以太陽中心方向簡化，並非日月食預測模型。亮面比例表示可見受光範圍，不代表月光亮度。</p>
+                  <p class="moon-model-note">月球軌道以圓形近似，與地球公轉平面傾斜約 5°。畫面壓縮天體距離、放大球體；受光與遮擋另依接近實際的地月比例計算。地球公轉弧線只交代運動關係，未模擬公轉、軌道進動或所在地的天空。一般月相並非地球影子造成；本模型不預測日月食。</p>
+                  <p class="moon-model-note">線條與移動光點是光路示意，並非太空中可直接看見的光束或實際光速。右下視窗放大呈現地球方向的月球，亮面比例不代表月光亮度；暗面未模擬地球反射光造成的「地照」。</p>
                   <p class="moon-model-note">貼圖來源：<a href="https://svs.gsfc.nasa.gov/4720/" target="_blank" rel="noopener">NASA／GSFC／ASU（月球）</a>、<a href="https://threejs.org/" target="_blank" rel="noopener">Three.js（地球）</a>、<a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope（太陽）</a>，太陽貼圖採 <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>。</p>
                 </div>
               </div>
@@ -859,7 +864,7 @@
       }
     })();
   </script>
-  <script type="module" src="assets/moon-reflection-lab.js?v=celestial-20261105"></script>
+  <script type="module" src="assets/moon-reflection-lab.js?v=orbit-20261105"></script>
   <script type="module" src="assets/scene-loader.js?v=no-view-reset-20261105"></script>
   <script type="module" src="assets/light-speed-timer.js?v=clear-results-on-start-20261029"></script>
 </body>
