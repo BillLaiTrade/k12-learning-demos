@@ -233,7 +233,8 @@ if('IntersectionObserver' in window){
   const visible=new Map();
   const observer=new IntersectionObserver(entries=>{
     entries.forEach(entry=>visible.set(entry.target.id,entry.isIntersecting));
-    const first=$$('.lesson-card,.quiz').find(section=>visible.get(section.id));
+    const first=$$('.lesson-card,.quiz').find(section=>visible.get(section.id))
+      || ($('.lesson-card').getBoundingClientRect().top>0 ? $('.lesson-card') : null);
     if(!first)return;
     $$('.route a').forEach(link=>{
       if(link.hash===`#${first.id}`)link.setAttribute('aria-current','step');
