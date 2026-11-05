@@ -1,3 +1,5 @@
+import {revealExperiment,experimentVisible} from './experiment-viewport.mjs?v=20261105-eleven1';
+import {mountCartPlayback} from './cart-playback.mjs?v=20261105-eleven1';
 import { layout, media, distanceKm, airDistanceKm, mediumDistanceKm, arrivalMs, boundaryMs, comparisonMs, durationMs, snapshot } from './normal-incidence-model.mjs?v=20261102-1500000-v1';
 
 const root=document.querySelector('#normal-lab');
@@ -81,6 +83,7 @@ function advance(now){
 }
 function tick(now){
  if(state!=='running')return;
+ if(document.hidden||!experimentVisible($('#normal-viewport'))){freeze('automatic');return;}
  const compare=advance(now);
  if(compare){state='paused';pauseReason='comparison';frame=0;}
  else if(elapsed>=durationMs){state='complete';pauseReason='';frame=0;}
@@ -88,16 +91,18 @@ function tick(now){
  if(state!=='running'){controls();explainStage();}
  else frame=requestAnimationFrame(tick);
 }
-function play(fromBeginning=false){
+function play(fromBeginning=false,manual=false){
  if(['loading','error'].includes(state))return;
- stop();if(fromBeginning){elapsed=0;comparisonPending=true;}
- state='running';pauseReason='';startTime=performance.now()-elapsed;render();controls();explainStage();frame=requestAnimationFrame(tick);
+ stop();if(manual)revealExperiment($('#normal-viewport'),$('.normal-console'));if(fromBeginning){elapsed=0;comparisonPending=true;}
+ state='running';pauseReason='';startTime=performance.now()-elapsed;
+ if(document.hidden||!experimentVisible($('#normal-viewport'))){state='paused';pauseReason='automatic';render();controls();explainStage();return;}
+ render();controls();explainStage();frame=requestAnimationFrame(tick);
 }
 function freeze(reason='manual'){
  if(state!=='running')return;
  stop();const compare=advance(performance.now());state=elapsed>=durationMs?'complete':'paused';pauseReason=compare?'comparison':state==='paused'?reason:'';render();controls();explainStage();
 }
-start.onclick=()=>play(true);pause.onclick=()=>state==='paused'?play():freeze();
+start.onclick=()=>play(true,true);pause.onclick=()=>state==='paused'?play(false,true):freeze();
 const resumeAutomatic=()=>{if(state==='paused'&&pauseReason==='automatic'&&inView&&!document.hidden)play();};
 document.addEventListener('visibilitychange',()=>{if(document.hidden)freeze('automatic');else resumeAutomatic();});
 if('IntersectionObserver' in window)new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;if(inView)resumeAutomatic();else freeze('automatic');},{threshold:0}).observe($('#normal-viewport'));
@@ -113,31 +118,10 @@ prepare();
 // reach it together. This analogy is explicitly separate from light's mechanism.
 const details=document.querySelector('#normal-explanation'), cart=document.querySelector('#normal-cart');
 const cartStatus=document.querySelector('#normal-cart-status'), cartPlay=document.querySelector('#normal-cart-play');
-let cartFrame=0, cartStart=0, cartElapsed=0, cartState='idle';
-function drawCart(){
- const time=Math.max(0,cartElapsed), y=time<=1000?82+time*.078:160+Math.min(1800,time-1000)*.052;
+function drawCart({elapsed:time,state}){
+ const y=time<=1000?82+time*.078:160+Math.min(1800,time-1000)*.052;
  cart.setAttribute('transform',`translate(0 ${y})`);cart.dataset.y=String(y);
- const crossed=time>=1000;
- const message=cartState==='complete'?'兩輪一起變慢，仍直直前進。':crossed?'兩輪同時進入較慢的區域，方向不變。':'兩輪並排，朝交界直直前進。';
+ const message=state==='complete'?'兩輪一起變慢，仍直直前進。':time>=1000?'兩輪同時進入較慢的區域，方向不變。':'兩輪並排，朝交界直直前進。';
  if(cartStatus.textContent!==message)cartStatus.textContent=message;
 }
-function stopCart(){cancelAnimationFrame(cartFrame);cartFrame=0;if(cartState==='running'){cartElapsed=Math.min(2800,performance.now()-cartStart);cartState='paused';drawCart();}cartPlay.textContent=cartState==='paused'?'繼續小車示範':'播放小車示範';}
-function cartTick(now){
- if(cartState!=='running')return;
- cartElapsed=Math.min(2800,Math.max(0,now-cartStart));drawCart();
- if(cartElapsed>=2800){cartState='complete';cartFrame=0;cartPlay.disabled=false;cartPlay.textContent='再看一次小車示範';drawCart();}
- else cartFrame=requestAnimationFrame(cartTick);
-}
-function playCart(){
- if(cartState==='running')return;
- if(cartState==='complete'||cartState==='idle')cartElapsed=0;
- cartState='running';cartStart=performance.now()-cartElapsed;cartPlay.disabled=true;drawCart();cartFrame=requestAnimationFrame(cartTick);
-}
-cartPlay.onclick=playCart;
-details.addEventListener('toggle',()=>{
- if(details.open){freeze();if(matchMedia('(prefers-reduced-motion: reduce)').matches){cartPlay.disabled=false;drawCart();}else playCart();}
- else{stopCart();cartPlay.disabled=false;}
-});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){stopCart();cartPlay.disabled=false;}});
-if('IntersectionObserver' in window)new IntersectionObserver(entries=>{if(!entries[0].isIntersecting){stopCart();cartPlay.disabled=false;}},{threshold:0}).observe(details);
-drawCart();
+mountCartPlayback({details,button:cartPlay,scene:details.querySelector('.normal-cart-scene'),cart,duration:2800,draw:drawCart,onOpen:()=>freeze()});

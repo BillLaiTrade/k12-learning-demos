@@ -1,4 +1,4 @@
-import {renderObserverPixels} from './depth-observer.mjs?v=20261105-review1';
+import {renderObserverPixels} from './depth-observer.mjs?v=20261105-eleven1';
 
 let textures;
 self.onmessage=({data})=>{

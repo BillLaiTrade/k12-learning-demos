@@ -7,7 +7,7 @@ const captures = process.env.CART_CAPTURE_DIR;
 test('4.3 exit cart demonstrates staggered acceleration and turning', {timeout:150000}, async t => {
   const {page:p,browser,base,errors,select} = await setup(t);
   const details=p.locator('#exit-explanation'), button=p.locator('#exit-cart-play');
-  const pose=()=>p.locator('#exit-cart').evaluate(e=>Object.fromEntries(Object.entries(e.dataset).map(([k,v])=>[k,k==='state'?v:Number(v)])));
+  const pose=()=>p.locator('#exit-cart').evaluate(e=>Object.fromEntries(Object.entries(e.dataset).map(([k,v])=>[k,['state','pauseReason'].includes(k)?v:Number(v)])));
   if(captures)await fs.mkdir(captures,{recursive:true});
   await t.test('rigid axle turns only while one wheel is faster, then keeps the new direction',async()=>{
     await details.locator('summary').click();await p.clock.runFor(50);
@@ -38,7 +38,7 @@ test('4.3 exit cart demonstrates staggered acceleration and turning', {timeout:1
     await button.click();await p.clock.runFor(500);await details.locator('summary').click();await p.clock.runFor(30);const folded=await pose();await p.clock.runFor(800);assert.deepEqual(await pose(),folded);assert.equal(folded.state,'paused');
     await details.locator('summary').click();await p.clock.runFor(30);await button.click();await p.clock.runFor(300);assert.ok((await pose()).y>folded.y);
     await p.locator('#s1').scrollIntoViewIfNeeded();await p.clock.runFor(100);await p.waitForFunction(()=>document.querySelector('#exit-cart').dataset.state==='paused',{},{polling:50});const offscreen=await pose();assert.equal(offscreen.state,'paused');await p.clock.runFor(600);assert.deepEqual(await pose(),offscreen);
-    await button.click();await p.clock.runFor(200);await p.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});const hidden=await pose();await p.clock.runFor(500);assert.deepEqual(await pose(),hidden);assert.equal(hidden.state,'paused');
+    await p.locator('#exit-explanation .oblique-cart-scene').scrollIntoViewIfNeeded();await p.waitForFunction(()=>document.querySelector('#exit-cart').dataset.state==='running');await p.clock.runFor(200);await p.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});const hidden=await pose();await p.clock.runFor(500);assert.deepEqual(await pose(),hidden);assert.equal(hidden.state,'paused');
     await p.evaluate(()=>{delete document.hidden;document.dispatchEvent(new Event('visibilitychange'));});await details.locator('summary').click();
   });
   await t.test('normal motion opens automatically; reduced motion remains explicit and keyboard accessible',async()=>{

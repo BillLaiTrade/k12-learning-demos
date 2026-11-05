@@ -1,0 +1,46 @@
+✔ depth construction conserves Snell direction and uses the backward intersection, with a fixed floor coin (233.130454ms)
+✔ side visibility and independently traced reverse camera rays agree at the rim (40.882224ms)
+✔ first person view has a fixed target and finds the same coin through air-to-water refraction (8.010018ms)
+✔ every submerged camera ray conserves tangential direction in both horizontal axes (4.169744ms)
+✔ controls stay finite across boundaries and the apparent point depends on observation position (0.779667ms)
+✔ the default is a dry hidden coin; direct dry rays and filling use the same fixed world (2.319565ms)
+✔ opening framing includes visible coin rays without moving the pupil or following water level (103.404379ms)
+✔ moving the eye translates a fixed camera and the tank edges shrink monotonically with distance (40.98414ms)
+✔ a true coin-rim crescent has one continuous visibility result and an admitted representative bundle (24.570372ms)
+✔ all control settings keep status monotone and every visible construction actually reaches the same coin (1143.598397ms)
+✔ preview and detail always contain the real visible edge, without changing visibility, camera or fixed coin (7716.922177ms)
+✔ reciprocal fronts start at the enabled source, conserve speed ratios and finish on the same reversed path (7.175429ms)
+✔ one actual inverted adjacent pair is returned across the whole deck without disclosing an entire answer (6.47659ms)
+✔ cached observer directions preserve identical frame pixels when camera and resolution alternate (260.102728ms)
+✔ a newly loaded deck can start with every one of the 24 answers and either incident angle (42.220727ms)
+✔ all 24 speed orders obey Snell invariance, continuous parallel-layer geometry and visible angle differences (7.271312ms)
+✔ deck renews indefinitely without adjacent identical rankings or a fixed fastest layer (9.717695ms)
+✔ animation advances by geometric distance and actual relative speed, including intermediate frames and exact endpoints (1.108766ms)
+✔ placement supports pool replacement, swapping existing cards and keeps a unique set (0.65915ms)
+✔ grading rejects partial, duplicate and invalid submissions, and accepts exactly the speed order (7.215817ms)
+✔ gas, liquid and solid appearances move with the same refractive indices through every layer permutation (1.038058ms)
+✔ three normal rays share a distance scale and common air speed before the real interfaces (8.20142ms)
+✔ the air reference continues unchanged while water and glass slow without bending (0.419208ms)
+✔ the shared air-arrival instant gives a visible, physically proportionate comparison (2.656447ms)
+✔ 1500000 km mixed paths use the time of each segment, not a full route of water or glass (0.29766ms)
+✔ one second and the shared air-arrival instant represent physical kilometres at normal speed (0.590816ms)
+✔ all selectable outgoing rays obey refraction and retrace the independently calculated reverse direction (8.257464ms)
+✔ zero, bounds and angle sectors retain a single optical plane (1.903561ms)
+✔ arrow tips point along their own forward and backward segments (2.117644ms)
+✔ dragging either source recovers the shared angle without changing the reciprocal geometry (1.360909ms)
+✔ full 0–90° domain has finite bounded paths, Snell transmission or equal-angle reflection (9.356452ms)
+✔ exact critical angle and either side remain distinct from TIR and grazing (0.229363ms)
+✔ front is continuous through entry and reaches exact reflected, refracted or grazing endpoint (1.725688ms)
+✔ equal inputs keep both source placements identical; invalid angles are clamped (0.959907ms)
+✔ both water and glass transmit throughout the 0–40° teaching domain in either direction (0.498591ms)
+✔ single-source animation is exactly twice its former rate while medium speed ratios stay intact (0.994342ms)
+✔ million-kilometre model uses the agreed representative speeds and travel times (2.526537ms)
+✔ a shared physical time gives independent distances and the same endpoint (1.021608ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9121.473545

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "normal",
+    "stageBottom": -35.015625,
+    "button": {
+      "x": 416,
+      "y": -20.015625,
+      "width": 128.015625,
+      "height": 47.515625
+    },
+    "state": "running",
+    "elapsed": "1060"
+  },
+  {
+    "id": "oblique",
+    "stageBottom": -35.421875,
+    "button": {
+      "x": 405,
+      "y": -19.859375,
+      "width": 111.9375,
+      "height": 46.140625
+    },
+    "state": "running",
+    "elapsed": "1005"
+  },
+  {
+    "id": "exit",
+    "stageBottom": -35.234375,
+    "button": {
+      "x": 405,
+      "y": -19.671875,
+      "width": 111.9375,
+      "height": 46.140625
+    },
+    "state": "running",
+    "elapsed": "1007"
+  }
+]

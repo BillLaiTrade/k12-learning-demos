@@ -1,4 +1,4 @@
-import { TANK, observerCamera, cameraDirection, traceViewRay } from './depth-model.mjs?v=20261104-review1';
+import { TANK, observerCamera, cameraDirection, traceViewRay } from './depth-model.mjs?v=20261105-eleven1';
 
 export function createTextures(photo) {
   const texture = (sx, sy, sw, sh, width = 256, height = 128) => {
@@ -59,11 +59,28 @@ export function renderObserverPixels(geometry, textures, width, height) {
   const pixels = new Uint8ClampedArray(width * height * 4);
   const camera = observerCamera(geometry, width / height), L=TANK.length,Z=TANK.width/2,H=TANK.height;
   const rays=directions(camera,width,height);
+  // Preserve a real, admitted coin ray when its thin crescent falls between
+  // pixel centres. This is a physical subpixel sample, not a drawn coin icon:
+  // the same backwards tracer must reach the coin through the opening.
+  let coinSample=null,featureSampled=false;
+  if(geometry.status!=='hidden'){
+    const r=geometry.representative;
+    const direction=norm([r.hit[0]-geometry.eyeX,r.hit[1]-TANK.eyeHeight,0]);
+    const forward=dot(direction,camera.forward);
+    const u=direction[2]/(forward*camera.lens*camera.aspect),v=dot(direction,camera.up)/(forward*camera.lens);
+    const x=Math.floor((u+1)*width/2),y=Math.floor((1-v)*height/2);
+    const hit=traceViewRay(geometry,camera.origin,direction);
+    if(x>=0&&x<width&&y>=0&&y<height&&hit?.kind==='coin')coinSample={x,y,direction,hit};
+  }
   let wallMinX=width,wallMaxX=0,wallMinY=height,wallMaxY=0;
   let coinPixels = 0, minX = width, maxX = 0, minY = height, maxY = 0;
   for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) {
-    const offset=(y*width+x)*3,direction=[rays[offset],rays[offset+1],rays[offset+2]];
-    const hit = traceViewRay(geometry, camera.origin, direction);
+    const offset=(y*width+x)*3;
+    let direction=[rays[offset],rays[offset+1],rays[offset+2]];
+    let hit = traceViewRay(geometry, camera.origin, direction);
+    if(coinSample&&coinSample.x===x&&coinSample.y===y&&hit?.kind!=='coin'){
+      direction=coinSample.direction;hit=coinSample.hit;featureSampled=true;
+    }
     let color;
     if (!hit) {
       const t=(-4-camera.origin[1])/direction[1];
@@ -138,7 +155,7 @@ export function renderObserverPixels(geometry, textures, width, height) {
   }
   const bounds=coinPixels?{x:minX/width,y:minY/height,width:(maxX-minX+1)/width,height:(maxY-minY+1)/height}:null;
   const frontWallBounds=wallMinX<=wallMaxX?{x:wallMinX/width,y:wallMinY/height,width:(wallMaxX-wallMinX+1)/width,height:(wallMaxY-wallMinY+1)/height}:null;
-  return {pixels,coinPixels,bounds,width,height,frontWallBounds};
+  return {pixels,coinPixels,bounds,width,height,frontWallBounds,visibility:geometry.status,featureSampled};
 }
 
 // Synchronous entry retained for unsupported workers and renderer verification.

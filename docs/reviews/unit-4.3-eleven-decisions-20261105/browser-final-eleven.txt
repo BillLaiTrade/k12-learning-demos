@@ -1,0 +1,16 @@
+▶ 4.3 eleven approved choices: controls, evidence, concise copy and desktop presentation
+  ✔ 2: explicit mouse/keyboard/lamp playback reveals the apparatus and controls before advancing (2409.225782ms)
+  ✔ 4: all three carts auto resume after viewport/tab interruption; explicit closing stays stopped on reopen (7190.503037ms)
+  ✔ 6-11: preconditions, conditional transmission, colour key, fixed analogy and depth narrative use short visible copy (751.61972ms)
+  ✔ 3 and 5: no-op selections/keys/drop retain grades; replay conceals then restores grades unless order changes (5486.925341ms)
+  ✔ desktop and laptop preserve visible controls, short notes and readable evidence at four sizes (10035.322782ms)
+✔ 4.3 eleven approved choices: controls, evidence, concise copy and desktop presentation (30169.878955ms)
+✔ 1: sixth-section edge visibility is physically shared through preview, detail and fallback (10523.858182ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41959.974177

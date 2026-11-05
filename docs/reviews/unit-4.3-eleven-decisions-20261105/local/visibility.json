@@ -1,0 +1,142 @@
+[
+  {
+    "depth": 70,
+    "eyeX": 300,
+    "preview": {
+      "left": "partial",
+      "right": "partial",
+      "text": "可以看見部分硬幣",
+      "pixels": 1,
+      "blocked": 0,
+      "quality": "preview"
+    },
+    "detail": {
+      "left": "partial",
+      "right": "partial",
+      "text": "可以看見部分硬幣",
+      "pixels": 30,
+      "blocked": 0,
+      "quality": "detail"
+    }
+  },
+  {
+    "depth": 83,
+    "eyeX": 320,
+    "preview": {
+      "left": "partial",
+      "right": "partial",
+      "text": "可以看見部分硬幣",
+      "pixels": 4,
+      "blocked": 0,
+      "quality": "preview"
+    },
+    "detail": {
+      "left": "partial",
+      "right": "partial",
+      "text": "可以看見部分硬幣",
+      "pixels": 14,
+      "blocked": 0,
+      "quality": "detail"
+    }
+  },
+  {
+    "depth": 92,
+    "eyeX": 340,
+    "preview": {
+      "left": "partial",
+      "right": "partial",
+      "text": "可以看見部分硬幣",
+      "pixels": 1,
+      "blocked": 0,
+      "quality": "preview"
+    },
+    "detail": {
+      "left": "partial",
+      "right": "partial",
+      "text": "可以看見部分硬幣",
+      "pixels": 40,
+      "blocked": 0,
+      "quality": "detail"
+    }
+  },
+  {
+    "depth": 100,
+    "eyeX": 300,
+    "preview": {
+      "left": "partial",
+      "right": "partial",
+      "text": "可以看見部分硬幣",
+      "pixels": 70,
+      "blocked": 0,
+      "quality": "preview"
+    },
+    "detail": {
+      "left": "partial",
+      "right": "partial",
+      "text": "可以看見部分硬幣",
+      "pixels": 1458,
+      "blocked": 0,
+      "quality": "detail"
+    }
+  },
+  {
+    "depth": 0,
+    "eyeX": 250,
+    "preview": {
+      "left": "partial",
+      "right": "partial",
+      "text": "空槽・可以看見部分硬幣",
+      "pixels": 35,
+      "blocked": 0,
+      "quality": "preview"
+    },
+    "detail": {
+      "left": "partial",
+      "right": "partial",
+      "text": "空槽・可以看見部分硬幣",
+      "pixels": 916,
+      "blocked": 0,
+      "quality": "detail"
+    }
+  },
+  {
+    "depth": 0,
+    "eyeX": 210,
+    "preview": {
+      "left": "visible",
+      "right": "visible",
+      "text": "空槽・可以直接看見",
+      "pixels": 128,
+      "blocked": 0,
+      "quality": "preview"
+    },
+    "detail": {
+      "left": "visible",
+      "right": "visible",
+      "text": "空槽・可以直接看見",
+      "pixels": 2832,
+      "blocked": 0,
+      "quality": "detail"
+    }
+  },
+  {
+    "depth": 0,
+    "eyeX": 300,
+    "preview": {
+      "left": "hidden",
+      "right": "hidden",
+      "text": "空槽・看不到硬幣",
+      "pixels": 0,
+      "blocked": 1,
+      "quality": "preview"
+    },
+    "detail": {
+      "left": "hidden",
+      "right": "hidden",
+      "text": "空槽・看不到硬幣",
+      "pixels": 0,
+      "blocked": 1,
+      "quality": "detail"
+    }
+  }
+]

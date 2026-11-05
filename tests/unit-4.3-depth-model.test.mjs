@@ -65,7 +65,7 @@ test('controls stay finite across boundaries and the apparent point depends on o
 test('the default is a dry hidden coin; direct dry rays and filling use the same fixed world',()=>{
  const initial=depthGeometry();assert.equal(initial.depth,0);assert.equal(initial.eyeX,300);assert.equal(initial.status,'hidden');assert.deepEqual(initial.apparent,initial.coin);
  for(const eyeX of [210,250,300,340]){const g=depthGeometry(0,eyeX),r=g.center;const raw=[55-eyeX,-190,0],d=Math.hypot(...raw),hit=traceViewRay(g,[eyeX,190,0],raw.map(v=>v/d));if(r.visible){assert.equal(hit.kind,'coin');assert.equal(hit.wet,false);}else assert.ok(['outside','rim'].includes(hit.kind));}
- const filled=depthGeometry(100,initial.eyeX);assert.equal(filled.status,'visible');assert.deepEqual(filled.coin,initial.coin);assert.deepEqual(filled.eye,initial.eye);
+ const filled=depthGeometry(100,initial.eyeX);assert.equal(filled.status,'partial');assert.equal(filled.center.visible,true);assert.equal(solveCoinRay(100,initial.eyeX,TANK.coinX+TANK.coinRadius).visible,false);assert.deepEqual(filled.coin,initial.coin);assert.deepEqual(filled.eye,initial.eye);
 });
 
 test('opening framing includes visible coin rays without moving the pupil or following water level',()=>{

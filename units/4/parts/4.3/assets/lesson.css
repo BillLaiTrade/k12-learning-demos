@@ -137,3 +137,6 @@ footer.shell { padding: 28px 0 36px; border-top: 1px solid var(--line); color: v
 .integrated-preview{display:inline-block;margin-right:8px;padding:2px 6px;border:1px solid #9bad83;border-radius:5px;color:#385d3b;background:#f5f8e8;font-size:.72rem;font-weight:650;vertical-align:middle}
 .integrated-preview[hidden]{display:none}
 .return-alignment-note{margin:7px 14px 0;color:#516c59;font-size:.8rem;line-height:1.55}
+
+.cart-setting-note{margin:7px 0;color:#596d5c;font-size:.79rem;line-height:1.55}
+.return-finding .return-direction-note{display:block;font-size:.78rem;font-weight:500;line-height:1.4;color:#506a58}

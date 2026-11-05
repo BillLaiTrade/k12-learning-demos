@@ -1,0 +1,145 @@
+{
+  "date": "2026-11-05",
+  "round": "4.3全面再檢查",
+  "source": "fa43545396d155538770c7d78d559421a5f29838",
+  "scope": "六學習區＋唯一四層小測；桌電／筆電；不修改，逐項決定後批次實作",
+  "evidence_dir": "/tmp/unit43-reaudit-20261105",
+  "current_item": 11,
+  "decisions": {
+    "1": {
+      "choice": "A",
+      "decision": "統一兩圖與提示的可見性判定，保留部分看見，避免預覽與精細畫面改變判定"
+    },
+    "2": {
+      "choice": "A",
+      "decision": "按發射後先將實驗圖與必要控制帶回可見範圍，再開始播放"
+    },
+    "3": {
+      "choice": "A",
+      "decision": "只有順序真正改變才清除判定；選取卡片、放回原位或按到移動邊界，保留原結果"
+    },
+    "4": {
+      "choice": "A",
+      "decision": "補充小車自動離屏或切頁暫停後返回續播；主動收合保持停止，重新展開不自動續播"
+    },
+    "5": {
+      "choice": "A",
+      "decision": "保留排序，重播期間暫藏作答回饋，光路與角度完整顯示後恢復；期間若排序改變則清除舊回饋"
+    },
+    "6": {
+      "choice": "A",
+      "decision": "小測就近補上同一束光斜射與各層介面互相平行的比較條件；作答前不直接揭示角度與光速規則，規則留於作答回饋"
+    },
+    "7": {
+      "choice": "A",
+      "decision": "第四區以斜射且發生折射時限定偏離法線的結論，保留0度不偏折說明，不增加全反射內容"
+    },
+    "8": {
+      "choice": "A",
+      "decision": "第五區保留紅藍雙光，在開關或圖例附近短註顏色僅用來區分前進方向"
+    },
+    "9": {
+      "choice": "A",
+      "decision": "第三四區保留固定小車原理解釋，就近標明固定斜射類比與上圖設定獨立，不讓小車同步主圖參數"
+    },
+    "10": {
+      "choice": "A",
+      "decision": "第二至四區改用小車兩輪同時或先後變速的白話類比，不額外引入波前；保留小車只是類比、光不是受到摩擦的說明"
+    },
+    "11": {
+      "choice": "A",
+      "decision": "第六區從硬幣沒動，加水後還會被槽壁擋住嗎切入，將觀察接回看似與實際位置差別，改寫現有短對話與結論，不增加長段落"
+    }
+  },
+  "items": [
+    {
+      "id": 1,
+      "area": "第六區",
+      "type": "已重現的判定錯誤",
+      "finding": "硬幣剛露邊的水位，左圖光路停在槽壁，右圖卻標可以看見硬幣；精細畫面仍有矛盾，預覽/精細也會因像素門檻變說法",
+      "evidence": "depth-threshold.json；x320/depth83，left hidden、right可以看見硬幣、14 coinPixels/detail；visibility-detail.json",
+      "recommendation": "共用物理可見性，兩圖與文字同一準則，妥善保留部分可見；狀態不依解析度翻轉"
+    },
+    {
+      "id": 2,
+      "area": "第二至四區",
+      "type": "已重現的播放錯誤",
+      "finding": "整張實驗圖完全在視窗上方，點尚可見的發射按鈕，光仍前進，可能錯過觀察",
+      "evidence": "offscreen-start.json：三區stageBottom約-35px，1000ms後仍running",
+      "recommendation": "發射時先把主要觀察畫面帶入可見範圍，或先保留起點待畫面可見再開始"
+    },
+    {
+      "id": 3,
+      "area": "小測",
+      "type": "已重現的判定清除錯誤",
+      "finding": "排序不變（第一位按左鍵／原位置放回），正確或錯誤判定仍被清掉",
+      "evidence": "quiz-noop.json：before/after order一致，result由排序正確變空白",
+      "recommendation": "只有真正改變排序才清除判定"
+    },
+    {
+      "id": 4,
+      "area": "第二至四區補充小車",
+      "type": "已重現的操作不一致",
+      "finding": "自動離屏／隱藏暫停後返回不會續播，與主實驗不同",
+      "evidence": "edges.json cartBefore running，visibility返回後cartAfter paused；oblique-cart.mjs",
+      "recommendation": "區別自動暫停、手動或收合，僅自動暫停回來續播"
+    },
+    {
+      "id": 5,
+      "area": "小測",
+      "type": "已重現的呈現時序問題",
+      "finding": "重播時舊角度回饋仍顯示，但四筆角度已收起，提示指向當下看不到的證據",
+      "evidence": "probes.json replayFeedback state running/result含角度/四label hidden",
+      "recommendation": "保留排序，重播期間暫藏角度回饋，到達後恢復或明示重播中"
+    },
+    {
+      "id": 6,
+      "area": "小測",
+      "type": "科學前提應說清",
+      "finding": "夾角越大光速越快需同一束光通過平行介面；平行條件在可見教學提示中不明確",
+      "evidence": "reading.json vs rank-scene-desc (hidden accessible description)",
+      "recommendation": "就近一句交代同一束光與平行介面；不新增公式"
+    },
+    {
+      "id": 7,
+      "area": "第四區",
+      "type": "科學適用範圍應說清",
+      "finding": "慢到快必偏離法線的文字需限定斜射且存在透射光；0–40圖本身正確，不要求擴充全反射",
+      "evidence": "index.html s4；single-refraction-model0–40；OpenStax1.4",
+      "recommendation": "加本區角度範圍內／發生折射時之短限定，不新增全反射教學"
+    },
+    {
+      "id": 8,
+      "area": "第五區",
+      "type": "模型說明位置",
+      "finding": "紅藍共用同折射率，顏色僅區分方向的說明只藏在補充，容易誤讀為不同色光一定完全同路",
+      "evidence": "index.html return-explanation",
+      "recommendation": "在主圖附近短註顏色僅區分方向，保留雙色與無色散模型"
+    },
+    {
+      "id": 9,
+      "area": "第三、四區補充小車",
+      "type": "示範與主圖關係",
+      "finding": "補充為固定示範，不隨主圖角度或介質切換；主圖0度仍可看到斜射轉向的小車",
+      "evidence": "oblique-0.png/cart.png；oblique-cart.mjs init固定40/30",
+      "recommendation": "標明固定斜射類比或選擇同步；不強制改整套模型"
+    },
+    {
+      "id": 10,
+      "area": "第二至四區說明",
+      "type": "術語銜接",
+      "finding": "直接用波前各處說明，但本頁未解釋其含義或指出圖上對應",
+      "evidence": "reading.json supplements",
+      "recommendation": "簡短白話替換或就近說明，不新增長段落"
+    },
+    {
+      "id": 11,
+      "area": "第六區對話",
+      "type": "學習敘事銜接",
+      "finding": "預設空槽看不到，開場卻先問為何看起來較淺；重新看見與視深目標需串起",
+      "evidence": "reading.json s6，depth-dry.png/depth-wet.png",
+      "recommendation": "先承接加水重新看見，再將觀察接回實際位置與看似位置，改寫短對話"
+    }
+  ],
+  "status": "11項皆A，開始統一實作"
+}

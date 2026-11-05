@@ -1,0 +1,11 @@
+✔ a true coin-rim crescent has one continuous visibility result and an admitted representative bundle (17.272729ms)
+✔ all control settings keep status monotone and every visible construction actually reaches the same coin (581.86163ms)
+✔ preview and detail always contain the real visible edge, without changing visibility, camera or fixed coin (10925.282263ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11715.335383
