@@ -2,6 +2,23 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {layerGeometry,layerSnapshot,createLayerDeck,placeLayer,compareLayers,MS_PER_OPTICAL_UNIT,LAYER_MATERIALS} from '../units/4/parts/4.3/assets/layer-speed-model.mjs';
 const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-10,`${a} != ${b}`);
+test('a newly loaded deck can start with every one of the 24 answers and either incident angle',()=>{
+ for(const incidentRandom of [0,.999999]){
+  const firstAnswers=new Set(),firstKeys=new Set();
+  for(let target=0;target<24;target++){
+   let calls=0;
+   const deck=createLayerDeck(()=>{
+    const i=23-calls++;
+    return i<1?incidentRandom:i===target?0:.999999;
+   });
+   const q=deck.next();firstAnswers.add(q.geometry.order.join(','));firstKeys.add(q.key);
+   assert.equal(q.id,1);assert.equal(q.geometry.incident,incidentRandom<.5?36:40);
+   assert.equal(compareLayers(q.geometry,q.geometry.order).correct,true);
+   for(const [id,material]of q.materials.entries())assert.equal(q.geometry.layers[id].n,material.n);
+  }
+  assert.equal(firstAnswers.size,24);assert.equal(firstKeys.size,24);
+ }
+});
 test('all 24 speed orders obey Snell invariance, continuous parallel-layer geometry and visible angle differences',()=>{
  const deck=createLayerDeck(()=>.37),orders=new Set();
  for(let i=0;i<24;i++){
@@ -20,7 +37,11 @@ test('all 24 speed orders obey Snell invariance, continuous parallel-layer geome
 });
 test('deck renews indefinitely without adjacent identical rankings or a fixed fastest layer',()=>{
  const deck=createLayerDeck(()=>.2);let last;const winners=new Set();
- for(let i=0;i<240;i++){const q=deck.next();assert.equal(q.id,i+1);const rank=q.geometry.order.join('');assert.notEqual(rank,last);last=rank;winners.add(q.geometry.order[0]);}
+ for(let round=0;round<10;round++){
+  const rankings=new Set();
+  for(let i=0;i<24;i++){const q=deck.next();assert.equal(q.id,round*24+i+1);const rank=q.geometry.order.join('');assert.notEqual(rank,last);last=rank;rankings.add(rank);winners.add(q.geometry.order[0]);}
+  assert.equal(rankings.size,24);
+ }
  assert.equal(winners.size,4);
 });
 test('animation advances by geometric distance and actual relative speed, including intermediate frames and exact endpoints',()=>{

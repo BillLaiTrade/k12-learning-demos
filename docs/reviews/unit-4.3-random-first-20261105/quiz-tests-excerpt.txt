@@ -1,0 +1,92 @@
+小測專項輸出節錄（完整首次輸出見initial-browser-tests.txt）
+# Subtest: 4.3 layer-speed quiz applies refraction through one four-layer bench
+    # Subtest: reloading starts a fresh random first question and grades its actual ray angles
+    ok 1 - reloading starts a fresh random first question and grades its actual ray angles
+      ---
+      duration_ms: 28541.436642
+      type: 'test'
+      ...
+    # Subtest: initial scene awaits emission, preserves six teaching sections and withholds speed answers
+    ok 2 - initial scene awaits emission, preserves six teaching sections and withholds speed answers
+      ---
+      duration_ms: 396.359909
+      type: 'test'
+      ...
+    # Subtest: emission draws genuine intermediate, continuous refracted segments and leaves parallel normals for comparison
+    ok 3 - emission draws genuine intermediate, continuous refracted segments and leaves parallel normals for comparison
+      ---
+      duration_ms: 3862.759866
+      type: 'test'
+      ...
+    # Subtest: displayed angles match actual rays in every material arrangement and stay clear on narrow screens
+    ok 4 - displayed angles match actual rays in every material arrangement and stay clear on narrow screens
+      ---
+      duration_ms: 100959.503238
+      type: 'test'
+      ...
+    # Subtest: photoreal bench and transparent source load, with the optical aperture aligned to the computed ray
+    ok 5 - photoreal bench and transparent source load, with the optical aperture aligned to the computed ray
+      ---
+      duration_ms: 15.647684
+      type: 'test'
+      ...
+    # Subtest: three material states use distinct real textures and follow the speed ordering when questions change
+    ok 6 - three material states use distinct real textures and follow the speed ordering when questions change
+      ---
+      duration_ms: 7782.619198
+      type: 'test'
+      ...
+    # Subtest: partial and wrong answers get actionable feedback; correction and new edits update the same diagram
+    ok 7 - partial and wrong answers get actionable feedback; correction and new edits update the same diagram
+      ---
+      duration_ms: 657.511287
+      type: 'test'
+      ...
+    # Subtest: mouse dragging swaps occupied slots, cancels outside drops and does not leak a click or ghost
+    ok 8 - mouse dragging swaps occupied slots, cancels outside drops and does not leak a click or ghost
+      ---
+      duration_ms: 577.674701
+      type: 'test'
+      ...
+    # Subtest: keyboard selection, arrows, deletion and Escape support the complete ranking workflow
+    ok 9 - keyboard selection, arrows, deletion and Escape support the complete ranking workflow
+      ---
+      duration_ms: 3749.441353
+      type: 'test'
+      ...
+    # Subtest: offscreen playback suspends and resumes, while changing question cancels old playback and clears answers
+    ok 10 - offscreen playback suspends and resumes, while changing question cancels old playback and clears answers
+      ---
+      duration_ms: 11987.726388
+      type: 'test'
+      ...
+    # Subtest: desktop, laptop and narrow screens preserve physical angles, readable labels and complete controls
+    ok 11 - desktop, laptop and narrow screens preserve physical angles, readable labels and complete controls
+      ---
+      duration_ms: 2198.325941
+      type: 'test'
+      ...
+    # Subtest: native phone touch drags cards without page scrolling and reduced-motion playback still reveals intermediate light
+    ok 12 - native phone touch drags cards without page scrolling and reduced-motion playback still reveals intermediate light
+      ---
+      duration_ms: 4941.439222
+      type: 'test'
+      ...
+    # Subtest: the lamp emits by mouse and keyboard, stays aligned after resize, and preserves answers on replay
+    ok 13 - the lamp emits by mouse and keyboard, stays aligned after resize, and preserves answers on replay
+      ---
+      duration_ms: 16251.458366
+      type: 'test'
+      ...
+    # Subtest: texture failure leaves a usable vector bench, and no-JavaScript explains how to continue
+    ok 14 - texture failure leaves a usable vector bench, and no-JavaScript explains how to continue
+      ---
+      duration_ms: 4664.293722
+      type: 'test'
+      ...
+    1..14
+ok 4 - 4.3 layer-speed quiz applies refraction through one four-layer bench
+  ---
+  duration_ms: 187446.426516
+  type: 'test'
+  ...

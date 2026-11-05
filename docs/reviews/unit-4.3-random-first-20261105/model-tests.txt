@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: reciprocal fronts start at the enabled source, conserve speed ratios and finish on the same reversed path
+ok 1 - reciprocal fronts start at the enabled source, conserve speed ratios and finish on the same reversed path
+  ---
+  duration_ms: 1.495853
+  type: 'test'
+  ...
+# Subtest: one actual inverted adjacent pair is returned across the whole deck without disclosing an entire answer
+ok 2 - one actual inverted adjacent pair is returned across the whole deck without disclosing an entire answer
+  ---
+  duration_ms: 1.358538
+  type: 'test'
+  ...
+# Subtest: cached observer directions preserve identical frame pixels when camera and resolution alternate
+ok 3 - cached observer directions preserve identical frame pixels when camera and resolution alternate
+  ---
+  duration_ms: 19.263404
+  type: 'test'
+  ...
+# Subtest: a newly loaded deck can start with every one of the 24 answers and either incident angle
+ok 4 - a newly loaded deck can start with every one of the 24 answers and either incident angle
+  ---
+  duration_ms: 1.132771
+  type: 'test'
+  ...
+# Subtest: all 24 speed orders obey Snell invariance, continuous parallel-layer geometry and visible angle differences
+ok 5 - all 24 speed orders obey Snell invariance, continuous parallel-layer geometry and visible angle differences
+  ---
+  duration_ms: 0.824651
+  type: 'test'
+  ...
+# Subtest: deck renews indefinitely without adjacent identical rankings or a fixed fastest layer
+ok 6 - deck renews indefinitely without adjacent identical rankings or a fixed fastest layer
+  ---
+  duration_ms: 1.248244
+  type: 'test'
+  ...
+# Subtest: animation advances by geometric distance and actual relative speed, including intermediate frames and exact endpoints
+ok 7 - animation advances by geometric distance and actual relative speed, including intermediate frames and exact endpoints
+  ---
+  duration_ms: 0.530091
+  type: 'test'
+  ...
+# Subtest: placement supports pool replacement, swapping existing cards and keeps a unique set
+ok 8 - placement supports pool replacement, swapping existing cards and keeps a unique set
+  ---
+  duration_ms: 0.184165
+  type: 'test'
+  ...
+# Subtest: grading rejects partial, duplicate and invalid submissions, and accepts exactly the speed order
+ok 9 - grading rejects partial, duplicate and invalid submissions, and accepts exactly the speed order
+  ---
+  duration_ms: 0.650692
+  type: 'test'
+  ...
+# Subtest: gas, liquid and solid appearances move with the same refractive indices through every layer permutation
+ok 10 - gas, liquid and solid appearances move with the same refractive indices through every layer permutation
+  ---
+  duration_ms: 0.52936
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 41.356563

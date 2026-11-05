@@ -42,9 +42,12 @@ test('4.3 complete basic lesson works on desktop and mobile',{timeout:90000},asy
  await page.locator('#reversibility-comparison summary').click();const original=await page.locator('#refract-scene .ray').first().getAttribute('d');await page.locator('#reverse-path').click();assert.match(await page.locator('#reverse-label').textContent(),/B 前往 A/);assert.notEqual(await page.locator('#refract-scene .ray').first().getAttribute('d'),original);await page.locator('#reverse-path').click();assert.equal(await page.locator('#refract-scene .ray').first().getAttribute('d'),original);
  const position=()=>page.locator('#depth-scene').evaluate(e=>[e.querySelector('.depth-coin').getAttribute('transform'),e.querySelector('.depth-apparent')?.getAttribute('cy')]);const initial=await position();await page.locator('#depth-input').fill('100');await page.locator('#depth-input').dispatchEvent('input');await page.clock.runFor(200);await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.depth==='100');const deep=await position();assert.equal(initial[0],deep[0]);assert.notEqual(initial[1],deep[1]);await page.locator('#show-rays').uncheck();assert.equal(await page.locator('#depth-scene .extension').count(),0);await page.locator('#show-rays').check();assert.equal(await page.locator('#depth-scene .extension').count(),2);
  await page.waitForFunction(()=>document.querySelector('#rank-lab')?.dataset.ready==='true');
- await page.locator('#rank-play').click();await page.clock.runFor(4000);assert.equal(await page.locator('#rank-lab').getAttribute('data-state'),'complete');
+ await page.locator('#rank-lab').evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await page.clock.runFor(200);
+ await page.locator('#rank-play').click();await page.clock.runFor(5000);assert.equal(await page.locator('#rank-lab').getAttribute('data-state'),'complete');
  await page.locator('#rank-check').click();assert.match(await page.locator('#quiz-result').textContent(),/未放入/);
- for(const [slot,id] of [0,2,1,3].entries()){await page.locator(`[data-rank-medium="${id}"]`).click();await page.locator(`[data-rank-slot="${slot}"]`).click();}
+ const ranking=await page.locator('.rank-angle-value').evaluateAll(es=>es.map((e,id)=>({id,angle:parseFloat(e.textContent)})).sort((a,b)=>b.angle-a.angle).map(e=>e.id));
+ const wrong=[...ranking];[wrong[2],wrong[3]]=[wrong[3],wrong[2]];
+ for(const [slot,id] of wrong.entries()){await page.locator(`[data-rank-medium="${id}"]`).click();await page.locator(`[data-rank-slot="${slot}"]`).click();}
  await page.locator('#rank-check').click();assert.equal(await page.locator('#quiz-result').getAttribute('data-result'),'retry');
  await page.locator('[data-rank-slot="2"]').focus();await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#quiz-result').textContent(),'');
  await page.locator('#rank-check').click();assert.match(await page.locator('#quiz-result').textContent(),/排序正確/);

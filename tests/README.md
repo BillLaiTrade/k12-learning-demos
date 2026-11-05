@@ -1,3 +1,14 @@
+## 4.3 每次載入隨機首題（2026-11-05）
+
+模型新增48組首題（24種排列×兩種入射角），逐輪核對24種排序各一次及跨輪不連續重題。小測專項新增真實重新載入六次，以受控亂數避免機率性斷言，每次由實際SVG光路判讀並驗證錯誤／正確作答。整課、最後檢查及觸控流程改依當題角度，不預設首題答案；完整角度、材質、拖曳、重播、換題與備援檢查保持。
+
+```sh
+node --test --test-isolation=none tests/unit-4.3-layer-speed-model.test.mjs tests/unit-4.3-final-review-model.test.mjs
+node --test --test-isolation=none --test-concurrency=1 tests/unit-4.3-layer-speed-quiz.test.cjs tests/unit-4.3-final-review.test.cjs tests/unit-4.3-format.test.cjs tests/unit-4.3.test.cjs
+```
+
+沿用LESSON_BASE_URL／LESSON_USE_PROXY與LAYER_CAPTURE_DIR；reload-cases.json記錄六次實際光路／角度／材質及正確排序。執行環境須允許本機HTTP與Chromium。
+
 ## 4.3 逐項核可後統一改善（2026-11-05）
 
 本輪正式桌電／筆電檢查使用`unit-4.3-final-review.test.cjs`：離屏自動續播與手動／比較停格、第三四區預覽、第五區獨立漸進光束／角度角色、四卡全放後實際拖回再放入、只用左右鍵、單組角度回饋；1440×900、1366×768、1280×720、1024×768七區界線。第六區用真實時間記錄加放水與同步影格，驗眼睛不中斷、手動水位接管、返回續播、停止恢復細節與無worker備援。`FINAL_REVIEW_CAPTURE_DIR`保存畫面與water-frames.json；`LESSON_BASE_URL`、`LESSON_USE_PROXY`沿用。
