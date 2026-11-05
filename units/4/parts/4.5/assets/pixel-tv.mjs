@@ -1,4 +1,4 @@
-import {WIDTH,HEIGHT,QUICK_POINTS,DEFAULT_INDEX,sourcePixels,currentPixel,renderPixels,rgbaPixels,pixelAt,colourCss,colourName,sameColour,groupOutline,neighbourhood,moveSelection,observationText,loupeLayout,sampleDragIndex} from './pixel-tv-observer-model.mjs?v=tv-sample-point-20261105';
+import {WIDTH,HEIGHT,QUICK_POINTS,DEFAULT_INDEX,sourcePixels,currentPixel,renderPixels,rgbaPixels,pixelAt,colourCss,colourName,sameColour,groupOutline,neighbourhood,moveSelection,observationText,loupeLayout,sampleDragIndex} from './pixel-tv-observer-model.mjs?v=tv-compare-20261105';
 export function initialisePixelTv(root){
  if(root.dataset.ready==='true')return;
  const $=s=>root.querySelector(s),source=sourcePixels();
@@ -7,6 +7,22 @@ export function initialisePixelTv(root){
  const lenses=[...root.querySelectorAll('[data-tv-loupe-canvas]')],lensContexts=lenses.map(c=>c.getContext('2d'));
  if([...contexts,...lensContexts].some(c=>!c))throw new Error('Canvas2D unavailable');
  contexts[0].putImageData(new ImageData(rgbaPixels(source),WIDTH,HEIGHT),0,0);
+ const comparison=$('[data-tv-comparison]'),workbench=$('.tv-content-grid');
+ const originalFigure=pictures[0].closest('figure'),currentFigure=pictures[1].closest('figure');
+ const moves=[
+  [originalFigure,'[data-tv-before-image]'],[currentFigure,'[data-tv-after-image]'],
+  [$('.tv-selected-summary'),'[data-tv-after-summary]'],[$('[data-tv-controls]'),'[data-tv-after-editor]'],
+  [$('[data-tv-reset]'),'[data-tv-after-reset]'],[$('.tv-quick-points'),'[data-tv-compare-selection]'],
+  [$('[data-tv-position]'),'[data-tv-compare-tools]'],[$('[data-tv-sample-status]'),'[data-tv-compare-tools]'],
+  [$('[data-tv-instruction]'),'[data-tv-compare-scope]'],[$('.tv-gallery-actions'),'[data-tv-compare-scope]']
+ ].map(([node,slot])=>{const home=document.createComment('pixel TV layout home');node.before(home);return{node,home,slot:$(slot)}});
+ let comparing=false;
+ function layoutMode(){
+  const next=state.mode==='colour';if(next===comparing)return;
+  if(next)moves.forEach(({node,slot})=>slot.append(node));
+  else [...moves].reverse().forEach(({node,home})=>home.after(node));
+  comparison.hidden=!next;workbench.hidden=next;comparing=next;
+ }
  const values=()=>state.mode==='screen'?state.screenValues:state.colourValues;
  const settings=()=>({mode:state.mode,selected:state.selected,values:values()});
  let groupIndex=-1,matches=[],outline='',drag=null,dragFrame=0,pendingDrag=null,frameKey='',visible=source;
@@ -30,7 +46,7 @@ export function initialisePixelTv(root){
   const config=settings(),before=pixelAt(source,state.selected),after=currentPixel(source,state.selected,config),x=state.selected%WIDTH,y=Math.floor(state.selected/WIDTH),point=QUICK_POINTS.find(p=>p.index===state.selected);
   if(groupIndex!==state.selected){matches=groups.get(before.join(','));groupIndex=state.selected;}
   if(state.mode==='colour'&&state.showOutline){const key=before.join(',');if(!outlines.has(key))outlines.set(key,groupOutline(matches));outline=outlines.get(key);}
-  root.dataset.mode=state.mode;root.dataset.selected=String(state.selected);root.dataset.targetCount=String(matches.length);
+  root.dataset.mode=state.mode;root.dataset.selected=String(state.selected);root.dataset.targetCount=String(matches.length);layoutMode();
   root.querySelectorAll('[data-tv-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tvMode===state.mode)));
   $('[data-tv-current-figure]').hidden=state.mode==='inspect';$('[data-tv-controls]').hidden=state.mode==='inspect';$('[data-tv-adjust-selected]').hidden=state.mode!=='inspect';
   $('[data-tv-inspector-title]').textContent=state.mode==='inspect'?'選中的像素':state.mode==='colour'?'已選定的顏色':'整幅圖的 RGB 調整';
@@ -38,9 +54,17 @@ export function initialisePixelTv(root){
   $('[data-tv-target]').textContent=state.mode==='inspect'?'觀察這一格':state.mode==='colour'?`調整對象：原圖的${colourName(before)}`:'調整對象：整幅圖';
   $('[data-tv-scope]').textContent=state.mode==='inspect'?'小取樣框與鏡面中央金框，對應同一個像素。':state.mode==='colour'?`已選定同色 ${matches.length} 格，修改後一起變色。`:`全部 ${WIDTH*HEIGHT} 格一起調整通道強度。`;
   $('[data-tv-selected-colour]').style.backgroundColor=colourCss(after);$('[data-tv-selected-colour]').setAttribute('aria-label',`${colourName(after)}，RGB ${after.join('、')}`);
-  $('[data-tv-colour-name]').textContent=`目前：${colourName(after)}`;
+  $('[data-tv-colour-name]').textContent=state.mode==='colour'?`調整中的顏色：${colourName(after)}`:`目前：${colourName(after)}`;
+  $('[data-tv-scope]').hidden=state.mode==='colour';$('[data-tv-colour-values]').hidden=state.mode!=='colour';
+  if(state.mode==='colour'){
+   const rgbLine=rgb=>rgb.map((n,c)=>`<span>${['R','G','B'][c]} ${n}</span>`).join('');
+   $('[data-tv-before-colour]').style.backgroundColor=colourCss(before);$('[data-tv-before-colour]').setAttribute('aria-label',`原始${colourName(before)}，RGB ${before.join('、')}`);
+   $('[data-tv-before-name]').textContent=`原始顏色：${colourName(before)}`;$('[data-tv-before-values]').innerHTML=rgbLine(before);$('[data-tv-colour-values]').innerHTML=rgbLine(after);
+   const changes=[];before.forEach((n,c)=>{const changed=n!==after[c];$(`[data-tv-before-value="${c}"]`).textContent=String(n);$(`[data-tv-before-light="${c}"]`).style.backgroundColor=colourCss(before.map((v,i)=>i===c?v:0));$(`[data-tv-before-row="${c}"]`).dataset.changed=String(changed);$(`[data-channel-row="${c}"]`).dataset.changed=String(changed);$(`[data-tv-compare-was="${c}"]`).textContent=`原 ${n}`;if(changed)changes.push(`${['紅光','綠光','藍光'][c]} ${n} → ${after[c]}`);});
+   const delta=changes.length?'本次變更：'+changes.join('；'):'尚未調整，兩邊顏色相同。';if($('[data-tv-compare-delta]').textContent!==delta)$('[data-tv-compare-delta]').textContent=delta;
+  }
   $('[data-tv-current-title]').textContent=state.mode==='colour'?'同色像素調整後':'整幅圖調整後';
-  $('[data-tv-instruction]').textContent=state.mode==='inspect'?'拖曳圖上的小取樣框，查看像素與 RGB；放開後選定。':state.mode==='colour'?`金色輪廓＝原圖中同色的 ${matches.length} 格。從右側「調整 RGB」立即改色。`:'拖曳任一小取樣框看像素；右側調整整台電視的 RGB 強度。';
+  $('[data-tv-instruction]').textContent=state.mode==='inspect'?'拖曳圖上的小取樣框，查看像素與 RGB；放開後選定。':state.mode==='colour'?`原圖中相同 RGB 的 ${matches.length} 格會一起變色，其餘保持原樣。`:'拖曳任一小取樣框看像素；右側調整整台電視的 RGB 強度。';
   $('[data-tv-outline]').hidden=state.mode!=='colour';$('[data-tv-outline]').setAttribute('aria-pressed',String(state.showOutline));$('[data-tv-outline]').textContent=`範圍標示：${state.showOutline?'開啟':'關閉'}`;
   for(const figure of root.querySelectorAll('.tv-picture-figure')){
    figure.querySelector('[data-tv-group-outline]').setAttribute('d',state.mode==='colour'&&state.showOutline?outline:'');
@@ -48,7 +72,7 @@ export function initialisePixelTv(root){
    region.setAttribute('x',Math.max(0,x-2));region.setAttribute('y',Math.max(0,y-2));region.setAttribute('width',Math.min(WIDTH-1,x+2)-Math.max(0,x-2)+1);region.setAttribute('height',Math.min(HEIGHT-1,y+2)-Math.max(0,y-2)+1);cell.setAttribute('x',x);cell.setAttribute('y',y);
   }
   const row=$('[data-tv-rgb="before"]');before.forEach((n,c)=>{row.querySelector(`[data-component="${c}"]`).style.backgroundColor=colourCss(before.map((v,i)=>i===c?v:0));row.querySelector(`[data-value="${c}"]`).textContent=`${['R','G','B'][c]} ${n}`;});row.querySelector('[data-combined]').style.backgroundColor=colourCss(before);row.querySelector('[data-combined]').setAttribute('aria-label',`原本${colourName(before)}，RGB ${before.join('、')}`);
-  $('[data-tv-control-label]').textContent=state.mode==='screen'?'在這裡調整 RGB 強度':'在這裡調整 RGB';
+  $('[data-tv-control-label]').textContent=state.mode==='screen'?'在這裡調整 RGB 強度':'調整 RGB';
   $('[data-tv-control-help]').textContent=state.mode==='screen'?'0 關閉、255 保留原強度；各像素依原值同比例改變。':'點選 0／128／255，或直接輸入數值。修改會立即套用整組。';
   root.querySelectorAll('[data-tv-value]').forEach((input,c)=>{if(input.value!==String(config.values[c]))input.value=String(config.values[c]);input.setAttribute('aria-invalid','false');});
   root.querySelectorAll('[data-tv-preset]').forEach(b=>b.setAttribute('aria-pressed',String(config.values[Number(b.dataset.channel)]===Number(b.dataset.tvPreset))));
@@ -93,5 +117,5 @@ export function initialisePixelTv(root){
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&drag){e.preventDefault();cancelDrag();}});
  window.addEventListener('blur',cancelDrag);window.addEventListener('resize',cancelDrag);document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelDrag();});
  root.querySelectorAll('[data-tv-point]').forEach(b=>b.addEventListener('click',()=>{cancelDrag();select(QUICK_POINTS.find(p=>p.id===b.dataset.tvPoint).index);}));
- sampleStatus();render();new ResizeObserver(()=>{cancelDrag();positionLenses();}).observe($('.tv-gallery'));root.querySelectorAll('[data-tv-pending]').forEach(b=>b.disabled=false);$('[data-tv-load-note]').hidden=true;root.dataset.ready='true';
+ sampleStatus();render();const widths=new WeakMap(),resize=new ResizeObserver(entries=>{let changed=false;for(const e of entries){if(widths.has(e.target)&&widths.get(e.target)!==e.contentRect.width)changed=true;widths.set(e.target,e.contentRect.width);}if(changed)cancelDrag();positionLenses();});pictures.forEach(p=>resize.observe(p));root.querySelectorAll('[data-tv-pending]').forEach(b=>b.disabled=false);$('[data-tv-load-note]').hidden=true;root.dataset.ready='true';
 }
