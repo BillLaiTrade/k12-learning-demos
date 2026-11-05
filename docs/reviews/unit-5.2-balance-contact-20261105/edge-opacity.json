@@ -1,0 +1,38 @@
+[
+  {
+    "file": "balance-aluminum.webp",
+    "edge_alpha": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      252,
+      251,
+      251,
+      251,
+      252,
+      250
+    ],
+    "opaque_all_heights": false
+  },
+  {
+    "file": "balance-aluminum-contact.webp",
+    "edge_alpha": [
+      253,
+      252,
+      253,
+      252,
+      252,
+      252,
+      253,
+      252,
+      252,
+      252,
+      252,
+      252
+    ],
+    "opaque_all_heights": true
+  }
+]
