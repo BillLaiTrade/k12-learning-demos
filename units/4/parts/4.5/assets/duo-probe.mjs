@@ -1,5 +1,8 @@
 import {MIX_SETUP,footprint} from './mix-optics.mjs';
-import {PRIMARY_KEYS,SECONDARY_KEYS,PROBE_SETUP,COLOUR_OPTIONS,DUO_LIGHTS as LIGHTS,PROBE_LINEAR,lightComponents,probeColourName} from './duo-quiz-model.mjs?v=compound-light-20261105';
+import {PRIMARY_KEYS,PROBE_SETUP,COLOUR_OPTIONS,DUO_LIGHTS,PROBE_LINEAR,probeColourName} from './duo-quiz-model.mjs?v=compound-light-20261105';
+
+// Free probing uses only primary sources; compound sources belong to challenges.
+const LIGHTS=Object.fromEntries(PRIMARY_KEYS.map(key=>[key,DUO_LIGHTS[key]]));
 
 // The same lens/pivot coordinates as section 3's PNG fallback.
 const PIVOT={x:.5,y:.533566923133767};
@@ -74,7 +77,6 @@ export function initialiseDuoProbe(root){
   root.dataset.probe=JSON.stringify(lamps);root.dataset.probePreset=preset;root.dataset.probeDragging=String(!!drag?.moved);
   buttons.forEach((b,i)=>{const lamp=lamps[i],name=`手電筒 ${i?'B':'A'}・${LIGHTS[lamp.colour].name}`,image=b.querySelector('img'),src=new URL(`./torch-${PRIMARY_KEYS[LIGHTS[lamp.colour].torchIndex]}.png`,import.meta.url).href;if(image.src!==src)image.src=src;b.style.setProperty('--torch-color',LIGHTS[lamp.colour].guide);b.querySelector('.torch-name').textContent=name;b.dataset.on=String(lamp.on);b.setAttribute('aria-pressed',String(lamp.on));b.setAttribute('aria-label',`${name}，目前${lamp.on?'開啟':'關閉'}；點按開關，拖曳或方向鍵調整照射位置，橫向${Math.round(lamp.x*100)}%、縱向${Math.round(lamp.y*100)}%`);});
   root.querySelectorAll('[data-probe-colour]').forEach(b=>b.setAttribute('aria-pressed',String(lamps[Number(b.dataset.probeLamp)].colour===b.dataset.probeColour)));
-  root.querySelectorAll('[data-probe-compound]').forEach(select=>select.value=PRIMARY_KEYS.includes(lamps[Number(select.dataset.probeCompound)].colour)?'':lamps[Number(select.dataset.probeCompound)].colour);
   root.querySelectorAll('[data-probe-preset]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.probePreset===preset)));
   const description=lamps.map((s,i)=>`手電筒${i?'B':'A'}的${LIGHTS[s.colour].name}${s.on?'開啟':'關閉'}`).join('、');canvas.setAttribute('aria-label',`正面白幕：${description}。拖動下方手電筒調整光斑重疊。`);$('[data-probe-status]').textContent=description;
   refreshPoses();updateGuide();if(!frame)frame=requestAnimationFrame(paint);
@@ -89,7 +91,6 @@ export function initialiseDuoProbe(root){
   b.addEventListener('keydown',e=>{if(e.key==='Escape'&&drag){e.preventDefault();end(true);return;}const d={ArrowLeft:[-.025,0],ArrowRight:[.025,0],ArrowUp:[0,-.025],ArrowDown:[0,.025]}[e.key];b.removeAttribute('data-pointer-focus');if(!d&&e.key!=='Home')return;e.preventDefault();end(true);if(d){lamps[i].x=clamp(lamps[i].x+d[0],.05,.95);lamps[i].y=clamp(lamps[i].y+d[1],.08,.92);}else lamps[i].x=lamps[i].y=.5;preset='custom';update();});
   b.addEventListener('click',e=>{if(e.detail!==0&&suppressClick===b){suppressClick=null;return;}end(true);lamps[i].on=!lamps[i].on;update();});
  });
- root.querySelectorAll('[data-probe-compound]').forEach(select=>{for(const key of[...SECONDARY_KEYS,'white']){const option=document.createElement('option');option.value=key;option.textContent=`${LIGHTS[key].name}（${lightComponents(key).replaceAll('光','')}）`;select.append(option);}select.addEventListener('change',()=>{if(!select.value)return;end(true);lamps[Number(select.dataset.probeCompound)].colour=select.value;update();});});
  root.querySelectorAll('[data-probe-colour]').forEach(b=>b.addEventListener('click',()=>{end(true);lamps[Number(b.dataset.probeLamp)].colour=b.dataset.probeColour;update();}));
  function arrange(kind){const positions={apart:[[.25,.5],[.75,.5]],pairs:[[.4,.5],[.6,.5]],together:[[.5,.5],[.5,.5]]}[kind];lamps.forEach((s,i)=>{s.x=positions[i][0];s.y=positions[i][1];});preset=kind;}
  root.querySelectorAll('[data-probe-preset]').forEach(b=>b.addEventListener('click',()=>{end(true);arrange(b.dataset.probePreset);update();}));
@@ -99,5 +100,5 @@ export function initialiseDuoProbe(root){
  const resize=new ResizeObserver(()=>{refreshPoses();updateGuide();});resize.observe(scene);resize.observe(canvas);buttons.forEach(b=>resize.observe(b.querySelector('.torch-drawing')));
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){observer.disconnect();loadTorches();}},{rootMargin:'180px'});observer.observe(scene);
  $('[data-probe-static]').setAttribute('hidden','');update();
- return{suspend(){end(true);},reproduce(colours){end(true);colours.forEach((colour,i)=>Object.assign(lamps[i],{colour,on:true}));arrange('pairs');update();buttons[0].focus({preventScroll:true});$('[data-probe-help]').textContent='已重現本題燈色。這裡只看白幕混光，未套用題目的色片與紙張；可拖曳調整光斑。';},dispose(){disposed=true;end(true);cancelAnimationFrame(frame);resize.disconnect();observer.disconnect();studios.forEach(s=>s?.dispose());removeEventListener('blur',onBlur);document.removeEventListener('visibilitychange',onVisibility);}};
+ return{suspend(){end(true);},dispose(){disposed=true;end(true);cancelAnimationFrame(frame);resize.disconnect();observer.disconnect();studios.forEach(s=>s?.dispose());removeEventListener('blur',onBlur);document.removeEventListener('visibilitychange',onVisibility);}};
 }

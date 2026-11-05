@@ -1,5 +1,5 @@
 import {rgbCss} from './color-model.mjs';
-import {initialiseDuoProbe} from './duo-probe.mjs?v=compound-light-20261105';
+import {initialiseDuoProbe} from './duo-probe.mjs?v=primary-probe-20261105';
 import {DUO_LIGHTS as LIGHTS,DUO_FILTERS as FILTERS,lightComponents,QUESTION_FOCUS,PAPER_TYPES,COLOUR_OPTIONS,TRANSMISSION_OPTIONS,REFLECTION_OPTIONS,INITIAL_SERIES,newQuestionSeries,challengeSignal,expectedAnswer,checkPrediction} from './duo-quiz-model.mjs?v=compound-light-20261105';
 
 const colourName=key=>COLOUR_OPTIONS.find(o=>o[0]===key)?.[1]||key;
@@ -71,7 +71,6 @@ export function initialiseDuoQuiz(root){
  }
  const colours=$('[data-colour-options]');COLOUR_OPTIONS.forEach(([key,name,swatch])=>{const label=document.createElement('label');label.className='duo-answer';const input=document.createElement('input');input.type='radio';input.name='appearance';input.value=key;input.required=true;const dot=document.createElement('i');dot.style.backgroundColor=swatch;dot.setAttribute('aria-hidden','true');label.append(input,dot,document.createTextNode(name));colours.append(label);});
  for(const [selector,options]of[['[name=transmission]',TRANSMISSION_OPTIONS],['[name=reflection]',REFLECTION_OPTIONS]])for(const [value,label]of options){const option=document.createElement('option');option.value=value;option.textContent=label;$(selector).append(option);}
- $('[data-reproduce]').addEventListener('click',()=>{showView('probe',{align:true});probe.reproduce(question.lights);});
  function selectQuestion(index){if(index<0||index>=attempts.length)return;current=index;renderQuestion();$('[data-challenge-question]').focus({preventScroll:true});const r=$('.duo-task').getBoundingClientRect();if(r.top<0||r.bottom>innerHeight)$('.duo-workspace-tabs').scrollIntoView({block:'start',behavior:'auto'});}
  root.querySelectorAll('[data-question-tab]').forEach(button=>button.addEventListener('click',()=>selectQuestion(Number(button.dataset.questionTab))));
  $('[data-prev-question]').addEventListener('click',()=>selectQuestion(current-1));
