@@ -220,3 +220,7 @@
 播放時才更新軌道、光點與兩幅畫面；初始／暫停狀態完全靜止，離屏或分頁隱藏停止RAF並排除離開期間的時間，收合改為暫停。模組／貼圖／任一畫布WebGL失敗及執行中context lost均停用唯一控制、處理焦點並停止繪圖。原夜間實驗、其餘區塊與既有三張貼圖原檔保持。未新增套件或服務。
 
 教材設計依據（使用者要求先搜尋再核可，於本輪前已完成）：Oak「How we see the Moon from Earth」https://www.thenational.academy/teachers/lessons/how-we-see-the-moon-from-earth 、LPI「Mirror Moon」https://www.lpi.usra.edu/education/explore/marvelMoon/activities/familyNight/mirrorMoon/ 與NSTA「Moonlight」https://www.nsta.org/lesson-plan/moonlight 。採受光與反射到眼睛的教學順序，不把月相當主題。素材來源及原始處理沿用前節。
+
+## 太陽辨識與移除人物指引（2026-11-05後續）
+
+依使用者要求，太陽由淡白灰色改為暖金色自發光示意，加強金橘色外緣光暈，與灰色月球區別；模型說明註明暖金色為辨識示意，未更動原貼圖。移除左圖「地球上的我們」文字、人物標籤樣式、SVG指引線及其每幀投影更新，避免與真正的青色反射光混淆。保留3D人物、眼睛目標、月面反射到眼睛的光路、雙視窗與單鍵播放／暫停；光學模型、軌道、相機與貼圖原檔保持。瀏覽器專項另核對實際Sun表面像素呈暖金色、三個剩餘標籤及指引線不存在，原操作與失敗狀態檢查沿用。

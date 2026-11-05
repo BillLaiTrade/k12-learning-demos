@@ -18,7 +18,7 @@ if(panel){
     if(api){api.setActive(true);return;}
     if(promise)return;
     root.dataset.moonState='loading';root.setAttribute('aria-busy','true');notice.hidden=false;
-    promise=import('./moon-reflection-3d.js?v=reflection-play-20261105').then(m=>m.createMoonLab(root)).then(value=>{
+    promise=import('./moon-reflection-3d.js?v=solar-gold-20261105').then(m=>m.createMoonLab(root)).then(value=>{
       api=value;if(failed){api.stop();return;}
       root.dataset.moonState='ready';root.setAttribute('aria-busy','false');notice.hidden=true;canvas.removeAttribute('aria-disabled');canvas.tabIndex=0;
       root.querySelectorAll('button,input').forEach(b=>b.disabled=false);api.setActive(panel.open);

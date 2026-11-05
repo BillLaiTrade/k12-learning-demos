@@ -49,15 +49,48 @@ export function createMicroscopeModel(canvas,onProject){
  cylinder(21,4,gold,432,566);cylinder(13,12,dark,432,574);
  const objglass=mesh(new THREE.SphereGeometry(1,48,24),glass,432,550);objglass.scale.set(16,4,16);
  const sample=box(7,1,7,mat('#d98261',{emissive:'#b45f47',emissiveIntensity:.25}),432,638,0);
+ // Small point markers identify the original and its image; they are overlays.
+ for(const [x,y,color]of [[436,638,'#ec8b6d'],[428,638,'#6dbde3'],[420,286,'#ec8b6d'],[444,286,'#6dbde3']]){
+  const mark=mesh(new THREE.SphereGeometry(3,20,12),new THREE.MeshBasicMaterial({color}),x,y,0);mark.castShadow=false;mark.receiveShadow=false;
+ }
  // Image plane is an annotation, not a screen or another glass element.
  const plane=mesh(new THREE.RingGeometry(29,31,64),new THREE.MeshBasicMaterial({color:'#f4dfa4',transparent:true,opacity:.25,side:THREE.DoubleSide,depthWrite:false}),432,286);
  plane.rotation.x=-Math.PI/2;
  const floor=mesh(new THREE.PlaneGeometry(1800,1800),new THREE.ShadowMaterial({opacity:.19}),440,757,0);floor.rotation.x=-Math.PI/2;floor.castShadow=false;floor.receiveShadow=true;
- let queued=0,currentStep=null;
+ let queued=0,currentStep=null,currentView='whole',overview='',overviewCamera=null,overviewAspect=1,span=780,center=425;
+ let motion=null;
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ function frameCamera(width,height){
+  camera.position.set(772,395-center,1700);camera.lookAt(432,-center,0);camera.updateMatrixWorld();
+  camera.top=span/2;camera.bottom=-span/2;camera.left=-span/2*width/height;camera.right=span/2*width/height;camera.updateProjectionMatrix();
+ }
  function project(x,y,z=0){const p=new THREE.Vector3(x,-y,z).project(camera);return[(p.x+1)*380,(1-p.y)*390];}
- function render(){queued=0;const b=canvas.getBoundingClientRect();if(!b.width||!b.height)return;camera.left=-390*b.width/b.height;camera.right=390*b.width/b.height;camera.updateProjectionMatrix();renderer.setSize(b.width,b.height,false);renderer.render(scene,camera);onProject?.();}
+ function render(now=performance.now()){
+  queued=0;const b=canvas.getBoundingClientRect();if(!b.width||!b.height)return;
+  if(motion){const t=Math.min(1,(now-motion.start)/300),ease=t*t*(3-2*t);span=motion.fromSpan+(motion.span-motion.fromSpan)*ease;center=motion.fromCenter+(motion.center-motion.fromCenter)*ease;if(t===1)motion=null;}
+  renderer.setSize(b.width,b.height,false);
+  if(!overview){const saved=[span,center];span=780;center=425;frameCamera(b.width,b.height);renderer.render(scene,camera);overview=canvas.toDataURL('image/png');overviewCamera=camera.clone();overviewAspect=b.width/b.height;[span,center]=saved;}
+  frameCamera(b.width,b.height);renderer.render(scene,camera);onProject?.();if(motion)request();
+ }
  const request=()=>{if(!queued)queued=requestAnimationFrame(render);};
- const observer=new ResizeObserver(request);observer.observe(canvas);
- request();
- return{project,update(step){if(currentStep===step)return;currentStep=step;plane.material.opacity=step==='objective'?.28:.43;request();},dispose(){observer.disconnect();if(queued)cancelAnimationFrame(queued);const materials=new Set();scene.traverse(o=>{o.geometry?.dispose();if(o.material)materials.add(o.material);});for(const m of materials)m.dispose();environment.dispose();renderer.dispose();}};
+ const observer=new ResizeObserver(request);observer.observe(canvas);request();
+ return{
+  project,get overview(){return overview;},get overviewAspect(){return overviewAspect;},
+  overviewRegion(view){
+   const box=view==='objective'?[335,240,530,680]:[355,100,515,365];
+   const points=[[box[0],box[1]],[box[2],box[1]],[box[0],box[3]],[box[2],box[3]]].map(([x,y])=>new THREE.Vector3(x,-y,0).project(overviewCamera||camera));
+   const xs=points.map(p=>(p.x+1)*380),ys=points.map(p=>(1-p.y)*390),x=Math.min(...xs),y=Math.min(...ys);
+   return[x,y,Math.max(...xs)-x,Math.max(...ys)-y];
+  },
+  update(step,view='whole'){
+   plane.material.opacity=step==='objective'?.28:.43;
+   if(currentStep===step&&currentView===view)return;
+   currentStep=step;
+   if(currentView!==view){currentView=view;const target=view==='objective'?{span:500,center:460}:view==='eyepiece'?{span:340,center:240}:{span:780,center:425};
+    if(reduced.matches){span=target.span;center=target.center;motion=null;}else motion={...target,fromSpan:span,fromCenter:center,start:performance.now()};
+   }
+   request();
+  },
+  dispose(){observer.disconnect();if(queued)cancelAnimationFrame(queued);const materials=new Set();scene.traverse(o=>{o.geometry?.dispose();if(o.material)materials.add(o.material);});for(const m of materials)m.dispose();environment.dispose();renderer.dispose();}
+ };
 }
