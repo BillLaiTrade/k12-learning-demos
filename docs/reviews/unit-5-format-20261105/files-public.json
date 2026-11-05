@@ -1,0 +1,282 @@
+{
+  "base": "https://billlaitrade.github.io/k12-learning-demos/",
+  "files": [
+    {
+      "path": "units/5/index.html",
+      "sha256": "4d980b64c2ed1735f64a26f7e6907d23e65e9c7dbc5b35cf8f23ad36e04c476b",
+      "bytes": 5334,
+      "matches": true
+    },
+    {
+      "path": "units/5/assets/unit-format.css",
+      "sha256": "c5b365c3adac380c2c3d5644dfc61d83df4fdee5dd3fc752438de8421127bedf",
+      "bytes": 7675,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/index.html",
+      "sha256": "5b75be639fe7a22213e695b3a071d59acda3118527ad4c2202ed02b0fcb4e395",
+      "bytes": 60080,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/dual-scale.css",
+      "sha256": "d27ba70bcce8afe936c7d0dd65d7c127f70122ba6b02c868c6e6cf926277c373",
+      "bytes": 6191,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/dual-scale.js",
+      "sha256": "3e64d2ab21c35ab32ccbe1e7bff7038c46910b6bf3e9a178799f95c930d77781",
+      "bytes": 7792,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/lesson-layout.css",
+      "sha256": "4d60e03100dc6812dda4a7ce70950bd19dda8c29b438bc802f1acb83a0ec2b11",
+      "bytes": 8168,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/measurement-scene.css",
+      "sha256": "ce7238a4432ce1f805d734972c0a9f46c8b76381be79b37067ea8e76850d1949",
+      "bytes": 9079,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/parallax-apparatus.webp",
+      "sha256": "0acaaf8f15a0e190fb1b1bf372fe9e2c969b227274a4802c4a636fe390f6588c",
+      "bytes": 82476,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/parallax-model.js",
+      "sha256": "6f77547a737e3faf05cc52003c241e5fe0d431168747286ce62909174e5e2030",
+      "bytes": 960,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/parallax-reading.js",
+      "sha256": "e1c9f21328d7da3b4e5acdcfc2293e59d5b6c647dcd484a9cc8b312b00e24b9e",
+      "bytes": 8688,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/temperature-lesson.js",
+      "sha256": "f6b71df4dd2ce82db9b666d7fd1945ec1c6e802c24219cda87a112309697433e",
+      "bytes": 542,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/temperature-story-opening.webp",
+      "sha256": "e50a2bbb7022c88fd345a5a414735b26ae31fffa3c306c8c6d8859812e82891e",
+      "bytes": 248634,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/thermometer-quiz-bench.webp",
+      "sha256": "36c54deba81d07b05233e240a1765a8b3ca5c8fc51b086c1ca48e24a57bb2a2a",
+      "bytes": 187912,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/thermometer-quiz-model.mjs",
+      "sha256": "2950a54c5cc0b5872f4bd010af816840e4d1ac283b1b281f4af3d31fc25d96a8",
+      "bytes": 2271,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/thermometer-quiz.css",
+      "sha256": "d8b4163642ab32329d77c912a70faee898c938891dde9a9881a1e83f2c4c5fcc",
+      "bytes": 9526,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/thermometer-quiz.js",
+      "sha256": "35b0b3001bcf59c0563f0eb681022d1017a0bc0d2f5d81c09ad752da2d01ad22",
+      "bytes": 19355,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/touch-story-after.webp",
+      "sha256": "654a32a843c3b9a4c5573a1948c0e8abdc4bdc3c042ca2476378101e3ec9ac89",
+      "bytes": 249738,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/touch-story-before.webp",
+      "sha256": "4cc68414ed8cf0d5d876cef430b027c709970e5090e62201953539a046720de1",
+      "bytes": 256096,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/touch-story.css",
+      "sha256": "4b03df5aac191f0299462676a6f3f0f832a608f7a4aed04046ceef458257c9f1",
+      "bytes": 1744,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/water-lab-apparatus.webp",
+      "sha256": "a9edde24bce3cfdfb5927c148d24ed44f4bd0d94d9dd0128cb483bfe1a31ce0c",
+      "bytes": 88406,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/water-lab-state.mjs",
+      "sha256": "f07a51fabb8f32e67baf2a2f7662cb639dc7b69490df60374c2df8e71aff98c4",
+      "bytes": 1871,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/water-lab.css",
+      "sha256": "4ae92766244753af17dddbea132470f3cd271912ba532f1088423374ee6e8d50",
+      "bytes": 4594,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.1/assets/water-lab.js",
+      "sha256": "acc7ee9b128ffcdb00e4eea29860492bc24cfc10ba7c4098187d53c0398b8100",
+      "bytes": 5967,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/index.html",
+      "sha256": "72e24356ec50bfc0893484848325e79e30407886532a16b3da7b5f998e7fb93d",
+      "bytes": 81831,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/balance-lab.css",
+      "sha256": "4b1909f385799650f075852440313735a66abfabdea3cb9d1fa3215374be2621",
+      "bytes": 4176,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/balance-lab.js",
+      "sha256": "ba5c6f74f4e454e9cc51b47e56492588e5dcc764a7cfb10217d491e06d123bb0",
+      "bytes": 12200,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/balance-model.mjs",
+      "sha256": "586e2b9623fa858c228472f6e60eeb4e8fb164a04111ce495bb88c9451925bad",
+      "bytes": 2271,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/conduction-lab.css",
+      "sha256": "4ac53187d7ec81788934709be18dc96d469359f1d981bb9bf3eabb78bada958f",
+      "bytes": 7325,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/conduction-lab.js",
+      "sha256": "11c1f65402421f673d58601d5d2d765a79d414a1d82b9b7347d3a4c2c9efc506",
+      "bytes": 7306,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/conduction-metal.webp",
+      "sha256": "a0e3a8e434e296db88ea2cc687b917172d6c1b151ff4476200c22cb4af850638",
+      "bytes": 142776,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/conduction-model.mjs",
+      "sha256": "26b46a37d60a10a7a4ed8ed116231aef6643f9dbb5fa45005d2ffe44da1dfa10",
+      "bytes": 1562,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/conduction-wood.webp",
+      "sha256": "bd5283eeef753a7fed27d430b434e0cd95d8b9dbc6b9f76530378e72741f50d0",
+      "bytes": 133694,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-fridge-glass.webp",
+      "sha256": "2a68c0f946cbaca64af1976c3eb82e878c3b0ca3d8f1fca9a8c6f65614c8fa29",
+      "bytes": 138312,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-fridge.webp",
+      "sha256": "75d7f6254847f204f320ddd80b149fbb8794588714e4c0572abe223a0563602c",
+      "bytes": 95488,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-hot-glass.webp",
+      "sha256": "1400b3164728ebed4d3cbf6313d7c55034d401d54e0d33ba4f9093715cfeebcf",
+      "bytes": 225742,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-hot.webp",
+      "sha256": "bd9f202363fc69dc1b9baa743134fc510c97134559d18eb7c32421f102d2a7c2",
+      "bytes": 164074,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-lab.css",
+      "sha256": "c1f534884b73bfae09dd3e9964ef6955a69c8056314c1aea41aa8d8fb5864b41",
+      "bytes": 5231,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-lab.js",
+      "sha256": "fcdd370f631f0051162843fad9becf92ff647f900d7050c99975e7ef21d84754",
+      "bytes": 7520,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-room-glass.webp",
+      "sha256": "d2cbf87afe98ee9309479cf558a6a4451f11eaf7d127757877743911a32c7c0b",
+      "bytes": 197882,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-room.webp",
+      "sha256": "98711e77bf4f921074d7fbbcede9a9cce8ec29fcef0bfac203812245fe7db373",
+      "bytes": 145186,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/heat-transfer.css",
+      "sha256": "176540ed3d2661f051a0a4eb571117d9ef4f68032556de508779d1ed976cb8eb",
+      "bytes": 3794,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/heat-transfer.js",
+      "sha256": "9594b6023a45a02eb4df23ed43ae126b8c00646d86f466b80a129d91d2072379",
+      "bytes": 5308,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/lesson-base.css",
+      "sha256": "cc431717434c565a65f361630f1f80bedcd64723dc87a269d49bae88c678d1dd",
+      "bytes": 10028,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/lesson-layout.css",
+      "sha256": "a64e68ccb21c03c4e8be5414122f46604ee97ecb151b4e6d169bb7c3c505285f",
+      "bytes": 6277,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/convection-lab.css",
+      "sha256": "60591d419ea0f18aa8495b8629222ef34dc45365cec18122a65eb609a63f8b62",
+      "bytes": 3992,
+      "matches": true
+    },
+    {
+      "path": "units/5/parts/5.2/assets/convection-lab.js",
+      "sha256": "c151a8f7cf70f484f8451f9725b4d39527e61c720e1e4534c06e8002362e0da7",
+      "bytes": 5747,
+      "matches": true
+    }
+  ],
+  "count": 46
+}
