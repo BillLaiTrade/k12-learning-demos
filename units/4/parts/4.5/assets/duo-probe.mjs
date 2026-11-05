@@ -1,5 +1,5 @@
 import {MIX_SETUP,footprint} from './mix-optics.mjs';
-import {PRIMARY_KEYS,PROBE_SETUP,COLOUR_OPTIONS,DUO_LIGHTS,PROBE_LINEAR,probeColourName} from './duo-quiz-model.mjs?v=compound-light-20261105';
+import {PRIMARY_KEYS,PROBE_SETUP,COLOUR_OPTIONS,DUO_LIGHTS,PROBE_LINEAR,probeColourName} from './duo-quiz-model.mjs?v=single-change-20261105';
 
 // Free probing uses only primary sources; compound sources belong to challenges.
 const LIGHTS=Object.fromEntries(PRIMARY_KEYS.map(key=>[key,DUO_LIGHTS[key]]));
