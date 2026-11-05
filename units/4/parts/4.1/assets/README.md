@@ -174,3 +174,19 @@
 ## 第二區可收合月球反光補充（2026-11-05）
 
 參考4.3第二區normal-explanation，以原生details／summary加入預設收合補充，展開後呈現陽光→月面多方向反射→部分光到達地球觀察者的SVG圖解與三段說明。太陽與地球分置不同方向，反射光從受光月面發出；註明不按比例。沿用淡色外框、加減號、圖文並排與窄欄堆疊，不新增套件或腳本，原夜間開關及圖片／光路回饋保持。
+
+## 可拖曳的3D天體補充模型（2026-11-05）
+
+取代上一輪靜態SVG，摺疊區預設收合，第一次展開才載入Three.js場景及貼圖。太陽、地球、月球為實際球面網格，可在參考平面直接拖曳或先選取再用方向鍵移動；防止球體交疊。空白處旋轉、滾輪縮放，「還原天體位置」只還原位置，不還原鏡頭。右下視窗以地球朝月球方向的正交投影觀察同一個月球，並非預存月相圖。
+
+月面著色與光路均依太陽方向、表面法向及地球遮擋計算。均勻面積取樣月球表面，以可見投影面積計算亮面範圍；不將亮面比例稱為月光亮度。反射光從受光月面向多方向散出，只在月面朝地球且受光時畫出抵達地球的示意光路。天體大小／距離、動畫光點速度及遮擋採教學簡化，不做軌道動力學或日月食時刻預測。
+
+收合、離開視窗或切到背景分頁暫停繪圖；WebGL、模組或貼圖失敗時明確提示並停用操作，其他學習區保持可用。沿用本地Three.js，不新增套件或外部執行期服務。
+
+貼圖來源與處理（2026-11-05取得；頁面亦列來源）：
+
+- 月球：NASA SVS CGI Moon Kit，NASA／GSFC／ASU，https://svs.gsfc.nasa.gov/4720/ 。原始LROC色彩貼圖 https://svs.gsfc.nasa.gov/vis/a000000/a004700/a004720/lroc_color_poles_2k.tif ，只轉成RGB JPEG供網頁使用，未改畫表面特徵。
+- 地球：Three.js公開範例地球貼圖 https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg ，原JPEG保持；Three.js專案採MIT授權 https://github.com/mrdoob/three.js/blob/dev/LICENSE 。未宣稱此圖可用來辨識當前雲層或季節。
+- 太陽：Solar System Scope，https://www.solarsystemscope.com/textures/download/2k_sun.jpg ，原JPEG保持；依其公開紋理授權CC BY 4.0 https://creativecommons.org/licenses/by/4.0/ ，頁面提供名稱、來源頁及授權連結。
+
+實作檔：moon-reflection-lab.js（延遲載入與錯誤狀態）、moon-reflection-3d.js（渲染與操作）、moon-reflection-model.mjs（幾何與亮面範圍）。檢查：tests/unit-4.1-moon-model.test.mjs、tests/unit-4.1-moon-lab.test.cjs。
