@@ -1,10 +1,9 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import { createSurfaceMirror, directApertureEmission } from './surface-mirror.mjs?v=planar-mirror-20261105';
 
 const canvas = document.querySelector('#reflection-3d-scene');
 if (!canvas) throw new Error('Reflection scene canvas is missing.');
 const comparison = document.querySelector('.reflection-comparison');
-const referenceMatchButton = document.querySelector('#reflection-match-reference');
+const resetViewButton = document.querySelector('#reflection-reset-view');
 
 const fireButtons = [
   document.querySelector('#reflection-fire-mirror'),
@@ -88,7 +87,7 @@ try {
     frame: standard('#84918e', { metalness: 0.42, roughness: 0.36 }),
     lampBody: standard('#35433d', { metalness: 0.2, roughness: 0.48 }),
     lampTrim: standard('#60736a', { metalness: 0.25, roughness: 0.4 }),
-    mirror: standard('#7c8885', { metalness: 0, roughness: 1 }),
+    mirror: new THREE.MeshPhysicalMaterial({ color: '#dce4e2', metalness: 0.96, roughness: 0.035, clearcoat: 0.65, clearcoatRoughness: 0.03 }),
     mirrorBacking: standard('#7c8885', { metalness: 0.3, roughness: 0.38 }),
   };
 
@@ -148,8 +147,6 @@ try {
   stationBase(paperCenter, mats.mirrorBacking);
   // A flat polished mirror tile and a visually flat sheet of matte paper.
   const mirrorTile = addBox(scene, [2.45, 0.025, 1.8], [mirrorCenter.x, 0.1175, mirrorCenter.z], mats.mirror, false, true);
-  const mirrorReflection = createSurfaceMirror(mirrorCenter, 2.45, 1.8);
-  scene.add(mirrorReflection.surface);
 
   const roughTextureCanvas = document.createElement('canvas');
   roughTextureCanvas.width = 512;
@@ -216,8 +213,8 @@ try {
     const bounds = new THREE.Box3().setFromObject(tag);
     for (const x of [bounds.min.x, bounds.max.x]) for (const y of [bounds.min.y, bounds.max.y]) for (const z of [bounds.min.z, bounds.max.z]) framingPoints.push(new THREE.Vector3(x, y, z));
   };
-  addSurfaceLabel(mirrorCenter, '平面鏡');
-  addSurfaceLabel(paperCenter, '霧面白紙');
+  addSurfaceLabel(mirrorCenter, '光滑表面');
+  addSurfaceLabel(paperCenter, '粗糙表面');
   // Aim the plane mirror's reflected beam toward the initial observer so the
   // specular reflection is clear as soon as the left flashlight is switched on.
   // The second lamp keeps the same incident direction to isolate surface texture.
@@ -239,8 +236,7 @@ try {
     const target = station.surface.clone();
     const direction = target.clone().sub(station.source).normalize();
     const lamp = new THREE.Group();
-    // The emitting disk, not the housing origin, is the optical source.
-    lamp.position.copy(station.source).addScaledVector(direction, -0.125 * 1.15);
+    lamp.position.copy(station.source);
     lamp.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
     lamp.scale.setScalar(1.15);
     scene.add(lamp);
@@ -251,12 +247,11 @@ try {
     const head = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.15, 0.2, 28), mats.lampTrim);
     head.position.y = 0.02;
     lamp.add(head);
-    const lensMaterial = new THREE.MeshStandardMaterial({ color: '#35423a', emissive: '#ffffff', emissiveIntensity: 0, roughness: 0.18, side: THREE.DoubleSide });
+    const lensMaterial = new THREE.MeshStandardMaterial({ color: '#35423a', emissive: '#fff0b8', emissiveIntensity: 0, roughness: 0.18, side: THREE.DoubleSide });
     const lens = new THREE.Mesh(new THREE.CircleGeometry(0.16, 36), lensMaterial);
     lens.position.y = 0.125;
     lens.rotation.x = -Math.PI / 2;
     lamp.add(lens);
-    directApertureEmission(lensMaterial, direction, .12, .45);
     lampLenses.push(lensMaterial);
     const rim = new THREE.Mesh(new THREE.TorusGeometry(0.165, 0.022, 10, 36), mats.lampTrim);
     rim.position.y = 0.13;
@@ -293,11 +288,27 @@ try {
     for (const x of [bounds.min.x, bounds.max.x]) for (const y of [bounds.min.y, bounds.max.y]) for (const z of [bounds.min.z, bounds.max.z]) framingPoints.push(new THREE.Vector3(x, y, z));
   }
 
-  const duration = 1150;
-  const render = () => {
-    mirrorReflection.update(renderer, scene, camera);
-    renderer.render(scene, camera);
+  // A uniform ambient environment keeps the polished surface readable.
+  // Flashlight models are excluded; the direct spotlight provides the glint.
+  const mirrorEnvironmentTarget = new THREE.WebGLCubeRenderTarget(128, {
+    generateMipmaps: true,
+    minFilter: THREE.LinearMipmapLinearFilter
+  });
+  const mirrorEnvironmentCamera = new THREE.CubeCamera(0.1, 24, mirrorEnvironmentTarget);
+  mirrorEnvironmentCamera.position.set(mirrorCenter.x, 0.14, mirrorCenter.z);
+  const mirrorEnvironmentScene = new THREE.Scene();
+  mirrorEnvironmentScene.background = scene.background;
+  mats.mirror.envMap = mirrorEnvironmentTarget.texture;
+  mats.mirror.envMapIntensity = 0.35;
+  const refreshMirrorEnvironment = () => {
+    // Reflect only the bright background. The direct spotlight still reaches
+    // the mirror in the main scene, but flashlight models cannot appear in it.
+    mirrorEnvironmentCamera.update(renderer, mirrorEnvironmentScene);
   };
+  refreshMirrorEnvironment();
+
+  const duration = 1150;
+  const render = () => renderer.render(scene, camera);
   const updateViewControls = () => {
     const normalizedAzimuth = Math.atan2(Math.sin(cameraAzimuth), Math.cos(cameraAzimuth));
     const isFront = Math.abs(normalizedAzimuth) < 0.001 && Math.abs(cameraPolar - frontPolar) < 0.001;
@@ -359,9 +370,8 @@ try {
     illuminationLevels[index] = level;
     spotLights[index].intensity = 17 * level;
     sourceGlows[index].intensity = 0.35 * level;
-    // Radiance of a finite circular aperture; its far-field on-axis intensity
-    // matches the spotlight (I = L * area). This is not a drawn mirror glint.
-    lampLenses[index].emissiveIntensity = 17 / (Math.PI * (0.16 * 1.15) ** 2) * level;
+    lampLenses[index].color.set(level > 0 ? '#fff2bf' : '#35423a');
+    lampLenses[index].emissiveIntensity = 2.5 * level;
     lampIndicators[index].emissiveIntensity = 1.4 * level;
     render();
   };
@@ -383,9 +393,9 @@ try {
     illuminated.forEach((isOn, index) => {
       fireButtons[index].querySelector('small').textContent = isOn ? '已開啟' : '已關閉';
       fireButtons[index].setAttribute('aria-pressed', String(isOn));
-      fireButtons[index].setAttribute('aria-label', `${isOn ? '關閉' : '開啟'}${index === 0 ? '鏡面' : '霧面紙'}手電筒`);
+      fireButtons[index].setAttribute('aria-label', `${isOn ? '關閉' : '開啟'}照向${index === 0 ? '光滑表面' : '粗糙表面'}的手電筒`);
     });
-    status.textContent = `照向平面鏡的手電筒${illuminated[0] ? '已開啟' : '已關閉'}；照向霧面紙的手電筒${illuminated[1] ? '已開啟' : '已關閉'}。`;
+    status.textContent = `照向光滑表面的手電筒${illuminated[0] ? '已開啟' : '已關閉'}；照向粗糙表面的手電筒${illuminated[1] ? '已開啟' : '已關閉'}。`;
   };
   const toggleLight = (index) => {
     cancelAnimationFrame(animationFrames[index]);
@@ -395,6 +405,7 @@ try {
     updateLightControls();
     if (reducedMotion.matches) {
       setIllumination(index, targetLevel);
+      refreshMirrorEnvironment();
       return;
     }
     const startedAt = performance.now();
@@ -403,51 +414,47 @@ try {
       const eased = 1 - Math.pow(1 - progress, 3);
       setIllumination(index, startLevel + (targetLevel - startLevel) * eased);
       if (progress < 1) animationFrames[index] = requestAnimationFrame(animate);
+      else refreshMirrorEnvironment();
     };
     animationFrames[index] = requestAnimationFrame(animate);
   };
   fireButtons.forEach((button, index) => button.addEventListener('click', () => toggleLight(index)));
-  const applyReference = () => {
-    if (referenceMatchButton.disabled) return;
+  const resetView = () => {
+    if (resetViewButton.disabled) return;
     cameraAzimuth = 0;
     cameraPolar = frontPolar;
     updateCamera();
     updateViewControls();
-    animationFrames.forEach(frame => cancelAnimationFrame(frame));
-    illuminated.fill(true);
-    setIllumination(0, 1);
-    setIllumination(1, 1);
-    updateLightControls();
     render();
     canvas.focus({ preventScroll: true });
   };
   // Some touch browsers suppress the compatibility click after a 3D drag.
   // Accept a stationary native touch release, without treating scrolling as
   // a tap or applying the action again when the regular click follows.
-  let referenceTouch = null, handledReferenceTouch = false;
-  referenceMatchButton.addEventListener('pointerdown', event => {
-    handledReferenceTouch = false;
-    referenceTouch = event.pointerType === 'touch' && event.isPrimary
+  let resetTouch = null, handledResetTouch = false;
+  resetViewButton.addEventListener('pointerdown', event => {
+    handledResetTouch = false;
+    resetTouch = event.pointerType === 'touch' && event.isPrimary
       ? { id: event.pointerId, x: event.clientX, y: event.clientY, moved: false } : null;
   });
-  referenceMatchButton.addEventListener('pointermove', event => {
-    if (referenceTouch?.id === event.pointerId && Math.hypot(event.clientX - referenceTouch.x, event.clientY - referenceTouch.y) > 8) referenceTouch.moved = true;
+  resetViewButton.addEventListener('pointermove', event => {
+    if (resetTouch?.id === event.pointerId && Math.hypot(event.clientX - resetTouch.x, event.clientY - resetTouch.y) > 8) resetTouch.moved = true;
   });
-  referenceMatchButton.addEventListener('pointercancel', () => { referenceTouch = null; handledReferenceTouch = false; });
-  referenceMatchButton.addEventListener('pointerup', event => {
-    const contact = referenceTouch;
-    referenceTouch = null;
+  resetViewButton.addEventListener('pointercancel', () => { resetTouch = null; handledResetTouch = false; });
+  resetViewButton.addEventListener('pointerup', event => {
+    const contact = resetTouch;
+    resetTouch = null;
     if (!contact || contact.id !== event.pointerId || contact.moved) return;
-    const bounds = referenceMatchButton.getBoundingClientRect();
+    const bounds = resetViewButton.getBoundingClientRect();
     if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) return;
-    handledReferenceTouch = true;
-    applyReference();
+    handledResetTouch = true;
+    resetView();
   });
-  referenceMatchButton.addEventListener('click', event => {
-    if (handledReferenceTouch && (event.pointerType === 'touch' || event.detail > 0)) { handledReferenceTouch = false; return; }
-    applyReference();
+  resetViewButton.addEventListener('click', event => {
+    if (handledResetTouch && (event.pointerType === 'touch' || event.detail > 0)) { handledResetTouch = false; return; }
+    resetView();
   });
-  [...fireButtons, referenceMatchButton].forEach(button => { button.disabled = false; });
+  [...fireButtons, resetViewButton].forEach(button => { button.disabled = false; });
   updateLightControls();
   updateViewControls();
   canvas.dataset.ready = 'true';
@@ -462,7 +469,7 @@ try {
     roughBump.dispose();
     surfaceLabelTextures.forEach((texture) => texture.dispose());
     woodTexture.dispose();
-    mirrorReflection.dispose();
+    mirrorEnvironmentTarget.dispose();
     renderer.dispose();
   }, { once: true });
 } catch (error) {
@@ -470,7 +477,7 @@ try {
   canvas.hidden = true;
   comparison.hidden = true;
   fallback.hidden = false;
-  [...fireButtons, referenceMatchButton].forEach((button) => { button.disabled = true; });
+  [...fireButtons, resetViewButton].forEach((button) => { button.disabled = true; });
   canvas.dataset.ready = 'error';
   status.textContent = '目前裝置無法呈現 3D 場景；請閱讀卡片說明了解反射差異。';
 }

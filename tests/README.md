@@ -1611,3 +1611,11 @@ MOON_CAPTURE預設/tmp/unit41-reflection-play，保存雙視窗與整區截圖�
 ## 4.3 十項逐項決定後的統一修訂（2026-11-05）
 
 `unit-4.3-ten-decisions.test.cjs`覆蓋第一區／第五區／四層小測的手動開始帶回圖與控制、四桌面尺寸、第一區鍵盤繼續、離屏返回不捲頁與手動暫停保留、雙光全部抵達才呈現結論及改角／換介質後重新等待、第六區七組空槽／有水／可見／遮擋狀態。可用`TEN_CAPTURE_DIR`保存視口、狀態及畫面證據。自動分頁暫停與備援渲染仍由既有eleven及final-review套件覆蓋；本輪不變動科學模型。
+
+## 4.2 自由觀察與輔助反射圖解（2026-11-05）
+
+沿用`tests/unit-4.2-reflection-stage.test.cjs`，現為14項（含外層）。保留相同光源／受照面、光錐、四種開關、實際反光像素、上下與完整水平轉動、觸控／取消／鍵盤、六寬度及比例檢查。回正斷言改為保留兩燈原狀態，畫面常駐且輔助圖位於下方；不再驗證已撤回的燈頭鏡像或正面PNG。
+
+新圖解以實際SVG路徑與表面輪廓獨立驗證三組入射／反射端點、相同入射方向、局部法向反射公式、反射角、方向分布及不穿過相鄰表面。播放／重播、減少動態、與3D狀態互不影響、無JavaScript完整靜態SVG、無WebGL仍可播放圖解均涵蓋。`surface-rays.json`保存實際SVG幾何，`stage-*`與`explanation-*`分別保存主畫面與輔助圖。
+
+整頁回歸仍使用`CHROMIUM_PATH=/usr/bin/chromium node --test --test-skip-pattern='入口、|潛望鏡素材' tests/unit-4.2-completion.test.cjs`，驗證導覽、實際燈具點擊與拖曳、第四區及WebGL備援。

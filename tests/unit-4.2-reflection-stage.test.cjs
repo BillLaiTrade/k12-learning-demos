@@ -23,20 +23,20 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
     await context.route(/\/assets\/(laser-reflection|reversible-light|periscope|mirror-image|mirror-distance|curved-mirrors)\.js/,r=>r.fulfill({contentType:'application/javascript',body:''}));
     await context.route('**/assets/reflection-3d.js*',async r=>{
       const response=await r.fetch(),s=await response.text(),anchor='  const duration = 1150;';assert.ok(s.includes(anchor));
-      await r.fulfill({response,body:s.replace(anchor,`  window.__surfaceLab={scene,camera,lamps,spotLights,mirrorTile,paperTile,mirrorCenter,paperCenter,stations,framingPoints,lampLenses,lampIndicators,renderer,fitCamera,mirrorReflection,getAzimuth:()=>cameraAzimuth,getPolar:()=>cameraPolar};\n${anchor}`)});
+      await r.fulfill({response,body:s.replace(anchor,`  window.__surfaceLab={scene,camera,lamps,spotLights,mirrorTile,paperTile,mirrorCenter,paperCenter,stations,framingPoints,lampLenses,lampIndicators,renderer,fitCamera,getAzimuth:()=>cameraAzimuth,getPolar:()=>cameraPolar};\n${anchor}`)});
     });
   };
   const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});await setup(context);
   const page=await context.newPage(),errors=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.url());});
-  const open=async p=>{await p.goto(new URL('units/4/parts/4.2/',base).href,{waitUntil:'networkidle'});await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});await expect(p.locator('#reflection-3d-scene')).toHaveAttribute('data-ready','true');await p.locator('#reflection-reference-image').scrollIntoViewIfNeeded();await p.locator('#reflection-reference-image').evaluate(e=>e.decode());};
+  const open=async p=>{await p.goto(new URL('units/4/parts/4.2/',base).href,{waitUntil:'networkidle'});await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});await expect(p.locator('#reflection-3d-scene')).toHaveAttribute('data-ready','true');await expect(p.locator('#surface-explanation')).toHaveAttribute('data-ready','true');};
   await open(page);
   const canvas=page.locator('#reflection-3d-scene'),mirror=page.locator('#reflection-fire-mirror'),paper=page.locator('#reflection-fire-paper');
   const toggle=async(index,on,p=page)=>{const b=p.locator(index===0?'#reflection-fire-mirror':'#reflection-fire-paper');if(await b.getAttribute('aria-pressed')!==String(on))await b.click();};
   // Side observations now use the actual free-drag interaction, without hidden
   // preset controls or directly setting the product camera.
   const view=async(name,p=page)=>{
-    await p.locator('#reflection-match-reference').click();
+    await p.locator('#reflection-reset-view').click();
     const c=p.locator('#reflection-3d-scene');await expect(c).toHaveAttribute('data-view','front');
     if(name==='front')return;
     await c.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));
@@ -62,60 +62,15 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
       });
       const outgoing=b.stations[0].surface.clone().sub(b.stations[0].source).normalize().reflect(n);
       const observer=b.camera.getWorldDirection(new V()).negate();
-      return{offset,cones,alignment:outgoing.dot(observer),dimensions:[b.mirrorTile,b.paperTile].map(x=>[x.geometry.parameters.width,x.geometry.parameters.depth]),lights:b.spotLights.map(x=>[x.angle,x.decay,x.penumbra]),planarMirror:b.mirrorReflection.surface.material.isShaderMaterial,mirrorReflectance:b.mirrorReflection.surface.material.uniforms.reflectance.value};
+      return{offset,cones,alignment:outgoing.dot(observer),dimensions:[b.mirrorTile,b.paperTile].map(x=>[x.geometry.parameters.width,x.geometry.parameters.depth]),lights:b.spotLights.map(x=>[x.angle,x.decay,x.penumbra]),roughness:[b.mirrorTile.material.roughness,b.paperTile.material.roughness]};
     });
     result.offset[0].forEach((v,i)=>close(v,result.offset[1][i]));close(result.alignment,1);
     assert.deepEqual(result.dimensions[0],result.dimensions[1]);assert.deepEqual(result.lights[0],result.lights[1]);
-    assert.ok(result.cones.every(m=>m>0.1));assert.equal(result.planarMirror,true);assert.ok(result.mirrorReflectance>0&&result.mirrorReflectance<=1);
+    assert.ok(result.cones.every(m=>m>0.1));assert.ok(result.roughness[0]<result.roughness[1]);
     fs.writeFileSync(path.join(dir,'geometry.json'),JSON.stringify(result,null,2));
   });
 
-  await t.test('燈頭發光面與光源重合；鏡像等距且反射光符合幾何定律',async()=>{
-    const geometry=[];
-    for(const name of ['front','left','right']){
-      await view(name);
-      const measured=await page.evaluate(()=>{
-        const b=window.__surfaceLab,V=b.mirrorCenter.constructor,n=new V(0,1,0),h=b.mirrorCenter.y;
-        const observer=b.camera.getWorldDirection(new V()).negate();
-        const aperture=b.lamps[0].localToWorld(new V(0,.125,0));
-        const virtual=aperture.clone();virtual.y=2*h-aperture.y;
-        const hit=virtual.clone().addScaledVector(observer,(h-virtual.y)/observer.y);
-        const incident=hit.clone().sub(aperture).normalize(),outgoing=incident.clone().reflect(n);
-        const mainProjection=virtual.clone().project(b.camera);
-        const reflectedProjection=aperture.clone().project(b.mirrorReflection.camera);
-        const texture=hit.clone().applyMatrix4(b.mirrorReflection.textureMatrix);
-        return{sourceError:aperture.distanceTo(b.stations[0].source),equalDistance:Math.abs((aperture.y-h)-(h-virtual.y)),rayError:outgoing.distanceTo(observer),cameraHeightError:Math.abs(b.camera.position.y+b.mirrorReflection.camera.position.y-2*h),texture:[texture.x,texture.y],reflected:[(reflectedProjection.x+1)/2,(reflectedProjection.y+1)/2],main:[mainProjection.x,mainProjection.y],hitProjection:hit.clone().project(b.camera).toArray(),mirrorDepthWrite:b.mirrorReflection.surface.material.depthWrite};
-      });
-      geometry.push(measured);close(measured.sourceError,0,1e-9);close(measured.equalDistance,0);close(measured.rayError,0,1e-9);close(measured.cameraHeightError,0,1e-9);
-      measured.texture.forEach((v,i)=>close(v,measured.reflected[i],1e-6));measured.main.forEach((v,i)=>close(v,measured.hitProjection[i],1e-6));
-    }
-    fs.writeFileSync(path.join(dir,'mirror-rays.json'),JSON.stringify(geometry,null,2));
-  });
-
-  await t.test('鏡面亮區來自有限燈頭鏡像，不會在整個受照區加上柔邊高光',async()=>{
-    await view('front');
-    const positions=await page.evaluate(()=>{
-      const b=window.__surfaceLab,V=b.mirrorCenter.constructor,n=new V(0,1,0),eye=b.camera.getWorldDirection(new V()).negate(),ray=eye.clone().negate().reflect(n),aperture=b.lamps[0].localToWorld(new V(0,.125,0)),axis=b.stations[0].surface.clone().sub(aperture).normalize();
-      const samples=[];
-      for(let y=0;y<31;y++)for(let x=0;x<45;x++){
-        const p=b.mirrorCenter.clone();p.x+=(x/44-.5)*2.4;p.z+=(y/30-.5)*1.75;
-        const distance=aperture.clone().sub(p).dot(axis)/ray.dot(axis),hit=p.clone().addScaledVector(ray,distance),radius=hit.distanceTo(aperture),q=p.clone().project(b.camera);
-        samples.push({uv:[(q.x+1)/2,(1-q.y)/2],radius});
-      }
-      return samples;
-    });
-    await toggle(0,false);await toggle(1,false);const off=PNG.sync.read(await canvas.screenshot());
-    await toggle(0,true);const on=PNG.sync.read(await canvas.screenshot());
-    const brightness=(im,[u,v])=>{const x=Math.round(u*im.width),y=Math.round(v*im.height),i=(y*im.width+x)*4;return .2126*im.data[i]+.7152*im.data[i+1]+.0722*im.data[i+2];};
-    const gains=positions.map(p=>({...p,gain:brightness(on,p.uv)-brightness(off,p.uv)}));
-    const center=gains.filter(p=>p.radius<.12),outside=gains.filter(p=>p.radius>.32);
-    assert.ok(center.length>3&&center.every(p=>p.gain>100));
-    assert.ok(outside.every(p=>Math.abs(p.gain)<3),'燈頭外不應出現額外材質高光');
-    fs.writeFileSync(path.join(dir,'mirror-aperture.json'),JSON.stringify({center: center.map(p=>p.gain),outsideMax:Math.max(...outside.map(p=>Math.abs(p.gain)))},null,2));
-  });
-
   await t.test('四種開關組合的燈頭、實際光源、按鈕狀態一致',async()=>{
-    const referenceStates=[];
     for(const [a,b] of [[false,false],[true,false],[false,true],[true,true]]){
       await toggle(0,a);await toggle(1,b);
       await expect(mirror).toHaveCSS('color',a?'rgb(255, 255, 255)':'rgb(66, 89, 78)');
@@ -123,30 +78,55 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
       const state=await page.evaluate(()=>{const b=window.__surfaceLab;return{power:b.spotLights.map(x=>x.intensity),lens:b.lampLenses.map(x=>x.emissiveIntensity),indicator:b.lampIndicators.map(x=>x.emissiveIntensity),small:[...document.querySelectorAll('.reflection-fire small')].map(x=>x.textContent),background:[...document.querySelectorAll('.reflection-fire')].map(x=>getComputedStyle(x).backgroundColor)};});
       [a,b].forEach((on,i)=>{assert.equal(state.power[i]>0,on);assert.equal(state.lens[i]>0,on);assert.equal(state.indicator[i]>0,on);assert.equal(state.small[i],on?'已開啟':'已關閉');});
       if(a!==b)assert.notEqual(state.background[0],state.background[1]);
-      referenceStates.push(await page.locator('#reflection-reference-image').getAttribute('src'));
     }
-    assert.equal(new Set(referenceStates).size,1,'固定參考圖片不隨上方開關改變');
   });
 
-  await t.test('下方為固定雙燈開啟圖片，主畫面改變角度不改參考內容',async()=>{
-    const snapshot=()=>page.locator('#reflection-reference-image').evaluate(e=>({src:e.currentSrc,width:e.naturalWidth,height:e.naturalHeight}));
-    const before=await snapshot();
-    assert.deepEqual([before.width,before.height],[1119,678]);
-    for(const name of ['front','left','right']){await view(name);assert.deepEqual(await snapshot(),before);}
+  await t.test('下方輔助圖的三組光路依各接觸面的反射規律計算',async()=>{
+    const diagrams=await page.locator('.surface-panel').evaluateAll(panels=>panels.map(panel=>{
+      const numbers=s=>s.match(/-?[\d.]+(?:e[-+]?\d+)?/gi).map(Number);
+      const profile=numbers(panel.querySelector('.surface-profile').getAttribute('d'));
+      return{kind:panel.dataset.surface,profile:Array.from({length:profile.length/2-2},(_,i)=>profile.slice(i*2,i*2+2)),rays:[...panel.querySelectorAll('[data-surface-ray]')].map(g=>({incoming:numbers(g.querySelector('.surface-incoming').getAttribute('d')),outgoing:numbers(g.querySelector('.surface-outgoing').getAttribute('d'))}))};
+    }));
+    const unit=v=>{const n=Math.hypot(...v);return v.map(x=>x/n);};
+    const dot=(a,b)=>a.reduce((sum,x,i)=>sum+x*b[i],0);
+    for(const diagram of diagrams){
+      assert.equal(diagram.rays.length,3);const directions=[];
+      for(const ray of diagram.rays){
+        const start=ray.incoming.slice(0,2),hit=ray.incoming.slice(2),outStart=ray.outgoing.slice(0,2),end=ray.outgoing.slice(2);
+        assert.deepEqual(hit,outStart);
+        const segment=diagram.profile.findIndex((p,i)=>i<diagram.profile.length-1&&p[0]<=hit[0]&&diagram.profile[i+1][0]>hit[0]);
+        const a=diagram.profile[segment],b=diagram.profile[segment+1],normal=unit([b[1]-a[1],a[0]-b[0]]);
+        close(hit[1],a[1]+(hit[0]-a[0])*(b[1]-a[1])/(b[0]-a[0]),1e-6);
+        const incoming=unit(hit.map((x,i)=>x-start[i])),outgoing=unit(end.map((x,i)=>x-hit[i]));
+        close(incoming[0],.6,1e-7);close(incoming[1],.8,1e-7);
+        const reflected=incoming.map((x,i)=>x-2*dot(incoming,normal)*normal[i]);
+        outgoing.forEach((x,i)=>close(x,reflected[i],1e-7));close(-dot(incoming,normal),dot(outgoing,normal),1e-7);
+        assert.ok(outgoing[1]<0);directions.push(Math.atan2(outgoing[1],outgoing[0]));
+        for(const p of [start,hit,end])assert.ok(p[0]>=0&&p[0]<=560&&p[1]>=0&&p[1]<=190);
+        for(let j=1;j<30;j++){
+          const p=hit.map((x,i)=>x+(end[i]-x)*j/30),k=diagram.profile.findIndex((x,i)=>i<diagram.profile.length-1&&x[0]<=p[0]&&diagram.profile[i+1][0]>=p[0]);
+          if(k>=0){const a=diagram.profile[k],b=diagram.profile[k+1];assert.ok(p[1]<a[1]+(p[0]-a[0])*(b[1]-a[1])/(b[0]-a[0])+1e-6,'反射光不得穿過其他表面');}
+        }
+      }
+      const spread=Math.max(...directions)-Math.min(...directions);
+      if(diagram.kind==='smooth')close(spread,0,1e-7);else assert.ok(spread>.6);
+    }
+    fs.writeFileSync(path.join(dir,'surface-rays.json'),JSON.stringify(diagrams,null,2));
   });
 
-  await t.test('正面雙燈的實際渲染與參考圖片一致，沒有另外調亮',async()=>{
-    await view('front');
-    await toggle(0,true);await toggle(1,true);
-    const points=await page.evaluate(()=>{const b=window.__surfaceLab,reference=b.camera.clone();b.fitCamera(reference,1119/678);return [b.camera,reference].map(camera=>b.stations.map(s=>{const out=[];for(let y=0;y<31;y++)for(let x=0;x<45;x++){const p=s.surface.clone();p.x+=(x/44-.5)*2.4;p.z+=(y/30-.5)*1.75;p.project(camera);out.push([(p.x+1)/2,(1-p.y)/2]);}return out;}));});
-    const sample=(buffer,positions)=>{
-      const im=PNG.sync.read(buffer);
-      return positions.map(ps=>ps.reduce((sum,[u,v])=>{const x=Math.max(0,Math.min(im.width-1,Math.round(u*im.width))),y=Math.max(0,Math.min(im.height-1,Math.round(v*im.height))),i=(y*im.width+x)*4;return sum+.2126*im.data[i]+.7152*im.data[i+1]+.0722*im.data[i+2];},0)/ps.length);
-    };
-    const response=await page.request.get(await page.locator('#reflection-reference-image').evaluate(e=>e.currentSrc));assert.equal(response.status(),200);
-    const main=sample(await canvas.screenshot(),points[0]),reference=sample(await response.body(),points[1]);
-    main.forEach((v,i)=>close(v,reference[i],6));
-    fs.writeFileSync(path.join(dir,'reference-colors.json'),JSON.stringify({main,reference},null,2));
+  await t.test('播放及重播兩側光路，不影響主實驗；減少動態保留完整圖解',async()=>{
+    const before=await page.evaluate(()=>window.__surfaceLab.spotLights.map(x=>x.intensity));
+    const play=page.locator('#surface-play'),explanation=page.locator('#surface-explanation');
+    await play.click();await expect(explanation).toHaveAttribute('data-playing','false');await expect(play).toHaveText(/重播光路/);
+    await page.emulateMedia({reducedMotion:'no-preference'});
+    try{
+      await play.click();await expect(explanation).toHaveAttribute('data-playing','true');
+      await expect(page.locator('.surface-pulse[visibility=visible]')).toHaveCount(6);
+      await expect(page.locator('#surface-play-status')).toHaveText(/反射方向離開/);
+      await play.click();await expect(explanation).toHaveAttribute('data-playing','true');
+      await expect(explanation).toHaveAttribute('data-playing','false');await expect(page.locator('.surface-pulse[visibility=visible]')).toHaveCount(0);
+      assert.deepEqual(await page.evaluate(()=>window.__surfaceLab.spotLights.map(x=>x.intensity)),before);
+    }finally{await page.emulateMedia({reducedMotion:'reduce'});}
   });
 
   await t.test('實際像素：鏡面反光隨視角明顯變化，紙面受照仍可見',async()=>{
@@ -176,15 +156,15 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
     await view('front');await toggle(0,false);
     const sources=await page.evaluate(()=>window.__surfaceLab.stations.map(s=>s.source.toArray()));
     await expect(page.locator('[data-reflection-view]')).toHaveCount(0);
-    await expect(page.locator('#card-01 button')).toHaveCount(3);
+    await expect(page.locator('.reflection-stage button')).toHaveCount(3);
     await canvas.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));await expect(canvas).toBeInViewport({ratio:.99});
     const r=await canvas.boundingBox();await page.mouse.move(r.x+r.width*.5,r.y+r.height*.65);await page.mouse.down();await page.mouse.move(r.x+r.width*.6,r.y+r.height*.7,{steps:5});await page.mouse.up();
     await expect(canvas).toHaveAttribute('data-view','free');await expect(page.locator('#reflection-view-status')).toHaveText('目前觀看位置：自由觀看');
     await expect(mirror).toHaveAttribute('aria-pressed','false');await expect(paper).toHaveAttribute('aria-pressed','true');
     await page.mouse.down();await canvas.dispatchEvent('pointercancel',{pointerId:1});await page.mouse.up();await expect(canvas).not.toHaveClass(/is-dragging/);
-    await page.locator('#reflection-match-reference').focus();await page.keyboard.press('Enter');await expect(canvas).toHaveAttribute('data-view','front');
+    await page.locator('#reflection-reset-view').focus();await page.keyboard.press('Enter');await expect(canvas).toHaveAttribute('data-view','front');
     assert.deepEqual(await page.evaluate(()=>window.__surfaceLab.stations.map(s=>s.source.toArray())),sources);
-    await expect(mirror).toHaveAttribute('aria-pressed','true');await expect(paper).toHaveAttribute('aria-pressed','true');
+    await expect(mirror).toHaveAttribute('aria-pressed','false');await expect(paper).toHaveAttribute('aria-pressed','true');
   });
 
   await t.test('恢復上下與左右拖曳，水平可轉過一圈且不受先前左右限制',async()=>{
@@ -201,49 +181,51 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
     await view('front');
   });
 
-  await t.test('一鍵對照重設兩個角度並開啟雙燈，不捲動頁面',async()=>{
+  await t.test('回到正面重設兩個角度，保留獨立開關且不捲動頁面',async()=>{
     await view('front');const front=await page.evaluate(()=>window.__surfaceLab.camera.position.toArray());
     await view('left');await toggle(0,false);await toggle(1,false);
     const beforeScroll=await page.evaluate(()=>scrollY);
-    await page.locator('#reflection-match-reference').click();
+    await page.locator('#reflection-reset-view').click();
     close(await page.evaluate(()=>scrollY),beforeScroll,1);
     await expect(canvas).toHaveAttribute('data-view','front');await expect(canvas).toBeInViewport({ratio:.99});
-    await expect(mirror).toHaveAttribute('aria-pressed','true');await expect(paper).toHaveAttribute('aria-pressed','true');
+    await expect(mirror).toHaveAttribute('aria-pressed','false');await expect(paper).toHaveAttribute('aria-pressed','false');
     const current=await page.evaluate(()=>({position:window.__surfaceLab.camera.position.toArray(),lights:window.__surfaceLab.spotLights.map(x=>x.intensity)}));
-    current.position.forEach((v,i)=>close(v,front[i]));assert.deepEqual(current.lights,[17,17]);
+    current.position.forEach((v,i)=>close(v,front[i]));assert.deepEqual(current.lights,[0,0]);
     await view('right');await toggle(0,false);
-    await page.locator('#reflection-match-reference').focus();await page.keyboard.press('Enter');await expect(canvas).toHaveAttribute('data-view','front');await expect(mirror).toHaveAttribute('aria-pressed','true');
+    await page.locator('#reflection-reset-view').focus();await page.keyboard.press('Enter');await expect(canvas).toHaveAttribute('data-view','front');await expect(mirror).toHaveAttribute('aria-pressed','false');
   });
 
   await t.test('六種寬度皆完整顯示器材、標籤與按鈕，沒有文字或頁面溢出',async()=>{
+    await toggle(0,true);await toggle(1,true);
     for(const width of [1440,1024,768,760,390,320]){
       await page.setViewportSize({width,height:1000});await view('front');await canvas.screenshot();
-      const m=await page.evaluate(()=>{const b=window.__surfaceLab,main=document.querySelector('.reflection-main-panel').getBoundingClientRect(),stage=document.querySelector('.reflection-stage').getBoundingClientRect(),reference=document.querySelector('.reflection-reference').getBoundingClientRect(),controls=document.querySelector('.reflection-controls').getBoundingClientRect(),image=document.querySelector('#reflection-reference-image').getBoundingClientRect();return{overflow:document.documentElement.scrollWidth>innerWidth,points:b.framingPoints.map(x=>x.clone().project(b.camera).toArray()),belowControls:reference.top>=controls.bottom-1,referenceInside:reference.bottom<=stage.bottom,referenceWidth:image.width,fullWidth:main.width/stage.width,canvases:document.querySelectorAll('#card-01 canvas').length,buttons:[...document.querySelectorAll('#card-01 button')].map(x=>({height:x.getBoundingClientRect().height,fits:x.scrollWidth<=x.clientWidth+1})),tilePixels:(b.mirrorTile.geometry.parameters.width)/(b.camera.right-b.camera.left)*document.querySelector('#reflection-3d-scene').clientWidth};});
+      const m=await page.evaluate(()=>{const b=window.__surfaceLab,main=document.querySelector('.reflection-main-panel').getBoundingClientRect(),stage=document.querySelector('.reflection-stage').getBoundingClientRect(),explanation=document.querySelector('.surface-explanation').getBoundingClientRect(),controls=document.querySelector('.reflection-controls').getBoundingClientRect();return{overflow:document.documentElement.scrollWidth>innerWidth,points:b.framingPoints.map(x=>x.clone().project(b.camera).toArray()),belowExperiment:explanation.top>=stage.bottom,diagramCount:document.querySelectorAll('.surface-panel svg').length,fullWidth:main.width/stage.width,canvases:document.querySelectorAll('#card-01 canvas').length,buttons:[...document.querySelectorAll('#card-01 button')].map(x=>({height:x.getBoundingClientRect().height,fits:x.scrollWidth<=x.clientWidth+1})),tilePixels:(b.mirrorTile.geometry.parameters.width)/(b.camera.right-b.camera.left)*document.querySelector('#reflection-3d-scene').clientWidth};});
       assert.equal(m.overflow,false);assert.ok(m.points.every(p=>Math.abs(p[0])<=.9&&Math.abs(p[1])<=.9));assert.ok(m.buttons.every(b=>b.height>=44&&b.fits));assert.ok(m.tilePixels>=(width>1000?130:64),JSON.stringify(m));
-      assert.equal(m.belowControls,true);assert.equal(m.referenceInside,true);assert.ok(m.referenceWidth<=202);assert.ok(m.fullWidth>.9);assert.equal(m.canvases,1);
+      assert.equal(m.belowExperiment,true);assert.equal(m.diagramCount,2);assert.ok(m.fullWidth>.9);assert.equal(m.canvases,1);
       if(width===1440||width===390){
         const style=await page.addStyleTag({content:'.route{visibility:hidden!important}'});
         await page.locator('.reflection-stage').screenshot({path:path.join(dir,`stage-${width}.png`)});
-        await page.locator('.reflection-reference').screenshot({path:path.join(dir,`reference-${width}.png`)});
+        await page.locator('.surface-explanation').screenshot({path:path.join(dir,`explanation-${width}.png`)});
         await style.evaluate(e=>e.remove());
       }
     }
   });
 
-  await t.test('主畫面維持原比例，常見視窗可同時看到操作及小型參考',async()=>{
+  await t.test('自由實驗常駐且比例自然，輔助圖解在下方而非折疊主畫面',async()=>{
     const measurements=[];
     for(const [width,height] of [[1440,900],[1366,768],[1024,768],[390,844],[320,667]]){
       await page.setViewportSize({width,height});await view('front');
       const stage=page.locator('.reflection-stage');
       await stage.evaluate(e=>{const gap=innerWidth<=760?document.querySelector('.route').getBoundingClientRect().height+12:12;window.scrollTo({top:scrollY+e.getBoundingClientRect().top-gap,behavior:'instant'});});
       await page.screenshot({clip:{x:0,y:0,width:1,height:1}});
-      const layout=await page.evaluate(()=>{const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return{top:r.top,bottom:r.bottom,width:r.width,height:r.height};};return{width:innerWidth,height:innerHeight,stage:rect('.reflection-stage'),main:rect('#reflection-3d-scene'),button:rect('#reflection-match-reference'),reference:rect('#reflection-reference-image')};});
+      const layout=await page.evaluate(()=>{const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return{top:r.top,bottom:r.bottom,width:r.width,height:r.height};};return{width:innerWidth,height:innerHeight,stage:rect('.reflection-stage'),main:rect('#reflection-3d-scene'),button:rect('#reflection-reset-view'),explanation:rect('.surface-explanation')};});
       measurements.push(layout);
       close(layout.main.width/layout.main.height,layout.stage.width<=520?1.3:1.65,.005);
       assert.ok(layout.stage.top>=0&&layout.stage.bottom<=height,JSON.stringify(layout));
       assert.ok(layout.button.bottom<=layout.main.top,'對照按鈕在主畫面上方');
-      assert.equal(await page.locator('#reflection-match-reference').evaluate(e=>{const r=e.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===e;}),true,'按鈕未被行動版導覽遮住');
-      assert.ok(layout.reference.width<=202&&layout.reference.width<layout.main.width*.5,'參考圖縮小至輔助比例');
+      assert.equal(await page.locator('#reflection-reset-view').evaluate(e=>{const r=e.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.closest('button')===e;}),true,'按鈕未被行動版導覽遮住');
+      assert.ok(layout.explanation.top>=layout.stage.bottom,'圖解位於實驗下方');
+      await expect(page.locator('#reflection-3d-scene')).toBeVisible();await expect(page.locator('#card-01 details')).toHaveCount(0);
       if(width===1366||width===390)await page.screenshot({path:path.join(dir,`viewport-${width}.png`)});
     }
     fs.writeFileSync(path.join(dir,'viewport.json'),JSON.stringify(measurements,null,2));
@@ -259,7 +241,7 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
       await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y,id:1}]});
       await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+30,y:y+8,id:1}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
       await expect(scene).toHaveAttribute('data-view','free');await view('front',p);
-      await expect(p.locator('#reflection-fire-mirror')).toHaveAttribute('aria-pressed','true');await expect(p.locator('#reflection-fire-paper')).toHaveAttribute('aria-pressed','true');
+      await expect(p.locator('#reflection-fire-mirror')).toHaveAttribute('aria-pressed','true');await expect(p.locator('#reflection-fire-paper')).toHaveAttribute('aria-pressed','false');
       await scene.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));
       const vertical=await scene.boundingBox(),beforeScroll=await p.evaluate(()=>scrollY),beforePolar=await p.evaluate(()=>window.__surfaceLab.getPolar());
       const vx=vertical.x+vertical.width*.5,vy=vertical.y+vertical.height*.45;
@@ -271,22 +253,32 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
       await expect(scene).toHaveAttribute('data-view','free');await expect(scene).not.toHaveClass(/is-dragging/);
       // Keep drag and tap on the same native touch session. Commit the scroll
       // before taking coordinates, rather than mixing two CDP input devices.
-      await p.locator('#reflection-match-reference').evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));
+      await p.locator('#reflection-reset-view').evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));
       await p.screenshot({clip:{x:0,y:0,width:1,height:1}});
-      const button=await p.locator('#reflection-match-reference').boundingBox(),tap={x:button.x+button.width/2,y:button.y+button.height/2};
-      assert.equal(await p.evaluate(pt=>document.elementFromPoint(pt.x,pt.y)?.closest('#reflection-match-reference')?.id,tap),'reflection-match-reference');
+      const button=await p.locator('#reflection-reset-view').boundingBox(),tap={x:button.x+button.width/2,y:button.y+button.height/2};
+      assert.equal(await p.evaluate(pt=>document.elementFromPoint(pt.x,pt.y)?.closest('#reflection-reset-view')?.id,tap),'reflection-reset-view');
       await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...tap,id:3}]});
       await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
       await expect(scene).toHaveAttribute('data-view','front');await expect(scene).toBeInViewport({ratio:.99});
-      await expect(p.locator('#reflection-fire-paper')).toHaveAttribute('aria-pressed','true');
+      await expect(p.locator('#reflection-fire-paper')).toHaveAttribute('aria-pressed','false');
       assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
     }finally{await c.close();}
   });
 
-  await t.test('WebGL不可用時停用互動，仍可閱讀下方正面參考圖片',async()=>{
+  await t.test('沒有JavaScript時仍有完整的表面方向圖解',async()=>{
+    const c=await browser.newContext({javaScriptEnabled:false}),p=await c.newPage();
+    try{
+      await p.goto(new URL('units/4/parts/4.2/',base).href);await expect(p.locator('.surface-panel svg')).toHaveCount(2);
+      await expect(p.locator('.surface-incoming')).toHaveCount(6);await expect(p.locator('.surface-outgoing')).toHaveCount(6);
+      await expect(p.locator('#surface-play')).toBeDisabled();await expect(p.locator('[data-surface=rough] .surface-scale-note')).toHaveText('表面起伏放大示意');
+      await p.locator('.surface-explanation').scrollIntoViewIfNeeded();await expect(p.locator('.surface-explanation')).toBeVisible();
+    }finally{await c.close();}
+  });
+
+  await t.test('WebGL不可用時停用實驗，但輔助圖解及播放仍可使用',async()=>{
     const c=await browser.newContext();await setup(c);await c.addInitScript(()=>{const get=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return String(type).includes('webgl')?null:get.call(this,type,...args);};});
     const p=await c.newPage();
-    try{await p.goto(new URL('units/4/parts/4.2/',base).href);await expect(p.locator('#reflection-3d-scene')).toHaveAttribute('data-ready','error');await expect(p.locator('.reflection-comparison')).toBeHidden();await expect(p.locator('#reflection-fallback')).toBeVisible();await expect(p.locator('#card-01 button:disabled')).toHaveCount(3);await p.locator('#reflection-reference-image').scrollIntoViewIfNeeded();await p.locator('#reflection-reference-image').evaluate(e=>e.decode());await expect(p.locator('#reflection-reference-image')).toBeVisible();}finally{await c.close();}
+    try{await p.goto(new URL('units/4/parts/4.2/',base).href);await expect(p.locator('#reflection-3d-scene')).toHaveAttribute('data-ready','error');await expect(p.locator('.reflection-comparison')).toBeHidden();await expect(p.locator('#reflection-fallback')).toBeVisible();await expect(p.locator('#card-01 button:disabled')).toHaveCount(3);await expect(p.locator('#surface-explanation')).toHaveAttribute('data-ready','true');await expect(p.locator('#surface-play')).toBeEnabled();await expect(p.locator('.surface-panel svg')).toHaveCount(2);await p.locator('#surface-play').click();await expect(p.locator('#surface-play')).toHaveText(/重播光路/);}finally{await c.close();}
     await page.goto('about:blank');assert.deepEqual(errors,[]);
   });
 });

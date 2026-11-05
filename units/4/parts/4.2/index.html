@@ -93,7 +93,7 @@
     @media(max-width:760px){.route a.quiz-nav{margin:0 0 0 4px;border-top:1px solid var(--line);padding:7px 10px}.route a.quiz-nav[aria-current=step]{border-color:#d9a74f}}
   </style>
   <link rel="stylesheet" href="assets/lesson-layout.css?v=align-4.1-20261105">
-  <link rel="stylesheet" href="assets/reflection-stage.css?v=natural-proportions-20261105">
+  <link rel="stylesheet" href="assets/reflection-stage.css?v=surfaces-experiment-20261105">
 </head>
 <body>
   <header class="shell masthead">
@@ -132,30 +132,37 @@
         <section class="lesson-card" id="card-01">
           <header class="card-heading"><span class="card-number">01</span><div class="card-heading-copy"><h2>同一束光照到不同表面，反射方向一樣嗎？</h2><p class="card-subtitle">鏡面反射與漫反射：比較反射光的分布</p></div></header>
           <div class="card-main">
-            <p>平整鏡面會把同一方向射來的光朝特定方向反射；霧面白紙則把光反射到許多方向。因此，改變觀看位置時，看到的反光情形也會不同。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>阿公，鏡子和白紙都會反射光，為什麼反光看起來不一樣？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>因為它們表面的平滑程度不同。鏡面平滑，反光比較集中；霧面紙的表面有細小凹凸，反光就比較分散。</p></div>
-            <p class="prompt">分別開啟左右手電筒，從目前視角比較鏡面與霧面紙的反光。</p>
-            <figure class="reflection-stage">
+            <p>保持兩側照射條件相同，改變觀看位置，觀察光滑表面與粗糙表面的反光差異。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>阿公，這兩種表面都會反射光，為什麼反光看起來不一樣？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>因為它們表面的平滑程度不同。光滑表面的反射方向比較集中；粗糙表面有細小凹凸，反射方向就比較分散。</p></div>
+            <p class="prompt">分別開啟左右手電筒，自由拖曳畫面，比較不同位置看到的反光。</p>
+            <figure class="reflection-stage" aria-labelledby="reflection-experiment-title">
               <div class="reflection-comparison">
                 <div class="reflection-main-panel">
-                  <div class="reflection-main-heading"><h3 id="reflection-view-status" aria-live="polite">目前觀看位置：正面</h3><button id="reflection-match-reference" class="reflection-match-button" type="button" aria-controls="reflection-3d-scene" aria-describedby="reflection-match-hint" disabled>回到正面參考角度</button></div>
+                  <div class="reflection-main-heading"><div><h3 id="reflection-experiment-title">自由觀察實驗器材</h3><span id="reflection-view-status" aria-live="polite">目前觀看位置：正面</span></div><button id="reflection-reset-view" class="reflection-reset-button" type="button" aria-controls="reflection-3d-scene" disabled>回到正面</button></div>
                   <div class="reflection-scene-wrap"><span class="reflection-drag-hint">可上下、左右自由拖曳</span>
-                  <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="可自由觀看的 3D 反射實驗：左邊是平面鏡，右邊是霧面白紙。拖曳可上下、左右調整觀看角度，並與下方雙燈開啟的正面參考圖片對照。" aria-describedby="reflection-status reflection-view-status" data-ready="loading"></canvas></div>
+                    <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="可自由觀看的 3D 反光實驗：左邊是光滑表面，右邊是粗糙表面。拖曳可上下、左右調整觀看角度。" aria-describedby="reflection-status reflection-view-status" data-ready="loading"></canvas>
+                  </div>
                 </div>
               </div>
-              <p class="reflection-fallback" id="reflection-fallback" hidden>這個 3D 實驗場景無法在目前裝置顯示；你仍可閱讀下方的觀察說明。</p>
+              <p class="reflection-fallback" id="reflection-fallback" hidden>這個 3D 實驗場景無法在目前裝置顯示；你仍可閱讀並播放下方的反射方向圖解。</p>
               <div class="reflection-controls">
-                <button class="reflection-fire" id="reflection-fire-mirror" type="button" aria-pressed="false" aria-label="開啟鏡面手電筒" disabled><span>鏡面手電筒</span><small>已關閉</small></button>
-                <button class="reflection-fire" id="reflection-fire-paper" type="button" aria-pressed="false" aria-label="開啟霧面紙手電筒" disabled><span>霧面紙手電筒</span><small>已關閉</small></button>
+                <button class="reflection-fire" id="reflection-fire-mirror" type="button" aria-pressed="false" aria-label="開啟照向光滑表面的手電筒" disabled><span>左側手電筒</span><small>已關閉</small></button>
+                <button class="reflection-fire" id="reflection-fire-paper" type="button" aria-pressed="false" aria-label="開啟照向粗糙表面的手電筒" disabled><span>右側手電筒</span><small>已關閉</small></button>
               </div>
-              <aside class="reflection-reference" aria-labelledby="reflection-reference-title">
-                <img id="reflection-reference-image" src="assets/reflection-front-reference.png?v=planar-mirror-20261105" width="1119" height="678" alt="正面參考：左側平面鏡映出手電筒燈頭，右側霧面白紙呈現受照亮區。" loading="lazy" decoding="async" aria-describedby="reflection-reference-caption">
-                <div class="reflection-reference-copy"><h3 id="reflection-reference-title">正面參考</h3><p id="reflection-reference-caption">兩支手電筒皆開啟時的畫面。</p><p>鏡面映出燈頭；白紙呈現受照亮區。</p><span class="visually-hidden" id="reflection-match-hint">回到正面參考角度會同時開啟兩支手電筒。</span></div>
-              </aside>
             </figure>
-              <p class="reflection-status visually-hidden" id="reflection-status" aria-live="polite">左右手電筒目前都已關閉。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>換個位置看，鏡子和白紙的反光果然不一樣！</p></div>
+            <p class="reflection-status visually-hidden" id="reflection-status" aria-live="polite">左右手電筒目前都已關閉。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>換個位置看，兩種表面的反光果然不一樣！</p></div>
+            <section class="surface-explanation" id="surface-explanation" aria-labelledby="surface-explanation-title" data-playing="false">
+              <header class="surface-explanation-heading"><h3 id="surface-explanation-title">為什麼反光會不一樣？</h3><button id="surface-play" type="button" disabled><span aria-hidden="true">▶</span> <span class="surface-play-label">播放光路</span></button></header>
+              <div class="surface-legend" aria-hidden="true"><span><i class="surface-incident-key"></i>入射光</span><span><i class="surface-reflected-key"></i>反射光</span></div>
+              <div class="surface-diagrams">
+                <article class="surface-panel" data-surface="smooth"><h4>光滑表面</h4><svg viewBox="0 0 560 190" role="img" aria-labelledby="surface-smooth-title surface-smooth-desc"><title id="surface-smooth-title">光滑表面的反射方向示意</title><desc id="surface-smooth-desc">三條同方向入射光，分別照到表面三處。平滑表面反射後的方向相同。</desc><defs><marker id="surface-smooth-in" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="strokeWidth"><path d="M0 0L7 3.5L0 7Z" fill="#b98218"/></marker><marker id="surface-smooth-out" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="strokeWidth"><path d="M0 0L7 3.5L0 7Z" fill="#16826c"/></marker></defs><path class="surface-profile" d="M40 150L145 150L195 150L260 150L310 150L375 150L425 150L520 150L520 174L40 174Z"/><g data-surface-ray="0"><path class="surface-incoming" data-start="80,30" data-hit="170,150" d="M80 30L170 150" marker-end="url(#surface-smooth-in)"/><path class="surface-outgoing" data-end="260,30" d="M170 150L260 30" marker-end="url(#surface-smooth-out)"/><circle class="surface-contact" cx="170" cy="150" r="3.5"/><circle class="surface-pulse" r="5" visibility="hidden"/></g><g data-surface-ray="1"><path class="surface-incoming" data-start="195,30" data-hit="285,150" d="M195 30L285 150" marker-end="url(#surface-smooth-in)"/><path class="surface-outgoing" data-end="375,30" d="M285 150L375 30" marker-end="url(#surface-smooth-out)"/><circle class="surface-contact" cx="285" cy="150" r="3.5"/><circle class="surface-pulse" r="5" visibility="hidden"/></g><g data-surface-ray="2"><path class="surface-incoming" data-start="310,30" data-hit="400,150" d="M310 30L400 150" marker-end="url(#surface-smooth-in)"/><path class="surface-outgoing" data-end="490,30" d="M400 150L490 30" marker-end="url(#surface-smooth-out)"/><circle class="surface-contact" cx="400" cy="150" r="3.5"/><circle class="surface-pulse" r="5" visibility="hidden"/></g></svg><p class="surface-scale-note">反射方向示意</p><p class="surface-result">鏡面反射：方向較集中</p></article>
+                <article class="surface-panel" data-surface="rough"><h4>粗糙表面</h4><svg viewBox="0 0 560 190" role="img" aria-labelledby="surface-rough-title surface-rough-desc"><title id="surface-rough-title">粗糙表面的反射方向示意</title><desc id="surface-rough-desc">三條同方向入射光，分別照到表面三處。表面起伏經放大，各處傾斜不同，反射後的方向不同。</desc><defs><marker id="surface-rough-in" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="strokeWidth"><path d="M0 0L7 3.5L0 7Z" fill="#b98218"/></marker><marker id="surface-rough-out" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto" markerUnits="strokeWidth"><path d="M0 0L7 3.5L0 7Z" fill="#16826c"/></marker></defs><path class="surface-profile" d="M40 154L115 148L145 155.5L195 146.5L235 153L260 150L310 150L345 156L375 146.5L425 155.5L520 150L520 174L40 174Z"/><g data-surface-ray="0"><path class="surface-incoming" data-start="80,31" data-hit="170,151" d="M80 31L170 151" marker-end="url(#surface-rough-in)"/><path class="surface-outgoing" data-end="212.50678,7.14878" d="M170 151L212.50678 7.14878" marker-end="url(#surface-rough-out)"/><circle class="surface-contact" cx="170" cy="151" r="3.5"/><circle class="surface-pulse" r="5" visibility="hidden"/></g><g data-surface-ray="1"><path class="surface-incoming" data-start="195,30" data-hit="285,150" d="M195 30L285 150" marker-end="url(#surface-rough-in)"/><path class="surface-outgoing" data-end="375,30" d="M285 150L375 30" marker-end="url(#surface-rough-out)"/><circle class="surface-contact" cx="285" cy="150" r="3.5"/><circle class="surface-pulse" r="5" visibility="hidden"/></g><g data-surface-ray="2"><path class="surface-incoming" data-start="310,31" data-hit="400,151" d="M310 31L400 151" marker-end="url(#surface-rough-in)"/><path class="surface-outgoing" data-end="526.195273,69.915149" d="M400 151L526.195273 69.915149" marker-end="url(#surface-rough-out)"/><circle class="surface-contact" cx="400" cy="151" r="3.5"/><circle class="surface-pulse" r="5" visibility="hidden"/></g></svg><p class="surface-scale-note">表面起伏放大示意</p><p class="surface-result">漫反射：方向較分散</p></article>
+              </div>
+              <p class="surface-explanation-copy">表面各處的朝向不同，光反射後的方向也會不同。</p>
+              <p class="visually-hidden" id="surface-play-status" aria-live="polite">完整光路已顯示，可播放觀察光的行進順序。</p>
+            </section>
           </div>
         </section>
         <section class="lesson-card" id="card-02">
@@ -499,7 +506,8 @@
   <script type="module" src="assets/mirror-distance.js?v=visual-polish-20261029"></script>
   <script type="module" src="assets/curved-mirrors.js?v=distance-observation-20261030"></script>
   <script type="module" src="assets/mirror-image.js?v=clearance-20261105"></script>
-  <script type="module" src="assets/reflection-3d.js?v=planar-mirror-20261105"></script>
+  <script type="module" src="assets/reflection-3d.js?v=surfaces-experiment-20261105"></script>
+  <script type="module" src="assets/surface-directions.js?v=surfaces-experiment-20261105"></script>
   <script type="module" src="assets/laser-reflection.js?v=availability-20261105"></script>
   <script type="module" src="assets/reversible-light.js?v=trim-notes-20261030"></script>
   <script type="module" src="assets/periscope.js?v=availability-20261105"></script>

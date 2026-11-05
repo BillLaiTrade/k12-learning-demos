@@ -1,0 +1,10 @@
+{
+  "baseline": "989883aab9cb6560cac2110fd66b9c9065499161",
+  "afternoon_version": "e9ad9ba4",
+  "afternoon_time": "2026-11-05 15:43 Asia/Taipei",
+  "optical_scene_matches_afternoon_except_labels": true,
+  "optical_scene_sha256": "19f354792fac2e95599789cb42c4fa40d1fa43856dfddd3e4b3c1e6f6badc48f",
+  "other_sections_identical": true,
+  "other_sections_sha256": "5d817417c6d7479b859179ba4a84b0f69230d1d5fca983be042e0943b89f78f0",
+  "hero_unchanged": true
+}
