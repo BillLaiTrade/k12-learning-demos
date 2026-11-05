@@ -1659,3 +1659,9 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-insulation.test.cjs
 ## 4.2 第二區核可反射定律圖（2026-11-05）
 
 `CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-4.2-law-diagram.test.cjs`檢查六種寬度、標示不溢出／不重疊、真實Home／End／方向鍵、實際拖曳、兩角讀值及SVG光路／圓弧的獨立角度量測；另檢查無JavaScript及WebGL失敗時的精確30°圖解。只隔離其他學習區塊，保留第二區真正的3D器材與輸入處理；`LAW_CAPTURE_DIR`可指定畫面與幾何紀錄目錄。
+
+## 4.2 連續反射亮光（2026-11-05）
+
+第一區播放案例改驗證完整折線上的短亮光前進。兩種動態偏好都以原生時間軸在42%、46%、50%、54%取樣實際dash位置，確認反射點前後速度相同，且同一段亮光跨過表面；比較25%與35%的SVG像素，排除只切換整條線。另檢查完成恢復靜態圖、重播不累積效果、Esc停止、鍵盤啟動與偏好變更、有效原生效果18個、開始時間相同及實際播放的DOM改寫數為0。取樣只操作光路SVG的動畫，避免暫停按鈕本身的CSS轉場。
+
+紀錄為`continuous-flow.json`與`flow-*-42/46/50/54.png`。原生觸控、六寬度、無JS／無WebGL與反射幾何沿用同一專項；本輪命令仍使用`--test-skip-pattern='實際像素|自由拖曳保留|恢復上下|回到正面重設|自由實驗常駐'`。

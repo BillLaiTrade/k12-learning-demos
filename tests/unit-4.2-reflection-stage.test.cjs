@@ -116,84 +116,56 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
     fs.writeFileSync(path.join(dir,'surface-rays.json'),JSON.stringify(diagrams,null,2));
   });
 
-  await t.test('原生光路動畫同步且沒有逐幀 DOM 寫入；減少動態、重播與鍵盤皆正常',async()=>{
-    const c=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
-    await setup(c);
+  await t.test('亮光連續通過反射點、速度不在接觸面停頓，兩種偏好皆可手動播放',async()=>{
+    const c=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});await setup(c);
     await c.route('**/assets/reflection-3d.js*',r=>r.fulfill({contentType:'application/javascript',body:''}));
-    const p=await c.newPage();await p.clock.install();await p.bringToFront();
-    await p.goto(new URL('units/4/parts/4.2/',base).href,{waitUntil:'load'});
-    await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
+    const p=await c.newPage(),failures=[];p.on('pageerror',e=>failures.push(e.message));await p.bringToFront();
+    await p.goto(new URL('units/4/parts/4.2/',base).href,{waitUntil:'load'});await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
     const root=p.locator('#surface-explanation'),play=p.locator('#surface-play'),svg=p.locator('[data-surface=smooth] svg');
     await expect(root).toHaveAttribute('data-ready','true');
-    const changedPixels=(a,b)=>{
-      const x=PNG.sync.read(a),y=PNG.sync.read(b);assert.equal(x.width,y.width);assert.equal(x.height,y.height);
-      let changed=0;for(let i=0;i<x.data.length;i+=4)if(Math.max(...[0,1,2].map(c=>Math.abs(x.data[i+c]-y.data[i+c])))>20)changed++;
-      return changed;
-    };
-    const seek=async time=>p.locator('.surface-native-track').evaluateAll((tracks,time)=>{
-      tracks.flatMap(t=>t.getAnimations({subtree:true})).forEach(a=>{a.pause();a.currentTime=time;});
-    },time);
-    const before=await page.evaluate(()=>window.__surfaceLab.spotLights.map(x=>x.intensity));
-    const evidence=[];
+    const changedPixels=(a,b)=>{const x=PNG.sync.read(a),y=PNG.sync.read(b);assert.equal(x.width,y.width);assert.equal(x.height,y.height);let changed=0;for(let i=0;i<x.data.length;i+=4)if(Math.max(...[0,1,2].map(c=>Math.abs(x.data[i+c]-y.data[i+c])))>20)changed++;return changed;};
+    const seek=async progress=>root.evaluate((e,progress)=>e.querySelector('.surface-diagrams').getAnimations({subtree:true}).filter(a=>a.playState!=='idle').forEach(a=>{a.pause();a.currentTime=a.effect.getTiming().duration*progress;}),progress);
+    const packetState=async()=>p.locator('.surface-flow-body').evaluateAll(paths=>paths.map(path=>{
+      const numbers=s=>s.match(/-?[\d.]+/g).map(Number),p=numbers(path.getAttribute('d')),offset=parseFloat(getComputedStyle(path).strokeDashoffset),tail=parseFloat(getComputedStyle(path).strokeDasharray);
+      return{route:p,head:tail-offset,tail:-offset,contact:Math.hypot(p[2]-p[0],p[3]-p[1])};
+    }));
+    const evidence=[],before=await page.evaluate(()=>window.__surfaceLab.spotLights.map(x=>x.intensity));
     try{
-      await p.clock.pauseAt(new Date(await p.evaluate(()=>Date.now())+100));
-      for(const motion of ['reduce','no-preference']){
-        await p.emulateMedia({reducedMotion:motion});await root.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));
-        const initial=await svg.screenshot();
-        await play.click();await expect(root).toHaveAttribute('data-phase','incident');
-        await expect(p.locator('#surface-play-status')).toHaveText(/光線入射/);
-        if(motion==='no-preference'){
-          const animations=await p.locator('.surface-native-track').evaluateAll(ts=>ts.flatMap(t=>t.getAnimations({subtree:true})).map(a=>({start:a.startTime,duration:a.effect.getTiming().duration})));
-          assert.equal(animations.length,24);assert.equal(new Set(animations.map(a=>a.start)).size,1);assert.ok(animations.every(a=>a.duration===2700));
-          await seek(250);
+      for(const motion of ['no-preference','reduce']){
+        await p.emulateMedia({reducedMotion:motion});await root.evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));const initial=await svg.screenshot();
+        await play.click();await seek(.25);await expect(root).toHaveAttribute('data-playing','true');await expect(root).toHaveAttribute('data-phase','running');
+        const native=await root.evaluate(e=>e.querySelector('.surface-diagrams').getAnimations({subtree:true}).filter(a=>a.playState!=='idle').map(a=>({start:a.startTime,duration:a.effect.getTiming().duration})));
+        // Pausing clears startTime, but every effect shares the same position.
+        assert.equal(native.length,18);assert.ok(native.every(a=>a.duration===(motion==='reduce'?4200:3400)));
+        const incoming=await svg.screenshot();assert.ok(changedPixels(initial,incoming)>150);
+        await seek(.35);const moving=await svg.screenshot(),movingPixels=changedPixels(incoming,moving);assert.ok(movingPixels>40,'亮光必須沿線移動，不能只切換整條線');
+        const positions=[];
+        for(const progress of [.42,.46,.5,.54]){await seek(progress);await svg.screenshot({path:path.join(dir,`flow-${motion}-${Math.round(progress*100)}.png`)});positions.push(await packetState());}
+        for(let i=0;i<6;i++){
+          assert.equal(positions[0][i].route.length,6,'每道光用一條包含反射點的完整折線');
+          const advances=positions.slice(1).map((state,j)=>state[i].head-positions[j][i].head);
+          assert.ok(advances.every(d=>d>10),'接觸前後不能停住');advances.forEach(d=>assert.ok(Math.abs(d-advances[0])<.05,'接觸前後沿路徑速度相同'));
+          const crossing=positions[2][i];assert.ok(crossing.tail<crossing.contact&&crossing.head>crossing.contact,'同一段亮光必須同時跨在入射與反射兩側');
         }
-        const incident=await svg.screenshot(),difference=changedPixels(initial,incident);assert.ok(difference>150);
-        fs.writeFileSync(path.join(dir,`native-${motion}-incident.png`),incident);
-        if(motion==='no-preference'){
-          await seek(650);assert.ok(changedPixels(incident,await svg.screenshot())>150,'原生時間軸推進時光線必須移動');
-        }else assert.equal(await p.locator('.surface-native-track').evaluateAll(ts=>ts.flatMap(t=>t.getAnimations({subtree:true})).length),0);
-        await p.clock.runFor(1050);if(motion==='no-preference')await seek(1050);
-        await expect(root).toHaveAttribute('data-phase','contact');
-        await svg.screenshot({path:path.join(dir,`native-${motion}-contact.png`)});
-        assert.ok(await p.locator('.surface-contact-halo').evaluateAll(es=>es.every(e=>+getComputedStyle(e).opacity>0)));
-        await p.clock.runFor(650);if(motion==='no-preference')await seek(2100);
-        await expect(root).toHaveAttribute('data-phase','reflected');
-        await svg.screenshot({path:path.join(dir,`native-${motion}-reflected.png`)});
-        if(motion==='no-preference')await p.locator('.surface-native-track').evaluateAll(ts=>ts.flatMap(t=>t.getAnimations({subtree:true})).forEach(a=>a.finish()));
-        else await p.clock.runFor(1100);
-        await expect(root).toHaveAttribute('data-playing','false');await expect(play).toHaveText(/重播光路/);
-        assert.equal(changedPixels(initial,await svg.screenshot()),0,'完成時恢復完整精確光路');
-        evidence.push({motion,changedPixels:difference});
-        await play.click();await expect(root).toHaveAttribute('data-phase','incident');
-        await play.click();await expect(root).toHaveAttribute('data-phase','incident');
-        if(motion==='no-preference')await p.emulateMedia({reducedMotion:'reduce'});else await p.clock.runFor(2800);
-        await expect(root).toHaveAttribute('data-playing','false');
+        await seek(.75);await svg.screenshot({path:path.join(dir,`flow-${motion}-outgoing.png`)});
+        await root.evaluate(e=>e.querySelector('.surface-diagrams').getAnimations({subtree:true}).filter(a=>a.playState!=='idle').forEach(a=>a.finish()));await expect(root).toHaveAttribute('data-playing','false');
+        assert.equal(changedPixels(initial,await svg.screenshot()),0,'完成時保留原本完整圖解');
+        await play.click();await seek(.48);await play.click();assert.equal(await root.evaluate(e=>e.querySelector('.surface-diagrams').getAnimations({subtree:true}).filter(a=>a.playState!=='idle').length),18,'重播不得累積舊動畫');
+        await play.focus();await p.keyboard.press('Escape');await expect(root).toHaveAttribute('data-playing','false');
+        evidence.push({motion,movingPixels,positions});
       }
-      await p.clock.resume();await p.emulateMedia({reducedMotion:'no-preference'});
-      await play.focus();await p.keyboard.press('Enter');await expect(root).toHaveAttribute('data-playing','true');
+      await p.emulateMedia({reducedMotion:'no-preference'});await play.focus();await p.keyboard.press('Enter');await expect(root).toHaveAttribute('data-playing','true');
       await p.emulateMedia({reducedMotion:'reduce'});await expect(root).toHaveAttribute('data-playing','false');
-      // A fresh, real-time page prevents the phase-test's mocked timer origin
-      // from contaminating the independent native timeline measurement.
-      const realtime=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'no-preference'});
-      let native;
-      try{
-        await setup(realtime);await realtime.route('**/assets/reflection-3d.js*',r=>r.fulfill({contentType:'application/javascript',body:''}));
-        const live=await realtime.newPage();await live.bringToFront();await live.goto(new URL('units/4/parts/4.2/',base).href,{waitUntil:'load'});
-        await expect(live.locator('#surface-explanation')).toHaveAttribute('data-ready','true');
-        await live.locator('#surface-explanation').evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));
-        native=await live.evaluate(async()=>{
-          const svg=document.querySelector('.surface-diagrams');let writes=0;
-          const observer=new MutationObserver(records=>writes+=records.length);
-          observer.observe(svg,{attributes:true,attributeFilter:['d','cx','cy','transform','style','marker-end','stroke-dasharray','stroke-dashoffset'],childList:true,subtree:true});
-          document.querySelector('#surface-play').click();observer.takeRecords();
-          const animations=[...svg.getAnimations({subtree:true})],first=animations[0].currentTime||0;
-          await new Promise(resolve=>setTimeout(resolve,500));observer.disconnect();
-          return{writes,animations:animations.length,elapsed:animations[0].currentTime-first};
-        });
-        fs.writeFileSync(path.join(dir,'native-playback.json'),JSON.stringify({evidence,native},null,2));
-        assert.equal(native.writes,0,'動畫不得逐幀重寫SVG');assert.equal(native.animations,24);assert.ok(native.elapsed>200);
-        await expect(live.locator('#surface-explanation')).toHaveAttribute('data-playing','false',{timeout:10000});
-      }finally{await realtime.close();}
+      await p.emulateMedia({reducedMotion:'no-preference'});
+      const performance=await p.evaluate(async()=>{
+        const e=document.querySelector('#surface-explanation'),svg=e.querySelector('.surface-diagrams');let writes=0;
+        const observer=new MutationObserver(r=>writes+=r.length);observer.observe(svg,{attributes:true,attributeFilter:['d','cx','cy','transform','style','stroke-dasharray','stroke-dashoffset'],childList:true,subtree:true});
+        document.querySelector('#surface-play').click();observer.takeRecords();const animations=e.querySelector('.surface-diagrams').getAnimations({subtree:true}).filter(a=>a.playState!=='idle'),first=animations[0].currentTime||0;
+        await new Promise(resolve=>setTimeout(resolve,500));observer.disconnect();return{writes,count:animations.length,advanced:animations[0].currentTime-first,starts:animations.map(a=>a.startTime)};
+      });
+      fs.writeFileSync(path.join(dir,'continuous-flow.json'),JSON.stringify({evidence,performance},null,2));
+      assert.equal(performance.writes,0);assert.equal(performance.count,18);assert.equal(new Set(performance.starts).size,1);assert.ok(performance.advanced>200);
+      await expect(root).toHaveAttribute('data-playing','false',{timeout:10000});assert.deepEqual(failures,[]);
       assert.deepEqual(await page.evaluate(()=>window.__surfaceLab.spotLights.map(x=>x.intensity)),before);
     }finally{await c.close();await page.bringToFront();}
   });
@@ -336,7 +308,7 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
       const rPlay=await play.boundingBox(),tapPlay={x:rPlay.x+rPlay.width/2,y:rPlay.y+rPlay.height/2};
       await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...tapPlay,id:4}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
       await expect(p.locator('#surface-explanation')).toHaveAttribute('data-playing','true');
-      await expect(p.locator('#surface-explanation')).toHaveAttribute('data-playing','false');await expect(play).toHaveText(/重播光路/);
+      await expect(p.locator('#surface-explanation')).toHaveAttribute('data-playing','false',{timeout:10000});await expect(play).toHaveText(/重播光路/);
       await expect(p.locator('#reflection-fire-mirror')).toHaveAttribute('aria-pressed','true');await expect(p.locator('#reflection-fire-paper')).toHaveAttribute('aria-pressed','false');
       assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
     }finally{await c.close();}

@@ -45,13 +45,7 @@
 #card-01 #surface-play:focus-visible { outline: 3px solid #176b5370; outline-offset: 2px; }
 #card-01 #surface-play:disabled { opacity: .55; cursor: default; }
 #card-01 .surface-explanation[data-playing="true"] #surface-play { background: #176b53; border-color: #176b53; color: #fff; }
-#card-01 .surface-playback-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin: 17px 0 16px; padding-top: 13px; border-top: 1px solid #e2e8e1; }
-#card-01 .surface-steps { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin: 0; padding: 0; list-style: none; }
-#card-01 .surface-steps li { display: flex; align-items: center; gap: 7px; padding: 4px 7px; border: 1px solid transparent; border-radius: 7px; color: #7b877c; font-size: .78rem; line-height: 1.4; }
-#card-01 .surface-steps li+li::before { content: '›'; color: #a0ac9d; margin-left: -5px; }
-#card-01 .surface-steps li[aria-current="step"] { border-color: #e2cb96; background: #fff2d9; color: #815f1c; font-weight: 750; }
-#card-01 .surface-steps li[data-step="reflected"][aria-current="step"] { border-color: #a6c6b2; background: #e1efe5; color: #216b53; }
-#card-01 .surface-steps li[data-done="true"] { color: #416d51; }
+#card-01 .surface-playback-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px 16px; margin: 17px 0 16px; padding-top: 13px; border-top: 1px solid #e2e8e1; }
 #card-01 .surface-legend { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; color: #617165; font-size: .78rem; }
 #card-01 .surface-legend span { display: inline-flex; align-items: center; gap: 7px; }
 #card-01 .surface-legend i { display: inline-block; width: 24px; height: 3px; border-radius: 2px; }
@@ -70,22 +64,20 @@
 #card-01 [data-surface="rough"] .surface-underedge { fill: #7a8267; }
 #card-01 .surface-edge { fill: none; stroke: #6e9195; stroke-width: 2.6; stroke-linejoin: round; }
 #card-01 [data-surface="rough"] .surface-edge { stroke: #8d9e83; }
-#card-01 .surface-incoming, #card-01 .surface-outgoing, #card-01 .surface-native-line { fill: none; stroke-width: 3.5; stroke-linecap: round; }
+#card-01 .surface-incoming, #card-01 .surface-outgoing { fill: none; stroke-width: 3.5; stroke-linecap: round; }
 #card-01 .surface-incoming { stroke: #b98218; }
 #card-01 .surface-outgoing { stroke: #16826c; }
 #card-01 .surface-contact { fill: #315d4b; stroke: #fffefa; stroke-width: 1.5; }
-#card-01 .surface-contact-halo { fill: #f0c775; stroke: #bd9138; stroke-width: 1.5; opacity: 0; }
-#card-01 .surface-explanation[data-phase="contact"] .surface-contact-halo { opacity: .65; }
-#card-01 .surface-native-track { display: none; }
-#card-01 .surface-native-incoming { color: #b98218; }
-#card-01 .surface-native-outgoing { color: #16826c; }
-#card-01 .surface-native-line { stroke: currentColor; transform-origin: 0 0; }
-#card-01 .surface-native-tip { fill: currentColor; }
-#card-01 .surface-explanation[data-playing="true"][data-motion="full"] .surface-incoming,
-#card-01 .surface-explanation[data-playing="true"] .surface-outgoing { opacity: 0; }
-#card-01 .surface-explanation[data-playing="true"][data-motion="full"] .surface-native-incoming,
-#card-01 .surface-explanation[data-phase="reflected"][data-motion="full"] .surface-native-outgoing { display: inline; }
-#card-01 .surface-explanation[data-phase="reflected"][data-motion="reduced"] .surface-outgoing { opacity: 1; }
+#card-01 .surface-panel svg, #card-01 .surface-panel svg * { transition: none !important; }
+#card-01 .surface-flow-packet { display: none; pointer-events: none; }
+#card-01 .surface-explanation[data-playing="true"] .surface-flow-packet { display: inline; }
+#card-01 .surface-flow-packet path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+#card-01 .surface-flow-halo { stroke: #e7bb54; stroke-width: 12; opacity: .2; }
+#card-01 .surface-flow-body { stroke: #d9aa3f; stroke-width: 6; }
+#card-01 .surface-flow-core { stroke: #fff9dd; stroke-width: 2.5; }
+#card-01 .surface-explanation[data-playing="true"] .surface-incoming,
+#card-01 .surface-explanation[data-playing="true"] .surface-outgoing { opacity: .28; }
+#card-01 .surface-explanation[data-motion="reduced"] .surface-flow-halo { opacity: .08; }
 #card-01 .surface-scale-note { margin: 0; padding: 0 8px 13px; color: #6c7d6c; text-align: center; font-size: .76rem; line-height: 1.5; }
 #card-01 .surface-result { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 7px 12px; margin: 0; padding: 13px 8px; background: #edf3e6; color: #456347; font-size: .9rem; }
 #card-01 [data-surface="rough"] .surface-result { background: #eaf2f4; color: #426870; }
