@@ -2,7 +2,7 @@ import {CALORIE_SETUP} from './calorie-model.mjs';
 
 // 沿用第一區的水／容器／環境參數；自由設定的是水實際吸收的熱量。
 export const HEAT_TARGET=Object.freeze({initial:1000,min:100,max:3000});
-export const STAGE_ANIMATION_SPEED=50;
+export const STAGE_ANIMATION_SPEED=30;
 const s=CALORIE_SETUP;
 const capacity=s.mass*s.waterSpecificHeat+s.containerHeatCapacity;
 const waterCapacity=s.mass*s.waterSpecificHeat;

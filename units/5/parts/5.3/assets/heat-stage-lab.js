@@ -1,12 +1,14 @@
 import {mountHeatBench} from './heat-bench-view.mjs?v=refined-1';
-import {HEAT_TARGET,validHeatTarget,secondsForWaterHeat,heatStageObservationAt,heatSampleValues,STAGE_ANIMATION_SPEED} from './heat-stage-model.mjs?v=continuous-1';
+import {HEAT_TARGET,validHeatTarget,secondsForWaterHeat,heatStageObservationAt,heatSampleValues,STAGE_ANIMATION_SPEED} from './heat-stage-model.mjs?v=readable-1';
 
 const get=id=>document.getElementById(id),root=get('heat-lab'),bench=mountHeatBench(root);
 const play=get('heat-stage-play'),heater=get('heat-stage-heater'),image=get('heat-stage-apparatus'),input=get('heat-stage-target');
 const status=get('heat-stage-status'),svg=get('heat-stage-graph'),records=[];
 const number=value=>value.toLocaleString('zh-TW',{maximumFractionDigits:2});
 const axisNumber=value=>value.toLocaleString('zh-TW',{maximumFractionDigits:4});
+const READING_INTERVAL_MS=400;
 let target=HEAT_TARGET.initial,elapsed=0,playing=false,frame=0,last=0,ready=false,attempt=0,inputValid=true;
+let lastReadingTime=-Infinity;
 let samples=heatSampleValues(target),geometry=null,pointsKey='',rowsKey='';
 const observation=()=>heatStageObservationAt(elapsed,target);
 const sampleAt=heat=>heatStageObservationAt(secondsForWaterHeat(heat),target);
@@ -52,15 +54,20 @@ function graph(){
   svg.setAttribute('aria-label',`100g水的關係直線已完整顯示，從0到吸熱${axisNumber(target)}cal、溫升${axisNumber(target/100)}°C。橘點目前在吸熱${number(state.waterCalories)}cal、溫升${state.rise.toFixed(1)}°C；加熱時沿直線向右上方移動。`);
 }
 
-function render(){
+function render(forceReadings=false){
   const state=observation(),example=exampleMode();
   root.dataset.playing=String(playing);root.dataset.records=String(records.length);root.dataset.target=String(target);
   root.dataset.waterCalories=String(state.waterCalories);root.dataset.temperature=String(state.temperature);root.dataset.rise=String(state.rise);
   input.disabled=!ready||playing;play.disabled=heater.disabled=!ready||playing||!inputValid;
   const label=state.complete?'重新觀察':elapsed>0?'繼續加熱':'開始加熱';
   play.textContent=playing?'加熱中…':label;heater.title=playing?'加熱中':label;heater.setAttribute('aria-label',label+'，連續觀察水吸收熱量與升溫');
-  get('heat-stage-meter').textContent=get('heat-stage-temperature').textContent=state.temperature.toFixed(1);
-  get('heat-stage-energy').textContent=number(state.waterCalories);get('heat-stage-rise').textContent=state.rise.toFixed(1);
+  const now=performance.now();
+  if(forceReadings||!playing||now-lastReadingTime>=READING_INTERVAL_MS){
+    lastReadingTime=now;
+    get('heat-stage-meter').textContent=get('heat-stage-temperature').textContent=state.temperature.toFixed(1);
+    get('heat-stage-energy').textContent=playing?state.waterCalories.toLocaleString('zh-TW',{maximumFractionDigits:0}):number(state.waterCalories);
+    get('heat-stage-rise').textContent=state.rise.toFixed(1);
+  }
   const data=example?samples.map(sampleAt):records,key=String(example)+'/'+data.map(r=>r.waterCalories).join(',');
   if(key!==rowsKey){
     rowsKey=key;const body=get('heat-stage-records');body.replaceChildren();
@@ -85,7 +92,7 @@ function tick(now){
 function start(){
   if(!ready||playing||!inputValid)return;
   if(observation().complete)reset();
-  playing=true;root.dataset.phase='running';last=performance.now();status.textContent='水溫、吸熱量與亮點同步更新；到目標熱量時停熱。';render();frame=requestAnimationFrame(tick);
+  playing=true;root.dataset.phase='running';last=performance.now();status.textContent='亮點連續前進，讀值稍作停留方便觀察；到目標熱量時停熱。';render(true);frame=requestAnimationFrame(tick);
 }
 function interrupt(){
   if(!playing)return;cancel();root.dataset.phase='interrupted';status.textContent='觀察已停止，讀值與紀錄保留；按「繼續加熱」接著觀察。';render();

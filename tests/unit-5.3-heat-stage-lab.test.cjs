@@ -38,10 +38,16 @@ test('5.3第二區：自由熱量、連續亮點、沿途記錄與常態公式',
     assert.deepEqual(await p.locator('#heat-stage-analysis-data td').allTextContents(),['—','—','—']);
     assert.match(await p.locator('#heat-stage-analysis-mode').textContent(),/本次觀察・沿途前三筆/);
     await p.clock.runFor(120);const b=await state(),x2=Number(await p.locator('#heat-stage-live').getAttribute('cx'));assert.ok(x2>x1);assert.ok(Number(b.waterCalories)<100);assert.deepEqual(await actualPoints(),[]);
+    assert.equal(await p.locator('#heat-stage-energy').textContent(),'0');assert.equal(await p.locator('#heat-stage-meter').textContent(),'20.0');
+    await p.clock.runFor(180);assert.ok(Number(await p.locator('#heat-stage-energy').textContent())>0);assert.doesNotMatch(await p.locator('#heat-stage-energy').textContent(),/\./);
+    const heldReadings=await p.locator('.heat-stage-readings').textContent(),heldMeter=await p.locator('#heat-stage-meter').textContent(),heldX=Number(await p.locator('#heat-stage-live').getAttribute('cx'));
+    await p.clock.runFor(150);assert.equal(await p.locator('.heat-stage-readings').textContent(),heldReadings);assert.equal(await p.locator('#heat-stage-meter').textContent(),heldMeter);assert.ok(Number(await p.locator('#heat-stage-live').getAttribute('cx'))>heldX);
     assert.equal(await input.isDisabled(),true);assert.equal(await play.isDisabled(),true);assert.equal(await input.inputValue(),'1000');
-    await p.clock.runFor(2200);const current=await state(),q=Number(current.waterCalories),rise=Number(current.rise);
-    assert.ok(q>500&&q<1000);assert.ok(Math.abs(q-100*rise)<1e-8);assert.equal(await p.locator('#heat-stage-meter').textContent(),Number(current.temperature).toFixed(1));
-    assert.equal(await p.locator('#heat-stage-rise').textContent(),rise.toFixed(1));assert.equal(await p.locator('#heat-stage-live').getAttribute('data-heat'),current.waterCalories);
+    await p.clock.runFor(Math.ceil(secondsForWaterHeat(650)/STAGE_ANIMATION_SPEED*1000));const current=await state(),q=Number(current.waterCalories),rise=Number(current.rise);
+    assert.ok(q>500&&q<1000);assert.ok(Math.abs(q-100*rise)<1e-8);
+    const displayedHeat=Number((await p.locator('#heat-stage-energy').textContent()).replaceAll(',','')),displayedTemperature=Number(await p.locator('#heat-stage-temperature').textContent()),displayedRise=Number(await p.locator('#heat-stage-rise').textContent());
+    assert.ok(q-displayedHeat>=-1&&q-displayedHeat<60);assert.ok(Math.abs(displayedHeat-100*displayedRise)<=5.1);assert.ok(Math.abs(displayedTemperature-20-displayedRise)<1e-8);
+    assert.equal(await p.locator('#heat-stage-meter').textContent(),await p.locator('#heat-stage-temperature').textContent());assert.equal(await p.locator('#heat-stage-live').getAttribute('data-heat'),current.waterCalories);
     const position=await p.locator('#heat-stage-graph').evaluate(lineGeometry);
     assert.ok(Math.abs(position.cx-(position.left+q/position.max*(position.right-position.left)))<1e-5);assert.ok(Math.abs(position.cy-(position.bottom-rise/(position.max/100)*(position.bottom-position.top)))<1e-5);
     assert.equal(position.path,readyPath);assert.ok(position.cx<position.right);assert.ok(position.cy>position.top);assert.ok((await actualPoints()).every(point=>point<=q+1e-7));
@@ -60,6 +66,7 @@ test('5.3第二區：自由熱量、連續亮點、沿途記錄與常態公式',
       assert.equal(Number(await p.locator('#heat-stage-graph').getAttribute('data-maximum')),q);assert.ok(axisLabels.includes(q.toLocaleString('zh-TW',{maximumFractionDigits:4})));assert.ok(axisLabels.includes((q/100).toLocaleString('zh-TW',{maximumFractionDigits:4})));
       await play.click();assert.equal(await root.getAttribute('data-water-calories'),'0');await finish(q);
       assert.equal(Number(await root.getAttribute('data-water-calories')),q);assert.equal(await p.locator('#heat-stage-meter').textContent(),(20+q/100).toFixed(1));
+      assert.equal(await p.locator('#heat-stage-energy').textContent(),q.toLocaleString('zh-TW',{maximumFractionDigits:2}));
       const points=await actualPoints();assert.ok(points.length>=10);assert.equal(points.at(-1),q);assert.ok(points.every(v=>v<=q+1e-7));assert.ok(Number(await p.locator('#heat-stage-graph').getAttribute('data-maximum'))>=q);
       const analysisHeat=await p.locator('#heat-stage-analysis-data th').evaluateAll(ns=>ns.map(n=>Number(n.textContent.replaceAll(',','').replace(' cal',''))));
       analysisHeat.forEach((value,i)=>assert.ok(Math.abs(value-points[i])<1e-7));
