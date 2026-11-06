@@ -1,0 +1,11 @@
+{
+  "card01": {
+    "identical": true,
+    "sha256": "2ff81e02852cbd2d43ee08843cc0b2df2f3a828cad5d257e47bd25360e519fa0"
+  },
+  "card05-and-quiz": {
+    "identical": true,
+    "sha256": "fbdf5d34b7ce98b8b369015764ab927abb3d895b78a826f3dbb0a2500e2f549a"
+  },
+  "baseline": "dcfc29cf45f7131ab1fa0bbb213c07ce03a63d09"
+}

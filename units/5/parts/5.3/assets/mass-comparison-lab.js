@@ -1,8 +1,8 @@
-import {MASS_CHOICES,MASS_TARGET_CALORIES,MASS_ANIMATION_SPEED,massObservationAt} from './mass-comparison-model.mjs';
+import {validWaterMass,MASS_TARGET_CALORIES,MASS_ANIMATION_SPEED,massObservationAt} from './mass-comparison-model.mjs';
 const root=document.getElementById('mass-lab'),get=id=>document.getElementById(id);
-const play=get('mass-play'),image=get('mass-apparatus'),choices=[...root.querySelectorAll('[data-mass-choice]')];
+const play=get('mass-play'),image=get('mass-apparatus'),input=get('mass-input');
 const records=new Map(),reduced=matchMedia('(prefers-reduced-motion: reduce)');
-let mass=100,frame=0,ready=false,attempt=0;
+let mass=200,frame=0,ready=false,attempt=0,inputValid=true;
 const cups=[{elapsed:0,active:false,last:0},{elapsed:0,active:false,last:0}];
 const isPlaying=()=>cups.some(cup=>cup.active);
 const observations=()=>[massObservationAt(100,cups[0].elapsed),massObservationAt(mass,cups[1].elapsed)];
@@ -22,10 +22,10 @@ function render(){
  const states=observations(),playing=isPlaying();
  const complete=root.dataset.phase==='complete';
  root.dataset.playing=String(playing);root.dataset.mass=String(mass);root.dataset.records=String(records.size);
- choices.forEach(button=>{const value=Number(button.dataset.massChoice);button.disabled=!ready||playing;button.setAttribute('aria-pressed',String(value===mass));button.querySelector('b').textContent=records.has(value)?'✓ ':'';});
- play.disabled=!ready||playing;play.textContent='兩杯一起開始';
+ input.disabled=!ready||playing;
+ play.disabled=!ready||playing||!inputValid;play.textContent='兩杯一起開始';
  play.title='兩杯都回到20°C，一起開始比較';
- root.querySelectorAll('[data-mass-start]').forEach(button=>{const i=button.dataset.massStart==='a'?0:1,name=i?'B杯':'A杯',cup=cups[i];button.disabled=!ready||cup.active;button.title=cup.active?`${name}加熱中`:`${cup.elapsed>0?'重新':'開始'}加熱${name}`;button.setAttribute('aria-label',`${button.title}，只控制${name}，到1,000cal自動停熱`);});
+ root.querySelectorAll('[data-mass-start]').forEach(button=>{const i=button.dataset.massStart==='a'?0:1,name=i?'B杯':'A杯',cup=cups[i];button.disabled=!ready||cup.active||!inputValid;button.title=cup.active?`${name}加熱中`:`${cup.elapsed>0?'重新':'開始'}加熱${name}`;button.setAttribute('aria-label',`${button.title}，只控制${name}，到1,000cal自動停熱`);});
  get('mass-current-b').textContent=mass;
  states.forEach((state,i)=>{
   const key=i?'b':'a',vessel=vessels[i],active=cups[i].active;
@@ -50,14 +50,15 @@ function render(){
  svg.style.visibility=ready?'visible':'hidden';
  get('mass-record-panel').hidden=records.size===0;
  get('mass-conclusion').hidden=!complete;
- if(complete)get('mass-conclusion-text').textContent=mass===100?'兩杯水量相同、吸收熱量相同，溫升也相同。':`水量變成${mass/100}倍，同樣吸熱，溫升約變成${mass===200?'1/2':'1/3'}。`;
+ get('mass-derivation').hidden=!complete;
+ if(complete){const factor=mass/100,reciprocal=Number.isInteger(factor)?`1/${factor}`:(100/mass).toFixed(2);get('mass-conclusion-text').textContent=mass===100?'兩杯水量相同，同樣吸熱，溫升也相同。':`B杯水量是A杯${Math.round((factor+Number.EPSILON)*100)/100}倍，溫升約為A杯的${reciprocal}（${states[1].rise.toFixed(1)}°C）。`;}
  get('mass-meter-a-screen').hidden=get('mass-meter-b-screen').hidden=!ready;
 }
 function reset(){cancel();cups.forEach(cup=>cup.elapsed=0);root.dataset.phase=ready?'ready':'loading';get('mass-status').textContent=ready?'點各杯旋鈕分別加熱，或讓兩杯一起從20°C開始。':'正在準備比較台…';render();}
 function record(){
- const [a,b]=observations();records.set(mass,{a,b});
+ const [a,b]=observations();records.delete(mass);records.set(mass,{a,b});if(records.size>3)records.delete(records.keys().next().value);
  const body=get('mass-records');body.replaceChildren();
- MASS_CHOICES.filter(value=>records.has(value)).forEach(value=>{const r=records.get(value),row=document.createElement('tr');[`${value} g`,`${r.a.rise.toFixed(1)}°C`,`${r.b.rise.toFixed(1)}°C`].forEach((text,i)=>{const cell=document.createElement(i?'td':'th');if(!i)cell.scope='row';cell.textContent=text;row.append(cell);});body.append(row);});
+ [...records.keys()].sort((a,b)=>a-b).forEach(value=>{const r=records.get(value),row=document.createElement('tr');[`${value} g`,`${r.a.rise.toFixed(1)}°C`,`${r.b.rise.toFixed(1)}°C`].forEach((text,i)=>{const cell=document.createElement(i?'td':'th');if(!i)cell.scope='row';cell.textContent=text;row.append(cell);});body.append(row);});
 }
 function status(){
  const states=observations(),active=cups.map(cup=>cup.active);
@@ -77,12 +78,12 @@ function tick(now){
  get('mass-status').textContent=status();render();schedule();
 }
 function startCup(index){
- if(!ready||cups[index].active)return;
+ if(!ready||!inputValid||cups[index].active)return;
  const cup=cups[index];cup.elapsed=0;cup.active=true;cup.last=performance.now();root.dataset.phase='running';
  get('mass-status').textContent=status();render();schedule();
 }
 function startTogether(){
- if(!ready||isPlaying())return;
+ if(!ready||!inputValid||isPlaying())return;
  const now=performance.now();cups.forEach(cup=>{cup.elapsed=0;cup.active=true;cup.last=now;});root.dataset.phase='running';
  get('mass-status').textContent=status();render();schedule();
 }
@@ -96,7 +97,13 @@ async function loadScene(retry=false){
  try{await image.decode();if(version!==attempt)return;ready=true;get('mass-loading').hidden=true;reset();}
  catch{if(version!==attempt)return;root.dataset.phase='error';get('mass-loading').textContent='比較台圖片未能載入，請重新載入。';get('mass-retry').hidden=false;get('mass-status').textContent='器材尚未就緒，請先重新載入。';render();}
 }
-choices.forEach(button=>button.addEventListener('click',()=>{if(!ready||isPlaying())return;mass=Number(button.dataset.massChoice);reset();}));
+input.addEventListener('input',()=>{
+ if(isPlaying())return;
+ const value=input.valueAsNumber;inputValid=validWaterMass(value);
+ get('mass-input-error').hidden=inputValid;input.setAttribute('aria-invalid',String(!inputValid));
+ if(inputValid)mass=value;
+ reset();if(!inputValid)get('mass-status').textContent='請先輸入100～350 g的有效水量。';
+});
 play.addEventListener('click',startTogether);root.querySelectorAll('[data-mass-start]').forEach(button=>button.addEventListener('click',()=>startCup(button.dataset.massStart==='a'?0:1)));get('mass-retry').addEventListener('click',()=>loadScene(true));
 window.addEventListener('blur',interrupt);document.addEventListener('visibilitychange',()=>{if(document.hidden)interrupt();});
 document.querySelector('.route').addEventListener('click',event=>{const link=event.target.closest('a');if(link&&link.hash!=='#card-03'&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey)interrupt();});

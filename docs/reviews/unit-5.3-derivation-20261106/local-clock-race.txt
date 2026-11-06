@@ -1,0 +1,99 @@
+▶ 第二至第四區：單一變數、自由水量及公式逐步揭示
+  ✔ 第二區只在三段觀察完成後整理熱量與溫升，尚無水公式及比熱 (4588.364558ms)
+  ✔ 第三區B預設200g，改300與任意150／175.5g，水位、讀值、長條及文字連動 (8683.771035ms)
+  ✔ 非法水量不啟動、有效值恢復且不自動播放；單杯完成不揭示公式 (4001.788629ms)
+  ✔ 第四區先檢驗水算法，兩份完成後才揭示比熱與完整公式，換材質收起 (8560.70987ms)
+  ✔ 第四區換區／背景不續熱，圖片失敗可重試且其他區可用 (2072.136487ms)
+  ✔ 五種尺寸的表格／輸入／公式不裁切，第四區旋鈕可點擊 (191.271188ms)
+✔ 第二至第四區：單一變數、自由水量及公式逐步揭示 (30355.583517ms)
+▶ 5.3 共通格式、導覽連動與原有活動回歸
+  ✔ 靜態 HTML 的標題、摘要、分享圖及入口一致，不依賴 JS (117.651651ms)
+  ✔ 五區導覽標題連動；小測固定名稱、共通樣式及活動說明同步 (731.547632ms)
+  ✔ 五區均為上標頭下內容；三種桌機與兩種窄版可完整閱讀 (652.888936ms)
+  ✔ 第一區 100 g 水升溫、完成後介紹卡，重新觀察同步清除結果 (1830.768366ms)
+  ✔ 第二、三區自動記錄，原材料比較與生活應用保持 (4916.604667ms)
+  ✔ 原有四題小測可核對與重答；無載入或程式錯誤 (247.481385ms)
+✔ 5.3 共通格式、導覽連動與原有活動回歸 (10736.348936ms)
+▶ 5.3共用器材：可見動畫與兩區加熱狀態同步，停止不殘留
+  ✔ calorie-lab啟動、運行、到點及背景中斷的視覺回饋 (1996.854006ms)
+  ✔ heat-lab啟動、運行、到點及背景中斷的視覺回饋 (1020.554111ms)
+  ✔ 減少動態效果時保留讀值、燈號和實驗流程，攪拌與水面不運動 (1716.942046ms)
+✔ 5.3共用器材：可見動畫與兩區加熱狀態同步，停止不殘留 (6776.025871ms)
+▶ 5.3 第二區：分段加熱、自動紀錄、圖表、中斷與載入恢復
+  ✖ 只記錄觀察過的點，三次累計熱量對應正確水溫與溫升 (605.309354ms)
+  ✖ 換區／背景中斷保留已完成紀錄，回來不自動加熱且可接續 (1847.832042ms)
+  ✔ 五種版面可讀，旋鈕及LCD在照片內，其他區與小測不受影響 (386.582298ms)
+  ✔ 器材慢載入或失敗時禁用兩入口，重試不會自行啟動 (1143.05585ms)
+✖ 5.3 第二區：分段加熱、自動紀錄、圖表、中斷與載入恢復 (5471.186533ms)
+▶ 5.3第三區：同熱量不同水量、獨立停熱、自動紀錄與恢復
+  ✔ 先相同水量再加倍，水位與溫升同源，每杯到點各自停熱 (7053.234807ms)
+  ✔ 300g延伸、換區／背景中斷不自動續熱，不記錄未完成結果 (2884.895946ms)
+  ✔ 三桌機與兩窄版無頁面溢出，LCD／旋鈕不被遮住且至少44px (748.749489ms)
+  ✔ 減少動態效果仍能完成比較，水位不因加熱任意升高 (2073.782948ms)
+  ✔ 器材慢載入／失敗時禁用入口，重試恢復且其他區可用 (850.260192ms)
+✔ 5.3第三區：同熱量不同水量、獨立停熱、自動紀錄與恢復 (15401.187118ms)
+✔ 相同水吸熱1000cal，100／200／300g溫升10／5／10÷3°C，各自精確停熱 (1.632832ms)
+✔ 全段能量守恆，容器與散熱另計，單調升溫且不強制同時完成 (3.089563ms)
+✔ 非法質量與時間被拒絕 (0.761089ms)
+▶ 第三區旋鈕分別控制各杯，完成兩杯才紀錄與歸納
+  ✔ 只按A杯，B杯讀值、燈號、攪拌與指針保持初始，A杯完成也不提前紀錄 (3215.759671ms)
+  ✔ 先B後A，各杯單獨完成，已完成杯讀值保留，兩杯完成才寫一筆 (7226.699964ms)
+  ✔ 錯開開始時，後點旋鈕不重設另一杯，兩杯各自到點停止 (4680.426473ms)
+  ✔ 兩杯一起開始會重設兩杯並同步啟動，不重複新增同條件紀錄 (7854.995205ms)
+  ✔ 換區與背景中斷不自動續熱；只重做一杯會保留另一杯，切換水量重設兩杯 (5797.694213ms)
+✔ 第三區旋鈕分別控制各杯，完成兩杯才紀錄與歸納 (29177.401869ms)
+▶ 第三區桌機同視窗：切換、運行、三筆紀錄與歸納不用上下捲動
+  ✔ 1440×900初始、運行及完成都可同時查看 (8409.045702ms)
+  ✔ 1366×768初始、運行及完成都可同時查看 (7609.468081ms)
+  ✔ 1280×720初始、運行及完成都可同時查看 (6714.97433ms)
+  ✔ 1536×864初始、運行及完成都可同時查看 (7107.014731ms)
+  ✔ 1440×720初始、運行及完成都可同時查看 (6759.527711ms)
+✔ 第三區桌機同視窗：切換、運行、三筆紀錄與歸納不用上下捲動 (36968.737417ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 41
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 64270.332502
+
+✖ failing tests:
+
+test at tests/unit-5.3-heat-stage-lab.test.cjs:21:11
+✖ 只記錄觀察過的點，三次累計熱量對應正確水溫與溫升 (605.309354ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  '23.3' !== '23.2'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-heat-stage-lab.test.cjs:29:12)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-heat-stage-lab.test.cjs:21:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '23.3',
+    expected: '23.2',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.3-heat-stage-lab.test.cjs:45:11
+✖ 換區／背景中斷保留已完成紀錄，回來不自動加熱且可接續 (1847.832042ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-heat-stage-lab.test.cjs:46:63)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-heat-stage-lab.test.cjs:45:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
