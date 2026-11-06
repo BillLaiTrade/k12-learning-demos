@@ -75,7 +75,7 @@
   <link rel="stylesheet" href="assets/mirror-image.css?v=mirror-dialogue-20261106">
   <link rel="stylesheet" href="assets/mirror-distance.css?v=readouts-below-20261106">
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=activity-order-20261105">
-  <link rel="stylesheet" href="assets/reversible-light.css?v=compact-workspace-20261106">
+  <link rel="stylesheet" href="assets/reversible-light.css?v=no-reset-20261106">
   <link rel="stylesheet" href="assets/periscope.css?v=success-feedback-20261106">
   <style>
     .route a.quiz-nav{margin-top:12px;border-top:1px solid var(--line);padding-top:17px;color:#8a6726;font-size:.86rem;font-weight:750}
@@ -230,7 +230,7 @@
                 <div class="reverse-overlap" id="reverse-overlap" hidden>紅藍光路重合</div>
                 <div class="reverse-fallback" id="reverse-fallback" hidden><p id="reverse-fallback-message"></p><svg id="reverse-fallback-svg" viewBox="0 0 400 325" role="img" aria-label="光路可逆的替代俯視圖"></svg></div>
               </div>
-              <div class="reverse-lab-footer"><span id="reverse-lock-note">點擊器材開關光源；拖動 A 可調整方向。</span><span class="reverse-angle-readout"><span class="reverse-incident-angle">入射角</span>＝<span class="reverse-reflected-angle">反射角</span>＝<output id="reverse-angle-value" aria-label="目前入射角與反射角">30°</output></span><button type="button" id="reverse-reset">↻ 重新設定</button></div>
+              <div class="reverse-lab-footer"><span id="reverse-lock-note">點擊器材開關光源；拖動 A 可調整方向。</span><span class="reverse-angle-readout"><span class="reverse-incident-angle">入射角</span>＝<span class="reverse-reflected-angle">反射角</span>＝<output id="reverse-angle-value" aria-label="目前入射角與反射角">30°</output></span></div>
             </div>
             <div class="reverse-paths"><div><small>A 紅光路徑</small><strong>A → M → B</strong><span id="reverse-path-a-status">已關閉</span></div><div><small>B 藍光路徑</small><strong>B → M → A</strong><span id="reverse-path-b-status">已關閉</span></div></div>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>真的耶！從另一頭照過來，光會沿著原來的路走回去！</p></div>
@@ -499,7 +499,7 @@
   <script type="module" src="assets/reflection-3d.js?v=flashlight-controls-20261106"></script>
   <script type="module" src="assets/surface-directions.js?v=surface-flow-20261105"></script>
   <script type="module" src="assets/laser-reflection.js?v=angle-copy-20261106"></script>
-  <script type="module" src="assets/reversible-light.js?v=compact-workspace-20261106"></script>
+  <script type="module" src="assets/reversible-light.js?v=no-reset-20261106"></script>
   <script type="module" src="assets/periscope.js?v=one-activity-20261106"></script>
 </body>
 </html>

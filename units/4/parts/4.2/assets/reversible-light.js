@@ -167,7 +167,6 @@ function refresh() { updateUI(); reframe(); draw(); }
 function toggle(key) { lights[key] = !lights[key]; started = true; refresh(); }
 function setAngle(value) { degrees = clamp(value); started = true; model = reciprocalPath(degrees); refresh(); }
 for (const key of ['a', 'b']) section.querySelector(`#reverse-toggle-${key}`).addEventListener('click', () => toggle(key));
-section.querySelector('#reverse-reset').addEventListener('click', () => { lights = { a: false, b: false }; started = true; refresh(); });
 prior.addEventListener('laser-angle-change', event => { if (!started) { degrees = clamp(event.detail.degrees); model = reciprocalPath(degrees); refresh(); } });
 const fallback = section.querySelector('#reverse-fallback-svg');
 for (const name of ['click', 'keydown']) fallback.addEventListener(name, event => {
