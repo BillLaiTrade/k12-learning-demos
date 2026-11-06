@@ -1,0 +1,21 @@
+▶ 4.3 shared lesson format keeps navigation and content usable
+  ✔ six numbered teaching sections and a separate quiz keep all existing anchors (303.083185ms)
+  ✔ desktop sidebar follows each section and keeps the quiz out of the six-section count (586.668211ms)
+  ✔ desktop, laptop and narrow screens retain unclipped headings and controls (8469.580669ms)
+  ✔ quiz alias and original deep links arrive below the mobile route (373.704279ms)
+✔ 4.3 shared lesson format keeps navigation and content usable (11718.051739ms)
+▶ 4.3 approved playback visibility and comparison timing
+  ✔ manual launch reveals apparatus and controls at four desktop and laptop sizes (22552.418029ms)
+  ✔ automatic viewport resumes preserve scroll position and manual pauses (8046.359794ms)
+  ✔ reciprocal conclusion waits for both complete paths and resets after changes (3618.771282ms)
+✔ 4.3 approved playback visibility and comparison timing (35803.186133ms)
+✔ depth takeaway agrees with the paired view for empty, occluded and visible water states (8108.230857ms)
+✔ 4.3 complete basic lesson works on desktop and mobile (14109.868304ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 71348.907868

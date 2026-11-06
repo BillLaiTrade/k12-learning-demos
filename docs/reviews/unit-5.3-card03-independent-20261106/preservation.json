@@ -1,0 +1,27 @@
+{
+  "first_two_identical": true,
+  "fourth_to_end_identical": true,
+  "existing_files": {
+    "assets/mass-comparison-lab.css": true,
+    "assets/calorie-lab.js": true,
+    "assets/heat-stage-lab.css": true,
+    "assets/heat-quantity.css": true,
+    "assets/heat-model.mjs": true,
+    "assets/lesson-navigation.js": true,
+    "assets/mass-comparison-fit.css": true,
+    "assets/heat-bench-view.mjs": true,
+    "assets/calorie-water-apparatus.webp": true,
+    "assets/heat-bench-refined.webp": true,
+    "assets/mass-comparison-model.mjs": true,
+    "assets/lesson-layout.css": true,
+    "assets/heat-bench.css": true,
+    "assets/heat-quantity.js": true,
+    "assets/lesson-base.css": true,
+    "assets/heat-stage-model.mjs": true,
+    "assets/heat-stage-lab.js": true,
+    "assets/calorie-model.mjs": true,
+    "assets/calorie-lab.css": true,
+    "assets/mass-comparison-bench.webp": true,
+    "assets/heat-story-opening.webp": true
+  }
+}

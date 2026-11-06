@@ -1,0 +1,75 @@
+TAP version 13
+# Subtest: 5.2 insulation workspace: same activity, one desktop viewport and return to reading
+    # Subtest: entry, native modal, Escape and return retain reading position and one activity instance
+    ok 1 - entry, native modal, Escape and return retain reading position and one activity instance
+      ---
+      duration_ms: 330.432241
+      type: 'test'
+      ...
+    # Subtest: both comparisons keep bottle, curves, findings and controls inside desktop viewports without scrolling
+    ok 2 - both comparisons keep bottle, curves, findings and controls inside desktop viewports without scrolling
+      ---
+      duration_ms: 10004.480282
+      type: 'test'
+      ...
+    # Subtest: reopening preserves selected comparison, frozen curve and elapsed time
+    ok 3 - reopening preserves selected comparison, frozen curve and elapsed time
+      ---
+      duration_ms: 293.421386
+      type: 'test'
+      ...
+    # Subtest: details do not enlarge the observation viewport and keyboard focus stays in the modal
+    not ok 4 - details do not enlarge the observation viewport and keyboard focus stays in the modal
+      ---
+      duration_ms: 200.0226
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-5.2-insulation-workspace.test.cjs:58:10'
+      failureType: 'testCodeFailure'
+      error: |-
+        The expression evaluated to a falsy value:
+        
+          assert.ok(await dialog.evaluate(n=>n.contains(document.activeElement)))
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: true
+      actual: false
+      operator: '=='
+      stack: |-
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-insulation-workspace.test.cjs:61:65)
+        async Test.run (node:internal/test_runner/test:1409:7)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-insulation-workspace.test.cjs:58:2)
+        async Test.run (node:internal/test_runner/test:1409:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      ...
+    # Subtest: mobile native touch can open, operate, reset and return without horizontal overflow
+    ok 5 - mobile native touch can open, operate, reset and return without horizontal overflow
+      ---
+      duration_ms: 3515.103853
+      type: 'test'
+      ...
+    # Subtest: no browser script errors
+    ok 6 - no browser script errors
+      ---
+      duration_ms: 2.332059
+      type: 'test'
+      ...
+    1..6
+not ok 1 - 5.2 insulation workspace: same activity, one desktop viewport and return to reading
+  ---
+  duration_ms: 16416.293788
+  type: 'test'
+  location: '/workspace/k12-learning-demos/tests/unit-5.2-insulation-workspace.test.cjs:9:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 7
+# suites 0
+# pass 5
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 17047.827198

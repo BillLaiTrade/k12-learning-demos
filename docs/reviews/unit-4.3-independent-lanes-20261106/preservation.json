@@ -1,0 +1,202 @@
+{
+  "base": "9fabd74317200adfb83a9e197aa41ea62f0f8618",
+  "sections_3_to_quiz_and_footer_identical": true,
+  "unchanged_assets": [
+    {
+      "path": "assets/README.md",
+      "sha256": "8bf47a3d0e089de1079b0cd1d79ab1e83e61d6cf58bc93866f2edf7c5c65f01f"
+    },
+    {
+      "path": "assets/cart-playback.mjs",
+      "sha256": "ec6c3e41eb339a058f22dfa2ccc24a65aecc8cceb6ca5995cdc4c00ca3eaeaf7"
+    },
+    {
+      "path": "assets/depth-eye-art.mjs",
+      "sha256": "6ce86f62c373fea7ad180013be706c1dece24287235f2cd8cdbaa39357917d2e"
+    },
+    {
+      "path": "assets/depth-lab.css",
+      "sha256": "2c41f4ccceae9b69f35baae5161cb577191b1d412ac6adb371c596a3b53d6fc7"
+    },
+    {
+      "path": "assets/depth-lab.mjs",
+      "sha256": "d63383535732d438e01009739954ef08aa327e7378f7f4d59228135a0e47e202"
+    },
+    {
+      "path": "assets/depth-model.mjs",
+      "sha256": "8aaf40b381241c16eeed84c0a2c95ab41355610c7df673d9bea2e9e53ed4844d"
+    },
+    {
+      "path": "assets/depth-observer-client.mjs",
+      "sha256": "328c394530a5d081805bee0fc6d8a8df914bf8f9e8a8f3f436d2e3c303f2e761"
+    },
+    {
+      "path": "assets/depth-observer-worker.mjs",
+      "sha256": "ce1c1cd19e0174ad7598b849d4b158a5fe08d635bc39143b13f0375fa4d8b489"
+    },
+    {
+      "path": "assets/depth-observer.mjs",
+      "sha256": "947245d1cb03cc9436b49a7ef30ccc841c6522c1414a357ffdf5ae6f96c6eba1"
+    },
+    {
+      "path": "assets/exit-refraction-model.mjs",
+      "sha256": "9f01f64f8cd0c7df17e12392a186b7b27180b133affc88cb8e324fcac2197c84"
+    },
+    {
+      "path": "assets/experiment-viewport.mjs",
+      "sha256": "5223fe7b174291be9d8971f16337ee4ad91cdcf7d0575472f601aa067b5df98d"
+    },
+    {
+      "path": "assets/integrated-refraction-scene.mjs",
+      "sha256": "d0330e839b68a03c7744c277c7c4e714db2ab7d41a745566bfe07c09f4ce94e4"
+    },
+    {
+      "path": "assets/integrated-refraction.css",
+      "sha256": "cdbacb1a439886dd61c3f6f52f93d5112fa8a75e2b16104dfbb57c8673463236"
+    },
+    {
+      "path": "assets/layer-quiz-bench-tall.png",
+      "sha256": "4898a1981b5647e646bf493573a3a87596d4c84655a6b64fd9d205df8e7caee4"
+    },
+    {
+      "path": "assets/layer-quiz-bench-wide.png",
+      "sha256": "1138ba1290b431baa43cbbbf979541f02ccb5fdebacb1de98130ac000a4a6b43"
+    },
+    {
+      "path": "assets/layer-quiz-source.png",
+      "sha256": "ee66ae7d561b7c42662c3fec6cd10e7a749e42dd88bba60bfefc93c7f04c3479"
+    },
+    {
+      "path": "assets/layer-speed-model.mjs",
+      "sha256": "a308a287ae2dd3c049ab9c6a75bb110f2062db6159e465c0ad746f254159a685"
+    },
+    {
+      "path": "assets/layer-speed-quiz.css",
+      "sha256": "dfced387eed3fffc07a4a2f7c63340f41e5cb9091edeb31c31097c712f4d5044"
+    },
+    {
+      "path": "assets/layer-speed-quiz.mjs",
+      "sha256": "8f76aaedc2533e05831cf5fa87fd6478eab654d6adfad5e67a58f38162e4b6c8"
+    },
+    {
+      "path": "assets/lesson-format.css",
+      "sha256": "6c3f2e0a0b26ca6116bc92643c6ef4f3e8c8237e9b6400b8ade529676483c671"
+    },
+    {
+      "path": "assets/lesson.css",
+      "sha256": "005f133a7103f99f6cf986492d88ac195c5d309437404ccfa22698a50a7ac33d"
+    },
+    {
+      "path": "assets/lesson.mjs",
+      "sha256": "8cf3c8a28088414bb98834af6ce940aafbfce119e9186f799f81da17b0be3f56"
+    },
+    {
+      "path": "assets/light-beam.css",
+      "sha256": "c394cc258adb5c835d083d3cc00af8be14b815969faace47ad92bf3d2f3d0d63"
+    },
+    {
+      "path": "assets/light-beam.mjs",
+      "sha256": "019f027a449864673d760b7754a49574dd7acca4b09fd59c5a8c45d7e30096ab"
+    },
+    {
+      "path": "assets/light-speed-bench.png",
+      "sha256": "0de80d26c7e8fbb9ed617f5291b9cea0d54590b654335caec7ce0aa0349a8ec9"
+    },
+    {
+      "path": "assets/light-speed-model.mjs",
+      "sha256": "1b08a913a4058d574b98c34cf6f70fc3d248a3fe8b056af66cc58210d8706243"
+    },
+    {
+      "path": "assets/linked-refraction-analysis.css",
+      "sha256": "71d57a300428d27c1d4f6e69c90f6e8859b6682bf85851858155341959300fc2"
+    },
+    {
+      "path": "assets/linked-refraction-analysis.mjs",
+      "sha256": "e836ad1332656a07636c94fc6144e77a25b153ffc0324ccdcd4224b96cb05e3b"
+    },
+    {
+      "path": "assets/medium-selector.mjs",
+      "sha256": "f14d73e20667778e86c0f436033ae301a297eecacde99907d021ee37bb94ffa0"
+    },
+    {
+      "path": "assets/normal-incidence-bench.png",
+      "sha256": "30b0fd1491bf2b90098cf3af827b4f59c59c3ec447b21c52a7c8b87a65514432"
+    },
+    {
+      "path": "assets/normal-incidence-half-air-bench.png",
+      "sha256": "ea1ae7048c57b47fbe2e5fc56ebfd75045ced3073d06e3d4d66107a3ea6ab527"
+    },
+    {
+      "path": "assets/normal-incidence-model.mjs",
+      "sha256": "79b6eea40f0cf8292ae98e15077c7d6d6228c2e01fe8ec791874713d5fa9f500"
+    },
+    {
+      "path": "assets/normal-incidence-three-bench.png",
+      "sha256": "b91fb3ed19402d27c3386b1bb6e751432d8e7d411279a0c6205cdc96809ac504"
+    },
+    {
+      "path": "assets/oblique-cart.mjs",
+      "sha256": "1b9f5b707255c9ac56cac1d03b168147f88f5a42621c565686dccc0edb1c7aca"
+    },
+    {
+      "path": "assets/oblique-entry-glass.png",
+      "sha256": "59a5cc9b4655b9c153200e6a421926d48a69c44241c817007e3cb5b5e6343229"
+    },
+    {
+      "path": "assets/oblique-entry-water.png",
+      "sha256": "5641f703ac6bafaa7c8023e00426186c46e50b411a7045651ddb8c5bf2a47b5f"
+    },
+    {
+      "path": "assets/oblique-incidence-bench.png",
+      "sha256": "40d2106208e4304e17aae59fc0dabd4eceab30a9400dfadfeba40113a35a3d38"
+    },
+    {
+      "path": "assets/oblique-incidence-lab.css",
+      "sha256": "4702cd941b0e096218ebcdab6ca98b240a9842e9be5b8f38cea6c709d620b7d8"
+    },
+    {
+      "path": "assets/oblique-incidence-lab.mjs",
+      "sha256": "1e05a57afd35badea15db110611a816d2d3f17aa0b337e8dbc11c98919abfefc"
+    },
+    {
+      "path": "assets/oblique-incidence-model.mjs",
+      "sha256": "8c6c370afae4b0e678764678ae296d1522f9fef10c6d30394c23fcef54ecc914"
+    },
+    {
+      "path": "assets/optics.mjs",
+      "sha256": "a45eeb8d660ed21d1ec3ebe5362f06e015eebdc831a63fac1a38f71d54a0d8ec"
+    },
+    {
+      "path": "assets/refraction-flow.css",
+      "sha256": "7818569b9a960d15d12df1b202d0c9ee3a92449575aa106707818fed39446e7e"
+    },
+    {
+      "path": "assets/return-refraction-lab.css",
+      "sha256": "2d7b2241c768c438db40f1c82cb122d7dbbd3424a75bf2d3cdbe3da84b5568ba"
+    },
+    {
+      "path": "assets/return-refraction-lab.mjs",
+      "sha256": "a222029f9c38b5d5f66f91161c18eb34e5dd1faa554b52e11b94564335198350"
+    },
+    {
+      "path": "assets/return-refraction-model.mjs",
+      "sha256": "c5ddd1adf35af7117790985c878057444d9fd619ec8e5021e3759bb83ef697e7"
+    },
+    {
+      "path": "assets/return-refraction-refresh.css",
+      "sha256": "86574a0684506263501d91073218003b254b341531d13b9e3470cc1a3cf843a9"
+    },
+    {
+      "path": "assets/return-refraction-view.mjs",
+      "sha256": "4b7957180c0e0ab6e3fdf40abc1f23367f1126007751d7a2768ea3b3e5137ad3"
+    },
+    {
+      "path": "assets/single-refraction-model.mjs",
+      "sha256": "68e621147906f9bae8937ad311de8a5aa036cc26b71b141b9dd95f52348c5657"
+    },
+    {
+      "path": "assets/wishing-pool-story-opening.png",
+      "sha256": "e0bf9416b70ee8ddcf9af1bb01518cdcd06f254e90fa30719ccbb92f6750f819"
+    }
+  ]
+}

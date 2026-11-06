@@ -1,0 +1,18 @@
+✔ staggered launches measure travel from their own starts and stop exactly on arrival (5.555536ms)
+✔ restarting one lane preserves the other active and completed lanes (0.517682ms)
+✔ automatic return resumes only automatic pauses and excludes time away (0.453759ms)
+✔ three normal rays share a distance scale and common air speed before the real interfaces (3.752118ms)
+✔ the air reference continues unchanged while water and glass slow without bending (0.536144ms)
+✔ the shared air-arrival instant gives a visible, physically proportionate comparison (2.021263ms)
+✔ 1500000 km mixed paths use the time of each segment, not a full route of water or glass (0.215088ms)
+✔ one second and the shared air-arrival instant represent physical kilometres at normal speed (0.310749ms)
+✔ million-kilometre model uses the agreed representative speeds and travel times (2.280164ms)
+✔ a shared physical time gives independent distances and the same endpoint (0.523502ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 136.050516

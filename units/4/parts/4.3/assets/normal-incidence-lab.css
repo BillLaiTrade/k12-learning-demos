@@ -41,6 +41,20 @@
 .normal-takeaway strong { color:#194b36; font-weight:750; }
 .normal-pan-hint { display:none; margin:0 0 7px; font-size:.76rem; color:#64736d; }
 #normal-retry[hidden] { display:none; }
+#normal-lab .normal-source-trigger {
+ position:absolute; z-index:2; top:18.5%; width:8.5%; height:8.5%;
+ min-width:44px; min-height:44px; padding:0; border:0; border-radius:9px;
+ transform:translateX(-50%); background:transparent; box-shadow:none; cursor:pointer;
+}
+.normal-source-trigger[data-normal-source="air"] { left:22.7865%; }
+.normal-source-trigger[data-normal-source="water"] { left:50%; }
+.normal-source-trigger[data-normal-source="glass"] { left:77.0833%; }
+#normal-lab .normal-source-trigger:is(:hover,:focus-visible):not(:disabled) {
+ background:#ffd96814; outline:2px solid #bd914b; outline-offset:2px;
+}
+#normal-lab .normal-source-trigger:disabled { cursor:default; }
+#normal-lab[data-mode="individual"] :is(.normal-clock,.normal-steps) { display:none; }
+#normal-lab[data-mode="individual"] .normal-state { top:0; }
 .normal-explanation { margin-top:18px; border:1px solid #d9e4d9; border-radius:13px; background:linear-gradient(130deg,#fcfdf9,#f6f9f1); }
 .normal-explanation summary { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:17px 20px; list-style:none; cursor:pointer; color:#284d3d; font-size:1.06rem; font-weight:750; }
 .normal-explanation summary::-webkit-details-marker { display:none; }

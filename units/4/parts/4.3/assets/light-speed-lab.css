@@ -38,6 +38,19 @@
 .race-pan-hint { display: none; margin: 0 0 8px; color: #65776d; font-size: .76rem; }
 #race-retry { margin: 0 0 12px; }
 #race-retry[hidden] { display: none; }
+#speed-lab .race-source-trigger {
+ position:absolute; z-index:2; left:15.3%; width:6.5%; height:15.4%;
+ min-width:44px; min-height:44px; padding:0; border:0; border-radius:9px;
+ background:transparent; box-shadow:none; cursor:pointer;
+}
+.race-source-trigger[data-race-source="air"] { top:15.2%; }
+.race-source-trigger[data-race-source="water"] { top:35.8%; }
+.race-source-trigger[data-race-source="glass"] { top:57.5%; }
+#speed-lab .race-source-trigger:is(:hover,:focus-visible):not(:disabled) {
+ background:#ffd96814; outline:2px solid #bd914b; outline-offset:2px;
+}
+#speed-lab .race-source-trigger:disabled { cursor:default; }
+#speed-lab[data-mode="individual"] .race-clock { display:none; }
 @media (max-width: 1100px) {
   .race-console { gap: 12px; }
   .race-actions { gap: 7px; }
