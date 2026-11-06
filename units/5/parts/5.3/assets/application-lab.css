@@ -1,0 +1,44 @@
+#application-lab{padding:18px;font-size:1rem;color:#294936}
+#application-lab [hidden]{display:none!important}
+#application-content{display:block;padding:0}
+#application-lab h3{font-size:1.05rem;margin:0 0 10px;line-height:1.5}
+#application-lab p{font-size:1rem;line-height:1.65;margin:8px 0}
+#application-lab button{font:inherit;min-height:44px;cursor:pointer}
+#application-lab button:disabled{opacity:.55;cursor:default}
+#application-lab button:focus-visible{outline:3px solid #b88634;outline-offset:3px}
+#application-lab .life-tabs{margin:0 0 14px}
+#application-lab .life-condition{padding:8px 12px;background:#e8eee0;border-radius:8px;font-size:1rem;font-weight:600;margin-bottom:14px}
+.life-workbench{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(250px,1fr);gap:14px;align-items:center}
+.life-workbench>*{min-width:0}
+.life-photo{position:relative;margin:0;overflow:hidden;border-radius:12px;background:#e3e9df;isolation:isolate}
+.life-photo>img{display:block;width:100%;height:auto;aspect-ratio:1672/941}
+#application-lab .life-photo>svg{position:absolute;inset:0;width:100%;height:100%;max-width:none;margin:0;pointer-events:none}
+.life-badge{position:absolute;border-radius:8px;background:#fff9eaf2;padding:4px 9px;font-weight:650;font-size:1rem;color:#365d43}
+.bottle-mass{left:32%;top:44%}.bottle-heat-label{right:3%;top:34%;color:#965621}
+.life-reading{padding:12px;border:1px solid #cdd9c9;border-radius:13px;background:#fffefa}
+.life-temperatures{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr);gap:6px;align-items:center;text-align:center}
+.life-temperatures>div{display:grid;gap:5px}.life-temperatures strong{font-size:clamp(1.15rem,2.1vw,1.65rem);white-space:nowrap;line-height:1.2;padding:6px 3px;background:#e8eee0;border-radius:8px;font-variant-numeric:tabular-nums}
+.life-temperatures small{font-size:.65em}
+#application-lab .life-drop{text-align:center;background:#f0f3e9;border-radius:8px;padding:5px}
+.life-drop strong{margin-left:6px}.life-energy{border-top:1px solid #d8e2d1;padding-top:10px;margin-top:10px;text-align:center;display:grid;gap:5px}
+.life-energy strong{font-size:clamp(1.6rem,3vw,2.25rem);color:#9c5a20;background:#fff4d9;border-radius:10px;padding:6px;line-height:1.2;white-space:nowrap;font-variant-numeric:tabular-nums}
+.life-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0;color:#4d6450}.life-actions .action{padding:9px 17px}.life-actions>span{flex:1 1 200px}
+.life-discovery{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;border:1px solid #cbd9bc;border-radius:12px;padding:16px;background:#f0f5e8}
+.life-discovery>div{min-width:0}.life-comparison{padding-left:16px;border-left:1px solid #cbd9bc}
+#application-lab .life-calculation{font-size:1.35rem;font-weight:650;line-height:1.5}.life-calculation strong{font-size:1.65rem;color:#a15d22}
+.life-bar-row{display:grid;grid-template-columns:22px minmax(0,1fr) 90px;align-items:center;gap:8px;margin:10px 0;font-variant-numeric:tabular-nums}.life-bar-row>div{height:24px;background:#e3e9db}.life-bar-row>div>span{display:block;height:100%;background:linear-gradient(90deg,#548a69,#9fc49d);border-radius:0 5px 5px 0}.life-bar-row:nth-of-type(2)>div>span{background:linear-gradient(90deg,#d29d3b,#e6bf71)}.life-bar-row>strong{font-size:1rem;white-space:nowrap}.life-bar-scale{display:flex;justify-content:space-between;margin-left:30px;margin-right:98px;font-size:.8rem;color:#5c735e;white-space:nowrap}
+#application-lab .life-note{font-size:.875rem;color:#5f715e;margin-top:12px}.life-conclusion{margin-bottom:0!important}.life-conclusion .speaker{flex-shrink:0}
+#application-lab .life-loading{position:absolute;inset:0;display:grid;align-content:center;text-align:center;background:#edf2e8ee;padding:18px;margin:0;z-index:4}
+.life-mode{display:flex;justify-content:center;gap:8px;margin-top:12px}.coast-scene-label{left:12px;top:12px}.coast-workbench{grid-template-columns:minmax(0,1.4fr) minmax(300px,1fr)}.life-coast-model{padding:16px;border:1px solid #cbd9bc;background:#f1f5e9;border-radius:12px}
+#application-lab #coast-model{width:100%;height:auto;max-width:360px;display:block;margin:0 auto}
+.coast-model-label{font-size:26px;text-anchor:middle;fill:#34563b;font-family:inherit}
+#coast-water-level,#coast-sand-level{transition:y .4s,height .4s}
+.life-coast-conclusion{background:#fff6de;padding:8px;border-radius:8px;font-weight:650}
+.pan-hotspot{position:absolute;border:2px solid transparent;background:#fff8e8f5;color:#3d5c3e;padding:5px 9px;border-radius:8px;font-weight:650!important;box-shadow:0 1px 5px #0002}
+.pan-body-hotspot{left:3%;top:43%}.pan-base-hotspot{right:3%;top:76%}.pan-hotspot[aria-pressed=true]{border-color:#296b46;background:#e7f2dd}
+.pan-concept{border:1px solid #cedbc5;background:#f0f5e8;padding:12px 14px;border-radius:10px;margin-bottom:12px}.pan-concept[data-pan-card=base]{background:#fff5de;border-color:#e4d2a7}.pan-concept[data-selected=true]{box-shadow:inset 4px 0 #4d7e4d;border-color:#4d7e4d}.pan-concept[data-pan-card=base][data-selected=true]{box-shadow:inset 4px 0 #bd8232;border-color:#bd8232}
+#application-lab .pan-concept h3{font-size:1.2rem;margin-bottom:4px}.life-pan-question{border:1px solid #ddc797;border-radius:10px;background:#fff8e8;padding:12px 16px}.life-pan-question strong{color:#91551f}
+.life-quiz-bridge{font-size:1rem;color:#526a52}
+@media(max-width:1100px){.life-workbench{grid-template-columns:minmax(0,1fr)}.life-reading{display:block}.life-temperatures strong{font-size:1.6rem}.life-photo{max-width:700px;width:100%;margin:0 auto}.life-discovery{gap:14px}.life-bar-row{grid-template-columns:20px minmax(0,1fr) 88px;gap:5px}}
+@media(max-width:600px){.life-bar-scale span:nth-child(2){display:none}#application-lab{padding:12px}.life-tabs .choice{flex:1 1 125px;padding:8px}.life-discovery{grid-template-columns:minmax(0,1fr)}.life-comparison{padding:14px 0 0;border-left:0;border-top:1px solid #cbd9bc}.life-reading{padding:12px}.life-temperatures strong{font-size:1.4rem}.life-badge{font-size:.85rem;padding:3px 6px}.bottle-heat-label{top:22%}.pan-hotspot{font-size:.85rem!important;padding:5px 7px}.pan-body-hotspot{top:30%}.pan-base-hotspot{top:58%}.life-mode button{flex:1}.life-coast-model{padding:12px}}
+@media(prefers-reduced-motion:reduce){#coast-water-level,#coast-sand-level{transition:none}}

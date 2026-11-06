@@ -189,19 +189,6 @@ function pauseAll(){experiments.forEach(experiment=>experiment.pause());}
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseAll();});
 window.addEventListener('blur',pauseAll);
 
-const applications={
-  bottle:{title:'同樣降溫，水能放出較多熱量',body:'相同質量的水與鋁，從相同初溫降低相同的溫度，水放出的熱量較多。因此水適合用來儲存並釋放熱能。',number:'100 g 水降低 10°C，約放出 1,000 cal。',note:'實際水袋能暖多久，也和外袋隔熱、表面積及環境有關。',art:'<path d="M48 25h44v24l12 14v91q-34 16-68 0V63l12-14Z" fill="#b7644b" stroke="#92503c" stroke-width="3"/><rect x="49" y="14" width="42" height="16" rx="4" fill="#6e836a"/><path d="M49 69h42v74H49Z" fill="#ce9175" opacity=".5"/><path d="M59 78v57m13-57v57m13-57v57" stroke="#9e5440" stroke-width="2"/>'},
-  coast:{title:'水的比熱較大，溫度變化往往較小',body:'比較相同質量、吸收或放出相同熱量的水與沙土，水的溫度變化通常較小。這有助於理解海水相較陸地較不容易在晝夜間大幅變溫。',number:'先比較質量與熱量，再比較溫度變化。',note:'真實海陸還有日照、混合、蒸發與風等因素；不能只靠比熱預測實際氣溫。',art:'<circle cx="99" cy="41" r="19" fill="#e9ba63"/><path d="M8 110q36-21 65 0t59 0v47H8Z" fill="#a9c8ca"/><path d="M8 120q31-15 62 0t62 0" fill="none" stroke="#eff5e9" stroke-width="4"/><path d="M8 157q38-40 68-34l56 34Z" fill="#d7bb83"/>'},
-  pan:{title:'比熱與導熱能力，要分開判斷',body:'金屬比熱通常比水小；相同質量、吸收相同熱量時，金屬升溫較多。鍋具還需要把熱傳給食物，這也涉及 5.2 學過的導熱能力。',number:'比熱：升溫需要多少熱。導熱：熱如何傳過去。',note:'不能只憑比熱小，就斷定任何金屬鍋都一定比較快煮熟食物。',art:'<path d="M16 91h87v43q-42 20-87 0Z" fill="#b0c1b9" stroke="#738c7c" stroke-width="3"/><ellipse cx="60" cy="91" rx="44" ry="10" fill="#dae6d9" stroke="#738c7c" stroke-width="3"/><path d="M102 103h29v14h-29" fill="#b79062" stroke="#826f50" stroke-width="3"/><path d="M30 152h60" stroke="#d39755" stroke-width="6" stroke-linecap="round"/>'}
-};
-function showApplication(key){
-  const a=applications[key];
-  $('#application-content').innerHTML=`<svg viewBox="0 0 140 180" aria-hidden="true">${a.art}</svg><div><h3>${a.title}</h3><p>${a.body}</p><p class="application-number">${a.number}</p><p class="application-caution">${a.note}</p></div>`;
-  $$('[data-application]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.application===key)));
-}
-$$('[data-application]').forEach(button=>button.addEventListener('click',()=>showApplication(button.dataset.application)));
-showApplication('bottle');
-
 const answers={
   q1:{value:'1000',explanation:'升溫是 30－20＝10°C。100 g 水每升高 1°C 約需 100 cal，因此共需 1,000 cal。'},
   q2:{value:'double',explanation:'同種物質、相同升溫，質量加倍，需要的熱量也加倍，約為 2,000 cal。'},
