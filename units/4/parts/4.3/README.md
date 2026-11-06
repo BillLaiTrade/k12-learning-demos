@@ -1,5 +1,16 @@
 # 4.3 光的折射與視深基本版
 
+## 第一、二區單組發射（2026-11-06）
+
+點擊任一組光源即可獨立發射與計時，再按只重播該組，其他組的進度與到達結果保持。原「同時發光／同時發射」重新同步三組；第二區同步比較的一次5秒停格保持，獨立播放則不中途套用共同停格。即時秒數顯示在各組原到達讀值，獨立播放暫收共同時鐘與第二區同步步驟。離屏／背景只暫停正在播放的組，返回不解除手動暫停。詳見[決策](../../../../docs/decisions/unit-4.3-independent-lanes.md)。
+
+```sh
+node --test tests/unit-4.3-individual-timers.test.mjs
+NODE_PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules node --test --test-concurrency=1 tests/unit-4.3-individual-lanes.test.cjs
+```
+
+`INDIVIDUAL_CAPTURE_DIR`保存四桌面尺寸截圖與各組計時資料；公開檢查沿用`LESSON_BASE_URL`／`LESSON_USE_PROXY`。以下共同時鐘、按鈕數量與首次製作描述為歷史，現行單組能力以本節為準。
+
 使用者於 2026-11-01 核可先完成七區基本版，再逐區優化。教學頁為 `index.html`，不新增依賴。`assets/optics.mjs` 為純幾何模型，`assets/lesson.mjs` 控制互動。
 
 - 六個對話／互動教學區：等距光速、垂直入射、空氣射入、水／玻璃射回、反射與折射光路可逆、視深。

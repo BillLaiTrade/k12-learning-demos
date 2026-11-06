@@ -1,0 +1,24 @@
+▶ 4.3 speed apparatus supports genuinely independent launch and timing
+  ✔ staggered launches have separate elapsed times and unstarted lanes stay dark (1476.648242ms)
+  ✔ a single-lane replay preserves the other clocks, global pause excludes idle time (2272.921948ms)
+  ✔ synchronous mode resets all clocks and retains its one-time comparison stop (5007.873915ms)
+  ✔ automatic pause preserves clocks and scroll, manual pauses remain manual (1022.807497ms)
+  ✔ all three physical lamp positions work at four desktop sizes without covering labels (4559.694646ms)
+  ✔ image errors disable every lamp and successful retry enables them (1331.97934ms)
+✔ 4.3 speed apparatus supports genuinely independent launch and timing (18336.112186ms)
+▶ 4.3 normal apparatus supports genuinely independent launch and timing
+  ✔ staggered launches have separate elapsed times and unstarted lanes stay dark (1198.81277ms)
+  ✔ a single-lane replay preserves the other clocks, global pause excludes idle time (2388.892105ms)
+  ✔ synchronous mode resets all clocks and retains its one-time comparison stop (5651.704993ms)
+  ✔ automatic pause preserves clocks and scroll, manual pauses remain manual (956.013391ms)
+  ✔ all three physical lamp positions work at four desktop sizes without covering labels (4875.75515ms)
+  ✔ image errors disable every lamp and successful retry enables them (1614.407971ms)
+✔ 4.3 normal apparatus supports genuinely independent launch and timing (18557.240967ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 37787.84407

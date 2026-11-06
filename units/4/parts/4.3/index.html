@@ -24,10 +24,10 @@
   <link rel="icon" href="data:,">
   <title>光進入水中，會發生什麼變化？｜4.3 光的折射與視深</title>
   <link rel="stylesheet" href="assets/lesson.css?v=20261105-eleven1">
-  <link rel="stylesheet" href="assets/light-speed-lab.css?v=20261101-controls2">
-  <script type="module" src="assets/light-speed-lab.mjs?v=20261105-tenreview1"></script>
-  <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261102-result1">
-  <script type="module" src="assets/normal-incidence-lab.mjs?v=20261105-cartlayout1"></script>
+  <link rel="stylesheet" href="assets/light-speed-lab.css?v=20261106-individual1">
+  <script type="module" src="assets/light-speed-lab.mjs?v=20261106-individual1"></script>
+  <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261106-individual1">
+  <script type="module" src="assets/normal-incidence-lab.mjs?v=20261106-individual1"></script>
   <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-cart1">
   <script type="module" src="assets/oblique-cart.mjs?v=20261105-cartlayout1"></script>
   <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261105-eleven1"></script>
@@ -115,6 +115,9 @@
         <div class="race-distance">模型路程：每段 <strong>100 萬公里</strong></div>
         <span class="race-state" id="race-state">準備實驗桌</span>
         <svg id="race-scene" viewBox="0 0 2022 778" role="img" aria-label="尚未發光的三排光速比較"></svg>
+        <button class="race-source-trigger" data-race-source="air" type="button" aria-label="發射空氣組光束，獨立計時" aria-controls="race-scene" disabled></button>
+        <button class="race-source-trigger" data-race-source="water" type="button" aria-label="發射水組光束，獨立計時" aria-controls="race-scene" disabled></button>
+        <button class="race-source-trigger" data-race-source="glass" type="button" aria-label="發射玻璃組光束，獨立計時" aria-controls="race-scene" disabled></button>
         <div class="race-arrivals" role="group" aria-label="各排接收器右側的到達時間">
           <div data-arrival="air"><span class="visually-hidden">空氣到達時間：</span><strong>尚未到達</strong></div>
           <div data-arrival="water"><span class="visually-hidden">水到達時間：</span><strong>尚未到達</strong></div>
@@ -153,6 +156,9 @@
           <h3 class="normal-name air">全程空氣<small>對照組</small></h3><h3 class="normal-name water">空氣 → 水</h3><h3 class="normal-name glass">空氣 → 玻璃</h3>
           <span class="normal-state" id="normal-state">準備實驗桌</span>
           <svg id="normal-scene" viewBox="0 0 1536 1024" role="img" aria-label="垂直入射的光路剖面示意，按同時發射觀察。"></svg>
+          <button class="normal-source-trigger" data-normal-source="air" type="button" aria-label="發射全程空氣組光束，獨立計時" aria-controls="normal-scene" disabled></button>
+          <button class="normal-source-trigger" data-normal-source="water" type="button" aria-label="發射空氣進入水組光束，獨立計時" aria-controls="normal-scene" disabled></button>
+          <button class="normal-source-trigger" data-normal-source="glass" type="button" aria-label="發射空氣進入玻璃組光束，獨立計時" aria-controls="normal-scene" disabled></button>
         </div>
       </div>
       <div class="normal-console">

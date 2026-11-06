@@ -1,0 +1,33 @@
+▶ 4.3 normal incidence desk and folding explanation work as approved
+  ✔ idle scene has no emitted light, dotted particles, autoplay or open explanation (164.516604ms)
+  ✔ continuous beams launch together and stay on the same axis across the interface (1244.481886ms)
+  ✔ pause freezes both fronts and resume continues the saved progress (196.875432ms)
+  ✔ air arrival pauses exactly once at one common instant, even across many frames (731.709541ms)
+  ✔ continuing the comparison finishes all three rays without a second automatic stop (531.126353ms)
+  ✔ same launch button starts a fresh run and offscreen or hidden pages preserve progress (2876.693619ms)
+  ✔ native folding control works by keyboard and the cart moves straight, slows and stops when folded (1326.997364ms)
+  ✔ seven widths keep controls readable, with only the apparatus scrolling on phones (4752.124482ms)
+  ✔ failed artwork disables firing, retry recovers, and other sections remain usable (3387.90058ms)
+  ✔ opening the explanation starts the analogy with normal motion preferences (1506.40654ms)
+  ✔ phone touch can fire, pause and expand the explanation (2165.162154ms)
+✔ 4.3 normal incidence desk and folding explanation work as approved (21527.003246ms)
+▶ 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork
+  ✔ artwork loads, media are fixed, and geometry has equal routes (147.267723ms)
+  ✔ one second of play is one second of model time with physical distance ratios (793.437105ms)
+  ✔ three arrivals follow 3.33, 4.44 and 5 seconds, with receivers and no stationary light dots (3438.484927ms)
+  ✔ starting again after completion clears old arrivals, and keyboard pause/resume keeps one clock (2721.044026ms)
+  ✔ a page-hidden event pauses the shared clock without clearing progress (2478.694925ms)
+  ✔ leaving the section pauses and returning automatically resumes the same progress (2118.012619ms)
+  ✔ seven screen widths retain artwork, readable controls and unclipped times (29047.355461ms)
+  ✔ image failure disables the desk, leaves the rest of the lesson working, and can retry (1977.010998ms)
+  ✔ touch start, pause and continue work with horizontal desk panning (2430.216606ms)
+  ✔ a real-time run finishes in five seconds without a browser test clock (6480.852646ms)
+✔ 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork (54123.499767ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 77319.288362
