@@ -13,7 +13,7 @@ function mountSingleLab(prefix,reverse){
  function configure(){
   const g=model();input.value=angle;$(`#${prefix}-angle-value`).value=`${angle}°`;$(`#${prefix}-in-value`).value=`${angle}°`;$(`#${prefix}-out-value`).value=`${g.outgoing.toFixed(1)}°`;
   root.dataset.angle=angle;root.dataset.medium=medium;root.dataset.kind=g.kind;root.dataset.outgoing=g.outgoing;root.dataset.entryMs=g.entryMs;root.dataset.durationMs=g.arrivalMs;
-  $('[data-finding-title]').textContent=angle===0?'方向不偏折':reverse?'偏離法線':'偏向法線';$('[data-speed-result]').textContent=reverse?'光速由慢變快':'光速由快變慢';$('[data-comparison]').textContent=angle===0?'=':reverse?'>':'<';$('[data-finding-reason]').textContent=angle===0?'速度改變，方向不變。':reverse?'折射角變大，更遠離法線。':'折射角變小，更靠近法線。';$('[data-reference-note]').hidden=angle===0;
+  $('[data-finding-title]').textContent=angle===0?'方向不偏折':reverse?'偏離法線':'偏向法線';$('[data-speed-result]').textContent=reverse?'光速由慢變快':'光速由快變慢';$('[data-comparison]').textContent=angle===0?'=':reverse?'<':'>';$('[data-finding-reason]').textContent=angle===0?'速度改變，方向不變。':reverse?'折射角變大，更遠離法線。':'折射角變小，更靠近法線。';$('[data-reference-note]').hidden=angle===0;
   view.configure(g,picture(medium).src);scene.setAttribute('aria-label',`${reverse?name():'空氣'}在上方，${reverse?'空氣':name()}在下方。入射角${angle}度，折射角${g.outgoing.toFixed(1)}度。${angle===0?'方向不偏折':reverse?'光速由慢變快，偏離法線':'光速由快變慢，偏向法線'}。點擊光源發射，拖曳或方向鍵調角。`);
  }
  function render(){
