@@ -221,7 +221,9 @@ if (bench) {
     const w = canvas.clientWidth, h = canvas.clientHeight; if (!w || !h) return;
     bench.renderer.setSize(w, h, false); bench.camera.aspect = w / h; bench.camera.fov = 38;
     const halfWidth = Math.max(6.5, 11 * Math.sin(degrees * Math.PI / 180));
-    const height = Math.max(10.5, 2 * halfWidth / bench.camera.aspect);
+    // Leave room for the emitter badges and the reflection-point label even
+    // when the viewport gives the experiment only a short strip of space.
+    const height = Math.max(13.2, 2 * halfWidth / bench.camera.aspect);
     const distance = height / (2 * Math.tan(THREE.MathUtils.degToRad(19)));
     bench.camera.up.set(-1, 0, 0); bench.camera.position.set(-2.3, 1.4 + distance, 0); bench.camera.lookAt(-2.3, 1.4, 0); bench.camera.updateProjectionMatrix();
   }
@@ -238,3 +240,21 @@ canvas.addEventListener('keydown', event => {
   event.preventDefault();
 });
 refresh();
+
+// Measure the dialogue and controls at their natural size, then give the bench
+// the remaining viewport space. Its existing resize handler reframes the camera.
+const workspace = section.querySelector('.reverse-workspace');
+function fitWorkspace() {
+  if (!bench) return;
+  const route = document.querySelector('.route');
+  const routeStyle = getComputedStyle(route);
+  const stickySpace = matchMedia('(max-width:760px)').matches && routeStyle.position === 'sticky'
+    ? route.getBoundingClientRect().height + Math.max(0, parseFloat(routeStyle.top) || 0) : 0;
+  const otherHeight = workspace.getBoundingClientRect().height - canvas.getBoundingClientRect().height;
+  const height = Math.round(Math.max(220, Math.min(400, innerHeight - stickySpace - 48 - otherHeight)));
+  if (Math.abs(canvas.getBoundingClientRect().height - height) > 1) workspace.style.setProperty('--reverse-stage-height', `${height}px`);
+}
+new ResizeObserver(fitWorkspace).observe(workspace);
+window.addEventListener('resize', fitWorkspace);
+document.fonts.ready.then(fitWorkspace);
+fitWorkspace();
