@@ -89,3 +89,16 @@
 .projector-control input[type=range]::-moz-range-track { height:5px; border:1px solid #adb994; border-radius:8px; background:#e1e8cf; }
 .projector-control input[type=range]::-moz-range-progress { height:5px; background:#9caf85; }
 .projector-control input[type=range]::-moz-range-thumb { width:18px; height:18px; border:1px solid #b88f31; border-radius:50%; background:#f1ce77; }
+
+/* Camera gestures stay inside the 3D canvas; the form keeps native scrolling. */
+.projector-stage>[data-projector-model] { touch-action:none; cursor:grab; }
+.projector-stage>[data-projector-model].projector-orbiting { cursor:grabbing; }
+.projector-stage>[data-projector-model]:focus-visible { outline:3px solid #c59534; outline-offset:-3px; }
+.projector-label[hidden] { display:none; }
+.projector-viewbar { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:0 3px; }
+.projector-viewbar[hidden] { display:none; }
+.projector-view-hint { margin:0; color:#5a7054; font-size:.72rem; line-height:1.5; }
+.projector-touch-help { display:none; }
+.projector-viewbar button { min-height:30px; padding:4px 9px; border:1px solid #afc29d; border-radius:7px; background:#fffdf0; color:#31543e; font-size:.72rem; }
+@media (pointer:coarse) { .projector-desktop-help { display:none; } .projector-touch-help { display:inline; } .projector-viewbar button { min-height:36px; } }
+@container (max-width:520px) { .projector-labels { display:flex; } .projector-label { flex:1; min-width:0; } }

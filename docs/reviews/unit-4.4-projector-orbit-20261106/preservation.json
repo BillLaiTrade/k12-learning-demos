@@ -1,0 +1,38 @@
+{
+  "s1": {
+    "same": true,
+    "sha256": "7a580a5fe1aee4b9284a4f32943dc165b47db1037cba9a7933fc4668d2c64de2"
+  },
+  "s2": {
+    "same": true,
+    "sha256": "5c1c9c9ef6dabaacf6cda611c8cf738155e916aa83aeadd07cf7a0eb75ebca92"
+  },
+  "s3": {
+    "same": true,
+    "sha256": "275297d55c0f7801aceca97e0e364291e65f91ff1e1471692853c9e2117ce86f"
+  },
+  "s4": {
+    "same": true,
+    "sha256": "5fec60a3b535a68e6ab7f8d028a57a3e4eaaa8acf18effbd856e9a96a5d437a3"
+  },
+  "s5": {
+    "same": true,
+    "sha256": "407a4b47135158c2b0d8ffececdc8067b844a0b65149c7f24037eed48584baad"
+  },
+  "s6": {
+    "same": true,
+    "sha256": "2cd004d041d4aa83e6df2656a12921eb4b11affe6f9d8b088bc3deb9ba7cec52"
+  },
+  "s7": {
+    "same": true,
+    "sha256": "6bf8a8c1b65d8cffab7b408eb68a31e1aebedb1673632397efa23c9892b9775c"
+  },
+  "s8": {
+    "same": true,
+    "sha256": "27b95b3092263ed216a49f78c44c85b5389a88709146464103996bcc85308433"
+  },
+  "s9": {
+    "same": true,
+    "sha256": "cda02e4c519d18ef911a4a0b0fa0988d3d6997276eeaa3f3a1f9bf08cb9804e1"
+  }
+}

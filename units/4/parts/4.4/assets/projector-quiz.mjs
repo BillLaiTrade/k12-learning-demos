@@ -8,11 +8,13 @@ if(root){
  const labels=all('[data-projector-label]');
  function labelsAt(points){
   const box=$('.projector-stage').getBoundingClientRect();if(box.width<1)return;
-  const placements=labels.map(e=>({e,key:e.dataset.projectorLabel,width:e.getBoundingClientRect().width||60,p:points[e.dataset.projectorLabel]}));
+  const tools=$('.projector-tools').getBoundingClientRect(),placements=[];
+  for(const e of labels){const p=points[e.dataset.projectorLabel],visible=Number.isFinite(p.x)&&Number.isFinite(p.y)&&p.x>=0&&p.x<=box.width&&p.y>=0&&p.y<=box.height;e.hidden=!visible;if(visible)placements.push({e,width:e.getBoundingClientRect().width||60,height:e.getBoundingClientRect().height||26,p});}
+  placements.sort((a,b)=>a.p.x-b.p.x);placements.forEach((a,i)=>a.e.style.order=String(i));
   for(let i=0;i<placements.length;i++){const a=placements[i];a.x=Math.max(a.width/2+8,Math.min(box.width-a.width/2-8,a.p.x));if(i)a.x=Math.max(a.x,placements[i-1].x+(placements[i-1].width+a.width)/2+7);}
   for(let i=placements.length-1;i>=0;i--){const a=placements[i];a.x=Math.min(a.x,box.width-a.width/2-8);if(i<placements.length-1)a.x=Math.min(a.x,placements[i+1].x-(placements[i+1].width+a.width)/2-7);}
-  for(const a of placements){a.y=Math.max(76,a.p.y-12);a.e.style.left=`${a.x}px`;a.e.style.top=`${a.y}px`;}
-  $('[data-projector-leaders]').setAttribute('viewBox',`0 0 ${box.width} ${box.height}`);$('[data-projector-leaders]').innerHTML=placements.map(a=>`<path d="M${a.x} ${a.y+3}L${a.p.x} ${Math.max(a.y+8,a.p.y)}"/><circle cx="${a.p.x}" cy="${Math.max(a.y+8,a.p.y)}" r="2.5"/>`).join('');
+  for(const a of placements){a.y=Math.min(box.height-8,Math.max(tools.bottom-box.top+a.height+8,a.p.y-12));if(a.p.y>a.y-a.height&&a.p.y<a.y&&Math.abs(a.p.x-a.x)<a.width/2)a.y=Math.min(box.height-8,a.p.y+a.height+10);a.e.style.left=`${a.x}px`;a.e.style.top=`${a.y}px`;}
+  $('[data-projector-leaders]').setAttribute('viewBox',`0 0 ${box.width} ${box.height}`);$('[data-projector-leaders]').innerHTML=placements.map(a=>`<path d="M${a.x} ${a.p.y<a.y-a.height/2?a.y-a.height:a.y}L${a.p.x} ${a.p.y}"/><circle cx="${a.p.x}" cy="${a.p.y}" r="2.5"/>`).join('');
  }
  function fallback(){
   const x=p=>148.46+p*73.46,y=p=>190-(p-G.axis)*40,l=x(state.lens),o=x(state.card),body=state.kind==='convex'?`M${l-3} 120Q${l-33} 190 ${l-3} 260L${l+3} 260Q${l+33} 190 ${l+3} 120Z`:`M${l-17} 120Q${l-2} 190 ${l-17} 260H${l+17}Q${l+2} 190 ${l+17} 120Z`;
@@ -50,13 +52,14 @@ if(root){
   if(b.dataset.projectorLens){state={...state,kind:b.dataset.projectorLens};edit();}
   else if(b.hasAttribute('data-projector-rotate')){state={...state,flipped:!state.flipped};edit();}
   else if(b.hasAttribute('data-projector-rays')){state={...state,rays:!state.rays};request();}
-  else if(b.hasAttribute('data-projector-reset')){state=initialProjector();edit();}
+  else if(b.hasAttribute('data-projector-reset')){state=initialProjector();edit();model?.resetView();}
+  else if(b.hasAttribute('data-projector-view-reset'))model?.resetView();
   else if(b.hasAttribute('data-projector-help')){showHint=!showHint;request();}
  });
  root.addEventListener('submit',e=>{e.preventDefault();checked=true;showHint=false;render();});
- function failed(){const previous=model;model=null;previous?.dispose();root.dataset.projectorRender='fallback';$('[data-projector-model]').hidden=true;$('[data-projector-fallback]').toggleAttribute('hidden',false);const note=$('[data-projector-render-note]');note.hidden=false;note.textContent='目前以剖面圖呈現，操作與成像判定相同。';render();}
- function activate(){if(started)return;started=true;root.dataset.projectorRender='loading';import('./projector-model.mjs?v=20261106-projector1').then(({createProjectorModel})=>{
-  try{model=createProjectorModel($('[data-projector-model]'),card,paper,labelsAt,failed);$('[data-projector-model]').hidden=false;$('[data-projector-fallback]').toggleAttribute('hidden',true);$('[data-projector-render-note]').hidden=true;root.dataset.projectorRender='3d';model.update(state);}catch{failed();}
+ function failed(){const previous=model;model=null;previous?.dispose();root.dataset.projectorRender='fallback';$('[data-projector-viewbar]').hidden=true;$('[data-projector-view-reset]').disabled=true;$('[data-projector-model]').hidden=true;$('[data-projector-fallback]').toggleAttribute('hidden',false);const note=$('[data-projector-render-note]');note.hidden=false;note.textContent='目前以剖面圖呈現，操作與成像判定相同。';render();}
+ function activate(){if(started)return;started=true;root.dataset.projectorRender='loading';import('./projector-model.mjs?v=20261106-projector-orbit2').then(({createProjectorModel})=>{
+  try{model=createProjectorModel($('[data-projector-model]'),card,paper,labelsAt,failed);$('[data-projector-model]').hidden=false;$('[data-projector-fallback]').toggleAttribute('hidden',true);$('[data-projector-render-note]').hidden=true;root.dataset.projectorRender='3d';$('[data-projector-viewbar]').hidden=false;$('[data-projector-view-reset]').disabled=false;model.update(state);}catch{failed();}
  }).catch(failed);}
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){observer.disconnect();activate();}},{rootMargin:'300px'});observer.observe(root);
  new ResizeObserver(()=>{if(!model)fallback();}).observe($('.projector-stage'));

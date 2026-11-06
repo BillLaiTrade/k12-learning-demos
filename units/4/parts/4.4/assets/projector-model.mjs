@@ -1,5 +1,6 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import {createLensVisual} from './lens-geometry.mjs?v=20261104-lens-clear5';
+import {bindProjectorOrbit} from './projector-orbit.mjs?v=20261106-projector-orbit2';
 import {PROJECTOR as G,projectorRays} from './projector-optics.mjs';
 
 export function createProjectorModel(canvas,cardCanvas,paperCanvas,onLayout,onFailure){
@@ -7,7 +8,10 @@ export function createProjectorModel(canvas,cardCanvas,paperCanvas,onLayout,onFa
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.6));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
  const scene=new THREE.Scene();scene.background=new THREE.Color('#e8e5db');
- const camera=new THREE.OrthographicCamera(-9,9,4,-4,.1,150);camera.position.set(-16,7.8,20);camera.lookAt(5.1,2.2,0);camera.updateMatrixWorld();
+ const camera=new THREE.OrthographicCamera(-9,9,4,-4,.1,150),target=new THREE.Vector3(5.1,2.2,0),radius=Math.hypot(21.1,5.6,20);
+ const orbit=bindProjectorOrbit(canvas,{getSpan:()=>({width:camera.right-camera.left,height:camera.top-camera.bottom}),onChange:request});
+ function applyView(){const v=orbit.getState(),r=radius*Math.sin(v.polar);camera.position.set(target.x+r*Math.sin(v.azimuth),target.y+radius*Math.cos(v.polar),target.z+r*Math.cos(v.azimuth));camera.lookAt(target);camera.zoom=v.zoom;camera.updateMatrixWorld();canvas.dataset.projectorView=JSON.stringify(v);canvas.dataset.camera=JSON.stringify(camera.position.toArray());}
+ applyView();
  scene.add(new THREE.HemisphereLight('#fff9ed','#72806b',2.6));
  const sun=new THREE.DirectionalLight('#fff0d5',3.2);sun.position.set(-4,11,10);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-14,right:18,top:10,bottom:-8,near:.1,far:50});sun.shadow.normalBias=.025;sun.shadow.bias=-.0003;scene.add(sun);sun.target.position.set(5,1,0);scene.add(sun.target);
  const rim=new THREE.DirectionalLight('#e7f4f1',1.7);rim.position.set(12,7,-5);scene.add(rim);
@@ -31,7 +35,7 @@ export function createProjectorModel(canvas,cardCanvas,paperCanvas,onLayout,onFa
  for(const x of [-1.5,12]){box(rig,.7,.23,2,x,-.04,0,green,.05);box(rig,.82,.08,2.08,x,-.2,0,dark,.025);}
  function mount(group,top){box(group,.75,.19,1.55,0,.42,0,green,.05);box(group,.6,.065,1.35,0,.555,0,steel,.02);cyl(group,.048,Math.max(.1,top-.59),0,(top+.59)/2,0,steel);cyl(group,.15,.13,0,.47,.86,brass,'z');for(let i=0;i<24;i++){const a=i*Math.PI/12;cyl(group,.01,.13,Math.sin(a)*.15,.47+Math.cos(a)*.15,.86,dark,'z');}}
  const lamp=new THREE.Group();rig.add(lamp);lamp.position.x=-.7;mount(lamp,G.axis-.85);const housing=new THREE.Group();housing.position.z=-.45;lamp.add(housing);box(housing,1.22,1.6,1.52,0,G.axis,0,green,.12);
- // Frosted side window makes the light source readable from this fixed view.
+ // Frosted side window makes the light source readable around the apparatus.
  box(housing,.84,1.12,.035,.02,G.axis,.78,brass,.04);box(housing,.7,.98,.04,.02,G.axis,.805,new THREE.MeshBasicMaterial({color:'#fff1be',toneMapped:false}),.035);
  box(housing,.04,1.23,1.15,.635,G.axis,0,brass,.025);box(housing,.045,1.1,1.02,.66,G.axis,0,new THREE.MeshBasicMaterial({color:'#fff4cf',toneMapped:false}),.025);
  for(let y=0;y<5;y++)box(housing,.022,.055,.62,-.626,G.axis+.36-y*.18,0,dark,.012);
@@ -52,11 +56,11 @@ export function createProjectorModel(canvas,cardCanvas,paperCanvas,onLayout,onFa
   const b=canvas.getBoundingClientRect();if(!b.width||!b.height)return false;renderer.setSize(b.width,b.height,false);
   scene.updateMatrixWorld(true);const points=[];
   rig.traverse(o=>{if(!o.isMesh)return;if(!o.geometry.boundingBox)o.geometry.computeBoundingBox();const box=o.geometry.boundingBox;for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z])points.push(new THREE.Vector3(x,y,z).applyMatrix4(o.matrixWorld).applyMatrix4(camera.matrixWorldInverse));});
-  const xs=points.map(p=>p.x),ys=points.map(p=>p.y),w=Math.max(...xs)-Math.min(...xs)+.8,rawH=Math.max(...ys)-Math.min(...ys),aspect=b.width/b.height,h=Math.max(w/aspect,(rawH+.3)/.79),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2+h*.07;
+  const xs=points.map(p=>p.x),ys=points.map(p=>p.y),w=Math.max(...xs)-Math.min(...xs)+.8,rawH=Math.max(...ys)-Math.min(...ys),aspect=b.width/b.height,h=Math.max(w/aspect,(rawH+.3)/.79),cx=(Math.min(...xs)+Math.max(...xs))/2+orbit.getState().panX,cy=(Math.min(...ys)+Math.max(...ys))/2+h*.07+orbit.getState().panY;
   camera.left=cx-h*aspect/2;camera.right=cx+h*aspect/2;camera.top=cy+h/2;camera.bottom=cy-h/2;camera.updateProjectionMatrix();return true;
  }
  function project(x,y,z=0){const p=new THREE.Vector3(x,y,z).project(camera),b=canvas.getBoundingClientRect();return {x:(p.x+1)*b.width/2,y:(1-p.y)*b.height/2};}
- function draw(){queued=0;if(disposed||!fit())return;renderer.render(scene,camera);onLayout?.({lamp:project(-.7,G.axis+.88),card:project(state?.card??2.3,G.axis+.98),lens:project(state?.lens??5.5,G.axis+1.12),screen:project(G.screen,G.axis+G.paperHeight/2)});}
+ function draw(){queued=0;if(disposed)return;applyView();if(!fit())return;renderer.render(scene,camera);onLayout?.({lamp:project(-.7,G.axis+.88),card:project(state?.card??2.3,G.axis+.98),lens:project(state?.lens??5.5,G.axis+1.12),screen:project(G.screen,G.axis+G.paperHeight/2)});}
  function request(){if(!queued&&!disposed)queued=requestAnimationFrame(draw);}
  const observer=new ResizeObserver(request);observer.observe(canvas);
  function update(next){
@@ -70,5 +74,5 @@ export function createProjectorModel(canvas,cardCanvas,paperCanvas,onLayout,onFa
   request();
  }
  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();onFailure?.();});
- return {update,project,dispose(){disposed=true;observer.disconnect();if(queued)cancelAnimationFrame(queued);const materials=new Set();scene.traverse(o=>{o.geometry?.dispose();if(o.material)materials.add(o.material);});for(const m of materials)m.dispose();for(const t of [cardTexture,paperTexture,woodTexture,tableTexture])t.dispose();environment.dispose();renderer.dispose();}};
+ return {update,project,resetView:()=>orbit.reset(),dispose(){disposed=true;orbit.dispose();observer.disconnect();if(queued)cancelAnimationFrame(queued);const materials=new Set();scene.traverse(o=>{o.geometry?.dispose();if(o.material)materials.add(o.material);});for(const m of materials)m.dispose();for(const t of [cardTexture,paperTexture,woodTexture,tableTexture])t.dispose();environment.dispose();renderer.dispose();}};
 }
