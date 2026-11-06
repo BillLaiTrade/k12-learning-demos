@@ -4,6 +4,7 @@ const canvas = document.querySelector('#laser-reflection-scene');
 if (!canvas) throw new Error('Laser reflection scene is missing.');
 import { createLaserBench } from './laser-bench.js';
 import { directionArrow } from './laser-direction.js?v=20261106';
+import { createAngleCallouts } from './angle-callouts.js?v=20261106';
 import { laserPath } from './planar-reflection.mjs';
 const MIN_ANGLE = 20, MAX_ANGLE = 90;
 let angleDegrees = 30;
@@ -22,6 +23,8 @@ try {
 if (bench) {
 const { scene, camera, renderer, centerPoint, reflectedRayLength, emitter, emitterBody, emitterStem, emitterFoot, pivot, incoming, reflected, setBeam, incomingSector, reflectedSector, incomingArc, outgoingArc, arc, setAngleSector, setThickArc, normalLabel, makeAngleLabel, updateAngleLabel, rayMaterial } = bench;
 
+const updateCallouts = createAngleCallouts(canvas, bench);
+document.querySelector('.laser-angle-readout').classList.add('visually-hidden');
 const directionArrows = [0, 1].map(() => {
   const arrow = directionArrow(rayMaterial.color);
   scene.add(arrow);
@@ -116,6 +119,7 @@ function update() {
   document.querySelector('#lab-angle-out').textContent = `${deg}°`;
   canvas.setAttribute('aria-valuenow', String(deg));
   canvas.setAttribute('aria-valuetext', `入射角 ${deg} 度，反射角 ${deg} 度`);
+  updateCallouts(deg);
   renderer.render(scene, camera);
   const bodyCenter = source.clone().addScaledVector(sourceDirection, -1.2).project(camera);
   canvas.dataset.emitterScreen = JSON.stringify([(bodyCenter.x + 1) * canvas.clientWidth / 2, (1 - bodyCenter.y) * canvas.clientHeight / 2]);

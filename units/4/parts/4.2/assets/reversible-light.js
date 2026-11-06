@@ -1,6 +1,7 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import { createLaserBench } from './laser-bench.js';
 import { directionArrow } from './laser-direction.js?v=20261106';
+import { createAngleCallouts } from './angle-callouts.js?v=20261106';
 import { reciprocalPath } from './planar-reflection.mjs';
 
 const section = document.querySelector('#card-03');
@@ -21,11 +22,13 @@ catch {
 const V = p => new THREE.Vector3(...p);
 const vec = (a, b, t) => a.map((v, i) => v + t * (b[i] - v));
 const colors = { a: '#ed2924', b: '#205df5', off: '#435058' };
-let sourceB, bodyB, lensB, stemB, footB, pivotB, blue, arrows, hitDot;
+let sourceB, bodyB, lensB, stemB, footB, pivotB, blue, arrows, hitDot, updateCallouts;
 
 
 if (bench) {
   const { scene, emitterBody, emitterStem, emitterFoot, pivot } = bench;
+  updateCallouts = createAngleCallouts(canvas, bench);
+  section.querySelector('.reverse-angle-readout').classList.add('visually-hidden');
   sourceB = new THREE.Group(); scene.add(sourceB);
   bodyB = emitterBody.clone(true); sourceB.add(bodyB);
   lensB = bodyB.getObjectByName('laser-lens'); lensB.material = lensB.material.clone();
@@ -78,6 +81,13 @@ function draw() {
   for (const guide of [b.incomingSector, b.reflectedSector, b.incomingArc, b.outgoingArc, hitDot]) {
     guide.visible = lights.a || lights.b;
   }
+  const mode = lights.a && lights.b ? 'both' : lights.a ? 'a' : lights.b ? 'b' : 'off';
+  const swapped = mode === 'b';
+  b.incomingArc.material.color.set(swapped ? '#27833d' : '#2878df');
+  b.outgoingArc.material.color.set(swapped ? '#2878df' : '#27833d');
+  b.incomingSector.material.color.set(swapped ? '#78c98c' : '#72aefa');
+  b.reflectedSector.material.color.set(swapped ? '#72aefa' : '#78c98c');
+  updateCallouts(degrees, mode);
   hitDot.material.color.set(lights.a ? colors.a : colors.b);
   for (const [key, path] of [['a', f], ['b', r]]) {
     [[path.source, path.hit], [path.hit, path.end]].forEach(([from, to], index) => {
