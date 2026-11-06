@@ -108,9 +108,10 @@ test('5.3 共通格式、導覽連動與原有活動回歸', {timeout:180000}, a
   });
 
   await t.test('第二、三區自動記錄，原材料比較與生活應用保持',async()=>{
-    await page.locator('#heat-stage-play').click();await page.clock.runFor(3000);
-    assert.equal(await page.locator('#heat-lab').getAttribute('data-records'),'1');
-    assert.equal(await page.locator('#heat-stage-meter').textContent(),'25.0');
+    assert.equal(await page.locator('#heat-stage-conclusion').isVisible(),true);
+    await page.locator('#heat-stage-play').click();await page.clock.runFor(6500);
+    assert.equal(await page.locator('#heat-lab').getAttribute('data-records'),'10');
+    assert.equal(await page.locator('#heat-stage-meter').textContent(),'30.0');
     await page.locator('#mass-input').fill('200');await page.locator('#mass-play').click();await page.clock.runFor(6500);
     assert.equal(await page.locator('#mass-lab').getAttribute('data-phase'),'complete');
     assert.equal(await page.locator('#mass-meter-a').textContent(),'30.0');assert.equal(await page.locator('#mass-meter-b').textContent(),'25.0');
