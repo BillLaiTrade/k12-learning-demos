@@ -5,7 +5,7 @@ import {CONCAVE_HOME as MAGNIFIER_HOME,fitConcave as fitMagnifier} from './conca
 import {clipProjectedRay} from './magnifier-framing.mjs?v=20261104-bench-proportion1';
 import {createConcaveWorkspace as createMagnifierWorkspace} from './concave-workspace.mjs?v=20261104-concave1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {CONCAVE as G,concaveState as magnifierState,moveConcave as moveMagnifier,concaveRays as magnifierDisplayRays} from './concave-optics.mjs?v=20261104-concave1';
+import {CONCAVE as G,concaveState as magnifierState,moveConcave as moveMagnifier,concaveRays as magnifierDisplayRays} from './concave-optics.mjs?v=20261106-concave-detail4';
 const root=document.querySelector('[data-concave-imaging-lab]');
 if(root) initialise(root);
 function initialise(root){
@@ -18,6 +18,17 @@ function initialise(root){
  eyeCanvas.getContext('2d',{willReadFrequently:true});reference.getContext('2d',{willReadFrequently:true});
  let observerKey='';
  function drawArt(ctx,width,height,factor){ctx.save();ctx.translate(width/2,height/2);ctx.scale(factor*G.cardWidth/art.width,factor*G.cardHeight/art.height);ctx.drawImage(art,-art.width/2,-art.height/2);ctx.restore();}
+ const detail=$('[data-ci-detail]'),detailCanvas=$('[data-ci-detail-art]');let detailReturn=null;
+ function paintDetail(){
+  const g=magnifierState(state),c=detailCanvas.getContext('2d'),W=detailCanvas.width,H=detailCanvas.height;
+  c.clearRect(0,0,W,H);c.fillStyle='#fffdf3';c.fillRect(0,0,W,H);drawArt(c,W,H,H*.72/(G.cardHeight*.76));
+  $('[data-ci-detail-ratio]').textContent=`虛像高約為原物的 ${Math.round(g.m*100)}%`;
+ }
+ function openDetail(trigger=canvas){if(detail.open)return;detailReturn=trigger;paintDetail();detail.showModal();}
+ $$('[data-ci-detail-open]').forEach(b=>b.addEventListener('click',()=>openDetail(b)));
+ $('[data-ci-detail-close]').addEventListener('click',()=>detail.close());
+ detail.addEventListener('click',e=>{const r=detail.getBoundingClientRect();if(e.target===detail&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom))detail.close();});
+ detail.addEventListener('close',()=>{if(detailReturn?.isConnected&&!detailReturn.hidden)detailReturn.focus({preventScroll:true});});
  function paintObserver(){
   const g=magnifierState(state),key=state.object+'|'+state.eye+'|'+state.screenIn+'|'+state.screen;if(key===observerKey)return g;observerKey=key;const W=eyeCanvas.width,H=eyeCanvas.height,c=eyeCanvas.getContext('2d'),pixels=W/(2*Math.tan(G.fov*Math.PI/360)),r=pixels*G.aperture/(g.eye*G.opticalScale);
   c.clearRect(0,0,W,H);c.fillStyle='#fffdf3';c.fillRect(0,0,W,H);c.save();c.beginPath();c.arc(W/2,H/2,r,0,Math.PI*2);c.clip();c.fillStyle='#fffdf3';c.fillRect(0,0,W,H);
@@ -48,7 +59,7 @@ function initialise(root){
   $('[data-ci-ray-name]').textContent=point==='top'?'紅：代表光':point==='bottom'?'藍：代表光':'紅／藍：代表光';
   $('[data-result]').textContent=condition;
   root.dataset.screenClear=g.screenClear;root.dataset.rayRegime=g.type==='virtual'?'diverging':g.type==='infinity'?'parallel':'converging';root.dataset.eye=G.eye;root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.screenIn=state.screenIn;root.dataset.rays=showRays;root.dataset.extensions=activeExtensions;root.dataset.point=point;root.dataset.view=front?'screen':'orbit';root.dataset.imageType=g.type;root.dataset.eyeMode=g.eyeMode;root.dataset.imageScale=g.imageScale??'';root.dataset.referenceScale=g.referenceScale;root.dataset.angularGain=g.angularGain??'';root.dataset.virtualX=g.type==='virtual'?g.v*G.scale:'';
-  canvas.setAttribute('aria-label',`立體凹透鏡成像觀察台，物距${distanceLabel(state.object)}，固定透鏡與眼睛，只移動圖卡，${condition}`);workspace.update(state);studio?.update();
+  canvas.setAttribute('aria-label',`立體凹透鏡成像觀察台，物距${distanceLabel(state.object)}，固定透鏡與眼睛，只移動圖卡，${condition}`);workspace.update(state);studio?.update();if(detail.open)paintDetail();
  }
  function clearGestureNotice(){$('[data-ci-gesture-note]').hidden=true;root.dataset.gestureHelp='false';$$('[data-ci-ruler]').forEach(r=>r.removeAttribute('data-guided'));}
  function showGestureNotice(key){clearGestureNotice();const note=$('[data-ci-gesture-note]');note.textContent=key==='eye'?'眼睛固定，請移動圖卡比較光路與大小。':key==='lens'?'凹透鏡是固定的。':'請使用下方金框標示的圖卡尺，點選刻度按鈕或拖曳綠色把手調整距離。';note.hidden=false;root.dataset.gestureHelp='true';$$('[data-ci-ruler]').forEach(r=>r.toggleAttribute('data-guided',r.dataset.ciRuler===key));}
@@ -111,7 +122,7 @@ function initialise(root){
   function draw(){pending=0;renderer.render(scene,camera);labels();annotations();}
   function requestDraw(){labels();annotations();if(!pending)pending=requestAnimationFrame(draw);}
   function syncScene(){const g=magnifierState(state);eye.position.x=state.eye*G.scale;virtualImage.visible=showRays&&g.type==='virtual'&&!front;if(g.type==='virtual'){virtualImage.position.set(g.v*G.scale,G.axis,0);virtualImage.scale.set(g.m,g.m,1);}source.position.x=-state.object*G.scale;screen.position.x=state.screen*G.scale;screen.visible=state.screenIn;updateRays();updateCamera();scene.updateMatrixWorld(true);highlight.update();requestDraw();}
-  const devices={object:source,screen,eye,lens:lensGroup},pointers=new Map(),raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let gesture=null;
+  const devices={object:source,screen,eye,lens:lensGroup},pointers=new Map(),raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let gesture=null,pendingDetail=false;
   function ray(e){const r=canvas.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,1-(e.clientY-r.top)/r.height*2);raycaster.setFromCamera(pointer,camera);}
   function hit(e){
    if(front)return null;ray(e);const h=raycaster.intersectObjects(Object.values(devices).filter(group=>group.visible),true)[0];
@@ -125,18 +136,21 @@ function initialise(root){
    const left=Math.min(...xs),right=Math.max(...xs),pad=Math.max(6,((e.pointerType==='touch'?44:28)-(right-left))/2),x=e.clientX-rect.left,y=e.clientY-rect.top;
    return x>=left-pad&&x<=right+pad&&y>=Math.min(...ys)-6&&y<=Math.max(...ys)+6?{key:'object'}:null;
   }
+  function hitsVirtual(e){if(!virtualImage.visible)return false;ray(e);return raycaster.intersectObject(virtualArt).length>0;}
   const pinch=()=>{const p=[...pointers.values()];return p.length<2?0:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);};
-  canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.setPointerCapture(e.pointerId);if(pointers.size>1){clearGestureNotice();gesture={kind:'pinch',distance:pinch(),zoom:orbit.zoom};return;}const h=hit(e);if(!h)clearGestureNotice();gesture={kind:h?'apparatus':'orbit',key:h?.key,startX:e.clientX,startY:e.clientY,azimuth:orbit.azimuth,polar:orbit.polar};});
+  canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;pendingDetail=false;e.preventDefault();pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.setPointerCapture(e.pointerId);if(pointers.size>1){clearGestureNotice();gesture={kind:'pinch',distance:pinch(),zoom:orbit.zoom};return;}const h=hit(e);if(!h)clearGestureNotice();gesture={kind:h?'apparatus':'orbit',key:h?.key,virtual:hitsVirtual(e),moved:false,startX:e.clientX,startY:e.clientY,azimuth:orbit.azimuth,polar:orbit.polar};});
   canvas.addEventListener('pointermove',e=>{
    if(!pointers.has(e.pointerId)){canvas.style.cursor=hit(e)?'help':'grab';return;}pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(!gesture)return;
    if(pointers.size>1){if(gesture.kind!=='pinch')return;front=false;orbit.zoom=clampZoom(gesture.zoom*gesture.distance/Math.max(pinch(),1));update();return;}
    if(gesture.kind==='pinch')return;
-   if(gesture.kind==='apparatus'){if(Math.hypot(e.clientX-gesture.startX,e.clientY-gesture.startY)>=4)showGestureNotice(gesture.key);return;}
+   if(Math.hypot(e.clientX-gesture.startX,e.clientY-gesture.startY)<4)return;gesture.moved=true;
+   if(gesture.kind==='apparatus'){showGestureNotice(gesture.key);return;}
    front=false;orbit.azimuth=gesture.azimuth-(e.clientX-gesture.startX)*.005;orbit.polar=THREE.MathUtils.clamp(gesture.polar+(e.clientY-gesture.startY)*.004,.25,1.55);update();
   });
   const clampZoom=value=>THREE.MathUtils.clamp(value,.2,2.2);
-  function stop(e){pointers.delete(e.pointerId);gesture=null;canvas.style.cursor='grab';}
+  function stop(e){if(e.type==='pointerup')pendingDetail=pointers.size===1&&gesture?.virtual&&!gesture.moved;else if(e.type==='pointercancel')pendingDetail=false;pointers.delete(e.pointerId);gesture=null;canvas.style.cursor='grab';}
   for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,stop);
+  canvas.addEventListener('click',()=>{if(pendingDetail){pendingDetail=false;openDetail();}});
   canvas.addEventListener('wheel',e=>{e.preventDefault();clearGestureNotice();if(front)return;orbit.zoom=THREE.MathUtils.clamp(orbit.zoom+e.deltaY*.001,.2,2.2);update();},{passive:false});
   canvas.addEventListener('keydown',e=>{const steps={ArrowLeft:[.06,0],ArrowRight:[-.06,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!steps[e.key])return;e.preventDefault();front=false;orbit.azimuth=orbit.azimuth+steps[e.key][0];orbit.polar=THREE.MathUtils.clamp(orbit.polar+steps[e.key][1],.25,1.55);update();});
   function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);workspace.layout();viewport=workspace.safeRect();camera.aspect=viewport.width/viewport.height;fitToViewport();updateCamera();requestDraw();}new ResizeObserver(resize).observe(canvas);resize();
