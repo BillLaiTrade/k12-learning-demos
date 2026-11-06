@@ -3,10 +3,6 @@
   "sections_3_to_quiz_and_footer_identical": true,
   "unchanged_assets": [
     {
-      "path": "assets/README.md",
-      "sha256": "8bf47a3d0e089de1079b0cd1d79ab1e83e61d6cf58bc93866f2edf7c5c65f01f"
-    },
-    {
       "path": "assets/cart-playback.mjs",
       "sha256": "ec6c3e41eb339a058f22dfa2ccc24a65aecc8cceb6ca5995cdc4c00ca3eaeaf7"
     },
@@ -198,5 +194,8 @@
       "path": "assets/wishing-pool-story-opening.png",
       "sha256": "e0bf9416b70ee8ddcf9af1bb01518cdcd06f254e90fa30719ccbb92f6750f819"
     }
+  ],
+  "documentation_excluded": [
+    "assets/README.md（本輪已補上獨立發射說明）"
   ]
 }
