@@ -87,7 +87,7 @@
   </style>
   <link rel="stylesheet" href="assets/lesson-layout.css?v=align-4.1-20261105">
   <link rel="stylesheet" href="assets/reflection-stage.css?v=surface-flow-20261105">
-  <link rel="stylesheet" href="assets/laser-concept.css?v=exhibit-20261105">
+  <link rel="stylesheet" href="assets/laser-concept.css?v=compact-20261106">
 </head>
 <body>
   <header class="shell masthead">
@@ -161,8 +161,8 @@
           <header class="card-heading"><span class="card-number">02</span><div class="card-heading-copy"><h2>光的反射，有什麼規律？</h2><p class="card-subtitle">反射定律：比較入射角與反射角</p></div></header>
           <div class="card-main">
             <p>入射角和反射角都從法線量起。改變入射光的方向，觀察兩個角度是否始終相等。</p>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>光在鏡面轉了方向，要怎麼把光路和角度說清楚？</p></div>
-            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>先從入射點畫出垂直鏡面的法線，再沿著光的方向標出入射線和反射線。</p></div>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>阿公，如果我換個方向照鏡子，反射的光也會跟著改變嗎？</p></div>
+            <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>會呀！照過來的方向改變，反射出去的方向也會跟著變。從垂直鏡面的方向來看，光照進來和反射出去的角度會一樣。</p></div>
             <div class="laser-lesson" aria-label="平面鏡反射定律說明與雷射實驗">
               <section class="laser-concept" id="reflection-law" aria-labelledby="laser-concept-title">
                 <div class="laser-concept-copy">
@@ -170,7 +170,7 @@
                   <p class="laser-law">入射角 ＝ 反射角</p>
                   <p class="laser-rule">角度從法線量起。</p>
                 </div>
-                <svg class="laser-diagram" viewBox="0 0 600 365" role="img" aria-labelledby="law-title law-desc">
+                <svg class="laser-diagram" viewBox="0 0 600 350" role="img" aria-labelledby="law-title law-desc">
                   <title id="law-title">鏡面朝上的平面鏡反射定律</title><desc id="law-desc">琥珀色入射光從右上方照向入射點，深綠色反射光向左上方離開。兩側角度都從垂直鏡面的法線量起，並隨下方實驗同步更新。</desc>
                   <defs>
                     <linearGradient id="law-silver" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#edf4f3"/><stop offset=".2" stop-color="#b3c9cd"/><stop offset=".65" stop-color="#c6d5d5"/><stop offset="1" stop-color="#8ba2a7"/></linearGradient>
@@ -182,7 +182,7 @@
                   <rect x="74" y="292" width="452" height="15" fill="url(#law-silver)" stroke="#93aaad" stroke-width=".8"/>
                   <path d="M75 293H525" stroke="#f7fcfa" stroke-width="1.5"/><path d="M75 301H525" stroke="url(#law-highlight)" stroke-width="1"/><path d="M74 307H526" stroke="#7f979b" stroke-width=".8"/>
                   <path id="law-normal" d="M300 35V292" fill="none" stroke="#92988e" stroke-width="1.4" stroke-dasharray="6 6"/>
-                  <g class="law-normal-label"><path id="law-normal-leader" d="M306 53L324 35" fill="none" stroke="#92988e" stroke-width="1"/><text id="law-normal-name" x="330" y="40">法線</text></g>
+                  <g class="law-normal-label"><path id="law-normal-leader" d="M306 47L316 35" fill="none" stroke="#92988e" stroke-width="1"/><text id="law-normal-name" x="322" y="40">法線</text></g>
                   <path id="law-wedge-incident" d="M300 292L300 150A142 142 0 0 1 371 169.024Z" fill="#b88636" fill-opacity=".045"/>
                   <path id="law-wedge-reflected" d="M300 292L300 150A142 142 0 0 0 229 169.024Z" fill="#24766c" fill-opacity=".045"/>
                   <path id="law-incident" d="M411.5 98.876L300 292" stroke="#b88636" stroke-width="2.4" stroke-linecap="round" fill="none"/>
@@ -194,11 +194,11 @@
                   <text id="law-angle-name-out" x="254.707" y="126.963" text-anchor="middle">反射角</text>
                   <text id="law-angle-in" x="333.129" y="173.162" text-anchor="middle">30°</text>
                   <text id="law-angle-out" x="266.871" y="173.162" text-anchor="middle">30°</text>
-                  <g id="law-line-name-in" transform="translate(456.5 74.876)"><text text-anchor="middle">入射線</text></g>
-                  <g id="law-line-name-out" transform="translate(143.5 74.876)"><text text-anchor="middle">反射線</text></g>
-                  <path d="M310 288L354 269" fill="none" stroke="#89918a" stroke-width="1"/><text class="law-hit-label" x="361" y="275">入射點</text>
+                  <g id="law-line-name-in" transform="translate(436.5 82.876)"><text text-anchor="middle">入射線</text></g>
+                  <g id="law-line-name-out" transform="translate(163.5 82.876)"><text text-anchor="middle">反射線</text></g>
+                  <path d="M310 288L338 268" fill="none" stroke="#89918a" stroke-width="1"/><text class="law-hit-label" x="344" y="274">入射點</text>
                   <circle cx="300" cy="292" r="7" fill="#fffefa"/><circle cx="300" cy="292" r="4.5" fill="#24766c"/>
-                  <text class="law-mirror-caption" x="300" y="343" text-anchor="middle">平面鏡（反射面朝上）</text>
+                  <text class="law-mirror-caption" x="300" y="333" text-anchor="middle">平面鏡（反射面朝上）</text>
                 </svg>
               </section>
               <section class="laser-lab" aria-label="可調整入射角的雷射反射實驗">
@@ -506,7 +506,7 @@
   <script type="module" src="assets/mirror-image.js?v=activity-order-20261105"></script>
   <script type="module" src="assets/reflection-3d.js?v=surfaces-experiment-20261105"></script>
   <script type="module" src="assets/surface-directions.js?v=surface-flow-20261105"></script>
-  <script type="module" src="assets/laser-reflection.js?v=exhibit-20261105"></script>
+  <script type="module" src="assets/laser-reflection.js?v=compact-20261106"></script>
   <script type="module" src="assets/reversible-light.js?v=activity-order-20261105"></script>
   <script type="module" src="assets/periscope.js?v=availability-20261105"></script>
 </body>
