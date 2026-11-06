@@ -1,0 +1,11 @@
+{
+  "baseline": "8b8c52eec6333412758d669e2d0d828fe576dac6",
+  "checks": {
+    "card01Identical": true,
+    "card03OnwardsIdentical": true,
+    "shareMetadataIdentical": true,
+    "heatingAndGraphLogicIdentical": true,
+    "otherResourcesIdentical": true
+  },
+  "unchangedFiles": 35
+}

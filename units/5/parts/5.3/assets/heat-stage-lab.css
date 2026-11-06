@@ -7,7 +7,8 @@
 #heat-stage-target[aria-invalid=true]{border-color:#b36439}#heat-stage-input-error{color:#975130;font-size:1rem}
 #heat-lab button{font-size:1rem;min-height:44px}#heat-stage-target:disabled{background:#eeeee7}
 #heat-lab .heat-bench{background:#fbfcf7;border-color:#cfddcf;box-shadow:none}
-#heat-lab .heat-stage-workbench{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:14px;padding:12px;align-items:center}
+#heat-lab .heat-stage-workbench{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:14px;padding:12px;align-items:start}
+#heat-lab .heat-stage-workbench .calorie-apparatus-view{align-self:start}
 #heat-lab .calorie-photo{aspect-ratio:1032/941;border-radius:10px;overflow:hidden;container-type:inline-size}
 #heat-lab .calorie-photo img{width:162%;max-width:none;height:auto;aspect-ratio:1672/941}
 #heat-lab .heat-apparatus-motion{width:162%;height:100%}
@@ -16,15 +17,15 @@
 #heat-lab .calorie-heater-light{left:41.8122%;top:79.7%;width:1.701%}
 #heat-lab .calorie-photo-label{left:35%;top:34.7%;font-size:.9rem;padding:3px 5px}
 #heat-lab .heat-knob-hint{display:none}
-#heat-lab .calorie-apparatus-view figcaption{position:static;display:block;margin-top:7px;border:0;padding:0;background:transparent;box-shadow:none;text-align:center;font-size:1rem}
 #heat-lab .heat-stage-plot{position:static;transform:none;width:auto;max-width:none;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;min-width:0}
-.heat-stage-plot-heading{display:flex;align-items:center;justify-content:space-between;gap:5px 10px;flex-wrap:wrap}
-#heat-lab .heat-stage-plot h4{font-size:1rem;margin:0;color:#35583e}
-#heat-stage-mode{font-size:.875rem;color:#60725f}
+.heat-stage-plot-heading{display:flex;align-items:center;gap:6px 8px;flex-wrap:wrap}
+#heat-lab .heat-stage-plot h4{font-size:1rem;font-weight:750;margin:0;color:#254b36}
+#heat-stage-mode{display:inline-flex;align-items:center;min-height:26px;padding:1px 7px;border:1px solid #cbdcc4;border-radius:6px;background:#edf5e7;font-size:.875rem;font-weight:600;line-height:1.4;white-space:nowrap;color:#315b3c}
+#heat-stage-mode.is-example{border-color:#ddcfb1;background:#fff8e9;color:#765e33}
 #heat-stage-graph{display:block;width:100%;overflow:visible}
-#heat-lab #heat-stage-graph text{font:16px var(--unit-font);fill:#385c44}
+#heat-lab #heat-stage-graph text{font:16px var(--unit-font);fill:#284d35}
 .heat-stage-grid path{fill:none;stroke:#dce5d7;stroke-width:1}
-.heat-stage-axes{fill:none;stroke:#4b7458;stroke-width:1.3}
+.heat-stage-axes{fill:none;stroke:#315c43;stroke-width:1.5}
 #heat-stage-line{fill:none;stroke:#26724d;stroke-width:2.5}
 #heat-stage-line.is-example{stroke:#8b9b83;stroke-dasharray:5 5}
 #heat-stage-points circle{fill:#276d49;stroke:#fff;stroke-width:1}

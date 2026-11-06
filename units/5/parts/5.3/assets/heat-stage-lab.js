@@ -53,8 +53,8 @@ function render(){
   play.textContent=playing?'加熱中…':label;heater.title=playing?'加熱中':label;heater.setAttribute('aria-label',label+'，連續觀察水吸收熱量與升溫');
   get('heat-stage-meter').textContent=get('heat-stage-temperature').textContent=state.temperature.toFixed(1);
   get('heat-stage-energy').textContent=number(state.waterCalories);get('heat-stage-rise').textContent=state.rise.toFixed(1);
-  get('heat-stage-heater-status').textContent=playing?'加熱並攪拌中':elapsed>0?'已停熱・保留讀值':ready?'等待開始加熱':'器材尚未就緒';
   get('heat-stage-mode').textContent=example?'推算示例・非本次觀察':'本次觀察';
+  get('heat-stage-mode').classList.toggle('is-example',example);
   get('heat-stage-graph-note').textContent=example?'未操作也可先看示例；開始後，改畫本次的加熱進度。':'橘色亮點跟著加熱前進，沿途留下觀察點。';
   const data=example?samples.map(sampleAt):records,key=String(example)+'/'+data.map(r=>r.waterCalories).join(',');
   if(key!==rowsKey){
