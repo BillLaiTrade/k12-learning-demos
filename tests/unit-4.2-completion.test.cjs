@@ -59,7 +59,7 @@ test('4.2 完整頁面、主要活動與資源失敗恢復',{timeout:300000},asy
     const targets=['card-01','card-02','card-03','card-04','card-05','card-06','unit-quiz'];
     assert.deepEqual(await page.locator('.lesson-list > section').evaluateAll(es=>es.map(e=>e.id)),targets);
     assert.deepEqual(await page.locator('.route a').evaluateAll(es=>es.map(e=>e.hash.slice(1))),targets);
-    const expectedTitles=['同一束光照到不同表面，反射方向一樣嗎？','怎麼用光路和雷射實驗看懂反射定律？','從另一端照回，光路會重合嗎？','為什麼鏡前的熊，看起來在鏡後？','物體移近鏡子，像的位置怎麼變？','鏡面不同，反射光與像怎麼變？'];
+    const expectedTitles=['同一束光照到不同表面，反射方向一樣嗎？','光的反射，有什麼規律？','從另一端照回，光路會重合嗎？','為什麼鏡前的熊，看起來在鏡後？','物體移近鏡子，像的位置怎麼變？','鏡面形狀不同，反射光和像會怎麼變？'];
     assert.deepEqual(await page.locator('.lesson-card:not(#unit-quiz) .card-heading h2').allTextContents(),expectedTitles);
     assert.deepEqual(await page.locator('.route a:not(.quiz-nav) > span:last-child').allTextContents(),expectedTitles);
     assert.deepEqual(await page.locator('.card-number').allTextContents(),['01','02','03','04','05','06']);
