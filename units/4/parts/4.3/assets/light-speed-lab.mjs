@@ -45,6 +45,7 @@ const lanes = media.map(key => ({
 }));
 function controls() {
   root.dataset.state = state;root.dataset.pauseReason=pauseReason;root.dataset.mode=mode;
+  status.hidden = state === 'idle';
   const unavailable = state === 'loading' || state === 'error';
   start.disabled = unavailable || mode==='together'&&(state === 'running' || state === 'paused');
   sourceButtons.forEach((button,i)=>{
@@ -149,7 +150,7 @@ async function prepare() {
   mode='together';state='loading';pauseReason='';elapsed=0;stopFrame();render();controls();retry.hidden=true;
   try {
     await image.decode();
-    state='idle';controls();status.textContent='點擊光源可單獨發光；按「同時發光」同步比較。';
+    state='idle';controls();status.textContent='';
   } catch {
     state='error';controls();retry.hidden=false;status.textContent='實驗桌圖片暫時無法載入，請重新載入實驗桌。';
   }
