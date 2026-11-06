@@ -1706,3 +1706,16 @@ node --test --test-isolation=none tests/unit-5.4-model.test.mjs tests/unit-5.4.t
 公開檢查設定`UNIT54_URL=https://billlaitrade.github.io/k12-learning-demos/units/5/parts/5.4/`，`UNIT54_CAPTURE_DIR`指定證據輸出位置。繼承既有HTTPS_PROXY，不停用TLS驗證。本輪是可操作初版，非逐區設計或完整外審已通過。
 
 5.4公開測試如遇環境代理CA未被Chromium信任，可指定`UNIT54_PROXY_CA`為環境提供的公開CA檔；僅該測試程序匹配該憑證的SPKI，不修改持久信任庫、不全面忽略TLS錯誤。
+
+## 5.2 水浴暖飲料操作小測（2026-11-06）
+
+```bash
+node tests/unit-5.2-water-bath-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-water-bath.test.cjs
+```
+
+模型13項涵蓋有限熱源／容量、接觸與排水、內部能量守恆、室內熱帳、量杯取倒、熱流反轉、外包覆與瓶套的不同作用、可達性、長時間趨近室溫、溫度界限及儀表精度判定。本環境node24以直接執行node:test模組可列出完整13項；--test子行程模式只回報整檔一項，故不以後者數字替代。
+
+瀏覽器13項（含父測試）檢查真實滑鼠拖曳、配件前景命中、手動開始／停續、實際讀值與曲線像素暫停、未開始／未達標／達標、有限量杯取倒、配置更換不重設、重來、鍵盤／說明／背景中斷、七種視窗44px及字級、跨區獨立、七圖分別失敗重試／延遲，以及390／320px兩動態偏好的原生觸控。`BATH_LAB_URL`可指定公開頁。
+
+原方向、對流、輻射與保溫套件的跨區小測斷言改查新手動操作與讀值，不保留舊表單假節點。全套本輪以指定系統Chromium執行；來源、八種視窗與畫面、首次失敗及修正均存於`docs/reviews/unit-5.2-water-bath-20261106/`。這是局部新小測交付，不是整頁重新驗收。

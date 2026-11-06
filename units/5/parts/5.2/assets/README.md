@@ -281,3 +281,21 @@ SVG裁切區48,60,1514,866與250×137.3顯示邊界一致，使用preserveAspect
 桌機1366×768／1280×720及1440×900／1024×768核對同屏邊界，瓶體由實際可用寬高等比例縮放；包含標註、圖表、控制與狀態。手機為可捲動的可讀排版，不承諾全畫面縮進同一屏。返回／Escape恢復課文位置及入口焦點，背景頁面保持不可操作。
 
 新檢查`tests/unit-5.2-insulation-workspace.test.cjs`搭配既有保溫測試；細節與核可圖見`docs/decisions/unit-5.2-insulation-workspace.md`及`docs/reviews/unit-5.2-insulation-workspace-20261106/`。
+
+## 2026-11-06：生活水浴操作小測
+
+使用者核可精簡示意圖`exec-5f2b71fd-8a21-4ebe-95c8-d6239b936e6e.png`後要求製作。改以「把這瓶飲料暖到35°C」替換舊保冷表單；只保留目標、儀表、操作場景、器材與必要控制，曲線／紀錄收合、說明按需開啟。原六區與同屏工作區保留。
+
+| 匯出 | image_gen原檔（/workspace/generated_images/exec-…png） | 用途 |
+| --- | --- | --- |
+| bath-bench.webp | 277478de-91ae-4d44-84da-dc7d5c4e1d15 | 無器材的廚房／木桌背景 |
+| bath-bowl.webp | 23a31e66-b523-4fa6-8ff0-5f7ba582b076 | 空透明玻璃盆及固定透明蓋；液面由程式畫 |
+| bath-bottle.webp | fc80db39-73f5-41c9-8402-a9278a677f26 | 密封飲料瓶，可實際移動 |
+| bath-wrap.webp | 231c4e43-ab4b-420f-97ac-296643981584 | 前面開口的外側保溫套，分前後圖層 |
+| bath-mat.webp | 5bac7765-e8d5-453a-934a-c68ba8a1500a | 軟木墊 |
+| bath-sleeve.webp | 18c317a9-f328-4e0d-a61a-87b7a393bfa0 | 飲料瓶套 |
+| bath-jug.webp | 848548c5-ced1-4cad-b69c-6d872214eb7a | 空量杯；水量由模型及SVG同步 |
+
+都是參照核可圖以image_gen生成的教學圖，不是實驗實拍；只作標準縮圖與WebP編碼，原檔保留。尺寸及位元組見本輪assets.json，合計約0.8MB。重用既有balance-meter.webp作儀表外殼，數字／名稱皆由原生HTML繪製。
+
+獨立water-bath.css/js與water-bath-model.mjs使用bath-1快取版本；共用heat-transfer.js只移除舊小測表單，保留導覽，版本bath-independent-4。模型包含有限水量、等效容器熱容量、隨浸入程度的換熱及室內損失，量杯取倒守恆。時間加速，讀值不是特定飲品實測。具體假設及判定見`docs/decisions/unit-5.2-water-bath-quiz.md`。

@@ -174,8 +174,7 @@ test('5.2 first block: three environments and in-water thermometers',{timeout:18
   await t.test('remaining learning blocks and quiz still operate independently',async()=>{
     await page.locator('#balance-pause').click();await page.locator('#balance-block-a').focus();await page.keyboard.press('End');await page.clock.runFor(800);const a=Number((await page.locator('#balance-temp-a').textContent()).replace('°C',''));await select(70);await page.clock.runFor(800);const b=Number((await page.locator('#balance-temp-a').textContent()).replace('°C',''));assert.ok(b<a);await page.locator('#balance-reset').click();
     await page.locator('#radiation-play').click();assert.equal(await page.locator('#radiation-play').getAttribute('aria-pressed'),'true');await page.locator('#radiation-reset').click();assert.equal(await page.locator('#radiation-play').getAttribute('aria-pressed'),'false');
-    await page.locator('input[value="outside"]').check();for(const [name,value]of [['metal','conduction'],['air','convection'],['sun','radiation']])await page.locator(`select[name="${name}"]`).selectOption(value);
-    await page.locator('#heat-quiz button[type="submit"]').click();assert.match(await page.locator('#heat-quiz-result').textContent(),/判斷都合理/);
+    await page.locator('#bath-check').click();assert.match(await page.locator('#bath-result').textContent(),/先開始/);await page.locator('#bath-bottle').focus();await page.keyboard.press('Enter');await page.locator('#bath-play').click();await page.clock.runFor(500);assert.ok(Number(await page.locator('#water-bath').getAttribute('data-drink'))>20);await page.locator('#bath-reset').click();assert.equal(await page.locator('#bath-reading-drink span').textContent(),'20.0');
     assert.deepEqual(errors,[]);
   });
 });
