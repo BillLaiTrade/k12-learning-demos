@@ -35,6 +35,7 @@
   <link rel="stylesheet" href="assets/heat-bench.css?v=refined-1">
   <link rel="stylesheet" href="assets/mass-comparison-lab.css?v=mass-1">
   <script type="module" src="assets/mass-comparison-lab.js?v=mass-1"></script>
+  <link rel="stylesheet" href="assets/mass-comparison-fit.css?v=fit-1">
 </head>
 <body>
   <header class="shell masthead"><div class="brand-row"><a class="brand" href="../../index.html">← 溫度與熱</a><span class="crumb">國二上・熱量與比熱</span></div>
@@ -144,9 +145,9 @@
           <div class="card-main">
             <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>水量加倍，吸收同樣的熱量，升高的溫度會一樣嗎？</p></div>
             <div class="unit-panel" id="mass-lab" data-phase="loading" data-playing="false" data-records="0">
-              <p class="mass-conditions"><strong>共同條件</strong><span>都是水・初溫20°C・各吸收1,000 cal</span></p>
+              <div class="mass-toolbar"><p class="mass-conditions"><strong>共同條件</strong><span>都是水・初溫20°C・各吸收1,000 cal</span></p>
               <div class="mass-setting"><span class="mass-setting-label" id="mass-choice-label">B杯水量</span><div class="mass-choices" role="group" aria-labelledby="mass-choice-label"><button type="button" data-mass-choice="100" aria-pressed="true" disabled><b aria-hidden="true"></b>100 g</button><button type="button" data-mass-choice="200" aria-pressed="false" disabled><b aria-hidden="true"></b>200 g</button><button type="button" data-mass-choice="300" aria-pressed="false" disabled><b aria-hidden="true"></b>300 g</button></div><span>A杯固定100 g；先比較相同水量</span></div>
-              <p class="mass-pan-hint">左右滑動，查看完整的兩杯比較台。</p>
+              </div><p class="mass-pan-hint">左右滑動，查看完整的兩杯比較台。</p>
               <figure class="mass-bench"><div class="mass-scene-pan" tabindex="0" role="region" aria-label="兩杯同規格器材，窄版可左右滑動"><div class="mass-photo">
                 <img id="mass-apparatus" src="assets/mass-comparison-bench.webp" width="1672" height="941" alt="AI生成的兩杯比較台：相同規格燒杯、加熱攪拌器與數位探針並排；水位、攪拌、燈號和LCD讀值由程式呈現。">
                 <svg id="mass-apparatus-motion" viewBox="0 0 1672 941" aria-hidden="true"></svg>
@@ -157,11 +158,12 @@
                 <span class="mass-sample-state mass-sample-state-a" id="mass-state-a">等待開始比較</span><span class="mass-sample-state mass-sample-state-b" id="mass-state-b">等待開始比較</span>
                 <div class="mass-loading" id="mass-loading">正在準備比較台…</div>
               </div></div></figure>
+              <div class="mass-console"><div class="mass-actions"><button type="button" class="action" id="mass-play" disabled>開始比較</button><button type="button" class="secondary" id="mass-retry" hidden>重新載入器材</button></div><p class="mass-status" id="mass-status" role="status">正在準備比較台…</p></div>
               <div class="mass-results">
-                <div class="mass-rise-panel"><h3>從20°C升高</h3><div class="mass-bar-row"><span>A杯</span><div class="mass-bar-track"><span class="mass-bar" id="mass-rise-bar-a" role="img" aria-label="A杯升高0°C"></span></div><strong><output id="mass-rise-a">0.0</output>°C</strong></div><div class="mass-bar-row"><span>B杯</span><div class="mass-bar-track"><span class="mass-bar mass-bar-b" id="mass-rise-bar-b" role="img" aria-label="B杯升高0°C"></span></div><strong><output id="mass-rise-b">0.0</output>°C</strong></div><div class="mass-bar-scale" aria-hidden="true"><span>0</span><span>5</span><span>10°C</span></div><div class="mass-actions"><button type="button" class="action" id="mass-play" disabled>開始比較</button><button type="button" class="secondary" id="mass-retry" hidden>重新載入器材</button></div><p class="mass-status" id="mass-status" role="status">正在準備比較台…</p></div>
+                <div class="mass-rise-panel"><h3>從20°C升高</h3><div class="mass-bar-row"><span>A杯</span><div class="mass-bar-track"><span class="mass-bar" id="mass-rise-bar-a" role="img" aria-label="A杯升高0°C"></span></div><strong><output id="mass-rise-a">0.0</output>°C</strong></div><div class="mass-bar-row"><span>B杯</span><div class="mass-bar-track"><span class="mass-bar mass-bar-b" id="mass-rise-bar-b" role="img" aria-label="B杯升高0°C"></span></div><strong><output id="mass-rise-b">0.0</output>°C</strong></div><div class="mass-bar-scale" aria-hidden="true"><span>0</span><span>5</span><span>10°C</span></div></div>
                 <div class="mass-record-panel" id="mass-record-panel" hidden><h3>已完成的比較</h3><table><caption class="calorie-table-caption">A杯固定100g，初溫20°C，各杯水均吸收1,000cal的觀察紀錄</caption><thead><tr><th scope="col">B杯水量</th><th scope="col">A杯溫升</th><th scope="col">B杯溫升</th></tr></thead><tbody id="mass-records"></tbody></table></div>
+                <div class="dialogue" id="mass-conclusion" hidden><span class="speaker" aria-label="阿公"></span><p id="mass-conclusion-text"></p></div>
               </div>
-              <div class="dialogue" id="mass-conclusion" hidden><span class="speaker" aria-label="阿公"></span><p id="mass-conclusion-text"></p></div>
               <p class="mass-model-note">水吸熱量依模型估算；各杯到1,000 cal時各自停熱。器材為AI示意，動畫已加速。</p>
             </div>
             <details class="relation mass-assumptions"><summary>器材與模型條件</summary><p>先用電子秤分別量取水量，兩杯使用同規格約400 mL燒杯，初溫都是20°C。水位及器材尺寸為示意；探針浸入水中，不碰杯底或杯壁，攪拌使溫度較均勻。切換B杯水量後，兩杯都回到初溫，已完成的比較紀錄保留。</p><p>沿用前兩區的水比熱與集中熱容量設定：20 W有效供熱、42 J/°C容器熱容量、向20°C環境散熱係數0.5 W/°C，水與容器視為同溫。這些為教學參數，並非實物校正。各杯水吸收1,000 cal才停熱，容器吸熱與散熱另計，不是兩個加熱器各供能1,000 cal，也不固定加熱時間相同。</p><p>動畫統一加速50倍；各杯到點後保留觀察時刻，不模擬等待冷卻、停熱餘熱或探針延遲。加熱中切換水量暫不可用；換區或背景中斷不自動續熱，重新比較從20°C開始。重新比較不增加重複紀錄，勾號表示該水量已完成觀察。</p><p>反過來想：同種物質若要升高相同溫度，水量加倍，水需要吸收的熱量也約加倍。</p></details>
