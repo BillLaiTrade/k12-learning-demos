@@ -30,6 +30,7 @@ function render(){
   for(const [side,letter,kind]of [['left',water,'水'],['right',unknown,'未知固體']]){
     const badge=get('unknown-label-'+side+'-letter');badge.textContent=name(letter);badge.dataset.letter=letter;
     get('unknown-label-'+side+'-kind').textContent=kind;
+    get('unknown-choice-'+letter+'-kind').textContent=kind;
     get('unknown-meter-'+side).textContent=state.samples[letter].temperature.toFixed(1);
     get('unknown-meter-'+side+'-name').textContent=`樣品${name(letter)}目前溫度`;
     get('unknown-meter-'+side+'-screen').hidden=!ready;

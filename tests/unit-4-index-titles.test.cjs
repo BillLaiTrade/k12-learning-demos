@@ -1,5 +1,5 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),{spawn}=require('node:child_process'),path=require('node:path'),{chromium}=require('playwright');
-const titles=['書頁不發光，我們為什麼看得見它？','光遇到表面會怎樣？','光進入不同介質會怎樣？','透鏡如何形成影像？','白光與物體顏色從哪裡來？'];
+const titles=['書頁不發光，我們為什麼看得見它？','光遇到表面會怎樣？','光進入不同介質會怎樣？','透鏡如何形成影像？','光怎麼變出五顏六色？'];
 test('unit 4 entry headings follow content pages and retain usable static fallbacks',{timeout:45000},async t=>{
  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','ignore']});t.after(()=>server.kill());
  const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{const m=String(d).match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.once('error',reject);});

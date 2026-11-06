@@ -117,6 +117,15 @@ function initialiseQuiz(){
 document.querySelectorAll('[data-lab]').forEach((root,i)=>{try{initialiseLab(root,i);}catch(error){root.dataset.ready='false';const hint=root.querySelector('[data-load-note]');if(hint){hint.hidden=false;text(hint,'這個互動暫時無法載入，請重新整理後再試；仍可閱讀對話與說明。');}console.error('4.5 lab failed',error);}});
 initialiseQuiz();
 const nav=[...document.querySelectorAll('.route a')],sections=nav.map(a=>document.querySelector(a.hash));
+// 以區塊主標為來源；HTML 仍保留無 JavaScript 時可閱讀的導覽文字。
+nav.forEach((link,i)=>{
+ const title=sections[i]?.querySelector(':scope > header h2')?.textContent.trim();
+ if(!title)return;
+ if(link.classList.contains('quiz-nav')){
+  const kicker=sections[i].querySelector('.quiz-kicker')?.textContent.trim();
+  link.title=title;if(kicker)link.setAttribute('aria-label',`${kicker}：${title}`);
+ }else{const label=link.querySelector('span');if(label)label.textContent=title;}
+});
 function active(id){for(const link of nav){if(link.hash==='#'+id)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');}}
 let queued=false;addEventListener('scroll',()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;let selected=sections[0];for(const section of sections)if(section.getBoundingClientRect().top<innerHeight*.4)selected=section;active(selected.id);});},{passive:true});
 nav.forEach(a=>a.addEventListener('click',()=>active(a.hash.slice(1))));
