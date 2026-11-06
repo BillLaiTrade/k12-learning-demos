@@ -9,7 +9,7 @@ function initialise(root){
  const $=s=>root.querySelector(s),g=parallelModel('concave'),canvas=$('#concave-canvas'),svg=$('[data-concave-section]');
  g.rays.forEach(r=>r.from[0]=-10);
  const SCALE=.55,AXIS=2.0,world=p=>new THREE.Vector3(p[0]*SCALE,AXIS-p[1]*SCALE,0);
- let showRays=true,extensions=false,step='enter',studio=null;
+ let showRays=true,extensions=true,step='enter',studio=null;
  const NS='http://www.w3.org/2000/svg';
  function el(tag,attrs={},parent=svg){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));parent.append(e);return e;}
  function path(points,attrs={}){return el('path',{d:points.map((p,i)=>`${i?'L':'M'}${p[0]} ${p[1]}`).join(' '),fill:'none',...attrs});}

@@ -34,8 +34,11 @@ test('B方案小測：先觀察、推算未知比熱、保留作答與換題',{t
     assert.equal(await p.locator('#unit-quiz').getByRole('button',{name:'暫停',exact:true}).count(),0);
     assert.equal(await p.locator('#unknown-observe').getAttribute('class'),'action');
     assert.equal(await p.locator('#unknown-check').isDisabled(),true);
+    assert.equal(await p.locator('.unknown-formula').getAttribute('open'),null);
+    assert.equal(await p.locator('.unknown-formula p').isHidden(),true);
     await p.locator('.unknown-formula summary').click();
     assert.equal(await p.locator('.unknown-formula').getAttribute('open'),'');
+    assert.match(await p.locator('.unknown-formula').innerText(),/溫升 ΔT＝末溫－初溫/);
     await p.locator('.unknown-formula summary').click();
 
   });
@@ -51,6 +54,10 @@ test('B方案小測：先觀察、推算未知比熱、保留作答與換題',{t
     assert.equal(await p.locator('#quiz-result').isHidden(),true);
     assert.equal(await p.locator('#unknown-observe').getAttribute('class'),'secondary');
     assert.equal(await p.locator('#unknown-check').isEnabled(),true);
+    for(const id of ['unknown-rise-a','unknown-rise-b','unknown-specific-heat'])assert.equal(await p.locator('#'+id).inputValue(),'');
+    const answerText=await p.locator('.unknown-reasoning').innerText();
+    assert.doesNotMatch(answerText,/25\.0|45\.0|20\.0|末溫|初溫|Q＝|ΔT＝/,'作答面板不複製末溫或直接列算式');
+    assert.equal(await p.locator('.unknown-formula p').isHidden(),true);
 
   });
 
@@ -81,6 +88,7 @@ test('B方案小測：先觀察、推算未知比熱、保留作答與換題',{t
       for(const [side,letter]of [['left',value.waterLetter],['right',value.unknownLetter]]){
         assert.equal(await p.locator(`#unknown-label-${side}-letter`).getAttribute('data-letter'),letter);
         assert.equal(await p.locator(`#unknown-energy-${side}-name`).getAttribute('data-letter'),letter);
+        assert.equal(await p.locator(`#unknown-choice-${letter}-kind`).textContent(),side==='left'?'水':'未知固體');
         const expected=await p.locator(`label[for=unknown-rise-${letter}] .unknown-sample-badge`).evaluate(n=>({text:n.textContent,color:getComputedStyle(n).color,background:getComputedStyle(n).backgroundColor}));
         const actual=await p.locator(`#unknown-label-${side}-letter`).evaluate(n=>({text:n.textContent,color:getComputedStyle(n).color,background:getComputedStyle(n).backgroundColor}));
         assert.deepEqual(actual,expected);
@@ -136,9 +144,10 @@ test('B方案小測：先觀察、推算未知比熱、保留作答與換題',{t
   await t.test('五種尺寸不溢出、輸入及按鈕至少44px，LCD與主要文字可讀，窄版可平移',async()=>{
     for(const [width,height]of [[1440,900],[1366,768],[1280,720],[390,844],[320,740]]){
       await p.setViewportSize({width,height});await p.clock.runFor(32);
-      const layout=await p.locator('#unit-quiz').evaluate(n=>({overflow:document.documentElement.scrollWidth>innerWidth,clipped:[...n.querySelectorAll('.unknown-meter,.unknown-specific-input')].filter(e=>e.scrollWidth>e.clientWidth+1).map(e=>e.textContent),fonts:[...n.querySelectorAll('.unknown-conditions,.unknown-step h4,.unknown-step label,.unknown-comparison legend')].map(e=>parseFloat(getComputedStyle(e).fontSize)),hits:[...n.querySelectorAll('input[type=number],button')].filter(e=>e.getClientRects().length).map(e=>{const r=e.getBoundingClientRect();return{w:r.width,h:r.height};}),meters:[...n.querySelectorAll('.unknown-meter')].map(e=>parseFloat(getComputedStyle(e).fontSize)),pan:{client:n.querySelector('.unknown-scene-pan').clientWidth,scroll:n.querySelector('.unknown-scene-pan').scrollWidth}}));
+      const layout=await p.locator('#unit-quiz').evaluate(n=>({overflow:document.documentElement.scrollWidth>innerWidth,clipped:[...n.querySelectorAll('.unknown-meter,.unknown-specific-input,.unknown-rise-inputs label,.unknown-choice-row label')].filter(e=>e.scrollWidth>e.clientWidth+1).map(e=>e.textContent),fonts:[...n.querySelectorAll('.unknown-conditions,.unknown-step h4,.unknown-step label,.unknown-comparison legend')].map(e=>parseFloat(getComputedStyle(e).fontSize)),hits:[...n.querySelectorAll('input[type=number],button')].filter(e=>e.getClientRects().length).map(e=>{const r=e.getBoundingClientRect();return{w:r.width,h:r.height};}),choices:[...n.querySelectorAll('.unknown-choice-row label')].map(e=>e.getBoundingClientRect().width),meters:[...n.querySelectorAll('.unknown-meter')].map(e=>parseFloat(getComputedStyle(e).fontSize)),pan:{client:n.querySelector('.unknown-scene-pan').clientWidth,scroll:n.querySelector('.unknown-scene-pan').scrollWidth}}));
       layouts.push({width,height,...layout});assert.equal(layout.overflow,false,`${width} overflow`);assert.deepEqual(layout.clipped,[],`${width} LCD clipped`);assert.ok(layout.fonts.every(f=>f>=16));assert.ok(layout.meters.every(f=>f>=15));layout.hits.forEach(h=>assert.ok(h.w>=44&&h.h>=44));
       if(width<600){assert.ok(layout.pan.scroll>layout.pan.client);await p.locator('.unknown-scene-pan').evaluate(n=>n.scrollLeft=n.scrollWidth);}
+      assert.ok(Math.max(...layout.choices)-Math.min(...layout.choices)<1,'三個選項等寬');
 
     }
     assert.deepEqual(errors,[]);

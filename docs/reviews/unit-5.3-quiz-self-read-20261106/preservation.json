@@ -1,0 +1,11 @@
+{
+  "baseline": "1ba70ea00be6a57df355a96100b542184d8cebf9",
+  "checks": {
+    "firstFiveBlocksIdentical": true,
+    "shareMetadataIdentical": true,
+    "quizApparatusAndConditionsIdentical": true,
+    "otherResourcesIdentical": true
+  },
+  "unchangedFiles": 35,
+  "modelSHA256": "66047d37d41adc9dd3dda0d734d2b2538730b3033ff233fc3f872957694dfd10"
+}

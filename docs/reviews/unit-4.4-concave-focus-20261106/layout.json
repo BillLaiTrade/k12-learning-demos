@@ -1,0 +1,72 @@
+[
+  {
+    "width": 1440,
+    "id": "concave-rays",
+    "overflow": false,
+    "separate": true,
+    "clipped": []
+  },
+  {
+    "width": 1440,
+    "id": "lab6",
+    "overflow": false,
+    "separate": true,
+    "clipped": []
+  },
+  {
+    "width": 1024,
+    "id": "concave-rays",
+    "overflow": false,
+    "separate": true,
+    "clipped": []
+  },
+  {
+    "width": 1024,
+    "id": "lab6",
+    "overflow": false,
+    "separate": true,
+    "clipped": []
+  },
+  {
+    "width": 820,
+    "id": "concave-rays",
+    "overflow": false,
+    "separate": true,
+    "clipped": []
+  },
+  {
+    "width": 820,
+    "id": "lab6",
+    "overflow": false,
+    "separate": true,
+    "clipped": []
+  },
+  {
+    "width": 390,
+    "id": "concave-rays",
+    "overflow": false,
+    "separate": true,
+    "clipped": []
+  },
+  {
+    "width": 390,
+    "id": "lab6",
+    "overflow": false,
+    "separate": true,
+    "clipped": []
+  },
+  {
+    "width": 320,
+    "id": "concave-rays",
+    "overflow": false,
+    "separate": true,
+    "clipped": []
+  },
+  {
+    "width": 320,
+    "id": "lab6",
+    "overflow": false,
+    "separate": true,
+    "clipped": []
+  }
+]

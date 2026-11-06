@@ -5,8 +5,6 @@
 .micro-tools button { background:#fffbed; color:#31543d; font-size:.8rem; padding:8px 10px; min-height:40px; }
 .micro-tools [data-micro-rays][aria-pressed=true] { background:#f6dfa0; border-color:#d1b565; }
 .micro-tools [data-micro-reset] { margin-left:auto; }
-.micro-trace { display:flex; gap:4px; }
-.micro-trace button[aria-pressed=true] { background:#d6e6c2; }
 .micro-tools button:disabled { opacity:.45; cursor:default; }
 .micro-scene { display:block; width:100%; height:auto; }
 .micro-scene text { font-family:inherit; }

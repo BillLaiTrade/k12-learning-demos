@@ -1,3 +1,5 @@
+import {FRONT_VIEW, projectMirrorDistance} from './mirror-distance-projection.mjs?v=1';
+
 const section = document.querySelector('#card-05');
 
 if (section) {
@@ -6,6 +8,7 @@ if (section) {
   const image = section.querySelector('#distance-side-image');
   const frontObject = section.querySelector('#distance-front-object');
   const frontReflection = section.querySelector('#distance-front-reflection');
+  const frontSvg = section.querySelector('#distance-front-view');
   const ticks = section.querySelector('#distance-ruler-ticks');
   const values = section.querySelector('#distance-ruler-values');
   const ns = 'http://www.w3.org/2000/svg';
@@ -13,7 +16,29 @@ if (section) {
   const unitsPerCm = 4;
   let distance = 40;
   let drag = null;
+  let frontProjection = projectMirrorDistance(distance);
   const tagWidths = new Map();
+  const placeFrontLabels = () => {
+    const scale = frontSvg.viewBox.baseVal.width / frontSvg.clientWidth;
+    if (!Number.isFinite(scale)) return;
+    const entries = [['reflection',frontProjection.image],['front-object',frontProjection.object]];
+    const minY=11*scale+5, maxY=380-11*scale-5, gap=28*scale;
+    const targets=entries.map(([,p])=>p.top+p.size*.46);
+    let ys=targets.map(y=>Math.max(minY,Math.min(maxY,y)));
+    if(ys[1]-ys[0]<gap){
+      const midpoint=Math.max(minY+gap/2,Math.min(maxY-gap/2,(ys[0]+ys[1])/2));
+      ys=[midpoint-gap/2,midpoint+gap/2];
+    }
+    entries.forEach(([name, projection],index) => {
+      const tag = frontSvg.querySelector(`[data-distance-tag="${name}"]`), width = tagWidths.get(tag);
+      if (!width) return;
+      const targetY = targets[index], y=ys[index];
+      const rect = tag.querySelector('rect'), text = tag.querySelector('text');
+      text.setAttribute('y', y + 4.9*scale);
+      rect.setAttribute('y', y - 11*scale);
+      tag.querySelector('.distance-leader').setAttribute('d', `M${FRONT_VIEW.centerX + projection.size*.46} ${targetY}L${500-width/2-5} ${y}`);
+    });
+  };
   const placeSideLabels = () => {
     for (const [name, center, origin] of [['object', mirrorX - distance * unitsPerCm, 182], ['image', mirrorX + distance * unitsPerCm, 438]]) {
       const tag = svg.querySelector(`[data-distance-tag="${name}"]`);
@@ -42,6 +67,7 @@ if (section) {
       }
     }
     placeSideLabels();
+    placeFrontLabels();
   };
 
   for (let cm = -60; cm <= 60; cm += 5) {
@@ -81,9 +107,16 @@ if (section) {
     object.setAttribute('aria-valuenow', distance);
     object.setAttribute('aria-valuetext', `物距 ${distance} 公分，像距 ${distance} 公分`);
     section.querySelector('#distance-front-status').textContent = `物體離鏡面 ${distance} cm｜虛像在鏡後 ${distance} cm`;
-    frontObject.setAttribute('transform', `translate(0 ${(distance - 40) * .65})`);
-    frontReflection.setAttribute('transform', `translate(0 ${(40 - distance) * .65})`);
+    frontProjection = projectMirrorDistance(distance);
+    for (const [group, projection] of [[frontObject,frontProjection.object],[frontReflection,frontProjection.image]]) {
+      const size=projection.size, image=group.querySelector('image');
+      for(const [name,value] of Object.entries({x:FRONT_VIEW.centerX-size/2,y:projection.top,width:size,height:size}))image.setAttribute(name,value);
+      group.querySelectorAll('ellipse').forEach((shadow,index)=>{
+        for(const [name,value] of Object.entries({cx:FRONT_VIEW.centerX,cy:projection.ground-2,rx:size*(index ? .25 : .36),ry:size*(index ? .028 : .05)}))shadow.setAttribute(name,value);
+      });
+    }
     placeSideLabels();
+    placeFrontLabels();
   };
 
   const pointerX = (event) => {

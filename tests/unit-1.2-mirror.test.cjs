@@ -176,8 +176,8 @@ test('第三區上下同時對照、整熊觀察及銜接第四區',{timeout:180
     await expect(section.locator('.comparison-takeaway')).toHaveText('上排是轉過彎的5公尺，下排是直達的5公尺。');
     const explanation=section.locator('.mirror-explanation');
     assert.equal(await explanation.locator('.dialogue').count(),2);
-    await expect(explanation.locator('.dialogue--xiaokui')).toContainText('鏡子在這條視線的3公尺處，熊卻像是在5公尺外');
-    await expect(explanation.locator('.dialogue:not(.dialogue--xiaokui)')).toContainText('沿入眼光的來向往回延長');
+    await expect(explanation.locator('.dialogue--xiaokui')).toContainText('和後來放在那個位置的真熊，看起來一樣遠');
+    await expect(explanation.locator('.dialogue:not(.dialogue--xiaokui)')).toContainText('把進入眼睛的反射光往鏡後延長');
     await expect(explanation.locator('.comparison-clarification')).toContainText('沿圖示光路量取');
     await expect(explanation.locator('.comparison-clarification')).toContainText('不代表光真的通過鏡後');
     assert.equal(await explanation.locator(':scope > p:not(.comparison-clarification),h3,.comparison-bridge').count(),0);

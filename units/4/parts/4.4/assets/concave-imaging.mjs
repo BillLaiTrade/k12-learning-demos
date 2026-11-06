@@ -50,8 +50,9 @@ function initialise(root){
   root.dataset.screenClear=g.screenClear;root.dataset.rayRegime=g.type==='virtual'?'diverging':g.type==='infinity'?'parallel':'converging';root.dataset.eye=G.eye;root.dataset.object=state.object;root.dataset.screen=state.screen;root.dataset.screenIn=state.screenIn;root.dataset.rays=showRays;root.dataset.extensions=activeExtensions;root.dataset.point=point;root.dataset.view=front?'screen':'orbit';root.dataset.imageType=g.type;root.dataset.eyeMode=g.eyeMode;root.dataset.imageScale=g.imageScale??'';root.dataset.referenceScale=g.referenceScale;root.dataset.angularGain=g.angularGain??'';root.dataset.virtualX=g.type==='virtual'?g.v*G.scale:'';
   canvas.setAttribute('aria-label',`立體凹透鏡成像觀察台，物距${distanceLabel(state.object)}，固定透鏡與眼睛，只移動圖卡，${condition}`);workspace.update(state);studio?.update();
  }
- function clearGestureNotice(){$('[data-ci-gesture-note]').hidden=true;$$('[data-ci-ruler]').forEach(r=>r.removeAttribute('data-guided'));}
- function showGestureNotice(key){const note=$('[data-ci-gesture-note]');note.textContent=key==='eye'?'眼睛固定，請移動圖卡比較光路與大小。':key==='lens'?'凹透鏡是固定的。':`請使用下方${key==='object'?'圖卡':key==='eye'?'眼睛':'比較屏幕'}位置尺調整。`;note.hidden=false;$$('[data-ci-ruler]').forEach(r=>r.toggleAttribute('data-guided',r.dataset.ciRuler===key));}
+ function clearGestureNotice(){$('[data-ci-gesture-note]').hidden=true;root.dataset.gestureHelp='false';$$('[data-ci-ruler]').forEach(r=>r.removeAttribute('data-guided'));}
+ function showGestureNotice(key){clearGestureNotice();const note=$('[data-ci-gesture-note]');note.textContent=key==='eye'?'眼睛固定，請移動圖卡比較光路與大小。':key==='lens'?'凹透鏡是固定的。':'請使用下方金框標示的圖卡尺，點選刻度按鈕或拖曳綠色把手調整距離。';note.hidden=false;root.dataset.gestureHelp='true';$$('[data-ci-ruler]').forEach(r=>r.toggleAttribute('data-guided',r.dataset.ciRuler===key));}
+ $('[data-ci-ruler=object]').addEventListener('pointerdown',clearGestureNotice);
  function move(key,value){if(key!=='object')return;clearGestureNotice();state=moveMagnifier(state,key,value);selected=key;update();}
  $("[data-ci-rays]").addEventListener('click',()=>{showRays=!showRays;extensions=showRays;update();studio?.frameObservation();});
  $('[data-ci-extensions]').addEventListener('click',()=>{extensions=!extensions;update();});
@@ -81,7 +82,22 @@ function initialise(root){
    else{camera.fov=38;const direction=new THREE.Vector3(Math.sin(orbit.polar)*Math.sin(orbit.azimuth),Math.cos(orbit.polar),Math.sin(orbit.polar)*Math.cos(orbit.azimuth));camera.position.copy(target).addScaledVector(direction,fitRadius*orbit.zoom);camera.lookAt(target);}
    camera.far=Math.max(120,fitRadius*6);camera.updateProjectionMatrix();
    if(viewport){const r=canvas.getBoundingClientRect(),p=camera.projectionMatrix.elements;p[0]*=viewport.width/r.width;p[5]*=viewport.height/r.height;p[8]=1-2*(viewport.left+viewport.width/2)/r.width;p[9]=2*(viewport.top+viewport.height/2)/r.height-1;camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();}
-   camera.updateMatrixWorld();virtualImage.rotation.y=Math.atan2(camera.position.x-virtualImage.position.x,camera.position.z-virtualImage.position.z);virtualImage.updateMatrixWorld(true);
+   camera.updateMatrixWorld();
+   // Balance the current apparatus and F as the card moves, preserving scale and angle.
+   if(!front&&viewport){
+    const r=canvas.getBoundingClientRect();let left=Infinity,right=-Infinity;
+    for(const device of [source,lensGroup,eye]){
+     device.updateWorldMatrix(true,true);const box=new THREE.Box3().setFromObject(device);
+     for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){
+      const p=new THREE.Vector3(x,y,z).project(camera),px=(p.x+1)*r.width/2;left=Math.min(left,px);right=Math.max(right,px);
+     }
+    }
+    const focus=new THREE.Vector3(-G.f*G.scale,G.axis,0).project(camera),fx=(focus.x+1)*r.width/2;
+    left=Math.min(left,fx-10);right=Math.max(right,fx+10);
+    const shift=(left+right)/2-(viewport.left+viewport.width/2);
+    camera.projectionMatrix.elements[8]+=2*shift/r.width;camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
+   }
+   virtualImage.rotation.y=Math.atan2(camera.position.x-virtualImage.position.x,camera.position.z-virtualImage.position.z);virtualImage.updateMatrixWorld(true);
   }
   const labels=createBenchLabels({THREE,root,canvas,camera,virtualImage,G,state:()=>magnifierState(state),viewport:()=>viewport,front:()=>front,rays:()=>showRays,receiver:()=>state.eye,receiverName:'固定眼睛',lightPaths:()=>showRays?magnifierDisplayRays(state,point):[]});
   function annotations(){
@@ -97,7 +113,18 @@ function initialise(root){
   function syncScene(){const g=magnifierState(state);eye.position.x=state.eye*G.scale;virtualImage.visible=showRays&&g.type==='virtual'&&!front;if(g.type==='virtual'){virtualImage.position.set(g.v*G.scale,G.axis,0);virtualImage.scale.set(g.m,g.m,1);}source.position.x=-state.object*G.scale;screen.position.x=state.screen*G.scale;screen.visible=state.screenIn;updateRays();updateCamera();scene.updateMatrixWorld(true);highlight.update();requestDraw();}
   const devices={object:source,screen,eye,lens:lensGroup},pointers=new Map(),raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();let gesture=null;
   function ray(e){const r=canvas.getBoundingClientRect();pointer.set((e.clientX-r.left)/r.width*2-1,1-(e.clientY-r.top)/r.height*2);raycaster.setFromCamera(pointer,camera);}
-  function hit(e){if(front)return null;ray(e);const h=raycaster.intersectObjects(Object.values(devices).filter(group=>group.visible),true)[0];if(!h)return null;let group=h.object;while(group.parent!==scene&&group.parent)group=group.parent;return {...h,key:Object.keys(devices).find(key=>devices[key]===group)};}
+  function hit(e){
+   if(front)return null;ray(e);const h=raycaster.intersectObjects(Object.values(devices).filter(group=>group.visible),true)[0];
+   if(h){let group=h.object;while(group.parent!==scene&&group.parent)group=group.parent;return {...h,key:Object.keys(devices).find(key=>devices[key]===group)};}
+   // A nearly edge-on card still needs an easy target for the ruler guidance.
+   const rect=canvas.getBoundingClientRect(),xs=[],ys=[];
+   for(const y of [-G.cardHeight/2,G.cardHeight/2])for(const z of [-G.cardWidth/2,G.cardWidth/2]){
+    const p=new THREE.Vector3(-state.object*G.scale,G.axis+y,z).project(camera);if(p.z< -1||p.z>1)return null;
+    xs.push((p.x+1)*rect.width/2);ys.push((1-p.y)*rect.height/2);
+   }
+   const left=Math.min(...xs),right=Math.max(...xs),pad=Math.max(6,((e.pointerType==='touch'?44:28)-(right-left))/2),x=e.clientX-rect.left,y=e.clientY-rect.top;
+   return x>=left-pad&&x<=right+pad&&y>=Math.min(...ys)-6&&y<=Math.max(...ys)+6?{key:'object'}:null;
+  }
   const pinch=()=>{const p=[...pointers.values()];return p.length<2?0:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);};
   canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.setPointerCapture(e.pointerId);if(pointers.size>1){clearGestureNotice();gesture={kind:'pinch',distance:pinch(),zoom:orbit.zoom};return;}const h=hit(e);if(!h)clearGestureNotice();gesture={kind:h?'apparatus':'orbit',key:h?.key,startX:e.clientX,startY:e.clientY,azimuth:orbit.azimuth,polar:orbit.polar};});
   canvas.addEventListener('pointermove',e=>{
