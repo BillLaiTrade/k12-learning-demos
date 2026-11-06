@@ -1,11 +1,11 @@
-import {ROOM,GOAL,SPEED,createBath,advanceBath,geometry,positionBottle,useCup} from './water-bath-model.mjs?v=bath-1';
+import {ROOM,GOAL,SPEED,createBath,advanceBath,geometry,positionBottle,useCup} from './water-bath-model.mjs?v=bath-2';
 
 const root=document.getElementById('water-bath');
 if(root){
   const $=id=>document.getElementById(id),stage=$('bath-stage'),bottle=$('bath-bottle');
   const play=$('bath-play'),check=$('bath-check'),tools=[...root.querySelectorAll('[data-bath-tool]')];
-  const names={bench:'桌面',bowl:'水盆',bottle:'飲料瓶',wrap:'保溫套',mat:'隔熱墊',sleeve:'瓶套',jug:'量杯'};
-  const assets=Object.fromEntries(Object.keys(names).map(key=>[key,{src:`assets/bath-${key}.webp?v=bath-1`,status:'idle',request:0}]));
+  const names={bench:'桌面',bowl:'水盆',bottle:'飲料瓶',wrap:'保溫套',mat:'隔熱墊',sleeve:'瓶套',jug:'量杯','bottle-sleeved':'已穿上瓶套的飲料瓶'};
+  const assets=Object.fromEntries(Object.keys(names).map(key=>[key,{src:`assets/bath-${key}.webp?v=bath-2`,status:'idle',request:0}]));
   let state=createBath(),playing=false,frame=0,previous=null,history=[[0,50,20]],lastSample=0,sampleEvery=3,events=[],drag=null,ghost=null,suppressClick={node:null,until:0};
   let anchors={bath:{x:275,y:177},drink:{x:825,y:177}};
   const text=(id,value)=>{const node=$(id);if(node.textContent!==value)node.textContent=value;};
@@ -44,18 +44,25 @@ if(root){
       output.setAttribute('aria-label',`${key==='bath'?'熱水':'飲料'}攝氏${value}度`);
     }
     bottle.setAttribute('transform',`translate(${state.x} ${state.bottom})`);
-    $('bath-collar').toggleAttribute('hidden',!g.inBowl);
+    $('bath-bottle-photo').toggleAttribute('hidden',state.sleeve);
     const a=anchors.drink;
-    $('bath-probe-drink-wire').setAttribute('d',`M${a.x} ${a.y}C${a.x} ${a.y+50} ${state.x} ${state.bottom-460} ${state.x} ${state.bottom-376}`);
-    const w=anchors.bath;$('bath-probe-water-wire').setAttribute('d',`M${w.x} ${w.y}C${w.x} ${w.y+50} 285 252 295 330`);
-    $('bath-probe-water').setAttribute('d',`M295 330L315 ${Math.max(g.surface+40,530)}`);
-    for(const id of ['bath-water-body','bath-water-front']){attr(id,'y',g.surface.toFixed(2));attr(id,'height',(630-g.surface).toFixed(2));}
-    attr('bath-water-surface','cy',g.surface.toFixed(2));
+    $('bath-probe-drink-wire').setAttribute('d',`M${a.x} ${a.y}C${a.x} ${a.y+50} ${state.x} ${state.bottom-460} ${state.x} ${state.bottom-368}`);
+    const w=anchors.bath;$('bath-probe-water-wire').setAttribute('d',`M${w.x} ${w.y}C${w.x} ${w.y+50} 355 275 362 330`);
+    $('bath-probe-water').setAttribute('d',`M362 330L368 ${Math.max(g.surface+55,540)}`);
+    const rx=326-Math.max(0,g.surface-425)*.04,y=g.surface;
+    const volume=`M${550-rx} ${y}A${rx} 43 0 0 1 ${550+rx} ${y}L860 577Q550 620 240 577Z`;
+    for(const id of ['bath-water-body','bath-water-front'])attr(id,'d',volume);
+    attr('bath-water-surface','cy',y.toFixed(2));attr('bath-water-surface','rx',rx.toFixed(2));
+    const wet=g.immersion>0;$('bath-water-meniscus').toggleAttribute('hidden',!wet);
+    const radius=state.sleeve?70:62;attr('bath-water-meniscus','d',`M${state.x-radius} ${y}Q${state.x} ${y+12} ${state.x+radius} ${y}`);
     $('bath-wrap-object').toggleAttribute('hidden',!state.wrap);$('bath-wrap-back-photo').toggleAttribute('hidden',!state.wrap);$('bath-mat-photo').toggleAttribute('hidden',!state.mat);$('bath-sleeve-photo').toggleAttribute('hidden',!state.sleeve);
     for(const button of tools)if(button.dataset.bathTool!=='jug')button.setAttribute('aria-pressed',String(state[button.dataset.bathTool]));
     const cup=$('bath-cup-object');cup.toggleAttribute('hidden',!root.dataset.cupUsed);cup.setAttribute('transform',`translate(${state.cupX} ${state.cupY})`);
-    $('bath-cup-liquid').setAttribute('d',`M-47 ${-14-state.cupWater*.8}H30V-6H-47Z`);$('bath-cup-liquid').toggleAttribute('hidden',state.cupWater===0);text('bath-cup-label',`${state.cupWater} mL`);
-    cup.setAttribute('aria-label',`量杯，裝有${state.cupWater}毫升；${state.cupWater?'移到水盆倒回':'移到水盆取水'}`);
+    const cupLevel=-12-state.cupWater*.9;
+    $('bath-cup-liquid').setAttribute('d',`M-46 ${cupLevel}Q-9 ${cupLevel-7} 28 ${cupLevel}L24-9Q-10 2-44-9Z`);$('bath-cup-liquid').toggleAttribute('hidden',state.cupWater===0);
+    attr('bath-cup-surface','cy',cupLevel);$('bath-cup-surface').toggleAttribute('hidden',state.cupWater===0);
+    const cupAction=$('bath-cup-action');cupAction.hidden=!root.dataset.cupUsed;cupAction.disabled=status!=='ready';text('bath-cup-action',state.cupWater?`${state.cupWater}mL・倒回`:'空量杯・取50mL');
+    cup.setAttribute('aria-label',`量杯，裝有${state.cupWater}毫升；${state.cupWater?'移回水盆或按倒回':'移到水面或按取水'}`);
     $('bath-retry').hidden=status!=='error';text('bath-loading-text',status==='error'?'器材未能載入，請再試一次。':'器材載入中…');
     plot();
   }
@@ -73,12 +80,28 @@ if(root){
   function toggleTool(key,on){
     if(!ready())return;clearResult();
     if(key==='jug'){
-      root.dataset.cupUsed='true';const action=useCup(state);state.cupX=100;state.cupY=575;
-      const message=action==='scoop'?'從水盆取出50mL；移回水盆或再點量杯可倒回。':'量杯裡的水已倒回，沒有補進新的熱水。';hint(message);record(action==='scoop'?'量杯取出50mL熱水':'量杯的水倒回水盆');sample(true);
+      presentCup();return;
     }else{
       state[key]=on===undefined?!state[key]:on;
       const descriptions={wrap:['包覆水盆外側','取下水盆保溫套'],mat:['放置隔熱墊','收回隔熱墊'],sleeve:['飲料瓶套上瓶套','取下瓶套']};const message=descriptions[key][state[key]?0:1];record(message);hint(`${message}，看看讀值怎麼變。`);
     }render();
+  }
+  function presentCup(forceShow=false){
+    if(!ready())return;
+    if(root.dataset.cupUsed&&!state.cupWater&&!forceShow){delete root.dataset.cupUsed;hint('空量杯已收回。');render();return;}
+    const first=!root.dataset.cupUsed;root.dataset.cupUsed='true';
+    if(first){state.cupX=100;state.cupY=575;record('拿出空量杯');}
+    hint(state.cupWater?`量杯裡有${state.cupWater}mL；移回水盆或按「倒回」。`:'空量杯已拿出；移到盆內水面或按「取50mL」。');render();
+  }
+  function transferCup(){
+    if(!ready())return;clearResult();root.dataset.cupUsed='true';const action=useCup(state);
+    state.cupX=100;state.cupY=575;
+    hint(action==='scoop'?'已取出50mL盆水，水盆裡的水量減少。':'量杯的水已倒回，水盆水位回升。');
+    record(action==='scoop'?'量杯取出50mL盆水':'把量杯的水倒回水盆');sample(true);render();
+  }
+  function cupDrop(p){
+    const g=geometry(state),clearOfBottle=!g.inBowl||Math.abs(p.x-state.x)>105;
+    return p.x>235&&p.x<865&&p.y>g.surface-55&&p.y<590&&clearOfBottle;
   }
   function checkResult(){
     if(!ready())return;stop();const result=$('bath-result');result.hidden=false;
@@ -88,7 +111,7 @@ if(root){
   }
   function stagePoint(event){const p=stage.createSVGPoint();p.x=event.clientX;p.y=event.clientY;return p.matrixTransform(stage.getScreenCTM().inverse());}
   function removeGhost(){ghost?.remove();ghost=null;}
-  function cancelDrag(){if(drag){if(drag.kind==='bottle'){state.x=drag.originalX;state.bottom=drag.originalBottom;}try{drag.node.releasePointerCapture(drag.pointer);}catch{}bottle.removeAttribute('data-dragging');}drag=null;removeGhost();render();}
+  function cancelDrag(){if(drag){if(drag.kind==='bottle'){state.x=drag.originalX;state.bottom=drag.originalBottom;}else if(drag.kind==='cup'){state.cupX=drag.cupX;state.cupY=drag.cupY;}try{drag.node.releasePointerCapture(drag.pointer);}catch{}bottle.removeAttribute('data-dragging');}drag=null;removeGhost();render();}
   // Some touch browsers omit the compatibility click after a canvas drag.
   // Handle touch release once; retain native clicks for mouse and keyboard.
   function activate(node,action){
@@ -126,7 +149,7 @@ if(root){
       if(!drag||drag.pointer!==event.pointerId)return;const moved=drag.moved,p=stagePoint(event);drag=null;removeGhost();bottle.removeAttribute('data-dragging');
       if(moved){suppressClick={node,until:performance.now()+350};
         if(kind==='bottle'){record(inWater()?'調整瓶子浸入程度':'把飲料瓶移出熱水');hint(inWater()?'已放入熱水，可以上下移動瓶子。':'瓶子已離水；可拖回水盆中央。');}
-        else if(kind==='cup'||kind==='jug'){if(p.x>200&&p.x<880&&p.y>285&&p.y<620)toggleTool('jug');else{root.dataset.cupUsed='true';if(kind==='jug'){state.cupX=Math.max(75,Math.min(1020,p.x));state.cupY=Math.max(290,Math.min(595,p.y));}hint(state.cupWater?'把量杯移回水盆即可倒回。':'把量杯移到水盆取水。');}}
+        else if(kind==='cup'||kind==='jug'){if(cupDrop(p))transferCup();else{root.dataset.cupUsed='true';if(kind==='jug'){state.cupX=Math.max(75,Math.min(1020,p.x));state.cupY=Math.max(290,Math.min(595,p.y));}hint(state.cupWater?'把量杯移回水盆即可倒回。':'把量杯移到水面或按取水。');}}
         else if(kind==='sleeve'){toggleTool(kind,Math.abs(p.x-state.x)<145&&p.y>state.bottom-390&&p.y<state.bottom+40);}
         else toggleTool(kind,p.x>150&&p.x<900&&p.y>280&&p.y<650);
         render();
@@ -140,7 +163,7 @@ if(root){
   bottle.addEventListener('keydown',event=>{
     if(!ready())return;const key=event.key;if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Enter',' '].includes(key))return;
     event.preventDefault();clearResult();
-    if(key==='Enter'||key===' ')positionBottle(state,inWater()?930:550,600);
+    if(key==='Enter'||key===' ')positionBottle(state,inWater()?1010:550,600);
     else if(key==='ArrowUp'||key==='ArrowDown')positionBottle(state,state.x,state.bottom+(key==='ArrowUp'?-35:35));
     else positionBottle(state,state.x+(key==='ArrowLeft'?-220:220),state.bottom);
     record(inWater()?'調整瓶子浸入程度':'把飲料瓶移出熱水');hint(inWater()?'已放入熱水，可以上下調整浸入程度。':'瓶子已離水。');render();
@@ -148,8 +171,9 @@ if(root){
   tools.forEach(node=>{const key=node.dataset.bathTool;bindDrag(node,key);activate(node,event=>{if(!blockedClick(node,event))toggleTool(key);});});
   activate($('bath-wrap-object'),event=>{if(!blockedClick($('bath-wrap-object'),event))toggleTool('wrap',false);});
   $('bath-wrap-object').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleTool('wrap',false);}});
-  activate($('bath-cup-object'),event=>{if(!blockedClick($('bath-cup-object'),event))toggleTool('jug');});
-  $('bath-cup-object').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleTool('jug');}});
+  activate($('bath-cup-object'),event=>{if(!blockedClick($('bath-cup-object'),event))presentCup(true);});
+  $('bath-cup-object').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();presentCup(true);$('bath-cup-action').focus({preventScroll:true});}});
+  activate($('bath-cup-action'),transferCup);
   activate(play,()=>playing?stop():start());activate(check,checkResult);activate($('bath-reset'),reset);
   activate($('bath-record').querySelector('summary'),event=>{event.preventDefault();$('bath-record').open=!$('bath-record').open;plot();drawLog();});
   $('bath-record').addEventListener('toggle',()=>{plot();drawLog();});
@@ -157,7 +181,7 @@ if(root){
   help.addEventListener('close',()=>$('bath-help-open').focus({preventScroll:true}));
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelDrag();stop();}});addEventListener('pagehide',()=>{cancelDrag();stop();});
   function assignImages(){
-    const mapping={bench:['bath-bench-photo'],bowl:['bath-bowl-back-photo','bath-bowl-front-photo'],bottle:['bath-bottle-photo'],wrap:['bath-wrap-photo','bath-wrap-back-photo'],mat:['bath-mat-photo'],sleeve:['bath-sleeve-photo'],jug:['bath-jug-photo']};
+    const mapping={bench:['bath-bench-photo'],bowl:['bath-bowl-back-photo','bath-bowl-front-photo'],bottle:['bath-bottle-photo'],wrap:['bath-wrap-photo','bath-wrap-back-photo'],mat:['bath-mat-photo'],sleeve:[],'bottle-sleeved':['bath-sleeve-photo'],jug:['bath-jug-photo']};
     for(const [key,ids]of Object.entries(mapping))if(assets[key].status==='ready'){
       for(const id of ids){const node=$(id),prop=node instanceof SVGElement?'href':'src';if(node.getAttribute(prop)!==assets[key].url)node.setAttribute(prop,assets[key].url);}
       root.querySelectorAll(`[data-bath-thumbnail="${key}"]`).forEach(node=>{if(node.getAttribute('src')!==assets[key].url)node.src=assets[key].url;});

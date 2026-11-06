@@ -67,3 +67,6 @@
   .bath-controls{width:100%;display:grid;grid-template-columns:1.1fr 1.1fr .7fr;gap:7px}#water-bath .bath-controls button{touch-action:manipulation;padding:10px 5px;font-size:.81rem;min-width:0;width:100%}.bath-hint{padding:8px 12px;font-size:.82rem}.bath-chart-wrap{height:185px}
 }
 @media(max-width:350px){.bath-scene{padding-top:110px}.bath-reading{font-size:1.05rem}.bath-room{font-size:.7rem;padding:3px 4px;top:13px}.bath-meter{width:33%}.bath-tools-title{font-size:.72rem}.bath-tools button{min-width:44px}.bath-tools button img{width:37px}.bath-tools button span{font-size:.7rem}}
+
+.bath-cup-action{position:absolute;left:10px;bottom:8px;z-index:3;min-height:44px;padding:7px 12px;border:1px solid #8fa68a;border-radius:12px;background:#fffdf1f2;color:#365a40;font:600 .82rem/1.5 system-ui;cursor:pointer;touch-action:manipulation;box-shadow:0 2px 6px #344c2c15}
+.bath-cup-action:disabled{opacity:.5;cursor:wait}

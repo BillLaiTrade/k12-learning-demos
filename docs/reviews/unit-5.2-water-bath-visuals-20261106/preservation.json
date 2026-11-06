@@ -1,0 +1,45 @@
+{
+  "baseline": "a476e42f57ccafa764616edb2df6089320c7f8fd",
+  "checks": [
+    {
+      "id": "card-01",
+      "identical": true
+    },
+    {
+      "id": "card-02",
+      "identical": true
+    },
+    {
+      "id": "card-03",
+      "identical": true
+    },
+    {
+      "id": "card-04",
+      "identical": true
+    },
+    {
+      "id": "card-05",
+      "identical": true
+    },
+    {
+      "id": "card-06",
+      "identical": true
+    },
+    {
+      "file": "units/5/parts/5.2/assets/heat-transfer.js",
+      "identical": true
+    },
+    {
+      "file": "units/5/parts/5.2/assets/convection-lab.js",
+      "identical": true
+    },
+    {
+      "file": "units/5/parts/5.2/assets/radiation-lab.js",
+      "identical": true
+    },
+    {
+      "file": "units/5/parts/5.2/assets/insulation-lab.js",
+      "identical": true
+    }
+  ]
+}

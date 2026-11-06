@@ -3,7 +3,7 @@
 export const ROOM=25, GOAL=35, SPEED=12, TOTAL_WATER=300;
 const CP=4.18, BOWL_C=210, DRINK_C=650, CUP_C=50, SIGMA=5.670374419e-8;
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
-export function createBath(){return {bath:50,drink:20,cup:25,water:TOTAL_WATER,cupWater:0,x:930,bottom:600,wrap:false,mat:false,sleeve:false,cupX:985,cupY:580,time:0,roomEnergy:0,goalAt:null,peak:20};}
+export function createBath(){return {bath:50,drink:20,cup:25,water:TOTAL_WATER,cupWater:0,x:1010,bottom:600,wrap:false,mat:false,sleeve:false,cupX:985,cupY:580,time:0,roomEnergy:0,goalAt:null,peak:20};}
 export function capacities(s){return {bath:BOWL_C+CP*s.water,drink:DRINK_C,cup:CUP_C+CP*s.cupWater};}
 export function energy(s){const c=capacities(s);return c.bath*s.bath+c.drink*s.drink+c.cup*s.cup;}
 export function geometry(s){
@@ -14,13 +14,13 @@ export function geometry(s){
 export function positionBottle(s,x,bottom){
   if(!Number.isFinite(x)||!Number.isFinite(bottom))return;
   s.bottom=clamp(bottom,250,600);
-  s.x=s.bottom>380?(x>340&&x<760?550:x<=340?160:930):clamp(x,130,950);
+  s.x=s.bottom>380?(x>340&&x<760?550:x<=340?90:1010):clamp(x,90,1010);
 }
 function surfaceLoss(t,area){return 10*area*(t-ROOM)+.9*SIGMA*area*((t+273.15)**4-(ROOM+273.15)**4);}
 function insulatedSide(t){
-  // Partial open-front jacket: 35% remains exposed; covered surface solves
+  // Low bowl cozy: 60% remains exposed; covered surface solves
   // conduction through insulation = convection+radiation from its outside.
-  const area=.035,covered=.65,R=.012/(.04*area*covered);
+  const area=.035,covered=.4,R=.012/(.04*area*covered);
   let lo=Math.min(t,ROOM),hi=Math.max(t,ROOM);
   for(let i=0;i<22;i++){const mid=(lo+hi)/2,f=(t-mid)/R-surfaceLoss(mid,area*covered);if(f>0)lo=mid;else hi=mid;}
   return surfaceLoss(t,area*(1-covered))+(t-(lo+hi)/2)/R;

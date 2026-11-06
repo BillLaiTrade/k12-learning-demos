@@ -299,3 +299,10 @@ SVG裁切區48,60,1514,866與250×137.3顯示邊界一致，使用preserveAspect
 都是參照核可圖以image_gen生成的教學圖，不是實驗實拍；只作標準縮圖與WebP編碼，原檔保留。尺寸及位元組見本輪assets.json，合計約0.8MB。重用既有balance-meter.webp作儀表外殼，數字／名稱皆由原生HTML繪製。
 
 獨立water-bath.css/js與water-bath-model.mjs使用bath-1快取版本；共用heat-transfer.js只移除舊小測表單，保留導覽，版本bath-independent-4。模型包含有限水量、等效容器熱容量、隨浸入程度的換熱及室內損失，量杯取倒守恆。時間加速，讀值不是特定飲品實測。具體假設及判定見`docs/decisions/unit-5.2-water-bath-quiz.md`。
+
+## 2026-11-06：小測套件與水體精修（bath-2）
+
+- `bath-wrap.webp`改為低式、連續包覆盆底／下側的軟墊套；image_gen編輯原檔`exec-176fd9a0-fc0d-49bd-b939-042fcb1266d4.png`（2172×724），匯出1200×400、142944 bytes。取消前面矩形挖空，前後弧形遮擋配合玻璃盆與瓶子。
+- 新增`bath-bottle-sleeved.webp`：同一密封瓶穿上合身針織套，image_gen原檔`exec-aabd0e96-9499-451a-8340-723a8a8b657c.png`，匯出320×800、56068 bytes；取代瓶身整圖，避免空筒與原瓶重疊。`bath-sleeve.webp`只作器材縮圖。
+- 只作標準縮圖／WebP編碼；生成原檔保留於`/workspace/generated_images/`，不是實拍。原生SVG呈現盆內曲面水體、前層玻璃與淡液面，移除懸空褐色圈。
+- 量杯點擊僅拿空杯；移到水面／明確取水才減50mL，杯內數量及倒回按鈕可見。模型依較低外套改40%包覆參數，其他守恆關係保留。詳見最新決策與visuals review。
