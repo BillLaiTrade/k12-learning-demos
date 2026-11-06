@@ -1,5 +1,6 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import { createLaserBench } from './laser-bench.js';
+import { directionArrow } from './laser-direction.js?v=20261106';
 import { reciprocalPath } from './planar-reflection.mjs';
 
 const section = document.querySelector('#card-03');
@@ -22,29 +23,6 @@ const vec = (a, b, t) => a.map((v, i) => v + t * (b[i] - v));
 const colors = { a: '#ed2924', b: '#205df5', off: '#435058' };
 let sourceB, bodyB, lensB, stemB, footB, pivotB, blue, arrows, hitDot;
 
-// Keep the compact silhouette; inset its color to leave a fine black edge.
-function directionArrow(color) {
-  const points = [[0, 0.36], [-0.22, -0.23], [0, -0.10], [0.22, -0.23]].map(p => new THREE.Vector2(...p));
-  const width = 0.018;
-  const inset = points.map((point, index) => {
-    const incoming = point.clone().sub(points[(index + points.length - 1) % points.length]).normalize();
-    const outgoing = points[(index + 1) % points.length].clone().sub(point).normalize();
-    const a = new THREE.Vector2(-incoming.y, incoming.x), b = new THREE.Vector2(-outgoing.y, outgoing.x);
-    return point.clone().addScaledVector(a.clone().add(b), width / (1 + a.dot(b)));
-  });
-  const arrow = new THREE.Group();
-  [[points, '#202622'], [inset, color]].forEach(([vertices, fill], index) => {
-    const geometry = new THREE.ShapeGeometry(new THREE.Shape(vertices));
-    geometry.rotateX(Math.PI / 2);
-    // Beam tubes render in the transparent pass. Keep both arrow layers in
-    // that pass too, so their higher renderOrder closes the tip over the beam.
-    const layer = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
-      color: fill, side: THREE.DoubleSide, transparent: true, opacity: 1, depthTest: false, depthWrite: false
-    }));
-    layer.renderOrder = 15 + index; layer.frustumCulled = false; arrow.add(layer);
-  });
-  return arrow;
-}
 
 if (bench) {
   const { scene, emitterBody, emitterStem, emitterFoot, pivot } = bench;
@@ -167,7 +145,6 @@ function refresh() { updateUI(); reframe(); draw(); }
 function toggle(key) { lights[key] = !lights[key]; started = true; refresh(); }
 function setAngle(value) { degrees = clamp(value); started = true; model = reciprocalPath(degrees); refresh(); }
 for (const key of ['a', 'b']) section.querySelector(`#reverse-toggle-${key}`).addEventListener('click', () => toggle(key));
-section.querySelector('#reverse-reset').addEventListener('click', () => { lights = { a: false, b: false }; started = true; refresh(); });
 prior.addEventListener('laser-angle-change', event => { if (!started) { degrees = clamp(event.detail.degrees); model = reciprocalPath(degrees); refresh(); } });
 const fallback = section.querySelector('#reverse-fallback-svg');
 for (const name of ['click', 'keydown']) fallback.addEventListener(name, event => {

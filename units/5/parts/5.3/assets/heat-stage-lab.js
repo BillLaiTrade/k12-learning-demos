@@ -12,10 +12,24 @@ const sampleAt=heat=>heatStageObservationAt(secondsForWaterHeat(heat),target);
 const exampleMode=()=>elapsed===0&&!playing;
 
 function cancel(){playing=false;cancelAnimationFrame(frame);frame=0;}
+function analysis(data,example){
+  get('heat-stage-analysis-mode').textContent=example?'推算示例・非本次觀察':'本次觀察・沿途前三筆';
+  const body=get('heat-stage-analysis-data');body.replaceChildren();
+  for(let i=0;i<3;i++){
+    const r=data[i],row=document.createElement('tr'),heat=document.createElement('th'),rise=document.createElement('td');
+    heat.scope='row';heat.textContent=r?number(r.waterCalories)+' cal':'待記錄';rise.textContent=r?r.rise.toFixed(1)+'°C':'—';
+    row.append(heat,rise);body.append(row);
+  }
+}
 function graph(){
   const state=observation(),example=exampleMode(),width=Math.max(220,Math.round(svg.getBoundingClientRect().width)||400);
-  if(!geometry||geometry.width!==width||geometry.target!==target){
-    const height=Math.max(270,Math.min(340,Math.round(width*.8))),raw=target/5,power=10**Math.floor(Math.log10(raw));
+  const photoBox=root.querySelector('.calorie-photo').getBoundingClientRect(),plotBox=svg.parentElement.getBoundingClientRect();
+  const headingHeight=root.querySelector('.heat-stage-plot-heading').getBoundingClientRect().height;
+  // 並排時讓整個圖表與器材照片等高；堆疊時維持獨立、可讀的圖表高度。
+  const height=plotBox.left>=photoBox.right-1?Math.max(240,Math.round(photoBox.height-headingHeight)):
+    Math.max(270,Math.min(340,Math.round(width*.8)));
+  if(!geometry||geometry.width!==width||geometry.height!==height||geometry.target!==target){
+    const raw=target/5,power=10**Math.floor(Math.log10(raw));
     const ratio=raw/power,step=power*(ratio<=1?1:ratio<=2?2:ratio<=5?5:10),maximum=Math.ceil(target/step)*step;
     geometry={width,height,target,maximum,left:42,right:width-18,top:35,bottom:height-46};
     const {left,right,top,bottom}=geometry,x=q=>left+q/maximum*(right-left),y=r=>bottom-r/(maximum/100)*(bottom-top);
@@ -60,6 +74,7 @@ function render(){
   if(key!==rowsKey){
     rowsKey=key;const body=get('heat-stage-records');body.replaceChildren();
     for(const r of data){const row=document.createElement('tr');[number(r.waterCalories)+' cal',r.temperature.toFixed(1)+'°C',r.rise.toFixed(1)+'°C'].forEach((value,i)=>{const cell=document.createElement(i?'td':'th');if(!i)cell.scope='row';cell.textContent=value;row.append(cell);});body.append(row);}
+    analysis(data,example);
   }
   get('heat-stage-record-label').textContent=example?'查看推算示例的逐點數據':`查看沿途觀察紀錄（${records.length}筆）`;
   graph();bench.draw({elapsed,playing,ready,speed:STAGE_ANIMATION_SPEED});

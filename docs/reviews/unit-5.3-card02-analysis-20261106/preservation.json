@@ -1,0 +1,13 @@
+{
+  "baseline": "6071a7f192dbf95287a20cc7dfe8b0d8c0d8ff25",
+  "checks": {
+    "card01Identical": true,
+    "card03OnwardsIdentical": true,
+    "shareMetadataIdentical": true,
+    "apparatusAndGraphIdentical": true,
+    "graphFunctionIdentical": true,
+    "heatingLifecycleIdentical": true,
+    "otherResourcesIdentical": true
+  },
+  "unchangedFiles": 33
+}

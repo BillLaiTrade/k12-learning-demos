@@ -19,6 +19,9 @@ test('5.3第二區：自由熱量、連續亮點、沿途記錄與常態公式',
     assert.equal(await p.locator('#heat-stage-graph').getAttribute('data-mode'),'example');assert.match(await p.locator('#heat-stage-mode').textContent(),/非本次觀察/);
     assert.equal(await p.locator('#heat-stage-points circle.is-example').count(),10);assert.equal(await p.locator('#heat-stage-live').isHidden(),true);
     assert.equal(await p.locator('#heat-stage-conclusion').isVisible(),true);assert.match(await p.locator('#heat-stage-conclusion').textContent(),/ΔT.*∝.*Q/);
+    assert.deepEqual(await p.locator('#heat-stage-analysis-data th').allTextContents(),['100 cal','200 cal','300 cal']);
+    assert.deepEqual(await p.locator('#heat-stage-analysis-data td').allTextContents(),['1.0°C','2.0°C','3.0°C']);
+    assert.match(await p.locator('#heat-stage-analysis-mode').textContent(),/非本次觀察/);
     assert.equal(await p.locator('[data-heat-stage]').count(),0);assert.equal(await root.locator('input[type=range]').count(),0);assert.equal(await root.getByRole('button',{name:'暫停',exact:true}).count(),0);
     const order=await p.evaluate(()=>document.querySelector('#heat-lab').compareDocumentPosition(document.querySelector('#heat-stage-conclusion')));assert.ok(order&4);
     await p.clock.runFor(10000);assert.equal(await root.getAttribute('data-water-calories'),'0');
@@ -27,6 +30,9 @@ test('5.3第二區：自由熱量、連續亮點、沿途記錄與常態公式',
   await t.test('一次加熱連續畫到當下，亮點非跳格，LCD／讀值／座標同源，十點後到目標停熱',async()=>{
     await p.locator('#heat-stage-heater').press('Enter');await p.clock.runFor(200);
     const a=await state(),x1=Number(await p.locator('#heat-stage-live').getAttribute('cx'));assert.ok(Number(a.waterCalories)>0&&Number(a.waterCalories)<100);assert.deepEqual(await actualPoints(),[]);
+    assert.deepEqual(await p.locator('#heat-stage-analysis-data th').allTextContents(),['待記錄','待記錄','待記錄']);
+    assert.deepEqual(await p.locator('#heat-stage-analysis-data td').allTextContents(),['—','—','—']);
+    assert.match(await p.locator('#heat-stage-analysis-mode').textContent(),/本次觀察・沿途前三筆/);
     await p.clock.runFor(120);const b=await state(),x2=Number(await p.locator('#heat-stage-live').getAttribute('cx'));assert.ok(x2>x1);assert.ok(Number(b.waterCalories)<100);assert.deepEqual(await actualPoints(),[]);
     assert.equal(await input.isDisabled(),true);assert.equal(await play.isDisabled(),true);assert.equal(await input.inputValue(),'1000');
     await p.clock.runFor(2200);const current=await state(),q=Number(current.waterCalories),rise=Number(current.rise);
@@ -48,6 +54,9 @@ test('5.3第二區：自由熱量、連續亮點、沿途記錄與常態公式',
       await play.click();assert.equal(await root.getAttribute('data-water-calories'),'0');await finish(q);
       assert.equal(Number(await root.getAttribute('data-water-calories')),q);assert.equal(await p.locator('#heat-stage-meter').textContent(),(20+q/100).toFixed(1));
       const points=await actualPoints();assert.ok(points.length>=10);assert.equal(points.at(-1),q);assert.ok(points.every(v=>v<=q+1e-7));assert.ok(Number(await p.locator('#heat-stage-graph').getAttribute('data-maximum'))>=q);
+      const analysisHeat=await p.locator('#heat-stage-analysis-data th').evaluateAll(ns=>ns.map(n=>Number(n.textContent.replaceAll(',','').replace(' cal',''))));
+      analysisHeat.forEach((value,i)=>assert.ok(Math.abs(value-points[i])<1e-7));
+      assert.deepEqual(await p.locator('#heat-stage-analysis-data td').allTextContents(),points.slice(0,3).map(v=>(v/100).toFixed(1)+'°C'));
     }
   });
 
@@ -87,8 +96,8 @@ test('5.3第二區：自由熱量、連續亮點、沿途記錄與常態公式',
   await t.test('五個實際視窗的器材／圖表／公式可讀、不裁切且操作至少44px',async()=>{
     for(const [width,height]of [[1440,900],[1366,768],[1280,720],[390,844],[320,740]]){
       const page=await browser.newPage({viewport:{width,height}});await page.goto(url,{waitUntil:'networkidle'});await page.locator('#heat-stage-record-panel summary').click();
-      const layout=await page.locator('#card-02').evaluate(n=>{const box=e=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,right:r.right,bottom:r.bottom,w:r.width,h:r.height};};return{width:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth,photo:box(n.querySelector('.calorie-photo')),heater:box(n.querySelector('.calorie-heater')),meter:box(n.querySelector('.calorie-meter-screen')),meterClipped:n.querySelector('.calorie-meter-screen').scrollWidth>n.querySelector('.calorie-meter-screen').clientWidth+1,meterFont:parseFloat(getComputedStyle(n.querySelector('.calorie-meter-screen')).fontSize),clipped:[...n.querySelectorAll('td,th,.heat-stage-readings>span')].filter(e=>e.scrollWidth>e.clientWidth+1).map(e=>e.textContent),hits:[...n.querySelectorAll('button,input')].filter(e=>e.getClientRects().length).map(box),fonts:[...n.querySelectorAll('.heat-stage-controls label,.heat-stage-readings,.heat-stage-analysis-grid>div:first-child,#heat-stage-graph text')].map(e=>parseFloat(getComputedStyle(e).fontSize))};});
-      layouts.push({width,height,...layout});assert.equal(layout.overflow,false,`${width} overflow`);assert.deepEqual(layout.clipped,[],`${width} clipped`);assert.equal(layout.meterClipped,false,`${width} LCD clipped`);assert.ok(layout.meterFont>=15);assert.ok(layout.fonts.every(f=>f>=15));layout.hits.forEach(b=>assert.ok(b.w>=44&&b.h>=44));
+      const layout=await page.locator('#card-02').evaluate(n=>{const box=e=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,right:r.right,bottom:r.bottom,w:r.width,h:r.height};};return{width:innerWidth,overflow:document.documentElement.scrollWidth>innerWidth,photo:box(n.querySelector('.calorie-photo')),plot:box(n.querySelector('.heat-stage-plot')),heater:box(n.querySelector('.calorie-heater')),meter:box(n.querySelector('.calorie-meter-screen')),meterClipped:n.querySelector('.calorie-meter-screen').scrollWidth>n.querySelector('.calorie-meter-screen').clientWidth+1,meterFont:parseFloat(getComputedStyle(n.querySelector('.calorie-meter-screen')).fontSize),clipped:[...n.querySelectorAll('td,th,.heat-stage-readings>span')].filter(e=>e.scrollWidth>e.clientWidth+1).map(e=>e.textContent),hits:[...n.querySelectorAll('button,input')].filter(e=>e.getClientRects().length).map(box),fonts:[...n.querySelectorAll('.heat-stage-controls label,.heat-stage-readings,.heat-stage-analysis-grid>div:first-child,#heat-stage-graph text')].map(e=>parseFloat(getComputedStyle(e).fontSize))};});
+      layouts.push({width,height,...layout});if(layout.plot.x>=layout.photo.right-1){assert.ok(Math.abs(layout.photo.w-layout.plot.w)<2,`${width} unequal panels`);assert.ok(Math.abs(layout.photo.y-layout.plot.y)<2,`${width} top misalignment`);assert.ok(Math.abs(layout.photo.bottom-layout.plot.bottom)<3,`${width} bottom misalignment`);}assert.equal(layout.overflow,false,`${width} overflow`);assert.deepEqual(layout.clipped,[],`${width} clipped`);assert.equal(layout.meterClipped,false,`${width} LCD clipped`);assert.ok(layout.meterFont>=15);assert.ok(layout.fonts.every(f=>f>=15));layout.hits.forEach(b=>assert.ok(b.w>=44&&b.h>=44));
       for(const b of [layout.heater,layout.meter])assert.ok(b.x>=layout.photo.x&&b.right<=layout.photo.right+1&&b.bottom<=layout.photo.bottom+1,`${width} apparatus bounds`);await page.close();
     }
     if(process.env.HEAT_STAGE_CAPTURE_DIR){await fs.mkdir(process.env.HEAT_STAGE_CAPTURE_DIR,{recursive:true});await fs.writeFile(path.join(process.env.HEAT_STAGE_CAPTURE_DIR,'layouts.json'),JSON.stringify(layouts,null,2));}assert.deepEqual(errors,[]);

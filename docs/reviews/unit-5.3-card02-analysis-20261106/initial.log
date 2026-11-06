@@ -1,0 +1,53 @@
+▶ 5.3 共通格式、導覽連動與原有活動回歸
+  ✔ 靜態 HTML 的標題、摘要、分享圖及入口一致，不依賴 JS (137.257931ms)
+  ✔ 五區導覽標題連動；小測固定名稱、共通樣式及活動說明同步 (757.982606ms)
+  ✔ 五區均為上標頭下內容；三種桌機與兩種窄版可完整閱讀 (152.186808ms)
+  ✔ 第一區 100 g 水升溫、完成後介紹卡，重新觀察同步清除結果 (2019.074425ms)
+  ✔ 第二、三區自動記錄，原材料比較與生活應用保持 (5752.584735ms)
+  ✔ 新小測可觀察、推算與重答；無載入或程式錯誤 (3044.409657ms)
+✔ 5.3 共通格式、導覽連動與原有活動回歸 (14158.512656ms)
+▶ 5.3第二區：自由熱量、連續亮點、沿途記錄與常態公式
+  ✔ 未操作能閱讀示例與下方公式，器材及本次讀值仍為初始狀態 (185.22063ms)
+  ✔ 一次加熱連續畫到當下，亮點非跳格，LCD／讀值／座標同源，十點後到目標停熱 (2256.036944ms)
+  ✖ 任意750／1500／750.5及邊界熱量從20°C重做，小數終點與座標尺度正確 (4579.422157ms)
+  ✔ 空白或超出模型範圍不啟動，有效小數恢復後不自動播放 (113.235907ms)
+  ✔ 換區／失焦／背景保留實際曲線與紀錄，不自動續播；手動接續同一過程 (5990.778037ms)
+  ✔ 圖片慢載入或失敗時禁用操作，示例與公式可讀，重試不自動啟動 (697.968122ms)
+  ✔ 減少動態效果停用攪拌與水紋，數據與移動亮點仍正常更新 (1293.76156ms)
+  ✔ 五個實際視窗的器材／圖表／公式可讀、不裁切且操作至少44px (5036.35188ms)
+✖ 5.3第二區：自由熱量、連續亮點、沿途記錄與常態公式 (22475.69978ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 14
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22920.500979
+
+✖ failing tests:
+
+test at tests/unit-5.3-heat-stage-lab.test.cjs:50:11
+✖ 任意750／1500／750.5及邊界熱量從20°C重做，小數終點與座標尺度正確 (4579.422157ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+    [
+      100,
+      200,
+  +   300
+  -   299.99999999999994
+    ]
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-heat-stage-lab.test.cjs:58:14)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-heat-stage-lab.test.cjs:50:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 100, 200, 300 ],
+    expected: [ 100, 200, 299.99999999999994 ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

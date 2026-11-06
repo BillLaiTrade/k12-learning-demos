@@ -35,7 +35,7 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
   assert.equal(await page.locator('#normal-background').evaluate(el=>el.naturalWidth),1536);
   assert.match(await lab.locator('.model-clock-note').textContent(),/依模型路程計時/);assert.match(await page.locator('.lesson-footer').textContent(),/第一、二區依模型路程與代表光速計時/);assert.equal(await page.locator('#normal-time').innerText(),'0.00');assert.equal(await page.locator('#normal-distance').innerText(),'150 萬公里');assert.match(await page.locator('#normal-route-split').innerText(),/75.*75/);assert.doesNotMatch(await lab.innerText(),/間距/);
   assert.equal(await page.locator('#s2 .normal-next').count(),0);assert.equal(await page.locator('.normal-name').count(),3);assert.equal(await page.locator('[data-medium=air] .normal-interface').count(),0);assert.equal(await page.locator('[data-medium=air] .normal-reference').count(),0);
-  assert.ok(await page.locator('.normal-steps').evaluate(el=>el.getBoundingClientRect().bottom<=document.querySelector('#normal-viewport').getBoundingClientRect().top));
+  assert.equal(await page.locator('.normal-steps').count(),0);
   if(captures)await page.locator('#s2').screenshot({path:path.join(captures,'1440-idle-collapsed.png')});
  });
  await t.test('continuous beams launch together and stay on the same axis across the interface',async()=>{
@@ -43,7 +43,6 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
   await page.clock.runFor(2600);const below=await fronts();assert.ok(below[0]>below[1]&&below[1]>below[2]&&below[2]>484);
   const geometry=await page.locator('.normal-beam line').evaluateAll(es=>es.map(e=>[e.getAttribute('x1'),e.getAttribute('x2'),e.getAttribute('y1'),e.getAttribute('y2')]));
   geometry.forEach(g=>{assert.equal(g[0],g[1]);assert.equal(g[2],'240');assert.ok(Number(g[3])>484);});
-  assert.equal(await page.locator('[data-normal-stage="2"]').getAttribute('aria-current'),'step');
  });
  await t.test('pause freezes both fronts and resume continues the saved progress',async()=>{
   await page.locator('#normal-pause').click();const stopped=await fronts(),stoppedClock=await page.locator('#normal-time').innerText();assert.equal(await lab.getAttribute('data-state'),'paused');
@@ -57,7 +56,6 @@ test('4.3 normal incidence desk and folding explanation work as approved',{timeo
   assert.equal(await lab.getAttribute('data-state'),'paused');assert.equal(await lab.getAttribute('data-pause-reason'),'comparison');
   assert.ok(Math.abs(Number(await lab.getAttribute('data-elapsed-ms'))-comparisonMs)<1e-8);
   const frozen=await fronts();assert.equal(frozen[0],728);assert.ok(Math.abs(frozen[1]-667)<1e-8);assert.ok(Math.abs(frozen[2]-(646+2/3))<1e-8);
-  assert.equal(await page.locator('[data-normal-stage="3"]').getAttribute('aria-current'),'step');
   assert.equal(await page.locator('#normal-state').innerText(),'同一瞬間・已暫停');assert.equal(await page.locator('#normal-time').innerText(),'5.00');assert.deepEqual(await page.locator('.normal-arrival-time').allTextContents(),['約 5.00 秒','—','—']);
   assert.deepEqual(await page.locator('.normal-arrival-status').allTextContents(),['先到達','尚未到達','尚未到達']);
   assert.equal(await page.locator('#normal-start').isDisabled(),true);

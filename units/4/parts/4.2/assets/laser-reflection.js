@@ -3,6 +3,7 @@ import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 const canvas = document.querySelector('#laser-reflection-scene');
 if (!canvas) throw new Error('Laser reflection scene is missing.');
 import { createLaserBench } from './laser-bench.js';
+import { directionArrow } from './laser-direction.js?v=20261106';
 import { laserPath } from './planar-reflection.mjs';
 const MIN_ANGLE = 20, MAX_ANGLE = 90;
 let angleDegrees = 30;
@@ -20,6 +21,12 @@ try {
 }
 if (bench) {
 const { scene, camera, renderer, centerPoint, reflectedRayLength, emitter, emitterBody, emitterStem, emitterFoot, pivot, incoming, reflected, setBeam, incomingSector, reflectedSector, incomingArc, outgoingArc, arc, setAngleSector, setThickArc, normalLabel, makeAngleLabel, updateAngleLabel, rayMaterial } = bench;
+
+const directionArrows = [0, 1].map(() => {
+  const arrow = directionArrow(rayMaterial.color);
+  scene.add(arrow);
+  return arrow;
+});
 
 function svgArc(radius, degrees, rightSide) {
   const radians = degrees * Math.PI / 180;
@@ -46,6 +53,11 @@ function update() {
   pivot.position.set(standPosition.x, 0.15, standPosition.z);
   setBeam(incoming, source, hit);
   setBeam(reflected, hit, reflectedEnd);
+  [[source, hit], [hit, reflectedEnd]].forEach(([from, to], index) => {
+    const arrow = directionArrows[index];
+    arrow.position.copy(from).lerp(to, index === 0 ? 0.49 : 0.35);
+    arrow.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), to.clone().sub(from).normalize());
+  });
   setAngleSector(incomingSector, arc(1.8, angle, -1));
   setAngleSector(reflectedSector, arc(1.8, angle, 1));
   setThickArc(incomingArc, arc(1.8, angle, -1));
@@ -89,7 +101,6 @@ function update() {
   document.querySelector('#lab-angle-out').textContent = `${deg}°`;
   canvas.setAttribute('aria-valuenow', String(deg));
   canvas.setAttribute('aria-valuetext', `入射角 ${deg} 度，反射角 ${deg} 度`);
-  document.querySelector('#angle-observation').textContent = `發射器轉到 ${deg}°；觀察反射光方向如何改變，入射角與反射角始終相等。`;
   renderer.render(scene, camera);
   const bodyCenter = source.clone().addScaledVector(sourceDirection, -1.2).project(camera);
   canvas.dataset.emitterScreen = JSON.stringify([(bodyCenter.x + 1) * canvas.clientWidth / 2, (1 - bodyCenter.y) * canvas.clientHeight / 2]);

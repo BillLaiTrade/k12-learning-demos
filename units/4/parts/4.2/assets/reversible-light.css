@@ -2,7 +2,7 @@
 .reverse-stage canvas[hidden],.reverse-device-label[hidden]{display:none}
 .reverse-device-label{position:absolute;z-index:2;display:grid;justify-items:center;gap:4px;transform:translate(-50%,-100%);pointer-events:none;white-space:nowrap;text-align:center;font-size:.78rem;line-height:1.4}.reverse-device-label strong{padding:3px 7px;border:1px solid #91a6b0;border-radius:5px;background:#fffdf8f0;color:#304d62;font-weight:800;box-shadow:0 2px 4px #0002}.reverse-device-label small{padding:2px 7px;border-radius:5px;background:#f9faf8ed;color:#405851;font-weight:750;font-size:.72rem}.reverse-device-label small[data-active=true]{color:#1457b9;background:#e2efff}.reverse-device-label.reverse-m-label{transform:translate(-50%,0);font-size:.74rem}
 .reverse-overlap{position:absolute;right:13px;bottom:14px;padding:7px 10px;border-radius:10px;background:#f0ffe7f0;color:#176b53;font-size:.85rem;font-weight:800;pointer-events:none}.reverse-overlap[hidden]{display:none}
-.reverse-lab-footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:9px;padding:12px 14px;background:#fffdf8;color:#456154;font-size:.8rem;font-weight:750}.reverse-lab-footer button{padding:7px 11px;min-height:42px;border:1px solid #d2d9cf;border-radius:10px;background:#fff;color:#405851}
+.reverse-lab-footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:9px;padding:12px 14px;background:#fffdf8;color:#456154;font-size:.8rem;font-weight:750}
 .reverse-angle-readout{display:inline-flex;align-items:baseline;gap:4px;white-space:nowrap;color:#61716a}.reverse-angle-readout .reverse-incident-angle{color:#1459af}.reverse-angle-readout .reverse-reflected-angle{color:#24783a}.reverse-angle-readout output{color:#304b40;font-weight:850}
 .reverse-paths{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}.reverse-paths>div{text-align:center;border:1px solid #dce2d8;border-radius:12px;padding:10px 6px;background:#f7f8f4}.reverse-paths small,.reverse-paths strong{display:block}.reverse-paths small{font-size:.8rem;color:#536c5f}.reverse-paths strong{font-size:1.08rem;color:#273c37}
 .reverse-fact{border-left:4px solid #8cae91;border-radius:0 12px 12px 0!important}
@@ -26,7 +26,6 @@
 #card-03 .reverse-switch{min-height:44px;padding:7px 8px}
 #card-03 .reverse-stage canvas{height:var(--reverse-stage-height,clamp(220px,calc(100svh - 420px),400px))}
 #card-03 .reverse-lab-footer{gap:6px 12px;padding:5px 10px}
-#card-03 .reverse-lab-footer button{min-height:40px;padding:5px 9px}
 #card-03 .reverse-paths{margin:0;gap:8px}
 #card-03 .reverse-paths>div{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 8px;padding:5px 8px;border-radius:9px}
 #card-03 .reverse-paths small{font-size:.75rem}
