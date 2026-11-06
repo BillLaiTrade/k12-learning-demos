@@ -1,7 +1,7 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import { createLaserBench } from './laser-bench.js';
+import { createLaserBench } from './laser-bench.js?v=larger-protractor-20261106';
 import { directionArrow } from './laser-direction.js?v=20261106';
-import { createAngleCallouts } from './angle-callouts.js?v=side-leaders-20261106';
+import { createAngleCallouts } from './angle-callouts.js?v=near-arc-20261106';
 import { reciprocalPath } from './planar-reflection.mjs';
 
 const section = document.querySelector('#card-03');
@@ -103,7 +103,7 @@ function draw() {
     b.setThickArc(b.outgoingArc, b.arc(1.8, angle, 1));
     drawnAngle = degrees;
   }
-  b.normalLabel.position.set(b.centerPoint.x - 5.5, 1.5, 0); b.updateAngleLabel(b.normalLabel, '法線');
+  b.normalLabel.position.set(b.centerPoint.x - 6.7, 1.5, 0); b.updateAngleLabel(b.normalLabel, '法線');
   b.renderer.render(b.scene, b.camera);
   for (const [key, p] of [['a', f.source], ['b', f.end]]) {
     const center = V(vec(f.hit, p, 1.17)).project(b.camera);
@@ -206,9 +206,9 @@ if (bench) {
     const w = canvas.clientWidth, h = canvas.clientHeight; if (!w || !h) return;
     bench.renderer.setSize(w, h, false); bench.camera.aspect = w / h; bench.camera.fov = 38;
     const theta = THREE.MathUtils.degToRad(degrees);
-    const minX = bench.centerPoint.x - Math.max(5, 7 * 1.33 * Math.cos(theta));
+    const minX = bench.centerPoint.x - Math.max(bench.protractorRadius + .7, 7 * 1.33 * Math.cos(theta));
     const maxX = bench.centerPoint.x + .9;
-    const halfWidth = Math.max(5.3, 7 * 1.33 * Math.sin(theta));
+    const halfWidth = Math.max(bench.protractorRadius + .3, 7 * 1.33 * Math.sin(theta));
     // Fit the actual apparatus, leaving only badge clearance above and below.
     const height = Math.max((maxX - minX) * h / Math.max(100, h - 80), 2 * halfWidth * h / Math.max(100, w - 32));
     const focusX = (minX + maxX) / 2 - 20 * height / h;

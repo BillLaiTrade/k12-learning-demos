@@ -2,9 +2,9 @@ import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 
 const canvas = document.querySelector('#laser-reflection-scene');
 if (!canvas) throw new Error('Laser reflection scene is missing.');
-import { createLaserBench } from './laser-bench.js';
+import { createLaserBench } from './laser-bench.js?v=larger-protractor-20261106';
 import { directionArrow } from './laser-direction.js?v=20261106';
-import { createAngleCallouts } from './angle-callouts.js?v=side-leaders-20261106';
+import { createAngleCallouts } from './angle-callouts.js?v=near-arc-20261106';
 import { laserPath } from './planar-reflection.mjs';
 const MIN_ANGLE = 20, MAX_ANGLE = 90;
 let angleDegrees = 30;
@@ -79,7 +79,7 @@ function update() {
   setAngleSector(reflectedSector, arc(1.8, angle, 1));
   setThickArc(incomingArc, arc(1.8, angle, -1));
   setThickArc(outgoingArc, arc(1.8, angle, 1));
-  normalLabel.position.set(centerPoint.x - 5.5, 1.5, centerPoint.z);
+  normalLabel.position.set(centerPoint.x - 6.7, 1.5, centerPoint.z);
   updateAngleLabel(normalLabel, '法線');
 
   const diagramLength = 223, dx = diagramLength * Math.sin(angle), dy = diagramLength * Math.cos(angle);
@@ -137,7 +137,7 @@ function resize() {
   renderer.setSize(width, height, false);
   camera.aspect = width / height;
   camera.fov = width < 200 ? 40 : width < 500 ? 34 : 38;
-  const compact = width < 500, focusX = compact ? -2.7 : -2.0, focusZ = compact ? -0.8 : 0.3;
+  const compact = width < 500, focusX = compact ? -2.7 : -2.0, focusZ = 0;
   camera.up.set(-1, 0, 0); camera.position.set(focusX, compact ? 20 : 18.5, focusZ); camera.lookAt(focusX, 1.4, focusZ);
   camera.updateProjectionMatrix();
   update();
