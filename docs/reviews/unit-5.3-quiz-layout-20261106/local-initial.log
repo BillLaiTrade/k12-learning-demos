@@ -1,0 +1,56 @@
+▶ 5.3 共通格式、導覽連動與原有活動回歸
+  ✔ 靜態 HTML 的標題、摘要、分享圖及入口一致，不依賴 JS (106.650994ms)
+  ✔ 五區導覽標題連動；小測固定名稱、共通樣式及活動說明同步 (654.093212ms)
+  ✔ 五區均為上標頭下內容；三種桌機與兩種窄版可完整閱讀 (108.411431ms)
+  ✔ 第一區 100 g 水升溫、完成後介紹卡，重新觀察同步清除結果 (1725.045827ms)
+  ✔ 第二、三區自動記錄，原材料比較與生活應用保持 (5042.642834ms)
+  ✔ 新小測可觀察、推算與重答；無載入或程式錯誤 (3040.510768ms)
+✔ 5.3 共通格式、導覽連動與原有活動回歸 (12231.511109ms)
+✔ 首題符合核可圖：水25°C、未知固體45°C，各100g吸收500cal (1.468688ms)
+✔ 16組條件均同質量、同初溫、同吸熱，能量守恆、讀值可精確推算且最高70°C (1.785298ms)
+✔ 判定分辨未填／無效／錯誤，拒絕把末溫當溫升；保留合理小數容差 (0.303981ms)
+✔ 拒絕無效模型條件與越界進度 (0.754189ms)
+▶ B方案小測：先觀察、推算未知比熱、保留作答與換題
+  ✔ 初始只有條件與20°C讀值，無自動觀察、預填答案或未知比熱標示 (151.099891ms)
+  ✔ 觀察同源推進樣品吸熱與溫度，到點25／45°C才開放作答，能讀到資料 (1872.403178ms)
+  ✔ 未填、無效值與錯答給方向提示，不代填；修改清掉舊判定，再答可正確 (328.339401ms)
+  ✔ 重觀察保留作答但收起判定，重新作答只清作答與判定，保留觀察 (1900.359594ms)
+  ✔ 換一組清空、不自動觀察；16組輪換不重複，甲乙配置變動後判定仍正確 (30588.98405ms)
+  ✔ 換區、失焦與背景會停止，不自動續播；重觀察由初溫開始 (2654.463127ms)
+  ✔ 器材慢載入／失敗時禁止觀察和作答；重試不自動播放，其他場景可用 (1606.069598ms)
+  ✔ 減少動態效果時攪拌子不運動，觀察與作答流程保持 (2585.672526ms)
+  ✖ 五種尺寸不溢出、輸入及按鈕至少44px，LCD與主要文字可讀，窄版可平移 (125.626495ms)
+✖ B方案小測：先觀察、推算未知比熱、保留作答與換題 (43547.509541ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 19
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43852.058159
+
+✖ failing tests:
+
+test at tests/unit-5.3-unknown-quiz.test.cjs:136:11
+✖ 五種尺寸不溢出、輸入及按鈕至少44px，LCD與主要文字可讀，窄版可平移 (125.626495ms)
+  AssertionError [ERR_ASSERTION]: 390 LCD clipped
+  + actual - expected
+  
+  + [
+  +   '乙的比熱約為 cal／(g·°C)'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-unknown-quiz.test.cjs:140:109)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-unknown-quiz.test.cjs:136:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ '乙的比熱約為 cal／(g·°C)' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

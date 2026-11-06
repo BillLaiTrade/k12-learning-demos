@@ -6,12 +6,16 @@
 #unknown-quiz-lab button:disabled,#unknown-new:disabled{opacity:.5;cursor:default}
 #unknown-quiz-lab button:focus-visible,#unknown-new:focus-visible{outline:3px solid #b88b3b;outline-offset:3px}
 #unknown-new{white-space:nowrap;margin-top:3px}
-.unknown-conditions{padding:8px 12px;background:#eaf0e1;border-radius:9px;font-size:1rem;font-weight:650;margin:14px 0}
+.unknown-conditions{display:flex;align-items:center;flex-wrap:wrap;gap:4px 18px;padding:9px 14px;border-bottom:1px solid #dedccf;background:#faf9f1;font-size:1rem}
+.unknown-conditions strong{color:#415d46}
 .unknown-bench{margin:0;border:1px solid #d9c6a8;border-radius:13px;background:#f5efdf;overflow:hidden}
 .unknown-scene-pan{overflow-x:auto;overflow-y:hidden}
 .unknown-photo{position:relative;min-width:580px}
 #unknown-apparatus{display:block;width:100%;height:auto;aspect-ratio:1672/720}
-.unknown-sample-label{position:absolute;top:21%;transform:translateX(-50%);white-space:nowrap;padding:4px 9px;background:#fff9eaf5;border-radius:7px;font-size:1rem;font-weight:650;color:#35583e;max-width:46%}
+.unknown-sample-label{position:absolute;top:21%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;padding:4px 9px;background:#fff9eaf5;border-radius:7px;font-size:1rem;font-weight:650;color:#35583e;max-width:46%}
+.unknown-sample-badge{display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 4px;border-radius:6px;font-size:1rem;font-weight:700;line-height:1;vertical-align:middle}
+.unknown-sample-badge[data-letter=a]{background:#e0ece2;color:#305c40}
+.unknown-sample-badge[data-letter=b]{background:#fae4cd;color:#86501f}
 .unknown-label-left{left:25.8%}.unknown-label-right{left:72.8%}
 .unknown-meter{position:absolute;top:64.9%;left:39.5%;width:9.4%;height:11.4%;display:flex;align-items:center;justify-content:center;white-space:nowrap;font:700 20px/1 ui-monospace,monospace;letter-spacing:-.07em;color:#203522}
 .unknown-meter-right{left:85.8%}.unknown-meter small{font:inherit;font-size:.5em}
@@ -19,28 +23,38 @@
 .unknown-loading{position:absolute;inset:0;display:grid;align-content:center;text-align:center;background:#f3f1e8ef;padding:16px;z-index:2}
 .unknown-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:12px 0}
 .unknown-actions>span{flex:1 1 220px;font-size:1rem;color:#566c55}
-.unknown-answer>fieldset{border:0;padding:0;margin:0;min-width:0}
-.unknown-answer-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
-.unknown-step{min-width:0;padding:14px;border:1px solid #ccd9c1;background:#f4f7ee;border-radius:12px}
-.unknown-step h3{font-size:1.05rem;margin:0 0 14px;line-height:1.5}
-.unknown-step h3>span{display:inline-grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#4a7849;color:white;margin-right:3px}
+.unknown-reasoning{padding:16px 18px 0;border:1px solid #ccd9c1;border-radius:13px;background:#f5f8f0}
+.unknown-reasoning-head{display:flex;align-items:center;flex-wrap:wrap;gap:10px 16px;padding-bottom:14px;border-bottom:1px solid #dbe4d4}
+.unknown-reasoning-head h3{font-size:1.125rem;margin:0;line-height:1.5}
+.unknown-reasoning>fieldset{border:0;padding:0;margin:0;min-width:0}
+.unknown-answer-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;margin-top:16px}
+.unknown-step{min-width:0;margin:0;padding:0 18px 0 0;border:0;background:transparent}
+.unknown-step:nth-child(2){padding:0 0 0 18px;border-left:1px solid #dbe4d4}
+.unknown-step h4{font-size:1rem;margin:0 0 12px;line-height:1.6}
+.unknown-step-number{display:inline-grid;place-items:center;width:27px;height:27px;border-radius:50%;background:#4a7849;color:white;margin-right:5px;font-size:1rem;font-weight:700;vertical-align:middle}
 .unknown-step label{font-size:1rem;line-height:1.7}
 .unknown-rise-inputs{display:flex;flex-wrap:wrap;gap:10px 16px}
 .unknown-rise-inputs label{flex:1 1 120px;display:grid;gap:5px}
 .unknown-rise-inputs label>span{white-space:nowrap}
+.unknown-specific-input{display:grid;grid-template-columns:minmax(0,1fr);gap:5px}
+.unknown-specific-input>span{min-width:0}
+.unknown-specific-input>span:last-child{display:flex;align-items:center;flex-wrap:wrap;gap:5px}
 .unknown-step input[type=number]{width:86px;max-width:100%;min-height:44px;font:inherit;padding:6px 8px;border:1px solid #b6c5ae;border-radius:7px;background:#fff;color:#294c35;font-variant-numeric:tabular-nums}
 #unknown-specific-heat{width:100px}
 .unknown-step input:disabled{background:#eef0e9}
 .unknown-unit{white-space:nowrap}
 .unknown-formula,.unknown-assumptions{padding:8px 10px;background:#e7efd9;border:1px solid #d6e1c6;border-radius:8px;font-size:1rem;margin-top:10px}
+.unknown-formula{margin:0 0 0 auto;padding:5px 10px;background:#fffdf7}
+.unknown-formula[open]{flex-basis:100%;margin:0}
 .unknown-formula summary,.unknown-assumptions summary{cursor:pointer;color:#315f3b;font-weight:600}
 .unknown-formula p,.unknown-assumptions p{margin:9px 0 0}
-.unknown-comparison{margin:14px 0 0!important;padding:12px 14px!important;border:1px solid #e3c99e!important;border-radius:10px;background:#fff7e8;min-width:0}
-.unknown-comparison legend{float:left;width:100%;padding:0;margin:0 0 9px;font-weight:600;font-size:1rem}
+.unknown-comparison{grid-column:1/-1;margin-top:16px;padding:16px 0 0;border-top:1px solid #dbe4d4;min-width:0}
+.unknown-comparison legend{float:left;width:100%;padding:0;margin:0 0 12px;font-weight:700;font-size:1rem;line-height:1.6}
 .unknown-choice-row{display:flex;flex-wrap:wrap;gap:8px;clear:both}
-.unknown-choice-row label{display:flex;align-items:center;gap:5px;min-height:44px;padding:7px 13px;border:1px solid #d6c49f;background:#fffdf7;border-radius:8px;font-size:1rem;cursor:pointer}
+.unknown-choice-row label{display:flex;align-items:center;gap:5px;min-height:44px;padding:7px 13px;border:1px solid #c4d2ba;background:#fffdf7;border-radius:8px;font-size:1rem;white-space:nowrap;cursor:pointer}
 .unknown-choice-row label:has(input:checked){border-color:#447d48;background:#eaf3df}
 .unknown-choice-row input{accent-color:#346d3d;width:18px;height:18px;margin:0}
+.unknown-answer-actions{justify-content:flex-end;border-top:1px solid #dbe4d4;padding:14px 0;margin:16px 0 0}
 #unknown-quiz-lab .unknown-note{font-size:.875rem;color:#60715e;line-height:1.65;margin:9px 0}
 .unknown-feedback{font-size:1rem;margin:9px 0 0;color:#94532d}
 .unknown-feedback[data-correct=true]{color:#24683d}
@@ -48,5 +62,6 @@
 #unknown-quiz-lab #quiz-result{font-size:1rem;border:1px solid #ccddc2;background:#eef5e7}
 #unknown-quiz-lab #quiz-result[data-correct=false]{background:#fff4e3;border-color:#ddc69e;color:#845128}
 .unknown-pan-hint{display:none}
-@media(max-width:1100px){.unknown-meter{font-size:18px}.unknown-answer-grid{grid-template-columns:minmax(0,1fr)}.unknown-rise-inputs label{display:block;flex:1 1 180px}}
-@media(max-width:600px){.unknown-meter{font-size:16px}#unit-quiz.unknown-quiz .quiz-head{flex-wrap:wrap}#unit-quiz.unknown-quiz .quiz-head>div{min-width:150px}#unknown-new{margin-left:54px}.unknown-photo{min-width:580px}.unknown-pan-hint{display:block;font-size:.875rem;color:#60715e;margin:6px 0}.unknown-energy-row{font-size:.9rem;padding:7px 5px}.unknown-step{padding:12px}.unknown-rise-inputs label{display:grid;flex-basis:100%}.unknown-comparison{padding:10px!important}.unknown-choice-row label{flex:1 1 90px}.unknown-actions>span{flex-basis:100%}}
+@media(max-width:1100px){.unknown-meter{font-size:18px}}
+@media(max-width:900px){.unknown-answer-grid{grid-template-columns:minmax(0,1fr);gap:16px}.unknown-step{padding:0}.unknown-step:nth-child(2){padding:16px 0 0;border-left:0;border-top:1px solid #dbe4d4}.unknown-comparison{margin-top:0}}
+@media(max-width:600px){.unknown-meter{font-size:16px}#unit-quiz.unknown-quiz .quiz-head{flex-wrap:wrap}#unit-quiz.unknown-quiz .quiz-head>div{min-width:150px}#unknown-new{margin-left:54px}.unknown-photo{min-width:580px}.unknown-pan-hint{display:block;font-size:.875rem;color:#60715e;margin:6px 0}.unknown-conditions{gap:4px 12px;padding:8px 10px}.unknown-conditions strong{flex-basis:100%}.unknown-energy-row{font-size:.9rem;padding:7px 5px}.unknown-reasoning{padding:14px 12px 0}.unknown-rise-inputs label{flex-basis:100%}.unknown-choice-row label{flex:1 1 90px}.unknown-actions>span{flex-basis:100%}}

@@ -24,17 +24,20 @@ function render(){
   root.dataset.observed=String(complete);root.dataset.playing=String(active);
   play.disabled=!ready||active;newButton.disabled=!ready;
   play.textContent=active?'觀察中…':progress?'重新觀察':'開始觀察';
+  play.classList.toggle('action',!complete);play.classList.toggle('secondary',complete);
   fields.disabled=!ready||!complete||active;
   const water=question.waterLetter,unknown=question.unknownLetter;
   for(const [side,letter,kind]of [['left',water,'水'],['right',unknown,'未知固體']]){
-    get('unknown-label-'+side).textContent=`樣品${name(letter)}｜${kind}`;
+    const badge=get('unknown-label-'+side+'-letter');badge.textContent=name(letter);badge.dataset.letter=letter;
+    get('unknown-label-'+side+'-kind').textContent=kind;
     get('unknown-meter-'+side).textContent=state.samples[letter].temperature.toFixed(1);
     get('unknown-meter-'+side+'-name').textContent=`樣品${name(letter)}目前溫度`;
     get('unknown-meter-'+side+'-screen').hidden=!ready;
     get('unknown-energy-'+side+'-name').textContent=name(letter);
+    get('unknown-energy-'+side+'-name').dataset.letter=letter;
     get('unknown-energy-'+side).textContent=Math.floor(state.heat+1e-8).toLocaleString('zh-TW');
   }
-  get('unknown-specific-label').textContent=`${name(unknown)}的比熱約為`;
+  get('unknown-specific-badge').textContent=name(unknown);get('unknown-specific-badge').dataset.letter=unknown;
   get('unknown-target-heat').textContent=question.heat.toLocaleString('zh-TW');
   get('unknown-readings').textContent=complete?`觀察完成：甲${state.samples.a.temperature.toFixed(1)}°C、乙${state.samples.b.temperature.toFixed(1)}°C；各100g，初溫20°C，各吸收${question.heat}cal。`:'';
   motion.style.visibility=ready?'visible':'hidden';
