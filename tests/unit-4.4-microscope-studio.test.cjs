@@ -1,5 +1,5 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),{openBench}=require('./helpers/convex-bench-fixture.cjs');
-test('顯微鏡立體剖面、精簡標示與備用畫面',{timeout:120000},async t=>{
+test('顯微鏡立體剖面、精簡標示與備用畫面',{timeout:180000},async t=>{
  const f=await openBench(t),{p}=f,r=p.locator('#microscope-lab');
  await p.waitForFunction(()=>document.querySelector('#microscope-lab').dataset.microRender==='3d');
  await t.test('主圖僅保留三個定位，預設顯示輔助光路與圖例',async()=>{
@@ -36,10 +36,10 @@ test('顯微鏡立體剖面、精簡標示與備用畫面',{timeout:120000},asyn
  });
  await t.test('點鏡頭與近看入口同步，返回全貌保留光路與物點',async()=>{
   await r.locator('[data-micro-rays]').click();await r.locator('.micro-label[data-micro-lens=objective]').click();assert.equal(await r.getAttribute('data-view'),'objective');assert.equal(await r.getAttribute('data-rays'),'false');assert.match(await r.locator('[data-micro-scope]').innerText(),/目前近看：物鏡成像/);assert.match(await r.locator('[data-micro-badge]').innerText(),/實像/);
-  await p.waitForFunction(()=>document.querySelector('[data-micro-map-image]').naturalWidth>0);const overview=await r.locator('[data-micro-map-image]').getAttribute('src');
+  assert.equal(await r.locator('[data-micro-map],.micro-map').count(),0);
   await r.locator('[data-set=micro][data-value=eyepiece]').click();assert.equal(await r.getAttribute('data-view'),'eyepiece');assert.equal(await r.getAttribute('data-rays'),'false');assert.match(await r.locator('[data-micro-badge]').innerText(),/虛像/);
   await r.locator('[data-micro-rays]').click();await r.locator('[data-micro-point=bottom]').click();await r.locator('[data-micro-overview]').click();assert.equal(await r.getAttribute('data-view'),'whole');assert.deepEqual(await r.locator('[data-set=micro]').evaluateAll(es=>es.map(e=>e.getAttribute('aria-pressed'))),['false','false']);
-  await r.locator('.micro-pick[data-micro-lens=objective]').click();assert.equal(await r.getAttribute('data-view'),'objective');assert.equal(await r.getAttribute('data-point'),'bottom');assert.equal(await r.getAttribute('data-rays'),'true');assert.equal(await r.locator('[data-micro-ray]').count(),2);assert.equal(await r.locator('[data-micro-map-image]').getAttribute('src'),overview);
+  await r.locator('.micro-pick[data-micro-lens=objective]').click();assert.equal(await r.getAttribute('data-view'),'objective');assert.equal(await r.getAttribute('data-point'),'bottom');assert.equal(await r.getAttribute('data-rays'),'true');assert.equal(await r.locator('[data-micro-ray]').count(),2);
   await r.locator('[data-micro-overview]').click();await r.locator('.micro-label[data-micro-lens=eyepiece]').focus();await p.keyboard.press('Enter');assert.equal(await r.getAttribute('data-view'),'eyepiece');assert.equal(await p.evaluate(()=>document.activeElement?.dataset.microLens),'eyepiece');await r.locator('[data-micro-reset]').click();
  });
  await t.test('下方說明卡可點選與鍵盤切換，帶回操作視窗並保留光路偏好',async()=>{
@@ -49,6 +49,7 @@ test('顯微鏡立體剖面、精簡標示與備用畫面',{timeout:120000},asyn
   assert.equal(await r.locator('.micro-workspace > .micro-concepts').count(),1);
   assert.deepEqual(await r.locator('[data-micro-frame][data-active=true]').evaluateAll(es=>es.map(e=>e.dataset.microFrame)),['eyepiece']);
   assert.deepEqual(await r.locator('[data-micro-node][data-active=true]').evaluateAll(es=>es.map(e=>e.dataset.microNode)),['intermediate','eyepiece','eye']);
+  await p.waitForFunction(()=>{const e=document.querySelector('[data-micro-frame=eyepiece]');return e.dataset.active==='true'&&getComputedStyle(e).backgroundColor!=='rgba(0, 0, 0, 0)'});
   assert.notEqual(await r.locator('[data-micro-frame=eyepiece]').evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)');assert.equal(await r.locator('[data-set=micro][data-value=eyepiece]').getAttribute('aria-pressed'),'true');
   assert.equal(await p.evaluate(()=>document.activeElement?.dataset.value),'eyepiece');const scroll=await r.locator('.micro-workspace').evaluate(e=>({top:e.getBoundingClientRect().top,expected:parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)+parseFloat(getComputedStyle(e).scrollMarginTop)}));assert.ok(Math.abs(scroll.top-scroll.expected)<2,JSON.stringify(scroll));
   await card('objective').focus();await p.keyboard.press('Space');await f.frame();assert.equal(await r.getAttribute('data-view'),'objective');assert.equal(await card('objective').getAttribute('aria-pressed'),'true');assert.equal(await card('eyepiece').getAttribute('aria-pressed'),'false');
@@ -57,10 +58,30 @@ test('顯微鏡立體剖面、精簡標示與備用畫面',{timeout:120000},asyn
   assert.equal(await r.getAttribute('data-rays'),'false');await r.locator('[data-micro-reset]').click();
   assert.equal(await r.locator('[data-micro-frame][data-active=true],[data-micro-node][data-active=true]').count(),0);
  });
+ await t.test('上下入口同步，重複選取不退出；中間像與空白返回全貌',async()=>{
+  await r.locator('[data-micro-reset]').click();
+  await r.locator('[data-micro-point=bottom]').click();await r.locator('[data-micro-rays]').click();
+  for(const [node,scope] of [['original','objective'],['objective','objective'],['eyepiece','eyepiece'],['eye','eyepiece']]){
+   const b=r.locator(`[data-micro-node=${node}]`);assert.equal(await b.evaluate(e=>e.tagName),'BUTTON');await b.click();assert.equal(await r.getAttribute('data-view'),scope);assert.equal(await r.locator(`[data-micro-card=${scope}]`).getAttribute('aria-pressed'),'true');await b.click();assert.equal(await r.getAttribute('data-view'),scope);
+   await r.locator(`[data-micro-card=${scope}]`).click();assert.equal(await r.getAttribute('data-view'),scope);
+  }
+  await r.locator('[data-micro-node=intermediate]').focus();await p.keyboard.press('Enter');assert.equal(await r.getAttribute('data-view'),'whole');assert.equal(await r.locator('[data-micro-frame][data-active=true]').count(),0);
+  await r.locator('[data-micro-node=objective]').click();await r.locator('.micro-context-heading').click({position:{x:5,y:5}});assert.equal(await r.getAttribute('data-view'),'whole');
+  await r.locator('[data-micro-node=eye]').click();await r.locator('.micro-concepts').click({position:{x:2,y:2}});assert.equal(await r.getAttribute('data-view'),'whole');
+  assert.equal(await r.getAttribute('data-point'),'bottom');assert.equal(await r.getAttribute('data-rays'),'false');await r.locator('[data-micro-reset]').click();
+ });
+ await t.test('實像與虛像的輪廓及填色不同，圖例貼合文字高度',async()=>{
+  await r.locator('[data-micro-reset]').click();
+  const real=r.locator('[data-micro-node-real] [data-specimen-body]'),virtual=r.locator('[data-micro-node-virtual] [data-specimen-body]');
+  assert.equal(await real.getAttribute('stroke-dasharray'),null);assert.equal(await virtual.getAttribute('stroke-dasharray'),'8 5');assert.notEqual(await real.getAttribute('fill'),await virtual.getAttribute('fill'));
+  await r.locator('[data-micro-node=eye]').click();assert.equal(await r.locator('[data-micro-preview] [data-micro-specimen]').getAttribute('data-image-kind'),'virtual');assert.equal(await r.locator('[data-micro-before] [data-micro-specimen]').getAttribute('data-image-kind'),'real');
+  const color=await r.locator('[data-micro-frame=eyepiece]').evaluate(e=>getComputedStyle(e).backgroundColor);assert.match(color,/255, 242, 223/);
+  const key=await r.locator('.micro-key').evaluate(e=>({height:e.getBoundingClientRect().height,pad:parseFloat(getComputedStyle(e).paddingTop)+parseFloat(getComputedStyle(e).paddingBottom)}));assert.ok(key.height<50,JSON.stringify(key));assert.equal(key.pad,10);await r.locator('[data-micro-reset]').click();
+ });
  await t.test('立體顯示不可用時，精簡剖面與操作仍可使用',async()=>{
   await p.route('**/microscope-model.mjs*',route=>route.fulfill({contentType:'text/javascript',body:"throw Error('simulated unavailable')"}));await p.reload({waitUntil:'networkidle'});
   await p.waitForFunction(()=>document.querySelector('#microscope-lab').dataset.microRender==='fallback');
-  assert.equal(await r.locator('[data-micro-model]').isVisible(),false);assert.equal(await r.locator('.micro-labels .micro-label').count(),3);await r.locator('[data-set=micro][data-value=eyepiece]').click();assert.equal(await r.getAttribute('data-view'),'eyepiece');assert.equal(await r.locator('.micro-map-fallback').isVisible(),true);await r.locator('[data-micro-overview]').click();
+  assert.equal(await r.locator('[data-micro-model]').isVisible(),false);assert.equal(await r.locator('.micro-labels .micro-label').count(),3);await r.locator('[data-set=micro][data-value=eyepiece]').click();assert.equal(await r.getAttribute('data-view'),'eyepiece');assert.equal(await r.locator('.micro-map').count(),0);await r.locator('[data-micro-overview]').click();
   assert.equal(await r.getAttribute('data-view'),'whole');assert.equal(await r.locator('[data-micro-ray]').count(),4);assert.match(await r.locator('[data-micro-badge]').innerText(),/虛像/);
  });
  assert.deepEqual(f.errors,[]);

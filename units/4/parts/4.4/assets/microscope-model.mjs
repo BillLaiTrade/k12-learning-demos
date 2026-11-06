@@ -1,4 +1,4 @@
-import {drawSpecimen} from './microscope-specimen.mjs?v=20261105-micro-specimen10';
+import {drawSpecimen} from './microscope-specimen.mjs?v=20261106-micro-flow-controls20';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 
 // Fixed cutaway geometry. Optical overlays are projected from the same world
@@ -61,7 +61,7 @@ export function createMicroscopeModel(canvas,onProject){
  const plane=mesh(new THREE.RingGeometry(29,31,64),new THREE.MeshBasicMaterial({color:'#f4dfa4',transparent:true,opacity:.25,side:THREE.DoubleSide,depthWrite:false}),432,286);
  plane.rotation.x=-Math.PI/2;
  const floor=mesh(new THREE.PlaneGeometry(1800,1800),new THREE.ShadowMaterial({opacity:.19}),440,757,0);floor.rotation.x=-Math.PI/2;floor.castShadow=false;floor.receiveShadow=true;
- let queued=0,currentStep=null,currentView='whole',overview='',overviewCamera=null,overviewAspect=1,span=780,center=425;
+ let queued=0,currentStep=null,currentView='whole',span=780,center=425;
  let motion=null;
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  function frameCamera(width,height){
@@ -73,19 +73,12 @@ export function createMicroscopeModel(canvas,onProject){
   queued=0;const b=canvas.getBoundingClientRect();if(!b.width||!b.height)return;
   if(motion){const t=Math.min(1,(now-motion.start)/300),ease=t*t*(3-2*t);span=motion.fromSpan+(motion.span-motion.fromSpan)*ease;center=motion.fromCenter+(motion.center-motion.fromCenter)*ease;if(t===1)motion=null;}
   renderer.setSize(b.width,b.height,false);
-  if(!overview){const saved=[span,center];span=780;center=425;frameCamera(b.width,b.height);renderer.render(scene,camera);overview=canvas.toDataURL('image/png');overviewCamera=camera.clone();overviewAspect=b.width/b.height;[span,center]=saved;}
   frameCamera(b.width,b.height);renderer.render(scene,camera);onProject?.();if(motion)request();
  }
  const request=()=>{if(!queued)queued=requestAnimationFrame(render);};
  const observer=new ResizeObserver(request);observer.observe(canvas);request();
  return{
-  project,get overview(){return overview;},get overviewAspect(){return overviewAspect;},
-  overviewRegion(view){
-   const box=view==='objective'?[335,240,530,680]:[355,100,515,365];
-   const points=[[box[0],box[1]],[box[2],box[1]],[box[0],box[3]],[box[2],box[3]]].map(([x,y])=>new THREE.Vector3(x,-y,0).project(overviewCamera||camera));
-   const xs=points.map(p=>(p.x+1)*380),ys=points.map(p=>(1-p.y)*390),x=Math.min(...xs),y=Math.min(...ys);
-   return[x,y,Math.max(...xs)-x,Math.max(...ys)-y];
-  },
+  project,
   update(step,view='whole'){
    plane.material.opacity=step==='objective'?.28:.43;
    if(currentStep===step&&currentView===view)return;

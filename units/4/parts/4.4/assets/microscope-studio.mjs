@@ -1,4 +1,4 @@
-import {specimenGraphic as symbol} from './microscope-specimen.mjs?v=20261105-micro-specimen10';
+import {specimenGraphic as symbol} from './microscope-specimen.mjs?v=20261106-micro-flow-controls20';
 import {microscopeGeometry} from './microscope-optics.mjs';
 const root=document.querySelector('#microscope-lab');
 if(root){
@@ -86,10 +86,7 @@ if(root){
   if(focused)$(`${focusWasLabel?'.micro-label':'.micro-pick'}[data-micro-lens="${focused}"]`)?.focus({preventScroll:true});
   $('[data-micro-scope]').textContent=view==='whole'?'目前觀察：完整成像':view==='objective'?'目前近看：物鏡成像':'目前近看：目鏡觀察';
   $('[data-micro-process]').setAttribute('aria-label','完整成像關係，'+(view==='whole'?'目前觀察完整成像。':view==='objective'?'目前近看原物、物鏡與中間像。':'目前近看中間像、目鏡與眼睛。'));
-  $('[data-micro-overview]').hidden=view==='whole';$('[data-micro-map]').hidden=view==='whole';
-  if(model?.overview){const img=$('[data-micro-map-image]');if(!img.getAttribute('src'))img.src=model.overview;$('.micro-map-picture').style.aspectRatio=String(model.overviewAspect);}
-  const region=$('[data-micro-map-region]'),regionBounds=model?model.overviewRegion(view):view==='objective'?[335,240,195,440]:[355,100,160,265];
-  for(const [key,value]of ['x','y','width','height'].map((k,i)=>[k,regionBounds[i]]))region.setAttribute(key,value);
+  $('[data-micro-overview]').hidden=view==='whole';
   if(rays)for(const r of g.rays){
    if(point!=='both'&&point!==r.point)continue;
    const color=r.point==='top'?red:blue,marker=r.point==='top'?'red':'blue';
@@ -109,10 +106,11 @@ if(root){
   $('[data-micro-after-label]').textContent=first?'中間實像':'最後看見的虛像';
   $('[data-micro-before]').innerHTML=symbol(100,115,ocularStep?64:38,ocularStep);
   $('[data-micro-before]').setAttribute('aria-label',ocularStep?'同一草履蟲的中間像：較圓端朝下，口溝在左':'玻片上的草履蟲：較圓端朝上，口溝在右');
-  $('[data-micro-preview]').innerHTML=symbol(100,115,first?64:90,true);
+  $('[data-micro-preview]').innerHTML=symbol(100,115,first?64:90,true,first?'real':'virtual');
   $('[data-micro-preview]').setAttribute('aria-label',first?'草履蟲的中間實像：較圓端朝下、口溝在左，倒立、放大':'透過目鏡看到的草履蟲虛像：較圓端仍朝下、口溝仍在左，進一步放大');
   $('[data-micro-before-direction]').textContent=ocularStep?'圓端朝下／口溝在左':'圓端朝上／口溝在右';
   $('[data-micro-after-direction]').textContent='圓端朝下／口溝在左';
+  $('[data-micro-badge]').dataset.imageKind=first?'real':'virtual';
   $('[data-micro-badge]').textContent=first?'倒立・放大的實像':ocularStep?'不再倒轉・放大的虛像':'相對原物倒立・放大虛像';
   $('[data-micro-copy]').textContent=first?'中間像形成在鏡筒內，這裡沒有放置屏幕。':ocularStep?'目鏡放大同一個中間像，方向不再倒轉。':'同一個中間像，連接兩段成像。';
   $('#micro-result').textContent={objective:'近看物鏡成像：原物經物鏡，在鏡筒內形成中間實像。',eyepiece:'近看目鏡觀察：同一個中間像位於目鏡焦距內，成為目鏡觀察的物體。',both:'完整成像：物鏡形成的中間實像，就是目鏡接著觀察的物體，兩段接力放大。'}[step];
@@ -126,23 +124,31 @@ if(root){
   if(model)model.update(step,view);
   root.dataset.ready='true';
  }
+ function showWhole(){step='both';view='whole';render();}
  function selectLens(lens){step=lens;view=lens;render();}
  root.addEventListener('click',e=>{
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.microCard){selectLens(b.dataset.microCard);$(`[data-set=micro][data-value="${b.dataset.microCard}"]`).focus({preventScroll:true});$('.micro-workspace').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});return;}
+  if(b.dataset.microFlow){if(b.dataset.microFlow==='whole')showWhole();else selectLens(b.dataset.microFlow);return;}
   if(b.dataset.microLens){selectLens(b.dataset.microLens);return;}
   if(b.dataset.set==='micro'){step=b.dataset.value;view=step==='both'?'whole':step;}
-  else if(b.hasAttribute('data-micro-overview')){step='both';view='whole';render();$('#micro-process-title').focus({preventScroll:true});return;}
+  else if(b.hasAttribute('data-micro-overview')){showWhole();$('#micro-process-title').focus({preventScroll:true});return;}
   else if(b.hasAttribute('data-micro-rays'))rays=!rays;
   else if(b.dataset.microPoint)point=b.dataset.microPoint;
   else if(b.hasAttribute('data-micro-reset')){step='both';view='whole';rays=true;point='both';}
   else return;render();
  });
+ // Click-away returns to the whole process without resetting ray preferences.
+ document.addEventListener('click',e=>{
+  if(view==='whole'||!(e.target instanceof Element)||e.target.closest('button,a,input,select,textarea,summary,[contenteditable]'))return;
+  const inWorkspace=$('.micro-workspace').contains(e.target),inContext=e.target.closest('.micro-context');
+  if(!inWorkspace||inContext||e.target.matches('.micro-workspace,.micro-concepts,.micro-tools,.micro-trace,.micro-stage,.micro-labels,canvas[data-micro-model],#microscope-scene'))showWhole();
+ });
  new ResizeObserver(render).observe($('.micro-stage'));
  $('[data-micro-a-symbol]').innerHTML=symbol(50,50,40,true);
  $('[data-micro-node-original]').innerHTML=symbol(50,64,36,false);
  $('[data-micro-node-real]').innerHTML=symbol(50,64,48,true);
- $('[data-micro-node-virtual]').innerHTML=symbol(50,64,58,true);
+ $('[data-micro-node-virtual]').innerHTML=symbol(50,64,58,true,'virtual');
  render();
- import('./microscope-model.mjs?v=20261105-micro-scope14').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
+ import('./microscope-model.mjs?v=20261106-micro-flow-controls20').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
 }
