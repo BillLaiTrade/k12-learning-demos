@@ -60,6 +60,7 @@ main.shell { padding-bottom: 76px; }
 .rank-quiz .quiz-body { padding: 20px; }
 #unit-quiz { scroll-margin-top: 22px; }
 button { padding: 9px 13px; border-color: var(--line); border-radius: 13px; color: var(--ink); text-align: left; }
+:is(#oblique-medium-toggle, #exit-medium-toggle, #return-medium-toggle) button { text-align: center; }
 button:hover { filter: none; }
 :is(.race-actions, .normal-actions, .depth-actions) button,
 :is(#oblique-lab, #exit-lab) .oblique-actions button,
