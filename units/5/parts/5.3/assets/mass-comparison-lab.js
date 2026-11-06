@@ -2,7 +2,10 @@ import {MASS_CHOICES,MASS_TARGET_CALORIES,MASS_ANIMATION_SPEED,massObservationAt
 const root=document.getElementById('mass-lab'),get=id=>document.getElementById(id);
 const play=get('mass-play'),image=get('mass-apparatus'),choices=[...root.querySelectorAll('[data-mass-choice]')];
 const records=new Map(),reduced=matchMedia('(prefers-reduced-motion: reduce)');
-let mass=100,elapsed=0,playing=false,frame=0,last=0,ready=false,attempt=0;
+let mass=100,frame=0,ready=false,attempt=0;
+const cups=[{elapsed:0,active:false,last:0},{elapsed:0,active:false,last:0}];
+const isPlaying=()=>cups.some(cup=>cup.active);
+const observations=()=>[massObservationAt(100,cups[0].elapsed),massObservationAt(mass,cups[1].elapsed)];
 const integer=value=>Math.floor(value+1e-8).toLocaleString('zh-TW');
 const svg=get('mass-apparatus-motion');
 svg.innerHTML=`<defs><linearGradient id="mass-water" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#cee5df" stop-opacity=".25"/><stop offset=".4" stop-color="#b6d9d2" stop-opacity=".07"/><stop offset="1" stop-color="#e5f4ec" stop-opacity=".23"/></linearGradient><linearGradient id="mass-stir" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fffef4"/><stop offset="1" stop-color="#c8d3c7"/></linearGradient></defs>`;
@@ -14,21 +17,22 @@ for(const [key,offset]of [['a',0],['b',778]]){
  <circle class="mass-led" cx="369" cy="693" r="7.2" fill="#173824"/><g class="mass-knob-pointer"><path d="M454 667V680" stroke="#5f5141" stroke-width="5" stroke-linecap="round"/><path d="M454 667V680" stroke="#fff9e4" stroke-width="2.5" stroke-linecap="round"/></g></g>`);
 }
 const vessels=[...svg.querySelectorAll('[data-mass-vessel]')];
-function cancel(){playing=false;cancelAnimationFrame(frame);}
+function cancel(){cups.forEach(cup=>cup.active=false);cancelAnimationFrame(frame);frame=0;}
 function render(){
- const states=[massObservationAt(100,elapsed),massObservationAt(mass,elapsed)];
+ const states=observations(),playing=isPlaying();
  const complete=root.dataset.phase==='complete';
  root.dataset.playing=String(playing);root.dataset.mass=String(mass);root.dataset.records=String(records.size);
  choices.forEach(button=>{const value=Number(button.dataset.massChoice);button.disabled=!ready||playing;button.setAttribute('aria-pressed',String(value===mass));button.querySelector('b').textContent=records.has(value)?'✓ ':'';});
- play.disabled=!ready||playing;play.textContent=playing?'觀察中…':complete||root.dataset.phase==='interrupted'?'重新比較':'開始比較';
- root.querySelectorAll('[data-mass-start]').forEach(button=>{button.disabled=!ready||playing;button.title=playing?'兩杯正在比較':play.textContent;button.setAttribute('aria-label',`${play.textContent}：兩杯各吸收1,000cal`);});
+ play.disabled=!ready||playing;play.textContent='兩杯一起開始';
+ play.title='兩杯都回到20°C，一起開始比較';
+ root.querySelectorAll('[data-mass-start]').forEach(button=>{const i=button.dataset.massStart==='a'?0:1,name=i?'B杯':'A杯',cup=cups[i];button.disabled=!ready||cup.active;button.title=cup.active?`${name}加熱中`:`${cup.elapsed>0?'重新':'開始'}加熱${name}`;button.setAttribute('aria-label',`${button.title}，只控制${name}，到1,000cal自動停熱`);});
  get('mass-current-b').textContent=mass;
  states.forEach((state,i)=>{
-  const key=i?'b':'a',vessel=vessels[i],active=playing&&!state.complete;
+  const key=i?'b':'a',vessel=vessels[i],active=cups[i].active;
   root.dataset[key+'Heat']=String(state.waterCalories);root.dataset[key+'Temperature']=String(state.temperature);
   get('mass-meter-'+key).textContent=state.temperature.toFixed(1);
   get('mass-energy-'+key).textContent=integer(state.waterCalories);
-  get('mass-state-'+key).textContent=active?'加熱並攪拌中':state.complete?'已到1,000 cal・停熱':elapsed>0?'已停止加熱':'等待開始比較';
+  get('mass-state-'+key).textContent=active?'加熱並攪拌中':state.complete?'已到1,000 cal・停熱':cups[i].elapsed>0?'已停止加熱':'等待點旋鈕';
   const rise=(Number(state.temperature.toFixed(1))-20).toFixed(1);get('mass-rise-'+key).textContent=rise;
   const bar=get('mass-rise-bar-'+key);bar.style.width=state.rise/10*100+'%';bar.setAttribute('aria-label',`${key.toUpperCase()}杯從20°C升高${rise}°C，共同刻度0至10°C`);
   // 400mL同規格燒杯；水位按已量取質量改變，不隨加熱任意變高。
@@ -49,29 +53,51 @@ function render(){
  if(complete)get('mass-conclusion-text').textContent=mass===100?'兩杯水量相同、吸收熱量相同，溫升也相同。':`水量變成${mass/100}倍，同樣吸熱，溫升約變成${mass===200?'1/2':'1/3'}。`;
  get('mass-meter-a-screen').hidden=get('mass-meter-b-screen').hidden=!ready;
 }
-function reset(){cancel();elapsed=0;root.dataset.phase=ready?'ready':'loading';get('mass-status').textContent=ready?(records.has(100)?'選擇B杯水量，再按「開始比較」。':'先比較兩杯各100 g，再試試把B杯水量加倍。'):'正在準備比較台…';render();}
+function reset(){cancel();cups.forEach(cup=>cup.elapsed=0);root.dataset.phase=ready?'ready':'loading';get('mass-status').textContent=ready?'點各杯旋鈕分別加熱，或讓兩杯一起從20°C開始。':'正在準備比較台…';render();}
 function record(){
- records.set(mass,{a:massObservationAt(100,elapsed),b:massObservationAt(mass,elapsed)});
+ const [a,b]=observations();records.set(mass,{a,b});
  const body=get('mass-records');body.replaceChildren();
  MASS_CHOICES.filter(value=>records.has(value)).forEach(value=>{const r=records.get(value),row=document.createElement('tr');[`${value} g`,`${r.a.rise.toFixed(1)}°C`,`${r.b.rise.toFixed(1)}°C`].forEach((text,i)=>{const cell=document.createElement(i?'td':'th');if(!i)cell.scope='row';cell.textContent=text;row.append(cell);});body.append(row);});
 }
-function start(){
- if(!ready||playing)return;elapsed=0;playing=true;root.dataset.phase='running';last=performance.now();
- get('mass-status').textContent='各杯到達水吸熱1,000 cal時各自停熱；比較最後的溫升。';render();
- const tick=now=>{if(!playing)return;elapsed+=Math.max(0,Math.min(100,now-last))/1000*MASS_ANIMATION_SPEED;last=now;
-  if(massObservationAt(100,elapsed).complete&&massObservationAt(mass,elapsed).complete){cancel();root.dataset.phase='complete';record();get('mass-status').textContent='本次比較完成，已自動記錄。可換B杯水量再比較。';}
-  render();if(playing)frame=requestAnimationFrame(tick);
- };frame=requestAnimationFrame(tick);
+function status(){
+ const states=observations(),active=cups.map(cup=>cup.active);
+ if(states.every(s=>s.complete))return '兩杯都已完成，已自動記錄；可分別重做或一起重來。';
+ if(active.every(Boolean))return '兩杯分別加熱，到水吸熱1,000 cal時各自停熱。';
+ const index=active[0]?0:active[1]?1:-1;
+ if(index>=0){const own=index?'B杯':'A杯',other=index?'A杯':'B杯';return `${own}加熱中；${states[1-index].complete?other+'已完成，讀值保留。':'可點'+other+'旋鈕，另外開始加熱。'}`;}
+ const done=states.findIndex(s=>s.complete);
+ return done>=0?`${done?'B杯':'A杯'}已完成；點${done?'A杯':'B杯'}旋鈕加熱，兩杯完成才記錄。`:'點各杯旋鈕分別加熱，或讓兩杯一起從20°C開始。';
 }
-function interrupt(){if(!playing)return;cancel();root.dataset.phase='interrupted';get('mass-status').textContent='比較已停止，已完成紀錄保留；按「重新比較」從20°C開始。';render();}
+function schedule(){if(!frame&&isPlaying())frame=requestAnimationFrame(tick);}
+function tick(now){
+ frame=0;
+ cups.forEach((cup,i)=>{if(!cup.active)return;cup.elapsed+=Math.max(0,Math.min(100,now-cup.last))/1000*MASS_ANIMATION_SPEED;cup.last=now;const observation=massObservationAt(i?mass:100,cup.elapsed);if(observation.complete){cup.elapsed=observation.elapsed;cup.active=false;}});
+ if(observations().every(state=>state.complete)){root.dataset.phase='complete';record();}
+ else root.dataset.phase=isPlaying()?'running':'partial';
+ get('mass-status').textContent=status();render();schedule();
+}
+function startCup(index){
+ if(!ready||cups[index].active)return;
+ const cup=cups[index];cup.elapsed=0;cup.active=true;cup.last=performance.now();root.dataset.phase='running';
+ get('mass-status').textContent=status();render();schedule();
+}
+function startTogether(){
+ if(!ready||isPlaying())return;
+ const now=performance.now();cups.forEach(cup=>{cup.elapsed=0;cup.active=true;cup.last=now;});root.dataset.phase='running';
+ get('mass-status').textContent=status();render();schedule();
+}
+function interrupt(){
+ if(!isPlaying())return;cancel();root.dataset.phase='interrupted';
+ get('mass-status').textContent='加熱已停止；點旋鈕從20°C重做該杯，完成杯讀值保留。';render();
+}
 async function loadScene(retry=false){
  const version=++attempt;ready=false;reset();get('mass-loading').hidden=false;get('mass-loading').textContent='正在準備比較台…';get('mass-retry').hidden=true;
  if(retry)image.src=new URL(`mass-comparison-bench.webp?retry=${version}`,import.meta.url).href;
  try{await image.decode();if(version!==attempt)return;ready=true;get('mass-loading').hidden=true;reset();}
  catch{if(version!==attempt)return;root.dataset.phase='error';get('mass-loading').textContent='比較台圖片未能載入，請重新載入。';get('mass-retry').hidden=false;get('mass-status').textContent='器材尚未就緒，請先重新載入。';render();}
 }
-choices.forEach(button=>button.addEventListener('click',()=>{if(!ready||playing)return;mass=Number(button.dataset.massChoice);reset();}));
-play.addEventListener('click',start);root.querySelectorAll('[data-mass-start]').forEach(button=>button.addEventListener('click',start));get('mass-retry').addEventListener('click',()=>loadScene(true));
+choices.forEach(button=>button.addEventListener('click',()=>{if(!ready||isPlaying())return;mass=Number(button.dataset.massChoice);reset();}));
+play.addEventListener('click',startTogether);root.querySelectorAll('[data-mass-start]').forEach(button=>button.addEventListener('click',()=>startCup(button.dataset.massStart==='a'?0:1)));get('mass-retry').addEventListener('click',()=>loadScene(true));
 window.addEventListener('blur',interrupt);document.addEventListener('visibilitychange',()=>{if(document.hidden)interrupt();});
 document.querySelector('.route').addEventListener('click',event=>{const link=event.target.closest('a');if(link&&link.hash!=='#card-03'&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey)interrupt();});
 loadScene();
