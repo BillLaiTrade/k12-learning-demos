@@ -65,7 +65,7 @@
 .micro-view-copy { color:#617153; }
 
 /* The whole process and its detail controls share one workspace. */
-.micro-stage { height:clamp(300px,52svh,430px); }
+.micro-stage { height:clamp(250px,43svh,370px); }
 .micro-scene { height:100%; }
 .micro-viewer { gap:10px; padding:14px 12px; justify-content:flex-start; }
 .micro-viewer h3 { font-size:.93rem; }
@@ -140,7 +140,7 @@
 .micro-comparison { display:grid; grid-template-columns:1fr; justify-items:center; gap:3px; }
 .micro-compare-cell { display:flex; flex-direction:column; align-items:center; min-width:0; width:100%; }
 .micro-viewer .micro-compare-cell p { margin:0; font-size:.77rem; line-height:1.5; font-weight:650; }
-.micro-preview,.micro-before { display:block; width:116px; height:134px; max-height:none; margin:0; aspect-ratio:200 / 230; border:0; border-radius:0; background:none; box-shadow:none; }
+.micro-preview,.micro-before { display:block; width:87px; height:100px; max-height:none; margin:0; aspect-ratio:200 / 230; border:0; border-radius:0; background:none; box-shadow:none; }
 .micro-compare-arrow { color:#647f53; font-size:22px; line-height:1; }
 .micro-viewer .micro-badge { padding:6px; font-size:.75rem; }
 .micro-viewer .micro-view-copy { font-size:.73rem; line-height:1.7; }
@@ -179,11 +179,11 @@
 .micro-context h3:focus-visible { outline:3px solid #c99a3c; outline-offset:3px; }
 .micro-overview { min-height:32px; padding:5px 10px; border:1px solid #78966c; border-radius:7px; background:#fffdf2; color:#31543d; font-size:.78rem; white-space:nowrap; }
 .micro-overview[hidden] { display:none; }
-.micro-process { position:relative; isolation:isolate; display:grid; grid-template-columns:minmax(0,2fr) auto minmax(0,2fr) auto minmax(0,3fr) auto minmax(0,2fr) auto minmax(0,2fr); grid-template-rows:30px 72px; padding:0 3px; font-size:.92rem; line-height:1.5; text-align:center; color:#31543d; font-weight:650; }
+.micro-process { position:relative; isolation:isolate; display:grid; grid-template-columns:minmax(0,2fr) auto minmax(0,2fr) auto minmax(0,3fr) auto minmax(0,2fr) auto minmax(0,2fr); grid-template-rows:30px 140px; padding:0 3px; font-size:.92rem; line-height:1.5; text-align:center; color:#31543d; font-weight:650; }
 .micro-range-frame { grid-row:2; z-index:1; min-width:0; border-radius:16px; box-sizing:border-box; pointer-events:none; }
-.micro-range-objective { grid-column:1 / 6; margin:4px 0 8px; border:2px solid #2f6a43; }
-.micro-range-eyepiece { grid-column:5 / 10; margin:12px 0 0; border:2px dashed #4b5450; }
-.micro-shared-range { grid-area:2 / 5 / 3 / 6; z-index:0; margin:15px 4px 11px; border-radius:8px; pointer-events:none; background:repeating-linear-gradient(45deg,transparent 0 7px,#55785a0c 7px 8px),repeating-linear-gradient(-45deg,transparent 0 7px,#55785a0c 7px 8px); }
+.micro-range-objective { grid-column:1 / 6; margin:4px 0; border:2px solid #2f6a43; }
+.micro-range-eyepiece { grid-column:5 / 10; margin:4px 0; border:2px dashed #4b5450; }
+.micro-shared-range { grid-area:2 / 5 / 3 / 6; z-index:0; margin:7px 4px; border-radius:8px; pointer-events:none; background:repeating-linear-gradient(45deg,transparent 0 7px,#55785a0c 7px 8px),repeating-linear-gradient(-45deg,transparent 0 7px,#55785a0c 7px 8px); }
 .micro-process-node,.micro-process-arrow { grid-row:2; z-index:2; align-self:center; min-width:0; padding:2px 1px; white-space:nowrap; }
 .micro-process-node[data-micro-node=original] { grid-column:1; }
 .micro-process-node[data-micro-node=objective] { grid-column:3; }
@@ -199,7 +199,7 @@
 .micro-group-objective { grid-column:1 / 6; --micro-frame-color:#2f6a43; color:var(--micro-frame-color); }
 .micro-group-eyepiece { grid-column:5 / 10; --micro-frame-color:#4b5450; color:var(--micro-frame-color); }
 .micro-process-group::after { content:''; position:absolute; left:50%; bottom:-6px; height:6px; border-left:2px solid currentColor; pointer-events:none; }
-.micro-group-eyepiece::after { bottom:-14px; height:14px; border-left-style:dashed; }
+.micro-group-eyepiece::after { border-left-style:dashed; }
 .micro-process-group:hover,.micro-process-group[aria-pressed=true] { background:transparent; color:var(--micro-frame-color); text-decoration:underline; text-decoration-thickness:2px; text-underline-offset:4px; }
 .micro-lab[data-view=objective] .micro-range-objective,.micro-lab[data-view=eyepiece] .micro-range-eyepiece { border-width:3px; }
 .micro-scope { display:grid; grid-template-columns:auto minmax(0,1fr); gap:10px; align-items:center; }
@@ -213,18 +213,28 @@
  .micro-context h3 { font-size:.94rem; }
  .micro-context-heading { gap:8px; }
  .micro-overview { font-size:.7rem; padding:4px 7px; }
- .micro-process { grid-template-rows:26px 56px; padding:0 1px; font-size:.72rem; }
+ .micro-process { grid-template-rows:26px 104px; padding:0 1px; font-size:.72rem; }
  .micro-process-arrow { font-size:.6rem; }
  .micro-range-frame { border-radius:12px; }
- .micro-range-objective { margin-top:2px; }
- .micro-range-eyepiece { margin-top:10px; }
- .micro-shared-range { margin-top:13px; }
+ .micro-range-objective,.micro-range-eyepiece { margin-block:2px; }
+ .micro-shared-range { margin-block:5px; }
  .micro-process-group { min-height:24px; padding:2px 5px; font-size:.76rem; }
  .micro-process-group::after { bottom:-4px; height:4px; }
- .micro-group-eyepiece::after { bottom:-12px; height:12px; }
+
  .micro-scope { gap:6px 8px; }
  .micro-scope p { font-size:.7rem; }
- .micro-stage { height:clamp(240px,32svh,280px); }
+ .micro-stage { height:clamp(210px,26svh,240px); }
  .micro-map { top:8px; }
  .micro-lab[data-view=objective] .micro-a-callout { top:8px; }
+}
+
+.micro-process-node { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; padding:2px 1px; font-weight:650; }
+.micro-node-name { display:block; line-height:1.4; }
+.micro-node-art { display:block; width:64px; max-width:100%; height:72px; overflow:visible; }
+.micro-node-kind { display:block; color:#54694b; font-size:.69rem; line-height:1.4; font-weight:500; }
+.micro-node-kind-virtual { text-decoration:underline dashed; text-underline-offset:3px; text-decoration-thickness:1.5px; }
+@container (max-width:640px) {
+ .micro-process-node { gap:2px; }
+ .micro-node-art { width:44px; height:44px; }
+ .micro-node-kind { font-size:.58rem; }
 }

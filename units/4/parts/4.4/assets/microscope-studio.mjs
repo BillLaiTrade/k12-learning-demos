@@ -63,7 +63,7 @@ if(root){
   let labels='';
   const targets=view==='objective'?[['中間像',image,true,null],['物鏡',objective,true,'objective'],['草履蟲',at(-g.objective.u),true,null]]:view==='eyepiece'?[['眼睛',at(g.eye+4),true,null],['目鏡',ocular,true,'eyepiece'],['中間像',image,true,null]]:[['目鏡',ocular,step!=='objective','eyepiece'],['中間像',image,true,null],['物鏡',objective,step!=='eyepiece','objective']];
   for(const [name,p,active,lens]of targets){
-   const [x,y]=position(p),rightLabel=view!=='whole'||box.width<420,labelOffset=view==='whole'&&box.height<320&&name==='目鏡'?-6:0,attrs=`class="micro-label${rightLabel?' micro-label-right':''}" style="left:calc(${x}% ${rightLabel?'+':'-'} 24px);top:calc(${y}% + ${labelOffset}px);opacity:${active?1:.55}"`;
+   const [x,y]=position(p),rightLabel=view!=='whole'||box.width<420,labelOffset=view==='whole'&&box.height<320&&name==='目鏡'?(box.height<250?-10:-6):0,attrs=`class="micro-label${rightLabel?' micro-label-right':''}" style="left:calc(${x}% ${rightLabel?'+':'-'} 24px);top:calc(${y}% + ${labelOffset}px);opacity:${active?1:.55}"`;
    labels+=`<span class="micro-connector" style="left:calc(${x}% ${rightLabel?'+ 6':'- 24'}px);top:${y}%"></span>`;
    labels+=lens?`<button type="button" ${attrs} data-micro-lens="${lens}" title="點選近看${name}" aria-label="近看${name}${lens==='objective'?'成像':'觀察'}">${name}</button>`:`<span ${attrs}>${name}</span>`;
    if(lens)labels+=`<button type="button" class="micro-pick" data-micro-lens="${lens}" style="left:${x}%;top:${y}%" aria-label="近看${name}剖面"></button>`;
@@ -138,6 +138,9 @@ if(root){
  });
  new ResizeObserver(render).observe($('.micro-stage'));
  $('[data-micro-a-symbol]').innerHTML=symbol(50,50,40,true);
+ $('[data-micro-node-original]').innerHTML=symbol(50,64,36,false);
+ $('[data-micro-node-real]').innerHTML=symbol(50,64,48,true);
+ $('[data-micro-node-virtual]').innerHTML=symbol(50,64,58,true);
  render();
  import('./microscope-model.mjs?v=20261105-micro-scope14').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
 }
