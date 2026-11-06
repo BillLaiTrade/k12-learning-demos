@@ -171,7 +171,7 @@ test('第三區上下同時對照、整熊觀察及銜接第四區',{timeout:180
   await t.test('圖下說明光路總長與虛像位置，保留短對話及模型限制',async()=>{
     await expect(section.locator('.comparison-column-headings span')).toHaveText(['光怎麼進入眼睛','小葵看到的熊']);
     await expect(section.locator('.comparison-path-equation')).toHaveText(['反射前2公尺＋反射後3公尺＝5公尺','到原鏡面位置2公尺＋再到眼睛3公尺＝5公尺']);
-    await expect(section.locator('.comparison-backtrace')).toContainText('先走3公尺到鏡面');
+    await expect(section.locator('.comparison-backtrace')).toContainText('小熊的光先走 2 公尺到鏡面');
     await expect(section.locator('.comparison-transition')).toContainText('放一隻同樣大小的真熊');
     await expect(section.locator('.comparison-takeaway')).toHaveText('上排是轉過彎的5公尺，下排是直達的5公尺。');
     const explanation=section.locator('.mirror-explanation');
