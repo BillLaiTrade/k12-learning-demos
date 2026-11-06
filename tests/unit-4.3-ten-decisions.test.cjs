@@ -16,6 +16,7 @@ async function ready(p,base){await p.goto(base);await p.waitForFunction(()=>docu
 async function scroll(p,selector){await p.locator(selector).evaluate(e=>e.scrollIntoView({block:'start',behavior:'instant'}));await p.waitForTimeout(100);}
 async function offscreen(p,button){await p.locator(button).evaluate(e=>scrollTo({top:scrollY+e.getBoundingClientRect().top-8,behavior:'instant'}));await p.waitForTimeout(100);}
 async function clickAtCurrentPosition(p,selector){const b=await p.locator(selector).boundingBox();await p.mouse.click(b.x+b.width/2,b.y+b.height/2);await p.waitForTimeout(100);}
+async function turnOffReturn(p){for(const key of ['a','b'])if(await p.locator('#return-lab').getAttribute('data-light-'+key)==='true')await p.locator('#return-toggle-'+key).click();}
 async function bounds(p,stage,controls){
  const a=await p.locator(stage).boundingBox(),b=await p.locator(controls).boundingBox(),height=p.viewportSize().height;
  assert.ok(a.y>=7,stage+' starts above the viewport');assert.ok(a.y+a.height<=height-6,stage+' ends outside the viewport');assert.ok(b.y+b.height<=height-6,controls+' is outside the viewport');
@@ -34,7 +35,7 @@ test('4.3 approved playback visibility and comparison timing',{timeout:180000},a
    await offscreen(p,'#race-pause');await p.locator('#race-pause').evaluate(e=>e.focus({preventScroll:true}));await p.keyboard.press('Enter');await p.waitForTimeout(100);await p.clock.runFor(100);
    await bounds(p,'.race-viewport','.race-console');assert.ok(Number(await p.locator('#speed-lab').getAttribute('data-elapsed-ms'))>before);
    await p.clock.runFor(5500);assert.equal(await p.locator('#race-status').textContent(),'三道光皆已到達，可重新比較。');
-   await p.locator('#return-reset').click();await offscreen(p,'#return-toggle-a');await clickAtCurrentPosition(p,'#return-toggle-a');await p.clock.runFor(100);
+   await turnOffReturn(p);await offscreen(p,'#return-toggle-a');await clickAtCurrentPosition(p,'#return-toggle-a');await p.clock.runFor(100);
    rows.push({width,kind:'return',...await bounds(p,'#return-viewport','.return-control-deck')});assert.ok(Number(await p.locator('#return-lab').getAttribute('data-progress-a'))>0);await p.clock.runFor(3000);
    await offscreen(p,'#rank-play');await clickAtCurrentPosition(p,'#rank-play');await p.clock.runFor(100);
    rows.push({width,kind:'quiz',...await bounds(p,'.rank-stage','.rank-playback')});assert.equal(await p.locator('#rank-lab').getAttribute('data-state'),'running');await p.clock.runFor(5000);
@@ -43,7 +44,7 @@ test('4.3 approved playback visibility and comparison timing',{timeout:180000},a
  });
  await t.test('automatic viewport resumes preserve scroll position and manual pauses',async()=>{
   for(const [root,button,stage,other] of [['#speed-lab','#race-start','.race-viewport','#s2'],['#return-lab','#return-toggle-a','#return-viewport','#s1'],['#rank-lab','#rank-play','.rank-stage','#s6']]){
-   if(root==='#return-lab')await p.locator('#return-reset').click();
+   if(root==='#return-lab')await turnOffReturn(p);
    await p.locator(button).click();await p.clock.runFor(200);await scroll(p,other);
    const elapsed=await p.locator(root).evaluate(e=>e.dataset.elapsedMs||e.dataset.progressA);await p.clock.runFor(600);assert.equal(await p.locator(root).evaluate(e=>e.dataset.elapsedMs||e.dataset.progressA),elapsed);
    await p.locator(stage).evaluate(e=>scrollTo({top:scrollY+e.getBoundingClientRect().top-60,behavior:'instant'}));await p.waitForTimeout(100);
@@ -54,7 +55,7 @@ test('4.3 approved playback visibility and comparison timing',{timeout:180000},a
   await p.locator('#race-start').click();await p.clock.runFor(100);await p.locator('#race-pause').click();await scroll(p,'#s2');await scroll(p,'.race-viewport');await p.clock.runFor(200);assert.equal(await p.locator('#speed-lab').getAttribute('data-pause-reason'),'manual');
  });
  await t.test('reciprocal conclusion waits for both complete paths and resets after changes',async()=>{
-  await p.locator('#return-reset').click();await p.locator('#return-toggle-a').click();await p.clock.runFor(3000);
+  await turnOffReturn(p);await p.locator('#return-toggle-a').click();await p.clock.runFor(3000);
   await p.locator('#return-toggle-b').click();await p.clock.runFor(100);assert.equal(await p.locator('#return-lab').getAttribute('data-progress-a'),'1');assert.ok(Number(await p.locator('#return-lab').getAttribute('data-progress-b'))<1);
   assert.equal(await p.locator('#return-finding').textContent(),'觀察兩束光的路徑與方向');await p.clock.runFor(3000);assert.equal(await p.locator('#return-finding').textContent(),'往返光路重合，方向相反');
   await p.locator('#return-angle').fill('35');assert.equal(await p.locator('#return-finding').textContent(),'觀察兩束光的路徑與方向');await p.clock.runFor(3000);assert.equal(await p.locator('#return-finding').textContent(),'往返光路重合，方向相反');

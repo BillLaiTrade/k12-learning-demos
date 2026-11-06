@@ -98,3 +98,5 @@ html:has(#return-lab:focus-within){scroll-padding-top:var(--return-scroll-inset,
  #return-lab .return-finding{grid-column:1 / -1;grid-row:2;display:flex;justify-content:space-between;align-items:baseline;gap:5px 10px;flex-wrap:wrap}
  #return-lab #return-route{margin:0}
 }
+
+#return-lab .return-angle-control[hidden], #return-lab #return-route[hidden], #return-lab #return-angle-summary[hidden] { display:none; }

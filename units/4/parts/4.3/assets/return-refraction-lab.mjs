@@ -55,8 +55,8 @@ function render(){
  }
  for(const badge of scene.querySelectorAll('.return-medium-badge')){const boxes=[...badge.querySelectorAll('text')].map(e=>e.getBBox()),x=Math.min(...boxes.map(b=>b.x)),y=Math.min(...boxes.map(b=>b.y)),pad=5/ratio;for(const[k,v]of Object.entries({x:x-pad,y:y-pad*.6,width:Math.max(...boxes.map(b=>b.x+b.width))-x+2*pad,height:Math.max(...boxes.map(b=>b.y+b.height))-y+1.2*pad,rx:7/ratio}))badge.querySelector('rect').setAttribute(k,String(v));}
  const angleDescription=both?`空氣側${g.airAngle.toFixed(1)}度，${g.name}側${angle}度`:lights.a?`入射角${g.airAngle.toFixed(1)}度，折射角${angle}度`:lights.b?`入射角${angle}度，折射角${g.airAngle.toFixed(1)}度`:'兩支光源關閉';
- scene.setAttribute('aria-label',`空氣在上方，${g.name}在下方。${angleDescription}，角度皆從法線量起。A紅光${lights.a?'開啟':'關閉'}，B藍光${lights.b?'開啟':'關閉'}。`);
- input.disabled=state!=='ready';$('#return-reset').disabled=state!=='ready';selectorControl.render(requested);drawBeams();
+ scene.setAttribute('aria-label',`空氣在上方，${g.name}在下方。${angleDescription}${active?'，角度皆從法線量起':''}。A紅光${lights.a?'開啟':'關閉'}，B藍光${lights.b?'開啟':'關閉'}。`);
+ input.disabled=state!=='ready';$('.return-angle-control').hidden=!active;$('#return-angle-summary').hidden=!active;selectorControl.render(requested);drawBeams();
  $('#return-status').classList.toggle('visually-hidden',state!=='error');$('#return-status').textContent=state==='loading'?'正在準備實驗場景……':state==='error'?'場景未能載入，請重試或切換介質。':'點擊開關光源；拖動 A 或 B 調角，另一端自動對準。';
 }
 function drawBeams(){
@@ -71,7 +71,8 @@ function drawBeams(){
  const active=state==='ready'&&(lights.a||lights.b),both=active&&lights.a&&lights.b;
  const completeActive=active&&keys.every(key=>!lights[key]||reciprocalSnapshot(g,key,playback[key].elapsed).complete);
  const marks=scene.querySelector('.return-angle-marks');marks.setAttribute('visibility',completeActive?'visible':'hidden');marks.setAttribute('aria-hidden',String(!completeActive));
- $('#return-route').textContent=!active?`空氣側 ${g.airAngle.toFixed(1)}°｜${g.name}側 ${angle}°`:!completeActive?'光路展開後顯示角度':both?'A → M → B　／　B → M → A':lights.b?`光速慢 → 快；入射角 ${angle}° → 折射角 ${g.airAngle.toFixed(1)}°`:`光速快 → 慢；入射角 ${g.airAngle.toFixed(1)}° → 折射角 ${angle}°`;
+ $('#return-route').hidden=!active;
+ $('#return-route').textContent=!active?'':!completeActive?'光路展開後顯示角度':both?'A → M → B　／　B → M → A':lights.b?`光速慢 → 快；入射角 ${angle}° → 折射角 ${g.airAngle.toFixed(1)}°`:`光速快 → 慢；入射角 ${g.airAngle.toFixed(1)}° → 折射角 ${angle}°`;
  const complete=both&&keys.every(key=>reciprocalSnapshot(g,key,playback[key].elapsed).complete);
  const finding=both?(complete?'往返光路重合，方向相反':'觀察兩束光的路徑與方向'):!active?'分別開啟 A、B，再比較兩個方向':lights.b?'B → M → A：從下方射回空氣':'A → M → B：從空氣射入下方';
  if($('#return-finding').textContent!==finding)$('#return-finding').textContent=finding;
@@ -94,7 +95,7 @@ function restartActive(){stopAnimation();for(const key of keys)playback[key].ela
 function toggle(key){if(state!=='ready')return;if(!lights[key])revealExperiment($('#return-viewport'),$('.return-control-deck'));lights[key]=!lights[key];playback[key].elapsed=0;render();resumeAnimation();}
 function setAngle(value){if(state!=='ready')return;const next=clampAngle(value);if(next===angle)return;angle=next;restartActive();}
 for(const key of keys)$(`#return-toggle-${key}`).onclick=()=>toggle(key);
-$('#return-reset').onclick=()=>{stopAnimation();lights.a=lights.b=false;playback.a.elapsed=playback.b.elapsed=0;angle=30;render();root.dataset.playback='complete';};input.oninput=()=>setAngle(Number(input.value));
+input.oninput=()=>setAngle(Number(input.value));
 root.addEventListener('keydown',e=>{const lamp=e.target.closest('.return-source');if(!lamp||state!=='ready')return;if(e.key==='Enter'||e.key===' '){e.preventDefault();if(!e.repeat)toggle(lamp.dataset.source);return;}const step={ArrowLeft:-1,ArrowDown:-1,ArrowRight:1,ArrowUp:1}[e.key];if(step!==undefined||e.key==='Home'||e.key==='End'){e.preventDefault();setAngle(e.key==='Home'?0:e.key==='End'?35:angle+step);}});
 const point=e=>new DOMPoint(e.clientX,e.clientY).matrixTransform(devices.getScreenCTM().inverse());
 devices.addEventListener('pointerdown',e=>{const lamp=e.target.closest('.return-source');if(!lamp||state!=='ready'||e.button!==0)return;e.preventDefault();const p=point(e),g=geometry(medium,angle),key=lamp.dataset.source,origin=key==='a'?g.sourceA:g.sourceB;press={key,id:e.pointerId,x:e.clientX,y:e.clientY,moved:false,dx:p.x-origin[0],dy:p.y-origin[1]};devices.setPointerCapture(e.pointerId);lamp.focus({preventScroll:true});});
