@@ -29,13 +29,15 @@
   <link rel="stylesheet" href="assets/calorie-lab.css?v=calc-layout-2">
   <link rel="stylesheet" href="../../assets/unit-format.css?v=20261105">
   <link rel="stylesheet" href="assets/heat-stage-lab.css?v=stages-1">
-  <script type="module" src="assets/heat-stage-lab.js?v=refined-1-stages-1"></script>
+  <script type="module" src="assets/heat-stage-lab.js?v=derive-1"></script>
   <script type="module" src="assets/heat-quantity.js?v=format-1"></script>
   <script type="module" src="assets/calorie-lab.js?v=refined-1-calc-layout-3"></script>
   <link rel="stylesheet" href="assets/heat-bench.css?v=refined-1">
   <link rel="stylesheet" href="assets/mass-comparison-lab.css?v=mass-1">
-  <script type="module" src="assets/mass-comparison-lab.js?v=readable-1"></script>
+  <script type="module" src="assets/mass-comparison-lab.js?v=derive-2"></script>
   <link rel="stylesheet" href="assets/mass-comparison-fit.css?v=readable-1">
+  <link rel="stylesheet" href="assets/heat-derivation.css?v=derive-1">
+  <script type="module" src="assets/material-comparison-lab.js?v=derive-1"></script>
 </head>
 <body>
   <header class="shell masthead"><div class="brand-row"><a class="brand" href="../../index.html">← 溫度與熱</a><span class="crumb">國二上・熱量與比熱</span></div>
@@ -133,7 +135,7 @@
               <div class="heat-bench-console"><div class="calorie-actions"><button class="action" id="heat-stage-play" type="button" disabled>開始加熱</button><button class="secondary" id="heat-stage-retry" type="button" hidden>重新載入器材</button><span>AI 器材示意・動畫已加速</span></div>
               <p class="calorie-observation-note" id="heat-stage-status" role="status">正在準備器材畫面…</p></div></div>
               <div class="heat-stage-record-panel" id="heat-stage-record-panel" hidden><h3>把三次觀察放在一起</h3><table class="heat-stage-record-table"><thead><tr><th scope="col">累計水吸收熱量</th><th scope="col">水溫</th><th scope="col">從 20°C 升高</th></tr></thead><tbody id="heat-stage-records"></tbody></table></div>
-              <div class="dialogue" id="heat-stage-conclusion" hidden><span class="speaker" aria-label="阿公"></span><p>水量相同、沒有狀態改變時，吸收熱量加倍，升高的溫度也約加倍。</p></div>
+              <div class="dialogue" id="heat-stage-conclusion" hidden><span class="speaker" aria-label="阿公"></span><p>完成觀察後：水量固定，吸熱量變成2倍，溫升也變成2倍。接下來，吸收相同熱量，水量不同呢？</p></div>
               <p class="heat-stage-note">熱量為模型估算；容器吸熱與散熱另計。器材為 AI 情境示意，動畫已加速。</p>
             </div>
             <details class="relation heat-stage-assumptions"><summary>模型條件</summary><p>另取100 g、20°C的水，沿用第一區器材，假設充分攪拌且水與玻璃容器同溫。以水的近似比熱計算水吸熱，並分開計入容器吸熱與向20°C環境散熱；20 W有效供熱、42 J/°C容器熱容量與0.5 W/°C散熱係數均為教學設定，非實測校正。</p><p>各節點是從20°C起算的累計水吸熱量，並非各段新增量，也不等於加熱器總供能。溫度計提供水溫，熱量由模型估算；圖表以溫升呈現。</p><p>全程使用相同加熱設定與50倍動畫加速；每段長短由模型決定。節點停下時保留該觀察時刻，按「繼續加熱」才推進，不模擬等待冷卻、探針遲滯與停熱餘熱。重新觀察會清除三筆紀錄並從初溫開始。</p></details>
@@ -146,12 +148,12 @@
             <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>水量加倍，吸收同樣的熱量，升高的溫度會一樣嗎？</p></div>
             <div class="unit-panel" id="mass-lab" data-phase="loading" data-playing="false" data-records="0">
               <div class="mass-toolbar"><p class="mass-conditions"><strong>共同條件</strong><span>都是水・初溫20°C・各吸收1,000 cal</span></p>
-              <div class="mass-setting"><span class="mass-setting-label" id="mass-choice-label">B杯水量</span><div class="mass-choices" role="group" aria-labelledby="mass-choice-label"><button type="button" data-mass-choice="100" aria-pressed="true" disabled><b aria-hidden="true"></b>100 g</button><button type="button" data-mass-choice="200" aria-pressed="false" disabled><b aria-hidden="true"></b>200 g</button><button type="button" data-mass-choice="300" aria-pressed="false" disabled><b aria-hidden="true"></b>300 g</button></div><span>A杯固定100 g；先比較相同水量</span></div>
+              <div class="mass-setting"><label class="mass-setting-label" for="mass-input">B杯水量</label><input id="mass-input" type="number" value="200" min="100" max="350" step="any" aria-describedby="mass-input-help mass-input-error" disabled><span>g</span><span id="mass-input-help">可輸入100～350 g</span><span id="mass-input-error" role="status" hidden>請輸入100～350 g。</span></div>
               </div><p class="mass-pan-hint">左右滑動，查看完整的兩杯比較台。</p>
               <figure class="mass-bench"><div class="mass-scene-pan" tabindex="0" role="region" aria-label="兩杯同規格器材，窄版可左右滑動"><div class="mass-photo">
                 <img id="mass-apparatus" src="assets/mass-comparison-bench.webp" width="1672" height="941" alt="AI生成的兩杯比較台：相同規格燒杯、加熱攪拌器與數位探針並排；水位、攪拌、燈號和LCD讀值由程式呈現。">
                 <svg id="mass-apparatus-motion" viewBox="0 0 1672 941" aria-hidden="true"></svg>
-                <span class="mass-badge mass-a-label">A杯 100 g</span><span class="mass-badge mass-b-label">B杯 <span id="mass-current-b">100</span> g</span>
+                <span class="mass-badge mass-a-label">A杯 100 g</span><span class="mass-badge mass-b-label">B杯 <span id="mass-current-b">200</span> g</span>
                 <div class="mass-meter" id="mass-meter-a-screen" aria-hidden="true" hidden><span id="mass-meter-a">20.0</span><small>°C</small></div><div class="mass-meter mass-meter-b" id="mass-meter-b-screen" aria-hidden="true" hidden><span id="mass-meter-b">20.0</span><small>°C</small></div>
                 <button class="mass-knob" data-mass-start="a" type="button" title="開始加熱A杯" aria-label="開始加熱A杯，只控制A杯" disabled></button><button class="mass-knob mass-knob-b" data-mass-start="b" type="button" title="開始加熱B杯" aria-label="開始加熱B杯，只控制B杯" disabled></button>
                 <span class="mass-badge mass-energy mass-a-energy">水已吸收 <output id="mass-energy-a">0</output> cal</span><span class="mass-badge mass-energy mass-b-energy">水已吸收 <output id="mass-energy-b">0</output> cal</span>
@@ -162,31 +164,37 @@
               <div class="mass-results">
                 <div class="mass-rise-panel"><h3>從20°C升高</h3><div class="mass-bar-row"><span>A杯</span><div class="mass-bar-track"><span class="mass-bar" id="mass-rise-bar-a" role="img" aria-label="A杯升高0°C"></span></div><strong><output id="mass-rise-a">0.0</output>°C</strong></div><div class="mass-bar-row"><span>B杯</span><div class="mass-bar-track"><span class="mass-bar mass-bar-b" id="mass-rise-bar-b" role="img" aria-label="B杯升高0°C"></span></div><strong><output id="mass-rise-b">0.0</output>°C</strong></div><div class="mass-bar-scale" aria-hidden="true"><span>0</span><span>5</span><span>10°C</span></div></div>
                 <div class="mass-record-panel" id="mass-record-panel" hidden><h3>已完成的比較</h3><table><caption class="calorie-table-caption">A杯固定100g，初溫20°C，各杯水均吸收1,000cal的觀察紀錄</caption><thead><tr><th scope="col">B杯水量</th><th scope="col">A杯溫升</th><th scope="col">B杯溫升</th></tr></thead><tbody id="mass-records"></tbody></table></div>
+                <div class="derivation-panel" id="mass-derivation" hidden><h3>完成觀察後，結合第二區</h3><p>熱量×2 → 溫升×2；水量×2 → 溫升÷2。</p><p class="water-relation"><strong>水的溫升 ≈ 吸熱量 ÷ 水量</strong><small>單位：°C、cal、g；接回第一區1 cal的定義。</small></p><p>這是水的近似關係；換物質也適用嗎？</p></div>
                 <div class="dialogue" id="mass-conclusion" hidden><span class="speaker" aria-label="阿公"></span><p id="mass-conclusion-text"></p></div>
               </div>
               <p class="mass-model-note">水吸熱量依模型估算；各杯到1,000 cal時各自停熱。器材為AI示意，動畫已加速。</p>
             </div>
-            <details class="relation mass-assumptions"><summary>器材與模型條件</summary><p>先用電子秤分別量取水量，兩杯使用同規格約400 mL燒杯，初溫都是20°C。水位及器材尺寸為示意；探針浸入水中，不碰杯底或杯壁，攪拌使溫度較均勻。切換B杯水量後，兩杯都回到初溫，已完成的比較紀錄保留。</p><p>沿用前兩區的水比熱與集中熱容量設定：20 W有效供熱、42 J/°C容器熱容量、向20°C環境散熱係數0.5 W/°C，水與容器視為同溫。這些為教學參數，並非實物校正。各杯水吸收1,000 cal才停熱，容器吸熱與散熱另計，不是兩個加熱器各供能1,000 cal，也不固定加熱時間相同。</p><p>動畫統一加速50倍；各杯到點後保留觀察時刻，不模擬等待冷卻、停熱餘熱或探針延遲。點各杯旋鈕只啟動該杯，完成後讀值保留；兩杯都完成才自動記錄及歸納。下方「兩杯一起開始」會把兩杯都回到20°C並同步啟動；加熱中不能切換水量或重設整組。換區或背景中斷不自動續熱，重新點某杯旋鈕會從20°C重做該杯，另一杯讀值保留。重做會更新同條件紀錄，不重複增加列；勾號表示該水量已完成觀察。</p><p>反過來想：同種物質若要升高相同溫度，水量加倍，水需要吸收的熱量也約加倍。</p></details>
+            <details class="relation mass-assumptions"><summary>器材與模型條件</summary><p>B杯預設200 g，可輸入100～350 g；範圍配合燒杯容量與探針浸水位置。先用電子秤分別量取水量，兩杯使用同規格約400 mL燒杯，初溫都是20°C。水位及器材尺寸為示意；探針浸入水中，不碰杯底或杯壁，攪拌使溫度較均勻。切換B杯水量後，兩杯都回到初溫，已完成的比較紀錄保留。</p><p>沿用前兩區的水比熱與集中熱容量設定：20 W有效供熱、42 J/°C容器熱容量、向20°C環境散熱係數0.5 W/°C，水與容器視為同溫。這些為教學參數，並非實物校正。各杯水吸收1,000 cal才停熱，容器吸熱與散熱另計，不是兩個加熱器各供能1,000 cal，也不固定加熱時間相同。</p><p>動畫統一加速50倍；各杯到點後保留觀察時刻，不模擬等待冷卻、停熱餘熱或探針延遲。點各杯旋鈕只啟動該杯，完成後讀值保留；兩杯都完成才自動記錄及歸納。下方「兩杯一起開始」會把兩杯都回到20°C並同步啟動；加熱中不能切換水量或重設整組。換區或背景中斷不自動續熱，重新點某杯旋鈕會從20°C重做該杯，另一杯讀值保留。重做會更新同條件紀錄，不重複增加列；紀錄保留最近三種已完成的水量。</p><p>反過來想：同種物質若要升高相同溫度，水量加倍，水需要吸收的熱量也約加倍。</p></details>
           </div>
         </section>
 
         <section class="lesson-card" id="card-04" aria-labelledby="title-04">
-          <header class="lesson-head"><span class="card-number">04</span><div class="card-heading"><h2 id="title-04">換一種物質，結果一樣嗎？</h2><p class="card-intro">比熱：相同質量、相同吸熱量下的材料比較</p></div></header>
+          <header class="lesson-head"><span class="card-number">04</span><div class="card-heading"><h2 id="title-04">換一種物質，剛才的公式還適用嗎？</h2><p class="card-intro">物質種類與溫升：檢驗水的近似關係</p></div></header>
           <div class="card-main">
-            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>「水量和熱量都會影響升溫，那物質本身也有差別嗎？」</p></div>
-            <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>「有。讓 1 g 物質升高 1°C 所需的熱量，叫做它的『比熱』。相同質量吸收相同熱量，比熱越大，升溫越少。」</p></div>
-            <div class="experiment" id="material-lab" data-mode="material" data-total="500" data-ymax="80">
-              <div class="lab-heading"><h3>同質量，換一種材料</h3><span class="condition-chip">各 100 g・各吸收 500 cal・初溫 20°C</span></div>
-              <div class="setting-row"><label for="material-setting">和水比較的材料</label><select id="material-setting" data-setting><option value="aluminum">鋁</option><option value="iron">鐵</option><option value="copper">銅</option></select><span class="setting-hint">固定質量，不是固定體積</span></div>
-              <div class="experiment-view compare-view"><div class="apparatus-grid" data-apparatus></div><div class="graph-panel"><h4>不同物質的升溫比較</h4><svg data-graph viewBox="0 0 380 280" role="img" aria-label="比較相同質量的水與金屬在吸收相同熱量時的溫度。"></svg><p class="graph-caption"><span class="legend-a">● 水</span><span class="legend-b" data-material-legend>● 鋁</span></p></div></div>
-              <div class="experiment-controls"><button type="button" class="action" data-play>開始比較</button><button type="button" class="secondary" data-reset>重來</button><button type="button" class="secondary" data-record disabled>記下結果</button><span class="run-status" data-status role="status">相同質量、相同吸收熱量，只改物質種類。</span></div>
-              <div class="record-wrap" data-record-wrap hidden><table><caption>我的比較紀錄（最近六筆）</caption><thead><tr><th scope="col">物質</th><th scope="col">各吸收熱量</th><th scope="col">末溫 水／金屬</th><th scope="col">升溫 水／金屬</th></tr></thead><tbody data-records></tbody></table></div>
-              <p class="lab-note">以均勻溫度的樣品比較，忽略容器吸熱、散熱與導熱過程；不是測試熱傳導快慢。樣品及儀器尺寸為示意。</p>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>用水的算法，500÷100＝5°C。換一種物質，也會升高5°C嗎？</p></div>
+            <div class="unit-panel material-comparison" id="material-lab" data-phase="loading">
+              <div class="material-toolbar"><p><strong>只改變物質種類</strong><br>各100 g・初溫20°C・各吸收500 cal</p><label for="material-setting">和水比較 <select id="material-setting" disabled><option value="aluminum">鋁</option><option value="iron">鐵</option><option value="copper">銅</option></select></label></div>
+              <p class="material-prediction">待檢驗的預測：用水的算法，兩份都會升高5°C？</p>
+              <div class="material-workbench"><figure class="material-bench"><div class="material-photo">
+                <img id="material-apparatus" src="assets/material-comparison-bench.webp" width="1672" height="941" alt="AI生成水與固體物質比較台：水的浸入式探針與金屬表面接觸探針；金屬塊、LCD及燈號由程式呈現。">
+                <svg id="material-motion" viewBox="0 0 1672 941" aria-hidden="true"></svg>
+                <span class="material-label material-label-a">水100 g</span><span class="material-label material-label-b"><span id="material-name">鋁</span>100 g（固體）</span>
+                <div class="material-meter" id="material-meter-a-screen" aria-hidden="true" hidden><span id="material-meter-a">20.0</span><small>°C</small></div><div class="material-meter material-meter-b" id="material-meter-b-screen" aria-hidden="true" hidden><span id="material-meter-b">20.0</span><small>°C</small></div>
+                <button class="material-knob" data-material-start="0" type="button" disabled aria-label="開始加熱水"></button><button class="material-knob material-knob-b" data-material-start="1" type="button" disabled aria-label="開始加熱金屬"></button>
+                <span class="material-label material-energy-a">已吸收 <output id="material-heat-a">0</output> cal</span><span class="material-label material-energy-b">已吸收 <output id="material-heat-b">0</output> cal</span>
+                <div class="mass-loading" id="material-loading">正在準備物質比較台…</div>
+              </div></figure>
+              <div class="material-results"><h3>觀察到的溫升</h3><div class="mass-bar-row"><span>水</span><div class="mass-bar-track"><span class="mass-bar" id="material-bar-a"></span></div><strong><output id="material-rise-a">0.0</output>°C</strong></div><div class="mass-bar-row"><span id="material-bar-name">鋁</span><div class="mass-bar-track"><span class="mass-bar mass-bar-b" id="material-bar-b"></span></div><strong><output id="material-rise-b">0.0</output>°C</strong></div><p id="material-scale">共同刻度</p></div></div>
+              <div class="mass-actions"><button class="action" id="material-play" type="button" disabled>兩份一起開始</button><button class="secondary" id="material-retry" type="button" hidden>重新載入器材</button><span id="material-status" role="status">正在準備物質比較台…</span></div>
+              <div class="derivation-panel" id="material-discovery" hidden><h3>完成檢驗後，引入比熱</h3><p id="material-observation"></p><p><strong>比熱：讓1 g物質升高1°C所需的熱量。</strong></p><p id="material-specific-values"></p><p>同樣質量與吸熱量，比熱越大，溫升越小。水的比熱約為1，所以剛才水的算法省略了這一項。</p><p>溫升＝吸收熱量÷（質量×比熱）</p><p class="final-heat-formula">Q ＝ m × c × ΔT</p><p>Q：吸收熱量（cal）　m：質量（g）　c：比熱〔cal／(g·°C)〕　ΔT：溫升＝末溫－初溫（°C）</p></div>
+              <p class="mass-model-note">樣品視為均勻溫度，無狀態改變。吸熱與動畫為模型示意，不代表實測。</p>
             </div>
-            <div class="specific-table"><table><caption>常溫附近的比熱參考值</caption><thead><tr><th scope="col">物質</th><th scope="col">比熱，約 cal／(g·°C)</th></tr></thead><tbody><tr><th scope="row">水</th><td>1.00</td></tr><tr><th scope="row">鋁</th><td>0.22</td></tr><tr><th scope="row">鐵</th><td>0.11</td></tr><tr><th scope="row">銅</th><td>0.093</td></tr></tbody></table></div>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>「同樣 100 g、吸收 500 cal，水只升高 5°C，鋁卻升高約 22.7°C。水的比熱比較大！」</p></div>
-            <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>「也可以這樣想：相同質量要升高同樣的溫度，比熱大的物質，需要吸收更多熱量。」</p></div>
-            <details class="relation"><summary>用一個關係式整理剛才的發現</summary><p class="formula">Q ＝ m × c × ΔT</p><p>吸收熱量＝質量 × 比熱 × 升溫；其中 ΔT＝末溫－初溫。</p><p>例如 100 g 水升高 10°C：100 × 1 × 10＝1,000 cal。先理解三個因素如何影響結果，再練習簡單判讀。</p></details>
+            <details class="relation"><summary>比較條件與模型</summary><p>只換物質，固定100g、初溫20°C與樣品各吸收500cal。固體直接以接觸探針讀取均勻樣品的模型溫度；不把固體當作液體，也不固定體積相同。金屬塊尺寸為示意，比熱使用常溫近似值。</p><p>此區以樣品實際吸熱作比較，忽略容器、散熱與內部導熱過程。動畫進度為示意，不代表相同加熱功率或相同效率，不用來比較熱傳導快慢。到點保留觀察時刻，不模擬冷卻或探針反應延遲。換物質或重做會收起當次歸納，換區與背景中斷不自動續熱。</p></details>
           </div>
         </section>
 

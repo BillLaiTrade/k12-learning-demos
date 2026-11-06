@@ -36,6 +36,7 @@ test('4.3 fifth-section apparatus follows the shared visual style with live main
    await select(medium);
    for(const combo of [[true,false],[false,true],[true,true],[false,false]]){
     for(const [i,key]of ['a','b'].entries())if((await root.getAttribute(`data-light-${key}`)==='true')!==combo[i])await p.locator(`#return-toggle-${key}`).click();
+    if(combo.some(Boolean))await p.clock.runFor(2500);
     assert.equal(await p.locator('#return-scene .return-angle-marks').getAttribute('visibility'),combo.some(Boolean)?'visible':'hidden');
     if(combo.some(Boolean)){assert.equal(await p.locator('.return-upper-label .return-angle-name').textContent(),combo.every(Boolean)?'空氣側':combo[0]?'入射角':'折射角');assert.equal(await p.locator('.return-lower-label .return-angle-name').textContent(),combo.every(Boolean)?`${medium==='water'?'水':'玻璃'}側`:combo[1]?'入射角':'折射角');}
    }
