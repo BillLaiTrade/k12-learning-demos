@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="assets/heat-quantity.css?v=quiz-nav-2">
   <link rel="stylesheet" href="assets/calorie-lab.css?v=calc-layout-2">
   <link rel="stylesheet" href="../../assets/unit-format.css?v=20261105">
-  <link rel="stylesheet" href="assets/heat-stage-lab.css?v=continuous-1">
-  <script type="module" src="assets/heat-stage-lab.js?v=continuous-1"></script>
+  <link rel="stylesheet" href="assets/heat-stage-lab.css?v=bench-balance-1">
+  <script type="module" src="assets/heat-stage-lab.js?v=bench-balance-1"></script>
   <script type="module" src="assets/heat-quantity.js?v=unknown-quiz-1"></script>
   <script type="module" src="assets/calorie-lab.js?v=refined-1-calc-layout-3"></script>
   <link rel="stylesheet" href="assets/heat-bench.css?v=refined-1">
@@ -134,9 +134,8 @@
                     <div class="calorie-meter-screen" id="heat-stage-meter-screen" aria-hidden="true" hidden><span id="heat-stage-meter">20.0</span><small>°C</small></div>
                     <div class="calorie-scene-loading" id="heat-stage-loading">正在準備器材畫面…</div>
                   </div>
-                  <figcaption id="heat-stage-heater-status">等待開始觀察</figcaption>
                 </figure>
-                <div class="heat-stage-plot"><div class="heat-stage-plot-heading"><h4>吸收熱量與溫升</h4><span id="heat-stage-mode">推算示例・非本次觀察</span></div><svg id="heat-stage-graph" role="img" aria-label="推算示例，非本次觀察。"></svg><p id="heat-stage-graph-note">未操作也可先看示例；開始後，改畫本次的加熱進度。</p></div>
+                <div class="heat-stage-plot"><div class="heat-stage-plot-heading"><h4>吸收熱量與溫升</h4><span id="heat-stage-mode" class="is-example">推算示例・非本次觀察</span></div><svg id="heat-stage-graph" role="img" aria-label="推算示例，非本次觀察。"></svg><p id="heat-stage-graph-note">未操作也可先看示例；開始後，改畫本次的加熱進度。</p></div>
               </div>
               <div class="heat-bench-console"><div class="heat-stage-readings"><span>已吸收熱量 <strong><output id="heat-stage-energy">0</output> cal</strong></span><span>目前水溫 <strong><output id="heat-stage-temperature">20.0</output>°C</strong></span><span>溫升 <strong><output id="heat-stage-rise">0.0</output>°C</strong></span></div><p id="heat-stage-status" role="status">正在準備器材畫面…</p></div></div>
               <details class="heat-stage-record-panel" id="heat-stage-record-panel"><summary id="heat-stage-record-label">查看推算示例的逐點數據</summary><table class="heat-stage-record-table"><caption>同一份100 g水，從20°C起算的累計吸熱量與溫升</caption><thead><tr><th scope="col">水吸收熱量</th><th scope="col">水溫</th><th scope="col">溫升</th></tr></thead><tbody id="heat-stage-records"></tbody></table></details>

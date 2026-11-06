@@ -5,16 +5,21 @@
 #card-01 .reflection-main-panel { min-width: 0; overflow: hidden; border: 1px solid #c9d6cf; border-radius: 13px; background: #e7e9e6; }
 #card-01 .reflection-main-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 7px; padding: 8px 10px; background: #f7f9f4; }
 #card-01 #reflection-experiment-title { margin: 0; color: #244d3b; font-size: 1.05rem; line-height: 1.4; }
-#card-01 #reflection-view-status { display: block; margin-top: 2px; color: #64756b; font-size: .73rem; line-height: 1.4; }
+#card-01 .reflection-view-meta { display:flex; flex-wrap:wrap; gap:2px 9px; align-items:center; margin-top:2px; }
+#card-01 #reflection-view-status { color: #64756b; font-size: .73rem; line-height: 1.4; }
 #card-01 .reflection-reset-button { min-height: 44px; padding: 9px 12px; border: 0; border-radius: 10px; background: #176b53; color: #fff; font-size: .84rem; font-weight: 750; touch-action: manipulation; }
 #card-01 .reflection-reset-button:hover { background: #105640; }
 #card-01 .reflection-reset-button:focus-visible { outline: 3px solid #176b5370; outline-offset: 2px; }
 #card-01 .reflection-scene-wrap { position: relative; }
-#card-01 .reflection-drag-hint { position: absolute; z-index: 1; top: 9px; right: 9px; padding: 4px 7px; border-radius: 7px; background: #fffdf8d9; color: #526b5d; font-size: .73rem; pointer-events: none; }
+#card-01 .reflection-drag-hint { color:#64756b; font-size:.73rem; line-height:1.4; }
 #card-01 #reflection-3d-scene { height: auto; aspect-ratio: 1.65; touch-action: none; }
 #card-01 .reflection-stage .reflection-controls { gap: 10px; padding: 10px 12px; }
-#card-01 .reflection-fire { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 5px 12px; min-height: 48px; border: 1px solid #bdcdc4; background: #edf2ed; color: #42594e; box-shadow: none; text-align: center; }
-#card-01 .reflection-fire small { font-size: .8rem; opacity: 1; }
+#card-01 .reflection-fire { display:flex; align-items:center; justify-content:center; gap:12px; min-height:68px; padding:9px 13px; border:1.5px solid #789986; border-radius:13px; background:#fffefa; color:#315b45; box-shadow:0 3px 0 #d1ddd3; text-align:left; }
+#card-01 .reflection-fire-copy { display:grid; gap:1px; min-width:0; line-height:1.35; }
+#card-01 .reflection-fire-copy strong { font-size:.98rem; font-weight:750; }
+#card-01 .reflection-fire small { font-size:.76rem; font-weight:550; opacity:1; }
+#card-01 .flashlight-icon,#card-01 .flashlight-power { display:block; flex:0 0 auto; width:26px; height:26px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+#card-01 .flashlight-power { width:19px; height:19px; opacity:.75; }
 #card-01 .reflection-fire[aria-pressed="true"] { border-color: #176b53; background: #176b53; color: #fff; box-shadow: 0 3px 8px #176b5326; }
 #card-01 .reflection-fire:hover { border-color: #176b53; }
 #card-01 .reflection-fire[aria-pressed="true"]:hover { background: #105640; }
@@ -27,11 +32,19 @@
   #card-01 #reflection-view-status { font-size: .68rem; }
   #card-01 .reflection-reset-button { font-size: .76rem; padding: 8px; }
   #card-01 #reflection-3d-scene { aspect-ratio: 1.3; }
-  #card-01 .reflection-drag-hint { top: 6px; right: 6px; font-size: .65rem; }
+  #card-01 .reflection-drag-hint { font-size: .68rem; }
   #card-01 .reflection-stage .reflection-controls { gap: 8px; padding: 8px; }
-  #card-01 .reflection-fire { flex-direction: column; gap: 2px; font-size: .8rem; }
-  #card-01 .reflection-fire small { font-size: .73rem; }
+  #card-01 .reflection-fire { gap:6px; min-height:64px; padding:8px 6px; }
+  #card-01 .reflection-fire-copy strong { font-size:.8rem; }
+  #card-01 .reflection-fire small { font-size:.69rem; }
+  #card-01 .flashlight-icon { width:21px; height:21px; }
+  #card-01 .flashlight-power { width:15px; height:15px; }
 
+}
+@container reflection-stage (max-width: 360px) {
+  #card-01 .flashlight-power { display:none; }
+  #card-01 .reflection-fire small { display:grid; font-size:.71rem; line-height:1.25; }
+  #card-01 .reflection-fire-separator { display:none; }
 }
 
 /* Supporting explanation follows the material and type hierarchy of cards 02/05. */

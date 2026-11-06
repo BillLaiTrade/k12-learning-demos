@@ -19,7 +19,7 @@ function initialise(root){
  let observerKey='';
  function drawArt(ctx,width,height,factor){ctx.save();ctx.translate(width/2,height/2);ctx.scale(factor*G.cardWidth/art.width,factor*G.cardHeight/art.height);ctx.drawImage(art,-art.width/2,-art.height/2);ctx.restore();}
  function paintObserver(){
-  const g=magnifierState(state),key=state.object+'|'+state.eye+'|'+state.screenIn+'|'+state.screen;if(key===observerKey)return g;observerKey=key;const W=eyeCanvas.width,H=eyeCanvas.height,c=eyeCanvas.getContext('2d'),pixels=H*.68/(G.cardHeight*.76*g.referenceScale),r=pixels*G.aperture/(g.eye*G.opticalScale);
+  const g=magnifierState(state),key=state.object+'|'+state.eye+'|'+state.screenIn+'|'+state.screen;if(key===observerKey)return g;observerKey=key;const W=eyeCanvas.width,H=eyeCanvas.height,c=eyeCanvas.getContext('2d'),pixels=W/(2*Math.tan(G.fov*Math.PI/360)),r=pixels*G.aperture/(g.eye*G.opticalScale);
   c.clearRect(0,0,W,H);c.fillStyle='#fffdf3';c.fillRect(0,0,W,H);c.save();c.beginPath();c.arc(W/2,H/2,r,0,Math.PI*2);c.clip();c.fillStyle='#fffdf3';c.fillRect(0,0,W,H);
   if(g.blocked){c.fillStyle='#657260';c.fillRect(0,0,W,H);c.strokeStyle='#aebaa4';c.lineWidth=10;c.strokeRect(W*.15,H*.12,W*.7,H*.76);c.fillStyle='#f5f5e5';c.font='24px system-ui';c.textAlign='center';c.fillText('屏幕背面',W/2,H*.48);c.font='20px system-ui';c.fillText('視線被擋住',W/2,H*.56);}
   else if(!g.resolved){
@@ -43,7 +43,7 @@ function initialise(root){
   $('[data-ci-eye-badge]').textContent=g.eyeMode==='converging'?'此固定眼位無法清楚對焦':g.eyeMode==='parallel'?'可放鬆觀看':`正立・${size}`;
   const condition=`正立、縮小的虛像，位於圖卡同側、透鏡與 F 之間（距透鏡 ${distanceLabel(Math.abs(g.v))}）。`;
   $('[data-ci-condition]').textContent=condition;
-  $('[data-ci-eye-note]').textContent='兩框同步縮放，以相同尺度比較大小。';
+  $('[data-ci-eye-note]').textContent='兩框採固定尺度，圖卡近大遠小。';
   root.dataset.blurRadius=g.blurRadius;
   $('[data-ci-ray-name]').textContent=point==='top'?'紅：代表光':point==='bottom'?'藍：代表光':'紅／藍：代表光';
   $('[data-result]').textContent=condition;

@@ -84,7 +84,7 @@
     @media(max-width:760px){.route a.quiz-nav{margin:0 0 0 4px;border-top:1px solid var(--line);padding:7px 10px}.route a.quiz-nav[aria-current=step]{border-color:#d9a74f}}
   </style>
   <link rel="stylesheet" href="assets/lesson-layout.css?v=align-4.1-20261105">
-  <link rel="stylesheet" href="assets/reflection-stage.css?v=surface-exhibit-20261106">
+  <link rel="stylesheet" href="assets/reflection-stage.css?v=flashlight-controls-20261106">
   <link rel="stylesheet" href="assets/laser-concept.css?v=compact-20261106">
 </head>
 <body>
@@ -130,16 +130,16 @@
             <figure class="reflection-stage" aria-labelledby="reflection-experiment-title">
               <div class="reflection-comparison">
                 <div class="reflection-main-panel">
-                  <div class="reflection-main-heading"><div><h3 id="reflection-experiment-title">自由觀察實驗器材</h3><span id="reflection-view-status" aria-live="polite">目前觀看位置：正面</span></div><button id="reflection-reset-view" class="reflection-reset-button" type="button" aria-controls="reflection-3d-scene" disabled>回到正面</button></div>
-                  <div class="reflection-scene-wrap"><span class="reflection-drag-hint">可上下、左右自由拖曳</span>
+                  <div class="reflection-main-heading"><div><h3 id="reflection-experiment-title">自由觀察實驗器材</h3><div class="reflection-view-meta"><span id="reflection-view-status" aria-live="polite">目前觀看位置：正面</span><span class="reflection-drag-hint">可上下、左右自由拖曳</span></div></div><button id="reflection-reset-view" class="reflection-reset-button" type="button" aria-controls="reflection-3d-scene" disabled>回到正面</button></div>
+                  <div class="reflection-scene-wrap">
                     <canvas id="reflection-3d-scene" role="img" tabindex="0" aria-label="可自由觀看的 3D 反光實驗：左邊是光滑表面，右邊是粗糙表面。拖曳可上下、左右調整觀看角度。" aria-describedby="reflection-status reflection-view-status" data-ready="loading"></canvas>
                   </div>
                 </div>
               </div>
               <p class="reflection-fallback" id="reflection-fallback" hidden>這個 3D 實驗場景無法在目前裝置顯示；你仍可閱讀並播放下方的反射方向圖解。</p>
               <div class="reflection-controls">
-                <button class="reflection-fire" id="reflection-fire-mirror" type="button" aria-pressed="false" aria-label="開啟照向光滑表面的手電筒" disabled><span>左側手電筒</span><small>已關閉</small></button>
-                <button class="reflection-fire" id="reflection-fire-paper" type="button" aria-pressed="false" aria-label="開啟照向粗糙表面的手電筒" disabled><span>右側手電筒</span><small>已關閉</small></button>
+                <button class="reflection-fire" id="reflection-fire-mirror" type="button" aria-pressed="false" aria-label="開啟照向光滑表面的手電筒" disabled><svg class="flashlight-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 21l8 5 7-12-8-5-7 12zm8-12 4-5 9 5-3 6-3-1"/><path d="M10 20l2 1"/></svg><span class="reflection-fire-copy"><strong>左側手電筒</strong><small><span data-light-state>已關閉</span><span class="reflection-fire-separator" aria-hidden="true">・</span><span data-light-action>點擊開啟</span></small></span><svg class="flashlight-power" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9M7.1 5.8a8 8 0 1 0 9.8 0"/></svg></button>
+                <button class="reflection-fire" id="reflection-fire-paper" type="button" aria-pressed="false" aria-label="開啟照向粗糙表面的手電筒" disabled><svg class="flashlight-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 21l8 5 7-12-8-5-7 12zm8-12 4-5 9 5-3 6-3-1"/><path d="M10 20l2 1"/></svg><span class="reflection-fire-copy"><strong>右側手電筒</strong><small><span data-light-state>已關閉</span><span class="reflection-fire-separator" aria-hidden="true">・</span><span data-light-action>點擊開啟</span></small></span><svg class="flashlight-power" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9M7.1 5.8a8 8 0 1 0 9.8 0"/></svg></button>
               </div>
             </figure>
             <p class="reflection-status visually-hidden" id="reflection-status" aria-live="polite">左右手電筒目前都已關閉。</p>
@@ -496,7 +496,7 @@
   <script type="module" src="assets/mirror-distance.js?v=readouts-below-20261106"></script>
   <script type="module" src="assets/curved-mirrors.js?v=activity-order-20261105"></script>
   <script type="module" src="assets/mirror-image.js?v=distance-segment-light-20261106"></script>
-  <script type="module" src="assets/reflection-3d.js?v=surfaces-experiment-20261105"></script>
+  <script type="module" src="assets/reflection-3d.js?v=flashlight-controls-20261106"></script>
   <script type="module" src="assets/surface-directions.js?v=surface-flow-20261105"></script>
   <script type="module" src="assets/laser-reflection.js?v=compact-20261106"></script>
   <script type="module" src="assets/reversible-light.js?v=compact-workspace-20261106"></script>

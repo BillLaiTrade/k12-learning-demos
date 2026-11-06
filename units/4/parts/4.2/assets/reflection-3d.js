@@ -232,6 +232,20 @@ try {
   const lampIndicators = [];
   const sourceGlows = [];
   const spotLights = [];
+  // A small physical switch on each lamp, rather than a screen-space hint.
+  const switchCanvas = document.createElement('canvas');
+  switchCanvas.width = switchCanvas.height = 128;
+  const switchContext = switchCanvas.getContext('2d');
+  switchContext.fillStyle = '#1b2922';
+  switchContext.beginPath();switchContext.arc(64,64,62,0,Math.PI*2);switchContext.fill();
+  switchContext.strokeStyle = '#8da99a';switchContext.lineWidth = 5;
+  switchContext.beginPath();switchContext.arc(64,64,58,0,Math.PI*2);switchContext.stroke();
+  switchContext.strokeStyle = '#e9f3eb';switchContext.lineWidth = 10;switchContext.lineCap = 'round';
+  switchContext.beginPath();switchContext.arc(64,65,28,-Math.PI/4,Math.PI*1.25);switchContext.stroke();
+  switchContext.beginPath();switchContext.moveTo(64,26);switchContext.lineTo(64,64);switchContext.stroke();
+  const switchTexture = new THREE.CanvasTexture(switchCanvas);
+  switchTexture.colorSpace = THREE.SRGBColorSpace;
+  const switchMaterial = new THREE.MeshBasicMaterial({map:switchTexture});
   for (const station of stations) {
     const target = station.surface.clone();
     const direction = target.clone().sub(station.source).normalize();
@@ -244,6 +258,17 @@ try {
     barrel.position.y = -0.29;
     barrel.castShadow = true;
     lamp.add(barrel);
+    const towardObserver = camera.position.clone().sub(station.source).applyQuaternion(lamp.quaternion.clone().invert());
+    towardObserver.y = 0;
+    if (towardObserver.lengthSq() < 1e-8) towardObserver.set(0,0,1);
+    towardObserver.normalize();
+    const powerSwitch = new THREE.Mesh(new THREE.CircleGeometry(0.115,32),switchMaterial);
+    powerSwitch.name = 'flashlight-power-switch';
+    powerSwitch.position.copy(towardObserver).multiplyScalar(.171);
+    powerSwitch.position.y = -.29;
+    powerSwitch.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),towardObserver);
+    powerSwitch.rotateZ(Math.PI);
+    lamp.add(powerSwitch);
     const head = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.15, 0.2, 28), mats.lampTrim);
     head.position.y = 0.02;
     lamp.add(head);
@@ -391,7 +416,8 @@ try {
   const illuminated = [false, false];
   const updateLightControls = () => {
     illuminated.forEach((isOn, index) => {
-      fireButtons[index].querySelector('small').textContent = isOn ? '已開啟' : '已關閉';
+      fireButtons[index].querySelector('[data-light-state]').textContent = isOn ? '已開啟' : '已關閉';
+      fireButtons[index].querySelector('[data-light-action]').textContent = isOn ? '點擊關閉' : '點擊開啟';
       fireButtons[index].setAttribute('aria-pressed', String(isOn));
       fireButtons[index].setAttribute('aria-label', `${isOn ? '關閉' : '開啟'}照向${index === 0 ? '光滑表面' : '粗糙表面'}的手電筒`);
     });
@@ -467,6 +493,8 @@ try {
     // Dispose GPU resources while their renderer property cache still exists.
     roughTexture.dispose();
     roughBump.dispose();
+    switchTexture.dispose();
+    switchMaterial.dispose();
     surfaceLabelTextures.forEach((texture) => texture.dispose());
     woodTexture.dispose();
     mirrorEnvironmentTarget.dispose();
