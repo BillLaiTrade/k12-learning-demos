@@ -19,6 +19,8 @@ if(section) {
     find('rays').before(incomingMatch);
     const totalPath=node('path',{'data-side':'total-highlight',d:sidePath(mirror?ray.reflected:ray.direct),fill:'none',stroke:'#ffca46','stroke-width':13,'stroke-linecap':'round','stroke-linejoin':'round','pointer-events':'none',visibility:'hidden'});
     find('rays').before(totalPath);
+    const segmentPath=node('path',{'data-side':'segment-highlight',fill:'none',stroke:'#ffca46','stroke-width':13,'stroke-linecap':'round','stroke-linejoin':'round','pointer-events':'none',visibility:'hidden'});
+    find('rays').before(segmentPath);
     find('extensions').replaceChildren(...(mirror?[path(ray.extension,false)]:[]));
     find('hits').replaceChildren(...(mirror?[node('circle',{cx:ray.hit[0],cy:ray.hit[1],r:4})]:[]));
     function distanceLabel(name,points,text,color,fraction=.5,{compact=false,side=1,gap=20}={}) {
@@ -47,6 +49,11 @@ if(section) {
     function selectDistance(key) {
       for(const control of [...badges,...terms,total]) control.setAttribute('aria-pressed',String(key!==null && control.dataset.match===key));
       totalPath.setAttribute('visibility',key==='total'?'visible':'hidden');
+      const segments={'2':mirror?[ray.source,ray.hit]:[ray.image,ray.hit],'3':[ray.hit,ray.eye],extension:[ray.hit,ray.image]};
+      const points=segments[key];
+      segmentPath.setAttribute('visibility',points?'visible':'hidden');
+      if(points)segmentPath.setAttribute('d',sidePath(points));
+      if(key==='extension')segmentPath.setAttribute('stroke-dasharray','8 12');else segmentPath.removeAttribute('stroke-dasharray');
     }
     clearSelections.push(()=>selectDistance(null));
     total.addEventListener('click',()=>selectDistance('total'));

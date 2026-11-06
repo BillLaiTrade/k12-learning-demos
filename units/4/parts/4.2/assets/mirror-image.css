@@ -22,7 +22,7 @@
 #card-04 .comparison-path-term strong{font-size:1rem;font-weight:700}
 #card-04 .comparison-path-operator{font-size:.95rem;color:#728a8d}
 #card-04 .comparison-path-total{font-size:1.15rem;font-weight:750;color:#155454}
-#card-04 button.comparison-path-total{appearance:none;min-height:44px;padding:3px 8px;border:2px solid transparent;border-radius:8px;background:transparent;font-family:inherit;line-height:inherit;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px}
+#card-04 button.comparison-path-total{appearance:none;min-height:44px;padding:3px 8px;border:2px solid transparent;border-radius:8px;background:transparent;font-family:inherit;line-height:inherit;cursor:pointer;text-decoration:none}
 #card-04 button.comparison-path-total:hover{background:#fff8e3}
 #card-04 button.comparison-path-total[aria-pressed="true"]{border-color:#a26c16;background:#fff2cb}
 #card-04 button.comparison-path-total:focus-visible{outline:2px solid #a26c16;outline-offset:2px}
