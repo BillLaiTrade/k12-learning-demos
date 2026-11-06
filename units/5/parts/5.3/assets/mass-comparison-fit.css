@@ -39,3 +39,16 @@
  .mass-console .mass-actions{margin-top:0}
  #mass-lab #mass-conclusion{margin-top:0}
 }
+/* 調整操作台為閱讀重心，保留桌機同視窗操作。 */
+@media(min-width:1100px){
+ #mass-lab{grid-template-columns:minmax(0,1.75fr) minmax(270px,1fr);scroll-margin-top:12px}
+ #mass-lab .mass-conditions,#mass-lab .mass-setting,#mass-lab .mass-choices button,#mass-lab .mass-rise-panel h3,#mass-lab .mass-record-panel h3,#mass-lab .mass-bar-row,#mass-lab .mass-bar-row strong,#mass-lab .mass-record-panel table,#mass-lab .mass-record-panel thead th,#mass-lab .mass-actions button,#mass-lab .mass-status,#mass-lab #mass-conclusion{font-size:1rem}
+ #mass-lab .mass-meter{font-size:clamp(15px,3.1cqi,20px);letter-spacing:-.07em;gap:0}
+ #mass-lab .mass-badge{font-size:.9rem;padding:2px 5px}
+ #mass-lab .mass-energy{top:82%}
+ #mass-lab .mass-sample-state{top:92%;font-size:.9rem;line-height:1.15}
+ #mass-lab .mass-bar-scale,#mass-lab .mass-model-note{font-size:.85rem}
+ #mass-lab .mass-bar-row{grid-template-columns:32px minmax(0,1fr) 65px}
+ #mass-lab .mass-bar-scale{margin-left:38px;margin-right:71px}
+ #mass-lab .mass-record-panel th,#mass-lab .mass-record-panel td{padding:4px 2px}
+}
