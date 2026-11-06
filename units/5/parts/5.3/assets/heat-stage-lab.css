@@ -39,24 +39,22 @@
 .heat-stage-record-table th,.heat-stage-record-table td{padding:8px 4px;border-bottom:1px solid #dfe6d8;font-weight:400}
 .heat-stage-record-table thead{background:#edf3e8}.heat-stage-record-table tbody th{font-weight:650}
 .heat-stage-note{font-size:.875rem;line-height:1.65;color:#64715e;margin:10px 0}
-.heat-stage-analysis{margin-top:24px;padding-top:18px;border-top:1px solid #d4e0d0;font-size:1rem}
-.heat-stage-analysis h3{margin:0 0 8px;font-size:1.1rem}
-.heat-stage-analysis-condition{margin:0 0 20px;color:#4c6551}
-.heat-stage-analysis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:24px;align-items:start}
-.heat-stage-analysis h4{display:flex;align-items:center;gap:8px;font-size:1rem;margin:0 0 12px;color:#31563b}
-.heat-stage-analysis h4>span{display:inline-grid;place-items:center;flex:none;width:26px;height:26px;border-radius:50%;background:#e7efdf;font-weight:750}
-.heat-stage-analysis-step>p{margin:10px 0;line-height:1.85}
-.heat-stage-analysis-step>.heat-stage-note{font-size:1rem}
-.heat-stage-analysis-step strong{color:#a85220}
-.heat-stage-analysis-table{width:100%;border-collapse:collapse;text-align:center;font-size:1rem;font-variant-numeric:tabular-nums}
-.heat-stage-analysis-table caption{text-align:left;font-size:.875rem;color:#64715e;padding-bottom:8px}
-.heat-stage-analysis-table thead{background:#eff3e9;color:#47604b}
-.heat-stage-analysis-table th,.heat-stage-analysis-table td{padding:8px;border-bottom:1px solid #dfe6d8;font-weight:400}
-.heat-stage-analysis-table tbody th{color:#a85220;font-weight:650}.heat-stage-analysis-table tbody td{color:#205d40;font-weight:650}
-.heat-stage-proportion{padding:10px 12px;border-left:3px solid #97b88d;background:#f2f6eb;border-radius:0 8px 8px 0}
-.heat-stage-proportion strong{color:#205d40}
-.heat-stage-formula-panel{background:#f6f7f0;border-left:3px solid #b3c5a8;border-radius:0 10px 10px 0;padding:14px 18px;margin-top:20px;text-align:left}
-.heat-stage-formula-panel h4{justify-content:flex-start;margin-bottom:8px}.heat-stage-formula-panel>p{margin:0;line-height:1.85;color:#526a54}
-.heat-stage-analysis .heat-stage-formula{display:inline-block;font-size:1rem;line-height:inherit;font-weight:500;color:#31563b;margin:0;white-space:nowrap}
+.heat-stage-analysis{margin-top:24px;padding:22px;border:1px solid #c9dbbd;border-radius:16px;background:#fffefa;font-size:1rem}
+.heat-stage-analysis h3{margin:0 0 16px;padding-left:12px;border-left:4px solid #9fbd86;font-size:1.25rem;line-height:1.4;color:#2d5537}
+.heat-stage-analysis-heading{display:flex;align-items:center;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;margin-bottom:16px}
+.heat-stage-analysis-condition{margin:0;color:#3f5f45}
+#heat-stage-analysis-mode{padding:3px 10px;border-radius:8px;background:#edf4e7;color:#3c6548;font-size:.875rem;line-height:1.6}
+#heat-stage-analysis-mode.is-example{background:#fbf0db;color:#6f603c}
+.heat-stage-analysis-table{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;overflow:hidden;border:1px solid #b9cfa8;border-radius:9px;text-align:center;font-variant-numeric:tabular-nums}
+.heat-stage-label-column{width:28%}
+.heat-stage-analysis-table th,.heat-stage-analysis-table td{padding:14px 12px;border-right:1px solid #d1dfc6;border-bottom:1px solid #d1dfc6;line-height:1.5}
+.heat-stage-analysis-table th{background:#edf4e5;color:#315838;font-size:1rem;font-weight:650}
+.heat-stage-analysis-table td{font-size:1.25rem;font-weight:650;color:#2d633e}
+#heat-stage-analysis-heat td{color:#b36028}
+.heat-stage-analysis-table tr>*:last-child{border-right:0}.heat-stage-analysis-table tr:last-child>*{border-bottom:0}
+.heat-stage-takeaway{margin-top:16px;padding:14px 16px;border-left:3px solid #97b785;border-radius:0 10px 10px 0;background:#f1f5eb;color:#38563e}
+.heat-stage-takeaway p{margin:0;line-height:1.7}
+.heat-stage-takeaway .heat-stage-rule{margin-bottom:5px;color:#2c5535;font-size:1.05rem;font-weight:650}
+#card-02 .heat-stage-next{margin:14px 0 0;color:#4c6551}
 @container heat-stage-workbench (max-width:640px){#heat-lab .heat-stage-workbench{grid-template-columns:minmax(0,1fr)}#heat-lab .calorie-apparatus-view{max-width:400px;margin-inline:auto}#heat-lab .heat-stage-plot{width:100%;max-width:600px;margin-inline:auto}}
-@media(max-width:600px){#heat-lab{padding:12px}.heat-stage-controls{gap:9px}.heat-stage-controls>span{flex-basis:100%}.heat-stage-readings{display:grid;gap:7px}.heat-stage-readings>span{display:flex;justify-content:space-between;gap:8px}.heat-stage-record-table{font-size:.95rem}.heat-stage-analysis{margin-top:20px}}
+@media(max-width:600px){#heat-lab{padding:12px}.heat-stage-controls{gap:9px}.heat-stage-controls>span{flex-basis:100%}.heat-stage-readings{display:grid;gap:7px}.heat-stage-readings>span{display:flex;justify-content:space-between;gap:8px}.heat-stage-record-table{font-size:.95rem}.heat-stage-analysis{margin-top:20px;padding:16px}.heat-stage-label-column{width:31%}.heat-stage-analysis-table th,.heat-stage-analysis-table td{padding:10px 4px;font-size:1rem}}

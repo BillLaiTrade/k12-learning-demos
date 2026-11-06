@@ -16,12 +16,10 @@ const exampleMode=()=>elapsed===0&&!playing;
 
 function cancel(){playing=false;cancelAnimationFrame(frame);frame=0;}
 function analysis(data,example){
-  get('heat-stage-analysis-mode').textContent=example?'推算示例・非本次觀察':'本次觀察・沿途前三筆';
-  const body=get('heat-stage-analysis-data');body.replaceChildren();
+  const mode=get('heat-stage-analysis-mode');mode.textContent=example?'推算示例・非本次觀察':'本次觀察・沿途前三筆';mode.classList.toggle('is-example',example);
+  const heat=get('heat-stage-analysis-heat').cells,rise=get('heat-stage-analysis-rise').cells;
   for(let i=0;i<3;i++){
-    const r=data[i],row=document.createElement('tr'),heat=document.createElement('th'),rise=document.createElement('td');
-    heat.scope='row';heat.textContent=r?number(r.waterCalories)+' cal':'待記錄';rise.textContent=r?r.rise.toFixed(1)+'°C':'—';
-    row.append(heat,rise);body.append(row);
+    const r=data[i];heat[i+1].textContent=r?number(r.waterCalories)+' cal':'待記錄';rise[i+1].textContent=r?number(r.rise)+'°C':'—';
   }
 }
 function graph(){
@@ -38,7 +36,7 @@ function graph(){
     const {left,right,top,bottom,maximum}=geometry,x=q=>left+q/maximum*(right-left),y=r=>bottom-r/(maximum/100)*(bottom-top);
     const ticks=Array.from({length:5},(_,i)=>maximum*i/4);
     svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.style.height=height+'px';
-    svg.innerHTML=`<g class="heat-stage-grid">${ticks.map((q,i)=>`<path d="M${left} ${y(q/100)}H${right}"/><path d="M${x(q)} ${top}V${bottom}"/>${side>=260||i%2===0?`<text x="${left-8}" y="${y(q/100)+5}" text-anchor="end">${axisNumber(q/100)}</text><text x="${x(q)}" y="${bottom+23}" text-anchor="${q===maximum?'end':q===0?'start':'middle'}">${axisNumber(q)}</text>`:''}`).join('')}</g><path class="heat-stage-axes" d="M${left} ${top-6}V${bottom}H${right+5}"/><text x="4" y="18" class="heat-stage-axis-title">溫升 ΔT（°C）</text><text x="${right}" y="${height-3}" text-anchor="end" class="heat-stage-axis-title">水吸收熱量 Q（cal）</text><path id="heat-stage-line" d="M${left} ${bottom}L${right} ${top}"/><g id="heat-stage-points"></g><circle id="heat-stage-halo" r="13"/><circle id="heat-stage-live" r="6"/>`;
+    svg.innerHTML=`<g class="heat-stage-grid">${ticks.map((q,i)=>`<path d="M${left} ${y(q/100)}H${right}"/><path d="M${x(q)} ${top}V${bottom}"/>${side>=260||i%2===0?`<text x="${left-8}" y="${y(q/100)+5}" text-anchor="end">${axisNumber(q/100)}</text><text x="${x(q)}" y="${bottom+23}" text-anchor="${q===maximum?'end':q===0?'start':'middle'}">${axisNumber(q)}</text>`:''}`).join('')}</g><path class="heat-stage-axes" d="M${left} ${top-6}V${bottom}H${right+5}"/><text x="4" y="18" class="heat-stage-axis-title">升高的度數（°C）</text><text x="${right}" y="${height-3}" text-anchor="end" class="heat-stage-axis-title">水吸收的熱量（cal）</text><path id="heat-stage-line" d="M${left} ${bottom}L${right} ${top}"/><g id="heat-stage-points"></g><circle id="heat-stage-halo" r="13"/><circle id="heat-stage-live" r="6"/>`;
     pointsKey='';
   }
   const {left,right,top,bottom,maximum}=geometry,x=q=>left+q/maximum*(right-left),y=r=>bottom-r/(maximum/100)*(bottom-top);
@@ -101,7 +99,7 @@ async function loadScene(retry=false){
   const version=++attempt;ready=false;reset();get('heat-stage-loading').hidden=false;get('heat-stage-loading').textContent='正在準備器材畫面…';get('heat-stage-retry').hidden=true;get('heat-stage-meter-screen').hidden=true;
   if(retry)image.src=new URL(`heat-bench-refined.webp?continuousRetry=${version}`,import.meta.url).href;
   try{await image.decode();if(version!==attempt)return;ready=true;get('heat-stage-loading').hidden=true;get('heat-stage-meter-screen').hidden=false;reset();}
-  catch{if(version!==attempt)return;root.dataset.phase='error';get('heat-stage-loading').textContent='器材圖片未能載入，請重新載入。';get('heat-stage-retry').hidden=false;status.textContent='器材尚未就緒；下方示例與公式仍可閱讀。';render();}
+  catch{if(version!==attempt)return;root.dataset.phase='error';get('heat-stage-loading').textContent='器材圖片未能載入，請重新載入。';get('heat-stage-retry').hidden=false;status.textContent='器材尚未就緒；下方示例與規律仍可閱讀。';render();}
 }
 input.addEventListener('input',()=>{
   const value=input.value.trim()===''?NaN:Number(input.value);inputValid=validHeatTarget(value);
