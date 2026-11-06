@@ -189,33 +189,6 @@ function pauseAll(){experiments.forEach(experiment=>experiment.pause());}
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseAll();});
 window.addEventListener('blur',pauseAll);
 
-const answers={
-  q1:{value:'1000',explanation:'升溫是 30－20＝10°C。100 g 水每升高 1°C 約需 100 cal，因此共需 1,000 cal。'},
-  q2:{value:'double',explanation:'同種物質、相同升溫，質量加倍，需要的熱量也加倍，約為 2,000 cal。'},
-  q3:{value:'a',explanation:'相同質量、相同吸收熱量，升溫較少的甲，比熱較大。'},
-  q4:{value:'controlled',explanation:'固定質量、初溫與實際吸收熱量，才適合比較物質種類對升溫的影響。相同加熱器不保證實際吸收熱量相同。'}
-};
-$('#heat-quiz').addEventListener('submit',event=>{
-  event.preventDefault();
-  const data=new FormData(event.currentTarget);
-  let score=0;
-  Object.entries(answers).forEach(([key,answer])=>{
-    const correct=data.get(key)===answer.value;
-    if(correct)score++;
-    const feedback=$(`[data-feedback="${key}"]`);
-    feedback.textContent=`${correct?'✓ 判斷正確。':'再想一想。'}${answer.explanation}`;
-    feedback.dataset.correct=String(correct);
-  });
-  const result=$('#quiz-result');
-  result.hidden=false;
-  result.textContent=score===4?'4／4 題正確！你已能用質量、升溫與比熱，解釋熱量的差異。':`${score}／4 題正確。依各題提示，回到上方實驗比較，再核對一次。`;
-});
-$('#heat-quiz').addEventListener('reset',()=>{
-  $$('[data-feedback]').forEach(item=>{item.textContent='';delete item.dataset.correct;});
-  $('#quiz-result').hidden=true;
-  $('#quiz-result').textContent='';
-});
-
 if('IntersectionObserver' in window){
   const visible=new Map();
   const observer=new IntersectionObserver(entries=>{

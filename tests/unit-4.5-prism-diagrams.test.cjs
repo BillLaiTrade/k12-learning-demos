@@ -10,11 +10,11 @@ test('4.5 折射方向與分色圖：原生收合、窄版及原操作',{timeout
  const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
  const capture=process.env.COLOR_CAPTURE_DIR||'/tmp/unit45-concise-local';await fs.mkdir(capture,{recursive:true});await page.goto(base,{waitUntil:'networkidle'});
  await t.test('收合預設與鍵盤操作不重設器材或光源',async()=>{
-  const first=page.locator('.prism-refraction'),second=page.locator('.prism-dispersion');assert.equal(await first.evaluate(e=>e.open),false);assert.equal(await second.evaluate(e=>e.open),true);
+  const first=page.locator('.prism-refraction'),second=page.locator('.prism-dispersion');assert.equal(await first.evaluate(e=>e.open),false);assert.equal(await second.evaluate(e=>e.open),false);
   for(const i of[1,2]){await page.locator('#s'+i+' .lab').scrollIntoViewIfNeeded();await page.waitForFunction(i=>document.querySelector('#s'+i+' .lab').dataset.renderer==='three',i);}
   await page.locator('#s1 [data-prism=out]').click();await page.locator('#s2 [data-light=blue]').click();
   for(const detail of[first,second]){const before=await detail.evaluate(e=>e.open);await detail.locator('summary').focus();await page.keyboard.press('Enter');assert.equal(await detail.evaluate(e=>e.open),!before);await detail.locator('summary').focus();await page.keyboard.press('Space');assert.equal(await detail.evaluate(e=>e.open),before);}
-  assert.equal(await page.locator('#s1 [data-prism=out]').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('#s2 [data-light=blue]').getAttribute('aria-pressed'),'true');assert.match(await page.locator('#s2 [data-current-light]').innerText(),/藍光/);const block=page.locator('.prism-dispersion');assert.equal(await block.locator('.prism-ray-key,.prism-kicker,.prism-takeaway,.prism-reading-note').count(),0);assert.equal(await block.locator('figcaption').innerText(),'以三色代表連續色光；分離程度已放大，非實際角度。');assert.deepEqual(await block.locator('.prism-cause-chain li>span').allTextContents(),['玻璃內速率略不同','偏折程度不同','色光分開，形成色散']);assert.equal(await block.locator('.prism-cause-chain small').innerText(),'紅光稍快、藍光稍慢');
+  assert.equal(await page.locator('#s1 [data-prism=out]').getAttribute('aria-pressed'),'true');assert.equal(await page.locator('#s2 [data-light=blue]').getAttribute('aria-pressed'),'true');assert.match(await page.locator('#s2 [data-current-light]').innerText(),/藍光/);const block=page.locator('.prism-dispersion');assert.equal(await block.locator('.prism-ray-key,.prism-kicker,.prism-takeaway,.prism-reading-note').count(),0);assert.equal(await block.locator('figcaption').textContent(),'以三色代表連續色光；分離程度已放大，非實際角度。');assert.deepEqual(await block.locator('.prism-cause-chain li>span').allTextContents(),['玻璃內速率略不同','偏折程度不同','色光分開，形成色散']);assert.equal(await block.locator('.prism-cause-chain small').textContent(),'紅光稍快、藍光稍慢');
  });
  const results=[];
  for(const [width,height]of[[1366,768],[820,900],[650,900],[390,844],[320,568]])await t.test(`${width}×${height} 圖文完整且不溢出`,async()=>{
@@ -28,7 +28,7 @@ test('4.5 折射方向與分色圖：原生收合、窄版及原操作',{timeout
   await svgPage.close();assert.deepEqual(errors,[]);
  });
  await t.test('停用 JavaScript 仍可展開兩區並載入圖解',async()=>{
-  const fallback=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}}),p=await fallback.newPage();await p.goto(base);for(const kind of['refraction','dispersion']){const detail=p.locator('.prism-'+kind);if(!await detail.evaluate(e=>e.open))await detail.locator('summary').click();const img=detail.locator('img');await img.scrollIntoViewIfNeeded();await img.evaluate(e=>e.decode());assert.equal(await img.evaluate(e=>e.complete&&e.naturalWidth>0),true);}await fallback.close();
+  const fallback=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}}),p=await fallback.newPage();await p.goto(base);for(const kind of['refraction','dispersion']){const detail=p.locator('.prism-'+kind);assert.equal(await detail.evaluate(e=>e.open),false);if(!await detail.evaluate(e=>e.open))await detail.locator('summary').click();const img=detail.locator('img');await img.scrollIntoViewIfNeeded();await img.evaluate(e=>e.decode());assert.equal(await img.evaluate(e=>e.complete&&e.naturalWidth>0),true);}await fallback.close();
  });
  await fs.writeFile(path.join(capture,'layout.json'),JSON.stringify(results,null,2));
 });

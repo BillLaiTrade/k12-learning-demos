@@ -133,7 +133,7 @@
       </div>
       <p id="race-status" class="race-status" role="status">正在準備實驗桌……</p>
       <button id="race-retry" type="button" hidden>重新載入實驗桌</button>
-      <p class="note race-model-note">圖中尺寸、光點與光跡為示意，假設整段均為同一介質，忽略光的衰減。</p>
+      <p class="note race-model-note">每一排的光都在同一種介質中前進；圖中裝置大小與光點為示意。</p>
       <noscript><p>空氣、水、玻璃走完 100 萬公里分別約需 3.33、4.44、5 秒。啟用 JavaScript 後可播放與暫停比較。</p></noscript>
     </div>
     <div class="dialogue dialogue--xiaokui" id="race-observation"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>原來真的有差！同時出發、走一樣長的路，光在空氣裡最先到，水裡的接著到，玻璃裡的最後到。所以這三種裡面，光在空氣裡跑得最快！</p></div>
@@ -419,7 +419,6 @@
   <p class="return-alignment-note">拖動一端，另一端會自動對準對應光路。</p>
   <p id="return-status" class="visually-hidden" role="status">正在準備實驗場景……</p><button type="button" id="return-retry" hidden>重新載入場景</button>
   <span class="visually-hidden">水／玻璃側角度 <span id="return-water-value" class="incident-readout">30°</span>，空氣側角度 <span id="return-air-value" class="refracted-readout">41.8°</span>。</span>
-  <details class="return-explanation"><summary>光路反向時，兩個角的角色怎麼交換？</summary><p>光沿原光路反向射入，會沿原路返回。原本的折射角會成為反向的入射角，原本的入射角會成為反向的折射角；兩個角通常不相等。只開一支光源時標示入射角與折射角；兩支同時開啟時改以空氣側及水／玻璃側命名。角度皆從法線量起。</p><p>拖曳 A 或 B 時，另一端會自動對準對應光路。分別開燈，再同時開啟，比較路徑與箭頭；兩種光色只用來區分方向，不比較色散。</p></details>
   <noscript><p>水中入射角30°時，射回空氣的折射角約41.8°；代表玻璃約48.6°。光偏離法線，沿這條光路反向射入則可返回。啟用 JavaScript 後可獨立開關兩支光源、調角，並直接查看兩側角度。</p></noscript>
 </div>
 <details id="reversibility-comparison" class="reciprocity-comparison"><summary>對照反射：兩種光路都能沿原路返回</summary>

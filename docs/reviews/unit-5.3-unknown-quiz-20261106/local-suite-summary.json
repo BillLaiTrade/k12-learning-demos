@@ -1,0 +1,36 @@
+{
+  "finalSuiteResults": [
+    {
+      "suite": "unknown-model",
+      "tests": 4,
+      "pass": 4,
+      "log": "local-combined-early.txt"
+    },
+    {
+      "suite": "unknown-browser",
+      "tests": 10,
+      "pass": 10,
+      "log": "local-combined-early.txt"
+    },
+    {
+      "suite": "derivation",
+      "tests": 7,
+      "pass": 7,
+      "log": "local-combined-early.txt"
+    },
+    {
+      "suite": "applications",
+      "tests": 9,
+      "pass": 9,
+      "log": "local-combined-early.txt"
+    },
+    {
+      "suite": "format",
+      "tests": 7,
+      "pass": 7,
+      "log": "local-format-final.txt"
+    }
+  ],
+  "totalUniqueTests": 37,
+  "note": "整合初跑中的格式套件失敗已由最後獨立頁面回歸7項通過取代；保留原始完整紀錄，不改寫測試輸出。"
+}
