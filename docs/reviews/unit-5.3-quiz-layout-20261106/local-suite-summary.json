@@ -1,0 +1,12 @@
+{
+  "quiz": {
+    "tests": 10,
+    "pass": 10
+  },
+  "formatAndModel": {
+    "tests": 11,
+    "pass": 11
+  },
+  "totalFinalPass": 21,
+  "screenshots": "獨立真實時間頁面的視窗截圖，不與凍結時鐘功能測試混用"
+}

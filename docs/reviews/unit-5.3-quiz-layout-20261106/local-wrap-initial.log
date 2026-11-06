@@ -1,0 +1,44 @@
+▶ B方案小測：先觀察、推算未知比熱、保留作答與換題
+  ✔ 初始只有條件與20°C讀值，無自動觀察、預填答案或未知比熱標示 (119.719032ms)
+  ✔ 觀察同源推進樣品吸熱與溫度，到點25／45°C才開放作答，能讀到資料 (1691.403413ms)
+  ✔ 未填、無效值與錯答給方向提示，不代填；修改清掉舊判定，再答可正確 (293.213285ms)
+  ✔ 重觀察保留作答但收起判定，重新作答只清作答與判定，保留觀察 (1810.364008ms)
+  ✔ 換一組清空、不自動觀察；16組輪換不重複，甲乙配置變動後判定仍正確 (29222.78337ms)
+  ✔ 換區、失焦與背景會停止，不自動續播；重觀察由初溫開始 (2732.080491ms)
+  ✔ 器材慢載入／失敗時禁止觀察和作答；重試不自動播放，其他場景可用 (1707.456879ms)
+  ✔ 減少動態效果時攪拌子不運動，觀察與作答流程保持 (2631.326762ms)
+  ✖ 五種尺寸不溢出、輸入及按鈕至少44px，LCD與主要文字可讀，窄版可平移 (145.524055ms)
+✖ B方案小測：先觀察、推算未知比熱、保留作答與換題 (41579.016067ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 8
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41875.80605
+
+✖ failing tests:
+
+test at tests/unit-5.3-unknown-quiz.test.cjs:136:11
+✖ 五種尺寸不溢出、輸入及按鈕至少44px，LCD與主要文字可讀，窄版可平移 (145.524055ms)
+  AssertionError [ERR_ASSERTION]: 320 LCD clipped
+  + actual - expected
+  
+  + [
+  +   '乙的比熱約為 cal／(g·°C)'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-unknown-quiz.test.cjs:140:109)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-unknown-quiz.test.cjs:136:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ '乙的比熱約為 cal／(g·°C)' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
