@@ -164,7 +164,7 @@ if(root) {
   }
   function render() {
     pending=0;
-    const info=observe(state.angles), messages={blocked:'視線被管壁或鏡背擋住',boat:info.target?'船的駕駛艙已在中央':'看見船了，再調整一下',sky:'目前主要看見天空',sea:'目前主要看見海面'};
+    const info=observe(state.angles), messages={blocked:'視線被管壁或鏡背擋住',boat:info.target?'船已在觀察窗中央':'看見船了，再調整一下',sky:'目前主要看見天空',sea:'目前主要看見海面'};
     root.dataset.phase=String(state.stage);root.dataset.angles=state.angles.join(',');root.dataset.view=info.kind;root.dataset.target=String(info.target);root.dataset.completed=state.done.join(',');root.dataset.signal=String(state.signal);
     const viewMessage=scenePixels?messages[info.kind]:root.dataset.ready==='error'?'場景素材未載入，請重新整理頁面再試。':'正在準備觀察窗…';
     $('#periscope-view-state').textContent=viewMessage;$('#periscope-view-state').dataset.kind=scenePixels?info.kind:root.dataset.ready;
@@ -235,16 +235,17 @@ if(root) {
     if(stage>0&&!state.done[stage-1])return;
     cancelPulse(true);state.stage=stage;state.signal=false;state.verified=false;
     const content=[
-      ['我在潛水艇裡，怎麼看見海上的船？','先轉動鏡片，再從觀察窗找找船在哪裡。','目前目標｜把船的駕駛艙調到觀察窗中央','拖曳鏡片端點旋轉。先試著觀察，需要時從觀察口追蹤視線，再修正鏡片。'],
-      ['剛才明明看見船，怎麼現在偏向天空了？','轉動鏡片，試著把船重新找回來。','目前目標｜把船重新調回觀察窗中央','拖曳鏡片端點，觀察景象怎麼移動；需要時追蹤目前視線，再調整鏡片。'],
-      ['我能沿同一條路，把訊號送回船上嗎？','鏡片保持不動，先預測，再發送藍色訊號光。','目前目標｜讓訊號沿原光路返回','暫以訊號光源替換眼睛；黃色是原入眼光線，藍光從同一位置反向發出。']
+      ['我在潛水艇裡，怎麼看見海上的船？','先轉動鏡片，再從觀察窗找找船在哪裡。','拖曳鏡片端點，讓船出現在觀察窗中央。',''],
+      ['剛才明明看見船，怎麼現在偏向天空了？','轉動鏡片，試著把船重新找回來。','把船重新調回觀察窗中央','拖曳鏡片端點，觀察景象怎麼移動；需要時追蹤目前視線，再調整鏡片。'],
+      ['我能沿同一條路，把訊號送回船上嗎？','鏡片保持不動，先預測，再發送藍色訊號光。','讓訊號沿原光路返回','暫以訊號光源替換眼睛；黃色是原入眼光線，藍光從同一位置反向發出。']
     ][stage];
     ['#periscope-student','#periscope-grandpa','#periscope-task-title','#periscope-task-copy'].forEach((id,i)=>$(id).textContent=content[i]);
+    $('#periscope-task-copy').hidden=!content[3];
     if(stage===0) {
-      feedback('調整兩片鏡子，讓船的駕駛艙出現在觀察窗中央。');
+      feedback('調整完成後，按「檢查我的設計」。');
     } else if(stage===1) {
       state.angles=[Math.min(65,state.saved[0]+9),state.saved[1]];state.done[1]=false;state.done[2]=false;
-      feedback('調整鏡片，讓船的駕駛艙重新回到觀察窗中央。');
+      feedback('調整鏡片，讓船重新回到觀察窗中央。');
     } else {state.angles=[...state.saved];state.prediction=null;state.done[2]=false;feedback('先選擇預測，再發送訊號，最後確認你的判斷。');}
     lastViewKey='';render();
   }
@@ -257,11 +258,11 @@ if(root) {
     if(!scenePixels)return;
     const info=observe(state.angles);
     if(state.stage===0) {
-      if(!info.target){feedback('還沒對準船的駕駛艙。看看觀察窗：目前是天空、海面，還是被管壁擋住？','try');return;}
-      state.saved=[...state.angles];state.done[0]=true;feedback('設計完成！小葵已看見船的駕駛艙。接著試著排除故障。','good');
+      if(!info.target){feedback('船還沒在觀察窗中央。看看觀察窗：目前是天空、海面，還是被管壁擋住？','try');return;}
+      state.saved=[...state.angles];state.done[0]=true;feedback('設計完成！小葵已在觀察窗中央看見船。接著試著排除故障。','good');
     } else if(state.stage===1) {
-      if(!info.target){feedback('還沒對準，再調整鏡片，讓船的駕駛艙回到觀察窗中央。','try');return;}
-      if(!returnSignal(state.angles).receiver){feedback('船已進入視野，再拖動鏡片讓駕駛艙回到中央，讓接下來的訊號也能回到船上。','try');return;}
+      if(!info.target){feedback('還沒對準，再調整鏡片，讓船回到觀察窗中央。','try');return;}
+      if(!returnSignal(state.angles).receiver){feedback('船已進入視野，再拖動鏡片讓船回到中央，讓接下來的訊號也能回到船上。','try');return;}
       state.saved=[...state.angles];state.done[1]=true;feedback('修復成功！船已回到中央。鏡面角度改變，視線也會跟著改變。','good');
     } else {
       if(!state.prediction){feedback('先選擇一個預測，再發送訊號驗證。','try');return;}

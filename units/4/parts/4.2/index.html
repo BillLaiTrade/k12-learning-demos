@@ -435,7 +435,7 @@
                 <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p id="periscope-student">我在潛水艇裡，怎麼看見海上的船？</p></div>
                 <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p id="periscope-grandpa">先轉動鏡片，再從觀察窗找找船在哪裡。</p></div>
               </div>
-              <div class="periscope-task"><div><strong id="periscope-task-title">目前目標｜把船的駕駛艙調到觀察窗中央</strong><p id="periscope-task-copy">拖曳鏡片端點旋轉。先試著觀察，需要時從觀察口追蹤視線，再修正鏡片。</p></div></div>
+              <div class="periscope-task"><div><strong id="periscope-task-title">拖曳鏡片端點，讓船出現在觀察窗中央。</strong><p id="periscope-task-copy" hidden></p></div></div>
               <div class="periscope-workspace">
                 <div class="periscope-cutaway">
                   <svg id="periscope-scene" viewBox="0 0 900 760" role="group" aria-label="潛望鏡剖面與可旋轉平面鏡" aria-describedby="periscope-scene-desc">
@@ -474,7 +474,7 @@
               <p class="periscope-model-note">黃色輔助線從小葵的眼睛位置反向追蹤視線。實際看見物體時，是外界的光進入眼睛；剖面與景物為示意比例。</p>
               <div class="periscope-question" id="periscope-question-2" hidden><h3>鏡子不動，從眼睛的位置沿原光路反向發出訊號，會怎麼走？</h3><p>先預測，再按「發送訊號光」比較藍光與原本的路線。</p><div class="periscope-answer-list"><button class="periscope-answer" type="button" data-prediction="same" aria-pressed="false">沿完整的原路徑返回，從上方入口照向船。</button><button class="periscope-answer" type="button" data-prediction="inside" aria-pressed="false">只有管內的路徑重合，離開入口後方向會不同。</button><button class="periscope-answer" type="button" data-prediction="turn" aria-pressed="false">兩次反射後會換一條路，需要再調鏡子才能照向船。</button></div></div>
               <div class="periscope-footer" hidden><button type="button" id="periscope-next" class="action" hidden>前往修復光路 →</button></div>
-              <div id="periscope-feedback" class="periscope-feedback" role="status">調整兩片鏡子，讓船的駕駛艙出現在觀察窗中央。</div>
+              <div id="periscope-feedback" class="periscope-feedback" role="status">調整完成後，按「檢查我的設計」。</div>
               <div id="periscope-complete" class="periscope-complete" hidden><h3>任務完成！小葵看見船，也把訊號送回去了。</h3><p>每一次反射都遵守入射角等於反射角。鏡面固定時，光也能沿原路徑反向傳播。</p></div>
             </div>
             <noscript><p>這個小測需要 JavaScript。船反射的光經上方、下方兩片平面鏡進入眼睛；鏡片偏轉可能讓視線改向天空、海面或被管壁遮擋。</p></noscript>
@@ -513,6 +513,6 @@
   <script type="module" src="assets/surface-directions.js?v=surface-flow-20261105"></script>
   <script type="module" src="assets/laser-reflection.js?v=compact-20261106"></script>
   <script type="module" src="assets/reversible-light.js?v=compact-workspace-20261106"></script>
-  <script type="module" src="assets/periscope.js?v=current-goal-20261106"></script>
+  <script type="module" src="assets/periscope.js?v=clear-task-20261106"></script>
 </body>
 </html>
