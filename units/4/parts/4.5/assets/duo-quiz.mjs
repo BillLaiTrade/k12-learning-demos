@@ -35,7 +35,7 @@ export function initialiseDuoQuiz(root){
  root.querySelectorAll('[data-duo-open]').forEach(button=>button.addEventListener('click',()=>showView(button.dataset.duoOpen,{focus:true,align:true})));
  const attempt=question=>({question,answer:{transmission:'',colour:''},tried:false});
  let attempts=INITIAL_SERIES.map(attempt),current=0,question=attempts[0].question,lit=false,studio=null,studioLoading=false,threeFailed=false;
- const readAnswer=()=>({transmission:form.elements.transmission.value,colour:form.querySelector('[name=appearance]:checked')?.value||''});
+ const readAnswer=()=>({transmission:form.querySelector('[name=transmission]:checked')?.value||'',colour:form.querySelector('[name=appearance]:checked')?.value||''});
  function progress(){
   let count=0;root.querySelectorAll('[data-question-tab]').forEach((button,i)=>{const state=attempts[i],checked=state.tried&&!checkPrediction(state.question,state.answer).missing.length,status=checked?'已驗證':Object.values(state.answer).some(Boolean)?'作答中':'未作答';count+=checked?1:0;button.setAttribute('aria-pressed',String(i===current));button.setAttribute('aria-label',`第${i+1}題，${status}${i===current?'，目前題目':''}`);button.dataset.status=status;button.querySelector('small').textContent=status;});
   $('[data-series-progress]').textContent=`已驗證 ${count} / ${attempts.length} 題`;$('[data-question-counter]').textContent=`第 ${current+1} 題 / 共 ${attempts.length} 題`;$('[data-prev-question]').disabled=current===0;$('[data-next-question]').disabled=current===attempts.length-1;root.dataset.questionIndex=String(current+1);root.dataset.questionSeries=JSON.stringify(attempts.map(s=>s.question.id));
@@ -69,17 +69,24 @@ root.dataset.lit=String(lit);$('[data-challenge-state]').textContent=lit?'已開
   question=attempts[current].question;
   root.dataset.question=JSON.stringify(question);$('[data-question-lights]').textContent=question.lights.map(key=>LIGHTS[key].name).join(' ＋ ');$('[data-question-filter]').textContent=question.filter==='clear'?'不放色片':FILTERS[question.filter].name;$('[data-filter-route]').textContent=question.filter==='clear'?'兩束光直接照到紙張':'兩束光都先通過這片色片';question.lights.forEach((key,i)=>{$(`[data-question-lamp="${i}"]`).textContent=LIGHTS[key].name;$(`[data-scene-label="${i?'b':'a'}"]`).textContent=`${i?'B':'A'} ${LIGHTS[key].name}`;});$('[data-scene-label=filter]').textContent=`② ${FILTERS[question.filter].name}`;$('[data-scene-label=paper]').textContent=`③ ${PAPER_TYPES[question.paper].name}`;$('[data-question-paper]').textContent=PAPER_TYPES[question.paper].name;
   const hint=$('[data-question-components]');hint.open=false;$('[data-question-focus]').textContent=QUESTION_FOCUS[current];$('[data-light-components]').textContent='兩束光：'+question.lights.map(key=>LIGHTS[key].name).join('＋')+'。';$('[data-filter-components]').textContent=question.filter==='clear'?'不放色片：保留原有色光。':`${FILTERS[question.filter].name}主要讓${['red','green','blue'].filter((_,c)=>FILTERS[question.filter].rgb[c]>.5).map(key=>LIGHTS[key].name).join('、')}通過。`;$('[data-challenge-question]').textContent=`同時開啟兩盞燈後，金框中的${PAPER_TYPES[question.paper].name}會看起來是什麼顏色？`;
-  form.reset();const state=attempts[current];if(state.answer.colour)form.querySelector(`[name=appearance][value="${state.answer.colour}"]`).checked=true;form.elements.transmission.value=state.answer.transmission;
+  form.reset();const state=attempts[current];if(state.answer.colour)form.querySelector(`[name=appearance][value="${state.answer.colour}"]`).checked=true;if(state.answer.transmission)form.querySelector(`[name=transmission][value="${state.answer.transmission}"]`).checked=true;
   renderFeedback();progress();
  }
- const colours=$('[data-colour-options]');COLOUR_OPTIONS.forEach(([key,name,swatch])=>{const label=document.createElement('label');label.className='duo-answer';const input=document.createElement('input');input.type='radio';input.name='appearance';input.value=key;input.required=true;const dot=document.createElement('i');dot.style.backgroundColor=swatch;dot.setAttribute('aria-hidden','true');label.append(input,dot,document.createTextNode(name));colours.append(label);});
- for(const [value,label]of TRANSMISSION_OPTIONS){const option=document.createElement('option');option.value=value;option.textContent=label;form.elements.transmission.append(option);}
+ function mountColourChoices(container,field){
+  for(const [key,name,colour]of COLOUR_OPTIONS){const light=TRANSMISSION_OPTIONS.find(([value])=>value===key);if(field==='transmission'&&!light)continue;
+   const label=document.createElement('label');label.className='duo-answer';const input=document.createElement('input');input.type='radio';input.name=field;input.value=key;input.required=true;
+   const dot=document.createElement('i');dot.style.backgroundColor=colour;dot.setAttribute('aria-hidden','true');label.append(input,dot,document.createTextNode(field==='transmission'?light[1]:name));container.append(label);
+  }
+ }
+ mountColourChoices($('[data-transmission-options]'),'transmission');
+ mountColourChoices($('[data-colour-options]'),'appearance');
+
  function selectQuestion(index){if(index<0||index>=attempts.length)return;current=index;renderQuestion();$('[data-challenge-question]').focus({preventScroll:true});const r=$('.duo-task').getBoundingClientRect();if(r.top<0||r.bottom>innerHeight)$('.duo-workspace-tabs').scrollIntoView({block:'start',behavior:'auto'});}
  root.querySelectorAll('[data-question-tab]').forEach(button=>button.addEventListener('click',()=>selectQuestion(Number(button.dataset.questionTab))));
  $('[data-prev-question]').addEventListener('click',()=>selectQuestion(current-1));
  $('[data-next-question]').addEventListener('click',()=>selectQuestion(current+1));
  $('[data-new-set]').addEventListener('click',()=>{attempts=newQuestionSeries(Math.random,attempts.map(s=>s.question)).map(attempt);selectQuestion(0);});
- $('[data-reset-question]').addEventListener('click',()=>{attempts[current]=attempt(question);renderQuestion();form.elements.transmission.focus({preventScroll:true});});
+ $('[data-reset-question]').addEventListener('click',()=>{attempts[current]=attempt(question);renderQuestion();form.querySelector('[name=transmission]').focus({preventScroll:true});});
  form.addEventListener('change',invalidate);
  function comparison(field,title,predicted,actual,matches){
   const card=document.createElement('article');card.className='duo-result-card';card.dataset.resultField=field;card.dataset.match=String(matches);
@@ -93,7 +100,7 @@ root.dataset.lit=String(lit);$('[data-challenge-state]').textContent=lit?'已開
   const state=attempts[current],result=checkPrediction(question,state.answer);form.querySelectorAll('[aria-invalid]').forEach(e=>e.removeAttribute('aria-invalid'));delete form.dataset.correct;
   results.hidden=true;feedback.hidden=true;feedback.replaceChildren();comparisons.replaceChildren();predictionError.hidden=true;predictionError.textContent='';clearExplanation();lit=state.tried&&!result.missing.length;updateScene();$('[data-submit]').textContent=lit?'再次檢查':'檢查並開燈驗證';
   if(!state.tried)return result;
-  if(result.missing.length){predictionError.hidden=false;predictionError.textContent='請先完成到達紙張的色光與紙面顏色預測，再開燈驗證。';const targets={transmission:form.elements.transmission,colour:form.querySelector('[name=appearance]')};for(const key of result.missing)targets[key].setAttribute('aria-invalid','true');return result;}
+  if(result.missing.length){predictionError.hidden=false;predictionError.textContent='請先完成到達紙張的色光與紙面顏色預測，再開燈驗證。';const targets={transmission:form.querySelector('[name=transmission]'),colour:form.querySelector('[name=appearance]')};for(const key of result.missing)targets[key].setAttribute('aria-invalid','true');return result;}
   form.dataset.correct=String(result.correct);const kind=result.correct?'correct':'retry';feedback.dataset.kind=results.dataset.kind=kind;results.hidden=false;feedback.hidden=false;const expected=expectedAnswer(question),incorrect=Object.values(result.fields).filter(value=>!value).length;
   const icon=document.createElement('span');icon.className='duo-result-symbol';icon.setAttribute('aria-hidden','true');icon.textContent=result.correct?'✓':'!';
   const copy=document.createElement('div'),lead=document.createElement('h4'),detail=document.createElement('p');lead.id='duo-result-title';lead.textContent=result.correct?'兩項預測都符合觀察':`還有 ${incorrect} 項預測，請再比較`;detail.textContent=result.correct?'把你的預測與開燈後的結果比一比。':'對照色塊，找出不同的地方，再修改預測。';copy.append(lead,detail);feedback.append(icon,copy);
@@ -103,7 +110,7 @@ root.dataset.lit=String(lit);$('[data-challenge-state]').textContent=lit?'已開
  }
  form.addEventListener('submit',e=>{
   e.preventDefault();const state=attempts[current];state.answer=readAnswer();state.tried=true;const result=renderFeedback();progress();
-  if(result.missing.length){const targets={transmission:form.elements.transmission,colour:form.querySelector('[name=appearance]')};targets[result.missing[0]].focus();return;}
+  if(result.missing.length){const targets={transmission:form.querySelector('[name=transmission]'),colour:form.querySelector('[name=appearance]')};targets[result.missing[0]].focus();return;}
   requestAnimationFrame(()=>{const r=results.getBoundingClientRect();if(r.bottom>innerHeight-12||r.top<100)results.scrollIntoView({block:'nearest',behavior:'auto'});});
  });
  root.querySelectorAll('[data-quiz-pending]').forEach(e=>e.disabled=false);$('[data-duo-load-note]').hidden=true;root.dataset.ready=form.dataset.ready='true';root.dataset.renderer='diagram';renderQuestion();showView('probe');
