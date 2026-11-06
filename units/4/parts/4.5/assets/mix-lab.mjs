@@ -1,4 +1,4 @@
-import {MIX_SETUP,MIX_KEYS,MIX_SOURCES,SOURCE_LINEAR,arrangeMix,mixSample,mixtureRegions,torchAim} from './mix-optics.mjs?v=mix-front-20261102';
+import {MIX_SETUP,MIX_KEYS,MIX_SOURCES,SOURCE_LINEAR,arrangeMix,mixSample,mixtureRegions,mixObservation,torchAim} from './mix-optics.mjs?v=science-reviewed-20261106';
 
 const NAMES=['紅','綠','藍'];
 const GUIDE_COLORS=['#ff8072','#8bedaa','#a5caff'];
@@ -7,16 +7,6 @@ const IMAGE_PIVOT={x:.5,y:.533566923133767};
 const IMAGE_LENSES=[{x:.6569610174673752,y:.2900937051775024},{x:.5711946434095605,y:.2758852718060382},{x:.2896874191480514,y:.31584680182345587}];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const srgb=v=>{v=clamp(v,0,1);return v<=.0031308?v*12.92:1.055*v**(1/2.4)-.055;};
-
-function observation(spots,regions){
- const active=spots.flatMap((s,i)=>s.on?[i]:[]);
- if(!active.length)return'三支手電筒都關閉了，白幕上沒有這三支燈照出的光斑。';
- if(active.length===1)return`只開${NAMES[active[0]]}光時，白幕上只看到${NAMES[active[0]]}色光斑。`;
- if(regions.includes(7))return'重疊的地方顏色變了，三色一起照的共同區看起來是白色！';
- const pairs=[[3,'紅光和綠光重疊處看起來是黃色'],[5,'紅光和藍光重疊處看起來是洋紅色'],[6,'綠光和藍光重疊處看起來是青色']].filter(([mask])=>regions.includes(mask)).map(([,s])=>s);
- if(pairs.length)return pairs.join('；')+'。';
- return'光斑分開時，可以分別看到每支手電筒原本的色光。';
-}
 
 export function initialiseFrontMix(root){
  const canvas=root.querySelector('[data-mix]'),ctx=canvas.getContext('2d'),torchButtons=[...root.querySelectorAll('[data-torch]')];
@@ -55,7 +45,7 @@ export function initialiseFrontMix(root){
  async function loadTorches(){
   if(loadingTorches)return;loadingTorches=true;
   try{
-   const module=await import('./torch-studio.mjs?v=mix-soft-beam-20261103');
+   const module=await import('./torch-studio.mjs?v=science-reviewed-20261106');
    torchButtons.forEach((button,i)=>{
     try{const canvas=button.querySelector('[data-torch-canvas]');studios[i]=module.createTorchStudio(canvas,i,{unavailable(){studios[i]?.dispose();studios[i]=null;fallbackTorch(i);},ready(){canvas.hidden=false;button.querySelector('[data-torch-image]').hidden=true;button.dataset.torchRenderer='three';refreshTorchPoses();updateGuide();}});studios[i].update(spots[i]);}
     catch{fallbackTorch(i);}
@@ -111,7 +101,7 @@ export function initialiseFrontMix(root){
  }
  function requestPaint(){if(!frame)frame=requestAnimationFrame(paint);}
  function update(announce=true){
-  const regions=mixtureRegions(spots),message=observation(spots,regions);
+  const regions=mixtureRegions(spots),message=mixObservation(spots);
   root.dataset.spots=JSON.stringify(spots);root.dataset.preset=preset;root.dataset.center=JSON.stringify(mixSample(.5,.5,spots).linear);root.dataset.regions=JSON.stringify(regions);
   root.dataset.aim=JSON.stringify(spots.map((s,i)=>torchAim(i,s)));
   refreshTorchPoses();

@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="../../assets/unit-format.css?v=20261105">
   <link rel="stylesheet" href="assets/heat-stage-lab.css?v=stages-1">
   <script type="module" src="assets/heat-stage-lab.js?v=derive-1"></script>
-  <script type="module" src="assets/heat-quantity.js?v=format-1"></script>
+  <script type="module" src="assets/heat-quantity.js?v=applications-1"></script>
   <script type="module" src="assets/calorie-lab.js?v=refined-1-calc-layout-3"></script>
   <link rel="stylesheet" href="assets/heat-bench.css?v=refined-1">
   <link rel="stylesheet" href="assets/mass-comparison-lab.css?v=mass-1">
@@ -38,6 +38,8 @@
   <link rel="stylesheet" href="assets/mass-comparison-fit.css?v=readable-1">
   <link rel="stylesheet" href="assets/heat-derivation.css?v=derive-1">
   <script type="module" src="assets/material-comparison-lab.js?v=derive-1"></script>
+  <link rel="stylesheet" href="assets/application-lab.css?v=applications-1">
+  <script type="module" src="assets/application-lab.js?v=applications-1"></script>
 </head>
 <body>
   <header class="shell masthead"><div class="brand-row"><a class="brand" href="../../index.html">← 溫度與熱</a><span class="crumb">國二上・熱量與比熱</span></div>
@@ -199,13 +201,51 @@
         </section>
 
         <section class="lesson-card" id="card-05" aria-labelledby="title-05">
-          <header class="lesson-head"><span class="card-number">05</span><div class="card-heading"><h2 id="title-05">比熱能解釋哪些生活現象？</h2><p class="card-intro">比熱的應用：暖暖水袋、海陸溫差與鍋具</p></div></header>
+          <header class="lesson-head"><span class="card-number">05</span><div class="card-heading"><h2 id="title-05">比熱能解釋哪些生活現象？</h2><p class="card-intro">生活應用：放熱、海陸溫差與鍋具</p></div></header>
           <div class="card-main">
-            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>「水不容易升溫，那為什麼適合裝進暖暖水袋？」</p></div>
-            <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>「換個方向想：同樣質量、降低同樣的溫度，比熱較大的物質，可以放出較多熱量。」</p></div>
-            <div class="application-panel"><div class="choice-row" role="group" aria-label="選擇生活情境"><button class="choice" type="button" data-application="bottle" aria-pressed="true">暖暖水袋</button><button class="choice" type="button" data-application="coast" aria-pressed="false">海邊的晝夜</button><button class="choice" type="button" data-application="pan" aria-pressed="false">煮飯的鍋子</button></div><div class="application-content" id="application-content" aria-live="polite"></div></div>
-            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>「所以不能只說『溫度高，熱量就多』，還得看質量、物質，以及改變了幾度。」</p></div>
-            <div class="dialogue"><span class="speaker" aria-label="阿公"></span><p>「沒錯。現在換你幫暖暖水袋安排一次公平的比較。」</p></div>
+            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p id="application-question">同樣降溫，為什麼水適合拿來保暖？</p></div>
+            <div class="application-panel life-lab" id="application-lab" data-scene="bottle">
+              <div class="choice-row life-tabs" role="group" aria-label="選擇生活情境"><button class="choice" type="button" data-application="bottle" aria-pressed="true" aria-controls="application-bottle">暖暖水袋</button><button class="choice" type="button" data-application="coast" aria-pressed="false" aria-controls="application-coast">海邊的晝夜</button><button class="choice" type="button" data-application="pan" aria-pressed="false" aria-controls="application-pan">煮飯的鍋子</button></div>
+              <div id="application-content" class="application-content">
+                <section class="life-view" id="application-bottle" aria-labelledby="bottle-heading" data-phase="loading">
+                  <h3 id="bottle-heading" class="life-condition">水500 g · 從50°C降到40°C</h3>
+                  <div class="life-workbench">
+                    <figure class="life-photo"><img id="bottle-photo" src="assets/application-bottle.webp" width="1672" height="941" alt="AI生成的生活情境：木桌上的暖暖水袋與針織布套。">
+                      <span class="life-badge bottle-mass">水500 g</span><span class="life-badge bottle-heat-label" hidden>向外放熱</span>
+                      <svg class="bottle-arrows" viewBox="0 0 1000 563" aria-hidden="true" hidden><defs><marker id="bottle-arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10" fill="none" stroke="#d28b30" stroke-width="2"/></marker></defs><g fill="none" stroke="#fff8e5" stroke-width="12"><path d="M650 240Q720 205 780 220M670 290Q745 265 805 285M680 340Q760 335 825 365"/></g><g fill="none" stroke="#d28b30" stroke-width="5" marker-end="url(#bottle-arrowhead)"><path d="M650 240Q720 205 780 220M670 290Q745 265 805 285M680 340Q760 335 825 365"/></g></svg>
+                      <p class="life-loading" data-life-loading role="status">正在準備水袋場景…</p>
+                    </figure>
+                    <div class="life-reading"><h3>降溫時，放出多少熱量？</h3><div class="life-temperatures"><div><span>起始水溫</span><strong>50.0<small>°C</small></strong></div><span aria-hidden="true">→</span><div><span>目前水溫</span><strong><output id="bottle-temperature">50.0</output><small>°C</small></strong></div></div><p class="life-drop">降溫幅度 <strong><output id="bottle-drop">0.0</output>°C</strong></p><div class="life-energy"><span>累計放出熱量（模型）</span><strong><output id="bottle-energy">0</output> cal</strong></div></div>
+                  </div>
+                  <div class="life-actions"><button class="action" id="bottle-play" type="button" disabled>觀察放熱</button><button class="secondary" type="button" data-life-retry hidden>重新載入場景</button><span id="bottle-status" role="status">場景準備完成後，點按觀察。</span></div>
+                  <div class="life-discovery" id="bottle-discovery" hidden>
+                    <div><h3>用剛才的公式解釋</h3><p>放出熱量的大小＝質量×比熱×降溫幅度</p><p class="life-calculation">500 × 1 × (50 − 40)<br><strong>＝5,000 cal</strong></p><p>降溫幅度＝初溫－末溫；水的比熱約1 cal／(g·°C)。</p></div>
+                    <div class="life-comparison"><h3>相同質量、相同降溫幅度</h3><p>各500 g · 都降低10°C</p><div class="life-bar-row"><span>水</span><div><span id="bottle-water-bar"></span></div><strong>5,000 cal</strong></div><div class="life-bar-row"><span>鋁</span><div><span id="bottle-aluminum-bar"></span></div><strong>1,100 cal</strong></div><div class="life-bar-scale" aria-hidden="true"><span>0</span><span>2,500</span><span>5,000 cal</span></div><p>鋁的比熱約0.22 cal／(g·°C)；這是相同條件的模型比較。</p></div>
+                  </div>
+                  <div class="dialogue life-conclusion" id="bottle-conclusion" hidden><span class="speaker" aria-label="阿公"></span><p>相同質量、降低相同溫度，比熱較大的物質能放出較多熱量。</p></div>
+                  <p class="life-note">場景為AI生成，讀值為模型示意；動畫不代表實際冷卻時間；保暖多久也受外袋、環境與散熱條件影響。</p>
+                </section>
+
+                <section class="life-view" id="application-coast" aria-labelledby="coast-heading" data-phase="loading" hidden>
+                  <h3 id="coast-heading" class="life-condition">同一片海岸，切換白天與夜晚</h3>
+                  <div class="life-workbench coast-workbench">
+                    <div><figure class="life-photo"><img id="coast-photo" src="assets/application-coast-day.webp" width="1672" height="941" alt="AI生成的海岸白天情境，海水在左、砂土在右。"><svg class="coast-arrows" viewBox="0 0 1000 563" aria-hidden="true"><defs><marker id="coast-arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10" fill="none" stroke="#e4ad50" stroke-width="2"/></marker></defs><g fill="none" stroke="#fff9e6" stroke-width="12"><path data-coast-arrow d="M230 260V400"/><path data-coast-arrow d="M850 300V440"/></g><g fill="none" stroke="#e4ad50" stroke-width="5" marker-end="url(#coast-arrowhead)"><path data-coast-arrow d="M230 260V400"/><path data-coast-arrow d="M850 300V440"/></g></svg><span class="life-badge coast-scene-label">白天吸熱</span><p class="life-loading" data-life-loading role="status">正在準備海岸場景…</p></figure><div class="life-mode" role="group" aria-label="海岸情境"><button class="choice" type="button" data-coast-mode="day" aria-pressed="true">白天吸熱</button><button class="choice" type="button" data-coast-mode="night" aria-pressed="false">夜晚放熱</button></div><div class="life-actions"><button class="secondary" type="button" data-life-retry hidden>重新載入場景</button></div></div>
+                    <div class="life-coast-model"><h3>用公平比較模型理解</h3><p id="coast-condition">相同質量、吸收相同熱量</p><svg id="coast-model" viewBox="0 0 360 260" role="img" aria-label="兩者初溫相同，吸收相同熱量後，水溫升較小、砂土溫升較大。"><defs><clipPath id="coast-water-clip"><path d="M88 48a10 10 0 0 1 20 0v139a21 21 0 1 1-20 0Z"/></clipPath><clipPath id="coast-sand-clip"><path d="M252 48a10 10 0 0 1 20 0v139a21 21 0 1 1-20 0Z"/></clipPath></defs><g fill="#fafcf8" stroke="#809184" stroke-width="2"><path d="M88 48a10 10 0 0 1 20 0v139a21 21 0 1 1-20 0Z"/><path d="M252 48a10 10 0 0 1 20 0v139a21 21 0 1 1-20 0Z"/></g><rect id="coast-water-level" x="70" y="105" width="56" height="125" fill="#80aaa0" clip-path="url(#coast-water-clip)"/><rect id="coast-sand-level" x="234" y="60" width="56" height="170" fill="#d9a758" clip-path="url(#coast-sand-clip)"/><path d="M25 125H330" stroke="#416a50" stroke-width="2" stroke-dasharray="6 5"/><g class="coast-model-label"><text x="98" y="24">水</text><text x="262" y="24">砂土</text><text x="98" y="248" id="coast-water-caption">溫升較小</text><text x="262" y="248" id="coast-sand-caption">溫升較大</text></g><rect x="124" y="112" width="112" height="28" rx="10" fill="#e8eee0"/><text class="coast-model-label" x="180" y="132">初溫相同</text></svg><p class="life-coast-conclusion" id="coast-conclusion">水的比熱較大，吸收相同熱量時，溫升較小。</p><p class="life-note">圖中高低僅示意變化大小，不代表實測溫度或固定倍數。</p></div>
+                  </div>
+                  <p class="life-note">白天與夜晚各以相同初溫作公平比較；AI場景只示意海陸情境。真實海陸溫差還受日照、混合、蒸發與風等因素影響。</p>
+                </section>
+
+                <section class="life-view" id="application-pan" aria-labelledby="pan-heading" data-phase="loading" hidden>
+                  <h3 id="pan-heading" class="life-condition">點選鍋身或鍋底，分別觀察</h3>
+                  <div class="life-workbench pan-workbench">
+                    <figure class="life-photo pan-photo"><img id="pan-photo" src="assets/application-pan.webp" width="1672" height="941" alt="AI生成的廚房情境：金屬鍋放在電爐上，鍋身與鍋底可分別點選。"><svg class="pan-overlay" viewBox="0 0 1000 563" aria-hidden="true"><path id="pan-body-highlight" d="M275 244Q500 317 719 243L706 415Q499 475 283 414Z" fill="#90be9a" opacity="0" stroke="#365f43" stroke-width="4"/><g id="pan-base-highlight" opacity="0"><path d="M438 463V425M500 467V429M562 463V425" fill="none" stroke="#fff8e5" stroke-width="12"/><path d="M438 463V425m-10 12 10-12 10 12M500 467V429m-10 12 10-12 10 12M562 463V425m-10 12 10-12 10 12" fill="none" stroke="#e1a142" stroke-width="5"/></g><path d="M190 270L330 300M820 446L620 438" fill="none" stroke="#fff8e5" stroke-width="3"/></svg><button class="pan-hotspot pan-body-hotspot" type="button" data-pan-part="body" aria-pressed="false" disabled>鍋身升溫</button><button class="pan-hotspot pan-base-hotspot" type="button" data-pan-part="base" aria-pressed="false" disabled>熱穿過鍋底</button><p class="life-loading" data-life-loading role="status">正在準備廚房場景…</p></figure>
+                    <div class="life-pan-model"><div class="pan-concept" data-pan-card="body"><h3>比熱</h3><p>同樣質量、升高同樣溫度，需要多少熱量？</p></div><div class="pan-concept" data-pan-card="base"><h3>導熱</h3><p>熱如何通過金屬鍋身？</p></div><p id="pan-focus-text" role="status">點選鍋身或鍋底，分別觀察兩個重點。</p><div class="life-actions"><button class="secondary" type="button" data-life-retry hidden>重新載入場景</button></div></div>
+                  </div>
+                  <div class="life-pan-question" id="pan-discovery" hidden><strong>比熱小，就一定煮得快？</strong><p>還要看導熱、厚度、熱源與食物。鍋身升溫和食物熟得快，是不同問題。</p></div><p class="life-note">連回5.2：比熱與導熱是不同性質。場景為AI生成，箭頭為示意，不用來預測實際烹調時間。</p>
+                </section>
+              </div>
+            </div>
+            <p class="life-quiz-bridge">接著，換你幫暖暖水袋安排公平比較。</p>
           </div>
         </section>
 

@@ -48,3 +48,18 @@
 #s2 [data-prism-landmark]::before,#s2 [data-prism-landmark]::after{content:'';position:absolute;left:-3px;width:5px;height:5px;background:#fff4c0;border:1px solid #33483b;transform:rotate(45deg)}
 #s2 [data-prism-landmark]::before{top:0}#s2 [data-prism-landmark]::after{bottom:0}
 #s2 .prism-comparison .prism-match-key{margin:4px 0 0;font-size:.62rem;line-height:1.5;color:#405c49}
+/* A desktop sidebar can make the lab narrow before the viewport breakpoint. */
+:is(#s1,#s2) [data-precision]{container-type:inline-size}
+@container(max-width:600px){
+ [data-precision] .stage{--prism-preview-width:110px;aspect-ratio:1;min-height:340px}
+ [data-precision] .prism-preview{top:8px;right:8px;padding:5px}
+ [data-precision] .prism-preview .receiver-heading{font-size:.62rem}
+ [data-precision] [data-receiver-label]{display:none}
+ [data-precision] .scene-tools{right:calc(var(--prism-preview-width) + 16px)}
+ [data-precision] .stage>[data-studio],[data-precision] .scene-fallback{top:110px;bottom:26px;height:calc(100% - 136px)}
+ [data-precision] .scene-fallback svg{width:100%}
+ #s2 [data-precision] .stage{--prism-preview-width:min(138px,calc(50% - 10px));min-height:400px}
+ #s2 [data-precision] .stage>[data-studio],#s2 [data-precision] .scene-fallback{top:180px;bottom:26px;height:calc(100% - 206px)}
+ #s2 .prism-compare-row{grid-template-columns:32px minmax(0,1fr);gap:4px;margin:2px 0}
+ #s2 .prism-compare-row>span{font-size:.61rem}
+}

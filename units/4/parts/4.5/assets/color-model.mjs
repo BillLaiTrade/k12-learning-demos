@@ -1,7 +1,7 @@
 // Optical conditions are shared by the apparatus, receiver and explanations.
 export const LIGHTS={white:{name:'白光',rgb:[1,1,1]},red:{name:'紅光',rgb:[1,0,0]},green:{name:'綠光',rgb:[0,1,0]},blue:{name:'藍光',rgb:[0,0,1]}};
 export const MATERIALS={red:{name:'紅色色卡',rgb:[.88,.012,.012],css:'#c54c42'},green:{name:'綠色色卡',rgb:[.02,.82,.025],css:'#4c9d69'},blue:{name:'藍色色卡',rgb:[.014,.025,.88],css:'#467fc1'},white:{name:'白色色卡',rgb:[.9,.9,.9],css:'#eceee9'},black:{name:'黑色色卡',rgb:[.012,.012,.012],css:'#26302e'}};
-export const FILTERS={clear:{name:'無色片',rgb:[1,1,1],css:'#edf6f4'},red:{name:'紅色色片',rgb:[.86,.006,.003],css:'#e94745'},green:{name:'綠色色片',rgb:[.008,.82,.012],css:'#37ac76'},blue:{name:'藍色色片',rgb:[.003,.015,.86],css:'#497fe0'}};
+export const FILTERS={clear:{name:'不放色片',rgb:[1,1,1],css:'#edf6f4'},red:{name:'紅色色片',rgb:[.86,.006,.003],css:'#e94745'},green:{name:'綠色色片',rgb:[.008,.82,.012],css:'#37ac76'},blue:{name:'藍色色片',rgb:[.003,.015,.86],css:'#497fe0'}};
 export const clamp=(n,a=0,b=1)=>Math.max(a,Math.min(b,n));
 export function linearToSrgb(n){n=clamp(n);return n<=.0031308?12.92*n:1.055*n**(1/2.4)-.055;}
 export function rgbCss(rgb){return `rgb(${rgb.map(c=>Math.round(linearToSrgb(c)*255)).join(' ')})`;}

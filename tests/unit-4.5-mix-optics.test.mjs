@@ -1,7 +1,7 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {CIE_D65} from '../units/4/parts/4.5/assets/spectral-data.mjs';
-import {MIX_SETUP,MIX_SOURCES,WHITE_XYZ,arrangeMix,footprint,mixSample,mixtureRegions,torchAim} from '../units/4/parts/4.5/assets/mix-optics.mjs';
+import {MIX_SETUP,MIX_SOURCES,WHITE_XYZ,arrangeMix,footprint,mixSample,mixtureRegions,mixObservation,torchAim} from '../units/4/parts/4.5/assets/mix-optics.mjs';
 const near=(a,b,tolerance=1e-9)=>assert.ok(Math.abs(a-b)<tolerance,`${a} != ${b}`);
 test('三個已知波長以正輻射功率配成D65白點，先加總光譜色度再轉顯示值',()=>{
  assert.deepEqual(MIX_SOURCES.map(s=>s.wavelength),[650,530,460]);
@@ -30,4 +30,11 @@ test('每支手電筒方向都指向自己的落點，單位向量及投影與�
  for(let i=0;i<3;i++)for(const [x,y]of[[.05,.08],[.5,.5],[.95,.92]]){
   const aim=torchAim(i,{x,y,on:true});near(Math.hypot(...aim.direction),1);assert.ok(aim.direction[2]<0);const t=-600/aim.direction[2];near((i+.5)*MIX_SETUP.width/3+t*aim.direction[0],x*MIX_SETUP.width);near(760+t*aim.direction[1],y*MIX_SETUP.height);assert.deepEqual(aim,torchAim(i,{x,y,on:false}));assert.ok(aim.length>0&&aim.length<105);
  }
+});
+
+test('光斑柔邊造成三色比例不均時不宣稱白色，完整混白與兩色混合仍正確',()=>{
+ const edge=[{x:.33,y:.5,on:true},{x:.5,y:.5,on:true},{x:.67,y:.5,on:true}];assert.ok(mixtureRegions(edge).includes(7));assert.match(mixObservation(edge),/強度比例不均/);assert.doesNotMatch(mixObservation(edge),/共同區.*混看接近白色/);
+ assert.match(mixObservation(arrangeMix('together')),/比例接近校配比例.*接近白色/);
+ const off=arrangeMix('together').map(s=>({...s,on:false}));assert.match(mixObservation(off),/都關閉/);
+ for(const [excluded,colour]of[[0,'青色'],[1,'洋紅色'],[2,'黃色']])assert.ok(mixObservation(arrangeMix('together').map((s,i)=>({...s,on:i!==excluded}))).includes(colour));
 });

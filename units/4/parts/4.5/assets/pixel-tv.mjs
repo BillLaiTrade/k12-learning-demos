@@ -1,4 +1,4 @@
-import {WIDTH,HEIGHT,QUICK_POINTS,DEFAULT_INDEX,sourcePixels,currentPixel,renderPixels,rgbaPixels,pixelAt,colourCss,colourName,sameColour,neighbourhood,moveSelection,observationText,loupeLayout,sampleDragIndex} from './pixel-tv-observer-model.mjs?v=tv-flow-20261105';
+import {WIDTH,HEIGHT,QUICK_POINTS,DEFAULT_INDEX,sourcePixels,currentPixel,renderPixels,rgbaPixels,pixelAt,colourCss,colourName,sameColour,neighbourhood,moveSelection,observationText,loupeLayout,sampleDragIndex,screenChannel} from './pixel-tv-observer-model.mjs?v=science-reviewed-20261106';
 export function initialisePixelTv(root){
  if(root.dataset.ready==='true')return;
  const $=s=>root.querySelector(s),source=sourcePixels();
@@ -33,9 +33,9 @@ export function initialisePixelTv(root){
   const v=state.screenValues;
   if(v.every(n=>n===255))return'';
   if(v.every(n=>n===0))return'紅、綠、藍三種色光全部關閉，沒有色光送出，因此整幅圖呈黑色。';
-  if(v.every(n=>n===128))return'三種色光都減少一半，因此白雲變灰、整幅圖變暗；各像素原本的 RGB 比例保持相同。';
+  if(v.every(n=>n===128))return'三種色光的強度都減半，因此白雲變灰、整幅圖變暗；原本的色彩關係大致保留。';
   const changed=v.flatMap((n,c)=>n===255?[]:[['紅光','綠光','藍光'][c]+(n===0?'關閉':'減少一半')]);
-  return changed.join('、')+`，使三種色光的比例改變，因此原本白色的雲偏${colourName(v).replace(/色$/,'')}；其他區域也依原本的色光組成改變。`;
+  return changed.join('、')+`，使三種色光的比例改變，因此原本白色的雲偏${colourName(v.map(n=>screenChannel(255,n))).replace(/色$/,'')}；其他區域也依原本的色光組成改變。`;
  }
  const values=()=>state.mode==='screen'?state.screenValues:state.colourValues;
  const settings=()=>({mode:state.mode,selected:state.selected,values:values()});
@@ -86,7 +86,7 @@ export function initialisePixelTv(root){
   }
   const row=$('[data-tv-rgb="before"]');before.forEach((n,c)=>{row.querySelector(`[data-component="${c}"]`).style.backgroundColor=colourCss(before.map((v,i)=>i===c?v:0));row.querySelector(`[data-value="${c}"]`).textContent=`${['R','G','B'][c]} ${n}`;});row.querySelector('[data-combined]').style.backgroundColor=colourCss(before);row.querySelector('[data-combined]').setAttribute('aria-label',`原本${colourName(before)}，RGB ${before.join('、')}`);
   $('[data-tv-control-label]').textContent=state.mode==='screen'?'調整整幅圖的 RGB':'調整 RGB';
-  $('[data-tv-control-help]').textContent=state.mode==='screen'?'每個選項都影響整幅圖。「減少一半」以原圖為準；「保留」維持原圖的該色光。':'點選 0／128／255，或直接輸入數值。修改會立即套用整組。';
+  $('[data-tv-control-help]').textContent=state.mode==='screen'?'每個選項都影響整幅圖。「減少一半」代表該色光強度減半；「保留」維持原圖。':'RGB 是圖片數值，並非光功率。點選 0／128／255，或輸入數值；換選其他顏色會重置本次試調。';
   root.querySelectorAll('[data-tv-value]').forEach((input,c)=>{if(input.value!==String(config.values[c]))input.value=String(config.values[c]);input.setAttribute('aria-invalid','false');input.hidden=state.mode==='screen';input.disabled=state.mode==='screen';});
   root.querySelectorAll('[data-tv-preset]').forEach(b=>b.setAttribute('aria-pressed',String(config.values[Number(b.dataset.channel)]===Number(b.dataset.tvPreset))));
   root.querySelectorAll('[data-channel-row]').forEach((row,c)=>{const label=row.querySelector('label');label.firstChild.textContent=state.mode==='screen'?`${['紅光','綠光','藍光'][c]} ${['R','G','B'][c]}`:`${['紅','綠','藍'][c]} ${['R','G','B'][c]}`;row.setAttribute('role','group');row.setAttribute('aria-label',`${['紅光','綠光','藍光'][c]}${state.mode==='screen'?'整圖調整選項':'數值調整'}`);if(state.mode==='screen')label.removeAttribute('for');else label.setAttribute('for',`tv-rgb-${c}`);});

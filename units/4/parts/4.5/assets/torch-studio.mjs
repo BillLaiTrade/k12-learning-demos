@@ -1,5 +1,5 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {torchAim} from './mix-optics.mjs?v=mix-front-20261102';
+import {torchAim} from './mix-optics.mjs?v=science-reviewed-20261106';
 
 // Actual turned metal geometry; the light on the wall stays in mix-optics.
 function studioEnvironment(){

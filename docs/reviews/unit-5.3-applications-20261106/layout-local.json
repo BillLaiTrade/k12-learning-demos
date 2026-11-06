@@ -1,0 +1,267 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "key": "bottle",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      16,
+      16.8,
+      16.8,
+      16.8
+    ],
+    "hotspots": []
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "key": "coast",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      16.8
+    ],
+    "hotspots": []
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "key": "pan",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      19.2,
+      16,
+      19.2,
+      16
+    ],
+    "hotspots": [
+      {
+        "w": 86.015625,
+        "h": 44,
+        "inside": true
+      },
+      {
+        "w": 102.015625,
+        "h": 44,
+        "inside": true
+      }
+    ]
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "key": "bottle",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      16,
+      16.8,
+      16.8,
+      16.8
+    ],
+    "hotspots": []
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "key": "coast",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      16.8
+    ],
+    "hotspots": []
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "key": "pan",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      19.2,
+      16,
+      19.2,
+      16
+    ],
+    "hotspots": [
+      {
+        "w": 86.015625,
+        "h": 44,
+        "inside": true
+      },
+      {
+        "w": 102.015625,
+        "h": 44,
+        "inside": true
+      }
+    ]
+  },
+  {
+    "width": 1280,
+    "height": 720,
+    "key": "bottle",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      16,
+      16.8,
+      16.8,
+      16.8
+    ],
+    "hotspots": []
+  },
+  {
+    "width": 1280,
+    "height": 720,
+    "key": "coast",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      16.8
+    ],
+    "hotspots": []
+  },
+  {
+    "width": 1280,
+    "height": 720,
+    "key": "pan",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      19.2,
+      16,
+      19.2,
+      16
+    ],
+    "hotspots": [
+      {
+        "w": 86.015625,
+        "h": 44,
+        "inside": true
+      },
+      {
+        "w": 102.015625,
+        "h": 44,
+        "inside": true
+      }
+    ]
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "key": "bottle",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      16,
+      16.8,
+      16.8,
+      16.8
+    ],
+    "hotspots": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "key": "coast",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      16.8
+    ],
+    "hotspots": []
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "key": "pan",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      19.2,
+      16,
+      19.2,
+      16
+    ],
+    "hotspots": [
+      {
+        "w": 72.375,
+        "h": 44,
+        "inside": true
+      },
+      {
+        "w": 85.96875,
+        "h": 44,
+        "inside": true
+      }
+    ]
+  },
+  {
+    "width": 320,
+    "height": 740,
+    "key": "bottle",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      16,
+      16.8,
+      16.8,
+      16.8
+    ],
+    "hotspots": []
+  },
+  {
+    "width": 320,
+    "height": 740,
+    "key": "coast",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      16.8
+    ],
+    "hotspots": []
+  },
+  {
+    "width": 320,
+    "height": 740,
+    "key": "pan",
+    "overflow": false,
+    "clipped": [],
+    "fonts": [
+      16,
+      19.2,
+      16,
+      19.2,
+      16
+    ],
+    "hotspots": [
+      {
+        "w": 72.375,
+        "h": 44,
+        "inside": true
+      },
+      {
+        "w": 85.96875,
+        "h": 44,
+        "inside": true
+      }
+    ]
+  }
+]

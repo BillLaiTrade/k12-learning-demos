@@ -17,6 +17,12 @@
 #periscope-recorded .light-line{stroke-width:10}
 .periscope-steps button span{width:23px}
 
+/* Make a successful check easy to distinguish and keep its next action close. */
+.periscope-feedback[data-state=good]{display:flex;align-items:center;gap:12px;min-height:72px;padding:16px 18px;border:1px solid #9cc5a6;border-left:5px solid #27805a;background:#e9f4e8;color:#205b39;font-size:1.05rem;font-weight:700;line-height:1.65}
+.periscope-feedback[data-state=good]::before{content:'✓';display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:#287a54;color:#fff;font-size:1.15rem;font-weight:800;line-height:1}
+.periscope-feedback[data-state=good]+.periscope-footer{margin-top:10px}
+@media(max-width:600px){.periscope-feedback[data-state=good]{padding:14px;font-size:1rem}}
+
 
 .periscope-controls button:disabled{cursor:default;background:#f1f4ef;color:#7b8d83;border-color:#d9e1d9}.periscope-pulse-note{margin:9px 0 0;color:#557465;font-size:.82rem}.periscope-path circle{pointer-events:none}
 
