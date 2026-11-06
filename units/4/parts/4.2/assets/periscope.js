@@ -259,7 +259,7 @@ if(root) {
     const info=observe(state.angles);
     if(state.stage===0) {
       if(!info.target){feedback('船還沒在觀察窗中央。看看觀察窗：目前是天空、海面，還是被管壁擋住？','try');return;}
-      state.saved=[...state.angles];state.done[0]=true;feedback('設計完成！小葵已在觀察窗中央看見船。接著試著排除故障。','good');
+      state.saved=[...state.angles];state.done[0]=true;feedback('設計完成！小葵看見船了。接著，試試鏡片角度改變後，能不能再把船找回來。','good');
     } else if(state.stage===1) {
       if(!info.target){feedback('還沒對準，再調整鏡片，讓船回到觀察窗中央。','try');return;}
       if(!returnSignal(state.angles).receiver){feedback('船已進入視野，再拖動鏡片讓船回到中央，讓接下來的訊號也能回到船上。','try');return;}
