@@ -1,5 +1,5 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {createLensVisual} from './lens-geometry.mjs?v=20261104-lens-clear5';
+import {createLensGeometry} from './lens-geometry.mjs?v=20261104-lens-clear5';
 import {bindProjectorOrbit} from './projector-orbit.mjs?v=20261106-projector-orbit2';
 import {PROJECTOR as G,projectorRays} from './projector-optics.mjs';
 
@@ -46,7 +46,25 @@ export function createProjectorModel(canvas,cardCanvas,paperCanvas,onLayout,onFa
  const cardPlane=new THREE.Mesh(new THREE.PlaneGeometry(1.5,1.65),new THREE.MeshBasicMaterial({map:cardTexture,transparent:true,side:THREE.DoubleSide,toneMapped:false,depthWrite:false}));cardPlane.rotation.y=-Math.PI/2;cardPlane.position.set(-.025,G.axis,0);source.add(cardPlane);
  box(source,.16,.1,.22,0,G.axis-.92,0,brass,.02);
  const lensGroup=new THREE.Group();rig.add(lensGroup);mount(lensGroup,G.axis-1.1);let lens=null,currentKind='';
- const rimMesh=new THREE.Mesh(new THREE.TorusGeometry(1.055,.045,12,100),green);rimMesh.rotation.y=Math.PI/2;rimMesh.position.y=G.axis;lensGroup.add(rimMesh);box(lensGroup,.22,.13,.25,0,G.axis-1.12,0,steel,.025);
+ // Leave both curved faces visible; support the glass only at its lower edge.
+ box(lensGroup,.22,.13,.25,0,G.axis-1.12,0,steel,.025);
+ box(lensGroup,.19,.12,.32,0,G.axis-1.025,0,brass,.025);
+ function lensVisual(kind){
+  const halfThickness=r=>kind==='convex'?.025+.14*(1-r*r):.025+.16*r*r;
+  const geometry=createLensGeometry(THREE,{radius:1,halfThickness});
+  const material=new THREE.MeshPhysicalMaterial({color:'#b8dfdd',metalness:0,roughness:.06,transmission:.72,ior:1.5,thickness:geometry.userData.centerThickness,clearcoat:1,clearcoatRoughness:.08,envMapIntensity:1.2,attenuationColor:'#9ac8c4',attenuationDistance:1.4});
+  const glass=new THREE.Mesh(geometry,material);glass.userData.presentation='projector-solid-glass';
+  const edge=[];for(let i=0;i<128;i++){const a=2*Math.PI*i/128;edge.push(new THREE.Vector3(0,Math.cos(a),Math.sin(a)));}
+  const contour=new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(edge),new THREE.LineBasicMaterial({color:'#8cb4ad',transparent:true,opacity:.4,depthWrite:false,toneMapped:false}));
+  contour.raycast=()=>{};glass.add(contour);
+  // Short, soft reflections follow the glass surfaces, without drawing full
+  // meridians through the center as if they were structural wires.
+  for(const side of [-1,1]){
+   const points=[];for(let i=0;i<=64;i++){const t=i/64,y=.75-.66*t,z=side*(.16+.3*Math.sin(t*Math.PI/2));points.push(new THREE.Vector3(side*(halfThickness(Math.hypot(y,z))+.008),y,z));}
+   const reflection=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:'#f3ffff',transparent:true,opacity:.65,depthWrite:false,toneMapped:false}));reflection.raycast=()=>{};glass.add(reflection);
+  }
+  return glass;
+ }
  const screen=new THREE.Group();rig.add(screen);screen.position.x=G.screen;mount(screen,.68);box(screen,.17,G.paperHeight+.26,G.paperWidth+.26,.05,G.axis,0,cream,.055);
  const paperTexture=new THREE.CanvasTexture(paperCanvas);paperTexture.colorSpace=THREE.SRGBColorSpace;
  const paperPlane=new THREE.Mesh(new THREE.PlaneGeometry(G.paperWidth,G.paperHeight),new THREE.MeshBasicMaterial({map:paperTexture,toneMapped:false}));paperPlane.rotation.y=-Math.PI/2;paperPlane.position.set(-.05,G.axis,0);screen.add(paperPlane);
@@ -65,7 +83,7 @@ export function createProjectorModel(canvas,cardCanvas,paperCanvas,onLayout,onFa
  const observer=new ResizeObserver(request);observer.observe(canvas);
  function update(next){
   state=next;source.position.x=next.card;lensGroup.position.x=next.lens;cardTexture.needsUpdate=true;paperTexture.needsUpdate=true;
-  if(next.kind!==currentKind){if(lens){lensGroup.remove(lens);disposeTree(lens);}currentKind=next.kind;lens=createLensVisual(THREE,{radius:1,halfThickness:r=>next.kind==='convex'?.025+.14*(1-r*r):.025+.16*r*r});lens.position.y=G.axis;lensGroup.add(lens);}
+  if(next.kind!==currentKind){if(lens){lensGroup.remove(lens);disposeTree(lens);}currentKind=next.kind;lens=lensVisual(next.kind);lens.position.y=G.axis;lensGroup.add(lens);}
   for(const child of [...rays.children]){rays.remove(child);disposeTree(child);}
   if(next.rays)for(const ray of projectorRays(next)){
    let end=ray.end;const minY=.3,maxY=5.15;if(end[1]<minY||end[1]>maxY){const y=Math.max(minY,Math.min(maxY,end[1])),t=(y-ray.lens[1])/(end[1]-ray.lens[1]);end=[ray.lens[0]+(end[0]-ray.lens[0])*t,y,0];}

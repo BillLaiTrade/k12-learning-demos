@@ -6,6 +6,7 @@ if(section) {
   const ns='http://www.w3.org/2000/svg',ray=comparisonRay(),distances=opticalDistances();
   const node=(name,attributes)=>{const element=document.createElementNS(ns,name);for(const [key,value] of Object.entries(attributes))element.setAttribute(key,value);return element;};
   const attrs=(element,values)=>{for(const [key,value] of Object.entries(values))element.setAttribute(key,value);};
+  const clearSelections=[];
   for(const prefix of ['reference','trial']) {
     const panel=section.querySelector(`#comparison-${prefix}`),mode=panel.dataset.mode,mirror=mode==='mirror';
     const svg=panel.querySelector('.comparison-side'),find=name=>svg.querySelector(`[data-side="${name}"]`);
@@ -16,6 +17,10 @@ if(section) {
     find('rays').setAttribute('stroke-width','4');
     const incomingMatch=node('path',{'data-side':'incoming-match',d:sidePath([ray.hit,ray.eye]),fill:'none',stroke:'#236f9f','stroke-width':10,'stroke-linecap':'round',opacity:.18});
     find('rays').before(incomingMatch);
+    const totalPath=node('path',{'data-side':'total-highlight',d:sidePath(mirror?ray.reflected:ray.direct),fill:'none',stroke:'#ffca46','stroke-width':13,'stroke-linecap':'round','stroke-linejoin':'round','pointer-events':'none',visibility:'hidden'});
+    find('rays').before(totalPath);
+    const segmentPath=node('path',{'data-side':'segment-highlight',fill:'none',stroke:'#ffca46','stroke-width':13,'stroke-linecap':'round','stroke-linejoin':'round','pointer-events':'none',visibility:'hidden'});
+    find('rays').before(segmentPath);
     find('extensions').replaceChildren(...(mirror?[path(ray.extension,false)]:[]));
     find('hits').replaceChildren(...(mirror?[node('circle',{cx:ray.hit[0],cy:ray.hit[1],r:4})]:[]));
     function distanceLabel(name,points,text,color,fraction=.5,{compact=false,side=1,gap=20}={}) {
@@ -35,30 +40,45 @@ if(section) {
       // Keep matching labels above the two short segments, clear of the bears.
       distanceLabel('distance-incoming',[ray.source,ray.hit],'2公尺','#fbd3ae',.4,{compact:true,gap:12});
     }
-    // Keep the two scenes independent; both 2 m badges in the mirror scene
-    // refer to the same length, while the dashed extension remains virtual.
+    // Equal lengths can represent different paths: the mirror extension is virtual.
     svg.setAttribute('role','group');
     const terms=[...panel.querySelectorAll('.comparison-path-term')];
+    const total=panel.querySelector('.comparison-path-total');
+    total.dataset.match='total';
     const badges=[...svg.querySelectorAll('[data-side^="distance-"]')];
-    function selectDistance(distance) {
-      for(const control of [...badges,...terms]) control.setAttribute('aria-pressed',String(control.dataset.distance===distance));
+    function selectDistance(key) {
+      for(const control of [...badges,...terms,total]) control.setAttribute('aria-pressed',String(key!==null && control.dataset.match===key));
+      totalPath.setAttribute('visibility',key==='total'?'visible':'hidden');
+      const segments={'2':mirror?[ray.source,ray.hit]:[ray.image,ray.hit],'3':[ray.hit,ray.eye],extension:[ray.hit,ray.image]};
+      const points=segments[key];
+      segmentPath.setAttribute('visibility',points?'visible':'hidden');
+      if(points)segmentPath.setAttribute('d',sidePath(points));
+      if(key==='extension')segmentPath.setAttribute('stroke-dasharray','8 12');else segmentPath.removeAttribute('stroke-dasharray');
     }
+    clearSelections.push(()=>selectDistance(null));
+    total.addEventListener('click',()=>selectDistance('total'));
     for(const term of terms) {
       term.id=`${prefix}-distance-${term.dataset.distance}`;
-      term.addEventListener('click',()=>selectDistance(term.dataset.distance));
+      term.dataset.match=term.dataset.distance;
+      term.addEventListener('click',()=>selectDistance(term.dataset.match));
     }
     for(const badge of badges) {
       const distance=badge.dataset.side==='distance-three'?'3':'2';
-      attrs(badge,{role:'button',tabindex:0,'data-distance':distance,'aria-pressed':'false','aria-controls':`${prefix}-distance-${distance}`});
+      const key=mirror&&badge.dataset.side==='distance-two'?'extension':distance;
+      attrs(badge,{role:'button',tabindex:0,'data-distance':distance,'data-match':key,'aria-pressed':'false'});
+      if(key!=='extension')badge.setAttribute('aria-controls',`${prefix}-distance-${distance}`);
       if(!mirror) badge.setAttribute('aria-label',distance==='2'?'真熊到原鏡面位置的光路為2公尺':'原鏡面位置到眼睛的光路為3公尺');
-      badge.addEventListener('click',()=>selectDistance(distance));
+      badge.addEventListener('click',()=>selectDistance(key));
       badge.addEventListener('keydown',event=>{
         if(!['Enter',' '].includes(event.key)) return;
-        event.preventDefault();selectDistance(distance);
+        event.preventDefault();selectDistance(key);
       });
     }
     svg.dataset.mode=mode;svg.dataset.eye=COMPARISON.eye.join(',');svg.dataset.source=COMPARISON.source.join(',');svg.dataset.image=COMPARISON.image.join(',');svg.dataset.hit=ray.hit.join(',');
     svg.dataset.distances=JSON.stringify(distances);
     createComparisonView(panel.querySelector('.comparison-eye'),mode);
   }
+  document.addEventListener('click',event=>{
+    if(!section.contains(event.target)||!event.target.closest('.comparison-path-term,.comparison-path-total,[data-side^=\"distance-\"]'))clearSelections.forEach(clear=>clear());
+  });
 }

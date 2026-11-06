@@ -25,17 +25,6 @@ $$('[data-ray-lab]:not([data-return-lab])').forEach(root=>{
   svg.onkeydown=e=>{if(e.target.getAttribute('role')!=='slider')return;const step={ArrowLeft:-1,ArrowDown:-1,ArrowRight:1,ArrowUp:1}[e.key];if(step!==undefined||e.key==='Home'||e.key==='End'){e.preventDefault();setAngle(e.key==='Home'?0:e.key==='End'?(reverse?35:60):angle+step);$('.source',svg).focus();}};
   render();
 });
-let reversed=false;
-function drawPaths(){
-  for(const kind of ['reflect','refract']){
-    const id=`path-${kind}`, hit=[210,165], a=[130,26], b=kind==='reflect'?[290,26]:[210+160*.375,165+160*Math.sqrt(1-.375**2)];
-    const points=reversed?[b,hit,a]:[a,hit,b];
-    $(`#${kind}-scene`).innerHTML=defs(id)+(kind==='refract'?'<rect x="0" y="165" width="420" height="165" fill="#dceeea"/>':'')+line([20,165],[400,165],'normal')+line([210,5],[210,325],'normal')+line(a,hit,'ghost')+line(hit,b,'ghost')+arrow(points[0],hit,id)+arrow(hit,points[2],id)+label(22,150,kind==='reflect'?'鏡面':'空氣')+(kind==='refract'?label(22,200,'水'):'')+label(a[0]-65,a[1]+5,`A ${reversed?'終點':'起點'}`)+label(b[0]+8,b[1]+5,`B ${reversed?'起點':'終點'}`);
-  }
-  $('#reverse-label').textContent=`目前：由 ${reversed?'B 前往 A':'A 前往 B'}`;
-  $('#reverse-path').textContent=reversed?'恢復由 A 前往 B':'反向沿原路走';$('#reverse-path').setAttribute('aria-pressed',String(reversed));
-}
-$('#reverse-path').onclick=()=>{reversed=!reversed;drawPaths();};drawPaths();
 const links=$$('.route-inner a');
 const sections=links.map(a=>$(a.hash));
 const teachingHeadings=sections.map(section=>$('.lesson-head h2',section));

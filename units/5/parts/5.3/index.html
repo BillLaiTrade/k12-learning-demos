@@ -40,8 +40,8 @@
   <script type="module" src="assets/material-comparison-lab.js?v=derive-1"></script>
   <link rel="stylesheet" href="assets/application-lab.css?v=applications-1">
   <script type="module" src="assets/application-lab.js?v=applications-1"></script>
-  <link rel="stylesheet" href="assets/unknown-quiz.css?v=unknown-quiz-1">
-  <script type="module" src="assets/unknown-quiz.js?v=unknown-quiz-1"></script>
+  <link rel="stylesheet" href="assets/unknown-quiz.css?v=quiz-layout-1">
+  <script type="module" src="assets/unknown-quiz.js?v=quiz-layout-1"></script>
 </head>
 <body>
   <header class="shell masthead"><div class="brand-row"><a class="brand" href="../../index.html">← 溫度與熱</a><span class="crumb">國二上・熱量與比熱</span></div>
@@ -255,29 +255,32 @@
           <header class="quiz-head"><span class="quiz-mark" aria-hidden="true">?</span><div><p class="quiz-kicker">單元小測</p><h2 id="quiz-title">找出未知樣品的比熱</h2><p>先觀察讀值，再用熱量、質量與溫升推算。</p></div><button class="secondary" id="unknown-new" type="button" disabled>↻ 換一組</button></header>
           <div class="quiz-body" id="unknown-quiz-lab" data-phase="loading" data-observed="false">
             <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p id="unknown-question">吸收同樣的熱量，兩份樣品的升溫會一樣嗎？未知樣品的比熱是多少？</p></div>
-            <p class="unknown-conditions">各100 g · 初溫20°C · 各吸收<span id="unknown-target-heat">500</span> cal</p>
             <figure class="unknown-bench">
+              <div class="unknown-conditions"><strong>共同條件</strong><span>各100 g</span><span>初溫20°C</span><span>各吸收 <span id="unknown-target-heat">500</span> cal</span></div>
               <div class="unknown-scene-pan" tabindex="0" role="region" aria-label="兩份樣品觀察台，窄版可左右移動查看"><div class="unknown-photo">
                 <svg id="unknown-apparatus" viewBox="0 90 1672 720" aria-hidden="true"><image id="unknown-apparatus-image" href="assets/material-comparison-bench.webp" width="1672" height="941"/><g id="unknown-motion"></g></svg>
-                <span class="unknown-sample-label unknown-label-left" id="unknown-label-left">樣品甲｜水</span><span class="unknown-sample-label unknown-label-right" id="unknown-label-right">樣品乙｜未知固體</span>
+                <span class="unknown-sample-label unknown-label-left" id="unknown-label-left"><span class="unknown-sample-badge" id="unknown-label-left-letter" data-letter="a">甲</span><span id="unknown-label-left-kind">水</span></span><span class="unknown-sample-label unknown-label-right" id="unknown-label-right"><span class="unknown-sample-badge" id="unknown-label-right-letter" data-letter="b">乙</span><span id="unknown-label-right-kind">未知固體</span></span>
                 <div class="unknown-meter unknown-meter-left" id="unknown-meter-left-screen" hidden><span class="visually-hidden" id="unknown-meter-left-name">樣品甲目前溫度</span><output id="unknown-meter-left">20.0</output><small>°C</small></div><div class="unknown-meter unknown-meter-right" id="unknown-meter-right-screen" hidden><span class="visually-hidden" id="unknown-meter-right-name">樣品乙目前溫度</span><output id="unknown-meter-right">20.0</output><small>°C</small></div>
                 <div class="unknown-loading" id="unknown-loading" role="status">正在準備樣品觀察台…</div>
               </div></div>
-              <figcaption class="unknown-energy-row"><span><span id="unknown-energy-left-name">甲</span>已吸收 <output id="unknown-energy-left">0</output> cal</span><span><span id="unknown-energy-right-name">乙</span>已吸收 <output id="unknown-energy-right">0</output> cal</span></figcaption>
+              <figcaption class="unknown-energy-row"><span><span class="unknown-sample-badge" id="unknown-energy-left-name" data-letter="a">甲</span> 已吸收 <output id="unknown-energy-left">0</output> cal</span><span><span class="unknown-sample-badge" id="unknown-energy-right-name" data-letter="b">乙</span> 已吸收 <output id="unknown-energy-right">0</output> cal</span></figcaption>
             </figure>
             <p class="unknown-pan-hint">左右移動，查看完整的兩份樣品。</p>
             <div class="unknown-actions"><button class="action" id="unknown-observe" type="button" disabled>開始觀察</button><button class="secondary" id="unknown-retry" type="button" hidden>重新載入器材</button><span id="unknown-status" role="status">器材就緒後，一起觀察兩份樣品。</span></div>
             <p class="visually-hidden" id="unknown-readings"></p>
             <form id="heat-quiz" class="unknown-answer" novalidate>
+              <section class="unknown-reasoning" aria-labelledby="unknown-reasoning-title">
+                <header class="unknown-reasoning-head"><h3 id="unknown-reasoning-title">你的推論</h3><details class="unknown-formula"><summary>公式提示</summary><p><strong>Q＝m×c×ΔT</strong><br>Q：吸收熱量；m：質量；c：比熱；ΔT：末溫－初溫。請使用未知樣品的溫升推算。</p></details></header>
               <fieldset id="unknown-answer-fields" disabled><legend class="visually-hidden">根據觀察讀值，完成溫升、未知比熱及所需熱量的推論。</legend>
                 <div class="unknown-answer-grid">
-                  <div class="unknown-step"><h3><span aria-hidden="true">1</span> 先找出溫升</h3><div class="unknown-rise-inputs"><label for="unknown-rise-a">甲的溫升 <span><input id="unknown-rise-a" name="riseA" type="number" min="0" step="any" inputmode="decimal" aria-describedby="unknown-rise-a-feedback"> °C</span></label><label for="unknown-rise-b">乙的溫升 <span><input id="unknown-rise-b" name="riseB" type="number" min="0" step="any" inputmode="decimal" aria-describedby="unknown-rise-b-feedback"> °C</span></label></div><p class="unknown-feedback" id="unknown-rise-a-feedback" hidden></p><p class="unknown-feedback" id="unknown-rise-b-feedback" hidden></p></div>
-                  <div class="unknown-step"><h3><span aria-hidden="true">2</span> 推算未知比熱</h3><label for="unknown-specific-heat"><span id="unknown-specific-label">乙的比熱約為</span> <input id="unknown-specific-heat" name="specificHeat" type="number" min="0" step="any" inputmode="decimal" aria-describedby="unknown-specific-help unknown-specific-heat-feedback"> <span class="unknown-unit">cal／(g·°C)</span></label><p id="unknown-specific-help" class="unknown-note">溫升填至小數點後1位，比熱可填至小數點後2位。</p><details class="unknown-formula"><summary>需要時看 Q＝m×c×ΔT</summary><p>Q：吸收熱量；m：質量；c：比熱；ΔT：末溫－初溫。請使用未知樣品的溫升推算。</p></details><p class="unknown-feedback" id="unknown-specific-heat-feedback" hidden></p></div>
+                  <div class="unknown-step"><h4><span class="unknown-step-number">1</span> 先找出溫升</h4><div class="unknown-rise-inputs"><label for="unknown-rise-a"><span><span class="unknown-sample-badge" data-letter="a">甲</span> 的溫升</span><span><input id="unknown-rise-a" name="riseA" type="number" min="0" step="any" inputmode="decimal" aria-describedby="unknown-rise-help unknown-rise-a-feedback"> °C</span></label><label for="unknown-rise-b"><span><span class="unknown-sample-badge" data-letter="b">乙</span> 的溫升</span><span><input id="unknown-rise-b" name="riseB" type="number" min="0" step="any" inputmode="decimal" aria-describedby="unknown-rise-help unknown-rise-b-feedback"> °C</span></label></div><p id="unknown-rise-help" class="unknown-note">溫升填至小數點後1位。</p><p class="unknown-feedback" id="unknown-rise-a-feedback" hidden></p><p class="unknown-feedback" id="unknown-rise-b-feedback" hidden></p></div>
+                  <div class="unknown-step"><h4><span class="unknown-step-number">2</span> 推算未知比熱</h4><label class="unknown-specific-input" for="unknown-specific-heat"><span><span class="unknown-sample-badge" id="unknown-specific-badge" data-letter="b">乙</span><span id="unknown-specific-label">的比熱約為</span></span><span><input id="unknown-specific-heat" name="specificHeat" type="number" min="0" step="any" inputmode="decimal" aria-describedby="unknown-specific-help unknown-specific-heat-feedback"> <span class="unknown-unit">cal／(g·°C)</span></span></label><p id="unknown-specific-help" class="unknown-note">比熱可填至小數點後2位。</p><p class="unknown-feedback" id="unknown-specific-heat-feedback" hidden></p></div>
+                  <fieldset class="unknown-step unknown-comparison" id="unknown-comparison"><legend><span class="unknown-step-number">3</span> 同樣質量、升高相同溫度，誰需要較多熱量？</legend><div class="unknown-choice-row"><label><input type="radio" name="comparison" value="a" aria-describedby="unknown-comparison-feedback"> 樣品<span class="unknown-sample-badge" data-letter="a">甲</span></label><label><input type="radio" name="comparison" value="b" aria-describedby="unknown-comparison-feedback"> 樣品<span class="unknown-sample-badge" data-letter="b">乙</span></label><label><input type="radio" name="comparison" value="same" aria-describedby="unknown-comparison-feedback"> 相同</label></div><p class="unknown-feedback" id="unknown-comparison-feedback" hidden></p></fieldset>
                 </div>
-                <fieldset class="unknown-comparison" id="unknown-comparison"><legend>同樣質量、升高相同溫度，誰需要較多熱量？</legend><div class="unknown-choice-row"><label><input type="radio" name="comparison" value="a" aria-describedby="unknown-comparison-feedback"> 樣品甲</label><label><input type="radio" name="comparison" value="b" aria-describedby="unknown-comparison-feedback"> 樣品乙</label><label><input type="radio" name="comparison" value="same" aria-describedby="unknown-comparison-feedback"> 相同</label></div><p class="unknown-feedback" id="unknown-comparison-feedback" hidden></p></fieldset>
-                <div class="unknown-actions"><button class="action" type="submit" id="unknown-check">核對推論</button><button class="secondary" type="reset">重新作答</button></div>
+                <div class="unknown-actions unknown-answer-actions"><button class="secondary" type="reset">重新作答</button><button class="action" type="submit" id="unknown-check">核對推論</button></div>
               </fieldset>
               <div class="quiz-result" id="quiz-result" role="status" hidden></div>
+              </section>
             </form>
             <p class="unknown-note">重觀察會保留作答；「換一組」會更換數據及甲乙配置，並清除本題作答。</p>
             <details class="unknown-assumptions"><summary>器材與模型條件</summary><p>每組兩份樣品都是100g、初溫20°C，實際吸收相同熱量；水與固體分別使用浸入式及表面接觸探針。未知固體的比熱為教學設定，不對應特定真實材料。假設均勻溫度、比熱固定、沒有狀態改變，只比較樣品吸熱，忽略容器、散熱與內部導熱。動畫進度不表示真實加熱時間、功率或效率。器材場景為AI生成，讀值由模型呈現。</p></details>

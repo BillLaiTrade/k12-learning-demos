@@ -32,6 +32,11 @@ test('B方案小測：先觀察、推算未知比熱、保留作答與換題',{t
     await p.clock.runFor(10000);assert.equal(await p.locator('#unknown-energy-left').textContent(),'0');
     assert.doesNotMatch(await p.locator('#unknown-quiz-lab').innerText(),/0\.2\s*cal|0\.20\s*cal|4／4/);
     assert.equal(await p.locator('#unit-quiz').getByRole('button',{name:'暫停',exact:true}).count(),0);
+    assert.equal(await p.locator('#unknown-observe').getAttribute('class'),'action');
+    assert.equal(await p.locator('#unknown-check').isDisabled(),true);
+    await p.locator('.unknown-formula summary').click();
+    assert.equal(await p.locator('.unknown-formula').getAttribute('open'),'');
+    await p.locator('.unknown-formula summary').click();
 
   });
 
@@ -44,6 +49,8 @@ test('B方案小測：先觀察、推算未知比熱、保留作答與換題',{t
     assert.equal(await p.locator('#unknown-energy-left').textContent(),'500');assert.equal(await p.locator('#unknown-quiz-lab').getAttribute('data-observed'),'true');
     assert.match(await p.locator('#unknown-readings').textContent(),/甲25.0°C、乙45.0°C/);
     assert.equal(await p.locator('#quiz-result').isHidden(),true);
+    assert.equal(await p.locator('#unknown-observe').getAttribute('class'),'secondary');
+    assert.equal(await p.locator('#unknown-check').isEnabled(),true);
 
   });
 
@@ -70,11 +77,21 @@ test('B方案小測：先觀察、推算未知比熱、保留作答與換題',{t
 
   await t.test('換一組清空、不自動觀察；16組輪換不重複，甲乙配置變動後判定仍正確',async()=>{
     const seen=new Set();let sawSwapped=false;
-    const register=async()=>{const value=await facts();const key=`${value.heat}/${value.waterLetter}/${value.c}`;assert.ok(!seen.has(key));seen.add(key);sawSwapped||=value.waterLetter==='b';await fill(value);await p.locator('#unknown-check').click();assert.equal(await p.locator('#quiz-result').getAttribute('data-correct'),'true');};
+    const register=async()=>{const value=await facts();const key=`${value.heat}/${value.waterLetter}/${value.c}`;assert.ok(!seen.has(key));seen.add(key);sawSwapped||=value.waterLetter==='b';
+      for(const [side,letter]of [['left',value.waterLetter],['right',value.unknownLetter]]){
+        assert.equal(await p.locator(`#unknown-label-${side}-letter`).getAttribute('data-letter'),letter);
+        assert.equal(await p.locator(`#unknown-energy-${side}-name`).getAttribute('data-letter'),letter);
+        const expected=await p.locator(`label[for=unknown-rise-${letter}] .unknown-sample-badge`).evaluate(n=>({text:n.textContent,color:getComputedStyle(n).color,background:getComputedStyle(n).backgroundColor}));
+        const actual=await p.locator(`#unknown-label-${side}-letter`).evaluate(n=>({text:n.textContent,color:getComputedStyle(n).color,background:getComputedStyle(n).backgroundColor}));
+        assert.deepEqual(actual,expected);
+      }
+      assert.equal(await p.locator('#unknown-specific-badge').getAttribute('data-letter'),value.unknownLetter);
+      await fill(value);await p.locator('#unknown-check').click();assert.equal(await p.locator('#quiz-result').getAttribute('data-correct'),'true');};
     await register();
     for(let i=0;i<15;i++){
       await p.locator('#unknown-new').click();assert.equal(await p.locator('#unknown-specific-heat').inputValue(),'');assert.equal(await p.locator('#quiz-result').isHidden(),true);
       assert.equal(await p.locator('#unknown-meter-left').textContent(),'20.0');assert.equal(await p.locator('#unknown-rise-a').isDisabled(),true);
+      assert.equal(await p.locator('#unknown-observe').getAttribute('class'),'action');
       await observe();await register();
     }
     assert.equal(seen.size,16);assert.equal(sawSwapped,true);
@@ -119,7 +136,7 @@ test('B方案小測：先觀察、推算未知比熱、保留作答與換題',{t
   await t.test('五種尺寸不溢出、輸入及按鈕至少44px，LCD與主要文字可讀，窄版可平移',async()=>{
     for(const [width,height]of [[1440,900],[1366,768],[1280,720],[390,844],[320,740]]){
       await p.setViewportSize({width,height});await p.clock.runFor(32);
-      const layout=await p.locator('#unit-quiz').evaluate(n=>({overflow:document.documentElement.scrollWidth>innerWidth,clipped:[...n.querySelectorAll('.unknown-meter')].filter(e=>e.scrollWidth>e.clientWidth+1).map(e=>e.textContent),fonts:[...n.querySelectorAll('.unknown-conditions,.unknown-step h3,.unknown-step label,.unknown-comparison legend')].map(e=>parseFloat(getComputedStyle(e).fontSize)),hits:[...n.querySelectorAll('input[type=number],button')].filter(e=>e.getClientRects().length).map(e=>{const r=e.getBoundingClientRect();return{w:r.width,h:r.height};}),meters:[...n.querySelectorAll('.unknown-meter')].map(e=>parseFloat(getComputedStyle(e).fontSize)),pan:{client:n.querySelector('.unknown-scene-pan').clientWidth,scroll:n.querySelector('.unknown-scene-pan').scrollWidth}}));
+      const layout=await p.locator('#unit-quiz').evaluate(n=>({overflow:document.documentElement.scrollWidth>innerWidth,clipped:[...n.querySelectorAll('.unknown-meter,.unknown-specific-input')].filter(e=>e.scrollWidth>e.clientWidth+1).map(e=>e.textContent),fonts:[...n.querySelectorAll('.unknown-conditions,.unknown-step h4,.unknown-step label,.unknown-comparison legend')].map(e=>parseFloat(getComputedStyle(e).fontSize)),hits:[...n.querySelectorAll('input[type=number],button')].filter(e=>e.getClientRects().length).map(e=>{const r=e.getBoundingClientRect();return{w:r.width,h:r.height};}),meters:[...n.querySelectorAll('.unknown-meter')].map(e=>parseFloat(getComputedStyle(e).fontSize)),pan:{client:n.querySelector('.unknown-scene-pan').clientWidth,scroll:n.querySelector('.unknown-scene-pan').scrollWidth}}));
       layouts.push({width,height,...layout});assert.equal(layout.overflow,false,`${width} overflow`);assert.deepEqual(layout.clipped,[],`${width} LCD clipped`);assert.ok(layout.fonts.every(f=>f>=16));assert.ok(layout.meters.every(f=>f>=15));layout.hits.forEach(h=>assert.ok(h.w>=44&&h.h>=44));
       if(width<600){assert.ok(layout.pan.scroll>layout.pan.client);await p.locator('.unknown-scene-pan').evaluate(n=>n.scrollLeft=n.scrollWidth);}
 

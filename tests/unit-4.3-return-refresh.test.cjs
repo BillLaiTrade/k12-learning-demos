@@ -42,10 +42,10 @@ test('4.3 fifth-section apparatus follows the shared visual style with live main
    }
   }
  });
- await t.test('focus, switching, keyboard adjustment and reset do not move a fitted apparatus',async()=>{
+ await t.test('focus, switching and keyboard adjustment do not move a fitted apparatus',async()=>{
   for(const[width,height]of [[1440,650],[390,667],[320,568],[700,390]]){
    await p.setViewportSize({width,height});await p.clock.runFor(100);await p.waitForTimeout(150);await align();await p.waitForTimeout(100);const y=await p.evaluate(()=>scrollY);
-   await p.locator('#return-devices [data-source=a]').focus();await p.keyboard.press('Home');await p.keyboard.press('ArrowUp');await p.locator('#return-toggle-a').click();await p.locator('#return-reset').click();await p.clock.runFor(100);const now=await p.evaluate(()=>scrollY);assert.ok(Math.abs(now-y)<1.5,JSON.stringify({width,height,before:y,after:now,stage:await p.locator('#return-viewport').boundingBox(),deck:await p.locator('.return-control-deck').boundingBox()}));assert.equal(await root.getAttribute('data-light-a'),'false');assert.equal(await root.getAttribute('data-light-b'),'false');assert.equal(await p.locator('#return-angle').inputValue(),'30');
+   await p.locator('#return-devices [data-source=a]').focus();await p.keyboard.press('Home');await p.keyboard.press('ArrowUp');if(await root.getAttribute('data-light-a')==='true')await p.locator('#return-toggle-a').click();if(await root.getAttribute('data-light-b')==='true')await p.locator('#return-toggle-b').click();await p.clock.runFor(100);const now=await p.evaluate(()=>scrollY);assert.ok(Math.abs(now-y)<1.5,JSON.stringify({width,height,before:y,after:now,stage:await p.locator('#return-viewport').boundingBox(),deck:await p.locator('.return-control-deck').boundingBox()}));assert.equal(await root.getAttribute('data-light-a'),'false');assert.equal(await root.getAttribute('data-light-b'),'false');assert.equal(await p.locator('#return-angle').inputValue(),'1');assert.equal(await p.locator('#return-angle').isVisible(),false);
   }
  });
  if(capture)await fs.writeFile(path.join(capture,'measurements.json'),JSON.stringify(measurements,null,2));assert.deepEqual(errors,[]);

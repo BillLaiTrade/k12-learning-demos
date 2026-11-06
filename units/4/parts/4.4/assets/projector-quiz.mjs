@@ -33,11 +33,12 @@ if(root){
   queued=0;const g=paintProjector(paper,state);paintCard(card,state);
   for(const key of ['card','lens']){const input=$(`[data-projector-position=${key}]`);input.min=String(key==='lens'?Math.max(G.lensMin,state.card+G.minGap):G.cardMin);input.max=String(key==='card'?Math.min(G.cardMax,state.lens-G.minGap):G.lensMax);input.value=String(state[key]);input.style.setProperty('--projector-progress',`${(state[key]-Number(input.min))/(Number(input.max)-Number(input.min))*100}%`);}
   all('[data-projector-lens]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.projectorLens===state.kind)));
+  const lensName=state.kind==='convex'?'凸透鏡':'凹透鏡';$('[data-projector-label=lens]').textContent=lensName;
   for(const key of ['card','lens'])$(`[data-projector-position=${key}]`).setAttribute('aria-valuetext',`軌道位置 ${Math.round((state[key]-G[key+'Min'])/(G[key+'Max']-G[key+'Min'])*100)}%`);
   $('[data-projector-rotate]').setAttribute('aria-pressed',String(state.flipped));$('[data-projector-rotation]').textContent=state.flipped?'已旋轉 180°':'目前 0°';
   $('[data-projector-rays]').setAttribute('aria-pressed',String(state.rays));$('[data-projector-rays]').textContent=state.rays?'隱藏輔助光路':'顯示輔助光路';$('.projector-key').hidden=!state.rays;
   const description=g.image.type!=='real'?'牆上是散開的光，沒有清楚圖案。':`牆上圖案${g.checks.clear?'清楚':'失焦'}、${g.checks.upright?'正立':'倒立'}、${g.checks.large?'放大':'尚未放大'}。`;
-  for(const e of [$('[data-projector-model]'),$('[data-projector-fallback]')])e.setAttribute('aria-label','光源、透明圖卡、鏡片與投影幕。'+description);
+  for(const e of [$('[data-projector-model]'),$('[data-projector-fallback]')])e.setAttribute('aria-label',`光源、透明圖卡、${lensName}與投影幕。`+description);
   root.dataset.kind=state.kind;root.dataset.flipped=String(state.flipped);root.dataset.card=String(state.card);root.dataset.lens=String(state.lens);root.dataset.clear=String(g.checks.clear);root.dataset.checked=String(checked);root.dataset.success=String(checked&&g.success);root.dataset.imageType=g.image.type;
   status.textContent=checked?(g.success?'挑戰完成':'再調整'):'調整中';status.dataset.complete=String(checked&&g.success);
   feedback(g);const hint=$('[data-projector-hint]');hint.hidden=!showHint;$('[data-projector-help]').setAttribute('aria-expanded',String(showHint));
@@ -58,7 +59,7 @@ if(root){
  });
  root.addEventListener('submit',e=>{e.preventDefault();checked=true;showHint=false;render();});
  function failed(){const previous=model;model=null;previous?.dispose();root.dataset.projectorRender='fallback';$('[data-projector-viewbar]').hidden=true;$('[data-projector-view-reset]').disabled=true;$('[data-projector-model]').hidden=true;$('[data-projector-fallback]').toggleAttribute('hidden',false);const note=$('[data-projector-render-note]');note.hidden=false;note.textContent='目前以剖面圖呈現，操作與成像判定相同。';render();}
- function activate(){if(started)return;started=true;root.dataset.projectorRender='loading';import('./projector-model.mjs?v=20261106-projector-orbit2').then(({createProjectorModel})=>{
+ function activate(){if(started)return;started=true;root.dataset.projectorRender='loading';import('./projector-model.mjs?v=20261106-projector-glass1').then(({createProjectorModel})=>{
   try{model=createProjectorModel($('[data-projector-model]'),card,paper,labelsAt,failed);$('[data-projector-model]').hidden=false;$('[data-projector-fallback]').toggleAttribute('hidden',true);$('[data-projector-render-note]').hidden=true;root.dataset.projectorRender='3d';$('[data-projector-viewbar]').hidden=false;$('[data-projector-view-reset]').disabled=false;model.update(state);}catch{failed();}
  }).catch(failed);}
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){observer.disconnect();activate();}},{rootMargin:'300px'});observer.observe(root);
