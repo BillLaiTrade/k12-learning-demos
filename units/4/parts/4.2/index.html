@@ -73,7 +73,7 @@
 
   </style>
   <link rel="stylesheet" href="assets/mirror-image.css?v=mirror-dialogue-20261106">
-  <link rel="stylesheet" href="assets/mirror-distance.css?v=shared-perspective-20261106">
+  <link rel="stylesheet" href="assets/mirror-distance.css?v=readouts-below-20261106">
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=activity-order-20261105">
   <link rel="stylesheet" href="assets/reversible-light.css?v=compact-workspace-20261106">
   <link rel="stylesheet" href="assets/periscope.css?v=success-feedback-20261106">
@@ -336,7 +336,6 @@
           <div class="card-main">
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>我把小熊往鏡子移，鏡後的虛像會留在原地嗎？</p></div>
             <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p>不會喔。小熊靠近鏡面時，鏡後的虛像也會靠近鏡面，而且小熊和虛像離鏡面的距離始終相等。</p></div>
-            <div class="distance-readouts" aria-label="物體與像到鏡面的距離"><output id="distance-object-measure-label" class="measure-text">物距 40 cm</output><span class="distance-equals" aria-hidden="true">＝</span><output id="distance-image-measure-label" class="measure-text">像距 40 cm</output><span id="distance-front-status" class="visually-hidden">物體離鏡面 40 cm｜虛像在鏡後 40 cm</span></div>
             <p class="distance-instruction">拖動小熊，觀察物體與像如何移動。</p>
             <div class="mirror-views" aria-label="調整物體距離並同步查看成像">
               <figure class="mirror-view">
@@ -374,11 +373,10 @@
                   <g id="distance-front-object"><ellipse cx="310" cy="314.182" rx="49.484" ry="6.873" fill="#5c4c38" opacity=".19" filter="url(#distance-front-contact)"/><ellipse cx="310" cy="314.182" rx="34.364" ry="3.849" fill="#5c4c38" opacity=".15"/><image href="assets/mirror/teddy-rear.webp" x="241.273" y="178.727" width="137.455" height="137.455" preserveAspectRatio="xMidYMax meet"/></g>
                   <g data-distance-tag="reflection" data-tag-y="181.343"><path class="distance-leader" d="M346.606 181.343L451.8 181.343" stroke="#75968b"/><rect x="456.8" y="163.743" width="86.4" height="35.2" rx="6.4" fill="#fffffa" fill-opacity=".94" stroke="#d8e2d9"/><text class="distance-front-tag" x="500" y="189.183" text-anchor="middle" fill="#527369">鏡中像</text></g><g data-distance-tag="front-object" data-tag-y="241.956"><path class="distance-leader" d="M373.229 241.956L440.6 241.956" stroke="#ad865d"/><rect x="445.6" y="224.356" width="108.8" height="35.2" rx="6.4" fill="#fff9ee" fill-opacity=".94" stroke="#e3d6c1"/><text class="distance-front-tag" x="500" y="249.796" text-anchor="middle" fill="#977145">鏡前實物</text></g>
                 </svg>
-                <figcaption class="distance-occlusion" id="distance-occlusion">這個視角下，小熊會遮住部分鏡中像。</figcaption>
               </figure>
             </div>
+            <div class="distance-readouts" aria-label="物體與像到鏡面的距離"><output id="distance-object-measure-label" class="measure-text">物距 40 cm</output><span class="distance-equals" aria-hidden="true">＝</span><output id="distance-image-measure-label" class="measure-text">像距 40 cm</output><span id="distance-front-status" class="visually-hidden">物體離鏡面 40 cm｜虛像在鏡後 40 cm</span></div>
             <p class="visually-hidden" id="distance-drag-instructions">拖動小熊向鏡面靠近或遠離。聚焦小熊後，可用左右方向鍵每次移動1公分，按住Shift每次移動10公分；Home移到最靠近鏡面，End移到最遠。</p>
-            <p class="visual-caption" id="distance-observation" aria-live="polite">尺以鏡面為 0；物體與像分居鏡面兩側。右圖以固定視角示意，畫面大小會受到遠近影響，實物與虛像的大小仍相等。鏡後位置是參考刻度，不能用實體尺直接量取。</p>
           </div>
         </section>
         <section class="lesson-card" id="card-06" data-normals="true" data-concave-position="near">
@@ -495,7 +493,7 @@
       cards.forEach(card => observer.observe(card));
     }
   </script>
-  <script type="module" src="assets/mirror-distance.js?v=shared-perspective-20261106"></script>
+  <script type="module" src="assets/mirror-distance.js?v=readouts-below-20261106"></script>
   <script type="module" src="assets/curved-mirrors.js?v=activity-order-20261105"></script>
   <script type="module" src="assets/mirror-image.js?v=distance-segment-light-20261106"></script>
   <script type="module" src="assets/reflection-3d.js?v=surfaces-experiment-20261105"></script>

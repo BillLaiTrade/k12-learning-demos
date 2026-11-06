@@ -108,7 +108,6 @@ if (section) {
     object.setAttribute('aria-valuetext', `物距 ${distance} 公分，像距 ${distance} 公分`);
     section.querySelector('#distance-front-status').textContent = `物體離鏡面 ${distance} cm｜虛像在鏡後 ${distance} cm`;
     frontProjection = projectMirrorDistance(distance);
-    section.querySelector('#distance-occlusion').hidden = frontProjection.object.top >= frontProjection.image.ground;
     for (const [group, projection] of [[frontObject,frontProjection.object],[frontReflection,frontProjection.image]]) {
       const size=projection.size, image=group.querySelector('image');
       for(const [name,value] of Object.entries({x:FRONT_VIEW.centerX-size/2,y:projection.top,width:size,height:size}))image.setAttribute(name,value);
