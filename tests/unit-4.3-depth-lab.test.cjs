@@ -222,8 +222,8 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   assert.ok(Math.abs((a[4]-a[2])*(b[3]-b[1])-(a[5]-a[3])*(b[2]-b[0]))<1e-6,'partial coin extends the same visible ray');
   if(capture)await page.locator('#depth-lab').screenshot({path:path.join(capture,'partial-coin.png')});
  });
- await t.test('the occluding wall is named in both views and the explanation follows the real visibility',async()=>{
-  await set(0,300);assert.match(await page.locator('.depth-annotations').textContent(),/前側槽壁.*光被擋住/s);
+ await t.test('the observer view names the occluding wall and the explanation follows visibility',async()=>{
+  await set(0,300);assert.match(await page.locator('.depth-annotations').textContent(),/光被擋住/);assert.doesNotMatch(await page.locator('.depth-annotations').textContent(),/前側槽壁|拉水位|拉動水位/);
   assert.equal(await page.locator('.depth-block-point').count(),1);
   assert.equal(await page.locator('.depth-front-wall').innerText(),'前側槽壁');
   assert.match(await page.locator('#depth-view-result').innerText(),/前側槽壁.*光還沒進入眼睛/);
@@ -231,6 +231,7 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   assert.match(await page.locator('#depth-view-result').innerText(),/直接越過槽緣/);
   await set(100,300);assert.equal(await page.locator('.depth-block-point').count(),0);
   assert.match(await page.locator('#depth-view-result').innerText(),/出水後轉向.*前側槽壁.*硬幣仍在原處/);
+  await page.waitForFunction(()=>document.querySelector('#depth-observer').dataset.renderQuality==='detail');
   const resolution=await page.locator('#depth-observer').evaluate(c=>({width:c.width,display:c.clientWidth,ratio:c.width/c.height,displayRatio:c.clientWidth/c.clientHeight}));
   assert.ok(resolution.width>=resolution.display*1.9,'stationary view renders above display resolution');
   assert.ok(Math.abs(resolution.ratio-resolution.displayRatio)<.01,'no stretched observer projection');
@@ -244,11 +245,11 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   await page.locator('#show-rays').check();assert.equal(await page.locator('#depth-scene .extension').count(),2);
  });
  await t.test('keyboard and pointer change the same viewing position without losing focus',async()=>{
-  await set(70,250);const eye=page.locator('.depth-eye');await eye.focus();await page.keyboard.press('ArrowRight');assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'252');
+  await set(70,250);const eye=page.locator('.depth-eye');await eye.focus();await page.keyboard.press('ArrowRight');await page.waitForFunction(()=>document.querySelector('#depth-eye').getAttribute('aria-valuenow')==='252');
   assert.equal(await eye.evaluate(e=>document.activeElement===e),true);
-  await page.keyboard.press('Home');assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'210');
-  await page.keyboard.press('End');assert.equal(await page.locator('#depth-eye').getAttribute('aria-valuenow'),'340');
-  await set(70,250);await eye.scrollIntoViewIfNeeded();const b=await eye.boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2+35,b.y+b.height/2,{steps:6});await page.mouse.up();assert.ok(+await page.locator('#depth-eye').getAttribute('aria-valuenow')>250);
+  await page.keyboard.press('Home');await page.waitForFunction(()=>document.querySelector('#depth-eye').getAttribute('aria-valuenow')==='210');
+  await page.keyboard.press('End');await page.waitForFunction(()=>document.querySelector('#depth-eye').getAttribute('aria-valuenow')==='340');
+  await set(70,250);await eye.scrollIntoViewIfNeeded();const b=await eye.boundingBox();await page.mouse.move(b.x+b.width/2,b.y+b.height/2);await page.mouse.down();await page.mouse.move(b.x+b.width/2+35,b.y+b.height/2,{steps:6});await page.mouse.up();await page.waitForFunction(()=>Number(document.querySelector('#depth-eye').getAttribute('aria-valuenow'))>250);
   await set(0,300);
  });
  await t.test('the eye and viewing window share a visual cue and the dashed guide follows keyboard focus',async()=>{
@@ -329,7 +330,7 @@ test('sixth section teaches apparent depth with synchronized side and rendered o
   const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const p=await context.newPage();await ready(p);
   const eye=p.locator('.depth-eye');await eye.scrollIntoViewIfNeeded();const b=await eye.boundingBox(),x=b.x+b.width/2,y=b.y+b.height/2;
   const cdp=await context.newCDPSession(p);await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+32,y}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
-  assert.ok(+await p.locator('#depth-eye').getAttribute('aria-valuenow')>300);await p.waitForFunction(()=>document.querySelector('#depth-eye').getAttribute('aria-valuenow')===document.querySelector('#depth-observer').dataset.eyeX);const water=p.locator('#depth-input');await water.scrollIntoViewIfNeeded();const wb=await water.boundingBox(),wx=wb.x+wb.width/2;
+  await p.waitForFunction(()=>Number(document.querySelector('#depth-eye').getAttribute('aria-valuenow'))>300);await p.waitForFunction(()=>document.querySelector('#depth-eye').getAttribute('aria-valuenow')===document.querySelector('#depth-observer').dataset.eyeX);const water=p.locator('#depth-input');await water.scrollIntoViewIfNeeded();const wb=await water.boundingBox(),wx=wb.x+wb.width/2;
   const scroll=await p.evaluate(()=>scrollY);
   await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:wx,y:wb.y+wb.height-22}]});
   await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:wx,y:wb.y+22}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});

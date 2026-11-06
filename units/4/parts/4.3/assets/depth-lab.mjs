@@ -115,30 +115,24 @@ if (root) {
   function drawLabels(g=paintedGeometry) {
     const ratio=Math.max(.2,svg.clientWidth/720),font=Math.max(21,13.5/ratio),s=Y(g.depth);
     const show=q('#show-rays').checked,blocked=!g.representative.visible;
-    let html=badge(g.depth>0?'空氣':'空槽',30,110,font);
+    let html=g.depth===0?badge('空槽',30,110,font):'';
     html+=`<text class="depth-eye-endpoint" x="${X(210)-10}" y="${Y(TANK.eyeHeight)-44}" font-size="${font}">靠近</text><text class="depth-eye-endpoint" x="${X(340)+10}" y="${Y(TANK.eyeHeight)-44}" text-anchor="end" font-size="${font}">遠離</text>`;
     // Once light reaches the eye, retain the double arrow and make room for
     // the incoming ray; the full instruction remains in the intro and ARIA.
     const cue=show&&!blocked?'↔':'↔ 左右拖動';
     const cueX=cue==='↔'?X(g.eyeX):clamp(X(g.eyeX),font*3+12,708-font*3);
     html+=`<text class="depth-eye-drag-cue" x="${cueX}" y="${Y(TANK.eyeHeight)+font+36}" text-anchor="middle" font-size="${font}">${cue}</text>`;
-    html+=badge(ratio<.56?'拉水位':'↕ 拉動水位',450,ratio<.56?300:Y(TANK.height)+24,font);
     html+=`<path d="M${X(g.coin[0])} ${Y(0)+10}L105 480" fill="none" stroke="#fffbe7" stroke-width="2"/>`+badge('實際位置',28,511,font);
-    // Keep the front wall's name in the same place for dry/wet and visible/hidden states.
-    html+=`<path d="M${X(TANK.length)+9} ${Y(TANK.height)+10}L270 175" fill="none" stroke="#8f7048" stroke-width="2"/>`+badge('前側槽壁',70,175,font);
-    if(g.depth>0){
-      if(Y(0)-s>font*1.6)html+=badge('水面',30,s+font+9,font);
-      if(Y(0)-s>font*4.2+20)html+=badge('水',30,(s+Y(0))/2+font*.3,font);
-    }
+    const labelX=Math.max(460,X(TANK.length)+58/ratio);
     if(show&&blocked){
       const p=point(g.representative.blockPoint);
       html+=`<circle class="depth-block-point" cx="${p[0]}" cy="${p[1]}" r="9" fill="#fff3d4" stroke="#956e3e" stroke-width="2.5"/>`;
       html+=`<path d="M${p[0]-5} ${p[1]-5}L${p[0]+5} ${p[1]+5}M${p[0]-5} ${p[1]+5}L${p[0]+5} ${p[1]-5}" fill="none" stroke="#956e3e" stroke-width="2"/>`;
-      html+=badge('光被擋住',ratio<.56?390:460,ratio<.56?390:342,font);
+      html+=badge('光被擋住',labelX,ratio<.56?390:342,font);
     }
     if(g.depth>0&&show&&!blocked){
       const virtual=point(g.apparent),labelY=Math.max(s+font+14,Math.min(virtual[1]+font,425),ratio<.56?385:0);
-      html+=`<path d="M${virtual[0]+23} ${virtual[1]}L380 ${labelY-8}" fill="none" stroke="#a56336" stroke-width="2"/>`+badge('看似位置',ratio<.56?390:460,labelY,font);
+      html+=`<path d="M${virtual[0]+23} ${virtual[1]}L${labelX-8} ${labelY-8}" fill="none" stroke="#a56336" stroke-width="2"/>`+badge('看似位置',labelX,labelY,font);
     }
     if(g.depth>0&&show){
       const nx=X(g.representative.hit[0]);
@@ -160,7 +154,7 @@ if (root) {
     q('.depth-waterline').style.display=q('.depth-meniscus').style.display=g.depth>0?'':'none';
     q('.depth-water-hit').setAttribute('d',`M${X(0)+2} ${s}H${X(TANK.length)-3}`);
     q('.depth-water-hit').setAttribute('stroke-width',44/ratio);
-    const waterControl=q('.depth-water-control'),handleX=ratio<.56?svg.clientWidth-27:(X(TANK.length)+55)*ratio;
+    const waterControl=q('.depth-water-control'),handleX=X(TANK.length)*ratio+28;
     Object.assign(waterControl.style,{left:`${handleX-22}px`,top:`${Y(100)*ratio-22}px`,height:`${(Y(0)-Y(100))*ratio+44}px`});
     q('#depth-input').setAttribute('aria-valuetext',waterState(g.depth));
     root.dataset.directReady='true';
