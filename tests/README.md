@@ -1,3 +1,12 @@
+## 4.5 兩步預測（2026-11-06）
+
+雙色光小測只判斷transmission與colour，reflection僅供驗證後解釋。模型測試覆蓋72題的兩項作答、缺項／錯答及忽略舊反射值；原瀏覽器套件補作答順序、移除欄位、鍵盤／漏答聚焦並保留六題、開燈、九視窗與備援。整課及像素電視交互測試移除已不存在的反射選單操作。
+
+```sh
+node tests/unit-4.5-duo-quiz-model.test.mjs
+NODE_PATH=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-4.5-duo-quiz.test.cjs tests/unit-4.5-pixel-tv.test.cjs tests/unit-4.5-format.test.cjs
+```
+
 ## 4.3 名牌固定對齊（2026-11-05）
 
 `unit-4.3-label-alignment.test.cjs`驗四桌面尺寸的待機、錯誤、正確、重播中／後與換題；名稱座標保持同欄且沒有與最快／最慢標記重疊。`LABEL_ALIGNMENT_CAPTURE_DIR`輸出截圖與alignment.json；沿用公開網址與代理參數。

@@ -57,8 +57,8 @@ export function expectedAnswer(question){
  return{colour:colourKey(s.outgoing),transmission:colourKey(s.transmitted),reflection:ratio<.045?'little':ratio>=.65?'much':'some'};
 }
 export function checkPrediction(question,answer){
- const expected=expectedAnswer(question),missing=Object.keys(expected).filter(key=>!answer[key]);
- return{missing,fields:Object.fromEntries(Object.keys(expected).map(key=>[key,answer[key]===expected[key]])),correct:!missing.length&&Object.keys(expected).every(key=>answer[key]===expected[key])};
+ const expected=expectedAnswer(question),keys=['transmission','colour'],missing=keys.filter(key=>!answer[key]);
+ return{missing,fields:Object.fromEntries(keys.map(key=>[key,answer[key]===expected[key]])),correct:!missing.length&&keys.every(key=>answer[key]===expected[key])};
 }
 export function shuffledQuestions(random=Math.random){
  const deck=[...QUESTION_BANK];for(let i=deck.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[deck[i],deck[j]]=[deck[j],deck[i]];}return deck;

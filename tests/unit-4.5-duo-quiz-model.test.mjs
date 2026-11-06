@@ -26,8 +26,8 @@ test('初始六題從混光、只換色片到只換紙張，每次只改一個�
 test('100次換組均維持逐步比較，六題不重複前組且可看到三種混光',()=>{
  let previous=INITIAL_SERIES;const mixtures=new Set();for(let n=0;n<100;n++){const next=newQuestionSeries(()=>n/100,previous);checkSequence(next);assert.ok(next.every(q=>!previous.some(old=>old.id===q.id)));next.slice(0,2).forEach(q=>mixtures.add(expectedAnswer(q).colour));previous=next;}assert.deepEqual([...mixtures].sort(),['cyan','magenta','yellow']);for(const random of[()=>0,()=>1])checkSequence(newQuestionSeries(random,previous));
 });
-test('每題分別判斷外觀、到達色光與反射，支援白光且漏答不過關',()=>{
- for(const q of QUESTION_BANK){const answer=expectedAnswer(q);assert.ok(TRANSMISSION_OPTIONS.some(([key])=>key===answer.transmission));assert.equal(checkPrediction(q,answer).correct,true);assert.equal(checkPrediction(q,{...answer,transmission:''}).missing[0],'transmission');for(const key of Object.keys(answer)){const result=checkPrediction(q,{...answer,[key]:'wrong'});assert.equal(result.correct,false);assert.equal(result.fields[key],false);assert.equal(Object.values(result.fields).filter(Boolean).length,2);}}
+test('每題只判斷到達色光與紙面顏色，無反射作答仍可完成',()=>{
+ for(const q of QUESTION_BANK){const answer=expectedAnswer(q);assert.ok(TRANSMISSION_OPTIONS.some(([key])=>key===answer.transmission));assert.equal(checkPrediction(q,{transmission:answer.transmission,colour:answer.colour}).correct,true);assert.equal(checkPrediction(q,{...answer,reflection:'wrong'}).correct,true);assert.deepEqual(checkPrediction(q,{}).missing,['transmission','colour']);assert.deepEqual(Object.keys(checkPrediction(q,answer).fields),['transmission','colour']);assert.equal(checkPrediction(q,{...answer,transmission:''}).missing[0],'transmission');for(const key of ['transmission','colour']){const result=checkPrediction(q,{...answer,[key]:'wrong'});assert.equal(result.correct,false);assert.equal(result.fields[key],false);assert.equal(Object.values(result.fields).filter(Boolean).length,1);}}
  const white={lights:['white','white'],filter:'clear',paper:'white'};assert.equal(expectedAnswer(white).transmission,'white');assert.equal(expectedAnswer(white).colour,'white');
 });
 test('兩燈到紙張四角的直線都經過色片，沒有繞過色片的捷徑',()=>{
