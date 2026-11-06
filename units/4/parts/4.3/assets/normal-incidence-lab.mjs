@@ -89,7 +89,6 @@ function render(){
   lane.arrival.querySelector('.normal-arrival-time').textContent=s.arrived?`約 ${(arrivalMs(s.medium)/1000).toFixed(2)} 秒`:mode==='individual'?`${clockText(laneTime.elapsed)} 秒`:'—';
  });
  const current=stage();
- root.querySelectorAll('[data-normal-stage]').forEach(el=>current===Number(el.dataset.normalStage)?el.setAttribute('aria-current','step'):el.removeAttribute('aria-current'));
  scene.setAttribute('aria-label',mode==='individual'?`總路程${distanceKm/10000}萬公里，各組獨立計時。${individual.lanes.map((lane,i)=>`${names[i]}：${lane.state==='idle'?'尚未發射':lane.state==='complete'?'已到達':lane.state==='paused'?'已暫停':'計時中'}，${clockText(lane.elapsed)}秒`).join('；')}。`:`總路程${distanceKm/10000}萬公里，共同計時${timer.textContent}秒的光路剖面示意：左側全程空氣，中間由空氣進入水，右側由空氣進入玻璃。${current>=2?'水與玻璃中的前緣較慢，光路仍沿法線筆直前進。':'按同時發射觀察。'}${!comparisonPending?'空氣組已先到達；可比較同一段時間走過的距離。':''}`);
  if(previousStage!==current){previousStage=current;if(!['loading','error'].includes(state))explainStage();}
 }

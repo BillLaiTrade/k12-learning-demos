@@ -21,7 +21,7 @@ for(const c of configs)test('4.3 '+c.id+' apparatus supports genuinely independe
   await lamp('air').click();await run(1000);check(await lanes(),[1000,2000,0]);
   await lamp('glass').click();await run(500);check(await lanes(),[1500,2500,500]);
   const text=await lab.innerText();assert.doesNotMatch(text,/同步前進中|三束光在空氣中同步|空氣先到/);
-  if(c.id==='normal')assert.equal(await p.locator('.normal-steps').isVisible(),false);
+  if(c.id==='normal')assert.equal(await p.locator('.normal-steps').count(),0);
   const reading=await p.locator(c.id==='speed'?'[data-arrival=water] strong':'[data-medium=water] .normal-arrival-time').textContent();assert.ok(Math.abs(parseFloat(reading)-2.5)<.03,reading);
  });
  await t.test('a single-lane replay preserves the other clocks, global pause excludes idle time',async()=>{
