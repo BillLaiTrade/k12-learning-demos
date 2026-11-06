@@ -27,6 +27,8 @@ const directionArrows = [0, 1].map(() => {
   scene.add(arrow);
   return arrow;
 });
+const reflectedTipArrow = directionArrow(rayMaterial.color);
+scene.add(reflectedTipArrow);
 
 function svgArc(radius, degrees, rightSide) {
   const radians = degrees * Math.PI / 180;
@@ -58,6 +60,19 @@ function update() {
     arrow.position.copy(from).lerp(to, index === 0 ? 0.49 : 0.35);
     arrow.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), to.clone().sub(from).normalize());
   });
+  // Place the tip at the visible end, including when the ray leaves the frame.
+  // The top-down camera projects this horizontal light path linearly.
+  const projectedHit = hit.clone().project(camera), projectedEnd = reflectedEnd.clone().project(camera);
+  let visibleEnd = 1;
+  for (const axis of ['x', 'y']) {
+    if (Math.abs(projectedEnd[axis]) > 0.96) {
+      const edge = Math.sign(projectedEnd[axis]) * 0.96;
+      visibleEnd = Math.min(visibleEnd, (edge - projectedHit[axis]) / (projectedEnd[axis] - projectedHit[axis]));
+    }
+  }
+  // The shared arrow's tip sits 0.36 units ahead of its origin.
+  reflectedTipArrow.position.copy(hit).lerp(reflectedEnd, visibleEnd).addScaledVector(reflectedEnd.clone().sub(hit).normalize(), -0.36);
+  reflectedTipArrow.quaternion.copy(directionArrows[1].quaternion);
   setAngleSector(incomingSector, arc(1.8, angle, -1));
   setAngleSector(reflectedSector, arc(1.8, angle, 1));
   setThickArc(incomingArc, arc(1.8, angle, -1));
