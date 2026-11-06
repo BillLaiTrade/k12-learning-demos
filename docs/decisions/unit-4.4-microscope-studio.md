@@ -132,4 +132,4 @@
 
 移除過小的位置小圖、快照與取景計算，保留主圖與上方關係圖定位。光路圖例上下留白縮整，當比較窗較高時由主圖分配剩餘高度，避免圖例下方留出大片空白。
 
-檢查見 [節點操作與實虛像辨識審查](../reviews/unit-4.4-microscope-flow-controls-20261106/review.md)。
+檢查見 [節點操作與實虛像辨識審查](../reviews/unit-4.4-microscope-node-actions-20261106/review.md)。
