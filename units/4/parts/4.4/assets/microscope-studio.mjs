@@ -63,7 +63,7 @@ if(root){
   let labels='';
   const targets=view==='objective'?[['中間像',image,true,null],['物鏡',objective,true,'objective'],['草履蟲',at(-g.objective.u),true,null]]:view==='eyepiece'?[['眼睛',at(g.eye+4),true,null],['目鏡',ocular,true,'eyepiece'],['中間像',image,true,null]]:[['目鏡',ocular,step!=='objective','eyepiece'],['中間像',image,true,null],['物鏡',objective,step!=='eyepiece','objective']];
   for(const [name,p,active,lens]of targets){
-   const [x,y]=position(p),rightLabel=view!=='whole'||box.width<420,labelOffset=view==='whole'&&box.height<320&&name==='目鏡'?(box.height<250?-10:-6):0,attrs=`class="micro-label${rightLabel?' micro-label-right':''}" style="left:calc(${x}% ${rightLabel?'+':'-'} 24px);top:calc(${y}% + ${labelOffset}px);opacity:${active?1:.55}"`;
+   const [x,y]=position(p),rightLabel=view!=='whole'||box.width<420,labelOffset=view==='whole'&&box.height<=320&&name==='目鏡'?(box.height<250?-10:-6):0,attrs=`class="micro-label${rightLabel?' micro-label-right':''}" style="left:calc(${x}% ${rightLabel?'+':'-'} 24px);top:calc(${y}% + ${labelOffset}px);opacity:${active?1:.55}"`;
    labels+=`<span class="micro-connector" style="left:calc(${x}% ${rightLabel?'+ 6':'- 24'}px);top:${y}%"></span>`;
    labels+=lens?`<button type="button" ${attrs} data-micro-lens="${lens}" title="點選近看${name}" aria-label="近看${name}${lens==='objective'?'成像':'觀察'}">${name}</button>`:`<span ${attrs}>${name}</span>`;
    if(lens)labels+=`<button type="button" class="micro-pick" data-micro-lens="${lens}" style="left:${x}%;top:${y}%" aria-label="近看${name}剖面"></button>`;
@@ -116,6 +116,8 @@ if(root){
   $('[data-micro-badge]').textContent=first?'倒立・放大的實像':ocularStep?'不再倒轉・放大的虛像':'相對原物倒立・放大虛像';
   $('[data-micro-copy]').textContent=first?'中間像形成在鏡筒內，這裡沒有放置屏幕。':ocularStep?'目鏡放大同一個中間像，方向不再倒轉。':'同一個中間像，連接兩段成像。';
   $('#micro-result').textContent={objective:'近看物鏡成像：原物經物鏡，在鏡筒內形成中間實像。',eyepiece:'近看目鏡觀察：同一個中間像位於目鏡焦距內，成為目鏡觀察的物體。',both:'完整成像：物鏡形成的中間實像，就是目鏡接著觀察的物體，兩段接力放大。'}[step];
+  all('[data-micro-frame]').forEach(e=>e.dataset.active=String(view===e.dataset.microFrame));
+  all('[data-micro-node]').forEach(e=>e.dataset.active=String(view!=='whole'&&(e.dataset.microRange==='shared'||view===e.dataset.microRange)));
   all('[data-micro-card]').forEach(b=>{const selected=view===b.dataset.microCard;b.setAttribute('aria-pressed',String(selected));b.closest('section').dataset.active=String(selected);});
   all('[data-set=micro]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.value===step)));
   $('[data-micro-rays]').setAttribute('aria-pressed',String(rays));$('[data-micro-rays]').textContent=rays?'隱藏輔助光路':'顯示輔助光路';

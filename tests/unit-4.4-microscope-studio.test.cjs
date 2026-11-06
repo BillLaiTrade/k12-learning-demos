@@ -45,9 +45,17 @@ test('顯微鏡立體剖面、精簡標示與備用畫面',{timeout:120000},asyn
  await t.test('下方說明卡可點選與鍵盤切換，帶回操作視窗並保留光路偏好',async()=>{
   await r.locator('[data-micro-point=bottom]').click();await r.locator('[data-micro-rays]').click();
   const card=lens=>r.locator(`[data-micro-card=${lens}]`);
-  await card('eyepiece').click();await f.frame();assert.equal(await r.getAttribute('data-view'),'eyepiece');assert.equal(await r.getAttribute('data-point'),'bottom');assert.equal(await r.getAttribute('data-rays'),'false');assert.equal(await card('eyepiece').getAttribute('aria-pressed'),'true');assert.equal(await r.locator('[data-set=micro][data-value=eyepiece]').getAttribute('aria-pressed'),'true');
+  await card('eyepiece').click();await f.frame();assert.equal(await r.getAttribute('data-view'),'eyepiece');assert.equal(await r.getAttribute('data-point'),'bottom');assert.equal(await r.getAttribute('data-rays'),'false');assert.equal(await card('eyepiece').getAttribute('aria-pressed'),'true');
+  assert.equal(await r.locator('.micro-workspace > .micro-concepts').count(),1);
+  assert.deepEqual(await r.locator('[data-micro-frame][data-active=true]').evaluateAll(es=>es.map(e=>e.dataset.microFrame)),['eyepiece']);
+  assert.deepEqual(await r.locator('[data-micro-node][data-active=true]').evaluateAll(es=>es.map(e=>e.dataset.microNode)),['intermediate','eyepiece','eye']);
+  assert.notEqual(await r.locator('[data-micro-frame=eyepiece]').evaluate(e=>getComputedStyle(e).backgroundColor),'rgba(0, 0, 0, 0)');assert.equal(await r.locator('[data-set=micro][data-value=eyepiece]').getAttribute('aria-pressed'),'true');
   assert.equal(await p.evaluate(()=>document.activeElement?.dataset.value),'eyepiece');const scroll=await r.locator('.micro-workspace').evaluate(e=>({top:e.getBoundingClientRect().top,expected:parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop)+parseFloat(getComputedStyle(e).scrollMarginTop)}));assert.ok(Math.abs(scroll.top-scroll.expected)<2,JSON.stringify(scroll));
-  await card('objective').focus();await p.keyboard.press('Space');await f.frame();assert.equal(await r.getAttribute('data-view'),'objective');assert.equal(await card('objective').getAttribute('aria-pressed'),'true');assert.equal(await card('eyepiece').getAttribute('aria-pressed'),'false');assert.equal(await r.getAttribute('data-rays'),'false');await r.locator('[data-micro-reset]').click();
+  await card('objective').focus();await p.keyboard.press('Space');await f.frame();assert.equal(await r.getAttribute('data-view'),'objective');assert.equal(await card('objective').getAttribute('aria-pressed'),'true');assert.equal(await card('eyepiece').getAttribute('aria-pressed'),'false');
+  assert.deepEqual(await r.locator('[data-micro-node][data-active=true]').evaluateAll(es=>es.map(e=>e.dataset.microNode)),['original','objective','intermediate']);
+  assert.deepEqual(await r.locator('[data-micro-frame][data-active=true]').evaluateAll(es=>es.map(e=>e.dataset.microFrame)),['objective']);
+  assert.equal(await r.getAttribute('data-rays'),'false');await r.locator('[data-micro-reset]').click();
+  assert.equal(await r.locator('[data-micro-frame][data-active=true],[data-micro-node][data-active=true]').count(),0);
  });
  await t.test('立體顯示不可用時，精簡剖面與操作仍可使用',async()=>{
   await p.route('**/microscope-model.mjs*',route=>route.fulfill({contentType:'text/javascript',body:"throw Error('simulated unavailable')"}));await p.reload({waitUntil:'networkidle'});
