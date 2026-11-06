@@ -23,13 +23,15 @@ test('4.2 圖中距離與算式同步，情境獨立並支援觸控和鍵盤',{t
   const capture=process.env.DISTANCE_CAPTURE_DIR;if(capture)fs.mkdirSync(capture,{recursive:true});
   const selected=async(prefix,distance)=>{
     const panel=page.locator(`#comparison-${prefix}`);
-    const controls=panel.locator('.comparison-path-term,[data-side^="distance-"]');
-    const states=await controls.evaluateAll(es=>es.map(e=>({distance:e.dataset.distance,pressed:e.getAttribute('aria-pressed')})));
+    const controls=panel.locator('.comparison-path-term,.comparison-path-total,[data-side^="distance-"]');
+    const states=await controls.evaluateAll(es=>es.map(e=>({match:e.dataset.match,pressed:e.getAttribute('aria-pressed')})));
     assert.ok(states.length>=4);
-    for(const s of states)assert.equal(s.pressed,String(s.distance===distance));
-    const term=panel.locator(`.comparison-path-term[data-distance="${distance}"]`);
-    await expect(term).toHaveAttribute('id',`${prefix}-distance-${distance}`);
-    await expect(term).toHaveCSS('border-top-color',distance==='2'?'rgb(152, 73, 20)':'rgb(36, 95, 131)');
+    for(const s of states)assert.equal(s.pressed,String(s.match===distance));
+    if(distance==='2'||distance==='3'){
+      const term=panel.locator(`.comparison-path-term[data-distance="${distance}"]`);
+      await expect(term).toHaveAttribute('id',`${prefix}-distance-${distance}`);
+      await expect(term).toHaveCSS('border-top-color',distance==='2'?'rgb(152, 73, 20)':'rgb(36, 95, 131)');
+    }
   };
   const geometry=()=>page.locator('.comparison-side').evaluateAll(es=>es.map(e=>[e.dataset.distances,...[...e.querySelectorAll('[data-side=rays] path,[data-side=extensions] path')].map(p=>p.getAttribute('d'))]));
   const before=await geometry();
@@ -38,13 +40,30 @@ test('4.2 圖中距離與算式同步，情境獨立並支援觸控和鍵盤',{t
     await page.locator('#reference-side [data-side=distance-incoming]').click();await selected('reference','2');
     await page.locator('#reference-side [data-side=distance-three]').click();await selected('reference','3');
     const extension=page.locator('#reference-side [data-side=distance-two]');
-    await extension.focus();await extension.press('Enter');await selected('reference','2');
+    await extension.focus();await extension.press('Enter');await selected('reference','extension');
+    await expect(extension).not.toHaveAttribute('aria-controls');
     const direct=page.locator('#trial-side [data-side=distance-three]');
     if(width<=390)await direct.tap();else await direct.click();
-    await selected('trial','3');await selected('reference','2');
+    await selected('trial','3');await selected('reference','extension');
     await page.locator('#trial-side [data-side=distance-two]').focus();
     await page.locator('#trial-side [data-side=distance-two]').press('Space');await selected('trial','2');
     await page.locator('#reference-distance-3').click();await selected('reference','3');await selected('trial','2');
+    await page.locator('#comparison-reference .comparison-path-caption').click();await selected('reference',null);await selected('trial',null);
+    await page.locator('#reference-distance-2').click();await selected('reference','2');
+    await page.mouse.click(3,3);await selected('reference',null);await selected('trial',null);
+    const upperTotal=page.locator('#comparison-reference .comparison-path-total'),lowerTotal=page.locator('#comparison-trial .comparison-path-total');
+    if(width<=390)await upperTotal.tap();else await upperTotal.click();
+    await selected('reference','total');await selected('trial',null);
+    await expect(page.locator('#reference-side [data-side=total-highlight]')).toHaveAttribute('visibility','visible');
+    await expect(page.locator('#reference-side [data-side=total-highlight]')).toHaveAttribute('d','M345,440L540,336L247.5,180');
+    await lowerTotal.focus();await lowerTotal.press('Space');await selected('trial','total');
+    await expect(page.locator('#trial-side [data-side=total-highlight]')).toHaveAttribute('visibility','visible');
+    await expect(page.locator('#trial-side [data-side=total-highlight]')).toHaveAttribute('d','M735,440L247.5,180');
+    await expect(page.locator('#reference-side [data-side=total-highlight]')).toHaveAttribute('stroke','#ffca46');
+    if(capture&&width===1440)await page.locator('#card-04').screenshot({path:path.join(capture,'1440-total-paths.png')});
+    if(width<=390)await page.touchscreen.tap(3,3);else await page.mouse.click(3,3);
+    await selected('reference',null);await selected('trial',null);
+    for(const overlay of await page.locator('[data-side=total-highlight]').all())await expect(overlay).toHaveAttribute('visibility','hidden');
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
     assert.deepEqual(await geometry(),before,'互動不得改變光路幾何或距離');
     if(capture&&[1440,390].includes(width))await page.locator('#comparison-reference').screenshot({path:path.join(capture,`${width}-distance-match.png`)});
