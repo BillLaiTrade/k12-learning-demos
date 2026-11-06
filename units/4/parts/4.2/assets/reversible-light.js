@@ -1,7 +1,7 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import { createLaserBench } from './laser-bench.js';
 import { directionArrow } from './laser-direction.js?v=20261106';
-import { createAngleCallouts } from './angle-callouts.js?v=20261106';
+import { createAngleCallouts } from './angle-callouts.js?v=clear-labels-20261106';
 import { reciprocalPath } from './planar-reflection.mjs';
 
 const section = document.querySelector('#card-03');
@@ -28,7 +28,6 @@ let sourceB, bodyB, lensB, stemB, footB, pivotB, blue, arrows, hitDot, updateCal
 if (bench) {
   const { scene, emitterBody, emitterStem, emitterFoot, pivot } = bench;
   updateCallouts = createAngleCallouts(canvas, bench);
-  section.querySelector('.reverse-angle-readout').classList.add('visually-hidden');
   sourceB = new THREE.Group(); scene.add(sourceB);
   bodyB = emitterBody.clone(true); sourceB.add(bodyB);
   lensB = bodyB.getObjectByName('laser-lens'); lensB.material = lensB.material.clone();
@@ -138,7 +137,6 @@ function updateUI() {
   section.dataset.lightA = lights.a ? 'on' : 'off'; section.dataset.lightB = lights.b ? 'on' : 'off';
   section.dataset.reverseAngle = String(degrees);
   section.dataset.reverseModel = JSON.stringify(model);
-  section.querySelector('#reverse-angle-value').textContent = `${degrees}°`;
   canvas.setAttribute('aria-valuenow', String(degrees));
   canvas.setAttribute('aria-valuetext', `入射角 ${degrees} 度；A 紅光${lights.a ? '開啟' : '關閉'}，B 藍光${lights.b ? '開啟' : '關閉'}`);
   for (const key of ['a', 'b']) {
@@ -212,7 +210,9 @@ if (bench) {
     // when the viewport gives the experiment only a short strip of space.
     const height = Math.max(13.2, 2 * halfWidth / bench.camera.aspect);
     const distance = height / (2 * Math.tan(THREE.MathUtils.degToRad(19)));
-    bench.camera.up.set(-1, 0, 0); bench.camera.position.set(-2.3, 1.4 + distance, 0); bench.camera.lookAt(-2.3, 1.4, 0); bench.camera.updateProjectionMatrix();
+    // Reframing a narrow stage must not fade the apparatus into the scene fog.
+    bench.scene.fog.near = distance + 4; bench.scene.fog.far = distance + 30;
+    bench.camera.up.set(-1, 0, 0); bench.camera.position.set(-2.3, 1.4 + distance, 0); bench.camera.lookAt(-2.3, 1.4, 0); bench.camera.setViewOffset(w, Math.max(1, h - 56), 0, 0, w, h); bench.camera.updateProjectionMatrix();
   }
   reframe = resize; new ResizeObserver(() => { resize(); draw(); }).observe(canvas); resize();
 }
