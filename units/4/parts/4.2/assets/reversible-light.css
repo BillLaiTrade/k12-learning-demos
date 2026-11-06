@@ -18,3 +18,22 @@
 .reverse-switch:focus-visible{outline:3px solid #176b5355;outline-offset:3px}
 #reverse-status-a[data-active=true]{color:#af3028;background:#fff0e9}
 .reverse-paths span{font-size:.78rem;color:#64736d}.reverse-paths>div:first-child strong{color:#af3028}.reverse-paths>div:last-child strong{color:#2058ae}
+
+/* Keep the conversation and experiment together without shrinking the text. */
+#card-03 .reverse-workspace{display:grid;gap:8px;scroll-margin-top:20px}
+#card-03.lesson-card .reverse-workspace .dialogue{margin:0;padding:7px 12px}
+#card-03 .reverse-switches{margin:0;gap:8px}
+#card-03 .reverse-switch{min-height:44px;padding:7px 8px}
+#card-03 .reverse-stage canvas{height:var(--reverse-stage-height,clamp(220px,calc(100svh - 420px),400px))}
+#card-03 .reverse-lab-footer{gap:6px 12px;padding:5px 10px}
+#card-03 .reverse-lab-footer button{min-height:40px;padding:5px 9px}
+#card-03 .reverse-paths{margin:0;gap:8px}
+#card-03 .reverse-paths>div{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 8px;padding:5px 8px;border-radius:9px}
+#card-03 .reverse-paths small{font-size:.75rem}
+#card-03 .reverse-paths strong{font-size:.94rem;white-space:nowrap}
+#card-03 .reverse-paths span{font-size:.74rem}
+@media(max-width:760px){
+  #card-03 .reverse-workspace{scroll-margin-top:110px}
+  #card-03 .reverse-paths small{display:none}
+  #card-03 .reverse-lab-footer>span:first-child{flex-basis:100%;font-weight:500}
+}

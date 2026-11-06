@@ -35,6 +35,28 @@ if(section) {
       // Keep matching labels above the two short segments, clear of the bears.
       distanceLabel('distance-incoming',[ray.source,ray.hit],'2公尺','#fbd3ae',.4,{compact:true,gap:12});
     }
+    // Keep the two scenes independent; both 2 m badges in the mirror scene
+    // refer to the same length, while the dashed extension remains virtual.
+    svg.setAttribute('role','group');
+    const terms=[...panel.querySelectorAll('.comparison-path-term')];
+    const badges=[...svg.querySelectorAll('[data-side^="distance-"]')];
+    function selectDistance(distance) {
+      for(const control of [...badges,...terms]) control.setAttribute('aria-pressed',String(control.dataset.distance===distance));
+    }
+    for(const term of terms) {
+      term.id=`${prefix}-distance-${term.dataset.distance}`;
+      term.addEventListener('click',()=>selectDistance(term.dataset.distance));
+    }
+    for(const badge of badges) {
+      const distance=badge.dataset.side==='distance-three'?'3':'2';
+      attrs(badge,{role:'button',tabindex:0,'data-distance':distance,'aria-pressed':'false','aria-controls':`${prefix}-distance-${distance}`});
+      if(!mirror) badge.setAttribute('aria-label',distance==='2'?'真熊到原鏡面位置的光路為2公尺':'原鏡面位置到眼睛的光路為3公尺');
+      badge.addEventListener('click',()=>selectDistance(distance));
+      badge.addEventListener('keydown',event=>{
+        if(!['Enter',' '].includes(event.key)) return;
+        event.preventDefault();selectDistance(distance);
+      });
+    }
     svg.dataset.mode=mode;svg.dataset.eye=COMPARISON.eye.join(',');svg.dataset.source=COMPARISON.source.join(',');svg.dataset.image=COMPARISON.image.join(',');svg.dataset.hit=ray.hit.join(',');
     svg.dataset.distances=JSON.stringify(distances);
     createComparisonView(panel.querySelector('.comparison-eye'),mode);
