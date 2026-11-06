@@ -111,18 +111,11 @@ test('5.3 共通格式、導覽連動與原有活動回歸', {timeout:180000}, a
     await page.locator('#heat-stage-play').click();await page.clock.runFor(3000);
     assert.equal(await page.locator('#heat-lab').getAttribute('data-records'),'1');
     assert.equal(await page.locator('#heat-stage-meter').textContent(),'25.0');
-    await page.locator('[data-mass-choice="200"]').click();await page.locator('#mass-play').click();await page.clock.runFor(6500);
+    await page.locator('#mass-input').fill('200');await page.locator('#mass-play').click();await page.clock.runFor(6500);
     assert.equal(await page.locator('#mass-lab').getAttribute('data-phase'),'complete');
     assert.equal(await page.locator('#mass-meter-a').textContent(),'30.0');assert.equal(await page.locator('#mass-meter-b').textContent(),'25.0');
     assert.equal(await page.locator('#mass-records tr').count(),1);
-    for(const [id,expected]of [['material-lab',['25.0','42.7']]]){
-      const lab=page.locator(`#${id}`);await lab.locator('[data-play]').click();await page.clock.runFor(6500);
-      assert.equal(await lab.getAttribute('data-phase'),'complete');assert.deepEqual(await lab.locator('[data-temperature]').allTextContents(),expected);
-      await lab.locator('[data-record]').click();assert.equal(await lab.locator('[data-records] tr').count(),1);
-      const setting=lab.locator('[data-setting]');
-      await setting.selectOption('copper');
-      assert.equal(await lab.getAttribute('data-phase'),'ready');assert.equal(await lab.locator('[data-records] tr').count(),1);
-    }
+    await page.locator('#material-play').click();await page.clock.runFor(6500);assert.equal(await page.locator('#material-meter-a').textContent(),'25.0');assert.equal(await page.locator('#material-meter-b').textContent(),'42.7');assert.equal(await page.locator('#material-discovery').isVisible(),true);await page.locator('#material-setting').selectOption('copper');assert.equal(await page.locator('#material-discovery').isHidden(),true);
     for(const key of ['bottle','coast','pan']){await page.locator(`[data-application="${key}"]`).click();assert.equal(await page.locator(`[data-application="${key}"]`).getAttribute('aria-pressed'),'true');assert.ok((await page.locator('#application-content').textContent()).length>40);}
   });
 

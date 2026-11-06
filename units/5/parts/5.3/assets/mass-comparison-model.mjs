@@ -1,9 +1,11 @@
 import {CALORIE_SETUP as s} from './calorie-model.mjs';
-export const MASS_CHOICES=Object.freeze([100,200,300]);
+export const MASS_RANGE=Object.freeze({min:100,max:350});
+export const MASS_CHOICES=Object.freeze([100,200,300]); // 舊模型測試的代表值，輸入已不限三項。
+export const validWaterMass=mass=>Number.isFinite(mass)&&mass>=MASS_RANGE.min&&mass<=MASS_RANGE.max;
 export const MASS_TARGET_CALORIES=1000;
 export const MASS_ANIMATION_SPEED=50;
 export function massHeatingSeconds(mass){
-  if(!MASS_CHOICES.includes(mass))throw new RangeError('水量須為100、200或300g。');
+  if(!validWaterMass(mass))throw new RangeError('水量須介於100至350g。');
   const rise=MASS_TARGET_CALORIES*s.joulesPerCalorie/(mass*s.waterSpecificHeat);
   return -(mass*s.waterSpecificHeat+s.containerHeatCapacity)/s.heatLossCoefficient*Math.log1p(-s.heatLossCoefficient*rise/s.effectivePower);
 }

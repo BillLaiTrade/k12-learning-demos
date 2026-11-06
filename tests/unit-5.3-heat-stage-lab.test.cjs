@@ -12,7 +12,7 @@ test('5.3 第二區：分段加熱、自動紀錄、圖表、中斷與載入恢�
   const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox'],...(remote?{proxy:{server:process.env.HTTPS_PROXY||process.env.HTTP_PROXY}}:{})});t.after(()=>browser.close());
   const url=remote||`http://127.0.0.1:${port}/units/5/parts/5.3/`;
   const page=await browser.newPage({viewport:{width:1366,height:768}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(url,{waitUntil:'networkidle'});await page.clock.install();
+  await page.goto(url,{waitUntil:'networkidle'});await page.clock.install();await page.clock.pauseAt(new Date(Date.now()+1000));
   const root=page.locator('#heat-lab'),button=page.locator('#heat-stage-play'),heater=page.locator('#heat-stage-heater');
   const phase=()=>root.getAttribute('data-phase');
   const rows=()=>page.locator('#heat-stage-records tr').evaluateAll(ns=>ns.map(n=>[...n.children].map(c=>c.textContent)));
