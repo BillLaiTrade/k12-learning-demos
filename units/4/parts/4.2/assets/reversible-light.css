@@ -23,7 +23,7 @@
 #card-03.lesson-card .reverse-workspace .dialogue{margin:0;padding:7px 12px}
 #card-03 .reverse-switches{margin:0;gap:8px}
 #card-03 .reverse-switch{min-height:44px;padding:7px 8px}
-#card-03 .reverse-stage canvas{height:var(--reverse-stage-height,clamp(220px,calc(100svh - 420px),400px))}
+#card-03 .reverse-stage canvas{height:var(--reverse-stage-height,clamp(320px,calc(100svh - 420px),440px))}
 #card-03 .reverse-lab-footer{gap:6px 12px;padding:5px 10px}
 #card-03 .reverse-paths{margin:0;gap:8px}
 #card-03 .reverse-paths>div{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 8px;padding:5px 8px;border-radius:9px}

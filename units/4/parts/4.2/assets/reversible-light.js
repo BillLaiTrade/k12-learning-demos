@@ -1,7 +1,7 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import { createLaserBench } from './laser-bench.js';
 import { directionArrow } from './laser-direction.js?v=20261106';
-import { createAngleCallouts } from './angle-callouts.js?v=clear-labels-20261106';
+import { createAngleCallouts } from './angle-callouts.js?v=side-leaders-20261106';
 import { reciprocalPath } from './planar-reflection.mjs';
 
 const section = document.querySelector('#card-03');
@@ -86,7 +86,6 @@ function draw() {
   b.outgoingArc.material.color.set(swapped ? '#2878df' : '#27833d');
   b.incomingSector.material.color.set(swapped ? '#78c98c' : '#72aefa');
   b.reflectedSector.material.color.set(swapped ? '#72aefa' : '#78c98c');
-  updateCallouts(degrees, mode);
   hitDot.material.color.set(lights.a ? colors.a : colors.b);
   for (const [key, path] of [['a', f], ['b', r]]) {
     [[path.source, path.hit], [path.hit, path.end]].forEach(([from, to], index) => {
@@ -109,10 +108,11 @@ function draw() {
   for (const [key, p] of [['a', f.source], ['b', f.end]]) {
     const center = V(vec(f.hit, p, 1.17)).project(b.camera);
     canvas.dataset[`emitter${key.toUpperCase()}Screen`] = JSON.stringify([(center.x + 1) * canvas.clientWidth / 2, (1 - center.y) * canvas.clientHeight / 2]);
-    const above = vec(f.hit, p, 1.48); above[1] += 0.4;
+    const above = vec(f.hit, p, 1.33); above[1] += 0.4;
     label(`#reverse-label-${key}`, above, -7);
   }
   label('#reverse-label-m', f.hit, 13);
+  updateCallouts(degrees, mode, [b.emitterBody, bodyB]);
 }
 function drawFallback() {
   section.querySelectorAll('.reverse-device-label').forEach(el => { el.hidden = true; });
@@ -205,14 +205,17 @@ if (bench) {
   function resize() {
     const w = canvas.clientWidth, h = canvas.clientHeight; if (!w || !h) return;
     bench.renderer.setSize(w, h, false); bench.camera.aspect = w / h; bench.camera.fov = 38;
-    const halfWidth = Math.max(6.5, 11 * Math.sin(degrees * Math.PI / 180));
-    // Leave room for the emitter badges and the reflection-point label even
-    // when the viewport gives the experiment only a short strip of space.
-    const height = Math.max(13.2, 2 * halfWidth / bench.camera.aspect);
+    const theta = THREE.MathUtils.degToRad(degrees);
+    const minX = bench.centerPoint.x - Math.max(5, 7 * 1.33 * Math.cos(theta));
+    const maxX = bench.centerPoint.x + .9;
+    const halfWidth = Math.max(5.3, 7 * 1.33 * Math.sin(theta));
+    // Fit the actual apparatus, leaving only badge clearance above and below.
+    const height = Math.max((maxX - minX) * h / Math.max(100, h - 80), 2 * halfWidth * h / Math.max(100, w - 32));
+    const focusX = (minX + maxX) / 2 - 20 * height / h;
     const distance = height / (2 * Math.tan(THREE.MathUtils.degToRad(19)));
     // Reframing a narrow stage must not fade the apparatus into the scene fog.
     bench.scene.fog.near = distance + 4; bench.scene.fog.far = distance + 30;
-    bench.camera.up.set(-1, 0, 0); bench.camera.position.set(-2.3, 1.4 + distance, 0); bench.camera.lookAt(-2.3, 1.4, 0); bench.camera.setViewOffset(w, Math.max(1, h - 56), 0, 0, w, h); bench.camera.updateProjectionMatrix();
+    bench.camera.up.set(-1, 0, 0); bench.camera.position.set(focusX, 1.4 + distance, 0); bench.camera.lookAt(focusX, 1.4, 0); bench.camera.updateProjectionMatrix();
   }
   reframe = resize; new ResizeObserver(() => { resize(); draw(); }).observe(canvas); resize();
 }
@@ -238,7 +241,8 @@ function fitWorkspace() {
   const stickySpace = matchMedia('(max-width:760px)').matches && routeStyle.position === 'sticky'
     ? route.getBoundingClientRect().height + Math.max(0, parseFloat(routeStyle.top) || 0) : 0;
   const otherHeight = workspace.getBoundingClientRect().height - canvas.getBoundingClientRect().height;
-  const height = Math.round(Math.max(220, Math.min(400, innerHeight - stickySpace - 48 - otherHeight)));
+  const minHeight = Math.min(440, Math.max(320, canvas.clientWidth * .48));
+  const height = Math.round(Math.max(minHeight, Math.min(440, innerHeight - stickySpace - 48 - otherHeight)));
   if (Math.abs(canvas.getBoundingClientRect().height - height) > 1) workspace.style.setProperty('--reverse-stage-height', `${height}px`);
 }
 new ResizeObserver(fitWorkspace).observe(workspace);

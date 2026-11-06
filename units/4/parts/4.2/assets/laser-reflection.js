@@ -4,7 +4,7 @@ const canvas = document.querySelector('#laser-reflection-scene');
 if (!canvas) throw new Error('Laser reflection scene is missing.');
 import { createLaserBench } from './laser-bench.js';
 import { directionArrow } from './laser-direction.js?v=20261106';
-import { createAngleCallouts } from './angle-callouts.js?v=clear-labels-20261106';
+import { createAngleCallouts } from './angle-callouts.js?v=side-leaders-20261106';
 import { laserPath } from './planar-reflection.mjs';
 const MIN_ANGLE = 20, MAX_ANGLE = 90;
 let angleDegrees = 30;
@@ -139,7 +139,6 @@ function resize() {
   camera.fov = width < 200 ? 40 : width < 500 ? 34 : 38;
   const compact = width < 500, focusX = compact ? -2.7 : -2.0, focusZ = compact ? -0.8 : 0.3;
   camera.up.set(-1, 0, 0); camera.position.set(focusX, compact ? 20 : 18.5, focusZ); camera.lookAt(focusX, 1.4, focusZ);
-  camera.setViewOffset(width, Math.max(1, height - 56), 0, 0, width, height);
   camera.updateProjectionMatrix();
   update();
 }
