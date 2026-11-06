@@ -4,7 +4,7 @@ const root=document.querySelector('#microscope-lab');
 if(root){
  const $=s=>root.querySelector(s),all=s=>[...root.querySelectorAll(s)],g=microscopeGeometry();
  const red='#ec8b6d',blue='#6dbde3',axis=432,k=1.1,Y=s=>550-s*k;
- let step='both',rays=true,point='both',model=null,view='whole';
+ let step='both',rays=true,model=null,view='whole';
  const hardware=`<defs>
  <linearGradient id="m9-body"><stop stop-color="#a9b49d"/><stop offset=".25" stop-color="#fbf4dc"/><stop offset=".6" stop-color="#dcd4bc"/><stop offset="1" stop-color="#8d9d88"/></linearGradient>
  <linearGradient id="m9-dark"><stop stop-color="#172e26"/><stop offset=".45" stop-color="#5d7564"/><stop offset="1" stop-color="#1c382c"/></linearGradient>
@@ -45,7 +45,7 @@ if(root){
  <path d="M409 144Q432 123 455 144Q432 165 409 144Z" fill="#fff9e5" stroke="#263f2f" stroke-width="2"/><circle cx="432" cy="144" r="7" fill="#355a40"/>
  `;
  function render(){
-  root.dataset.step=step;root.dataset.rays=String(rays);root.dataset.point=point;root.dataset.view=view;
+  root.dataset.step=step;root.dataset.rays=String(rays);root.dataset.view=view;
   const bounds=view==='objective'?{top:210,height:500}:view==='eyepiece'?{top:70,height:340}:{top:0,height:780};
   const fallback=(x,y)=>view==='whole'?[x,y]:[380+(x-432)*780/bounds.height,(y-bounds.top)*780/bounds.height];
   const project=(x,y)=>model?model.project(x,y):fallback(x,y);
@@ -88,7 +88,6 @@ if(root){
   $('[data-micro-process]').setAttribute('aria-label','完整成像關係，'+(view==='whole'?'目前觀察完整成像。':view==='objective'?'目前近看原物、物鏡與中間像。':'目前近看中間像、目鏡與眼睛。'));
   $('[data-micro-overview]').hidden=view==='whole';
   if(rays)for(const r of g.rays){
-   if(point!=='both'&&point!==r.point)continue;
    const color=r.point==='top'?red:blue,marker=r.point==='top'?'red':'blue';
    const coords=pts=>pts.map((p,i)=>`${i?'L':'M'}${at(p[0],p[1]).map(n=>n.toFixed(2)).join(' ')}`).join('');
    const middle=[g.intermediate,g.first.m*r.objectHeight],ocular=[g.separation,r.ocularHeight];
@@ -119,7 +118,6 @@ if(root){
   all('[data-micro-card]').forEach(b=>{const selected=view===b.dataset.microCard;b.setAttribute('aria-pressed',String(selected));b.closest('section').dataset.active=String(selected);});
   all('[data-set=micro]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.value===step)));
   $('[data-micro-rays]').setAttribute('aria-pressed',String(rays));$('[data-micro-rays]').textContent=rays?'隱藏輔助光路':'顯示輔助光路';
-  all('[data-micro-point]').forEach(b=>{b.disabled=!rays;b.setAttribute('aria-pressed',String(b.dataset.microPoint===point));});
   $('.micro-key').hidden=!rays;
   if(model)model.update(step,view);
   root.dataset.ready='true';
@@ -134,15 +132,14 @@ if(root){
   if(b.dataset.set==='micro'){step=b.dataset.value;view=step==='both'?'whole':step;}
   else if(b.hasAttribute('data-micro-overview')){showWhole();$('#micro-process-title').focus({preventScroll:true});return;}
   else if(b.hasAttribute('data-micro-rays'))rays=!rays;
-  else if(b.dataset.microPoint)point=b.dataset.microPoint;
-  else if(b.hasAttribute('data-micro-reset')){step='both';view='whole';rays=true;point='both';}
+  else if(b.hasAttribute('data-micro-reset')){step='both';view='whole';rays=true;}
   else return;render();
  });
  // Click-away returns to the whole process without resetting ray preferences.
  document.addEventListener('click',e=>{
   if(view==='whole'||!(e.target instanceof Element)||e.target.closest('button,a,input,select,textarea,summary,[contenteditable]'))return;
   const inWorkspace=$('.micro-workspace').contains(e.target),inContext=e.target.closest('.micro-context');
-  if(!inWorkspace||inContext||e.target.matches('.micro-workspace,.micro-concepts,.micro-tools,.micro-trace,.micro-stage,.micro-labels,canvas[data-micro-model],#microscope-scene'))showWhole();
+  if(!inWorkspace||inContext||e.target.matches('.micro-workspace,.micro-concepts,.micro-tools,.micro-stage,.micro-labels,canvas[data-micro-model],#microscope-scene'))showWhole();
  });
  new ResizeObserver(render).observe($('.micro-stage'));
  $('[data-micro-a-symbol]').innerHTML=symbol(50,50,40,true,'real');

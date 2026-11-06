@@ -4,7 +4,7 @@ test('顯微鏡立體剖面、精簡標示與備用畫面',{timeout:180000},asyn
  await p.waitForFunction(()=>document.querySelector('#microscope-lab').dataset.microRender==='3d');
  await t.test('主圖僅保留三個定位，預設顯示輔助光路與圖例',async()=>{
   assert.deepEqual(await r.locator('.micro-labels .micro-label').allTextContents(),['目鏡','中間像','物鏡']);
-  assert.equal(await r.locator('[data-micro-ray]').count(),4);assert.equal(await r.locator('[data-micro-rays]').getAttribute('aria-pressed'),'true');assert.equal(await r.locator('[data-micro-point=top]').isEnabled(),true);assert.equal(await r.locator('.micro-key').isVisible(),true);assert.equal(await r.locator('[data-micro-model]').isVisible(),true);
+  assert.equal(await r.locator('[data-micro-ray]').count(),4);assert.equal(await r.locator('[data-micro-rays]').getAttribute('aria-pressed'),'true');assert.equal(await r.locator('[data-micro-point],.micro-trace').count(),0);assert.deepEqual(await r.locator('.micro-tools button').allTextContents(),['隱藏輔助光路','重新觀察']);assert.match(await r.locator('.micro-key').innerText(),/不同物點/);assert.equal(await r.locator('.micro-key').isVisible(),true);assert.equal(await r.locator('[data-micro-model]').isVisible(),true);
  });
  await t.test('兩個完整框線共同包含唯一中間像，區段名稱可切換近看',async()=>{
   const process=r.locator('[data-micro-process]');
@@ -29,23 +29,23 @@ test('顯微鏡立體剖面、精簡標示與備用畫面',{timeout:180000},asyn
   assert.match(await r.locator('[data-micro-a-role]').innerText(),/物鏡形成的實像/);assert.equal(await r.locator('[data-micro-before-label]').innerText(),'玻片上的草履蟲');assert.equal(await r.locator('[data-micro-after-label]').innerText(),'中間實像');
   await r.locator('[data-set=micro][data-value=eyepiece]').click();await r.locator('.micro-comparison').scrollIntoViewIfNeeded();await f.frame();assert.equal(await r.locator('[data-micro-before]').innerHTML(),firstImage);assert.equal(await grooveSide('[data-micro-before]'),-1);assert.equal(await grooveSide('[data-micro-preview]'),-1);assert.equal(await roundEndSide('[data-micro-before]'),1);assert.equal(await roundEndSide('[data-micro-preview]'),1);assert.equal(await r.locator('[data-micro-a-symbol]').innerHTML(),middle);assert.equal(await middleNode.evaluate(e=>e===document.querySelector('[data-micro-a-symbol]')),true);assert.match(await r.locator('[data-micro-a-role]').innerText(),/目鏡觀察的物體/);assert.match(await r.locator('[data-micro-badge]').innerText(),/不再倒轉/);assert.equal(await r.locator('[data-micro-after-label]').innerText(),'最後看見的虛像');await r.locator('[data-micro-reset]').click();
  });
- await t.test('全貌與局部切換保留物點偏好，光路與觀看結果正常',async()=>{
-  await r.locator('[data-micro-point=top]').click();
-  for(const step of ['objective','eyepiece','both']){await r.locator(step==='both'?'[data-micro-overview]':`[data-set=micro][data-value=${step}]`).click();assert.equal(await r.locator('[data-micro-ray]').count(),2);assert.equal(await r.locator('.extension').count(),step==='objective'?0:2);assert.match(await r.locator('[data-micro-badge]').innerText(),step==='objective'?/實像/:/虛像/);}
-  await r.locator('[data-micro-reset]').click();assert.equal(await r.getAttribute('data-rays'),'true');assert.equal(await r.getAttribute('data-point'),'both');assert.equal(await r.getAttribute('data-step'),'both');
+ await t.test('切換保留光路開關，開啟時同時顯示兩組物點光線',async()=>{
+  for(const step of ['objective','eyepiece','both']){await r.locator(step==='both'?'[data-micro-overview]':`[data-set=micro][data-value=${step}]`).click();assert.equal(await r.locator('[data-micro-ray]').count(),4);assert.equal(await r.locator('[data-micro-ray][data-point=top]').count(),2);assert.equal(await r.locator('[data-micro-ray][data-point=bottom]').count(),2);assert.equal(await r.locator('.extension').count(),step==='objective'?0:4);assert.match(await r.locator('[data-micro-badge]').innerText(),step==='objective'?/實像/:/虛像/);}
+  await r.locator('[data-micro-rays]').click();for(const step of ['objective','eyepiece','both']){await r.locator(step==='both'?'[data-micro-overview]':`[data-set=micro][data-value=${step}]`).click();assert.equal(await r.locator('[data-micro-ray]').count(),0);assert.equal(await r.locator('.micro-key').isVisible(),false);}
+  await r.locator('[data-micro-reset]').click();assert.equal(await r.getAttribute('data-rays'),'true');assert.equal(await r.locator('[data-micro-ray]').count(),4);assert.equal(await r.getAttribute('data-step'),'both');
  });
- await t.test('點鏡頭與近看入口同步，返回全貌保留光路與物點',async()=>{
+ await t.test('點鏡頭與近看入口同步，返回全貌保留光路開關',async()=>{
   await r.locator('[data-micro-rays]').click();await r.locator('.micro-label[data-micro-lens=objective]').click();assert.equal(await r.getAttribute('data-view'),'objective');assert.equal(await r.getAttribute('data-rays'),'false');assert.match(await r.locator('[data-micro-scope]').innerText(),/目前近看：物鏡成像/);assert.match(await r.locator('[data-micro-badge]').innerText(),/實像/);
   assert.equal(await r.locator('[data-micro-map],.micro-map').count(),0);
   await r.locator('[data-set=micro][data-value=eyepiece]').click();assert.equal(await r.getAttribute('data-view'),'eyepiece');assert.equal(await r.getAttribute('data-rays'),'false');assert.match(await r.locator('[data-micro-badge]').innerText(),/虛像/);
-  await r.locator('[data-micro-rays]').click();await r.locator('[data-micro-point=bottom]').click();await r.locator('[data-micro-overview]').click();assert.equal(await r.getAttribute('data-view'),'whole');assert.deepEqual(await r.locator('[data-set=micro]').evaluateAll(es=>es.map(e=>e.getAttribute('aria-pressed'))),['false','false']);
-  await r.locator('.micro-pick[data-micro-lens=objective]').click();assert.equal(await r.getAttribute('data-view'),'objective');assert.equal(await r.getAttribute('data-point'),'bottom');assert.equal(await r.getAttribute('data-rays'),'true');assert.equal(await r.locator('[data-micro-ray]').count(),2);
+  await r.locator('[data-micro-rays]').click();await r.locator('[data-micro-overview]').click();assert.equal(await r.getAttribute('data-view'),'whole');assert.deepEqual(await r.locator('[data-set=micro]').evaluateAll(es=>es.map(e=>e.getAttribute('aria-pressed'))),['false','false']);
+  await r.locator('.micro-pick[data-micro-lens=objective]').click();assert.equal(await r.getAttribute('data-view'),'objective');assert.equal(await r.getAttribute('data-rays'),'true');assert.equal(await r.locator('[data-micro-ray]').count(),4);
   await r.locator('[data-micro-overview]').click();await r.locator('.micro-label[data-micro-lens=eyepiece]').focus();await p.keyboard.press('Enter');assert.equal(await r.getAttribute('data-view'),'eyepiece');assert.equal(await p.evaluate(()=>document.activeElement?.dataset.microLens),'eyepiece');await r.locator('[data-micro-reset]').click();
  });
  await t.test('下方說明卡可點選與鍵盤切換，帶回操作視窗並保留光路偏好',async()=>{
-  await r.locator('[data-micro-point=bottom]').click();await r.locator('[data-micro-rays]').click();
+  await r.locator('[data-micro-rays]').click();
   const card=lens=>r.locator(`[data-micro-card=${lens}]`);
-  await card('eyepiece').click();await f.frame();assert.equal(await r.getAttribute('data-view'),'eyepiece');assert.equal(await r.getAttribute('data-point'),'bottom');assert.equal(await r.getAttribute('data-rays'),'false');assert.equal(await card('eyepiece').getAttribute('aria-pressed'),'true');
+  await card('eyepiece').click();await f.frame();assert.equal(await r.getAttribute('data-view'),'eyepiece');assert.equal(await r.getAttribute('data-rays'),'false');assert.equal(await card('eyepiece').getAttribute('aria-pressed'),'true');
   assert.equal(await r.locator('.micro-workspace > .micro-concepts').count(),1);
   assert.deepEqual(await r.locator('[data-micro-frame][data-active=true]').evaluateAll(es=>es.map(e=>e.dataset.microFrame)),['eyepiece']);
   assert.deepEqual(await r.locator('[data-micro-node][data-active=true]').evaluateAll(es=>es.map(e=>e.dataset.microNode)),['intermediate','eyepiece','eye']);
@@ -60,7 +60,7 @@ test('顯微鏡立體剖面、精簡標示與備用畫面',{timeout:180000},asyn
  });
  await t.test('上下入口同步，重複選取不退出；中間像與空白返回全貌',async()=>{
   await r.locator('[data-micro-reset]').click();
-  await r.locator('[data-micro-point=bottom]').click();await r.locator('[data-micro-rays]').click();
+  await r.locator('[data-micro-rays]').click();
   for(const [node,scope] of [['original','objective'],['objective','objective'],['eyepiece','eyepiece'],['eye','eyepiece']]){
    const b=r.locator(`[data-micro-node=${node}]`);assert.equal(await b.evaluate(e=>e.tagName),'BUTTON');await b.click();assert.equal(await r.getAttribute('data-view'),scope);assert.equal(await r.locator(`[data-micro-card=${scope}]`).getAttribute('aria-pressed'),'true');await b.click();assert.equal(await r.getAttribute('data-view'),scope);
    await r.locator(`[data-micro-card=${scope}]`).click();assert.equal(await r.getAttribute('data-view'),scope);
@@ -68,7 +68,7 @@ test('顯微鏡立體剖面、精簡標示與備用畫面',{timeout:180000},asyn
   await r.locator('[data-micro-node=intermediate]').focus();await p.keyboard.press('Enter');assert.equal(await r.getAttribute('data-view'),'whole');assert.equal(await r.locator('[data-micro-frame][data-active=true]').count(),0);
   await r.locator('[data-micro-node=objective]').click();await r.locator('.micro-context-heading').click({position:{x:5,y:5}});assert.equal(await r.getAttribute('data-view'),'whole');
   await r.locator('[data-micro-node=eye]').click();await r.locator('.micro-concepts').click({position:{x:2,y:2}});assert.equal(await r.getAttribute('data-view'),'whole');
-  assert.equal(await r.getAttribute('data-point'),'bottom');assert.equal(await r.getAttribute('data-rays'),'false');await r.locator('[data-micro-reset]').click();
+  assert.equal(await r.getAttribute('data-rays'),'false');await r.locator('[data-micro-reset]').click();
  });
  await t.test('實像虛像保留相同標本，以外框區分，圖例貼合文字高度',async()=>{
   await r.locator('[data-micro-reset]').click();
