@@ -1,0 +1,341 @@
+{
+  "records": [
+    {
+      "width": 1440,
+      "height": 900,
+      "mode": "initial",
+      "section": {
+        "x": 444,
+        "y": 7.859375,
+        "right": 1280,
+        "bottom": 860.96875,
+        "width": 836,
+        "height": 853.109375
+      },
+      "main": {
+        "x": 457,
+        "y": 144.109375,
+        "right": 1267,
+        "bottom": 815.34375,
+        "width": 810,
+        "height": 671.234375
+      },
+      "stage": {
+        "x": 457,
+        "y": 193.859375,
+        "right": 1267,
+        "bottom": 643.859375,
+        "width": 810,
+        "height": 450
+      },
+      "footer": {
+        "x": 457,
+        "y": 773.34375,
+        "right": 1267,
+        "bottom": 815.34375,
+        "width": 810,
+        "height": 42
+      },
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "x": 641.6953125,
+          "y": 404.859375,
+          "right": 684.6484375,
+          "bottom": 429.703125,
+          "width": 42.953125,
+          "height": 24.84375,
+          "text": "光源",
+          "transform": "matrix(1, 0, 0, 1, -21.4766, -24.8438)"
+        },
+        {
+          "x": 721.2265625,
+          "y": 382.125,
+          "right": 789.1171875,
+          "bottom": 406.96875,
+          "width": 67.890625,
+          "height": 24.84375,
+          "text": "透明圖卡",
+          "transform": "matrix(1, 0, 0, 1, -33.9453, -24.8438)"
+        },
+        {
+          "x": 831.8359375,
+          "y": 356.40625,
+          "right": 874.7890625,
+          "bottom": 381.25,
+          "width": 42.953125,
+          "height": 24.84375,
+          "text": "鏡片",
+          "transform": "matrix(1, 0, 0, 1, -21.4766, -24.8438)"
+        },
+        {
+          "x": 1008.9765625,
+          "y": 249.578125,
+          "right": 1096.3359375,
+          "bottom": 289.8125,
+          "width": 87.359375,
+          "height": 40.234375,
+          "text": "牆上的投影金框：目標範圍",
+          "transform": "matrix(1, 0, 0, 1, -43.6797, -40.2344)"
+        }
+      ],
+      "collisions": [],
+      "modelVisible": true,
+      "fallbackVisible": false
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "mode": "complete",
+      "section": {
+        "x": 444,
+        "y": 7.859375,
+        "right": 1280,
+        "bottom": 964.421875,
+        "width": 836,
+        "height": 956.5625
+      },
+      "main": {
+        "x": 457,
+        "y": 144.109375,
+        "right": 1267,
+        "bottom": 918.796875,
+        "width": 810,
+        "height": 774.6875
+      },
+      "stage": {
+        "x": 457,
+        "y": 193.859375,
+        "right": 1267,
+        "bottom": 643.859375,
+        "width": 810,
+        "height": 450
+      },
+      "footer": {
+        "x": 457,
+        "y": 773.34375,
+        "right": 1267,
+        "bottom": 815.34375,
+        "width": 810,
+        "height": 42
+      },
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "x": 641.6953125,
+          "y": 404.859375,
+          "right": 684.6484375,
+          "bottom": 429.703125,
+          "width": 42.953125,
+          "height": 24.84375,
+          "text": "光源",
+          "transform": "matrix(1, 0, 0, 1, -21.4766, -24.8438)"
+        },
+        {
+          "x": 691.6484375,
+          "y": 388.859375,
+          "right": 759.5390625,
+          "bottom": 413.703125,
+          "width": 67.890625,
+          "height": 24.84375,
+          "text": "透明圖卡",
+          "transform": "matrix(1, 0, 0, 1, -33.9453, -24.8438)"
+        },
+        {
+          "x": 810.3671875,
+          "y": 360.6875,
+          "right": 853.3203125,
+          "bottom": 385.53125,
+          "width": 42.953125,
+          "height": 24.84375,
+          "text": "鏡片",
+          "transform": "matrix(1, 0, 0, 1, -21.4766, -24.8438)"
+        },
+        {
+          "x": 1008.9765625,
+          "y": 249.578125,
+          "right": 1096.3359375,
+          "bottom": 289.8125,
+          "width": 87.359375,
+          "height": 40.234375,
+          "text": "牆上的投影金框：目標範圍",
+          "transform": "matrix(1, 0, 0, 1, -43.6797, -40.2344)"
+        }
+      ],
+      "collisions": [],
+      "modelVisible": true,
+      "fallbackVisible": false
+    },
+    {
+      "width": 320,
+      "height": 844,
+      "mode": "initial",
+      "section": {
+        "x": 12,
+        "y": 7.53125,
+        "right": 308,
+        "bottom": 712.609375,
+        "width": 296,
+        "height": 705.078125
+      },
+      "main": {
+        "x": 21,
+        "y": 118.78125,
+        "right": 299,
+        "bottom": 670.984375,
+        "width": 278,
+        "height": 552.203125
+      },
+      "stage": {
+        "x": 21,
+        "y": 181.65625,
+        "right": 299,
+        "bottom": 416.65625,
+        "width": 278,
+        "height": 235
+      },
+      "footer": {
+        "x": 21,
+        "y": 630.984375,
+        "right": 299,
+        "bottom": 670.984375,
+        "width": 278,
+        "height": 40
+      },
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "x": 27,
+          "y": 388.609375,
+          "right": 91.25,
+          "bottom": 410.65625,
+          "width": 64.25,
+          "height": 22.046875,
+          "text": "光源",
+          "transform": "none"
+        },
+        {
+          "x": 94.25,
+          "y": 388.609375,
+          "right": 158.5,
+          "bottom": 410.65625,
+          "width": 64.25,
+          "height": 22.046875,
+          "text": "透明圖卡",
+          "transform": "none"
+        },
+        {
+          "x": 161.5,
+          "y": 388.609375,
+          "right": 225.75,
+          "bottom": 410.65625,
+          "width": 64.25,
+          "height": 22.046875,
+          "text": "鏡片",
+          "transform": "none"
+        },
+        {
+          "x": 228.75,
+          "y": 388.609375,
+          "right": 293,
+          "bottom": 410.65625,
+          "width": 64.25,
+          "height": 22.046875,
+          "text": "牆上的投影金框：目標範圍",
+          "transform": "none"
+        }
+      ],
+      "collisions": [],
+      "modelVisible": true,
+      "fallbackVisible": false
+    },
+    {
+      "width": 320,
+      "height": 844,
+      "mode": "complete",
+      "section": {
+        "x": 12,
+        "y": 7.53125,
+        "right": 308,
+        "bottom": 836.53125,
+        "width": 296,
+        "height": 829
+      },
+      "main": {
+        "x": 21,
+        "y": 118.78125,
+        "right": 299,
+        "bottom": 794.90625,
+        "width": 278,
+        "height": 676.125
+      },
+      "stage": {
+        "x": 21,
+        "y": 181.65625,
+        "right": 299,
+        "bottom": 416.65625,
+        "width": 278,
+        "height": 235
+      },
+      "footer": {
+        "x": 21,
+        "y": 630.984375,
+        "right": 299,
+        "bottom": 670.984375,
+        "width": 278,
+        "height": 40
+      },
+      "overflow": false,
+      "clipped": [],
+      "labels": [
+        {
+          "x": 27,
+          "y": 388.609375,
+          "right": 91.25,
+          "bottom": 410.65625,
+          "width": 64.25,
+          "height": 22.046875,
+          "text": "光源",
+          "transform": "none"
+        },
+        {
+          "x": 94.25,
+          "y": 388.609375,
+          "right": 158.5,
+          "bottom": 410.65625,
+          "width": 64.25,
+          "height": 22.046875,
+          "text": "透明圖卡",
+          "transform": "none"
+        },
+        {
+          "x": 161.5,
+          "y": 388.609375,
+          "right": 225.75,
+          "bottom": 410.65625,
+          "width": 64.25,
+          "height": 22.046875,
+          "text": "鏡片",
+          "transform": "none"
+        },
+        {
+          "x": 228.75,
+          "y": 388.609375,
+          "right": 293,
+          "bottom": 410.65625,
+          "width": 64.25,
+          "height": 22.046875,
+          "text": "牆上的投影金框：目標範圍",
+          "transform": "none"
+        }
+      ],
+      "collisions": [],
+      "modelVisible": true,
+      "fallbackVisible": false
+    }
+  ],
+  "errors": []
+}
