@@ -64,6 +64,8 @@ test('4.2 完整頁面、主要活動與資源失敗恢復',{timeout:300000},asy
     assert.deepEqual(await page.locator('.route a:not(.quiz-nav) > span:last-child').allTextContents(),expectedTitles);
     assert.deepEqual(await page.locator('.card-number').allTextContents(),['01','02','03','04','05','06']);
     assert.deepEqual(await page.locator('.route a:not(.quiz-nav) .route-number').allTextContents(),['01','02','03','04','05','06']);
+    await expect(page.locator('.route a.quiz-nav > span:last-child')).toHaveText('單元小測');
+    await expect(page.locator('#periscope-title')).toHaveText('幫小葵完成潛望鏡');
     const measurements=[];
     for(const [width,height] of [[1440,900],[1366,768],[1280,720]]){
       await page.setViewportSize({width,height});
