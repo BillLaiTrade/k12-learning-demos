@@ -120,3 +120,8 @@ button.primary:hover, .rank-quiz .rank-play:hover, .rank-quiz .rank-check:hover 
 @media (min-width: 901px) {
   .cart-explanation .cart-analogy-grid { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); }
 }
+
+.reflection-recall { display:flex; align-items:flex-start; gap:14px; }
+.reflection-recall-icon { width:32px; height:32px; flex:none; color:#4e8061; }
+.reflection-recall p { margin:3px 0; }
+.reflection-recall a { color:#256b4c; font-size:.9rem; font-weight:700; }
