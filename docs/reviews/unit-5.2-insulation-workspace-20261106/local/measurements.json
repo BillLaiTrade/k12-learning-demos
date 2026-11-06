@@ -1,0 +1,1417 @@
+{
+  "url": "http://127.0.0.1:46033/units/5/parts/5.2/",
+  "measurements": [
+    {
+      "mode": "gap",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "scrollHeight": 900,
+      "clientHeight": 900,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "boxes": [
+        {
+          "selector": ".insulation-focus-heading",
+          "left": 12,
+          "top": 12,
+          "right": 1428,
+          "bottom": 78.578125,
+          "width": 1416,
+          "height": 66.578125,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-toolbar",
+          "left": 13,
+          "top": 89.578125,
+          "right": 1427,
+          "bottom": 166.578125,
+          "width": 1414,
+          "height": 77,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-a",
+          "left": 21,
+          "top": 210.625,
+          "right": 378.984375,
+          "bottom": 674.390625,
+          "width": 357.984375,
+          "height": 463.765625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-b",
+          "left": 386.828125,
+          "top": 210.625,
+          "right": 744.8125,
+          "bottom": 674.390625,
+          "width": 357.984375,
+          "height": 463.765625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-route-key",
+          "left": 13,
+          "top": 739.625,
+          "right": 752.65625,
+          "bottom": 775.375,
+          "width": 739.65625,
+          "height": 35.75,
+          "font": 13.6,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-chart-heading",
+          "left": 765.65625,
+          "top": 180.578125,
+          "right": 1415,
+          "bottom": 239.171875,
+          "width": 649.34375,
+          "height": 58.59375,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-plot",
+          "left": 765.65625,
+          "top": 249.171875,
+          "right": 1415,
+          "bottom": 668.671875,
+          "width": 649.34375,
+          "height": 419.5,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-finding",
+          "left": 765.65625,
+          "top": 678.671875,
+          "right": 1415,
+          "bottom": 729.0625,
+          "width": 649.34375,
+          "height": 50.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-takeaway",
+          "left": 765.65625,
+          "top": 739.0625,
+          "right": 1415,
+          "bottom": 763.375,
+          "width": 649.34375,
+          "height": 24.3125,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-play",
+          "left": 27,
+          "top": 788.375,
+          "right": 137,
+          "bottom": 834.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-reset",
+          "left": 149,
+          "top": 788.375,
+          "right": 259,
+          "bottom": 834.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-progress",
+          "left": 279,
+          "top": 805.296875,
+          "right": 1321.421875,
+          "bottom": 817.296875,
+          "width": 1042.421875,
+          "height": 12,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-return",
+          "left": 1315.9375,
+          "top": 22.09375,
+          "right": 1428,
+          "bottom": 68.484375,
+          "width": 112.0625,
+          "height": 46.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-footer",
+          "left": 13,
+          "top": 846.21875,
+          "right": 1427,
+          "bottom": 887,
+          "width": 1414,
+          "height": 40.78125,
+          "font": 13.6,
+          "inside": true
+        }
+      ]
+    },
+    {
+      "mode": "lining",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "scrollHeight": 900,
+      "clientHeight": 900,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "boxes": [
+        {
+          "selector": ".insulation-focus-heading",
+          "left": 12,
+          "top": 12,
+          "right": 1428,
+          "bottom": 78.578125,
+          "width": 1416,
+          "height": 66.578125,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-toolbar",
+          "left": 13,
+          "top": 89.578125,
+          "right": 1427,
+          "bottom": 166.578125,
+          "width": 1414,
+          "height": 77,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-a",
+          "left": 21,
+          "top": 210.625,
+          "right": 378.984375,
+          "bottom": 674.390625,
+          "width": 357.984375,
+          "height": 463.765625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-b",
+          "left": 386.828125,
+          "top": 210.625,
+          "right": 744.8125,
+          "bottom": 674.390625,
+          "width": 357.984375,
+          "height": 463.765625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-route-key",
+          "left": 13,
+          "top": 739.625,
+          "right": 752.65625,
+          "bottom": 775.375,
+          "width": 739.65625,
+          "height": 35.75,
+          "font": 13.6,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-chart-heading",
+          "left": 765.65625,
+          "top": 180.578125,
+          "right": 1415,
+          "bottom": 239.171875,
+          "width": 649.34375,
+          "height": 58.59375,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-plot",
+          "left": 765.65625,
+          "top": 249.171875,
+          "right": 1415,
+          "bottom": 668.671875,
+          "width": 649.34375,
+          "height": 419.5,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-finding",
+          "left": 765.65625,
+          "top": 678.671875,
+          "right": 1415,
+          "bottom": 729.0625,
+          "width": 649.34375,
+          "height": 50.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-takeaway",
+          "left": 765.65625,
+          "top": 739.0625,
+          "right": 1415,
+          "bottom": 763.375,
+          "width": 649.34375,
+          "height": 24.3125,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-play",
+          "left": 27,
+          "top": 788.375,
+          "right": 137,
+          "bottom": 834.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-reset",
+          "left": 149,
+          "top": 788.375,
+          "right": 259,
+          "bottom": 834.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-progress",
+          "left": 279,
+          "top": 805.296875,
+          "right": 1321.421875,
+          "bottom": 817.296875,
+          "width": 1042.421875,
+          "height": 12,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-return",
+          "left": 1315.9375,
+          "top": 22.09375,
+          "right": 1428,
+          "bottom": 68.484375,
+          "width": 112.0625,
+          "height": 46.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-footer",
+          "left": 13,
+          "top": 846.21875,
+          "right": 1427,
+          "bottom": 887,
+          "width": 1414,
+          "height": 40.78125,
+          "font": 13.6,
+          "inside": true
+        }
+      ]
+    },
+    {
+      "mode": "gap",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "scrollHeight": 768,
+      "clientHeight": 768,
+      "scrollWidth": 1366,
+      "clientWidth": 1366,
+      "boxes": [
+        {
+          "selector": ".insulation-focus-heading",
+          "left": 12,
+          "top": 12,
+          "right": 1354,
+          "bottom": 78.578125,
+          "width": 1342,
+          "height": 66.578125,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-toolbar",
+          "left": 13,
+          "top": 89.578125,
+          "right": 1353,
+          "bottom": 166.578125,
+          "width": 1340,
+          "height": 77,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-a",
+          "left": 46.71875,
+          "top": 190.609375,
+          "right": 333.71875,
+          "bottom": 562.40625,
+          "width": 287,
+          "height": 371.796875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-b",
+          "left": 393.15625,
+          "top": 190.609375,
+          "right": 680.15625,
+          "bottom": 562.40625,
+          "width": 287,
+          "height": 371.796875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-route-key",
+          "left": 13,
+          "top": 607.625,
+          "right": 713.890625,
+          "bottom": 643.375,
+          "width": 700.890625,
+          "height": 35.75,
+          "font": 13.6,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-chart-heading",
+          "left": 726.890625,
+          "top": 180.578125,
+          "right": 1341,
+          "bottom": 239.171875,
+          "width": 614.109375,
+          "height": 58.59375,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-plot",
+          "left": 726.890625,
+          "top": 249.171875,
+          "right": 1341,
+          "bottom": 536.671875,
+          "width": 614.109375,
+          "height": 287.5,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-finding",
+          "left": 726.890625,
+          "top": 546.671875,
+          "right": 1341,
+          "bottom": 597.0625,
+          "width": 614.109375,
+          "height": 50.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-takeaway",
+          "left": 726.890625,
+          "top": 607.0625,
+          "right": 1341,
+          "bottom": 631.375,
+          "width": 614.109375,
+          "height": 24.3125,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-play",
+          "left": 27,
+          "top": 656.375,
+          "right": 137,
+          "bottom": 702.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-reset",
+          "left": 149,
+          "top": 656.375,
+          "right": 259,
+          "bottom": 702.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-progress",
+          "left": 279,
+          "top": 673.296875,
+          "right": 1247.421875,
+          "bottom": 685.296875,
+          "width": 968.421875,
+          "height": 12,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-return",
+          "left": 1241.9375,
+          "top": 22.09375,
+          "right": 1354,
+          "bottom": 68.484375,
+          "width": 112.0625,
+          "height": 46.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-footer",
+          "left": 13,
+          "top": 714.21875,
+          "right": 1353,
+          "bottom": 755,
+          "width": 1340,
+          "height": 40.78125,
+          "font": 13.6,
+          "inside": true
+        }
+      ]
+    },
+    {
+      "mode": "lining",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "scrollHeight": 768,
+      "clientHeight": 768,
+      "scrollWidth": 1366,
+      "clientWidth": 1366,
+      "boxes": [
+        {
+          "selector": ".insulation-focus-heading",
+          "left": 12,
+          "top": 12,
+          "right": 1354,
+          "bottom": 78.578125,
+          "width": 1342,
+          "height": 66.578125,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-toolbar",
+          "left": 13,
+          "top": 89.578125,
+          "right": 1353,
+          "bottom": 166.578125,
+          "width": 1340,
+          "height": 77,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-a",
+          "left": 46.71875,
+          "top": 190.609375,
+          "right": 333.71875,
+          "bottom": 562.40625,
+          "width": 287,
+          "height": 371.796875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-b",
+          "left": 393.15625,
+          "top": 190.609375,
+          "right": 680.15625,
+          "bottom": 562.40625,
+          "width": 287,
+          "height": 371.796875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-route-key",
+          "left": 13,
+          "top": 607.625,
+          "right": 713.890625,
+          "bottom": 643.375,
+          "width": 700.890625,
+          "height": 35.75,
+          "font": 13.6,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-chart-heading",
+          "left": 726.890625,
+          "top": 180.578125,
+          "right": 1341,
+          "bottom": 239.171875,
+          "width": 614.109375,
+          "height": 58.59375,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-plot",
+          "left": 726.890625,
+          "top": 249.171875,
+          "right": 1341,
+          "bottom": 536.671875,
+          "width": 614.109375,
+          "height": 287.5,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-finding",
+          "left": 726.890625,
+          "top": 546.671875,
+          "right": 1341,
+          "bottom": 597.0625,
+          "width": 614.109375,
+          "height": 50.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-takeaway",
+          "left": 726.890625,
+          "top": 607.0625,
+          "right": 1341,
+          "bottom": 631.375,
+          "width": 614.109375,
+          "height": 24.3125,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-play",
+          "left": 27,
+          "top": 656.375,
+          "right": 137,
+          "bottom": 702.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-reset",
+          "left": 149,
+          "top": 656.375,
+          "right": 259,
+          "bottom": 702.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-progress",
+          "left": 279,
+          "top": 673.296875,
+          "right": 1247.421875,
+          "bottom": 685.296875,
+          "width": 968.421875,
+          "height": 12,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-return",
+          "left": 1241.9375,
+          "top": 22.09375,
+          "right": 1354,
+          "bottom": 68.484375,
+          "width": 112.0625,
+          "height": 46.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-footer",
+          "left": 13,
+          "top": 714.21875,
+          "right": 1353,
+          "bottom": 755,
+          "width": 1340,
+          "height": 40.78125,
+          "font": 13.6,
+          "inside": true
+        }
+      ]
+    },
+    {
+      "mode": "gap",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "scrollHeight": 720,
+      "clientHeight": 720,
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "boxes": [
+        {
+          "selector": ".insulation-focus-heading",
+          "left": 12,
+          "top": 12,
+          "right": 1268,
+          "bottom": 77.046875,
+          "width": 1256,
+          "height": 65.046875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-toolbar",
+          "left": 13,
+          "top": 88.046875,
+          "right": 1267,
+          "bottom": 165.046875,
+          "width": 1254,
+          "height": 77,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-a",
+          "left": 53.21875,
+          "top": 188.84375,
+          "right": 304.703125,
+          "bottom": 514.640625,
+          "width": 251.484375,
+          "height": 325.796875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-b",
+          "left": 377.140625,
+          "top": 188.84375,
+          "right": 628.625,
+          "bottom": 514.640625,
+          "width": 251.484375,
+          "height": 325.796875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-route-key",
+          "left": 13,
+          "top": 559.625,
+          "right": 668.84375,
+          "bottom": 595.375,
+          "width": 655.84375,
+          "height": 35.75,
+          "font": 13.6,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-chart-heading",
+          "left": 681.84375,
+          "top": 179.046875,
+          "right": 1255,
+          "bottom": 237.640625,
+          "width": 573.15625,
+          "height": 58.59375,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-plot",
+          "left": 681.84375,
+          "top": 247.640625,
+          "right": 1255,
+          "bottom": 488.671875,
+          "width": 573.15625,
+          "height": 241.03125,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-finding",
+          "left": 681.84375,
+          "top": 498.671875,
+          "right": 1255,
+          "bottom": 549.0625,
+          "width": 573.15625,
+          "height": 50.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-takeaway",
+          "left": 681.84375,
+          "top": 559.0625,
+          "right": 1255,
+          "bottom": 583.375,
+          "width": 573.15625,
+          "height": 24.3125,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-play",
+          "left": 27,
+          "top": 608.375,
+          "right": 137,
+          "bottom": 654.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-reset",
+          "left": 149,
+          "top": 608.375,
+          "right": 259,
+          "bottom": 654.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-progress",
+          "left": 279,
+          "top": 625.296875,
+          "right": 1161.421875,
+          "bottom": 637.296875,
+          "width": 882.421875,
+          "height": 12,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-return",
+          "left": 1155.9375,
+          "top": 21.328125,
+          "right": 1268,
+          "bottom": 67.71875,
+          "width": 112.0625,
+          "height": 46.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-footer",
+          "left": 13,
+          "top": 666.21875,
+          "right": 1267,
+          "bottom": 707,
+          "width": 1254,
+          "height": 40.78125,
+          "font": 13.6,
+          "inside": true
+        }
+      ]
+    },
+    {
+      "mode": "lining",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "scrollHeight": 720,
+      "clientHeight": 720,
+      "scrollWidth": 1280,
+      "clientWidth": 1280,
+      "boxes": [
+        {
+          "selector": ".insulation-focus-heading",
+          "left": 12,
+          "top": 12,
+          "right": 1268,
+          "bottom": 77.046875,
+          "width": 1256,
+          "height": 65.046875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-toolbar",
+          "left": 13,
+          "top": 88.046875,
+          "right": 1267,
+          "bottom": 165.046875,
+          "width": 1254,
+          "height": 77,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-a",
+          "left": 53.21875,
+          "top": 188.84375,
+          "right": 304.703125,
+          "bottom": 514.640625,
+          "width": 251.484375,
+          "height": 325.796875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-b",
+          "left": 377.140625,
+          "top": 188.84375,
+          "right": 628.625,
+          "bottom": 514.640625,
+          "width": 251.484375,
+          "height": 325.796875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-route-key",
+          "left": 13,
+          "top": 559.625,
+          "right": 668.84375,
+          "bottom": 595.375,
+          "width": 655.84375,
+          "height": 35.75,
+          "font": 13.6,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-chart-heading",
+          "left": 681.84375,
+          "top": 179.046875,
+          "right": 1255,
+          "bottom": 237.640625,
+          "width": 573.15625,
+          "height": 58.59375,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-plot",
+          "left": 681.84375,
+          "top": 247.640625,
+          "right": 1255,
+          "bottom": 488.671875,
+          "width": 573.15625,
+          "height": 241.03125,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-finding",
+          "left": 681.84375,
+          "top": 498.671875,
+          "right": 1255,
+          "bottom": 549.0625,
+          "width": 573.15625,
+          "height": 50.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-takeaway",
+          "left": 681.84375,
+          "top": 559.0625,
+          "right": 1255,
+          "bottom": 583.375,
+          "width": 573.15625,
+          "height": 24.3125,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-play",
+          "left": 27,
+          "top": 608.375,
+          "right": 137,
+          "bottom": 654.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-reset",
+          "left": 149,
+          "top": 608.375,
+          "right": 259,
+          "bottom": 654.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-progress",
+          "left": 279,
+          "top": 625.296875,
+          "right": 1161.421875,
+          "bottom": 637.296875,
+          "width": 882.421875,
+          "height": 12,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-return",
+          "left": 1155.9375,
+          "top": 21.328125,
+          "right": 1268,
+          "bottom": 67.71875,
+          "width": 112.0625,
+          "height": 46.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-footer",
+          "left": 13,
+          "top": 666.21875,
+          "right": 1267,
+          "bottom": 707,
+          "width": 1254,
+          "height": 40.78125,
+          "font": 13.6,
+          "inside": true
+        }
+      ]
+    },
+    {
+      "mode": "gap",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "scrollHeight": 768,
+      "clientHeight": 768,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "boxes": [
+        {
+          "selector": ".insulation-focus-heading",
+          "left": 12,
+          "top": 12,
+          "right": 1012,
+          "bottom": 69.671875,
+          "width": 1000,
+          "height": 57.671875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-toolbar",
+          "left": 13,
+          "top": 80.671875,
+          "right": 1011,
+          "bottom": 157.671875,
+          "width": 998,
+          "height": 77,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-a",
+          "left": 21,
+          "top": 210.765625,
+          "right": 269.984375,
+          "bottom": 533.328125,
+          "width": 248.984375,
+          "height": 322.5625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-b",
+          "left": 277.875,
+          "top": 210.765625,
+          "right": 526.859375,
+          "bottom": 533.328125,
+          "width": 248.984375,
+          "height": 322.5625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-route-key",
+          "left": 13,
+          "top": 607.625,
+          "right": 534.75,
+          "bottom": 643.375,
+          "width": 521.75,
+          "height": 35.75,
+          "font": 13.6,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-chart-heading",
+          "left": 547.75,
+          "top": 171.671875,
+          "right": 999,
+          "bottom": 230.265625,
+          "width": 451.25,
+          "height": 58.59375,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-plot",
+          "left": 547.75,
+          "top": 240.265625,
+          "right": 999,
+          "bottom": 511.875,
+          "width": 451.25,
+          "height": 271.609375,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-finding",
+          "left": 547.75,
+          "top": 521.875,
+          "right": 999,
+          "bottom": 597.0625,
+          "width": 451.25,
+          "height": 75.1875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-takeaway",
+          "left": 547.75,
+          "top": 607.0625,
+          "right": 999,
+          "bottom": 631.375,
+          "width": 451.25,
+          "height": 24.3125,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-play",
+          "left": 27,
+          "top": 656.375,
+          "right": 137,
+          "bottom": 702.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-reset",
+          "left": 149,
+          "top": 656.375,
+          "right": 259,
+          "bottom": 702.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-progress",
+          "left": 279,
+          "top": 673.296875,
+          "right": 905.421875,
+          "bottom": 685.296875,
+          "width": 626.421875,
+          "height": 12,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-return",
+          "left": 899.9375,
+          "top": 17.640625,
+          "right": 1012,
+          "bottom": 64.03125,
+          "width": 112.0625,
+          "height": 46.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-footer",
+          "left": 13,
+          "top": 714.21875,
+          "right": 1011,
+          "bottom": 755,
+          "width": 998,
+          "height": 40.78125,
+          "font": 13.6,
+          "inside": true
+        }
+      ]
+    },
+    {
+      "mode": "lining",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "scrollHeight": 768,
+      "clientHeight": 768,
+      "scrollWidth": 1024,
+      "clientWidth": 1024,
+      "boxes": [
+        {
+          "selector": ".insulation-focus-heading",
+          "left": 12,
+          "top": 12,
+          "right": 1012,
+          "bottom": 69.671875,
+          "width": 1000,
+          "height": 57.671875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-toolbar",
+          "left": 13,
+          "top": 80.671875,
+          "right": 1011,
+          "bottom": 157.671875,
+          "width": 998,
+          "height": 77,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-a",
+          "left": 21,
+          "top": 210.765625,
+          "right": 269.984375,
+          "bottom": 533.328125,
+          "width": 248.984375,
+          "height": 322.5625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-bottle-b",
+          "left": 277.875,
+          "top": 210.765625,
+          "right": 526.859375,
+          "bottom": 533.328125,
+          "width": 248.984375,
+          "height": 322.5625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-route-key",
+          "left": 13,
+          "top": 607.625,
+          "right": 534.75,
+          "bottom": 643.375,
+          "width": 521.75,
+          "height": 35.75,
+          "font": 13.6,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-chart-heading",
+          "left": 547.75,
+          "top": 171.671875,
+          "right": 999,
+          "bottom": 230.265625,
+          "width": 451.25,
+          "height": 58.59375,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-plot",
+          "left": 547.75,
+          "top": 240.265625,
+          "right": 999,
+          "bottom": 511.875,
+          "width": 451.25,
+          "height": 271.609375,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-finding",
+          "left": 547.75,
+          "top": 521.875,
+          "right": 999,
+          "bottom": 597.0625,
+          "width": 451.25,
+          "height": 75.1875,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-takeaway",
+          "left": 547.75,
+          "top": 607.0625,
+          "right": 999,
+          "bottom": 631.375,
+          "width": 451.25,
+          "height": 24.3125,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-play",
+          "left": 27,
+          "top": 656.375,
+          "right": 137,
+          "bottom": 702.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-reset",
+          "left": 149,
+          "top": 656.375,
+          "right": 259,
+          "bottom": 702.21875,
+          "width": 110,
+          "height": 45.84375,
+          "font": 15.2,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-progress",
+          "left": 279,
+          "top": 673.296875,
+          "right": 905.421875,
+          "bottom": 685.296875,
+          "width": 626.421875,
+          "height": 12,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": "#insulation-return",
+          "left": 899.9375,
+          "top": 17.640625,
+          "right": 1012,
+          "bottom": 64.03125,
+          "width": 112.0625,
+          "height": 46.390625,
+          "font": 16,
+          "inside": true
+        },
+        {
+          "selector": ".insulation-footer",
+          "left": 13,
+          "top": 714.21875,
+          "right": 1011,
+          "bottom": 755,
+          "width": 998,
+          "height": 40.78125,
+          "font": 13.6,
+          "inside": true
+        }
+      ]
+    },
+    {
+      "case": "native modal focus sequence",
+      "sequence": [
+        {
+          "allowed": true,
+          "tag": "BODY",
+          "id": ""
+        },
+        {
+          "allowed": true,
+          "tag": "BUTTON",
+          "id": "insulation-return"
+        },
+        {
+          "allowed": true,
+          "tag": "BUTTON",
+          "id": ""
+        },
+        {
+          "allowed": true,
+          "tag": "BUTTON",
+          "id": ""
+        },
+        {
+          "allowed": true,
+          "tag": "BUTTON",
+          "id": "insulation-source-a"
+        },
+        {
+          "allowed": true,
+          "tag": "BUTTON",
+          "id": "insulation-source-b"
+        },
+        {
+          "allowed": true,
+          "tag": "BUTTON",
+          "id": "insulation-play"
+        },
+        {
+          "allowed": true,
+          "tag": "BUTTON",
+          "id": "insulation-reset"
+        },
+        {
+          "allowed": true,
+          "tag": "SUMMARY",
+          "id": ""
+        },
+        {
+          "allowed": true,
+          "tag": "BODY",
+          "id": ""
+        },
+        {
+          "allowed": true,
+          "tag": "BUTTON",
+          "id": "insulation-return"
+        },
+        {
+          "allowed": true,
+          "tag": "BUTTON",
+          "id": ""
+        },
+        {
+          "allowed": true,
+          "tag": "BUTTON",
+          "id": ""
+        },
+        {
+          "allowed": true,
+          "tag": "BUTTON",
+          "id": "insulation-source-a"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

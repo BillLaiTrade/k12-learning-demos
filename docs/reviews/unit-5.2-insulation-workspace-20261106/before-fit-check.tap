@@ -1,0 +1,120 @@
+TAP version 13
+# Subtest: 5.2 insulation workspace: same activity, one desktop viewport and return to reading
+    # Subtest: entry, native modal, Escape and return retain reading position and one activity instance
+    ok 1 - entry, native modal, Escape and return retain reading position and one activity instance
+      ---
+      duration_ms: 316.055698
+      type: 'test'
+      ...
+    # Subtest: both comparisons keep bottle, curves, findings and controls inside desktop viewports without scrolling
+    ok 2 - both comparisons keep bottle, curves, findings and controls inside desktop viewports without scrolling
+      ---
+      duration_ms: 13343.245771
+      type: 'test'
+      ...
+    # Subtest: reopening preserves selected comparison, frozen curve and elapsed time
+    ok 3 - reopening preserves selected comparison, frozen curve and elapsed time
+      ---
+      duration_ms: 246.838076
+      type: 'test'
+      ...
+    # Subtest: completed curve and remaining heat paths share one view in both comparisons
+    ok 4 - completed curve and remaining heat paths share one view in both comparisons
+      ---
+      duration_ms: 11222.941556
+      type: 'test'
+      ...
+    # Subtest: details do not enlarge the observation viewport and the background page cannot receive focus
+    ok 5 - details do not enlarge the observation viewport and the background page cannot receive focus
+      ---
+      duration_ms: 460.679024
+      type: 'test'
+      ...
+    # Subtest: mobile native touch can open, operate, reset and return without horizontal overflow
+    ok 6 - mobile native touch can open, operate, reset and return without horizontal overflow
+      ---
+      duration_ms: 3285.808226
+      type: 'test'
+      ...
+    # Subtest: no browser script errors
+    ok 7 - no browser script errors
+      ---
+      duration_ms: 6.694705
+      type: 'test'
+      ...
+    1..7
+ok 1 - 5.2 insulation workspace: same activity, one desktop viewport and return to reading
+  ---
+  duration_ms: 30714.928653
+  type: 'test'
+  ...
+# Subtest: 5.2 insulation: controlled comparisons, remaining heat paths and manual observation
+    # Subtest: starts only on request, retains the scientific bridge and uses identical capped bottles
+    ok 1 - starts only on request, retains the scientific bridge and uses identical capped bottles
+      ---
+      duration_ms: 96.531946
+      type: 'test'
+      ...
+    # Subtest: air and vacuum differ in gas paths while radiation and solid neck/support paths remain
+    ok 2 - air and vacuum differ in gas paths while radiation and solid neck/support paths remain
+      ---
+      duration_ms: 539.347855
+      type: 'test'
+      ...
+    # Subtest: pause freezes actual paths and graph pixels, resume does not restart, repeated bottle clicks are idempotent
+    ok 3 - pause freezes actual paths and graph pixels, resume does not restart, repeated bottle clicks are idempotent
+      ---
+      duration_ms: 5612.214566
+      type: 'test'
+      ...
+    # Subtest: lining comparison resets progress, holds vacuum fixed and changes only gap-facing imagery
+    ok 4 - lining comparison resets progress, holds vacuum fixed and changes only gap-facing imagery
+      ---
+      duration_ms: 5342.873509
+      type: 'test'
+      ...
+    # Subtest: keyboard, background pause and other experiments remain independent
+    ok 5 - keyboard, background pause and other experiments remain independent
+      ---
+      duration_ms: 936.592706
+      type: 'test'
+      ...
+    # Subtest: both modes at seven viewports keep the full plot and all native controls inside the panel
+    ok 6 - both modes at seven viewports keep the full plot and all native controls inside the panel
+      ---
+      duration_ms: 1595.47689
+      type: 'test'
+      ...
+    # Subtest: each required image can fail and retry without automatic playback
+    ok 7 - each required image can fail and retry without automatic playback
+      ---
+      duration_ms: 3494.700528
+      type: 'test'
+      ...
+    # Subtest: late lining image cannot restart or reset a different running comparison
+    ok 8 - late lining image cannot restart or reset a different running comparison
+      ---
+      duration_ms: 1639.449609
+      type: 'test'
+      ...
+    # Subtest: real touch in both modes and motion preferences moves paths and pauses actual curves
+    ok 9 - real touch in both modes and motion preferences moves paths and pauses actual curves
+      ---
+      duration_ms: 11867.797279
+      type: 'test'
+      ...
+    1..9
+ok 2 - 5.2 insulation: controlled comparisons, remaining heat paths and manual observation
+  ---
+  duration_ms: 32608.157182
+  type: 'test'
+  ...
+1..2
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 64333.448693
