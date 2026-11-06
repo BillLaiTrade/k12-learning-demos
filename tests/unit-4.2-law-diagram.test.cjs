@@ -19,8 +19,8 @@ test('4.2 反射定律圖：核可版面、實際調角、光路幾何與靜態�
   await context.route(/\/assets\/(reflection-3d|reversible-light|periscope|mirror-image|mirror-distance|curved-mirrors)\.js/,r=>r.fulfill({contentType:'application/javascript',body:''}));
   const p=await context.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));
   const url=new URL('units/4/parts/4.2/',base).href;
-  await p.goto(url,{waitUntil:'commit'});await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
-  const canvas=p.locator('#laser-reflection-scene');await expect(canvas).toHaveAttribute('data-ready','true',{timeout:60000});
+  await p.goto(url,{waitUntil:'commit'});
+  const canvas=p.locator('#laser-reflection-scene');await expect(canvas).toHaveAttribute('data-ready','true',{timeout:60000});await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
   const geometry=async(page=p,expected)=>{
     const d=await page.locator('.laser-diagram').evaluate(svg=>{
       const numbers=s=>s.match(/-?[\d.]+/g).map(Number),attr=id=>svg.querySelector(id).getAttribute('d');
@@ -40,7 +40,9 @@ test('4.2 反射定律圖：核可版面、實際調角、光路幾何與靜態�
     await p.setViewportSize({width,height:1100});await p.locator('#reflection-law').evaluate(e=>e.scrollIntoView({block:'center',behavior:'instant'}));
     await p.locator('#reflection-law').screenshot({path:path.join(dir,`${width}-concept.png`)});
     assert.equal(await p.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-    await geometry(p,30);layouts.push({width,labels:await inFrame()});
+    const layout=await p.locator('#reflection-law').evaluate(e=>{const svg=e.querySelector('svg'),r=svg.getBoundingClientRect(),m=svg.getScreenCTM(),h=e.querySelector('h3').getBoundingClientRect(),f=e.querySelector('.laser-law').getBoundingClientRect();return{height:e.getBoundingClientRect().height,diagramWidth:r.width,scaleDifference:Math.abs(m.a-m.d),formulaGap:f.left-h.right};});
+    assert.ok(layout.diagramWidth<=560.5);assert.ok(layout.scaleDifference<.001,'圖形必須維持等比例');if(width===1440){assert.ok(layout.height<=480,'概念圖須收緊高度');assert.ok(layout.formulaGap>=0&&layout.formulaGap<=40,'公式應靠近標題');}
+    await geometry(p,30);layouts.push({width,...layout,labels:await inFrame()});
   }
   const native=[];
   for(const [key,angle] of [['Home',20],['ArrowRight',21],['End',90],['ArrowLeft',89]]){
