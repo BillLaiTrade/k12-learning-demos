@@ -1,9 +1,9 @@
-import {initialiseFrontMix} from './mix-lab.mjs?v=mix-drag-focus-20261103';
-import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-clarity-20261104';
-import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays} from './color-model.mjs?v=integrated-eye-20261104';
-import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs?v=filter-paper-20261103';
-import {surfaceObservation} from './surface-model.mjs?v=integrated-eye-20261104';
-import {filterPaperObservation} from './filter-paper-model.mjs?v=integrated-eye-20261104';
+import {initialiseFrontMix} from './mix-lab.mjs?v=science-reviewed-20261106';
+import {initialisePrecisionPrism} from './precision-prism.mjs?v=science-reviewed-20261106';
+import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays} from './color-model.mjs?v=science-reviewed-20261106';
+import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs?v=science-reviewed-20261106';
+import {surfaceObservation} from './surface-model.mjs?v=science-reviewed-20261106';
+import {filterPaperObservation} from './filter-paper-model.mjs?v=science-reviewed-20261106';
 let studioModule=null;
 const text=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};
 const pressed=(root,selector,key)=>root.querySelectorAll(selector).forEach(b=>b.setAttribute('aria-pressed',String(b.getAttribute(selector.slice(1,-1))===key)));
@@ -62,7 +62,7 @@ function initialiseLab(root,index){
     root.dataset.incoming=JSON.stringify(signal.incoming);root.dataset.transmitted=JSON.stringify(signal.transmitted);
     root.dataset.filterAbsorbed=JSON.stringify(signal.filterAbsorbed);root.dataset.paperAbsorbed=JSON.stringify(signal.paperAbsorbed);
     text($('[data-result]'),observation.result);text($('[data-receiver-label]'),observation.preview);
-    text($('[data-comparison-note]'),'三組選項獨立切換；改變一項時，另外兩項保持不變。');
+    text($('[data-comparison-note]'),'先比較通過色片的光，再比較紙張反射後的外觀；改變一項時，另外兩項保持不變。');
    }else{
     condition(root,[['光源','白光固定'],['情境',state.mode==='reflection'?'綠色色卡反射':'綠色色片透射'],['物體到眼睛',state.blocked?'被遮住':'光路暢通']]);
     text($('[data-result]'),state.blocked?'光源與物體沒有改變，但遮光板擋住物體到眼睛的這條光路，因此看不到原本的顏色。':state.mode==='reflection'?'白光照到綠色色卡，反射的光進入眼睛，形成看見綠色的視覺感受。':'白光通過綠色色片，透射的光進入眼睛，形成看見綠色的視覺感受。');
@@ -71,7 +71,7 @@ function initialiseLab(root,index){
     text($('[data-blocker]'),state.blocked?'移開遮光板':'放入遮光板');$('[data-blocker]').setAttribute('aria-pressed',String(state.blocked));
    }
    if(kind==='surface')surfaceChannels(root,observation);
-   else if(kind==='filter')channels(root,[['光源提供的光',signal.incoming],['通過色片的光',signal.transmitted],['紙張反射的光',signal.outgoing]]);
+   else if(kind==='filter')channels(root,[['光源提供的光',signal.incoming],['通過色片的光',signal.transmitted],['紙張反射到眼睛的光',signal.outgoing]]);
    else channels(root,kind==='eye'?[['光源提供',signal.incoming],['離開物體',signal.outgoing],['到達眼睛',signal.received,state.blocked?'這條光路被擋住':channelsText(signal.received)]]:[['照過來的光',signal.incoming],[kind==='filter'?'通過色片':'反射出去',signal.outgoing],['被吸收的部分',signal.absorbed,Math.max(...signal.absorbed)===0?'沒有色光被吸收':channelsText(signal.absorbed)]]);
   }
   for(const[attr,key]of[['data-prism',state.inserted?'in':'out'],['data-light',state.light],['data-material',state.material],['data-filter',state.filter],['data-eye-mode',state.mode]])pressed(root,`[${attr}]`,key);
@@ -102,7 +102,7 @@ function initialiseLab(root,index){
  function fallback(){canvas.hidden=true;diagram.hidden=false;root.dataset.renderer='diagram';$('[data-view]').hidden=true;const note=$('[data-load-note]');note.classList.add('is-fallback');note.hidden=false;text(note,'立體觀察暫時無法使用，這裡改用同一組條件的平面光路示意；操作與近看仍可使用。');}
  async function loadStudio(){
   if(loading||studio)return;loading=true;
-  try{studioModule ||= import('./studio.mjs?v=filter-paper-20261103');const module=await studioModule;studio=module.createStudio(root,{prism(value){state.inserted=value;update();},unavailable:fallback});canvas.hidden=false;diagram.hidden=true;studio.update(state,signal);studio.setView(state.view);root.dataset.renderer='three';}
+  try{studioModule ||= import('./studio.mjs?v=science-reviewed-20261106');const module=await studioModule;studio=module.createStudio(root,{prism(value){state.inserted=value;update();},unavailable:fallback});canvas.hidden=false;diagram.hidden=true;studio.update(state,signal);studio.setView(state.view);root.dataset.renderer='three';}
   catch{fallback();}
  }
  ready(root);update();root.dataset.renderer='diagram';
@@ -111,7 +111,7 @@ function initialiseLab(root,index){
 
 function initialiseQuiz(){
  const root=document.querySelector('.duo-quiz');
- import('./duo-quiz.mjs?v=both-swatches-20261106').then(module=>module.initialiseDuoQuiz(root)).catch(error=>{root.querySelector('[data-duo-load-note]').hidden=false;console.error('4.5 quiz failed',error);});
+ import('./duo-quiz.mjs?v=science-reviewed-20261106').then(module=>module.initialiseDuoQuiz(root)).catch(error=>{root.querySelector('[data-duo-load-note]').hidden=false;console.error('4.5 quiz failed',error);});
 }
 
 document.querySelectorAll('[data-lab]').forEach((root,i)=>{try{initialiseLab(root,i);}catch(error){root.dataset.ready='false';const hint=root.querySelector('[data-load-note]');if(hint){hint.hidden=false;text(hint,'這個互動暫時無法載入，請重新整理後再試；仍可閱讀對話與說明。');}console.error('4.5 lab failed',error);}});

@@ -1,6 +1,6 @@
-import {rgbCss} from './color-model.mjs';
-import {initialiseDuoProbe} from './duo-probe.mjs?v=single-change-20261105';
-import {DUO_LIGHTS as LIGHTS,DUO_FILTERS as FILTERS,QUESTION_FOCUS,PAPER_TYPES,COLOUR_OPTIONS,TRANSMISSION_OPTIONS,REFLECTION_OPTIONS,INITIAL_SERIES,newQuestionSeries,challengeSignal,expectedAnswer,checkPrediction} from './duo-quiz-model.mjs?v=two-predictions-20261106';
+import {rgbCss} from './color-model.mjs?v=science-reviewed-20261106';
+import {initialiseDuoProbe} from './duo-probe.mjs?v=science-reviewed-20261106';
+import {DUO_LIGHTS as LIGHTS,DUO_FILTERS as FILTERS,QUESTION_FOCUS,PAPER_TYPES,COLOUR_OPTIONS,TRANSMISSION_OPTIONS,REFLECTION_OPTIONS,INITIAL_SERIES,newQuestionSeries,challengeSignal,expectedAnswer,checkPrediction} from './duo-quiz-model.mjs?v=science-reviewed-20261106';
 
 const colourName=key=>COLOUR_OPTIONS.find(o=>o[0]===key)?.[1]||key;
 export function challengeDiagram(q,signal,lit){
@@ -62,7 +62,7 @@ root.dataset.lit=String(lit);$('[data-challenge-state]').textContent=lit?'已開
   if(lit)root.dataset.signal=JSON.stringify(signal);else delete root.dataset.signal;
  }
  function fallback(){threeFailed=true;studio?.dispose();studio=null;$('[data-challenge-canvas]').hidden=true;$('[data-duo-fallback]').hidden=false;$('[data-scene-help]').textContent='目前以平面光路示意顯示；可繼續作答、開燈與換題。';root.dataset.renderer='diagram';$('[data-scene-labels]').hidden=true;}
- async function loadStudio(){if(studioLoading||threeFailed||studio)return;studioLoading=true;try{const module=await import('./duo-quiz-studio.mjs?v=single-change-20261105');studio=module.createChallengeStudio($('[data-challenge-canvas]'),{unavailable:fallback,onLabels:placeLabels});$('[data-challenge-canvas]').hidden=false;$('[data-duo-fallback]').hidden=true;root.dataset.renderer='three';studio.update(question,challengeSignal(question),lit);dispatchEvent(new Event('resize'));}catch{fallback();}}
+ async function loadStudio(){if(studioLoading||threeFailed||studio)return;studioLoading=true;try{const module=await import('./duo-quiz-studio.mjs?v=science-reviewed-20261106');studio=module.createChallengeStudio($('[data-challenge-canvas]'),{unavailable:fallback,onLabels:placeLabels});$('[data-challenge-canvas]').hidden=false;$('[data-duo-fallback]').hidden=true;root.dataset.renderer='three';studio.update(question,challengeSignal(question),lit);dispatchEvent(new Event('resize'));}catch{fallback();}}
  function clearExplanation(){const explanation=$('[data-duo-explanation]');explanation.hidden=true;explanation.open=false;$('[data-duo-reason]').textContent='';}
  function invalidate(){const state=attempts[current];state.answer=readAnswer();state.tried=false;renderFeedback();progress();}
  function renderQuestion(){
@@ -105,7 +105,8 @@ root.dataset.lit=String(lit);$('[data-challenge-state]').textContent=lit?'已開
   const icon=document.createElement('span');icon.className='duo-result-symbol';icon.setAttribute('aria-hidden','true');icon.textContent=result.correct?'✓':'!';
   const copy=document.createElement('div'),lead=document.createElement('h4'),detail=document.createElement('p');lead.id='duo-result-title';lead.textContent=result.correct?'兩項預測都符合觀察':`還有 ${incorrect} 項預測，請再比較`;detail.textContent=result.correct?'把你的預測與開燈後的結果比一比。':'對照色塊，找出不同的地方，再修改預測。';copy.append(lead,detail);feedback.append(icon,copy);
   comparisons.append(comparison('transmission','到達紙張的色光',state.answer.transmission,expected.transmission,result.fields.transmission),comparison('colour','紙張的外觀',state.answer.colour,expected.colour,result.fields.colour));
-  $('[data-duo-reason]').textContent=`${question.lights.map(key=>LIGHTS[key].name).join('與')}照過來，${question.filter==='clear'?'直接到達紙張':`經${FILTERS[question.filter].name}後主要透過${TRANSMISSION_OPTIONS.find(o=>o[0]===expected.transmission)[1]}`}；到達${PAPER_TYPES[question.paper].name}的光${expected.reflection==='little'?'只有極少部分被反射':REFLECTION_OPTIONS.find(o=>o[0]===expected.reflection)[1]}，所以看起來${expected.colour==='dark'?'很暗':'呈'+colourName(expected.colour)}。可切到自由試光查證，再修改答案。`;
+  $('[data-duo-reason]').textContent=`${question.lights.map(key=>LIGHTS[key].name).join('與')}照過來，${question.filter==='clear'?'直接到達紙張':`經${FILTERS[question.filter].name}後主要透過${TRANSMISSION_OPTIONS.find(o=>o[0]===expected.transmission)[1]}`}；到達${PAPER_TYPES[question.paper].name}的光${expected.reflection==='little'?'只有極少部分被反射':REFLECTION_OPTIONS.find(o=>o[0]===expected.reflection)[1]}，所以看起來${expected.colour==='dark'?'很暗':'呈'+colourName(expected.colour)}。混光可到自由試光比較；色片與紙張的影響可回第五區比較。`;
+  if(current===4)$('[data-duo-reason]').textContent+=` 與第4題比較：白紙與${PAPER_TYPES[question.paper].name}都較多反射照來的${TRANSMISSION_OPTIONS.find(o=>o[0]===expected.transmission)[1]}，因此不同紙張也可能看起來同色。`;
   $('[data-duo-explanation]').hidden=false;return result;
  }
  form.addEventListener('submit',e=>{

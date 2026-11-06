@@ -1,5 +1,5 @@
-import {MIX_SETUP,footprint} from './mix-optics.mjs';
-import {PRIMARY_KEYS,PROBE_SETUP,COLOUR_OPTIONS,DUO_LIGHTS,PROBE_LINEAR,probeColourName} from './duo-quiz-model.mjs?v=single-change-20261105';
+import {MIX_SETUP,footprint} from './mix-optics.mjs?v=science-reviewed-20261106';
+import {PRIMARY_KEYS,PROBE_SETUP,COLOUR_OPTIONS,DUO_LIGHTS,PROBE_LINEAR,probeColourName} from './duo-quiz-model.mjs?v=science-reviewed-20261106';
 
 // Free probing uses only primary sources; compound sources belong to challenges.
 const LIGHTS=Object.fromEntries(PRIMARY_KEYS.map(key=>[key,DUO_LIGHTS[key]]));
@@ -95,7 +95,7 @@ export function initialiseDuoProbe(root){
  function arrange(kind){const positions={apart:[[.25,.5],[.75,.5]],pairs:[[.4,.5],[.6,.5]],together:[[.5,.5],[.5,.5]]}[kind];lamps.forEach((s,i)=>{s.x=positions[i][0];s.y=positions[i][1];});preset=kind;}
  root.querySelectorAll('[data-probe-preset]').forEach(b=>b.addEventListener('click',()=>{end(true);arrange(b.dataset.probePreset);update();}));
  function fallback(i){studios[i]?.dispose();studios[i]=null;failed.add(i);const b=buttons[i];b.querySelector('img').hidden=false;b.querySelector('canvas').hidden=true;b.dataset.torchRenderer='image';refreshPoses();updateGuide();}
- async function loadTorches(){if(loading||disposed)return;loading=true;try{const module=await import('./torch-studio.mjs?v=duo-free-torches-compound-20261105');if(disposed)return;buttons.forEach((b,i)=>{if(failed.has(i))return;try{const c=b.querySelector('canvas');studios[i]=module.createTorchStudio(c,LIGHTS[lamps[i].colour].torchIndex,{screen:canvas,unavailable(){fallback(i);},ready(){c.hidden=false;b.querySelector('img').hidden=true;b.dataset.torchRenderer='three';refreshPoses();updateGuide();}});studios[i].update(lamps[i],LIGHTS[lamps[i].colour].band);}catch{fallback(i);}});}catch{buttons.forEach((_,i)=>fallback(i));}}
+ async function loadTorches(){if(loading||disposed)return;loading=true;try{const module=await import('./torch-studio.mjs?v=duo-free-torches-science-reviewed-20261106');if(disposed)return;buttons.forEach((b,i)=>{if(failed.has(i))return;try{const c=b.querySelector('canvas');studios[i]=module.createTorchStudio(c,LIGHTS[lamps[i].colour].torchIndex,{screen:canvas,unavailable(){fallback(i);},ready(){c.hidden=false;b.querySelector('img').hidden=true;b.dataset.torchRenderer='three';refreshPoses();updateGuide();}});studios[i].update(lamps[i],LIGHTS[lamps[i].colour].band);}catch{fallback(i);}});}catch{buttons.forEach((_,i)=>fallback(i));}}
  const onBlur=()=>end(true),onVisibility=()=>{if(document.hidden)end(true);};addEventListener('blur',onBlur);document.addEventListener('visibilitychange',onVisibility);
  const resize=new ResizeObserver(()=>{refreshPoses();updateGuide();});resize.observe(scene);resize.observe(canvas);buttons.forEach(b=>resize.observe(b.querySelector('.torch-drawing')));
  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){observer.disconnect();loadTorches();}},{rootMargin:'180px'});observer.observe(scene);

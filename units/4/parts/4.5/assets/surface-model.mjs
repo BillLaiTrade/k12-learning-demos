@@ -1,4 +1,4 @@
-import {LIGHTS,MATERIALS,materialLight,colorName,channelsText} from './color-model.mjs?v=merged-surface-20261103';
+import {LIGHTS,MATERIALS,materialLight,colorName,channelsText} from './color-model.mjs?v=science-reviewed-20261106';
 
 // Both independent controls feed one optical result, used by every observation.
 export function surfaceObservation(light,material){

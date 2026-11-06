@@ -1,5 +1,5 @@
-import {LIGHTS,MATERIALS,FILTERS,PRISM,SCREEN_RANGE,prismRays,rgbCss,wavelengthRgb,linearToSrgb,mixAt,colorName} from './color-model.mjs';
-import {drawFilterPaper,filterPaperDiagram} from './filter-paper-rendering.mjs?v=filter-paper-20261103';
+import {LIGHTS,MATERIALS,FILTERS,PRISM,SCREEN_RANGE,prismRays,rgbCss,wavelengthRgb,linearToSrgb,mixAt,colorName} from './color-model.mjs?v=science-reviewed-20261106';
+import {drawFilterPaper,filterPaperDiagram} from './filter-paper-rendering.mjs?v=science-reviewed-20261106';
 export function rounded(ctx,x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.stroke();}}
 export function drawScreen(canvas,state,close=true){
  const rays=prismRays(state.light,state.inserted),ctx=canvas.getContext('2d'),w=canvas.width,h=canvas.height;

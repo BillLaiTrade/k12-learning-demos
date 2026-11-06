@@ -1,5 +1,5 @@
-import {MATERIALS,FILTERS} from './color-model.mjs';
-import {MIX_SETUP,SOURCE_LINEAR} from './mix-optics.mjs';
+import {MATERIALS,FILTERS} from './color-model.mjs?v=science-reviewed-20261106';
+import {MIX_SETUP,SOURCE_LINEAR} from './mix-optics.mjs?v=science-reviewed-20261106';
 
 export const PROBE_SETUP=MIX_SETUP;
 export const PRIMARY_KEYS=Object.freeze(['red','green','blue']);
@@ -11,7 +11,7 @@ export const DUO_FILTERS=Object.freeze({...FILTERS,yellow:Object.freeze({name:'�
 export function lightComponents(key){return DUO_LIGHTS[key].components.map(c=>DUO_LIGHTS[c].name).join('＋');}
 // Describe the displayed swatch, including unequal mixtures available in free probing.
 export function probeColourName([r,g,b]){const high=Math.max(r,g,b),low=Math.min(r,g,b),delta=high-low;if(high<32)return'很暗';if(delta<24)return low>230?'白色':'灰色';let hue=high===r?((g-b)/delta+6)%6:high===g?(b-r)/delta+2:(r-g)/delta+4;hue*=60;return hue<15||hue>=345?'紅色':hue<45?'橙色':hue<70?'黃色':hue<165?'綠色':hue<195?'青色':hue<265?'藍色':hue<295?'紫色':'洋紅色';}
-export const QUESTION_FOCUS=Object.freeze(['第1步｜兩束原色光照白紙','第1步｜只換一盞燈，觀察混光','第2步｜與第2題比較：加入色片','第2步｜與第3題比較：只換色片','第3步｜與第4題比較：換成彩色紙','第3步｜與第5題比較：只換紙張']);
+export const QUESTION_FOCUS=Object.freeze(['第1步｜兩束原色光照白紙','第1步｜只換一盞燈，觀察混光','第2步｜與第2題比較：加入色片','第2步｜與第3題比較：只換色片','第3步｜與第4題比較：不同紙張一定不同色嗎？','第3步｜與第5題比較：只換紙張']);
 
 export const PAPER_TYPES=Object.freeze({
  red:{name:'紅紙',rgb:MATERIALS.red.rgb,css:'#c54c42'},green:{name:'綠紙',rgb:MATERIALS.green.rgb,css:'#4c9d69'},blue:{name:'藍紙',rgb:MATERIALS.blue.rgb,css:'#467fc1'},
@@ -34,10 +34,15 @@ const SERIES_POOL=Object.freeze(LIGHT_PAIRS.flatMap(lights=>[0,1].flatMap(change
  const first=[...lights];first[changed]=PRIMARY_KEYS.find(key=>!lights.includes(key));
  return[0,1].map(filterIndex=>{const a=lights[filterIndex],b=lights[1-filterIndex];return Object.freeze([findQuestion(first,'clear','white'),findQuestion(lights,'clear','white'),findQuestion(lights,a,'white'),findQuestion(lights,b,'white'),findQuestion(lights,b,b),findQuestion(lights,b,a)]);});
 })));
+// A/B source order does not change the uniformly illuminated paper's condition.
+export const questionConditionKey=q=>[...q.lights].sort().join('-')+'/'+q.filter+'/'+q.paper;
+const PHYSICAL_SERIES=[...new Map(SERIES_POOL.map(series=>[series.map(questionConditionKey).join(';'),series])).values()];
 export function newQuestionSeries(random=Math.random,previous=[]){
- const used=new Set(previous.map(q=>q.id)),fresh=SERIES_POOL.filter(series=>series.every(q=>!used.has(q.id)));
- const options=fresh.length?fresh:SERIES_POOL.filter(series=>series.some((q,i)=>q.id!==previous[i]?.id));
- return [...options[Math.max(0,Math.min(options.length-1,Math.floor(random()*options.length)))]];
+ const used=new Set(previous.map(questionConditionKey));
+ const scored=PHYSICAL_SERIES.map(series=>({series,repeats:series.filter(q=>used.has(questionConditionKey(q))).length}));
+ const least=Math.min(...scored.map(entry=>entry.repeats)),options=scored.filter(entry=>entry.repeats===least);
+ // Two pairs drawn from three mixtures necessarily share one baseline question.
+ return [...options[Math.max(0,Math.min(options.length-1,Math.floor(random()*options.length)))].series];
 }
 
 // Add the two source components before the filter and paper select from them.

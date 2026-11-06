@@ -1,4 +1,4 @@
-import {LIGHTS,FILTERS,MATERIALS,filterLight,colorName,channelsText} from './color-model.mjs';
+import {LIGHTS,FILTERS,MATERIALS,filterLight,colorName,channelsText} from './color-model.mjs?v=science-reviewed-20261106';
 
 // Two successive selections of the SAME incident light; no new colour is added.
 export function filterPaperLight(light,filter,paper){
@@ -11,7 +11,7 @@ export function filterPaperLight(light,filter,paper){
 export const paperName=key=>MATERIALS[key].name.replace('色色卡','紙');
 export function filterPaperObservation(light,filter,paper){
  const signal=filterPaperLight(light,filter,paper),name=paperName(paper),appearance=colorName(signal.outgoing);
- const prefix=`${LIGHTS[light].name}通過${FILTERS[filter].name}後，再照到${name}`;
+ const prefix=filter==='clear'?`未放色片，${LIGHTS[light].name}直接照到${name}`:`${LIGHTS[light].name}通過${FILTERS[filter].name}後，再照到${name}`;
  let result;
  if(Math.max(...signal.transmitted)<.045)result=`${prefix}；色片透過的光已很少，紙張反射進入眼睛的光更少，所以看起來很暗。`;
  else if(Math.max(...signal.outgoing)<.045)result=`${prefix}；${name}對透過的${channelsText(signal.transmitted)}光反射很少，進入眼睛的光也少，所以看起來很暗。`;

@@ -29,3 +29,5 @@ test('無色片不吸收、黑紙仍保留少量反射，輸入陣列互不共�
  const s=filterPaperLight('white','clear','black');assert.deepEqual(s.incoming,[1,1,1]);assert.deepEqual(s.transmitted,[1,1,1]);assert.deepEqual(s.filterAbsorbed,[0,0,0]);assert.deepEqual(s.outgoing,[.012,.012,.012]);
  s.incoming[0]=0;assert.equal(s.transmitted[0],1);assert.equal(filterPaperLight('white','clear','white').incoming[0],1);
 });
+
+test('不放色片時描述直接照紙，不把沒有色片說成穿過無色透明片',()=>{for(const light of lights){const result=filterPaperObservation(light,'clear','white').result;assert.match(result,/未放色片.*直接照到白紙/);assert.doesNotMatch(result,/通過.*色片/);}});
