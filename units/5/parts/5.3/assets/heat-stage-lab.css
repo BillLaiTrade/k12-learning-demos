@@ -28,8 +28,6 @@
 #heat-stage-points circle{fill:#276d49;stroke:#fff;stroke-width:1}
 #heat-stage-live{fill:#e57a25;stroke:#fff9e9;stroke-width:2}
 #heat-stage-halo{fill:#e98b32;opacity:.18}
-#heat-stage-tooltip{pointer-events:none}#heat-stage-tooltip rect{fill:#fffcf1;stroke:#df8635;stroke-width:1}
-#heat-lab #heat-stage-tooltip text{font-size:15px;fill:#3a563f}
 #heat-lab #heat-stage-graph-note{font-size:.875rem;color:#647660;line-height:1.6;margin:0;padding:0 12px 10px}
 #heat-lab .heat-bench-console{padding:11px 14px;background:#f7f1e5;border-color:#ded4be}
 .heat-stage-readings{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px 16px;font-size:1rem}

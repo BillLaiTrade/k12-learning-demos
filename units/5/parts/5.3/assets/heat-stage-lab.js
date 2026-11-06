@@ -36,7 +36,7 @@ function graph(){
     const {left,right,top,bottom,maximum}=geometry,x=q=>left+q/maximum*(right-left),y=r=>bottom-r/(maximum/100)*(bottom-top);
     const ticks=Array.from({length:5},(_,i)=>maximum*i/4);
     svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.style.height=height+'px';
-    svg.innerHTML=`<g class="heat-stage-grid">${ticks.map((q,i)=>`<path d="M${left} ${y(q/100)}H${right}"/><path d="M${x(q)} ${top}V${bottom}"/>${side>=260||i%2===0?`<text x="${left-8}" y="${y(q/100)+5}" text-anchor="end">${axisNumber(q/100)}</text><text x="${x(q)}" y="${bottom+23}" text-anchor="${q===maximum?'end':q===0?'start':'middle'}">${axisNumber(q)}</text>`:''}`).join('')}</g><path class="heat-stage-axes" d="M${left} ${top-6}V${bottom}H${right+5}"/><text x="4" y="18" class="heat-stage-axis-title">溫升 ΔT（°C）</text><text x="${right}" y="${height-3}" text-anchor="end" class="heat-stage-axis-title">水吸收熱量 Q（cal）</text><path id="heat-stage-line" d="M${left} ${bottom}L${right} ${top}"/><g id="heat-stage-points"></g><circle id="heat-stage-halo" r="13"/><circle id="heat-stage-live" r="6"/><g id="heat-stage-tooltip"><rect width="142" height="48" rx="8"/><text x="10" y="19" id="heat-stage-tip-heat"></text><text x="10" y="39" id="heat-stage-tip-rise"></text></g>`;
+    svg.innerHTML=`<g class="heat-stage-grid">${ticks.map((q,i)=>`<path d="M${left} ${y(q/100)}H${right}"/><path d="M${x(q)} ${top}V${bottom}"/>${side>=260||i%2===0?`<text x="${left-8}" y="${y(q/100)+5}" text-anchor="end">${axisNumber(q/100)}</text><text x="${x(q)}" y="${bottom+23}" text-anchor="${q===maximum?'end':q===0?'start':'middle'}">${axisNumber(q)}</text>`:''}`).join('')}</g><path class="heat-stage-axes" d="M${left} ${top-6}V${bottom}H${right+5}"/><text x="4" y="18" class="heat-stage-axis-title">溫升 ΔT（°C）</text><text x="${right}" y="${height-3}" text-anchor="end" class="heat-stage-axis-title">水吸收熱量 Q（cal）</text><path id="heat-stage-line" d="M${left} ${bottom}L${right} ${top}"/><g id="heat-stage-points"></g><circle id="heat-stage-halo" r="13"/><circle id="heat-stage-live" r="6"/>`;
     pointsKey='';
   }
   const {left,right,top,bottom,maximum}=geometry,x=q=>left+q/maximum*(right-left),y=r=>bottom-r/(maximum/100)*(bottom-top);
@@ -48,11 +48,6 @@ function graph(){
     const node=get(id);node.setAttribute('cx',x(state.waterCalories));node.setAttribute('cy',y(state.rise));
     node.dataset.heat=String(state.waterCalories);node.dataset.rise=String(state.rise);
   }
-  const tip=get('heat-stage-tooltip'),tipWidth=Math.min(180,right-left-8);tip.style.display=example?'none':'';
-  tip.querySelector('rect').setAttribute('width',tipWidth);
-  tip.setAttribute('transform',`translate(${Math.max(left+4,Math.min(right-tipWidth,x(state.waterCalories)-110))} ${Math.max(top+4,y(state.rise)-63)})`);
-  get('heat-stage-tip-heat').textContent=`已吸收 ${number(state.waterCalories)} cal`;
-  get('heat-stage-tip-rise').textContent=`溫升 ${state.rise.toFixed(1)}°C`;
   svg.dataset.mode=example?'example':'observation';svg.dataset.maximum=String(maximum);
   svg.setAttribute('aria-label',`100g水的關係直線已完整顯示，從0到吸熱${axisNumber(target)}cal、溫升${axisNumber(target/100)}°C。橘點目前在吸熱${number(state.waterCalories)}cal、溫升${state.rise.toFixed(1)}°C；加熱時沿直線向右上方移動。`);
 }
