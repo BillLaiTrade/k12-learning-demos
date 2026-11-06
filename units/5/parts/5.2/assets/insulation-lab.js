@@ -11,6 +11,33 @@
   };
   const assets={bench:{src:$('insulation-bench').dataset.src,status:'idle',request:0},matte:{src:'assets/insulation-flask-matte.webp?v=flask-1',status:'idle',request:0},lining:{src:'assets/insulation-flask-lining.webp?v=flask-1',status:'idle',request:0}};
   let comparison='gap',time=0,playing=false,frame=0,previous=null;
+  const workspace=$('insulation-workspace'),dialog=$('insulation-dialog'),expand=$('insulation-expand');
+  const placeholder=document.createElement('div');placeholder.hidden=true;placeholder.setAttribute('aria-hidden','true');
+  workspace.before(placeholder);
+  let readingPosition;
+  function fitBottles(){
+    if(!dialog.open||innerWidth<900){workspace.style.removeProperty('--insulation-canvas-height');return;}
+    const grid=root.querySelector('.insulation-bottle-grid'),style=getComputedStyle(grid);
+    const width=(grid.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight)-parseFloat(style.columnGap))/2;
+    const captions=[...grid.querySelectorAll('figcaption')].map(n=>n.getBoundingClientRect().height);
+    const height=grid.clientHeight-parseFloat(style.paddingTop)-parseFloat(style.paddingBottom)-Math.max(...captions);
+    const value=Math.max(1,Math.min(height,width*570/440)).toFixed(2)+'px';
+    if(workspace.style.getPropertyValue('--insulation-canvas-height')!==value)workspace.style.setProperty('--insulation-canvas-height',value);
+  }
+  new ResizeObserver(fitBottles).observe(root.querySelector('.insulation-bottle-grid'));
+  expand.addEventListener('click',()=>{
+    if(dialog.open)return;
+    readingPosition={left:scrollX,top:scrollY};
+    placeholder.style.height=workspace.getBoundingClientRect().height+'px';placeholder.hidden=false;
+    dialog.append(workspace);document.documentElement.classList.add('insulation-focus-open');dialog.showModal();fitBottles();
+  });
+  $('insulation-return').addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('close',()=>{
+    placeholder.after(workspace);placeholder.hidden=true;
+    document.documentElement.classList.remove('insulation-focus-open');
+    expand.focus({preventScroll:true});if(readingPosition)scrollTo({...readingPosition,behavior:'instant'});
+  });
+  expand.disabled=false;
   const WINDOW=14,gasPath=$('insulation-gas-route'),gasLength=gasPath.getTotalLength(),gasArrows=[...root.querySelectorAll('.insulation-gas-arrow')];
   const setText=(id,text)=>{const n=$(id);if(n.textContent!==text)n.textContent=text;};
   const required=()=>comparison==='lining'?['bench','matte','lining']:['bench','matte'];
@@ -21,6 +48,7 @@
   function ordinate(role,p){return Math.exp(-(role==='a'?3.2:1.5)*p);}
   function plot(){
     const p=Math.min(1,time/WINDOW);root.dataset.progress=p.toFixed(4);
+    $('insulation-progress').value=p;
     ['a','b'].forEach(role=>{
       const ps=[];for(let x=0;x<p;x+=.012)ps.push(x);ps.push(p);
       const d=ps.map((x,i)=>`${i?'L':'M'}${(72+783*x).toFixed(2)} ${(224-179*ordinate(role,x)).toFixed(2)}`).join('');

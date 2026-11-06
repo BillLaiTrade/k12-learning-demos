@@ -1,0 +1,161 @@
+{
+  "base": "a63f1fa483ea1434d15498c7bf3055f1167652d1",
+  "checks": [
+    {
+      "section": "card-01",
+      "unchanged": true,
+      "sha256": "4103aa91beadacd1065da7e164c31f1f07b26439b5c28278590a48f7d7181404"
+    },
+    {
+      "section": "card-02",
+      "unchanged": true,
+      "sha256": "e293b2e3337b820fb3320879db747b3125524c4946be7f0601bb1d136f91fe9a"
+    },
+    {
+      "section": "card-03",
+      "unchanged": true,
+      "sha256": "4463d49adf3293050328ed3ba57ed6b376c6f57a13c012d662d76d8f4bec6f3d"
+    },
+    {
+      "section": "card-04",
+      "unchanged": true,
+      "sha256": "a0d523be9f59d781b59ea895f19f5dd1788aefd7cb052be578c71bdab501e258"
+    },
+    {
+      "section": "card-05",
+      "unchanged": true,
+      "sha256": "17dd2e06fe8fd626199c286f6bebcccb52bdafe2e5cb0c9c7fd774ac075f2d23"
+    },
+    {
+      "section": "unit-quiz",
+      "unchanged": true,
+      "sha256": "1e12929a7c197a714ca0c9245d6e28734442602f66627aba37f35b26327d429d"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/conduction-metal.webp",
+      "unchanged": true,
+      "sha256": "a0e3a8e434e296db88ea2cc687b917172d6c1b151ff4476200c22cb4af850638"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/conduction-wood.webp",
+      "unchanged": true,
+      "sha256": "bd5283eeef753a7fed27d430b434e0cd95d8b9dbc6b9f76530378e72741f50d0"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-fridge-glass.webp",
+      "unchanged": true,
+      "sha256": "2a68c0f946cbaca64af1976c3eb82e878c3b0ca3d8f1fca9a8c6f65614c8fa29"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-fridge.webp",
+      "unchanged": true,
+      "sha256": "75d7f6254847f204f320ddd80b149fbb8794588714e4c0572abe223a0563602c"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-hot-glass.webp",
+      "unchanged": true,
+      "sha256": "1400b3164728ebed4d3cbf6313d7c55034d401d54e0d33ba4f9093715cfeebcf"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-hot.webp",
+      "unchanged": true,
+      "sha256": "bd9f202363fc69dc1b9baa743134fc510c97134559d18eb7c32421f102d2a7c2"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-room-glass.webp",
+      "unchanged": true,
+      "sha256": "d2cbf87afe98ee9309479cf558a6a4451f11eaf7d127757877743911a32c7c0b"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-room.webp",
+      "unchanged": true,
+      "sha256": "98711e77bf4f921074d7fbbcede9a9cce8ec29fcef0bfac203812245fe7db373"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/balance-meter.webp",
+      "unchanged": true,
+      "sha256": "faf2babe9925ad9094e6c335eec4ecf87a568ce3ec5a8fedc4fe38c62f65d22a"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/convection-air.webp",
+      "unchanged": true,
+      "sha256": "aaa9e3b5551c751232740a4330762f3d37d6321a9741eaba3d07a4730a52e38b"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/radiation-space.webp",
+      "unchanged": true,
+      "sha256": "cbed2741f9ad2af97df174ea610a92d2eb2d3b0b69eb31da7ac92735c774846d"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/insulation-flask-lining.webp",
+      "unchanged": true,
+      "sha256": "6a3fac5ddbb3dd6b7fa1e8633cb5c518d106f211458df08681ecbd5579df10bf"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/insulation-flask-matte.webp",
+      "unchanged": true,
+      "sha256": "dae1dd6022b2b9ae94434b39857a343e16dc0291fa34d7548e284d547df4b76b"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/balance-bench.webp",
+      "unchanged": true,
+      "sha256": "c71fba4f85730cdf2d0e09051f491d82ddd5eaa6e8394157b2973e230b01019b"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/convection-water.webp",
+      "unchanged": true,
+      "sha256": "52f072c30f97224950fd410496e9dffbecadf899f5a6aa27d4f2b1ae4002cd06"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/radiation-ground.webp",
+      "unchanged": true,
+      "sha256": "423c821c78e72bb621fe0a5b01f9767526c79a6b3b84187722eac777d51fbba6"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/insulation-bench.webp",
+      "unchanged": true,
+      "sha256": "cf18aaef88f2aade07bcd67dfdea000ed80dd6e9bef8e354042cb12d6c15a601"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/balance-aluminum.webp",
+      "unchanged": true,
+      "sha256": "45c1eb9f20f692cd8fe5475857e1e8045cb8893b1d31dad9ba09dd1fbb204601"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/balance-aluminum-contact.webp",
+      "unchanged": true,
+      "sha256": "dd8ab523e165cc21e7fb6bdc53d45e313322aaa44c2697fecd0d24ba95e4477f"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/heat-transfer.js",
+      "unchanged": true,
+      "sha256": "d817b7342824cd69d4d0cbbb7edfeb544a0796a7f5014573c35b1e412cf8c425"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/convection-lab.js",
+      "unchanged": true,
+      "sha256": "a8c0c3b49d11cd3843b2febf00aee67cc3c8812e2e94afd0a526f79267fc8dc2"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/radiation-lab.js",
+      "unchanged": true,
+      "sha256": "22aa65007beee889a7730b2cb0181ac769adb43b8a23773d879c56903f9a00f6"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/balance-model.mjs",
+      "unchanged": true,
+      "sha256": "586e2b9623fa858c228472f6e60eeb4e8fb164a04111ce495bb88c9451925bad"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/conduction-model.mjs",
+      "unchanged": true,
+      "sha256": "26b46a37d60a10a7a4ed8ed116231aef6643f9dbb5fa45005d2ffe44da1dfa10"
+    },
+    {
+      "path": "units/5/parts/5.2/assets/direction-lab.js",
+      "unchanged": true,
+      "sha256": "fcdd370f631f0051162843fad9becf92ff647f900d7050c99975e7ef21d84754"
+    }
+  ],
+  "approvedMockupSha256": "aaf584027e478b0888baf61712911716e6ad5ec16e009e0d262f85221dd1d36f"
+}

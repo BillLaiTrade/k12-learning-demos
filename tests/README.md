@@ -1684,3 +1684,13 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-insulation.test.cjs
 `unit-4.2-completion.test.cjs`現檢查新順序「表面反射→反射定律→光路可逆→平面鏡虛像→物距像距→曲面鏡」。導覽、標題、編號與閱讀進度逐一對應；新增原生鍵盤調整第二區後承接新第三區角度，雙光源切換／重設，以及第四至第六區器材綁定與操作檢查。既有距離及WebGL備援斷言同步新編號。光學模型與各活動內容不因排序改變。
 
 本輪全頁針對性命令：`CHROMIUM_PATH=/usr/bin/chromium node --test --test-skip-pattern='入口、|第一區實際|潛望鏡素材' tests/unit-4.2-completion.test.cjs`；卡片樣式及窄版導覽另以既有4.1格式對照檢查。
+
+## 5.2 第六區同屏觀察（2026-11-06）
+
+```sh
+CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-5.2-insulation-workspace.test.cjs tests/unit-5.2-insulation.test.cjs
+```
+
+新workspace套件8項（含外層），與原保溫10項合計18項。桌機四種視窗×兩模式確認主畫面不捲動、瓶體等比例且不重疊／裁切、標註與曲線完整可見；另測原生dialog進出／Escape、課文位置與焦點恢復、背景不可聚焦、重開保留比較／進度、完成曲線仍保留傳熱、唯讀進度／重來及390／320px原生觸控。手機採縱向可讀排版，允許dialog內捲動。
+
+`INSULATION_WORKSPACE_CAPTURE`保存各尺寸實際畫面與measurements.json；`INSULATION_LAB_URL`沿用原套件設定，可指定公開頁面。原保溫套件繼續涵蓋傳熱邊界、停續、錯誤／延遲素材、手機動態偏好及其他區塊／小測代表回歸。未變更的其他區塊以逐字保留核對為依據，不把這兩套描述為5.2整頁正式驗收。
