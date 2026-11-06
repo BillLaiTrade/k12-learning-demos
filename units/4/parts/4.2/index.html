@@ -202,11 +202,11 @@
               <section class="laser-lab" aria-label="可調整入射角的雷射反射實驗">
                 <canvas id="laser-reflection-scene" tabindex="0" role="slider" aria-label="調整入射角。使用方向鍵每次調整一度，Home 和 End 可快速調整至 20 度或 90 度。" aria-valuemin="20" aria-valuemax="90" aria-valuenow="30" aria-valuetext="入射角 30 度，反射角 30 度" aria-describedby="laser-drag-instruction"></canvas>
                 <div class="laser-lab-ui" aria-label="雷射角度操作與讀數">
-                  <p class="laser-view-current" id="laser-drag-instruction">反射板角度視角・拖動雷射即可調整入射角；也可聚焦畫面後使用方向鍵微調</p>
+                  <p class="laser-view-current" id="laser-drag-instruction">拖動雷射調整角度；也可聚焦畫面後用方向鍵微調。</p>
                   <div class="laser-angle-readout"><span>入射角 <strong id="lab-angle-in">30°</strong></span><span>反射角 <strong id="lab-angle-out">30°</strong></span></div>
                 </div>
               </section>
-              <p class="laser-observation" id="angle-observation" aria-live="polite">入射角和反射角都是 30°。拖動雷射，觀察反射光方向如何改變。</p>
+              <p class="laser-observation" id="angle-observation" aria-live="polite">入射角和反射角一樣大。</p>
             </div>
           </div>
         </section>
@@ -498,7 +498,7 @@
   <script type="module" src="assets/mirror-image.js?v=distance-segment-light-20261106"></script>
   <script type="module" src="assets/reflection-3d.js?v=flashlight-controls-20261106"></script>
   <script type="module" src="assets/surface-directions.js?v=surface-flow-20261105"></script>
-  <script type="module" src="assets/laser-reflection.js?v=compact-20261106"></script>
+  <script type="module" src="assets/laser-reflection.js?v=angle-copy-20261106"></script>
   <script type="module" src="assets/reversible-light.js?v=compact-workspace-20261106"></script>
   <script type="module" src="assets/periscope.js?v=one-activity-20261106"></script>
 </body>

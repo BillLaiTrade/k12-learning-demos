@@ -89,7 +89,6 @@ function update() {
   document.querySelector('#lab-angle-out').textContent = `${deg}°`;
   canvas.setAttribute('aria-valuenow', String(deg));
   canvas.setAttribute('aria-valuetext', `入射角 ${deg} 度，反射角 ${deg} 度`);
-  document.querySelector('#angle-observation').textContent = `發射器轉到 ${deg}°；觀察反射光方向如何改變，入射角與反射角始終相等。`;
   renderer.render(scene, camera);
   const bodyCenter = source.clone().addScaledVector(sourceDirection, -1.2).project(camera);
   canvas.dataset.emitterScreen = JSON.stringify([(bodyCenter.x + 1) * canvas.clientWidth / 2, (1 - bodyCenter.y) * canvas.clientHeight / 2]);
