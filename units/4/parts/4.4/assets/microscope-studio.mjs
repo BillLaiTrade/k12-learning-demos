@@ -1,4 +1,4 @@
-import {specimenGraphic as symbol} from './microscope-specimen.mjs?v=20261106-micro-flow-controls20';
+import {specimenGraphic as symbol} from './microscope-specimen.mjs?v=20261106-micro-same-colors21';
 import {microscopeGeometry} from './microscope-optics.mjs';
 const root=document.querySelector('#microscope-lab');
 if(root){
@@ -104,7 +104,7 @@ if(root){
   $('.micro-compare-note').textContent='草履蟲玻片・方向比較';
   $('[data-micro-before-label]').textContent=ocularStep?'同一個中間像':'玻片上的草履蟲';
   $('[data-micro-after-label]').textContent=first?'中間實像':'最後看見的虛像';
-  $('[data-micro-before]').innerHTML=symbol(100,115,ocularStep?64:38,ocularStep);
+  $('[data-micro-before]').innerHTML=symbol(100,115,ocularStep?64:38,ocularStep,ocularStep?'real':'original');
   $('[data-micro-before]').setAttribute('aria-label',ocularStep?'同一草履蟲的中間像：較圓端朝下，口溝在左':'玻片上的草履蟲：較圓端朝上，口溝在右');
   $('[data-micro-preview]').innerHTML=symbol(100,115,first?64:90,true,first?'real':'virtual');
   $('[data-micro-preview]').setAttribute('aria-label',first?'草履蟲的中間實像：較圓端朝下、口溝在左，倒立、放大':'透過目鏡看到的草履蟲虛像：較圓端仍朝下、口溝仍在左，進一步放大');
@@ -145,10 +145,10 @@ if(root){
   if(!inWorkspace||inContext||e.target.matches('.micro-workspace,.micro-concepts,.micro-tools,.micro-trace,.micro-stage,.micro-labels,canvas[data-micro-model],#microscope-scene'))showWhole();
  });
  new ResizeObserver(render).observe($('.micro-stage'));
- $('[data-micro-a-symbol]').innerHTML=symbol(50,50,40,true);
+ $('[data-micro-a-symbol]').innerHTML=symbol(50,50,40,true,'real');
  $('[data-micro-node-original]').innerHTML=symbol(50,64,36,false);
- $('[data-micro-node-real]').innerHTML=symbol(50,64,48,true);
+ $('[data-micro-node-real]').innerHTML=symbol(50,64,48,true,'real');
  $('[data-micro-node-virtual]').innerHTML=symbol(50,64,58,true,'virtual');
  render();
- import('./microscope-model.mjs?v=20261106-micro-flow-controls20').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
+ import('./microscope-model.mjs?v=20261106-micro-same-colors21').then(({createMicroscopeModel})=>{try{model=createMicroscopeModel($('[data-micro-model]'),render);root.dataset.microRender='3d';render();}catch{root.dataset.microRender='fallback';}}).catch(()=>{root.dataset.microRender='fallback';});
 }

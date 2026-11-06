@@ -70,11 +70,14 @@ test('顯微鏡立體剖面、精簡標示與備用畫面',{timeout:180000},asyn
   await r.locator('[data-micro-node=eye]').click();await r.locator('.micro-concepts').click({position:{x:2,y:2}});assert.equal(await r.getAttribute('data-view'),'whole');
   assert.equal(await r.getAttribute('data-point'),'bottom');assert.equal(await r.getAttribute('data-rays'),'false');await r.locator('[data-micro-reset]').click();
  });
- await t.test('實像與虛像的輪廓及填色不同，圖例貼合文字高度',async()=>{
+ await t.test('實像虛像保留相同標本，以外框區分，圖例貼合文字高度',async()=>{
   await r.locator('[data-micro-reset]').click();
   const real=r.locator('[data-micro-node-real] [data-specimen-body]'),virtual=r.locator('[data-micro-node-virtual] [data-specimen-body]');
-  assert.equal(await real.getAttribute('stroke-dasharray'),null);assert.equal(await virtual.getAttribute('stroke-dasharray'),'8 5');assert.notEqual(await real.getAttribute('fill'),await virtual.getAttribute('fill'));
-  await r.locator('[data-micro-node=eye]').click();assert.equal(await r.locator('[data-micro-preview] [data-micro-specimen]').getAttribute('data-image-kind'),'virtual');assert.equal(await r.locator('[data-micro-before] [data-micro-specimen]').getAttribute('data-image-kind'),'real');
+  assert.equal(await real.getAttribute('stroke-dasharray'),null);assert.equal(await virtual.getAttribute('stroke-dasharray'),null);assert.equal(await real.getAttribute('fill'),await virtual.getAttribute('fill'));
+  const specimen=selector=>r.locator(selector+' [data-micro-specimen]').evaluate(e=>[...e.children].filter(n=>!n.hasAttribute('data-micro-image-frame')).map(n=>n.outerHTML));
+  assert.deepEqual(await specimen('[data-micro-node-real]'),await specimen('[data-micro-node-virtual]'));
+  assert.equal(await r.locator('[data-micro-node-real] [data-micro-image-frame]').getAttribute('stroke-dasharray'),null);assert.equal(await r.locator('[data-micro-node-virtual] [data-micro-image-frame]').getAttribute('stroke-dasharray'),'12 9');
+  await r.locator('[data-micro-node=eye]').click();assert.equal(await r.locator('[data-micro-preview] [data-micro-specimen]').getAttribute('data-image-kind'),'virtual');assert.equal(await r.locator('[data-micro-before] [data-micro-specimen]').getAttribute('data-image-kind'),'real');assert.deepEqual(await specimen('[data-micro-before]'),await specimen('[data-micro-preview]'));
   const color=await r.locator('[data-micro-frame=eyepiece]').evaluate(e=>getComputedStyle(e).backgroundColor);assert.match(color,/255, 242, 223/);
   const key=await r.locator('.micro-key').evaluate(e=>({height:e.getBoundingClientRect().height,pad:parseFloat(getComputedStyle(e).paddingTop)+parseFloat(getComputedStyle(e).paddingBottom)}));assert.ok(key.height<50,JSON.stringify(key));assert.equal(key.pad,10);await r.locator('[data-micro-reset]').click();
  });

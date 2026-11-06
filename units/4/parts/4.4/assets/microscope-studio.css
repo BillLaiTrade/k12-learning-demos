@@ -270,5 +270,4 @@ button.micro-process-node:hover { background:#fff6e7; filter:none; }
 }
 
 .micro-context { background:#fffdf5; }
-.micro-node-kind-virtual { color:#617ba0; }
-.micro-viewer .micro-badge[data-image-kind=virtual] { background:#e5eaf7; color:#425e81; outline:1px dashed #8397b3; outline-offset:-1px; }
+.micro-viewer .micro-badge[data-image-kind=virtual] { background:#f4e2ad; color:#5a491f; outline:1px dashed #8f7a43; outline-offset:-1px; }
