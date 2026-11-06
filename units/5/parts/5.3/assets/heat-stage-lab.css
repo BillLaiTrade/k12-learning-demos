@@ -15,21 +15,17 @@
 #heat-lab .calorie-meter-screen{left:74.439%;top:58.15%;width:19.602%;height:10.65%;font-size:clamp(15px,4.7cqi,22px);gap:0;letter-spacing:-.08em}
 #heat-lab .calorie-heater{left:52.1316%;top:80.13%;width:max(44px,10.692%);min-height:44px;aspect-ratio:1}
 #heat-lab .calorie-heater-light{left:41.8122%;top:79.7%;width:1.701%}
-#heat-lab .calorie-photo-label{left:35%;top:34.7%;font-size:.9rem;padding:3px 5px}
 #heat-lab .heat-knob-hint{display:none}
 #heat-lab .heat-stage-plot{position:static;transform:none;width:auto;max-width:none;margin:0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;min-width:0}
 .heat-stage-plot-heading{display:flex;align-items:center;gap:6px 8px;flex-wrap:wrap}
 #heat-lab .heat-stage-plot h4{font-size:1rem;font-weight:750;margin:0;color:#254b36}
 #heat-stage-mode{display:inline-flex;align-items:center;min-height:26px;padding:1px 7px;border:1px solid #cbdcc4;border-radius:6px;background:#edf5e7;font-size:.875rem;font-weight:600;line-height:1.4;white-space:nowrap;color:#315b3c}
-#heat-stage-mode.is-example{border-color:#ddcfb1;background:#fff8e9;color:#765e33}
 #heat-stage-graph{display:block;width:100%;overflow:visible}
 #heat-lab #heat-stage-graph text{font:16px var(--unit-font);fill:#284d35}
 .heat-stage-grid path{fill:none;stroke:#dce5d7;stroke-width:1}
 .heat-stage-axes{fill:none;stroke:#315c43;stroke-width:1.5}
 #heat-stage-line{fill:none;stroke:#26724d;stroke-width:2.5}
-#heat-stage-line.is-example{stroke:#8b9b83;stroke-dasharray:5 5}
 #heat-stage-points circle{fill:#276d49;stroke:#fff;stroke-width:1}
-#heat-stage-points circle.is-example{fill:#f8fbf5;stroke:#8b9b83}
 #heat-stage-live{fill:#e57a25;stroke:#fff9e9;stroke-width:2}
 #heat-stage-halo{fill:#e98b32;opacity:.18}
 #heat-stage-tooltip{pointer-events:none}#heat-stage-tooltip rect{fill:#fffcf1;stroke:#df8635;stroke-width:1}

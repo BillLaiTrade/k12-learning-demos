@@ -1,0 +1,144 @@
+▶ 5.3 共通格式、導覽連動與原有活動回歸
+  ✔ 靜態 HTML 的標題、摘要、分享圖及入口一致，不依賴 JS (99.953302ms)
+  ✔ 五區導覽標題連動；小測固定名稱、共通樣式及活動說明同步 (674.779923ms)
+  ✔ 五區均為上標頭下內容；三種桌機與兩種窄版可完整閱讀 (145.107975ms)
+  ✔ 第一區 100 g 水升溫、完成後介紹卡，重新觀察同步清除結果 (2021.554363ms)
+  ✖ 第二、三區自動記錄，原材料比較與生活應用保持 (30007.416006ms)
+  ✖ 新小測可觀察、推算與重答；無載入或程式錯誤 (3045.403588ms)
+✖ 5.3 共通格式、導覽連動與原有活動回歸 (37696.376999ms)
+▶ 5.3第二區：自由熱量、連續亮點、沿途記錄與常態公式
+  ✖ 未操作能閱讀示例與下方公式，器材及本次讀值仍為初始狀態 (33.899717ms)
+  ✖ 完整直線始終不變，亮點連續沿線前進；LCD／讀值／座標同源，十點後到目標停熱 (30053.675885ms)
+  ✖ 任意750／1500／750.5及邊界熱量從20°C重做，小數終點與座標尺度正確 (30007.999534ms)
+
+Interrupted while running:
+
+⚠ tests/unit-5.3-heat-stage-lab.test.cjs (tests/unit-5.3-heat-stage-lab.test.cjs:1:1)
+✖ tests/unit-5.3-heat-stage-lab.test.cjs (82206.78322ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 4
+ℹ fail 6
+ℹ cancelled 1
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 82217.099626
+
+✖ failing tests:
+
+test at tests/unit-5.3-format.test.cjs:110:11
+✖ 第二、三區自動記錄，原材料比較與生活應用保持 (30007.416006ms)
+  locator.click: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('#heat-stage-play')[22m
+  [2m    - locator resolved to <button disabled type="button" class="action" id="heat-stage-play">開始加熱</button>[22m
+  [2m  - attempting click action[22m
+  [2m    2 × waiting for element to be visible, enabled and stable[22m
+  [2m      - element is not enabled[22m
+  [2m    - retrying click action[22m
+  [2m    - waiting 20ms[22m
+  [2m    2 × waiting for element to be visible, enabled and stable[22m
+  [2m      - element is not enabled[22m
+  [2m    - retrying click action[22m
+  [2m      - waiting 100ms[22m
+  [2m    58 × waiting for element to be visible, enabled and stable[22m
+  [2m       - element is not enabled[22m
+  [2m     - retrying click action[22m
+  [2m       - waiting 500ms[22m
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-format.test.cjs:112:44)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-format.test.cjs:110:3) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for locator('#heat-stage-play')", '    - locator resolved to <button disabled type="button" class="action" id="heat-stage-play">開始加熱</button>', '  - attempting click action', '    2 × waiting for element to be visible, enabled and stable', '      - element is not enabled', '    - retrying click action', '    - waiting 20ms', '    2 × waiting for element to be visible, enabled and stable', '      - element is not enabled', '    - retrying click action', '      - waiting 100ms', '    58 × waiting for element to be visible, enabled and stable', '       - element is not enabled', '     - retrying click action', '       - waiting 500ms' ]
+  }
+
+test at tests/unit-5.3-format.test.cjs:123:11
+✖ 新小測可觀察、推算與重答；無載入或程式錯誤 (3045.403588ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+  + [
+  +   "Cannot read properties of null (reading 'setAttribute')",
+  +   "Cannot access 'maximum' before initialization",
+  +   "Cannot access 'maximum' before initialization",
+  +   "Cannot access 'maximum' before initialization",
+  +   "Cannot access 'maximum' before initialization",
+  +   "Cannot read properties of null (reading 'setAttribute')",
+  +   "Cannot access 'maximum' before initialization"
+  + ]
+  - []
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-format.test.cjs:131:35)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-format.test.cjs:123:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ "Cannot read properties of null (reading 'setAttribute')", "Cannot access 'maximum' before initialization", "Cannot access 'maximum' before initialization", "Cannot access 'maximum' before initialization", "Cannot access 'maximum' before initialization", "Cannot read properties of null (reading 'setAttribute')", "Cannot access 'maximum' before initialization" ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.3-heat-stage-lab.test.cjs:18:11
+✖ 未操作能閱讀示例與下方公式，器材及本次讀值仍為初始狀態 (33.899717ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  'loading' !== 'ready'
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-heat-stage-lab.test.cjs:19:58)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-heat-stage-lab.test.cjs:18:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'loading',
+    expected: 'ready',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.3-heat-stage-lab.test.cjs:34:11
+✖ 完整直線始終不變，亮點連續沿線前進；LCD／讀值／座標同源，十點後到目標停熱 (30053.675885ms)
+  locator.getAttribute: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('#heat-stage-live')[22m
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-heat-stage-lab.test.cjs:36:73)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-heat-stage-lab.test.cjs:34:3) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for locator('#heat-stage-live')" ]
+  }
+
+test at tests/unit-5.3-heat-stage-lab.test.cjs:55:11
+✖ 任意750／1500／750.5及邊界熱量從20°C重做，小數終點與座標尺度正確 (30007.999534ms)
+  locator.fill: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('#heat-stage-target')[22m
+  [2m    - locator resolved to <input disabled min="100" max="3000" step="any" value="1000" type="number" inputmode="decimal" id="heat-stage-target" aria-describedby="heat-stage-input-help heat-stage-input-error"/>[22m
+  [2m    - fill("2000")[22m
+  [2m  - attempting fill action[22m
+  [2m    2 × waiting for element to be visible, enabled and editable[22m
+  [2m      - element is not enabled[22m
+  [2m    - retrying fill action[22m
+  [2m    - waiting 20ms[22m
+  [2m    2 × waiting for element to be visible, enabled and editable[22m
+  [2m      - element is not enabled[22m
+  [2m    - retrying fill action[22m
+  [2m      - waiting 100ms[22m
+  [2m    60 × waiting for element to be visible, enabled and editable[22m
+  [2m       - element is not enabled[22m
+  [2m     - retrying fill action[22m
+  [2m       - waiting 500ms[22m
+
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-heat-stage-lab.test.cjs:57:19)
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-heat-stage-lab.test.cjs:55:11) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for locator('#heat-stage-target')", '    - locator resolved to <input disabled min="100" max="3000" step="any" value="1000" type="number" inputmode="decimal" id="heat-stage-target" aria-describedby="heat-stage-input-help heat-stage-input-error"/>', '    - fill("2000")', '  - attempting fill action', '    2 × waiting for element to be visible, enabled and editable', '      - element is not enabled', '    - retrying fill action', '    - waiting 20ms', '    2 × waiting for element to be visible, enabled and editable', '      - element is not enabled', '    - retrying fill action', '      - waiting 100ms', '    60 × waiting for element to be visible, enabled and editable', '       - element is not enabled', '     - retrying fill action', '       - waiting 500ms' ]
+  }
+
+test at tests/unit-5.3-heat-stage-lab.test.cjs:1:1
+✖ tests/unit-5.3-heat-stage-lab.test.cjs (82206.78322ms)
+  'Promise resolution is still pending but the event loop has already resolved'

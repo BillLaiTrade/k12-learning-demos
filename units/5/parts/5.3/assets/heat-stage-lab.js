@@ -5,6 +5,7 @@ const get=id=>document.getElementById(id),root=get('heat-lab'),bench=mountHeatBe
 const play=get('heat-stage-play'),heater=get('heat-stage-heater'),image=get('heat-stage-apparatus'),input=get('heat-stage-target');
 const status=get('heat-stage-status'),svg=get('heat-stage-graph'),records=[];
 const number=value=>value.toLocaleString('zh-TW',{maximumFractionDigits:2});
+const axisNumber=value=>value.toLocaleString('zh-TW',{maximumFractionDigits:4});
 let target=HEAT_TARGET.initial,elapsed=0,playing=false,frame=0,last=0,ready=false,attempt=0,inputValid=true;
 let samples=heatSampleValues(target),geometry=null,pointsKey='',rowsKey='';
 const observation=()=>heatStageObservationAt(elapsed,target);
@@ -29,24 +30,22 @@ function graph(){
   const height=plotBox.left>=photoBox.right-1?Math.max(240,Math.round(photoBox.height-headingHeight)):
     Math.max(270,Math.min(340,Math.round(width*.8)));
   if(!geometry||geometry.width!==width||geometry.height!==height||geometry.target!==target){
-    const raw=target/5,power=10**Math.floor(Math.log10(raw));
-    const ratio=raw/power,step=power*(ratio<=1?1:ratio<=2?2:ratio<=5?5:10),maximum=Math.ceil(target/step)*step;
-    geometry={width,height,target,maximum,left:42,right:width-18,top:35,bottom:height-46};
-    const {left,right,top,bottom}=geometry,x=q=>left+q/maximum*(right-left),y=r=>bottom-r/(maximum/100)*(bottom-top);
-    const ticks=width<340?[0,maximum/2,maximum]:Array.from({length:Math.round(maximum/step)+1},(_,i)=>i*step);
+    // 兩軸隨目標縮放，繪圖區維持正方形；完整關係線因此固定呈45度。
+    const side=Math.min(width-76,height-81),offsetX=60+(width-76-side)/2,offsetY=35+(height-81-side)/2;
+    geometry={width,height,target,maximum:target,left:offsetX,right:offsetX+side,top:offsetY,bottom:offsetY+side};
+    const {left,right,top,bottom,maximum}=geometry,x=q=>left+q/maximum*(right-left),y=r=>bottom-r/(maximum/100)*(bottom-top);
+    const ticks=Array.from({length:5},(_,i)=>maximum*i/4);
     svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.style.height=height+'px';
-    svg.innerHTML=`<g class="heat-stage-grid">${ticks.map(q=>`<path d="M${left} ${y(q/100)}H${right}"/><text x="${left-8}" y="${y(q/100)+5}" text-anchor="end">${number(q/100)}</text><path d="M${x(q)} ${top}V${bottom}"/><text x="${x(q)}" y="${bottom+23}" text-anchor="${q===maximum?'end':q===0?'start':'middle'}">${number(q)}</text>`).join('')}</g><path class="heat-stage-axes" d="M${left} ${top-6}V${bottom}H${right+5}"/><text x="4" y="18" class="heat-stage-axis-title">溫升 ΔT（°C）</text><text x="${right}" y="${height-3}" text-anchor="end" class="heat-stage-axis-title">水吸收熱量 Q（cal）</text><path id="heat-stage-line"/><g id="heat-stage-points"></g><circle id="heat-stage-halo" r="13"/><circle id="heat-stage-live" r="6"/><g id="heat-stage-tooltip"><rect width="142" height="48" rx="8"/><text x="10" y="19" id="heat-stage-tip-heat"></text><text x="10" y="39" id="heat-stage-tip-rise"></text></g>`;
+    svg.innerHTML=`<g class="heat-stage-grid">${ticks.map((q,i)=>`<path d="M${left} ${y(q/100)}H${right}"/><path d="M${x(q)} ${top}V${bottom}"/>${side>=260||i%2===0?`<text x="${left-8}" y="${y(q/100)+5}" text-anchor="end">${axisNumber(q/100)}</text><text x="${x(q)}" y="${bottom+23}" text-anchor="${q===maximum?'end':q===0?'start':'middle'}">${axisNumber(q)}</text>`:''}`).join('')}</g><path class="heat-stage-axes" d="M${left} ${top-6}V${bottom}H${right+5}"/><text x="4" y="18" class="heat-stage-axis-title">溫升 ΔT（°C）</text><text x="${right}" y="${height-3}" text-anchor="end" class="heat-stage-axis-title">水吸收熱量 Q（cal）</text><path id="heat-stage-line" d="M${left} ${bottom}L${right} ${top}"/><g id="heat-stage-points"></g><circle id="heat-stage-halo" r="13"/><circle id="heat-stage-live" r="6"/><g id="heat-stage-tooltip"><rect width="142" height="48" rx="8"/><text x="10" y="19" id="heat-stage-tip-heat"></text><text x="10" y="39" id="heat-stage-tip-rise"></text></g>`;
     pointsKey='';
   }
   const {left,right,top,bottom,maximum}=geometry,x=q=>left+q/maximum*(right-left),y=r=>bottom-r/(maximum/100)*(bottom-top);
-  const heat=example?target:state.waterCalories,rise=example?target/100:state.rise;
-  const line=get('heat-stage-line');line.setAttribute('d',`M${left} ${bottom}L${x(heat)} ${y(rise)}`);line.classList.toggle('is-example',example);
-  const values=example?samples:records.map(r=>r.waterCalories),key=String(example)+'/'+values.join(',');
+  const values=records.map(r=>r.waterCalories),key=values.join(',');
   if(key!==pointsKey){
-    pointsKey=key;get('heat-stage-points').innerHTML=values.map(q=>`<circle cx="${x(q)}" cy="${y(q/100)}" r="3.5" data-heat="${q}" data-rise="${q/100}" class="${example?'is-example':''}"/>`).join('');
+    pointsKey=key;get('heat-stage-points').innerHTML=values.map(q=>`<circle cx="${x(q)}" cy="${y(q/100)}" r="3.5" data-heat="${q}" data-rise="${q/100}"/>`).join('');
   }
   for(const id of ['heat-stage-live','heat-stage-halo']){
-    const node=get(id);node.style.display=example?'none':'';node.setAttribute('cx',x(state.waterCalories));node.setAttribute('cy',y(state.rise));
+    const node=get(id);node.setAttribute('cx',x(state.waterCalories));node.setAttribute('cy',y(state.rise));
     node.dataset.heat=String(state.waterCalories);node.dataset.rise=String(state.rise);
   }
   const tip=get('heat-stage-tooltip'),tipWidth=Math.min(180,right-left-8);tip.style.display=example?'none':'';
@@ -55,7 +54,7 @@ function graph(){
   get('heat-stage-tip-heat').textContent=`已吸收 ${number(state.waterCalories)} cal`;
   get('heat-stage-tip-rise').textContent=`溫升 ${state.rise.toFixed(1)}°C`;
   svg.dataset.mode=example?'example':'observation';svg.dataset.maximum=String(maximum);
-  svg.setAttribute('aria-label',example?`推算示例，非本次觀察：100g水吸收${number(target)}cal，預期溫升${(target/100).toFixed(1)}°C。`:`本次觀察：水吸收${number(state.waterCalories)}cal，水溫${state.temperature.toFixed(1)}°C，從20°C升高${state.rise.toFixed(1)}°C；亮點只走到目前進度。`);
+  svg.setAttribute('aria-label',`100g水的關係直線已完整顯示，從0到吸熱${axisNumber(target)}cal、溫升${axisNumber(target/100)}°C。橘點目前在吸熱${number(state.waterCalories)}cal、溫升${state.rise.toFixed(1)}°C；加熱時沿直線向右上方移動。`);
 }
 
 function render(){
@@ -67,9 +66,6 @@ function render(){
   play.textContent=playing?'加熱中…':label;heater.title=playing?'加熱中':label;heater.setAttribute('aria-label',label+'，連續觀察水吸收熱量與升溫');
   get('heat-stage-meter').textContent=get('heat-stage-temperature').textContent=state.temperature.toFixed(1);
   get('heat-stage-energy').textContent=number(state.waterCalories);get('heat-stage-rise').textContent=state.rise.toFixed(1);
-  get('heat-stage-mode').textContent=example?'推算示例・非本次觀察':'本次觀察';
-  get('heat-stage-mode').classList.toggle('is-example',example);
-  get('heat-stage-graph-note').textContent=example?'未操作也可先看示例；開始後，改畫本次的加熱進度。':'橘色亮點跟著加熱前進，沿途留下觀察點。';
   const data=example?samples.map(sampleAt):records,key=String(example)+'/'+data.map(r=>r.waterCalories).join(',');
   if(key!==rowsKey){
     rowsKey=key;const body=get('heat-stage-records');body.replaceChildren();
