@@ -1,6 +1,6 @@
 import {SETUP,TRIANGLE,rays,measurements,drawProjection,prismRayRgb}from './prism-optics.mjs?v=prism-clarity-20261104';
 import {linearToSrgb} from './prism-display.mjs?v=prism-clarity-20261104';
-import {LIGHTS,rgbCss}from './color-model.mjs';
+import {LIGHTS,rgbCss}from './color-model.mjs?v=science-reviewed-20261106';
 function diagram(state){
  const map=([x,z])=>[40+(x+180)*1.35,38+(z+150)*1.35],shift=state.inserted?0:90,poly=TRIANGLE.map(([x,z])=>map([x,z+shift]).join(',')).join(' '),s=map([-150,0]),slit=map([-80,0]),end=map([300,0]),railA=map([0,0]),railB=map([0,90]),samples=rays(state.inserted,state.light),input=state.light==='white'?'#fffbe3':rgbCss(prismRayRgb(samples[0].wavelength).map(linearToSrgb));
  const lines=state.rays?(state.inserted?`<path d="M${map(samples[0].points[0]).join(' ')}L${map(samples[0].points[1]).join(' ')}" stroke="${input}" stroke-width="2"/>`:'')+samples.filter((_,i)=>i%20===0).map(r=>`<path d="${(state.inserted?r.points.slice(1):r.points).map((p,i)=>`${i?'L':'M'}${map(p).join(' ')}`).join('')}" fill="none" stroke="${state.inserted?rgbCss(prismRayRgb(r.wavelength).map(linearToSrgb)):input}" stroke-width="1.5"/>`).join(''):'';

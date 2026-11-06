@@ -66,8 +66,6 @@
 .duo-quiz form .duo-prediction-step+fieldset{margin-top:14px}
 .duo-quiz .duo-prediction-step legend{display:flex;align-items:center;gap:7px;font-size:.9rem;line-height:1.6}
 .duo-step-number{display:inline-flex;align-items:center;justify-content:center;flex:none;width:24px;height:24px;border:1px solid #557e58;border-radius:50%;font-size:.85rem}
-.duo-light-choice{display:block;min-width:0}
-.duo-light-choice select{display:block;width:100%;max-width:100%;min-height:44px;padding:8px 10px;border:1px solid #c4d2c5;border-radius:12px;background:#fff;color:#2b4638;font:inherit;font-size:.9rem}
 .duo-step-help{margin:6px 0 0;font-size:.75rem;line-height:1.6;color:#61735f}
 .duo-quiz .duo-actions{margin-top:12px;display:block}
 .duo-quiz .duo-actions>p{margin:7px 0 0;text-align:center;font-size:.73rem;line-height:1.5;color:#61735f}
@@ -199,3 +197,27 @@
  .duo-result-panel{margin-top:8px}
  .duo-quiz .duo-question-footer{margin-top:6px}
 }
+
+/* Both predictions use the same colour tiles and native radio interaction. */
+.duo-quiz .duo-actions{padding-top:10px}
+@media(min-width:1000px) and (max-height:800px){
+ .duo-workspace-tabs,.duo-series-toolbar{margin-bottom:4px}
+ .duo-quiz .duo-task,.duo-quiz .duo-conditions{margin-bottom:4px}
+ .duo-quiz form .duo-prediction-step+fieldset{margin-top:6px}
+ .duo-quiz .duo-actions{padding-top:8px}
+ .duo-quiz .duo-question-footer{margin-top:4px}
+ .duo-result-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;margin-top:6px;padding:6px}
+ .duo-result-panel .duo-feedback{grid-column:1;grid-row:1}
+ .duo-result-panel .duo-explanation{grid-column:2;grid-row:1;align-self:center;margin:0}
+ .duo-result-panel:has(.duo-explanation[open]) .duo-explanation{grid-column:1/-1;grid-row:3}
+ .duo-result-comparisons{grid-column:1/-1;grid-row:2;margin-top:0}
+}
+
+/* Local scientific conditions and independent modes share a concise note style. */
+.science-hint,.tv-mode-note{margin:10px 0;color:#4c6654;font-size:.82rem;line-height:1.6}
+.science-hint{padding-left:10px;border-left:3px solid #b7cdb2}
+.duo-check-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.duo-check-links :is(a,button){display:inline-flex;align-items:center;min-height:44px;padding:6px 12px;border:1px solid #bdcfbf;border-radius:10px;color:#176b53;background:#fff;font:inherit;font-size:.85rem;text-decoration:none}
+.duo-check-links :is(a,button):focus-visible{outline:2px solid #176b53;outline-offset:2px}
+
+.tv-rgb-model-note{margin:8px 0 0;color:#596b58;font-size:.76rem;line-height:1.6}

@@ -1,5 +1,5 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {MATERIALS} from './color-model.mjs';
+import {MATERIALS} from './color-model.mjs?v=science-reviewed-20261106';
 
 export function createFilterPaperAppearance(paper){
  // Render the sheet with only the selected experiment light. The bench's white

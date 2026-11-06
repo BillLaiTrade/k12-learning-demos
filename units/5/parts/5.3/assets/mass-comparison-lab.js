@@ -1,4 +1,4 @@
-import {validWaterMass,MASS_TARGET_CALORIES,MASS_ANIMATION_SPEED,massObservationAt} from './mass-comparison-model.mjs';
+import {validWaterMass,MASS_TARGET_CALORIES,MASS_ANIMATION_SPEED,massObservationAt} from './mass-comparison-model.mjs?v=derive-1';
 const root=document.getElementById('mass-lab'),get=id=>document.getElementById(id);
 const play=get('mass-play'),image=get('mass-apparatus'),input=get('mass-input');
 const records=new Map(),reduced=matchMedia('(prefers-reduced-motion: reduce)');

@@ -67,7 +67,7 @@ test('5.3 共通格式、導覽連動與原有活動回歸', {timeout:180000}, a
       },{target,original});
     }
     const quiz=page.locator('.quiz-nav');
-    assert.equal(await page.locator('#quiz-title').textContent(),'幫小葵準備暖暖水袋');
+    assert.equal(await page.locator('#quiz-title').textContent(),'找出未知樣品的比熱');
     await page.locator('.route a').first().click();
     await page.waitForFunction(()=>!document.querySelector('.quiz-nav').hasAttribute('aria-current'));
     const style=await quiz.evaluate(n=>{const s=getComputedStyle(n),b=getComputedStyle(n.querySelector('b'));return{font:s.fontSize,weight:s.fontWeight,padding:s.padding,margin:s.marginTop,color:s.color,bg:b.backgroundColor,iconWidth:b.width,iconHeight:b.height};});
@@ -97,7 +97,7 @@ test('5.3 共通格式、導覽連動與原有活動回歸', {timeout:180000}, a
   });
 
   await t.test('第一區 100 g 水升溫、完成後介紹卡，重新觀察同步清除結果',async()=>{
-    await page.clock.install();
+    await page.clock.install();await page.clock.pauseAt(new Date(Date.now()+1000));
     assert.equal(await page.locator('#calorie-conclusion').isHidden(),true);
     assert.equal(await page.locator('#calorie-pause').count(),0);
     await page.locator('#calorie-transfer').click();await page.clock.runFor(6500);
@@ -119,10 +119,14 @@ test('5.3 共通格式、導覽連動與原有活動回歸', {timeout:180000}, a
     for(const key of ['bottle','coast','pan']){await page.locator(`[data-application="${key}"]`).click();assert.equal(await page.locator(`[data-application="${key}"]`).getAttribute('aria-pressed'),'true');assert.ok((await page.locator('#application-content').textContent()).length>40);}
   });
 
-  await t.test('原有四題小測可核對與重答；無載入或程式錯誤',async()=>{
-    for(const [name,value]of Object.entries({q1:'1000',q2:'double',q3:'a',q4:'controlled'}))await page.locator(`input[name="${name}"][value="${value}"]`).check();
-    await page.locator('#heat-quiz button[type=submit]').click();assert.match(await page.locator('#quiz-result').textContent(),/4／4/);
-    await page.locator('#heat-quiz button[type=reset]').click();assert.equal(await page.locator('#quiz-result').isHidden(),true);assert.equal(await page.locator('#heat-quiz input:checked').count(),0);
-    assert.deepEqual(errors,[]);
+  await t.test('新小測可觀察、推算與重答；無載入或程式錯誤',async()=>{
+    const quizPage=await browser.newPage({viewport:{width:1440,height:900}});
+    quizPage.on('pageerror',e=>errors.push(e.message));
+    await quizPage.goto(url,{waitUntil:'networkidle'});await quizPage.clock.install();await quizPage.clock.pauseAt(new Date(Date.now()+1000));
+    await quizPage.locator('#unknown-observe').click();await quizPage.clock.runFor(6500);
+    await quizPage.locator('#unknown-rise-a').fill('5');await quizPage.locator('#unknown-rise-b').fill('25');await quizPage.locator('#unknown-specific-heat').fill('0.2');await quizPage.locator('input[name="comparison"][value="a"]').check();
+    await quizPage.locator('#unknown-check').click();assert.match(await quizPage.locator('#quiz-result').textContent(),/推論正確/);
+    await quizPage.locator('#heat-quiz button[type=reset]').click();assert.equal(await quizPage.locator('#quiz-result').isHidden(),true);assert.equal(await quizPage.locator('#heat-quiz input:checked').count(),0);assert.equal(await quizPage.locator('#unknown-rise-a').inputValue(),'');
+    await quizPage.close();assert.deepEqual(errors,[]);
   });
 });

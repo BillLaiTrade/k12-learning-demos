@@ -159,7 +159,7 @@ test('4.2 完整頁面、主要活動與資源失敗恢復',{timeout:300000},asy
       release();await expect(p.locator('#unit-quiz')).toHaveAttribute('data-ready','true');await expect(p.locator('#periscope-check')).toBeEnabled();
       await p.unroute(pattern);await p.route(pattern,route=>route.abort());await p.reload();await expect(p.locator('#unit-quiz')).toHaveAttribute('data-ready','error');
       await expect(p.locator('#periscope-view-state')).toContainText('未載入');await expect(p.locator('#periscope-feedback')).toContainText('重新整理');await expect(p.locator('#periscope-check')).toBeDisabled();
-      await p.locator('#periscope-check').dispatchEvent('click');await expect(p.locator('#unit-quiz')).toHaveAttribute('data-completed','false,false,false');
+      await p.locator('#periscope-check').dispatchEvent('click');await expect(p.locator('#unit-quiz')).toHaveAttribute('data-completed','false');
       await p.unroute(pattern);await p.reload();await expect(p.locator('#unit-quiz')).toHaveAttribute('data-ready','true');await expect(p.locator('#periscope-check')).toBeEnabled();
     }finally{release();await c.close();}
   });

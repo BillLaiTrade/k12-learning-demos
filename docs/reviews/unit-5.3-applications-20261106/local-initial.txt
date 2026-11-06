@@ -1,0 +1,45 @@
+✖ 水袋降溫與正值放熱量同源，從50到40°C放出5000cal (1.867991ms)
+✔ 同500g、同降10°C，鋁放熱1100cal，長條應為水的22% (0.167929ms)
+✔ 放熱示意進度拒絕越界及非有限值 (0.354666ms)
+▶ 第五區：生活場景、放熱連動、日夜比較與鍋具概念
+  ✔ 水袋從50降到40°C，讀值與正值放熱量同源，完成後才揭示公式及22%比較 (1939.684802ms)
+  ✔ 重觀察收起解釋；換情境、換區、背景中斷保留讀值且不自動續播 (1225.541679ms)
+  ✔ 海陸日夜切換照片、相同熱量條件、初溫基準及升降方向，無實際氣溫數字 (479.648099ms)
+  ✔ 鍋身／鍋底可鍵盤操作，兩重點看過才揭示煮得快的判斷，切頁保留 (308.371608ms)
+  ✔ 減少動態效果仍保留完整讀值與揭示，箭頭不脈動 (2514.569797ms)
+  ✔ 慢載入不啟動，場景就緒也不自動播放 (527.18557ms)
+  ✔ 圖片失敗隔離在當情境，重試恢復不自動開始；日夜晚到回應不覆蓋新模式 (1536.756394ms)
+  ✔ 三桌機與兩窄版三情境無頁面溢出、讀值不截字，主要文字16px、熱點至少44px (9000.242879ms)
+✔ 第五區：生活場景、放熱連動、日夜比較與鍋具概念 (18749.110925ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19050.606533
+
+✖ failing tests:
+
+test at tests/unit-5.3-application-model.test.mjs:5:1
+✖ 水袋降溫與正值放熱量同源，從50到40°C放出5000cal (1.867991ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 0.7000000000000001
+  - 0.7
+       ^
+  
+      at TestContext.<anonymous> (file:///workspace/k12-learning-demos/tests/unit-5.3-application-model.test.mjs:11:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0.7000000000000001,
+    expected: 0.7,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

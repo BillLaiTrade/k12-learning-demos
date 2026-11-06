@@ -1,5 +1,8 @@
 # 4.5 素材與呈現
 
+2026-11-06科學修訂：整圖半強度在sRGB解碼後的線性色光量乘0.5，再編碼顯示；原PNG、RGB資料與關紅靜態圖保持。第三區改解說判讀，不改光源光譜、配色、白幕足跡及繪圖。第五區僅標示與clear用語改動，光學係數及3D幾何保持。詳見[決策](../../../../../docs/decisions/unit-4.5-science-review-revision.md)。
+
+
 - `color-story-opening.png`：2026-11-02以image_gen生成，1672×941 PNG，來源`/workspace/generated_images/exec-f57aa8f9-728d-436d-95ba-fc61fd98cf96.png`。參考3.2既有人物畫風，改為小葵與阿公在科學教室觀察三稜鏡／白幕，保留色光燈、色卡、透明色片。用於首頁與OG／Twitter分享縮圖。此為情境插畫，非定量光學圖。
 - 角色頭像直接引用`shared-assets/characters/dialogue-character-avatars.png`，未重製或複製。
 - `studio.mjs`直接引用4.1的`assets/vendor/three/build/three.module.js`，保留原有授權檔，不新增依賴。

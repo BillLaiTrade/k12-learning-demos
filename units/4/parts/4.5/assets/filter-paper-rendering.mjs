@@ -1,4 +1,4 @@
-import {MATERIALS,FILTERS,rgbCss,colorName} from './color-model.mjs';
+import {MATERIALS,FILTERS,rgbCss,colorName} from './color-model.mjs?v=science-reviewed-20261106';
 
 // Fixed exposure, no additive glow. The optical model is not changed by drawing.
 export function drawFilterPaper(canvas,state,signal){

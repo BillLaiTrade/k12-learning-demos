@@ -1,4 +1,4 @@
-import {drawSpecimen} from './microscope-specimen.mjs?v=20261106-micro-flow-controls20';
+import {drawSpecimen} from './microscope-specimen.mjs?v=20261106-micro-same-colors21';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 
 // Fixed cutaway geometry. Optical overlays are projected from the same world

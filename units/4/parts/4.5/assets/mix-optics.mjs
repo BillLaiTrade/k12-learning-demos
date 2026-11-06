@@ -31,13 +31,29 @@ const POSITIONS=Object.freeze({apart:[[.185,.325],[.815,.325],[.50,.675]],pairs:
 export function arrangeMix(kind='pairs',previous){
  return POSITIONS[kind].map(([x,y],i)=>({x,y,on:previous?previous[i].on:true}));
 }
-export function mixtureRegions(spots){
- const masks=new Set();
+function mixtureSamples(spots){
+ const samples=new Map();
  for(let y=0;y<35;y++)for(let x=0;x<63;x++){
-  let mask=0;for(let i=0;i<3;i++)if(footprint((x+.5)/63,(y+.5)/35,spots[i])>.6)mask|=1<<i;
-  if(mask)masks.add(mask);
+  const weights=spots.map(spot=>footprint((x+.5)/63,(y+.5)/35,spot));
+  const mask=weights.reduce((n,w,i)=>n|(w>.6?1<<i:0),0);if(!mask)continue;
+  const included=weights.filter((_,i)=>mask&(1<<i)),strength=Math.min(...included),old=samples.get(mask);
+  const imbalance=Math.max(...included)-strength;
+  const leakage=weights.reduce((n,w,i)=>n+(mask&(1<<i)?0:w),0);
+  if(!old||strength>old.strength+1e-6||(Math.abs(strength-old.strength)<1e-6&&imbalance+leakage<old.imbalance+old.leakage))samples.set(mask,{weights,strength,imbalance,leakage});
  }
- return[...masks].sort((a,b)=>a-b);
+ return samples;
+}
+export function mixtureRegions(spots){return [...mixtureSamples(spots).keys()].sort((a,b)=>a-b);}
+export function mixObservation(spots){
+ const names=['紅','綠','藍'],active=spots.flatMap((s,i)=>s.on?[i]:[]),samples=mixtureSamples(spots);
+ if(!active.length)return'三支手電筒都關閉了，白幕上沒有這三支燈照出的光斑。';
+ if(active.length===1)return`只開${names[active[0]]}光時，白幕上只看到${names[active[0]]}色光斑。`;
+ const triple=samples.get(7);
+ if(triple)return triple.imbalance<=.03*Math.max(...triple.weights)?'三色共同區的強度比例接近校配比例，混看接近白色。':'三色重疊處的強度比例不均，顏色出現偏移；移動光斑，比較何時接近白色。';
+ const pairs=[[3,'紅光和綠光重疊處看起來是黃色'],[5,'紅光和藍光重疊處看起來是洋紅色'],[6,'綠光和藍光重疊處看起來是青色']].filter(([mask])=>samples.has(mask));
+ if(pairs.length)return pairs.map(([mask,text])=>{const s=samples.get(mask);return s.imbalance<=.03&&s.leakage<.01?text:'光斑重疊處的色光強度比例不均，顏色出現偏移';}).join('；')+'。';
+ const touching=active.some((i,j)=>active.slice(j+1).some(k=>Math.hypot((spots[i].x-spots[k].x)*MIX_SETUP.width,(spots[i].y-spots[k].y)*MIX_SETUP.height)<2*MIX_SETUP.radius));
+ return touching?'光斑邊緣開始重疊，繼續靠近，比較中央與邊緣的顏色。':'光斑分開時，可以分別看到每支手電筒原本的色光。';
 }
 // Direction from fixed torch position to its own spot, with a foreshortened
 // orthographic silhouette. The source itself stays below the screen.

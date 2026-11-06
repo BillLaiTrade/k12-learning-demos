@@ -137,13 +137,6 @@ $$('[data-lab]').forEach(root=>{
  render();
 });
 function sizeText(size){return {equal:'等大',larger:'放大',smaller:'縮小'}[size];}
-const quiz=$('#quiz'),result=$('#quiz-result');
-const answers=['1','0','2','1'],reviewTargets=$$('fieldset',quiz).map(f=>f.dataset.review);
-const explanations=['上下端的光各自沿直線穿過小孔，落在屏幕相反高度。','物體在焦距外向透鏡靠近時，清楚實像離透鏡更遠、變大，仍是倒立。','虛像的位置由入眼光線的反向延長線判斷；光沒有真的在那裡會聚。','凹透鏡先改變入眼光束，使整體光路在視網膜上成像。'];
-quiz.addEventListener('submit',e=>{e.preventDefault();const data=new FormData(quiz),missing=answers.map((_,i)=>i+1).filter(i=>!data.has(`q${i}`));if(missing.length){result.textContent=`還有第 ${missing.join('、')} 題未作答，完成後再送出。`;return;}
- const wrong=answers.map((a,i)=>data.get(`q${i+1}`)===a?null:i).filter(i=>i!==null);
- result.innerHTML=wrong.length?'<strong>再沿著光路觀察一下。</strong>'+wrong.map(i=>`<p>第 ${i+1} 題：${explanations[i]} <a href="${reviewTargets[i]}">回到相關探索</a></p>`).join(''):'<strong>四題都答對了！</strong><p>你能根據光路，解釋成像的位置、大小，以及透鏡如何配合眼睛。</p>';
-});quiz.addEventListener('change',()=>result.replaceChildren());quiz.addEventListener('reset',()=>result.replaceChildren());
 const route=$('.route'),inner=$('.route-inner'),links=$$('.route a'),sections=links.map(a=>$(a.hash));let active,frame;
 function nav(){
  const mobile=matchMedia('(max-width:760px)').matches,threshold=mobile?route.getBoundingClientRect().height+50:160;

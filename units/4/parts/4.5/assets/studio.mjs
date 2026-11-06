@@ -1,8 +1,8 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {PRISM,SOURCE,SCREEN_X,SCREEN_RANGE,prismRays,LIGHTS,MATERIALS,FILTERS,rgbCss} from './color-model.mjs';
-import {drawScreen} from './rendering.mjs';
+import {PRISM,SOURCE,SCREEN_X,SCREEN_RANGE,prismRays,LIGHTS,MATERIALS,FILTERS,rgbCss} from './color-model.mjs?v=science-reviewed-20261106';
+import {drawScreen} from './rendering.mjs?v=science-reviewed-20261106';
 import {createSurfaceAppearance} from './surface-appearance.mjs?v=merged-surface-20261103';
-import {createFilterPaperAppearance} from './filter-paper-appearance.mjs?v=filter-paper-20261103';
+import {createFilterPaperAppearance} from './filter-paper-appearance.mjs?v=science-reviewed-20261106';
 const AXIS=1.65;
 function woodTexture(){
  const c=document.createElement('canvas');c.width=512;c.height=256;const x=c.getContext('2d');x.fillStyle='#b38a59';x.fillRect(0,0,512,256);

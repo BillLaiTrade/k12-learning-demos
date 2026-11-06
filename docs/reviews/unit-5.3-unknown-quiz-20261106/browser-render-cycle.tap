@@ -1,0 +1,154 @@
+TAP version 13
+# Subtest: B方案小測：先觀察、推算未知比熱、保留作答與換題
+    # Subtest: 初始只有條件與20°C讀值，無自動觀察、預填答案或未知比熱標示
+    ok 1 - 初始只有條件與20°C讀值，無自動觀察、預填答案或未知比熱標示
+      ---
+      duration_ms: 58.609564
+      type: 'test'
+      ...
+    # Subtest: 觀察同源推進樣品吸熱與溫度，到點25／45°C才開放作答，能讀到資料
+    ok 2 - 觀察同源推進樣品吸熱與溫度，到點25／45°C才開放作答，能讀到資料
+      ---
+      duration_ms: 1668.285877
+      type: 'test'
+      ...
+# FILLVALUES {"riseA":25,"riseB":45,"c":0.3,"waterLetter":"b"}
+# CFILLED 0.3
+# AFTERCHOICE 0.3
+# FILLVALUES {"waterLetter":"a","unknownLetter":"b","heat":500,"riseA":5,"riseB":25,"c":0.2}
+# CFILLED 0.2
+# AFTERCHOICE 0.2
+    # Subtest: 未填、無效值與錯答給方向提示，不代填；修改清掉舊判定，再答可正確
+    ok 3 - 未填、無效值與錯答給方向提示，不代填；修改清掉舊判定，再答可正確
+      ---
+      duration_ms: 303.039482
+      type: 'test'
+      ...
+    # Subtest: 重觀察保留作答但收起判定，重新作答只清作答與判定，保留觀察
+    ok 4 - 重觀察保留作答但收起判定，重新作答只清作答與判定，保留觀察
+      ---
+      duration_ms: 1715.37345
+      type: 'test'
+      ...
+# FILLVALUES {"waterLetter":"a","unknownLetter":"b","heat":500,"riseA":5,"riseB":25,"c":0.2}
+# CFILLED 0.2
+# AFTERCHOICE 0.2
+# FILLVALUES {"waterLetter":"a","unknownLetter":"b","heat":500,"riseA":5,"riseB":10,"c":0.5}
+# CFILLED 0.5
+# AFTERCHOICE 0.5
+# FILLVALUES {"waterLetter":"a","unknownLetter":"b","heat":1000,"riseA":10,"riseB":20,"c":0.5}
+# CFILLED 0.5
+# AFTERCHOICE 0.5
+# FILLVALUES {"waterLetter":"a","unknownLetter":"b","heat":500,"riseA":5,"riseB":12.5,"c":0.4}
+# CFILLED 0.4
+# AFTERCHOICE 0.4
+# FILLVALUES {"waterLetter":"b","unknownLetter":"a","heat":1000,"riseA":20,"riseB":10,"c":0.5}
+# CFILLED 0.5
+# AFTERCHOICE 0.5
+# FILLVALUES {"waterLetter":"b","unknownLetter":"a","heat":500,"riseA":12.5,"riseB":5,"c":0.4}
+# CFILLED 0.4
+# AFTERCHOICE 0.4
+# FILLVALUES {"waterLetter":"a","unknownLetter":"b","heat":1000,"riseA":10,"riseB":50,"c":0.2}
+# CFILLED 0.2
+# AFTERCHOICE 0.2
+# FILLVALUES {"waterLetter":"b","unknownLetter":"a","heat":1000,"riseA":40,"riseB":10,"c":0.25}
+# CFILLED 0.25
+# AFTERCHOICE 0.25
+# FILLVALUES {"waterLetter":"b","unknownLetter":"a","heat":500,"riseA":25,"riseB":5,"c":0.2}
+# CFILLED 0.2
+# AFTERCHOICE 0.2
+# FILLVALUES {"waterLetter":"b","unknownLetter":"a","heat":500,"riseA":10,"riseB":5,"c":0.5}
+# CFILLED 0.5
+# AFTERCHOICE 0.5
+# FILLVALUES {"waterLetter":"b","unknownLetter":"a","heat":1000,"riseA":50,"riseB":10,"c":0.2}
+# CFILLED 0.2
+# AFTERCHOICE 0.2
+# FILLVALUES {"waterLetter":"b","unknownLetter":"a","heat":1000,"riseA":25,"riseB":10,"c":0.4}
+# CFILLED 0.4
+# AFTERCHOICE 0.4
+# FILLVALUES {"waterLetter":"b","unknownLetter":"a","heat":500,"riseA":20,"riseB":5,"c":0.25}
+# CFILLED 0.25
+# AFTERCHOICE 0.25
+# FILLVALUES {"waterLetter":"a","unknownLetter":"b","heat":1000,"riseA":10,"riseB":40,"c":0.25}
+# CFILLED 0.25
+# AFTERCHOICE 0.25
+# FILLVALUES {"waterLetter":"a","unknownLetter":"b","heat":500,"riseA":5,"riseB":20,"c":0.25}
+# CFILLED 0.25
+# AFTERCHOICE 0.25
+# FILLVALUES {"waterLetter":"a","unknownLetter":"b","heat":1000,"riseA":10,"riseB":25,"c":0.4}
+# CFILLED 0.4
+# AFTERCHOICE 0.4
+    # Subtest: 換一組清空、不自動觀察；16組輪換不重複，甲乙配置變動後判定仍正確
+    ok 5 - 換一組清空、不自動觀察；16組輪換不重複，甲乙配置變動後判定仍正確
+      ---
+      duration_ms: 27949.244617
+      type: 'test'
+      ...
+    # Subtest: 換區、失焦與背景會停止，不自動續播；重觀察由初溫開始
+    ok 6 - 換區、失焦與背景會停止，不自動續播；重觀察由初溫開始
+      ---
+      duration_ms: 2703.525366
+      type: 'test'
+      ...
+    # Subtest: 器材慢載入／失敗時禁止觀察和作答；重試不自動播放，其他場景可用
+    ok 7 - 器材慢載入／失敗時禁止觀察和作答；重試不自動播放，其他場景可用
+      ---
+      duration_ms: 1704.859148
+      type: 'test'
+      ...
+    # Subtest: 減少動態效果時攪拌子不運動，觀察與作答流程保持
+    ok 8 - 減少動態效果時攪拌子不運動，觀察與作答流程保持
+      ---
+      duration_ms: 2543.083868
+      type: 'test'
+      ...
+    # Subtest: 五種尺寸不溢出、輸入及按鈕至少44px，LCD與主要文字可讀，窄版可平移
+    not ok 9 - 五種尺寸不溢出、輸入及按鈕至少44px，LCD與主要文字可讀，窄版可平移
+      ---
+      duration_ms: 151.464848
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-5.3-unknown-quiz.test.cjs:121:11'
+      failureType: 'testCodeFailure'
+      error: |-
+        390 LCD clipped
+        + actual - expected
+        
+        + [
+        +   '樣品甲目前溫度30.0°C',
+        +   '樣品乙目前溫度70.0°C'
+        + ]
+        - []
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected:
+      actual:
+        0: '樣品甲目前溫度30.0°C'
+        1: '樣品乙目前溫度70.0°C'
+      operator: 'deepStrictEqual'
+      stack: |-
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-unknown-quiz.test.cjs:125:109)
+        async Test.run (node:internal/test_runner/test:1389:7)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-unknown-quiz.test.cjs:121:3)
+        async Test.run (node:internal/test_runner/test:1389:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      ...
+    1..9
+not ok 1 - B方案小測：先觀察、推算未知比熱、保留作答與換題
+  ---
+  duration_ms: 40099.516876
+  type: 'test'
+  location: '/workspace/k12-learning-demos/tests/unit-5.3-unknown-quiz.test.cjs:8:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..1
+# tests 10
+# suites 0
+# pass 8
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 40412.129738
