@@ -1,0 +1,11 @@
+{
+  "baseline": "cf80eb7c2ebb1bdd7301a08c63f81d4da21cf2ea",
+  "checks": {
+    "card01Identical": true,
+    "card03OnwardsIdentical": true,
+    "shareMetadataIdentical": true,
+    "controllerFromRenderIdentical": true,
+    "otherResourcesIdentical": true
+  },
+  "unchangedFiles": 35
+}

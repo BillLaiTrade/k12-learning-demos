@@ -7,7 +7,7 @@
 #heat-stage-target[aria-invalid=true]{border-color:#b36439}#heat-stage-input-error{color:#975130;font-size:1rem}
 #heat-lab button{font-size:1rem;min-height:44px}#heat-stage-target:disabled{background:#eeeee7}
 #heat-lab .heat-bench{background:#fbfcf7;border-color:#cfddcf;box-shadow:none}
-#heat-lab .heat-stage-workbench{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:14px;padding:12px;align-items:start}
+#heat-lab .heat-stage-workbench{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:12px;align-items:start}
 #heat-lab .heat-stage-workbench .calorie-apparatus-view{align-self:start}
 #heat-lab .calorie-photo{aspect-ratio:1032/941;border-radius:10px;overflow:hidden;container-type:inline-size}
 #heat-lab .calorie-photo img{width:162%;max-width:none;height:auto;aspect-ratio:1672/941}
@@ -34,7 +34,7 @@
 #heat-stage-halo{fill:#e98b32;opacity:.18}
 #heat-stage-tooltip{pointer-events:none}#heat-stage-tooltip rect{fill:#fffcf1;stroke:#df8635;stroke-width:1}
 #heat-lab #heat-stage-tooltip text{font-size:15px;fill:#3a563f}
-#heat-lab #heat-stage-graph-note{font-size:.875rem;color:#647660;line-height:1.6;margin:4px 0 0}
+#heat-lab #heat-stage-graph-note{font-size:.875rem;color:#647660;line-height:1.6;margin:0;padding:0 12px 10px}
 #heat-lab .heat-bench-console{padding:11px 14px;background:#f7f1e5;border-color:#ded4be}
 .heat-stage-readings{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px 16px;font-size:1rem}
 .heat-stage-readings strong{color:#ae5b23;white-space:nowrap;font-variant-numeric:tabular-nums}
