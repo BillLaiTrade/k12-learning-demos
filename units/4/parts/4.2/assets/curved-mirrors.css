@@ -31,7 +31,9 @@
 #card-06 .mirror-bear-toggle{min-height:38px;padding:5px 10px;border:1px solid #7db2ca;border-radius:999px;background:#fffef9;color:#265f7d;font-size:.74rem;font-weight:750;line-height:1.4}
 #card-06 .mirror-normal-toggle:hover,#card-06 .mirror-bear-toggle:hover{background:#e2f1f7}
 #card-06 button:focus-visible,#card-06 summary:focus-visible{outline:3px solid #428eae;outline-offset:3px}
-#card-06 .mirror-application{display:flex;align-items:center;justify-content:center;gap:12px;min-height:136px;margin:7px 0 0}
+#card-06 .mirror-life-examples{margin-top:12px;padding-top:12px;border-top:1px solid #d5dfd4}
+#card-06 .mirror-life-examples h4{margin:0 4px 7px;color:#284a40;font-size:.94rem;font-weight:650;line-height:1.5;text-wrap:balance}
+#card-06 .mirror-application{display:flex;align-items:center;justify-content:center;gap:12px;min-width:0;min-height:136px;margin:7px 0 0}
 #card-06 .mirror-application img{display:block;flex:0 0 88px;width:88px;height:132px;object-fit:contain}
 #card-06 .mirror-application figcaption{min-width:0;text-align:left;color:#284a40;line-height:1.5}
 #card-06 .mirror-application figcaption strong{display:block;font-size:.8rem;font-weight:650}
