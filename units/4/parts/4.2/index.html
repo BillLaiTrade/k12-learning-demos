@@ -74,8 +74,8 @@
 
 
   </style>
-  <link rel="stylesheet" href="assets/mirror-image.css?v=activity-order-20261105">
-  <link rel="stylesheet" href="assets/mirror-distance.css?v=activity-order-20261105">
+  <link rel="stylesheet" href="assets/mirror-image.css?v=distance-match-20261106">
+  <link rel="stylesheet" href="assets/mirror-distance.css?v=readable-labels-20261106">
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=activity-order-20261105">
   <link rel="stylesheet" href="assets/reversible-light.css?v=compact-workspace-20261106">
   <link rel="stylesheet" href="assets/periscope.css?v=8">
@@ -244,6 +244,7 @@
           <header class="card-heading"><span class="card-number">04</span><div class="card-heading-copy"><h2>為什麼鏡前的熊，看起來在鏡後？</h2><p class="card-subtitle">反射與直視對照</p></div></header>
           <div class="card-main">
             <p class="comparison-intro">小熊反射的光再經鏡面反射進入眼睛，卻看起來像從鏡後傳來。對照有鏡子與撤鏡後放入真熊的情境，觀察光路與眼中景象的對應。</p>
+            <p class="comparison-distance-hint">點選圖中的距離，對照下方的計算。</p>
             <div class="comparison-column-headings" aria-hidden="true"><span>光怎麼進入眼睛</span><span>小葵看到的熊</span></div>
             <div class="mirror-comparison-grid" aria-label="上排有鏡子，下排撤鏡並放入真熊；兩個情境同時比較"><article class="comparison-state" id="comparison-reference" data-mode="mirror" aria-labelledby="reference-heading">
  <figure class="comparison-diagram"><h3 class="comparison-row-title" id="reference-heading">鏡前的熊，經反射看見</h3><svg class="comparison-side" id="reference-side" viewBox="0 0 900 650" role="img" aria-labelledby="reference-side-title reference-side-desc">
@@ -280,7 +281,7 @@
 </svg></figure>
 <div class="comparison-path-summary" aria-label="反射光從熊到鏡面走2公尺，反射後到眼睛走3公尺，總共5公尺">
  <p class="comparison-path-caption">熊到鏡面，再反射到眼睛</p>
- <p class="comparison-path-equation"><span class="comparison-path-term"><span>反射前</span><strong>2公尺</strong></span><span class="comparison-path-operator">＋</span><span class="comparison-path-term"><span>反射後</span><strong>3公尺</strong></span><span class="comparison-path-operator">＝</span><strong class="comparison-path-total">5公尺</strong></p>
+ <p class="comparison-path-equation"><button type="button" class="comparison-path-term" data-distance="2" aria-pressed="false"><span>反射前</span><strong>2公尺</strong></button><span class="comparison-path-operator">＋</span><button type="button" class="comparison-path-term" data-distance="3" aria-pressed="false"><span>反射後</span><strong>3公尺</strong></button><span class="comparison-path-operator">＝</span><strong class="comparison-path-total">5公尺</strong></p>
 </div>
 </article>
 <div class="comparison-backtrace"><p>從眼睛沿著來光方向往回看：先走<strong>3公尺到鏡面</strong>，再沿同一直線往後延長<strong>2公尺到像的位置</strong>。</p><p class="comparison-locations">沿這條視線，鏡面在<strong>3公尺處</strong>，像看起來在<strong>5公尺處</strong>。</p></div>
@@ -320,7 +321,7 @@
 </svg></figure>
 <div class="comparison-path-summary" aria-label="真熊的光直接傳來，到原鏡面位置走2公尺，再到眼睛走3公尺，總共5公尺">
  <p class="comparison-path-caption">真熊的光直接傳到眼睛</p>
- <p class="comparison-path-equation"><span class="comparison-path-term"><span>到原鏡面位置</span><strong>2公尺</strong></span><span class="comparison-path-operator">＋</span><span class="comparison-path-term"><span>再到眼睛</span><strong>3公尺</strong></span><span class="comparison-path-operator">＝</span><strong class="comparison-path-total">5公尺</strong></p>
+ <p class="comparison-path-equation"><button type="button" class="comparison-path-term" data-distance="2" aria-pressed="false"><span>到原鏡面位置</span><strong>2公尺</strong></button><span class="comparison-path-operator">＋</span><button type="button" class="comparison-path-term" data-distance="3" aria-pressed="false"><span>再到眼睛</span><strong>3公尺</strong></button><span class="comparison-path-operator">＝</span><strong class="comparison-path-total">5公尺</strong></p>
 </div>
 </article></div>
             <div class="comparison-result"><p class="comparison-takeaway">上排是轉過彎的5公尺，下排是直達的5公尺。</p><p class="comparison-view-result">兩組光以對應的方向進入眼睛，遠處的熊看起來位置、大小相同。</p></div>
@@ -340,21 +341,22 @@
             <div class="mirror-views" aria-label="調整物體距離並同步查看成像">
               <figure class="mirror-view">
                 <h3>側面｜物距與像距 <small>拖動小熊</small></h3>
-                <svg id="distance-side-view" viewBox="20 0 580 328" role="group" aria-labelledby="distance-side-title distance-side-desc">
+                <div class="distance-readouts"><output id="distance-object-measure-label" class="measure-text">物距 40 cm</output><output id="distance-image-measure-label" class="measure-text">像距 40 cm</output></div>
+                <svg id="distance-side-view" viewBox="0 0 620 370" role="group" aria-labelledby="distance-side-title distance-side-desc">
                   <title id="distance-side-title">側面觀察物距和像距</title><desc id="distance-side-desc">拖動物體改變物距，鏡後虛像位於鏡面另一側相同距離；刻度尺以鏡面為零點。</desc>
                   <defs><marker id="dim-arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse"><path d="M0 0L6 3L0 6Z" fill="#668b97"/></marker></defs>
                   <defs><linearGradient id="measure-wall" x2="0" y2="1"><stop stop-color="#fcfbf6"/><stop offset="1" stop-color="#f2f0e6"/></linearGradient><linearGradient id="measure-wood" x2="0" y2="1"><stop stop-color="#d7b993"/><stop offset=".18" stop-color="#e0c6a5"/><stop offset="1" stop-color="#b5906a"/></linearGradient><linearGradient id="measure-mirror" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#8ca9a3"/><stop offset=".45" stop-color="#f4faf6"/><stop offset="1" stop-color="#9bb6b0"/></linearGradient><filter id="distance-contact-shadow" x="-.5" y="-2" width="2" height="5"><feGaussianBlur stdDeviation="2.2"/></filter><pattern id="measure-woodgrain" width="180" height="12" patternUnits="userSpaceOnUse"><path d="M0 3Q40 0 90 3T180 3M0 9Q60 6 120 10T200 9" fill="none" stroke="#93724f" stroke-width=".6" opacity=".22"/></pattern></defs>
                   <rect x="0" y="0" width="620" height="222" fill="url(#measure-wall)"/><rect x="0" y="222" width="620" height="20" fill="url(#measure-wood)"/><rect x="0" y="224" width="620" height="18" fill="url(#measure-woodgrain)"/><path d="M0 223H620" stroke="#efddc4" stroke-width="2"/>
-                  <rect x="296" y="215" width="28" height="8" rx="3" fill="#8b9f92"/><rect x="306" y="35" width="8" height="188" rx="2.5" fill="#7b9890"/><rect x="307" y="38" width="6" height="181" rx="1.5" fill="url(#measure-mirror)"/><path d="M309 40V215" stroke="#fff" stroke-opacity=".7" stroke-width="1.3"/><text x="310" y="26" text-anchor="middle" fill="#526e60" font-size="12.5" font-weight="600">平面鏡</text>
+                  <rect x="296" y="215" width="28" height="8" rx="3" fill="#8b9f92"/><rect x="306" y="35" width="8" height="188" rx="2.5" fill="#7b9890"/><rect x="307" y="38" width="6" height="181" rx="1.5" fill="url(#measure-mirror)"/><path d="M309 40V215" stroke="#fff" stroke-opacity=".7" stroke-width="1.3"/><text x="310" y="32" text-anchor="middle" class="distance-mirror-name" fill="#526e60" font-size="12.5" font-weight="600">平面鏡</text>
                   <g id="distance-side-object" class="drag-object" tabindex="0" role="slider" aria-label="拖動面向鏡子的小熊調整物距" aria-orientation="horizontal" aria-describedby="distance-drag-instructions" aria-valuemin="10" aria-valuemax="60" aria-valuenow="40">
                     <rect x="126" y="124" width="112" height="112" fill="transparent"/>
                     <ellipse cx="182" cy="221.5" rx="27" ry="3.8" fill="#705b43" opacity=".19" filter="url(#distance-contact-shadow)"/>
-                    <image href="assets/mirror/teddy-side.webp" x="146" y="135.6" width="72" height="90" preserveAspectRatio="xMidYMax meet"/><rect x="149" y="126" width="66" height="22" rx="7" fill="#fff8e9" stroke="#e3d5ba"/><text id="distance-side-object-label" class="distance-side-tag" x="182" y="141" text-anchor="middle" fill="#977145">鏡前實物</text>
+                    <image href="assets/mirror/teddy-side.webp" x="146" y="135.6" width="72" height="90" preserveAspectRatio="xMidYMax meet"/><g data-distance-tag="object" data-tag-y="70"><rect x="124" y="52" width="116" height="36" rx="7" fill="#fff8e9" stroke="#e3d5ba"/><text id="distance-side-object-label" class="distance-side-tag" x="182" y="75" text-anchor="middle" fill="#977145">鏡前實物</text></g>
                   </g>
-                  <g id="distance-side-image"><g opacity=".46"><ellipse cx="438" cy="221.5" rx="27" ry="3.8" fill="#687a70" opacity=".2" filter="url(#distance-contact-shadow)"/><image href="assets/mirror/teddy-side.webp" x="402" y="135.6" width="72" height="90" preserveAspectRatio="xMidYMax meet" transform="translate(876 0) scale(-1 1)"/></g><rect x="405" y="126" width="66" height="22" rx="7" fill="#eff5f5" stroke="#cfdddd"/><text id="distance-side-image-label" class="distance-side-tag" x="438" y="141" text-anchor="middle" fill="#5d7e87">鏡後虛像</text></g>
+                  <g id="distance-side-image"><g opacity=".46"><ellipse cx="438" cy="221.5" rx="27" ry="3.8" fill="#687a70" opacity=".2" filter="url(#distance-contact-shadow)"/><image href="assets/mirror/teddy-side.webp" x="402" y="135.6" width="72" height="90" preserveAspectRatio="xMidYMax meet" transform="translate(876 0) scale(-1 1)"/></g><g data-distance-tag="image" data-tag-y="70"><rect x="380" y="52" width="116" height="36" rx="7" fill="#eff5f5" stroke="#cfdddd"/><text id="distance-side-image-label" class="distance-side-tag" x="438" y="75" text-anchor="middle" fill="#5d7e87">鏡後虛像</text></g></g>
                   <path id="distance-object-measure" d="M182 116H310" class="measure-line" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/><path id="distance-image-measure" d="M310 116H438" class="measure-line" marker-start="url(#dim-arrow)" marker-end="url(#dim-arrow)"/>
-                  <text id="distance-object-measure-label" x="246" y="104" class="measure-text">物距 40 cm</text><text id="distance-image-measure-label" x="374" y="104" class="measure-text">像距 40 cm</text>
-                  <line x1="70" y1="260" x2="550" y2="260" class="ruler-line"/><g id="distance-ruler-ticks"></g><rect x="296" y="278" width="28" height="24" rx="7" fill="#e2ede5"/><g id="distance-ruler-values"></g><text x="310" y="315" text-anchor="middle" fill="#7a8b7f" font-size="11.5">鏡面為 0（畫面參考刻度）</text>
+
+                  <line x1="70" y1="260" x2="550" y2="260" class="ruler-line"/><g id="distance-ruler-ticks"></g><rect x="292" y="284" width="36" height="36" rx="7" fill="#e2ede5"/><g id="distance-ruler-values"></g><text class="distance-ruler-caption" x="310" y="355" text-anchor="middle" fill="#7a8b7f" font-size="11.5">鏡面為 0（畫面參考刻度）</text>
                   <line id="distance-ruler-object-marker" x1="182" y1="239" x2="182" y2="275"/><line id="distance-ruler-image-marker" x1="438" y1="239" x2="438" y2="275"/>
                 </svg>
               </figure>
@@ -367,12 +369,13 @@
                   <ellipse cx="310" cy="260" rx="146" ry="7" fill="#4d5040" opacity=".15" filter="url(#distance-front-contact)"/>
                   <rect x="170" y="38" width="280" height="220" rx="10" fill="url(#distance-front-frame)" stroke="#8ca59a" stroke-width="1.2" filter="url(#distance-mirror-shadow)"/><rect x="176" y="44" width="268" height="208" rx="4" fill="#536e63"/><rect x="179" y="47" width="262" height="202" rx="2" fill="url(#distance-front-glass)"/>
                   <g clip-path="url(#distance-front-clip)"><rect x="179" y="140" width="262" height="109" fill="url(#distance-front-wood)" opacity=".82"/><path d="M179 170H441M179 205H441M179 236H441" stroke="#a47e57" stroke-width=".7" opacity=".15"/>
-                    <g id="distance-front-reflection"><ellipse cx="310" cy="158" rx="34" ry="4" fill="#69705a" opacity=".17" filter="url(#distance-front-contact)"/><image href="assets/mirror/teddy-front.webp" x="260" y="55" width="100" height="104" preserveAspectRatio="xMidYMax meet"/><rect x="368" y="64" width="64" height="22" rx="7" fill="#fffffa" fill-opacity=".94" stroke="#d8e2d9"/><text class="distance-front-tag" x="400" y="79" text-anchor="middle" fill="#527369">鏡中像</text></g>
+                    <g id="distance-front-reflection"><ellipse cx="310" cy="158" rx="34" ry="4" fill="#69705a" opacity=".17" filter="url(#distance-front-contact)"/><image href="assets/mirror/teddy-front.webp" x="260" y="55" width="100" height="104" preserveAspectRatio="xMidYMax meet"/></g>
                     <path d="M189 48H215L187 248H179V174Z" fill="#fff" fill-opacity=".18"/><path d="M182 51H438" stroke="#fff" stroke-opacity=".6" stroke-width="1"/>
                   </g>
-                  <g id="distance-front-object"><ellipse cx="310" cy="279" rx="42" ry="6" fill="#5c4c38" opacity=".19" filter="url(#distance-front-contact)"/><ellipse cx="310" cy="279" rx="25" ry="2.8" fill="#5c4c38" opacity=".15"/><image href="assets/mirror/teddy-rear.webp" x="260" y="180" width="100" height="104" preserveAspectRatio="xMidYMax meet"/><rect x="369" y="255" width="76" height="23" rx="7" fill="#fff9ee" fill-opacity=".94" stroke="#e3d6c1"/><text class="distance-front-tag" x="407" y="271" text-anchor="middle" fill="#977145">鏡前實物</text></g>
-                  <rect x="139" y="307" width="342" height="24" rx="8" fill="#fffff7" fill-opacity=".93" stroke="#d9e3d8" stroke-width=".8"/><text id="distance-front-status" x="310" y="323" text-anchor="middle" fill="#426655">目前物距 40 cm｜像距 40 cm</text>
+                  <g id="distance-front-object"><ellipse cx="310" cy="279" rx="42" ry="6" fill="#5c4c38" opacity=".19" filter="url(#distance-front-contact)"/><ellipse cx="310" cy="279" rx="25" ry="2.8" fill="#5c4c38" opacity=".15"/><image href="assets/mirror/teddy-rear.webp" x="260" y="180" width="100" height="104" preserveAspectRatio="xMidYMax meet"/></g>
+                  <g data-distance-tag="reflection" data-tag-y="80"><rect x="450" y="62" width="100" height="36" rx="7" fill="#fffffa" fill-opacity=".94" stroke="#d8e2d9"/><text class="distance-front-tag" x="500" y="85" text-anchor="middle" fill="#527369">鏡中像</text></g><g data-distance-tag="front-object" data-tag-y="270"><rect x="442" y="252" width="116" height="36" rx="7" fill="#fff9ee" fill-opacity=".94" stroke="#e3d6c1"/><text class="distance-front-tag" x="500" y="275" text-anchor="middle" fill="#977145">鏡前實物</text></g>
                 </svg>
+                <p id="distance-front-status">物體離鏡面 40 cm｜虛像在鏡後 40 cm</p>
               </figure>
             </div>
             <p class="visually-hidden" id="distance-drag-instructions">拖動小熊向鏡面靠近或遠離。聚焦小熊後，可用左右方向鍵每次移動1公分，按住Shift每次移動10公分；Home移到最靠近鏡面，End移到最遠。</p>
@@ -432,7 +435,7 @@
                 <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p id="periscope-student">我在潛水艇裡，怎麼看見海上的船？</p></div>
                 <div class="dialogue"><span class="speaker"><span class="visually-hidden">阿公</span></span><p id="periscope-grandpa">先轉動鏡片，再從觀察窗找找船在哪裡。</p></div>
               </div>
-              <div class="periscope-task"><div><strong id="periscope-task-title">任務一｜把船的駕駛艙調到觀察窗中央</strong><p id="periscope-task-copy">拖曳鏡片端點旋轉。先試著觀察，需要時從觀察口追蹤視線，再修正鏡片。</p></div></div>
+              <div class="periscope-task"><div><strong id="periscope-task-title">目前目標｜把船的駕駛艙調到觀察窗中央</strong><p id="periscope-task-copy">拖曳鏡片端點旋轉。先試著觀察，需要時從觀察口追蹤視線，再修正鏡片。</p></div></div>
               <div class="periscope-workspace">
                 <div class="periscope-cutaway">
                   <svg id="periscope-scene" viewBox="0 0 900 760" role="group" aria-label="潛望鏡剖面與可旋轉平面鏡" aria-describedby="periscope-scene-desc">
@@ -503,13 +506,13 @@
       cards.forEach(card => observer.observe(card));
     }
   </script>
-  <script type="module" src="assets/mirror-distance.js?v=activity-order-20261105"></script>
+  <script type="module" src="assets/mirror-distance.js?v=readable-labels-20261106"></script>
   <script type="module" src="assets/curved-mirrors.js?v=activity-order-20261105"></script>
-  <script type="module" src="assets/mirror-image.js?v=activity-order-20261105"></script>
+  <script type="module" src="assets/mirror-image.js?v=distance-match-20261106"></script>
   <script type="module" src="assets/reflection-3d.js?v=surfaces-experiment-20261105"></script>
   <script type="module" src="assets/surface-directions.js?v=surface-flow-20261105"></script>
   <script type="module" src="assets/laser-reflection.js?v=compact-20261106"></script>
   <script type="module" src="assets/reversible-light.js?v=compact-workspace-20261106"></script>
-  <script type="module" src="assets/periscope.js?v=availability-20261105"></script>
+  <script type="module" src="assets/periscope.js?v=current-goal-20261106"></script>
 </body>
 </html>

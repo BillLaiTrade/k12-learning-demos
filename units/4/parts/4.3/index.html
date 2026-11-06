@@ -30,7 +30,7 @@
   <script type="module" src="assets/normal-incidence-lab.mjs?v=20261106-individual1"></script>
   <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-cart1">
   <script type="module" src="assets/oblique-cart.mjs?v=20261105-cartlayout1"></script>
-  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261105-eleven1"></script>
+  <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261106-angleorder1"></script>
   <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-inline1">
   <script type="module" src="assets/return-refraction-lab.mjs?v=20261105-tenreview1"></script>
   <link rel="stylesheet" href="assets/light-beam.css?v=20261103-fit2">
@@ -41,7 +41,7 @@
   <script type="module" src="assets/depth-lab.mjs?v=20261105-tenreview1"></script>
   <link rel="stylesheet" href="assets/layer-speed-quiz.css?v=20261105-labeltype1">
   <script type="module" src="assets/layer-speed-quiz.mjs?v=20261105-tenreview1"></script>
-  <link rel="stylesheet" href="assets/lesson-format.css?v=20261105-cartcompact2">
+  <link rel="stylesheet" href="assets/lesson-format.css?v=20261106-mediumcenter1">
   <script type="module" src="assets/lesson.mjs?v=20261105-remove-position1">
 </script>
 </head>
@@ -227,7 +227,7 @@
             <div id="oblique-medium-toggle" class="lab-medium-toggle" role="group" data-current="water" aria-label="切換介質，目前為水"><span class="medium-toggle-icon" aria-hidden="true">⇄</span><span class="medium-toggle-caption" aria-hidden="true">介質</span><button type="button" data-lab-medium="water" aria-pressed="true">水</button><button type="button" data-lab-medium="glass" aria-pressed="false">玻璃</button></div>
             <div class="integrated-copy" id="oblique-finding" hidden>
               <h3 data-finding-title>偏向法線</h3><p class="integrated-speed" data-speed-result>光速由快變慢</p>
-              <p class="integrated-equation" aria-label="折射角與入射角比較"><span class="angle-out"><small>折射角</small><output id="oblique-out-value">22.0°</output></span><b data-comparison>&lt;</b><span class="angle-in"><small>入射角</small><output id="oblique-in-value">30°</output></span></p>
+              <p class="integrated-equation" aria-label="入射角與折射角比較"><span class="angle-in"><small>入射角</small><output id="oblique-in-value">30°</output></span><b data-comparison>&gt;</b><span class="angle-out"><small>折射角</small><output id="oblique-out-value">22.0°</output></span></p>
               <p class="integrated-reason" data-finding-reason>折射角變小，光線更靠近法線。</p>
             </div>
             <p class="integrated-legend" hidden><span>角度皆從法線量起</span><span data-reference-note><i aria-hidden="true"></i>原方向延長線<span class="legend-extra">（比較參考）</span></span></p>
@@ -313,7 +313,7 @@
             <div id="exit-medium-toggle" class="lab-medium-toggle" role="group" data-current="water" aria-label="切換介質，目前為水"><span class="medium-toggle-icon" aria-hidden="true">⇄</span><span class="medium-toggle-caption" aria-hidden="true">介質</span><button type="button" data-lab-medium="water" aria-pressed="true">水</button><button type="button" data-lab-medium="glass" aria-pressed="false">玻璃</button></div>
             <div class="integrated-copy" id="exit-finding" hidden>
               <h3 data-finding-title>偏離法線</h3><p class="integrated-speed" data-speed-result>光速由慢變快</p>
-              <p class="integrated-equation" aria-label="折射角與入射角比較"><span class="angle-out"><small>折射角</small><output id="exit-out-value">41.8°</output></span><b data-comparison>&gt;</b><span class="angle-in"><small>入射角</small><output id="exit-in-value">30°</output></span></p>
+              <p class="integrated-equation" aria-label="入射角與折射角比較"><span class="angle-in"><small>入射角</small><output id="exit-in-value">30°</output></span><b data-comparison>&lt;</b><span class="angle-out"><small>折射角</small><output id="exit-out-value">41.8°</output></span></p>
               <p class="integrated-reason" data-finding-reason>折射角變大，光線更遠離法線。</p>
             </div>
             <p class="integrated-legend" hidden><span id="exit-transmission-condition">斜射且發生折射時</span><span>角度皆從法線量起</span><span data-reference-note><i aria-hidden="true"></i>原方向延長線<span class="legend-extra">（比較參考）</span></span></p>

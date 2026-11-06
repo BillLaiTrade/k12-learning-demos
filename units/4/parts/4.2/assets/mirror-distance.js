@@ -13,6 +13,36 @@ if (section) {
   const unitsPerCm = 4;
   let distance = 40;
   let drag = null;
+  const tagWidths = new Map();
+  const placeSideLabels = () => {
+    for (const [name, center, origin] of [['object', mirrorX - distance * unitsPerCm, 182], ['image', mirrorX + distance * unitsPerCm, 438]]) {
+      const tag = svg.querySelector(`[data-distance-tag="${name}"]`);
+      const width = tagWidths.get(tag);
+      if (!width) continue;
+      const min = name === 'object' ? 8 + width / 2 : mirrorX + 8 + width / 2;
+      const max = name === 'object' ? mirrorX - 8 - width / 2 : 612 - width / 2;
+      const x = Math.max(min, Math.min(max, center)) - (center - origin);
+      tag.querySelector('text').setAttribute('x', x);
+      tag.querySelector('rect').setAttribute('x', x - width / 2);
+    }
+  };
+  const sizeLabels = () => {
+    for (const drawing of section.querySelectorAll('#distance-side-view,#distance-front-view')) {
+      if (!drawing.clientWidth) continue;
+      const scale = drawing.viewBox.baseVal.width / drawing.clientWidth;
+      drawing.style.setProperty('--distance-svg-scale', scale);
+      for (const tag of drawing.querySelectorAll('[data-distance-tag]')) {
+        const text = tag.querySelector('text'), rect = tag.querySelector('rect');
+        // These labels contain full-width Chinese characters. Reserve their
+        // em width directly so a resize cannot reuse a stale SVG text box.
+        const y = Number(tag.dataset.tagY), width = (text.textContent.length * 14 + 12) * scale;
+        text.setAttribute('y', y + 4.9 * scale);
+        for (const [name, value] of Object.entries({x: Number(text.getAttribute('x')) - width / 2, y: y - 11 * scale, width, height: 22 * scale, rx: 4 * scale})) rect.setAttribute(name, value);
+        tagWidths.set(tag, width);
+      }
+    }
+    placeSideLabels();
+  };
 
   for (let cm = -60; cm <= 60; cm += 5) {
     const x = mirrorX + cm * unitsPerCm;
@@ -22,7 +52,7 @@ if (section) {
     ticks.append(tick);
     if (major) {
       const label = document.createElementNS(ns, 'text');
-      for (const [name, value] of Object.entries({ x, y: 292, class: `ruler-label${cm === 0 ? ' is-zero' : ''}` })) label.setAttribute(name, value);
+      for (const [name, value] of Object.entries({ x, y: 310, class: `ruler-label${cm === 0 ? ' is-zero' : ''}` })) label.setAttribute(name, value);
       label.textContent = String(Math.abs(cm));
       values.append(label);
     }
@@ -36,12 +66,11 @@ if (section) {
     image.setAttribute('transform', `translate(${imageX - 438} 0)`);
     section.querySelector('#distance-object-measure').setAttribute('d', `M${objectX} 116H${mirrorX}`);
     section.querySelector('#distance-image-measure').setAttribute('d', `M${mirrorX} 116H${imageX}`);
-    for (const [id, x, text] of [
-      ['distance-object-measure-label', Math.min(245, (objectX + mirrorX) / 2), `物距 ${distance} cm`],
-      ['distance-image-measure-label', Math.max(375, (imageX + mirrorX) / 2), `像距 ${distance} cm`]
+    for (const [id, text] of [
+      ['distance-object-measure-label', `物距 ${distance} cm`],
+      ['distance-image-measure-label', `像距 ${distance} cm`]
     ]) {
       const label = section.querySelector(`#${id}`);
-      label.setAttribute('x', x);
       label.textContent = text;
     }
     for (const [id, x] of [['distance-ruler-object-marker', objectX], ['distance-ruler-image-marker', imageX]]) {
@@ -54,6 +83,7 @@ if (section) {
     section.querySelector('#distance-front-status').textContent = `物體離鏡面 ${distance} cm｜虛像在鏡後 ${distance} cm`;
     frontObject.setAttribute('transform', `translate(0 ${(distance - 40) * .65})`);
     frontReflection.setAttribute('transform', `translate(0 ${(40 - distance) * .65})`);
+    placeSideLabels();
   };
 
   const pointerX = (event) => {
@@ -108,4 +138,8 @@ if (section) {
     updateDistance(next);
   });
   updateDistance(distance);
+  const labelObserver = new ResizeObserver(sizeLabels);
+  for (const drawing of section.querySelectorAll('#distance-side-view,#distance-front-view')) labelObserver.observe(drawing);
+  document.fonts.ready.then(sizeLabels);
+  sizeLabels();
 }
