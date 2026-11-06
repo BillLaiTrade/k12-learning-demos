@@ -81,7 +81,20 @@ function initialise(root){
    else{camera.fov=38;const direction=new THREE.Vector3(Math.sin(orbit.polar)*Math.sin(orbit.azimuth),Math.cos(orbit.polar),Math.sin(orbit.polar)*Math.cos(orbit.azimuth));camera.position.copy(target).addScaledVector(direction,fitRadius*orbit.zoom);camera.lookAt(target);}
    camera.far=Math.max(120,fitRadius*6);camera.updateProjectionMatrix();
    if(viewport){const r=canvas.getBoundingClientRect(),p=camera.projectionMatrix.elements;p[0]*=viewport.width/r.width;p[5]*=viewport.height/r.height;p[8]=1-2*(viewport.left+viewport.width/2)/r.width;p[9]=2*(viewport.top+viewport.height/2)/r.height-1;camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();}
-   camera.updateMatrixWorld();virtualImage.rotation.y=Math.atan2(camera.position.x-virtualImage.position.x,camera.position.z-virtualImage.position.z);virtualImage.updateMatrixWorld(true);
+   camera.updateMatrixWorld();
+   // Shift the apparatus left without changing its scale or the surrounding layout.
+   if(!front&&viewport){
+    const r=canvas.getBoundingClientRect();let left=Infinity;
+    for(const device of [source,lensGroup,eye]){
+     device.updateWorldMatrix(true,true);const box=new THREE.Box3().setFromObject(device);
+     for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){
+      const p=new THREE.Vector3(x,y,z).project(camera);left=Math.min(left,(p.x+1)*r.width/2);
+     }
+    }
+    const shift=Math.min(56,r.width*.12,Math.max(0,left-viewport.left-12));
+    camera.projectionMatrix.elements[8]+=2*shift/r.width;camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
+   }
+   virtualImage.rotation.y=Math.atan2(camera.position.x-virtualImage.position.x,camera.position.z-virtualImage.position.z);virtualImage.updateMatrixWorld(true);
   }
   const labels=createBenchLabels({THREE,root,canvas,camera,virtualImage,G,state:()=>magnifierState(state),viewport:()=>viewport,front:()=>front,rays:()=>showRays,receiver:()=>state.eye,receiverName:'固定眼睛',lightPaths:()=>showRays?magnifierDisplayRays(state,point):[]});
   function annotations(){
