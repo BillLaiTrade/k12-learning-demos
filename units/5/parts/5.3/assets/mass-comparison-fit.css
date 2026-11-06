@@ -1,0 +1,41 @@
+/* 桌機比較台同時呈現器材、控制與結果；模型及實驗狀態不變。 */
+.mass-toolbar{min-width:0}
+.mass-console .mass-actions{margin-top:12px}
+@media(min-width:1100px){
+ #mass-lab{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(250px,1fr);grid-template-rows:auto auto auto auto;grid-template-areas:"toolbar toolbar" "bench results" "console results" "note results";gap:8px 12px;padding:10px;align-items:start}
+ .mass-toolbar{grid-area:toolbar;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px}
+ #mass-lab .mass-conditions{display:block;flex:1;margin:0;font-size:.8rem;line-height:1.5}
+ #mass-lab .mass-conditions strong{display:block}
+ #mass-lab .mass-setting{flex:0 0 auto;margin:0;gap:7px;flex-wrap:nowrap}
+ #mass-lab .mass-setting>span:last-child{display:none}
+ #mass-lab .mass-choices{gap:6px}
+ #mass-lab .mass-choices button{min-width:65px;padding:6px 9px;font-size:.82rem}
+ #mass-lab .mass-bench{grid-area:bench;margin:0;border-radius:10px}
+ #mass-lab .mass-photo{min-width:0}
+ #mass-lab .mass-meter{font-size:clamp(13px,2.35cqi,25px)}
+ #mass-lab .mass-badge{font-size:.72rem;padding:2px 5px}
+ #mass-lab .mass-sample-state{font-size:.62rem;padding:0 3px}
+ #mass-lab .mass-results{grid-area:results;display:flex;flex-direction:column;gap:8px;margin:0;min-width:0}
+ #mass-lab .mass-rise-panel,#mass-lab .mass-record-panel{padding:9px 10px;border-radius:10px}
+ #mass-lab .mass-rise-panel h3,#mass-lab .mass-record-panel h3{margin:0 0 5px;font-size:.9rem;line-height:1.5}
+ #mass-lab .mass-bar-row{grid-template-columns:28px minmax(0,1fr) 56px;gap:6px;margin:6px 0;font-size:.82rem;line-height:1.5}
+ #mass-lab .mass-bar-row strong{font-size:.86rem}
+ #mass-lab .mass-bar-track{height:13px}
+ #mass-lab .mass-bar-scale{margin-left:34px;margin-right:62px;font-size:.7rem;line-height:1.5}
+ #mass-lab .mass-record-panel table{font-size:.8rem;line-height:1.5}
+ #mass-lab .mass-record-panel thead th{font-size:.75rem}
+ #mass-lab .mass-record-panel th,#mass-lab .mass-record-panel td{padding:5px 3px}
+ #mass-lab .mass-console{grid-area:console;display:flex;align-items:center;gap:9px;min-width:0;padding:0}
+ #mass-lab .mass-actions{flex:0 0 auto;margin:0;padding:0;border:0;gap:6px}
+ #mass-lab .mass-actions button{padding:8px 11px;font-size:.85rem}
+ #mass-lab .mass-status{flex:1;margin:0;font-size:.76rem;line-height:1.5;min-height:0}
+ #mass-lab .mass-model-note{grid-area:note;margin:0;font-size:.72rem;line-height:1.5}
+ #mass-lab #mass-conclusion{gap:7px;margin:0;padding:6px 9px;font-size:.82rem;line-height:1.5}
+ #mass-lab #mass-conclusion .speaker::before{width:32px;height:32px}
+ #mass-lab .mass-pan-hint{display:none}
+}
+@media(max-width:1099px){
+ .mass-console{margin-top:12px}
+ .mass-console .mass-actions{margin-top:0}
+ #mass-lab #mass-conclusion{margin-top:0}
+}

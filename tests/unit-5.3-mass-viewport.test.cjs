@@ -1,0 +1,20 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),{spawn}=require('node:child_process'),path=require('node:path'),fs=require('node:fs/promises'),{chromium}=require('playwright');
+test('第三區桌機同視窗：切換、運行、三筆紀錄與歸納不用上下捲動',{timeout:180000},async t=>{
+ const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..'),stdio:['ignore','pipe','pipe']});t.after(()=>server.kill());
+ const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{const m=String(d).match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.on('error',reject);});
+ const remote=process.env.UNIT53_URL,url=remote||`http://127.0.0.1:${port}/units/5/parts/5.3/`,browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox'],...(remote?{proxy:{server:process.env.HTTPS_PROXY||process.env.HTTP_PROXY}}:{})});t.after(()=>browser.close());
+ const layouts=[],errors=[];
+ for(const [width,height]of [[1440,900],[1366,768],[1280,720],[1536,864],[1440,720]]){
+  await t.test(`${width}×${height}初始、運行及完成都可同時查看`,async()=>{
+   const page=await browser.newPage({viewport:{width,height}});page.on('pageerror',e=>errors.push(e.message));await page.goto(url,{waitUntil:'networkidle'});await page.clock.install();await page.clock.pauseAt(new Date(Date.now()+1000));await page.locator('.route a[href="#card-03"]').click();
+   const initialScroll=await page.evaluate(()=>scrollY);
+   const inspect=async state=>{const layout=await page.locator('#mass-lab').evaluate(n=>{const box=e=>{const r=e.getBoundingClientRect();return{x:r.x,y:r.y,w:r.width,h:r.height,right:r.right,bottom:r.bottom};};const selectors=['.mass-toolbar','.mass-bench','.mass-console','.mass-rise-panel','.mass-model-note',...(!document.querySelector('#mass-record-panel').hidden?['#mass-record-panel']:[]),...(!document.querySelector('#mass-conclusion').hidden?['#mass-conclusion']:[])];return{width:innerWidth,height:innerHeight,scroll:scrollY,root:box(n),elements:selectors.map(s=>({selector:s,...box(n.querySelector(s))})),meters:[...n.querySelectorAll('.mass-meter')].map(e=>({...box(e),font:parseFloat(getComputedStyle(e).fontSize),clipped:e.scrollWidth>e.clientWidth+1})),knobs:[...n.querySelectorAll('.mass-knob')].map(box),overflow:document.documentElement.scrollWidth>innerWidth,internalScroll:[n,...n.querySelectorAll('.mass-results,.mass-console,.mass-scene-pan')].some(e=>e.scrollHeight>e.clientHeight+1)};});layouts.push({state,...layout});assert.equal(layout.scroll,initialScroll,`${state} should not auto-scroll`);assert.equal(layout.overflow,false);assert.equal(layout.internalScroll,false,`${state} no nested vertical scroll`);for(const r of layout.elements){assert.ok(r.y>=0&&r.bottom<=height,`${width}x${height} ${state} ${r.selector} outside viewport: ${JSON.stringify(r)}`);assert.ok(r.x>=0&&r.right<=width);}for(const r of layout.meters){assert.equal(r.clipped,false);assert.ok(r.font>=13);}for(const r of layout.knobs)assert.ok(r.w>=44&&r.h>=44);};
+   await inspect('ready');
+   for(const mass of [100,200,300]){await page.locator(`[data-mass-choice="${mass}"]`).click();await page.locator('#mass-play').click();await page.clock.runFor(1000);await inspect(`running-${mass}`);await page.clock.runFor(5000);assert.equal(await page.locator('#mass-lab').getAttribute('data-phase'),'complete');await inspect(`complete-${mass}`);}
+   assert.equal(await page.locator('#mass-records tr').count(),3);
+   if(process.env.MASS_VIEWPORT_CAPTURE_DIR){await fs.mkdir(process.env.MASS_VIEWPORT_CAPTURE_DIR,{recursive:true});await page.screenshot({path:path.join(process.env.MASS_VIEWPORT_CAPTURE_DIR,`${width}x${height}.png`)});}
+   await page.close();
+  });
+ }
+ if(process.env.MASS_VIEWPORT_CAPTURE_DIR)await fs.writeFile(path.join(process.env.MASS_VIEWPORT_CAPTURE_DIR,'layouts.json'),JSON.stringify(layouts,null,2));assert.deepEqual(errors,[]);
+});
