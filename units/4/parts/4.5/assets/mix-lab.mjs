@@ -1,4 +1,4 @@
-import {MIX_SETUP,MIX_KEYS,MIX_SOURCES,SOURCE_LINEAR,arrangeMix,mixSample,mixtureRegions,mixObservation,torchAim} from './mix-optics.mjs?v=science-reviewed-20261106';
+import {MIX_SETUP,MIX_KEYS,MIX_SOURCES,SOURCE_LINEAR,arrangeMix,mixSample,mixtureRegions,mixObservation,torchAim} from './mix-optics.mjs?v=mix-dialogue-20261106';
 
 const NAMES=['紅','綠','藍'];
 const GUIDE_COLORS=['#ff8072','#8bedaa','#a5caff'];
