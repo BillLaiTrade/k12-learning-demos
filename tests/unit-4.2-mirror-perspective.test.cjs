@@ -36,6 +36,8 @@ test('物距像距共享讀值、正面遮擋與原生拖動',{timeout:120000},a
     await page.goto(new URL('units/4/parts/4.2/',base).href,{waitUntil:'load'});await page.addStyleTag({content:'html{scroll-behavior:auto!important}'});
     const bear=page.locator('#distance-side-object');await expect(bear).toHaveAttribute('aria-valuenow','40');
     assert.equal(await page.locator('#card-05 .distance-readouts').count(),1);assert.equal(await page.locator('#card-05 .mirror-view').count(),2);
+    assert.equal(await page.locator('#card-05').evaluate(e=>Boolean(e.querySelector('.mirror-views').compareDocumentPosition(e.querySelector('.distance-readouts'))&Node.DOCUMENT_POSITION_FOLLOWING)),true);
+    assert.equal(await page.locator('#distance-occlusion').count(),0);
     const visible=[];
     for(const [key,distance] of [['Home',10],['Shift+ArrowLeft',20],['Shift+ArrowLeft',30],['Shift+ArrowLeft',40],['End',60],['Home',10]]){
       await bear.press(key);await expect(bear).toHaveAttribute('aria-valuenow',String(distance));await page.screenshot({clip:{x:0,y:0,width:1,height:1}});
@@ -46,12 +48,11 @@ test('物距像距共享讀值、正面遮擋與原生拖動',{timeout:120000},a
         ctx.drawImage(b,i.x,i.y,i.width,i.height);const alpha=()=>{const pixels=ctx.getImageData(179,47,262,202).data;let sum=0;for(let k=3;k<pixels.length;k+=4)sum+=pixels[k];return sum;};
         const all=alpha();ctx.globalCompositeOperation='destination-out';ctx.drawImage(a,o.x,o.y,o.width,o.height);const remaining=alpha();
         const tags=[...svg.querySelectorAll('[data-distance-tag] rect')].map(x=>{const r=x.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};}),r=svg.getBoundingClientRect();
-        return {o,i,visible:remaining/all,tags,bounds:{left:r.left,right:r.right,top:r.top,bottom:r.bottom},occlusion:e.querySelector('#distance-occlusion').hidden===false,markers:['object','image'].map(k=>n(e.querySelector(`#distance-ruler-${k}-marker`).getAttribute('x1'))),overflow:document.documentElement.scrollWidth>innerWidth};
+        return {o,i,visible:remaining/all,tags,bounds:{left:r.left,right:r.right,top:r.top,bottom:r.bottom},markers:['object','image'].map(k=>n(e.querySelector(`#distance-ruler-${k}-marker`).getAttribute('x1'))),overflow:document.documentElement.scrollWidth>innerWidth};
       });
       const expected=project(distance);close(data.o.height,expected.object.size,.001);close(data.i.height,expected.image.size,.001);close(data.o.y,expected.object.top,.001);close(data.i.y,expected.image.top,.001);close(310-data.markers[0],distance*4);close(data.markers[1]-310,distance*4);assert.equal(data.overflow,false);visible.push(data.visible);
       assert.ok(data.tags[0].bottom<=data.tags[1].top,JSON.stringify({width,distance,tags:data.tags}));
       for(const tag of data.tags)assert.ok(tag.left>=data.bounds.left-1&&tag.right<=data.bounds.right+1&&tag.top>=data.bounds.top-1&&tag.bottom<=data.bounds.bottom+1,JSON.stringify({width,distance,tag}));
-      if(distance===10)assert.equal(data.occlusion,true);
       if(captures&&width!==320)await page.locator('#card-05 .mirror-views').screenshot({path:path.join(captures,`${width}-${distance}.png`)});
       if(captures&&width===1440&&distance===40)await page.locator('#card-05 .card-main').screenshot({path:path.join(captures,'complete-1440.png')});
     }
