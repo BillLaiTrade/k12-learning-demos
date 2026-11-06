@@ -101,3 +101,8 @@ play.addEventListener('click',startTogether);root.querySelectorAll('[data-mass-s
 window.addEventListener('blur',interrupt);document.addEventListener('visibilitychange',()=>{if(document.hidden)interrupt();});
 document.querySelector('.route').addEventListener('click',event=>{const link=event.target.closest('a');if(link&&link.hash!=='#card-03'&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey)interrupt();});
 loadScene();
+
+// 導覽進入後將操作台置於視窗上緣，操作時不必上下移動。
+const massLink=document.querySelector('.route a[href="#card-03"]');
+massLink.addEventListener('click',event=>{if(innerWidth>=1100&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey){event.preventDefault();history.pushState(null,'','#card-03');root.scrollIntoView({block:'start',behavior:'instant'});}});
+if(location.hash==='#card-03'&&innerWidth>=1100)window.addEventListener('load',()=>root.scrollIntoView({block:'start',behavior:'instant'}),{once:true});

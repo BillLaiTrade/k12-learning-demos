@@ -49,7 +49,7 @@ test('5.3 共通格式、導覽連動與原有活動回歸', {timeout:180000}, a
       const link=links.nth(i),hash=await link.getAttribute('href');
       assert.equal(await link.locator('span').textContent(),i===5?'單元小測':await page.locator(`${hash} h2`).textContent());
       await link.click();assert.equal(new URL(page.url()).hash,hash);
-      const top=await page.locator(hash).evaluate(n=>n.getBoundingClientRect().top);assert.ok(top>=0&&top<160);
+      const top=await page.locator(hash==='#card-03'?'#mass-lab':hash).evaluate(n=>n.getBoundingClientRect().top);assert.ok(top>=0&&top<160);
       await page.waitForFunction(hash=>document.querySelector(`.route a[href="${hash}"]`).getAttribute('aria-current')==='step',hash);
     }
     for(const id of ['title-02','quiz-title']){
