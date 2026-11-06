@@ -1,0 +1,21 @@
+{
+  "card-01": {
+    "identical": true,
+    "sha256": "2ff81e02852cbd2d43ee08843cc0b2df2f3a828cad5d257e47bd25360e519fa0"
+  },
+  "card-02": {
+    "identical": true,
+    "sha256": "65d7f376705760e42465124ac6dacdd87ab8cd476dd79f268ebd31045aae141e"
+  },
+  "card-03": {
+    "identical": true,
+    "sha256": "0182093a481245787da2de10b7fa36c06cf6399a91b38c0692da71e759e076f0"
+  },
+  "card-04": {
+    "identical": true,
+    "sha256": "6c59794a3cdc91c39cb9984e90d6c514e25dc573602ff4472427eaada0fd0a1a"
+  },
+  "card-05-only-bridge-updated": true,
+  "old-controller-only-quiz-grader-removed": true,
+  "baseline": "8304511bb7512c21fd712e08998b35e059dfcd17"
+}
