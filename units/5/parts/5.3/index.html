@@ -40,8 +40,8 @@
   <script type="module" src="assets/material-comparison-lab.js?v=derive-1"></script>
   <link rel="stylesheet" href="assets/application-lab.css?v=applications-1">
   <script type="module" src="assets/application-lab.js?v=applications-1"></script>
-  <link rel="stylesheet" href="assets/unknown-quiz.css?v=quiz-layout-1">
-  <script type="module" src="assets/unknown-quiz.js?v=quiz-layout-1"></script>
+  <link rel="stylesheet" href="assets/unknown-quiz.css?v=quiz-self-read-1">
+  <script type="module" src="assets/unknown-quiz.js?v=quiz-self-read-1"></script>
 </head>
 <body>
   <header class="shell masthead"><div class="brand-row"><a class="brand" href="../../index.html">← 溫度與熱</a><span class="crumb">國二上・熱量與比熱</span></div>
@@ -270,12 +270,31 @@
             <p class="visually-hidden" id="unknown-readings"></p>
             <form id="heat-quiz" class="unknown-answer" novalidate>
               <section class="unknown-reasoning" aria-labelledby="unknown-reasoning-title">
-                <header class="unknown-reasoning-head"><h3 id="unknown-reasoning-title">你的推論</h3><details class="unknown-formula"><summary>公式提示</summary><p><strong>Q＝m×c×ΔT</strong><br>Q：吸收熱量；m：質量；c：比熱；ΔT：末溫－初溫。請使用未知樣品的溫升推算。</p></details></header>
+                <header class="unknown-reasoning-head">
+                  <div><h3 id="unknown-reasoning-title">你的推論</h3><p class="unknown-reasoning-intro">根據觀察讀值，完成三步推論。</p></div>
+                  <details class="unknown-formula"><summary>公式提示</summary><p><strong>溫升 ΔT＝末溫－初溫</strong><br><strong>Q＝m×c×ΔT</strong><br>Q：吸收熱量；m：質量；c：比熱。請使用未知樣品的溫升推算。</p></details>
+                </header>
               <fieldset id="unknown-answer-fields" disabled><legend class="visually-hidden">根據觀察讀值，完成溫升、未知比熱及所需熱量的推論。</legend>
                 <div class="unknown-answer-grid">
-                  <div class="unknown-step"><h4><span class="unknown-step-number">1</span> 先找出溫升</h4><div class="unknown-rise-inputs"><label for="unknown-rise-a"><span><span class="unknown-sample-badge" data-letter="a">甲</span> 的溫升</span><span><input id="unknown-rise-a" name="riseA" type="number" min="0" step="any" inputmode="decimal" aria-describedby="unknown-rise-help unknown-rise-a-feedback"> °C</span></label><label for="unknown-rise-b"><span><span class="unknown-sample-badge" data-letter="b">乙</span> 的溫升</span><span><input id="unknown-rise-b" name="riseB" type="number" min="0" step="any" inputmode="decimal" aria-describedby="unknown-rise-help unknown-rise-b-feedback"> °C</span></label></div><p id="unknown-rise-help" class="unknown-note">溫升填至小數點後1位。</p><p class="unknown-feedback" id="unknown-rise-a-feedback" hidden></p><p class="unknown-feedback" id="unknown-rise-b-feedback" hidden></p></div>
+                  <div class="unknown-step">
+                    <h4><span class="unknown-step-number">1</span> 先找出溫升</h4>
+                    <div class="unknown-rise-inputs">
+                      <label for="unknown-rise-a"><span><span class="unknown-sample-badge" data-letter="a">甲</span> 的溫升</span><span class="unknown-entry"><input id="unknown-rise-a" name="riseA" type="number" min="0" step="any" inputmode="decimal" aria-describedby="unknown-rise-help unknown-rise-a-feedback"> °C</span><span class="unknown-feedback" id="unknown-rise-a-feedback" hidden></span></label>
+                      <label for="unknown-rise-b"><span><span class="unknown-sample-badge" data-letter="b">乙</span> 的溫升</span><span class="unknown-entry"><input id="unknown-rise-b" name="riseB" type="number" min="0" step="any" inputmode="decimal" aria-describedby="unknown-rise-help unknown-rise-b-feedback"> °C</span><span class="unknown-feedback" id="unknown-rise-b-feedback" hidden></span></label>
+                    </div>
+                    <p id="unknown-rise-help" class="unknown-note">溫升填至小數點後1位。</p>
+                  </div>
                   <div class="unknown-step"><h4><span class="unknown-step-number">2</span> 推算未知比熱</h4><label class="unknown-specific-input" for="unknown-specific-heat"><span><span class="unknown-sample-badge" id="unknown-specific-badge" data-letter="b">乙</span><span id="unknown-specific-label">的比熱約為</span></span><span><input id="unknown-specific-heat" name="specificHeat" type="number" min="0" step="any" inputmode="decimal" aria-describedby="unknown-specific-help unknown-specific-heat-feedback"> <span class="unknown-unit">cal／(g·°C)</span></span></label><p id="unknown-specific-help" class="unknown-note">比熱可填至小數點後2位。</p><p class="unknown-feedback" id="unknown-specific-heat-feedback" hidden></p></div>
-                  <fieldset class="unknown-step unknown-comparison" id="unknown-comparison"><legend><span class="unknown-step-number">3</span> 同樣質量、升高相同溫度，誰需要較多熱量？</legend><div class="unknown-choice-row"><label><input type="radio" name="comparison" value="a" aria-describedby="unknown-comparison-feedback"> 樣品<span class="unknown-sample-badge" data-letter="a">甲</span></label><label><input type="radio" name="comparison" value="b" aria-describedby="unknown-comparison-feedback"> 樣品<span class="unknown-sample-badge" data-letter="b">乙</span></label><label><input type="radio" name="comparison" value="same" aria-describedby="unknown-comparison-feedback"> 相同</label></div><p class="unknown-feedback" id="unknown-comparison-feedback" hidden></p></fieldset>
+                  <fieldset class="unknown-step unknown-comparison" id="unknown-comparison" aria-describedby="unknown-comparison-question">
+                    <legend><span class="unknown-comparison-title"><span class="unknown-step-number">3</span> 比較所需熱量</span><span class="unknown-comparison-condition">質量相同、升溫相同</span></legend>
+                    <p class="unknown-comparison-question" id="unknown-comparison-question">哪份樣品需要較多熱量？</p>
+                    <div class="unknown-choice-row">
+                      <label><input type="radio" name="comparison" value="a" aria-describedby="unknown-comparison-feedback"><span class="unknown-choice-copy"><span class="unknown-choice-title"><span class="unknown-sample-badge" data-letter="a">甲</span> 樣品甲</span><span class="unknown-choice-kind" id="unknown-choice-a-kind">水</span></span></label>
+                      <label><input type="radio" name="comparison" value="b" aria-describedby="unknown-comparison-feedback"><span class="unknown-choice-copy"><span class="unknown-choice-title"><span class="unknown-sample-badge" data-letter="b">乙</span> 樣品乙</span><span class="unknown-choice-kind" id="unknown-choice-b-kind">未知固體</span></span></label>
+                      <label><input type="radio" name="comparison" value="same" aria-describedby="unknown-comparison-feedback"><span class="unknown-choice-title">一樣多</span></label>
+                    </div>
+                    <p class="unknown-feedback" id="unknown-comparison-feedback" hidden></p>
+                  </fieldset>
                 </div>
                 <div class="unknown-actions unknown-answer-actions"><button class="secondary" type="reset">重新作答</button><button class="action" type="submit" id="unknown-check">核對推論</button></div>
               </fieldset>
