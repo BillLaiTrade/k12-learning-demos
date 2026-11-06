@@ -78,7 +78,7 @@ test('4.2 第一區：材質、相同照射條件、觀看位置與獨立開關'
       await expect(mirror).toHaveCSS('color',a?'rgb(255, 255, 255)':'rgb(66, 89, 78)');
       await expect(paper).toHaveCSS('color',b?'rgb(255, 255, 255)':'rgb(66, 89, 78)');
       const state=await page.evaluate(()=>{const b=window.__surfaceLab;return{power:b.spotLights.map(x=>x.intensity),lens:b.lampLenses.map(x=>x.emissiveIntensity),indicator:b.lampIndicators.map(x=>x.emissiveIntensity),small:[...document.querySelectorAll('.reflection-fire small')].map(x=>x.textContent),background:[...document.querySelectorAll('.reflection-fire')].map(x=>getComputedStyle(x).backgroundColor)};});
-      [a,b].forEach((on,i)=>{assert.equal(state.power[i]>0,on);assert.equal(state.lens[i]>0,on);assert.equal(state.indicator[i]>0,on);assert.equal(state.small[i],on?'已開啟':'已關閉');});
+      [a,b].forEach((on,i)=>{assert.equal(state.power[i]>0,on);assert.equal(state.lens[i]>0,on);assert.equal(state.indicator[i]>0,on);assert.equal(state.small[i],on?'已開啟・點擊關閉':'已關閉・點擊開啟');});
       if(a!==b)assert.notEqual(state.background[0],state.background[1]);
     }
   });

@@ -1,0 +1,11 @@
+{
+  "baseline": "e3b500e08ab3b4e413011e897627252525192da3",
+  "checks": {
+    "card01Identical": true,
+    "card03OnwardsIdentical": true,
+    "shareMetadataIdentical": true,
+    "otherResourcesIdentical": true
+  },
+  "unchangedFiles": 34,
+  "physicalSetupSHA256": "381e4b883e34dd30c47f3c981f9e56b2781517cc7387ad30d41d1afbc1637f19"
+}
