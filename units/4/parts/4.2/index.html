@@ -39,17 +39,15 @@
     .laser-lab{overflow:hidden;border:1px solid #d8dfdf;border-radius:16px;background:#b8895f}
     #laser-reflection-scene{display:block;width:100%;height:clamp(320px,38vw,430px);touch-action:pan-y;cursor:default}
     #laser-reflection-scene:focus-visible{outline:3px solid #176b53;outline-offset:-4px}
-    .laser-lab-ui{display:grid;grid-template-columns:minmax(0,1fr) minmax(190px,auto);align-items:center;gap:12px 16px;padding:12px 18px;background:#fffdf8}
+    .laser-scene{position:relative;isolation:isolate;overflow:hidden}
+    .angle-callouts{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
+    .angle-callout path{fill:none;stroke-width:1.5}.angle-callout text{font:700 15px system-ui,sans-serif;paint-order:stroke;stroke:#fffdf4;stroke-width:2px;stroke-linejoin:round}.angle-callout[data-kind=incident] path{stroke:#165fc2}.angle-callout[data-kind=incident] text{fill:#165fc2}.angle-callout[data-kind=reflected] path{stroke:#24783a}.angle-callout[data-kind=reflected] text{fill:#24783a}.angle-callout[data-kind=both] path{stroke:#244a40}.angle-callout[data-kind=both] text{fill:#244a40}@media(max-width:760px){.angle-callout text{font-size:12px;stroke-width:1.5px}}
+    .laser-lab-ui{display:grid;grid-template-columns:minmax(0,1fr);align-items:center;gap:12px 16px;padding:12px 18px;background:#fffdf8}
     .laser-view-current{margin:0;color:#47645a;font-size:.82rem;font-weight:800}
-    .laser-angle-readout{display:grid;grid-template-columns:1fr 1fr;gap:8px;color:#1459af;font-size:.88rem;font-weight:850}
-    .laser-angle-readout span{padding:7px 10px;border-radius:10px;background:#edf4fb;white-space:nowrap}
-    .laser-angle-readout span:last-child{background:#eef5eb;color:#24783a}
-    .laser-angle-readout strong{padding-left:4px;font-variant-numeric:tabular-nums}
     .laser-observation{margin:0;padding:13px 18px;background:#f0f5eb;color:#315a46;font-weight:750}
-    @media(max-width:960px){.laser-lab-ui{grid-template-columns:minmax(0,1fr) minmax(175px,auto);gap:12px}}
+    @media(max-width:960px){.laser-lab-ui{grid-template-columns:minmax(0,1fr);gap:12px}}
     @media(max-width:780px){.laser-lesson{width:auto;margin-left:0}}
     @media(max-width:760px){#laser-reflection-scene{height:clamp(140px,70vw,280px)}.laser-lab-ui{grid-template-columns:1fr;padding:14px}}
-    @media(max-width:440px){.laser-angle-readout{gap:6px;font-size:.8rem}.laser-angle-readout span{padding:7px 8px}}
   </style>
   <style>
     #card-04 .mirror-views,#card-05 .mirror-views{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
@@ -75,7 +73,7 @@
   <link rel="stylesheet" href="assets/mirror-image.css?v=mirror-dialogue-20261106">
   <link rel="stylesheet" href="assets/mirror-distance.css?v=readouts-below-20261106">
   <link rel="stylesheet" href="assets/curved-mirrors.css?v=applications-heading-20261106">
-  <link rel="stylesheet" href="assets/reversible-light.css?v=no-reset-20261106">
+  <link rel="stylesheet" href="assets/reversible-light.css?v=clear-angle-labels-20261106">
   <link rel="stylesheet" href="assets/periscope.css?v=success-feedback-20261106">
   <style>
     .route a.quiz-nav{margin-top:12px;border-top:1px solid var(--line);padding-top:17px;color:#8a6726;font-size:.86rem;font-weight:750}
@@ -200,10 +198,9 @@
                 </svg>
               </section>
               <section class="laser-lab" aria-label="可調整入射角的雷射反射實驗">
-                <canvas id="laser-reflection-scene" tabindex="0" role="slider" aria-label="調整入射角。使用方向鍵每次調整一度，Home 和 End 可快速調整至 20 度或 90 度。" aria-valuemin="20" aria-valuemax="90" aria-valuenow="30" aria-valuetext="入射角 30 度，反射角 30 度" aria-describedby="laser-drag-instruction"></canvas>
-                <div class="laser-lab-ui" aria-label="雷射角度操作與讀數">
+                <div class="laser-scene"><canvas id="laser-reflection-scene" tabindex="0" role="slider" aria-label="調整入射角。使用方向鍵每次調整一度，Home 和 End 可快速調整至 20 度或 90 度。" aria-valuemin="20" aria-valuemax="90" aria-valuenow="30" aria-valuetext="入射角 30 度，反射角 30 度" aria-describedby="laser-drag-instruction"></canvas></div>
+                <div class="laser-lab-ui" aria-label="雷射角度操作說明">
                   <p class="laser-view-current" id="laser-drag-instruction">拖動雷射調整角度；也可聚焦畫面後用方向鍵微調。</p>
-                  <div class="laser-angle-readout"><span>入射角 <strong id="lab-angle-in">30°</strong></span><span>反射角 <strong id="lab-angle-out">30°</strong></span></div>
                 </div>
               </section>
               <p class="laser-observation" id="angle-observation" aria-live="polite">入射角和反射角一樣大。</p>
@@ -230,7 +227,7 @@
                 <div class="reverse-overlap" id="reverse-overlap" hidden>紅藍光路重合</div>
                 <div class="reverse-fallback" id="reverse-fallback" hidden><p id="reverse-fallback-message"></p><svg id="reverse-fallback-svg" viewBox="0 0 400 325" role="img" aria-label="光路可逆的替代俯視圖"></svg></div>
               </div>
-              <div class="reverse-lab-footer"><span id="reverse-lock-note">點擊器材開關光源；拖動 A 可調整方向。</span><span class="reverse-angle-readout"><span class="reverse-incident-angle">入射角</span>＝<span class="reverse-reflected-angle">反射角</span>＝<output id="reverse-angle-value" aria-label="目前入射角與反射角">30°</output></span></div>
+              <div class="reverse-lab-footer"><span id="reverse-lock-note">點擊器材開關光源；拖動 A 可調整方向。</span></div>
             </div>
             <div class="reverse-paths"><div><small>A 紅光路徑</small><strong>A → M → B</strong><span id="reverse-path-a-status">已關閉</span></div><div><small>B 藍光路徑</small><strong>B → M → A</strong><span id="reverse-path-b-status">已關閉</span></div></div>
             <div class="dialogue dialogue--xiaokui"><span class="speaker"><span class="visually-hidden">小葵</span></span><p>真的耶！從另一頭照過來，光會沿著原來的路走回去！</p></div>
@@ -506,8 +503,8 @@
   <script type="module" src="assets/mirror-image.js?v=distance-segment-light-20261106"></script>
   <script type="module" src="assets/reflection-3d.js?v=flashlight-controls-20261106"></script>
   <script type="module" src="assets/surface-directions.js?v=surface-flow-20261105"></script>
-  <script type="module" src="assets/laser-reflection.js?v=terminal-arrow-20261106"></script>
-  <script type="module" src="assets/reversible-light.js?v=direction-arrows-20261106"></script>
+  <script type="module" src="assets/laser-reflection.js?v=clear-angle-labels-20261106"></script>
+  <script type="module" src="assets/reversible-light.js?v=clear-angle-labels-20261106"></script>
   <script type="module" src="assets/periscope.js?v=one-activity-20261106"></script>
 </body>
 </html>
