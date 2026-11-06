@@ -86,7 +86,9 @@ test('潛望鏡有限鏡面、管壁與反向傳播',async t=>{
   });
 });
 
-test('潛望鏡實際操作、畫面與三階段評量',{timeout:180000},async t=>{
+// Historical three-stage UI was retired; the single-activity browser test is
+// maintained in unit-4.2-periscope-single.test.cjs. Keep the optics tests above.
+test.skip('舊版潛望鏡三階段操作與評量',{timeout:180000},async t=>{
   const server=spawn('python',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:root,stdio:['ignore','pipe','pipe']});
   t.after(()=>server.kill());
   const port=await new Promise((resolve,reject)=>{let out='';const timer=setTimeout(()=>reject(new Error('server timeout')),5000);server.stdout.on('data',d=>{out+=d;const m=out.match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.once('error',reject);});
