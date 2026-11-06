@@ -12,6 +12,15 @@ const sampleAt=heat=>heatStageObservationAt(secondsForWaterHeat(heat),target);
 const exampleMode=()=>elapsed===0&&!playing;
 
 function cancel(){playing=false;cancelAnimationFrame(frame);frame=0;}
+function analysis(data,example){
+  get('heat-stage-analysis-mode').textContent=example?'推算示例・非本次觀察':'本次觀察・沿途前三筆';
+  const body=get('heat-stage-analysis-data');body.replaceChildren();
+  for(let i=0;i<3;i++){
+    const r=data[i],row=document.createElement('tr'),heat=document.createElement('th'),rise=document.createElement('td');
+    heat.scope='row';heat.textContent=r?number(r.waterCalories)+' cal':'待記錄';rise.textContent=r?r.rise.toFixed(1)+'°C':'—';
+    row.append(heat,rise);body.append(row);
+  }
+}
 function graph(){
   const state=observation(),example=exampleMode(),width=Math.max(220,Math.round(svg.getBoundingClientRect().width)||400);
   const photoBox=root.querySelector('.calorie-photo').getBoundingClientRect(),plotBox=svg.parentElement.getBoundingClientRect();
@@ -65,6 +74,7 @@ function render(){
   if(key!==rowsKey){
     rowsKey=key;const body=get('heat-stage-records');body.replaceChildren();
     for(const r of data){const row=document.createElement('tr');[number(r.waterCalories)+' cal',r.temperature.toFixed(1)+'°C',r.rise.toFixed(1)+'°C'].forEach((value,i)=>{const cell=document.createElement(i?'td':'th');if(!i)cell.scope='row';cell.textContent=value;row.append(cell);});body.append(row);}
+    analysis(data,example);
   }
   get('heat-stage-record-label').textContent=example?'查看推算示例的逐點數據':`查看沿途觀察紀錄（${records.length}筆）`;
   graph();bench.draw({elapsed,playing,ready,speed:STAGE_ANIMATION_SPEED});
