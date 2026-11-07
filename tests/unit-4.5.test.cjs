@@ -22,7 +22,7 @@ test('4.5 五區與小測：實際操作、畫面一致與手機備援',{timeout
  const opticalPixels=async locator=>locator.evaluate(c=>Array.from(c.getContext('2d').getImageData(0,c.height/2,c.width,1).data));
  await t.test('五區對話、獨立小測、封面與分享縮圖及唯一ID完整',async()=>{
   assert.equal(await page.locator('.lesson-card').count(),5);assert.equal(await page.locator('form').count(),1);assert.equal(await page.locator('.unit-quiz fieldset').count(),2);
-  for(let i=1;i<=5;i++){assert.equal(await page.locator(`#s${i} .dialogue`).count(),i===1||i===2?4:3);assert.equal(await page.locator(`.route a[href="#s${i}"] span`).innerText(),await page.locator(`#s${i} h2`).innerText());}
+  for(let i=1;i<=5;i++){assert.equal(await page.locator(`#s${i} .dialogue`).count(),i===1||i===2||i===4?4:3);assert.equal(await page.locator(`.route a[href="#s${i}"] span`).innerText(),await page.locator(`#s${i} h2`).innerText());}
   const ids=await page.locator('[id]').evaluateAll(es=>es.map(e=>e.id));assert.equal(ids.length,new Set(ids).size);assert.equal(await page.locator('.hero-cover img').evaluate(e=>e.complete&&e.naturalWidth===1672),true);
   assert.match(await page.locator('[property="og:image"]').getAttribute('content'),/4\.5\/assets\/color-story-opening-window\.png$/);await page.locator('.hero').screenshot({path:path.join(capture,'hero.png')});
  });

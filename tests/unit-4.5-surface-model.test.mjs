@@ -18,3 +18,8 @@ test('黑卡仍反射少量，白卡仍吸收少量，白光比較保留三色�
  const black=surfaceObservation('white','black'),white=surfaceObservation('white','white');
  assert.ok(black.signal.outgoing.every(v=>v>0));assert.ok(white.signal.absorbed.every(v=>v>0));assert.equal(black.incoming,'紅、綠、藍');assert.equal(white.incoming,'紅、綠、藍');assert.match(black.reflected,/較少/);assert.match(white.absorbed,/較少/);
 });
+
+test('小葵依實際外觀說話，阿公解釋反射，切換色卡與照明時同步更新',()=>{
+ const o=surfaceObservation('green','white');assert.equal(o.observation,'白色色卡照到綠光，竟然看起來變綠了！');assert.equal(o.result,'因為白色色卡反射了照到它上面的綠光，反射的光進入眼睛，所以看起來是綠色的。');
+ for(const light of ['white','red','green','blue'])for(const material of ['red','green','blue','white','black']){const v=surfaceObservation(light,material);assert.ok(v.observation.includes(v.name.split('在')[0]));if(light!=='green'||material!=='white')assert.ok(v.observation.includes(v.preview.replace('看起來','')));assert.match(v.result,/進入眼睛/);}
+});
