@@ -34,3 +34,9 @@
 #heat-discovery{font-size:.93rem}
 @media(min-width:761px) and (max-width:1100px){.heat-visuals{grid-template-columns:minmax(0,1.04fr) minmax(0,1fr)}.heat-plot svg text{font-size:17px}.heat-steps{gap:6px;padding-inline:12px}.heat-steps li{font-size:.85rem;gap:6px;padding:8px 6px}}
 @media(max-width:760px){.heat-visuals{grid-template-columns:1fr;padding:0 10px 12px;gap:10px}.heat-apparatus{aspect-ratio:1.15;min-height:275px}.heat-steps{padding:12px 10px;gap:5px}.heat-steps li{flex-direction:column;align-items:center;text-align:center;padding:9px 4px;font-size:.8rem;gap:5px}.heat-steps small{font-size:.7rem}.heat-plot svg{max-height:none}.heat-controls p{flex-basis:100%;margin:4px 0 0}.heat-controls button{min-width:0}.heat-plot{padding:14px 10px 8px}.heat-plot svg text{font-size:18px}.heat-plot h3{font-size:1.1rem}}
+
+/* Readability refinement: keep the 3D instrument as the visible temperature source. */
+.heat-apparatus.has-3d .heat-accessible-reading{width:1px;height:1px;padding:0;border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.heat-reference{position:absolute;left:10px;bottom:9px;z-index:2;margin:0;padding:3px 7px;border-radius:5px;background:#fffef6ed;color:#775129;font-size:.73rem;line-height:1.5}
+.heat-reference span{font-size:1.05rem;font-weight:800;vertical-align:-1px}
+.heat-plot svg .heat-phase-label{font-size:14px;font-weight:700;fill:#285c3c;stroke:#fffefa;stroke-width:4px;paint-order:stroke;stroke-linejoin:round}
