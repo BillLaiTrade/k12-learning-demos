@@ -1,53 +1,28 @@
 import {createParallelLabels} from './parallel-labels.mjs?v=20261104-lens-clear5';
 import {createLensVisual} from './lens-geometry.mjs?v=20261104-lens-clear5';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
+import {renderConvexRefraction} from './convex-refraction.mjs?v=20261107-convex-fold1';
 import {parallelModel} from './parallel-optics.mjs?v=20261104-lens-clear5';
 const root=document.querySelector('[data-convex-lab]');
 if(root) initialise(root);
 
 function initialise(root){
- const $=s=>root.querySelector(s),g=parallelModel('convex'),canvas=$('#convex-canvas'),svg=$('[data-convex-section]');
+ const $=s=>root.querySelector(s),g=parallelModel('convex'),canvas=$('#convex-canvas');
  const SCALE=.55,AXIS=1.75,world=p=>new THREE.Vector3(p[0]*SCALE,AXIS-p[1]*SCALE,0);
- let showRays=true,step='enter',studio=null;
- const NS='http://www.w3.org/2000/svg';
- function el(tag,attrs={},parent=svg){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));parent.append(e);return e;}
- function path(points,attrs={}){return el('path',{d:points.map((p,i)=>`${i?'L':'M'}${p[0]} ${p[1]}`).join(' '),fill:'none',...attrs});}
- function renderDetail(){
-  svg.replaceChildren();svg.setAttribute('viewBox',step==='enter'?'-.9 -1.9 2.4 1.8':'-.4 -1.9 2.4 1.8');
-  svg.setAttribute('aria-label',step==='enter'?'第一個表面，光由空氣進入玻璃，偏向法線':'第二個表面，光由玻璃進入空氣，偏離法線');
-  const defs=el('defs'),grad=el('linearGradient',{id:'convex-detail-glass'},defs);
-  for(const[offset,color]of [['0','#98c3bb'],['.5','#eafffa'],['1','#94bfb8']])el('stop',{offset,'stop-color':color,'stop-opacity':.8},grad);
-  const marker=el('marker',{id:'convex-detail-arrow',viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:5,markerHeight:5,orient:'auto',markerUnits:'strokeWidth'},defs);el('path',{d:'M0 0L10 5L0 10Z',fill:'#bd7149'},marker);
-  const boundary=[];for(let y=-g.halfHeight;y<=g.halfHeight+.0001;y+=.04)boundary.push([g.left(y),y]);for(let y=g.halfHeight;y>=-g.halfHeight-.0001;y-=.04)boundary.push([g.right(y),y]);
-  const lens=path([...boundary,boundary[0]],{fill:'url(#convex-detail-glass)',stroke:'#6b9d92','stroke-width':.012,'data-lens-boundary':'convex'});lens.dataset.centerThickness=g.thickness;lens.dataset.edgeThickness=g.right(g.halfHeight)-g.left(g.halfHeight);
-  const r=g.rays[0];
-  if(showRays){
-   for(const[part,points]of [['enter',[r.from,r.enter]],['inside',[r.enter,r.exit]],['exit',[r.exit,r.end]]]){
-    const active=part==='inside'||part===step;
-    path(points,{stroke:active?'#bd7149':'#bda35d','stroke-width':active?.018:.011,opacity:active?1:.42,'marker-end':'url(#convex-detail-arrow)','data-ray-part':part});
-   }
-   for(const[key,n]of [['enter',1],['exit',2]]){
-    const p=r[key],active=key===step;el('circle',{cx:p[0],cy:p[1],r:active?.042:.022,fill:active?'#f1d681':'#6c9f8f',stroke:active?'#176b53':'none','stroke-width':.012,'data-interface':n});
-    const t=el('text',{x:p[0]-.035,y:p[1]-.09,'font-size':.13,fill:'#176b53','font-weight':750});t.textContent=n;
-   }
-   const p=r[step],N=step==='enter'?r.N1:r.N2;
-   path([[p[0]-N[0]*.65,p[1]-N[1]*.65],[p[0]+N[0]*.65,p[1]+N[1]*.65]],{stroke:'#586e62','stroke-width':.01,'stroke-dasharray':'.045 .035','data-surface-normal':step});
-   const text=el('text',{x:step==='enter'?p[0]-.56:p[0]+.2,y:p[1]-.23,'font-size':.14,fill:'#3f5d4b'});text.textContent='法線';
-  }
-  for(const[x,y,s]of [[step==='enter'?-.33:-.15,-1.7,'空氣'],[.45,-.32,'玻璃'],[step==='enter'?1.13:1.4,-1.7,'空氣']]){const t=el('text',{x,y,'text-anchor':'middle','font-size':.15,fill:'#4c6a58'});t.textContent=s;}
- }
+ let showRays=true,studio=null;
  function update(){
-  renderDetail();
+  root.querySelectorAll('[data-convex-section]').forEach(svg=>renderConvexRefraction(svg,g,{rayIndex:svg.dataset.convexSection==='upper'?0:2,showRays,closeup:svg.dataset.closeup==='true'}));
   $('[data-parallel-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-parallel-rays]').setAttribute('aria-pressed',String(showRays));
-  root.querySelectorAll('[data-convex-step]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.convexStep===step)));
-  $('[data-convex-explain]').textContent=step==='enter'?'先看第一個表面：光從空氣進入玻璃，偏向這個表面的法線，與法線的夾角變小。':'再看第二個表面：光從玻璃進入空氣，偏離這個表面的法線，與法線的夾角變大。';
-  $('[data-result]').textContent=showRays?'凸透鏡中間厚、邊緣薄。這組平行光在另一側會聚，會聚位置稱為焦點 F。凸透鏡中心到 F 的距離叫焦距；光通過焦點後仍繼續前進。':'先觀察鏡片厚薄，再顯示輔助光路，追蹤入射、玻璃內部與出射的方向。';
   canvas.setAttribute('aria-label',`立體凸透鏡實驗台，平行光會聚於焦點，光路${showRays?'顯示':'隱藏'}`);
-  root.dataset.view='overall';root.dataset.rays=String(showRays);root.dataset.step=step;
+  root.dataset.view='overall';root.dataset.rays=String(showRays);
   studio?.update();
  }
  $('[data-parallel-rays]').addEventListener('click',()=>{showRays=!showRays;update();});
- root.querySelectorAll('[data-convex-step]').forEach(b=>b.addEventListener('click',()=>{step=b.dataset.convexStep;showRays=true;update();}));
+ $('[data-convex-reset]').addEventListener('click',()=>{showRays=true;studio?.reset();update();});
+ root.querySelectorAll('[data-convex-zoom]').forEach(button=>button.addEventListener('click',()=>{
+  const svg=button.closest('[data-convex-ray]').querySelector('svg'),closeup=svg.dataset.closeup!=='true';
+  svg.dataset.closeup=String(closeup);button.setAttribute('aria-pressed',String(closeup));button.textContent=closeup?'看完整光路':'放大折射處';update();
+ }));
  try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-convex-fallback]').hidden=false;root.dataset.webgl='unavailable';console.warn('Convex 3D:',error.message);}
  update();root.dataset.ready='true';
 
@@ -127,6 +102,6 @@ function initialise(root){
   canvas.addEventListener('wheel',e=>{e.preventDefault();orbit.radius=THREE.MathUtils.clamp(orbit.radius+e.deltaY*.008,7,19);updateCamera();requestDraw();},{passive:false});
   canvas.addEventListener('keydown',e=>{const map={ArrowLeft:[-.07,0],ArrowRight:[.07,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!map[e.key])return;e.preventDefault();orbit.azimuth=THREE.MathUtils.clamp(orbit.azimuth+map[e.key][0],-.9,.7);orbit.polar=THREE.MathUtils.clamp(orbit.polar+map[e.key][1],.85,1.55);updateCamera();requestDraw();});
   new ResizeObserver(resize).observe(canvas);resize();document.addEventListener('visibilitychange',()=>{if(!document.hidden)requestDraw();});
-  return {update,scene,camera,renderer,lens,rays,focus,source,g,world};
+  return {update,reset(){orbit={azimuth:-.10,polar:1.46,radius:11.5};},scene,camera,renderer,lens,rays,focus,source,g,world};
  }
 }
