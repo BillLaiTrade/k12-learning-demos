@@ -48,6 +48,7 @@ function initialise(root){
   $('[data-result]').textContent=showRays?(extensions?'平行光通過凹透鏡後發散；出射光的反向延長線交於入射側的虛焦點 F，出射光沒有在 F 實際會聚。':'凹透鏡中間薄、邊緣厚。這組平行光通過後向外發散。'):'先觀察鏡片厚薄，再顯示輔助光路，追蹤入射、玻璃內部與出射的方向。';
   canvas.setAttribute('aria-label',`立體凹透鏡觀察台，平行光向外發散，光路${showRays?'顯示':'隱藏'}`);
   root.dataset.view='overall';root.dataset.rays=String(showRays);root.dataset.step=step;root.dataset.extensions=String(showRays&&extensions);
+  $('[data-concave-extension-note]').hidden=!(showRays&&extensions);
   $('[data-parallel-extensions]').hidden=!showRays;$('[data-parallel-extensions]').textContent=extensions?'隱藏反向延長線':'顯示反向延長線';$('[data-parallel-extensions]').setAttribute('aria-pressed',String(showRays&&extensions));
   studio?.update();
  }
