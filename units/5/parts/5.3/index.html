@@ -34,9 +34,11 @@
   <script type="module" src="assets/calorie-lab.js?v=refined-1-calc-layout-3"></script>
   <link rel="stylesheet" href="assets/heat-bench.css?v=refined-1">
   <link rel="stylesheet" href="assets/mass-comparison-lab.css?v=mass-1">
-  <script type="module" src="assets/mass-comparison-lab.js?v=derive-2"></script>
-  <link rel="stylesheet" href="assets/mass-comparison-fit.css?v=readable-1">
+
+
   <link rel="stylesheet" href="assets/heat-derivation.css?v=derive-1">
+  <link rel="stylesheet" href="assets/mass-curve-lab.css?v=curve-verify-1">
+  <script type="module" src="assets/mass-curve-lab.js?v=curve-verify-1"></script>
   <script type="module" src="assets/material-comparison-lab.js?v=derive-1"></script>
   <link rel="stylesheet" href="assets/application-lab.css?v=applications-1">
   <script type="module" src="assets/application-lab.js?v=applications-1"></script>
@@ -161,33 +163,25 @@
         </section>
 
         <section class="lesson-card" id="card-03" aria-labelledby="title-03">
-          <header class="lesson-head"><span class="card-number">03</span><div class="card-heading"><h2 id="title-03">水裝得不一樣多，升溫有什麼不同？</h2><p class="card-intro">質量與溫升：同種物質吸收相同熱量的比較</p></div></header>
+          <header class="lesson-head"><span class="card-number">03</span><div class="card-heading"><h2 id="title-03">水量不同，升高的度數會怎麼變？</h2><p class="card-intro">輸入水量，驗證曲線上的預測位置</p></div></header>
           <div class="card-main">
-            <div class="dialogue dialogue--xiaokui"><span class="speaker" aria-label="小葵"></span><p>水量加倍，吸收同樣的熱量，升高的溫度會一樣嗎？</p></div>
-            <div class="unit-panel" id="mass-lab" data-phase="loading" data-playing="false" data-records="0">
-              <div class="mass-toolbar"><p class="mass-conditions"><strong>共同條件</strong><span>都是水・初溫20°C・各吸收1,000 cal</span></p>
-              <div class="mass-setting"><label class="mass-setting-label" for="mass-input">B杯水量</label><input id="mass-input" type="number" value="200" min="100" max="350" step="any" aria-describedby="mass-input-help mass-input-error" disabled><span>g</span><span id="mass-input-help">可輸入100～350 g</span><span id="mass-input-error" role="status" hidden>請輸入100～350 g。</span></div>
-              </div><p class="mass-pan-hint">左右滑動，查看完整的兩杯比較台。</p>
-              <figure class="mass-bench"><div class="mass-scene-pan" tabindex="0" role="region" aria-label="兩杯同規格器材，窄版可左右滑動"><div class="mass-photo">
-                <img id="mass-apparatus" src="assets/mass-comparison-bench.webp" width="1672" height="941" alt="AI生成的兩杯比較台：相同規格燒杯、加熱攪拌器與數位探針並排；水位、攪拌、燈號和LCD讀值由程式呈現。">
-                <svg id="mass-apparatus-motion" viewBox="0 0 1672 941" aria-hidden="true"></svg>
-                <span class="mass-badge mass-a-label">A杯 100 g</span><span class="mass-badge mass-b-label">B杯 <span id="mass-current-b">200</span> g</span>
-                <div class="mass-meter" id="mass-meter-a-screen" aria-hidden="true" hidden><span id="mass-meter-a">20.0</span><small>°C</small></div><div class="mass-meter mass-meter-b" id="mass-meter-b-screen" aria-hidden="true" hidden><span id="mass-meter-b">20.0</span><small>°C</small></div>
-                <button class="mass-knob" data-mass-start="a" type="button" title="開始加熱A杯" aria-label="開始加熱A杯，只控制A杯" disabled></button><button class="mass-knob mass-knob-b" data-mass-start="b" type="button" title="開始加熱B杯" aria-label="開始加熱B杯，只控制B杯" disabled></button>
-                <span class="mass-badge mass-energy mass-a-energy">水已吸收 <output id="mass-energy-a">0</output> cal</span><span class="mass-badge mass-energy mass-b-energy">水已吸收 <output id="mass-energy-b">0</output> cal</span>
-                <span class="mass-sample-state mass-sample-state-a" id="mass-state-a">等待開始比較</span><span class="mass-sample-state mass-sample-state-b" id="mass-state-b">等待開始比較</span>
-                <div class="mass-loading" id="mass-loading">正在準備比較台…</div>
-              </div></div></figure>
-              <div class="mass-console"><div class="mass-actions"><button type="button" class="action" id="mass-play" title="兩杯都回到20°C，一起開始比較" disabled>兩杯一起開始</button><button type="button" class="secondary" id="mass-retry" hidden>重新載入器材</button></div><p class="mass-status" id="mass-status" role="status">正在準備比較台…</p></div>
-              <div class="mass-results">
-                <div class="mass-rise-panel"><h3>從20°C升高</h3><div class="mass-bar-row"><span>A杯</span><div class="mass-bar-track"><span class="mass-bar" id="mass-rise-bar-a" role="img" aria-label="A杯升高0°C"></span></div><strong><output id="mass-rise-a">0.0</output>°C</strong></div><div class="mass-bar-row"><span>B杯</span><div class="mass-bar-track"><span class="mass-bar mass-bar-b" id="mass-rise-bar-b" role="img" aria-label="B杯升高0°C"></span></div><strong><output id="mass-rise-b">0.0</output>°C</strong></div><div class="mass-bar-scale" aria-hidden="true"><span>0</span><span>5</span><span>10°C</span></div></div>
-                <div class="mass-record-panel" id="mass-record-panel" hidden><h3>已完成的比較</h3><table><caption class="calorie-table-caption">A杯固定100g，初溫20°C，各杯水均吸收1,000cal的觀察紀錄</caption><thead><tr><th scope="col">B杯水量</th><th scope="col">A杯溫升</th><th scope="col">B杯溫升</th></tr></thead><tbody id="mass-records"></tbody></table></div>
-                <div class="derivation-panel" id="mass-derivation" hidden><h3>完成觀察後，結合第二區</h3><p>熱量×2 → 溫升×2；水量×2 → 溫升÷2。</p><p class="water-relation"><strong>水的溫升 ≈ 吸熱量 ÷ 水量</strong><small>單位：°C、cal、g；接回第一區1 cal的定義。</small></p><p>這是水的近似關係；換物質也適用嗎？</p></div>
-                <div class="dialogue" id="mass-conclusion" hidden><span class="speaker" aria-label="阿公"></span><p id="mass-conclusion-text"></p></div>
+            <div class="unit-panel mass-curve-lab" id="mass-lab" data-phase="loading" data-playing="false">
+              <p class="mass-curve-conditions">都是水・初溫20°C・水吸收1,000 cal</p>
+              <div class="mass-curve-workbench">
+                <div class="mass-curve-scene">
+                  <div class="mass-curve-controls"><label for="mass-input">水量 <input id="mass-input" type="number" value="250" min="100" max="350" step="any" inputmode="decimal" aria-describedby="mass-input-help mass-input-error" disabled> g</label><button class="action" id="mass-play" type="button" disabled>開始驗證</button></div>
+                  <p id="mass-input-help">可自行輸入100～350 g</p><p id="mass-input-error" role="status" hidden>請輸入100～350 g的有效水量。</p>
+                  <figure class="mass-curve-photo"><img id="mass-apparatus" src="assets/mass-comparison-bench.webp" width="1672" height="941" alt="AI生成的單組加熱器材：玻璃燒杯、浸水探針與數位溫度計；水位與讀值依輸入水量呈現。"><svg id="mass-curve-motion" viewBox="0 0 836 800" aria-hidden="true"></svg><div class="mass-curve-meter" id="mass-meter-screen" hidden><span class="visually-hidden">目前水溫</span><span id="mass-meter">20.0</span><small>°C</small></div><button class="mass-curve-knob" id="mass-knob" type="button" aria-label="開始驗證" disabled></button><div class="mass-curve-loading" id="mass-loading">正在準備器材…</div></figure>
+                  <div class="mass-curve-readings"><span>已吸收 <strong><output id="mass-energy">0</output> cal</strong></span><span>升高 <strong><output id="mass-rise">0.0</output>°C</strong></span></div>
+                  <button class="secondary" id="mass-retry" type="button" hidden>重新載入器材</button>
+                </div>
+                <div class="mass-curve-plot"><h3>固定吸熱量下的水量與升溫</h3><p class="mass-curve-caption">曲線：推算關係</p><svg id="mass-curve-graph" role="img" aria-label="固定吸收1000cal時，水量與升高的度數的推算曲線。"></svg><p class="mass-curve-legend"><span><i class="mass-prediction-key"></i>空心點：預測位置</span><span><i class="mass-result-key"></i>實心點：驗證結果</span></p></div>
               </div>
-              <p class="mass-model-note">水吸熱量依模型估算；各杯到1,000 cal時各自停熱。器材為AI示意，動畫已加速。</p>
+              <p id="mass-status" class="mass-curve-status" role="status">正在準備器材…</p>
+              <p class="mass-curve-rule">吸收同樣熱量時，水量越多，升高的度數越少。</p>
+              <p class="mass-curve-note">曲線與加熱讀值為教學模型推算；器材為AI示意，動畫已加速。</p>
             </div>
-            <details class="relation mass-assumptions"><summary>器材與模型條件</summary><p>B杯預設200 g，可輸入100～350 g；範圍配合燒杯容量與探針浸水位置。先用電子秤分別量取水量，兩杯使用同規格約400 mL燒杯，初溫都是20°C。水位及器材尺寸為示意；探針浸入水中，不碰杯底或杯壁，攪拌使溫度較均勻。切換B杯水量後，兩杯都回到初溫，已完成的比較紀錄保留。</p><p>沿用前兩區的水比熱與集中熱容量設定：20 W有效供熱、42 J/°C容器熱容量、向20°C環境散熱係數0.5 W/°C，水與容器視為同溫。這些為教學參數，並非實物校正。各杯水吸收1,000 cal才停熱，容器吸熱與散熱另計，不是兩個加熱器各供能1,000 cal，也不固定加熱時間相同。</p><p>動畫統一加速50倍；各杯到點後保留觀察時刻，不模擬等待冷卻、停熱餘熱或探針延遲。點各杯旋鈕只啟動該杯，完成後讀值保留；兩杯都完成才自動記錄及歸納。下方「兩杯一起開始」會把兩杯都回到20°C並同步啟動；加熱中不能切換水量或重設整組。換區或背景中斷不自動續熱，重新點某杯旋鈕會從20°C重做該杯，另一杯讀值保留。重做會更新同條件紀錄，不重複增加列；紀錄保留最近三種已完成的水量。</p><p>反過來想：同種物質若要升高相同溫度，水量加倍，水需要吸收的熱量也約加倍。</p></details>
+            <details class="relation mass-assumptions"><summary>器材與模型條件</summary><p>水量可輸入100～350 g及小數，範圍配合約400mL燒杯與探針浸水位置。更換水量代表重新量取另一份20°C的水，水位只在準備時調整，加熱中水量固定。</p><p>沿用原水、容器及散熱模型：20 W有效供熱、42 J/°C容器熱容量、向20°C環境散熱係數0.5 W/°C。水實際吸收1,000 cal才停熱，容器吸熱與散熱另計。30倍動畫加速，數字約每0.4秒更新；完成時立即顯示最後讀值。</p><p>曲線表示不同水量都吸收1,000 cal後的推算結果。空心點先標示預測終點，加熱完成才顯示實心結果點；兩者在本教學模型內重合，並非真實量測誤差的模擬。換區或背景中斷保留進度，不自動續熱；按繼續驗證接續，更改水量則從20°C重新開始。</p></details>
           </div>
         </section>
 
