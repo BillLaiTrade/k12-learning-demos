@@ -2,7 +2,7 @@ import{validWaterMass,massObservationAt,massHeatingSeconds}from './mass-comparis
 const get=id=>document.getElementById(id),root=get('mass-lab'),input=get('mass-input'),play=get('mass-play'),knob=get('mass-knob'),image=get('mass-apparatus'),svg=get('mass-curve-graph'),motion=get('mass-curve-motion');
 const speed=30,number=v=>v.toLocaleString('zh-TW',{maximumFractionDigits:2}),reduced=matchMedia('(prefers-reduced-motion: reduce)');
 let mass=250,elapsed=0,playing=false,ready=false,valid=true,frame=0,last=0,lastReading=-Infinity,attempt=0,geometry='',analysisKey='';
-const comparisons=new Map();
+const caseMasses=[100,200,300],verifiedCases=new Set();
 const observe=()=>massObservationAt(mass,elapsed),predict=m=>massObservationAt(m,massHeatingSeconds(m));
 motion.innerHTML='<defs><linearGradient id="mass-curve-water"><stop stop-color="#c5e1d8" stop-opacity=".25"/><stop offset=".5" stop-color="#d8ece5" stop-opacity=".08"/><stop offset="1" stop-color="#bfdbd1" stop-opacity=".23"/></linearGradient></defs><path d="M418 539V563" stroke="#b8bbae" stroke-width="4"/><path id="mass-water-body" fill="url(#mass-curve-water)"/><ellipse id="mass-water-surface" cx="432" rx="113" ry="9" fill="#effbf6" fill-opacity=".15" stroke="#fffef1" stroke-opacity=".7"/><ellipse id="mass-water-ripple" cx="432" fill="none" stroke="#fffdf1" stroke-width="2"/><g transform="translate(432 578) scale(1 .32)"><g id="mass-stir"><rect x="-34" y="-10" width="68" height="20" rx="10" fill="#f6faf0" stroke="#bac4b5"/></g></g><circle id="mass-led" cx="369" cy="693" r="7" fill="#173824"/>';
 function cancel(){playing=false;cancelAnimationFrame(frame);frame=0;}
@@ -20,10 +20,13 @@ function graph(){
  get('mass-result').dataset.heat=String(state.waterCalories);
  svg.setAttribute('aria-label',`推算曲線：100至350g水各吸收1000cal。${number(mass)}g水預測升高${prediction.rise.toFixed(1)}°C；${state.complete?'驗證結果與預測位置重合。':`空心點標示最終預測；橘色實心點目前吸收${number(state.waterCalories)}cal、升高${state.rise.toFixed(1)}°C。`}`);
 }
-function analysis(){
- const entries=[...comparisons.entries()].slice(-3),key=JSON.stringify(entries);if(key===analysisKey)return;analysisKey=key;
- const masses=get('mass-analysis-masses').cells,rises=get('mass-analysis-rises').cells;
- for(let i=0;i<3;i++){const entry=entries[i];masses[i+1].textContent=entry?number(entry[0])+' g':'待記錄';if(!entry){rises[i+1].textContent='—';continue;}const rounded=entry[1].toFixed(1);rises[i+1].textContent=(Math.abs(entry[1]-Number(rounded))>1e-8?'約':'')+number(Number(rounded))+'°C';}
+function analysis(state){
+ const key=[mass,playing,elapsed>0,state.complete,ready,...verifiedCases].join('/');if(key===analysisKey)return;analysisKey=key;
+ document.querySelectorAll('[data-mass-case]').forEach(button=>{
+  const value=Number(button.dataset.massCase),active=value===mass;
+  const label=active&&playing?'驗證中…':active&&elapsed>0&&!state.complete?'驗證未完成':verifiedCases.has(value)?'✓ 已驗證':'待驗證';
+  button.disabled=!ready;button.setAttribute('aria-pressed',String(active));button.querySelector('small').textContent=label;button.dataset.verified=String(verifiedCases.has(value));button.setAttribute('aria-label',`驗證${value}g水，預期升高${predict(value).rise.toFixed(1)}°C，${label}`);
+ });
 }
 function render(force=false){
  const state=observe();analysis(state);root.dataset.playing=String(playing);root.dataset.mass=String(mass);root.dataset.waterCalories=String(state.waterCalories);root.dataset.temperature=String(state.temperature);root.dataset.rise=String(state.rise);
@@ -35,14 +38,18 @@ function render(force=false){
 }
 function reset(){cancel();elapsed=0;root.dataset.phase=ready?'ready':'loading';get('mass-status').textContent=ready?`預測：${number(mass)}g水吸收1,000 cal，升高${predict(mass).rise.toFixed(1)}°C。按下開始驗證，核對曲線上的位置。`:'正在準備器材…';render(true);}
 function tick(now){frame=0;if(!playing)return;elapsed=Math.min(massHeatingSeconds(mass),elapsed+Math.min(100,Math.max(0,now-last))/1000*speed);last=now;
- if(observe().complete){comparisons.delete(mass);comparisons.set(mass,observe().rise);while(comparisons.size>3)comparisons.delete(comparisons.keys().next().value);cancel();root.dataset.phase='complete';get('mass-status').textContent=`✓ 驗證符合預測：${number(mass)}g水吸收1,000 cal，升高${observe().rise.toFixed(1)}°C。`;}
+ if(observe().complete){if(caseMasses.includes(mass))verifiedCases.add(mass);cancel();root.dataset.phase='complete';get('mass-status').textContent=`✓ 驗證符合預測：${number(mass)}g水吸收1,000 cal，升高${observe().rise.toFixed(1)}°C。`;}
  render();if(playing)frame=requestAnimationFrame(tick);
 }
-function start(){if(!ready||playing||!valid)return;if(observe().complete)reset();playing=true;root.dataset.phase='running';last=performance.now();get('mass-status').textContent='正在加熱驗證；水量固定，吸收滿1,000 cal後核對預測位置。';render(true);frame=requestAnimationFrame(tick);}
+function start(){if(!ready||playing||!valid)return;if(observe().complete)reset();if(elapsed===0)verifiedCases.delete(mass);playing=true;root.dataset.phase='running';last=performance.now();get('mass-status').textContent='正在加熱驗證；水量固定，吸收滿1,000 cal後核對預測位置。';render(true);frame=requestAnimationFrame(tick);}
 function interrupt(){if(!playing)return;cancel();root.dataset.phase='interrupted';get('mass-status').textContent='驗證已中斷，讀值保留；按繼續驗證接著觀察。';render(true);}
 async function load(retry=false){const version=++attempt;ready=false;reset();get('mass-loading').hidden=false;get('mass-loading').textContent='正在準備器材…';get('mass-retry').hidden=true;if(retry)image.src=new URL('mass-comparison-bench.webp?curveRetry='+version,import.meta.url).href;
  try{await image.decode();if(version!==attempt)return;ready=true;get('mass-loading').hidden=true;reset();}catch{if(version!==attempt)return;root.dataset.phase='error';get('mass-loading').textContent='器材圖片未能載入，請重新載入。';get('mass-retry').hidden=false;get('mass-status').textContent='器材尚未就緒；仍可閱讀推算曲線與白話規律。';render(true);}}
 input.addEventListener('input',()=>{valid=input.value.trim()!==''&&validWaterMass(Number(input.value));input.setAttribute('aria-invalid',String(!valid));get('mass-input-error').hidden=valid;if(valid&&Number(input.value)!==mass){mass=Number(input.value);reset();}else render();});
+document.getElementById('mass-analysis').addEventListener('click',event=>{
+ const target=event.target.closest('[data-mass-case],[data-mass-case-target]');if(!target||!ready)return;
+ mass=Number(target.dataset.massCase||target.dataset.massCaseTarget);valid=true;input.value=String(mass);input.setAttribute('aria-invalid','false');get('mass-input-error').hidden=true;reset();root.scrollIntoView({block:'start',behavior:'instant'});start();
+});
 play.addEventListener('click',start);knob.addEventListener('click',start);get('mass-retry').addEventListener('click',()=>load(true));window.addEventListener('blur',interrupt);document.addEventListener('visibilitychange',()=>{if(document.hidden)interrupt();});
 document.querySelector('.route').addEventListener('click',e=>{const a=e.target.closest('a');if(a&&a.hash!=='#card-03'&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey)interrupt();});
 document.querySelector('.route a[href="#card-03"]').addEventListener('click',e=>{if(innerWidth>=1100&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey){e.preventDefault();history.pushState(null,'','#card-03');root.scrollIntoView({block:'start',behavior:'instant'});}});if(location.hash==='#card-03'&&innerWidth>=1100)window.addEventListener('load',()=>root.scrollIntoView({block:'start',behavior:'instant'}),{once:true});

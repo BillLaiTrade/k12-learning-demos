@@ -24,3 +24,10 @@
 #mass-analysis-state{display:block;margin-top:4px;font-size:.875rem;font-weight:400;line-height:1.5;color:#6f603c}
 #mass-analysis[data-mode=verified] #mass-analysis-state{color:#315e3d;font-weight:650}
 #mass-analysis var{font-family:inherit;font-weight:inherit}
+
+#mass-analysis-masses td{padding:0}
+.mass-case{display:block;width:100%;min-height:76px;padding:10px 4px;border:0;border-radius:0;background:transparent;color:#b36028;font:650 1.15rem/1.5 var(--unit-font);cursor:pointer}
+.mass-case small{display:block;font-size:.875rem;font-weight:400;color:#66745e}.mass-case[aria-pressed=true]{background:#edf4e7}.mass-case[data-verified=true] small{color:#315e3d;font-weight:650}.mass-case:focus-visible{outline:3px solid #176b53;outline-offset:-3px}.mass-case:disabled{cursor:wait;opacity:.65}
+#mass-lab{scroll-margin-top:12px}@media(max-width:1100px){#mass-lab{scroll-margin-top:112px}}
+
+.mass-case:not(:disabled):hover,#mass-analysis-rises td[data-mass-case-target]:hover{background:#f2f6ed}#mass-analysis-rises td[data-mass-case-target]{cursor:pointer}

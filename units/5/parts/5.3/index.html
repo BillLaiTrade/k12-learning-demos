@@ -37,8 +37,8 @@
 
 
   <link rel="stylesheet" href="assets/heat-derivation.css?v=derive-1">
-  <link rel="stylesheet" href="assets/mass-curve-lab.css?v=observed-1">
-  <script type="module" src="assets/mass-curve-lab.js?v=live-point-1"></script>
+  <link rel="stylesheet" href="assets/mass-curve-lab.css?v=cases-1">
+  <script type="module" src="assets/mass-curve-lab.js?v=cases-1"></script>
   <script type="module" src="assets/material-comparison-lab.js?v=derive-1"></script>
   <link rel="stylesheet" href="assets/application-lab.css?v=applications-1">
   <script type="module" src="assets/application-lab.js?v=applications-1"></script>
@@ -182,12 +182,12 @@
             </div>
             <section class="heat-stage-analysis mass-analysis" id="mass-analysis" aria-labelledby="mass-analysis-title" data-mode="prediction">
               <h3 id="mass-analysis-title">從數字找規律</h3>
-              <div class="heat-stage-analysis-heading"><p class="heat-stage-analysis-condition">都是水，每份各吸收1,000 cal</p><span id="mass-analysis-mode">完成驗證後自動記錄</span></div>
+              <div class="heat-stage-analysis-heading"><p class="heat-stage-analysis-condition">都是水，每份各吸收1,000 cal</p><span id="mass-analysis-mode">點選案例，開始驗證</span></div>
               <table class="heat-stage-analysis-table" aria-label="固定吸收1000cal時，水量與升高的度數對照" aria-describedby="mass-analysis-mode">
                 <colgroup><col class="heat-stage-label-column"><col span="3"></colgroup>
                 <tbody>
-                  <tr id="mass-analysis-masses"><th scope="row">水量</th><td>待記錄</td><td>待記錄</td><td>待記錄</td></tr>
-                  <tr id="mass-analysis-rises"><th scope="row">升高的度數</th><td>—</td><td>—</td><td>—</td></tr>
+                  <tr id="mass-analysis-masses"><th scope="row">水量</th><td><button class="mass-case" data-mass-case="100" type="button" aria-pressed="false" disabled><span>100 g</span><small>待驗證</small></button></td><td><button class="mass-case" data-mass-case="200" type="button" aria-pressed="false" disabled><span>200 g</span><small>待驗證</small></button></td><td><button class="mass-case" data-mass-case="300" type="button" aria-pressed="false" disabled><span>300 g</span><small>待驗證</small></button></td></tr>
+                  <tr id="mass-analysis-rises"><th scope="row">預期升高的度數</th><td data-mass-case-target="100" title="點選100g案例開始驗證">10°C</td><td data-mass-case-target="200" title="點選200g案例開始驗證">5°C</td><td data-mass-case-target="300" title="點選300g案例開始驗證">約3.3°C</td></tr>
                 </tbody>
               </table>
               <div class="heat-stage-takeaway">
