@@ -16,8 +16,9 @@ function graph(){
  const state=observe(),prediction=predict(mass),px=x(mass),py=y(prediction.rise);
  get('mass-curve-guides').setAttribute('d',`M${left} ${py}H${px}V${bottom}`);
  for(const [id,rise]of[['mass-prediction',prediction.rise],['mass-result',state.rise]]){const n=get(id);n.setAttribute('cx',px);n.setAttribute('cy',y(rise));n.dataset.mass=String(mass);n.dataset.rise=String(rise);}
- get('mass-result').style.display=state.complete?'':'none';
- svg.setAttribute('aria-label',`推算曲線：100至350g水各吸收1000cal。${number(mass)}g水預測升高${prediction.rise.toFixed(1)}°C；${state.complete?'驗證結果與預測位置重合。':'空心點標示預測，驗證尚未完成。'}`);
+ get('mass-result').style.display=playing||elapsed>0?'':'none';
+ get('mass-result').dataset.heat=String(state.waterCalories);
+ svg.setAttribute('aria-label',`推算曲線：100至350g水各吸收1000cal。${number(mass)}g水預測升高${prediction.rise.toFixed(1)}°C；${state.complete?'驗證結果與預測位置重合。':`空心點標示最終預測；橘色實心點目前吸收${number(state.waterCalories)}cal、升高${state.rise.toFixed(1)}°C。`}`);
 }
 function analysis(){
  const entries=[...comparisons.entries()].slice(-3),key=JSON.stringify(entries);if(key===analysisKey)return;analysisKey=key;

@@ -38,7 +38,7 @@
 
   <link rel="stylesheet" href="assets/heat-derivation.css?v=derive-1">
   <link rel="stylesheet" href="assets/mass-curve-lab.css?v=observed-1">
-  <script type="module" src="assets/mass-curve-lab.js?v=observed-1"></script>
+  <script type="module" src="assets/mass-curve-lab.js?v=live-point-1"></script>
   <script type="module" src="assets/material-comparison-lab.js?v=derive-1"></script>
   <link rel="stylesheet" href="assets/application-lab.css?v=applications-1">
   <script type="module" src="assets/application-lab.js?v=applications-1"></script>
@@ -175,7 +175,7 @@
                   <div class="mass-curve-readings"><span>已吸收 <strong><output id="mass-energy">0</output> cal</strong></span><span>升高 <strong><output id="mass-rise">0.0</output>°C</strong></span></div>
                   <button class="secondary" id="mass-retry" type="button" hidden>重新載入器材</button>
                 </div>
-                <div class="mass-curve-plot"><h3>固定吸熱量下的水量與升溫</h3><p class="mass-curve-caption">曲線：推算關係</p><svg id="mass-curve-graph" role="img" aria-label="固定吸收1000cal時，水量與升高的度數的推算曲線。"></svg><p class="mass-curve-legend"><span><i class="mass-prediction-key"></i>空心點：預測位置</span><span><i class="mass-result-key"></i>實心點：驗證結果</span></p></div>
+                <div class="mass-curve-plot"><h3>固定吸熱量下的水量與升溫</h3><p class="mass-curve-caption">曲線：推算關係</p><svg id="mass-curve-graph" role="img" aria-label="固定吸收1000cal時，水量與升高的度數的推算曲線。"></svg><p class="mass-curve-legend"><span><i class="mass-prediction-key"></i>空心點：預測位置</span><span><i class="mass-result-key"></i>實心點：目前升溫</span></p></div>
               </div>
               <p id="mass-status" class="mass-curve-status" role="status">正在準備器材…</p>
               <p class="mass-curve-note">曲線與加熱讀值為教學模型推算；器材為AI示意，動畫已加速。</p>
@@ -195,7 +195,7 @@
                 <p>水量與升高的度數，這種關係叫做「<strong>成反比</strong>」。</p>
               </div>
             </section>
-            <details class="relation mass-assumptions"><summary>器材與模型條件</summary><p>水量可輸入100～350 g及小數，範圍配合約400mL燒杯與探針浸水位置。更換水量代表重新量取另一份20°C的水，水位只在準備時調整，加熱中水量固定。</p><p>沿用原水、容器及散熱模型：20 W有效供熱、42 J/°C容器熱容量、向20°C環境散熱係數0.5 W/°C。水實際吸收1,000 cal才停熱，容器吸熱與散熱另計。30倍動畫加速，數字約每0.4秒更新；完成時立即顯示最後讀值。</p><p>曲線表示不同水量都吸收1,000 cal後的推算結果。空心點先標示預測終點，加熱完成才顯示實心結果點；兩者在本教學模型內重合，並非真實量測誤差的模擬。換區或背景中斷保留進度，不自動續熱；按繼續驗證接續，更改水量則從20°C重新開始。</p></details>
+            <details class="relation mass-assumptions"><summary>器材與模型條件</summary><p>水量可輸入100～350 g及小數，範圍配合約400mL燒杯與探針浸水位置。更換水量代表重新量取另一份20°C的水，水位只在準備時調整，加熱中水量固定。</p><p>沿用原水、容器及散熱模型：20 W有效供熱、42 J/°C容器熱容量、向20°C環境散熱係數0.5 W/°C。水實際吸收1,000 cal才停熱，容器吸熱與散熱另計。30倍動畫加速，數字約每0.4秒更新；完成時立即顯示最後讀值。</p><p>曲線表示不同水量都吸收1,000 cal後的推算結果。空心點先標示預測終點，橘色實心點在驗證時從溫升0°C沿所選水量向上移動，隨目前吸熱量與溫升同步更新；完成時停在空心點，中斷時保留當下位置。兩者在本教學模型內重合，並非真實量測誤差的模擬。換區或背景中斷保留進度，不自動續熱；按繼續驗證接續，更改水量則從20°C重新開始。</p></details>
           </div>
         </section>
 
