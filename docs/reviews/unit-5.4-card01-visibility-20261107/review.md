@@ -20,4 +20,12 @@
 
 ## 檢查
 
-[本機29項](local.txt)通過：13模型項、15瀏覽器子流程及外層。包含融冰期間吸熱量增加而維持0°C、暫停保留兩種讀值、重做歸零、熱箭頭停熱隱藏、三段停點、固定尺度、只畫已觀察內容、WebGL替代、無JS、鍵盤及其餘區塊／小測代表流程。[35組版面](layout-local.json)無整頁水平溢出，[錯誤紀錄](errors-local.json)為空。人工檢視[融冰](melting-local.png)、[升溫](warming-local.png)、[沸騰](boiling-local.png)及[390px](narrow-local.png)，並微調相機以留出導線上緣空間後重驗。公開發布另列實際結果。未作Firefox／Safari或實體裝置驗收，不記為整頁最終核可或外審通過。
+[本機29項](local.txt)通過：13模型項、15瀏覽器子流程及外層。包含融冰期間吸熱量增加而維持0°C、暫停保留兩種讀值、重做歸零、熱箭頭停熱隱藏、三段停點、固定尺度、只畫已觀察內容、WebGL替代、無JS、鍵盤及其餘區塊／小測代表流程。[35組版面](layout-local.json)無整頁水平溢出，[錯誤紀錄](errors-local.json)為空。人工檢視[融冰](melting-local.png)、[升溫](warming-local.png)、[沸騰](boiling-local.png)及[390px](narrow-local.png)，並微調相機以留出導線上緣空間後重驗。未作Firefox／Safari或實體裝置驗收，不記為整頁最終核可或外審通過。
+
+## 發布
+
+功能提交08b46ba2，經1a0b92e4保留其他更新後推送，最終由1ace30181b5da29b8f297f5be8e322a3ba36c182發布；該版本包含本次提交且5.4內容沒有額外差異。原生Pages[42352032617](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/42352032617)成功，見[release.json](release.json)。先前42351950106因後續提交接續發布而取消，沒有當作成功。
+
+[公開16項](public.txt)通過，[15個資源](public-hashes.json)與本機一致，[35組公開版面](layout-public.json)無整頁水平溢出，[錯誤紀錄](errors-public.json)為空。人工核對[融冰](melting-public.png)、[升溫](warming-public.png)、[沸騰](boiling-public.png)及[窄版](narrow-public.png)。公開瀏覽器沿用程序限定環境代理CA公鑰匹配，未改持久信任庫；資源比對使用系統TLS驗證。
+
+下一步檢視[第一區](https://billlaitrade.github.io/k12-learning-demos/units/5/parts/5.4/#card-01)，特別是加熱時吸熱量增加而0°C水平段延長，再依回饋精修或接續第三區。

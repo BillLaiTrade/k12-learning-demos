@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="assets/normal-incidence-lab.css?v=20261106-individual1">
   <script type="module" src="assets/normal-incidence-lab.mjs?v=20261106-no-steps1"></script>
   <link rel="stylesheet" href="assets/oblique-incidence-lab.css?v=20261103-cart1">
-  <script type="module" src="assets/oblique-cart.mjs?v=20261105-cartlayout1"></script>
+  <script type="module" src="assets/oblique-cart.mjs?v=20261107-exitcompact1"></script>
   <script type="module" src="assets/oblique-incidence-lab.mjs?v=20261107-controls1"></script>
   <link rel="stylesheet" href="assets/return-refraction-lab.css?v=20261103-inline1">
   <script type="module" src="assets/return-refraction-lab.mjs?v=20261106-dark-controls1"></script>
@@ -327,13 +327,13 @@
       </div>
       <noscript><p>光由水或玻璃進入空氣，由慢變快，斜射時偏離法線，折射角較大。0°時不偏折。啟用JavaScript後可切換介質、發射並直接在光路上觀察角度與說明。</p></noscript>
     </div>
-    <details class="oblique-explanation" id="exit-explanation">
+    <details class="oblique-explanation cart-explanation" id="exit-explanation" data-compact-cart>
       <summary>斜射且發生折射時，光為什麼偏離法線？</summary>
       <div class="oblique-explanation-body">
-        <div class="oblique-analogy-grid">
-          <div>
+        <div class="oblique-analogy-grid cart-analogy-grid">
+          <div class="cart-demo">
             <div class="oblique-cart-scene">
-              <svg viewBox="0 0 520 340" role="img" aria-label="小車由上方較難前進的地面斜入下方平滑地面，一側先加速而轉向；類比光由水或玻璃射入空氣，偏離法線。">
+              <svg viewBox="0 -40 520 380" role="img" aria-label="小車由上方較難前進的地面斜入下方平滑地面，一側先加速而轉向；類比光由水或玻璃射入空氣，偏離法線。">
                 <defs>
                   <linearGradient id="exit-cart-tire" x1="0" x2="1"><stop stop-color="#20272b"/><stop offset=".3" stop-color="#4a5053"/><stop offset=".65" stop-color="#252b2e"/><stop offset="1" stop-color="#11181c"/></linearGradient>
                   <linearGradient id="exit-cart-axle" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e5bb7e"/><stop offset=".4" stop-color="#c59151"/><stop offset=".65" stop-color="#d3a267"/><stop offset="1" stop-color="#94612f"/></linearGradient>
@@ -341,9 +341,9 @@
                   <pattern id="exit-cart-rough" width="17" height="19" patternUnits="userSpaceOnUse"><path d="m2 5 3-1m5 9 2 2m-9 1 2-2" stroke="#a7804e" stroke-width="1.2" opacity=".27"/><path d="m12 3 2 1m-6 5 2-1" stroke="#fff4d6" stroke-width="2" opacity=".6"/></pattern>
                   <pattern id="exit-cart-tread" width="8" height="9" patternUnits="userSpaceOnUse"><path d="M0 2h8m-8 5h8" stroke="#89908e" stroke-width="1" opacity=".35"/></pattern>
                 </defs>
-                <rect width="520" height="340" fill="#f2eee5"/><path d="M0 0H520V160H0Z" fill="#d8bd94"/><path d="M0 0H520V160H0Z" fill="url(#exit-cart-rough)"/><path d="M0 160H520" stroke="#b89d77" stroke-width="3"/>
-                <text id="exit-cart-medium-label" x="20" y="28" fill="#3d624c" font-size="18">水（光速較慢）</text><text x="20" y="50" fill="#6d624f" font-size="14">類比：較難前進的地面</text><text x="20" y="299" fill="#3d624c" font-size="18">空氣（光速較快）</text><text x="20" y="322" fill="#6d756b" font-size="14">類比：平滑地面</text>
-                <path id="exit-cart-normal" stroke="#487c62" stroke-width="2" stroke-dasharray="7 6"/><text id="exit-cart-normal-label" y="27" fill="#487c62" font-size="18">法線</text>
+                <rect y="-40" width="520" height="380" fill="#f2eee5"/><path d="M0 -40H520V160H0Z" fill="#d8bd94"/><path d="M0 -40H520V160H0Z" fill="url(#exit-cart-rough)"/><path d="M0 160H520" stroke="#b89d77" stroke-width="3"/>
+                <text x="500" y="1" text-anchor="end" fill="#6d624f" font-size="18">較難前進的地面</text><text x="20" y="326" fill="#6d756b" font-size="18">平滑地面</text>
+                <path id="exit-cart-normal" stroke="#487c62" stroke-width="2" stroke-dasharray="7 6"/><text id="exit-cart-normal-label" y="-5" dx="48" fill="#487c62" font-size="18">法線</text>
                 <path id="exit-cart-trail" fill="none" stroke="#64826a" stroke-width="3" opacity=".55"/>
                 <g id="exit-cart" transform="translate(145 67) rotate(-30)">
                   <ellipse cy="12" rx="97" ry="31" fill="#4a4533" opacity=".14"/>
@@ -354,16 +354,10 @@
                 </g>
               </svg>
             </div>
-            <p class="cart-setting-note">固定斜射類比・與上圖設定獨立</p>
-            <p class="oblique-cart-caption" id="exit-cart-status" role="status">斜著前進，兩輪速度相同。</p>
-            <button class="oblique-cart-action" id="exit-cart-play" type="button">播放小車示範</button>
           </div>
-          <div class="oblique-cart-copy">
-            <p><strong>一側先進入、先加速，小車便轉向；兩輪都進入後，沿新方向前進。</strong></p>
-            <p>斜射且發生折射時，光由上方較慢的<span data-cart-medium>水</span>進入下方較快的空氣，光路偏離法線，折射角變大。沿法線入射（0°）時，速度改變，方向不偏折。</p>
-          </div>
+          <div class="oblique-cart-copy cart-analogy-copy"><p class="cart-reason"><span class="cart-copy-label">小車</span><strong>一輪先加速，兩輪暫時不同速，因此轉向。</strong></p><p class="cart-light-link"><span class="cart-copy-label">光</span><span>斜射且發生折射時，進入較快介質，光路偏離法線。</span></p><div class="cart-analogy-notes"><p class="cart-analogy-note">小車為類比，不代表光受到摩擦。</p><p class="cart-setting-note">固定斜射類比・與上圖設定獨立</p></div></div>
         </div>
-        <p class="oblique-model-note">小車為類比，不代表光受到摩擦。</p>
+        <div class="cart-demo-controls"><button class="oblique-cart-action" id="exit-cart-play" type="button">播放示範</button><p class="oblique-cart-caption" id="exit-cart-status" role="status">兩輪等速，斜向前進。</p></div>
       </div>
     </details>
 
