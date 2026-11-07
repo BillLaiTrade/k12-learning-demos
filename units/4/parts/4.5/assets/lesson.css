@@ -136,7 +136,7 @@ h1 { margin: 6px 0 12px; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.2;
 #s3 .choice-row button{min-height:44px;padding:6px 4px;font-size:.71rem;gap:4px}
 #s3 .choice-row button:last-child{grid-column:auto}
 #s3 .swatch-dot{width:10px;height:10px}
-#s3 .interaction-hint{margin:6px 0 0;font-size:.72rem;line-height:1.5}
+#s3 .interaction-hint{margin:0 0 6px;font-size:.72rem;line-height:1.5}
 #s3 .model-notes{padding-top:3px;font-size:.74rem}
 @media(max-width:900px){#s3{--mix-nav-space:100px}}
 @media(max-width:650px){
