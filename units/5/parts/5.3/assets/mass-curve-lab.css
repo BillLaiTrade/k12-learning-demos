@@ -18,3 +18,10 @@
 @container mass-curve (max-width:570px){.mass-curve-workbench{grid-template-columns:minmax(0,1fr)}.mass-curve-photo{max-width:390px;margin-inline:auto}#mass-curve-graph{height:300px}}
 
 .mass-curve-meter .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+#mass-analysis-mode{padding:3px 10px;border-radius:8px;background:#fbf0db;color:#6f603c;font-size:.875rem;line-height:1.6}
+#mass-analysis-masses td{color:#b36028}
+#mass-analysis-state{display:block;margin-top:4px;font-size:.875rem;font-weight:400;line-height:1.5;color:#6f603c}
+#mass-analysis[data-mode=verified] #mass-analysis-state{color:#315e3d;font-weight:650}
+#mass-analysis .heat-stage-analysis-table tr>*:last-child{background:#f3f7ee}
+#mass-analysis var{font-family:inherit;font-weight:inherit}
