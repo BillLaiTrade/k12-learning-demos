@@ -1,0 +1,53 @@
+{
+  "baseline": "685958cf4029bb2f8a2bfe2c235bb81a37026258",
+  "checks": [
+    {
+      "section": "card-01",
+      "identical": true
+    },
+    {
+      "section": "card-02",
+      "identical": true
+    },
+    {
+      "section": "card-03",
+      "identical": true
+    },
+    {
+      "section": "card-04",
+      "identical": true
+    },
+    {
+      "section": "card-05",
+      "identical": true
+    },
+    {
+      "section": "card-06",
+      "identical": true
+    },
+    {
+      "water_visual": "bath-water-clip",
+      "identical": true
+    },
+    {
+      "water_visual": "bath-liquid",
+      "identical": true
+    },
+    {
+      "water_visual": "bath-liquid-front",
+      "identical": true
+    },
+    {
+      "file": "water-bath-model.mjs",
+      "identical": true
+    },
+    {
+      "file": "water-bath.css",
+      "identical": true
+    },
+    {
+      "file": "heat-transfer.js",
+      "identical": true
+    }
+  ]
+}
