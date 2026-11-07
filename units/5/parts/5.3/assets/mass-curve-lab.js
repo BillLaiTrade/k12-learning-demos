@@ -2,6 +2,7 @@ import{validWaterMass,massObservationAt,massHeatingSeconds}from './mass-comparis
 const get=id=>document.getElementById(id),root=get('mass-lab'),input=get('mass-input'),play=get('mass-play'),knob=get('mass-knob'),image=get('mass-apparatus'),svg=get('mass-curve-graph'),motion=get('mass-curve-motion');
 const speed=30,number=v=>v.toLocaleString('zh-TW',{maximumFractionDigits:2}),reduced=matchMedia('(prefers-reduced-motion: reduce)');
 let mass=250,elapsed=0,playing=false,ready=false,valid=true,frame=0,last=0,lastReading=-Infinity,attempt=0,geometry='',analysisKey='';
+const comparisons=new Map();
 const observe=()=>massObservationAt(mass,elapsed),predict=m=>massObservationAt(m,massHeatingSeconds(m));
 motion.innerHTML='<defs><linearGradient id="mass-curve-water"><stop stop-color="#c5e1d8" stop-opacity=".25"/><stop offset=".5" stop-color="#d8ece5" stop-opacity=".08"/><stop offset="1" stop-color="#bfdbd1" stop-opacity=".23"/></linearGradient></defs><path d="M418 539V563" stroke="#b8bbae" stroke-width="4"/><path id="mass-water-body" fill="url(#mass-curve-water)"/><ellipse id="mass-water-surface" cx="432" rx="113" ry="9" fill="#effbf6" fill-opacity=".15" stroke="#fffef1" stroke-opacity=".7"/><ellipse id="mass-water-ripple" cx="432" fill="none" stroke="#fffdf1" stroke-width="2"/><g transform="translate(432 578) scale(1 .32)"><g id="mass-stir"><rect x="-34" y="-10" width="68" height="20" rx="10" fill="#f6faf0" stroke="#bac4b5"/></g></g><circle id="mass-led" cx="369" cy="693" r="7" fill="#173824"/>';
 function cancel(){playing=false;cancelAnimationFrame(frame);frame=0;}
@@ -18,14 +19,10 @@ function graph(){
  get('mass-result').style.display=state.complete?'':'none';
  svg.setAttribute('aria-label',`推算曲線：100至350g水各吸收1000cal。${number(mass)}g水預測升高${prediction.rise.toFixed(1)}°C；${state.complete?'驗證結果與預測位置重合。':'空心點標示預測，驗證尚未完成。'}`);
 }
-function analysis(state){
- const mode=!valid?'invalid':state.complete?'verified':playing?'running':elapsed>0?'interrupted':'prediction',key=mass+'/'+mode;
- if(key===analysisKey)return;analysisKey=key;
- get('mass-analysis').dataset.mode=mode;
- get('mass-analysis-mass').textContent=valid?number(mass)+' g':'—';
- const rise=state.complete?state.rise:predict(mass).rise,rounded=rise.toFixed(1);
- get('mass-analysis-rise').textContent=valid?(Math.abs(rise-Number(rounded))>1e-8?'約':'')+number(Number(rounded))+'°C':'—';
- get('mass-analysis-state').textContent=mode==='invalid'?'請修正水量':mode==='verified'?'本次已驗證':mode==='running'?'驗證中':mode==='interrupted'?'預測・未完成':'本次預測';
+function analysis(){
+ const entries=[...comparisons.entries()].slice(-3),key=JSON.stringify(entries);if(key===analysisKey)return;analysisKey=key;
+ const masses=get('mass-analysis-masses').cells,rises=get('mass-analysis-rises').cells;
+ for(let i=0;i<3;i++){const entry=entries[i];masses[i+1].textContent=entry?number(entry[0])+' g':'待記錄';if(!entry){rises[i+1].textContent='—';continue;}const rounded=entry[1].toFixed(1);rises[i+1].textContent=(Math.abs(entry[1]-Number(rounded))>1e-8?'約':'')+number(Number(rounded))+'°C';}
 }
 function render(force=false){
  const state=observe();analysis(state);root.dataset.playing=String(playing);root.dataset.mass=String(mass);root.dataset.waterCalories=String(state.waterCalories);root.dataset.temperature=String(state.temperature);root.dataset.rise=String(state.rise);
@@ -37,7 +34,7 @@ function render(force=false){
 }
 function reset(){cancel();elapsed=0;root.dataset.phase=ready?'ready':'loading';get('mass-status').textContent=ready?`預測：${number(mass)}g水吸收1,000 cal，升高${predict(mass).rise.toFixed(1)}°C。按下開始驗證，核對曲線上的位置。`:'正在準備器材…';render(true);}
 function tick(now){frame=0;if(!playing)return;elapsed=Math.min(massHeatingSeconds(mass),elapsed+Math.min(100,Math.max(0,now-last))/1000*speed);last=now;
- if(observe().complete){cancel();root.dataset.phase='complete';get('mass-status').textContent=`✓ 驗證符合預測：${number(mass)}g水吸收1,000 cal，升高${observe().rise.toFixed(1)}°C。`;}
+ if(observe().complete){comparisons.delete(mass);comparisons.set(mass,observe().rise);while(comparisons.size>3)comparisons.delete(comparisons.keys().next().value);cancel();root.dataset.phase='complete';get('mass-status').textContent=`✓ 驗證符合預測：${number(mass)}g水吸收1,000 cal，升高${observe().rise.toFixed(1)}°C。`;}
  render();if(playing)frame=requestAnimationFrame(tick);
 }
 function start(){if(!ready||playing||!valid)return;if(observe().complete)reset();playing=true;root.dataset.phase='running';last=performance.now();get('mass-status').textContent='正在加熱驗證；水量固定，吸收滿1,000 cal後核對預測位置。';render(true);frame=requestAnimationFrame(tick);}

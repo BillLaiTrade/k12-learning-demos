@@ -16,7 +16,7 @@ const exampleMode=()=>elapsed===0&&!playing;
 
 function cancel(){playing=false;cancelAnimationFrame(frame);frame=0;}
 function analysis(data,example){
-  const mode=get('heat-stage-analysis-mode');mode.textContent=example?'推算示例・非本次觀察':'本次觀察・沿途前三筆';mode.classList.toggle('is-example',example);
+  const mode=get('heat-stage-analysis-mode');mode.textContent='本次加熱紀錄';mode.classList.remove('is-example');
   const heat=get('heat-stage-analysis-heat').cells,rise=get('heat-stage-analysis-rise').cells;
   for(let i=0;i<3;i++){
     const r=data[i];heat[i+1].textContent=r?number(r.waterCalories)+' cal':'待記錄';rise[i+1].textContent=r?number(r.rise)+'°C':'—';
@@ -66,13 +66,13 @@ function render(forceReadings=false){
     get('heat-stage-energy').textContent=playing?state.waterCalories.toLocaleString('zh-TW',{maximumFractionDigits:0}):number(state.waterCalories);
     get('heat-stage-rise').textContent=state.rise.toFixed(1);
   }
-  const data=example?samples.map(sampleAt):records,key=String(example)+'/'+data.map(r=>r.waterCalories).join(',');
+  const data=records,key='records/'+data.map(r=>r.waterCalories).join(',');
   if(key!==rowsKey){
     rowsKey=key;const body=get('heat-stage-records');body.replaceChildren();
     for(const r of data){const row=document.createElement('tr');[number(r.waterCalories)+' cal',r.temperature.toFixed(1)+'°C',r.rise.toFixed(1)+'°C'].forEach((value,i)=>{const cell=document.createElement(i?'td':'th');if(!i)cell.scope='row';cell.textContent=value;row.append(cell);});body.append(row);}
-    analysis(data,example);
+    analysis(records,false);
   }
-  get('heat-stage-record-label').textContent=example?'查看推算示例的逐點數據':`查看沿途觀察紀錄（${records.length}筆）`;
+  get('heat-stage-record-label').textContent=`查看沿途觀察紀錄（${records.length}筆）`;
   graph();bench.draw({elapsed,playing,ready,speed:STAGE_ANIMATION_SPEED});
 }
 function reset(){
