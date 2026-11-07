@@ -1,0 +1,13 @@
+{
+  "baseline": "cf75ed93389ae7440a551df5b3d30dc798ac3b29",
+  "checks": {
+    "card01Identical": true,
+    "card03OnwardsIdentical": true,
+    "analysisAndFormulaIdentical": true,
+    "shareMetadataIdentical": true,
+    "heatingLifecycleIdentical": true,
+    "analysisFunctionIdentical": true,
+    "otherResourcesIdentical": true
+  },
+  "unchangedResources": 35
+}

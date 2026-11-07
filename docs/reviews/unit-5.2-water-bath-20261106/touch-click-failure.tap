@@ -1,0 +1,58 @@
+▶ 5.2 first block: three environments and in-water thermometers
+  ✔ starts with three clean scenes, pending observations and authentic portraits (112.432741ms)
+  ✔ matching scales, immersed bulbs and synchronized liquid/readout levels (1412.209506ms)
+  ✔ 25°C: A releases heat and B absorbs heat; pause freezes readouts (1292.287558ms)
+  ✔ 5°C: both release heat and scene/captions change together (1345.396383ms)
+  ✔ 70°C: even the initially hot cup absorbs heat; both arrows point inward (1288.434618ms)
+  ✔ copper paths cross cup boundaries and pulses move, pause and resume with the model (6932.342918ms)
+  ✔ reset and switching environment during playback cancel old observations (702.673222ms)
+  ✔ same displayed temperature removes heat flow and replay starts cleanly (9864.926855ms)
+  ✔ keyboard and reduced motion preserve all basic controls (899.411393ms)
+  ✔ in-scene instruments and controls fit desktop, tablet and phone widths (1737.33408ms)
+  ✔ real rendered flow keeps moving with either motion preference and freezes only when paused (5892.14965ms)
+  ✔ real mobile taps change scene, play, pause and restart (1209.424354ms)
+  ✔ remaining learning blocks and quiz still operate independently (1106.638575ms)
+✔ 5.2 first block: three environments and in-water thermometers (35300.49199ms)
+▶ 5.2 water bath: direct manipulation, finite source and goal evidence
+  ✔ compact page starts stopped, hides records and uses a fixed quiz route name (119.593963ms)
+  ✔ real mouse drag inserts, adjusts depth and removes bottle without restarting temperature (993.016416ms)
+  ✔ material drag places jacket and bottle stays draggable through the jacket opening (889.416841ms)
+  ✔ same clock updates both reservoirs, successful target is earned and check pauses (6334.898321ms)
+  ✔ pause freezes actual digits and graph pixels, resumed changes retain temperatures and goal (6324.912319ms)
+  ✔ cup removes actual finite water and pouring back preserves the cooled cup effect (498.097892ms)
+  ✔ insulating the drink bottle gives a different result than insulating the bath (5932.493405ms)
+  ✔ keyboard, help and background pause leave no automatic resume or stuck drag (404.950668ms)
+  ✔ seven viewports retain readable readings and native controls, help and record stay optional (827.425149ms)
+  ✔ convection/radiation and the new quiz do not reset or stop one another (751.599196ms)
+  ✔ every generated asset can fail and retry; late loading never starts the task (8362.03704ms)
+  ✖ real touch can insert/raise the bottle under both motion preferences and pause current readings (1965.645497ms)
+✖ 5.2 water bath: direct manipulation, finite source and goal evidence (34759.087928ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 25
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 35705.218195
+
+✖ failing tests:
+
+test at tests/unit-5.2-water-bath.test.cjs:58:10
+✖ real touch can insert/raise the bottle under both motion preferences and pause current readings (1965.645497ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Number(await p.locator('#water-bath').getAttribute('data-drink'))>t)
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:59:976)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:58:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

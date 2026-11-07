@@ -33,8 +33,8 @@ test('每支手電筒方向都指向自己的落點，單位向量及投影與�
 });
 
 test('光斑柔邊造成三色比例不均時不宣稱白色，完整混白與兩色混合仍正確',()=>{
- const edge=[{x:.33,y:.5,on:true},{x:.5,y:.5,on:true},{x:.67,y:.5,on:true}];assert.ok(mixtureRegions(edge).includes(7));assert.match(mixObservation(edge),/強度比例不均/);assert.doesNotMatch(mixObservation(edge),/共同區.*混看接近白色/);
- assert.match(mixObservation(arrangeMix('together')),/比例接近校配比例.*接近白色/);
+ const edge=[{x:.33,y:.5,on:true},{x:.5,y:.5,on:true},{x:.67,y:.5,on:true}];assert.ok(mixtureRegions(edge).includes(7));assert.match(mixObservation(edge),/強度比例不均/);assert.doesNotMatch(mixObservation(edge),/照在一起的地方，看起來接近白色/);
+ assert.match(mixObservation(arrangeMix('together')),/紅光、綠光和藍光照在一起的地方，看起來接近白色耶！/);
  const off=arrangeMix('together').map(s=>({...s,on:false}));assert.match(mixObservation(off),/都關閉/);
  for(const [excluded,colour]of[[0,'青色'],[1,'洋紅色'],[2,'黃色']])assert.ok(mixObservation(arrangeMix('together').map((s,i)=>({...s,on:i!==excluded}))).includes(colour));
 });

@@ -1,0 +1,12 @@
+{
+  "baseline": "2883b926744c017b4422d17e468adf9afe09c221",
+  "checks": {
+    "card01Identical": true,
+    "card03OnwardsIdentical": true,
+    "graphGeometryAndContinuousPointIdentical": true,
+    "physicsOnlyPlaybackConstantChanged": true,
+    "integratorAndSamplingIdentical": true,
+    "otherResourcesIdentical": true
+  },
+  "unchangedResources": 35
+}

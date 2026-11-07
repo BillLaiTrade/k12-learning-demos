@@ -1,0 +1,167 @@
+▶ 5.2 water bath: direct manipulation, finite source and goal evidence
+  ✔ compact page starts stopped, hides records and uses a fixed quiz route name (80.29652ms)
+  ✖ real mouse drag inserts, adjusts depth and removes bottle without restarting temperature (599.836166ms)
+  ✖ material drag places jacket and bottle stays draggable through the jacket opening (808.198144ms)
+  ✔ same clock updates both reservoirs, successful target is earned and check pauses (5758.651987ms)
+  ✖ pause freezes actual digits and graph pixels, resumed changes retain temperatures and goal (64.98312ms)
+  ✖ cup removes actual finite water and pouring back preserves the cooled cup effect (90.355922ms)
+  ✖ insulating the drink bottle gives a different result than insulating the bath (5394.833955ms)
+  ✔ keyboard, help and background pause leave no automatic resume or stuck drag (435.561329ms)
+  ✖ seven viewports retain readable readings and native controls, help and record stay optional (837.229209ms)
+  ✔ convection/radiation and the new quiz do not reset or stop one another (752.353538ms)
+  ✔ every generated asset can fail and retry; late loading never starts the task (6739.98803ms)
+  ✖ real touch can insert/raise the bottle under both motion preferences and pause current readings (1014.422255ms)
+✖ 5.2 water bath: direct manipulation, finite source and goal evidence (23592.768993ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 5
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 23944.404959
+
+✖ failing tests:
+
+test at tests/unit-5.2-water-bath.test.cjs:21:10
+✖ real mouse drag inserts, adjusts depth and removes bottle without restarting temperature (599.836166ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Number((await state()).immersion)<.4)
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:22:227)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:21:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.2-water-bath.test.cjs:24:10
+✖ material drag places jacket and bottle stays draggable through the jacket opening (808.198144ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Number((await state()).immersion)<.5)
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:26:110)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:24:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.2-water-bath.test.cjs:32:10
+✖ pause freezes actual digits and graph pixels, resumed changes retain temperatures and goal (64.98312ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    {
+      curves: [
+  +     'M55.00 51.43L65.73 52.94L76.47 54.42L87.20 55.87L97.94 57.28L108.67 58.67L119.41 60.02L130.14 61.34L140.87 62.63L151.61 63.90L162.34 65.14L173.08 66.35L183.81 67.53L194.54 68.69L205.28 69.82L216.01 70.93L226.75 72.01L237.48 73.07L248.22 74.11L258.95 75.12L269.68 76.11L280.42 77.09L291.15 78.04L301.89 78.97L312.62 79.88L323.35 80.77L334.09 81.64L344.82 82.49L355.56 83.33L366.29 84.14L377.03 84.94L387.76 85.73L398.49 86.49L409.23 87.24L419.96 87.98L430.70 88.70L441.43 89.40L452.16 90.09L462.90 90.77L473.63 91.43L484.37 92.08L495.10 92.71L505.84 93.34L516.57 93.95L527.30 94.54L538.04 95.13L548.77 95.70L559.51 96.26L570.24 96.81L580.97 97.35L591.71 97.88L602.44 98.40L613.18 98.91L623.91 99.41L634.65 99.90L645.38 100.37L656.11 100.84L666.85 101.30L677.58 101.76L688.32 102.20L699.05 102.63L709.78 103.06L720.52 103.48L731.25 103.89L741.99 104.29L752.72 104.69L763.46 105.07L774.19 105.46L784.92 105.83L795.66 106.20L806.39 106.56L817.13 106.91L827.86 107.26L838.59 107.60L849.33 107.93L850.00 107.95',
+  +     'M55.00 240.00L65.73 236.99L76.47 234.05L87.20 231.19L97.94 228.39L108.67 225.66L119.41 223.00L130.14 220.41L140.87 217.87L151.61 215.41L162.34 213.00L173.08 210.65L183.81 208.36L194.54 206.12L205.28 203.94L216.01 201.81L226.75 199.74L237.48 197.72L248.22 195.75L258.95 193.82L269.68 191.95L280.42 190.12L291.15 188.33L301.89 186.60L312.62 184.90L323.35 183.25L334.09 181.63L344.82 180.06L355.56 178.53L366.29 177.04L377.03 175.58L387.76 174.16L398.49 172.78L409.23 171.43L419.96 170.11L430.70 168.83L441.43 167.58L452.16 166.37L462.90 165.18L473.63 164.02L484.37 162.90L495.10 161.80L505.84 160.73L516.57 159.69L527.30 158.67L538.04 157.68L548.77 156.72L559.51 155.78L570.24 154.87L580.97 153.98L591.71 153.11L602.44 152.27L613.18 151.45L623.91 150.64L634.65 149.87L645.38 149.11L656.11 148.37L666.85 147.65L677.58 146.95L688.32 146.27L699.05 145.60L709.78 144.96L720.52 144.33L731.25 143.72L741.99 143.13L752.72 142.55L763.46 141.99L774.19 141.44L784.92 140.91L795.66 140.39L806.39 139.89L817.13 139.40L827.86 138.92L838.59 138.46L849.33 138.01L850.00 137.98'
+  -     null,
+  -     null
+      ],
+      readings: [
+        '41.0',
+        '36.2'
+      ],
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:33:149)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:32:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { readings: [ '41.0', '36.2' ], curves: [ 'M55.00 51.43L65.73 52.94L76.47 54.42L87.20 55.87L97.94 57.28L108.67 58.67L119.41 60.02L130.14 61.34L140.87 62.63L151.61 63.90L162.34 65.14L173.08 66.35L183.81 67.53L194.54 68.69L205.28 69.82L216.01 70.93L226.75 72.01L237.48 73.07L248.22 74.11L258.95 75.12L269.68 76.11L280.42 77.09L291.15 78.04L301.89 78.97L312.62 79.88L323.35 80.77L334.09 81.64L344.82 82.49L355.56 83.33L366.29 84.14L377.03 84.94L387.76 85.73L398.49 86.49L409.23 87.24L419.96 87.98L430.70 88.70L441.43 89.40L452.16 90.09L462.90 90.77L473.63 91.43L484.37 92.08L495.10 92.71L505.84 93.34L516.57 93.95L527.30 94.54L538.04 95.13L548.77 95.70L559.51 96.26L570.24 96.81L580.97 97.35L591.71 97.88L602.44 98.40L613.18 98.91L623.91 99.41L634.65 99.90L645.38 100.37L656.11 100.84L666.85 101.30L677.58 101.76L688.32 102.20L699.05 102.63L709.78 103.06L720.52 103.48L731.25 103.89L741.99 104.29L752.72 104.69L763.46 105.07L774.19 105.46L784.92 105.83L795.66 106.20L806.39 106.56L817.13 106.91L827.86 107.26L838.59 107.60L849.33 107.93L850.00 107.95', 'M55.00 240.00L65.73 236.99L76.47 234.05L87.20 231.19L97.94 228.39L108.67 225.66L119.41 223.00L130.14 220.41L140.87 217.87L151.61 215.41L162.34 213.00L173.08 210.65L183.81 208.36L194.54 206.12L205.28 203.94L216.01 201.81L226.75 199.74L237.48 197.72L248.22 195.75L258.95 193.82L269.68 191.95L280.42 190.12L291.15 188.33L301.89 186.60L312.62 184.90L323.35 183.25L334.09 181.63L344.82 180.06L355.56 178.53L366.29 177.04L377.03 175.58L387.76 174.16L398.49 172.78L409.23 171.43L419.96 170.11L430.70 168.83L441.43 167.58L452.16 166.37L462.90 165.18L473.63 164.02L484.37 162.90L495.10 161.80L505.84 160.73L516.57 159.69L527.30 158.67L538.04 157.68L548.77 156.72L559.51 155.78L570.24 154.87L580.97 153.98L591.71 153.11L602.44 152.27L613.18 151.45L623.91 150.64L634.65 149.87L645.38 149.11L656.11 148.37L666.85 147.65L677.58 146.95L688.32 146.27L699.05 145.60L709.78 144.96L720.52 144.33L731.25 143.72L741.99 143.13L752.72 142.55L763.46 141.99L774.19 141.44L784.92 140.91L795.66 140.39L806.39 139.89L817.13 139.40L827.86 138.92L838.59 138.46L849.33 138.01L850.00 137.98' ], transform: 'translate(550 600)', water: '426.67' },
+    expected: { readings: [ '41.0', '36.2' ], curves: [ null, null ], transform: 'translate(550 600)', water: '426.67' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.2-water-bath.test.cjs:36:10
+✖ cup removes actual finite water and pouring back preserves the cooled cup effect (90.355922ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '41.00716'
+  - '50.00000'
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:37:235)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:36:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '41.00716',
+    expected: '50.00000',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.2-water-bath.test.cjs:40:10
+✖ insulating the drink bottle gives a different result than insulating the bath (5394.833955ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(sleeved<30)
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:41:195)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:40:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.2-water-bath.test.cjs:47:10
+✖ seven viewports retain readable readings and native controls, help and record stay optional (837.229209ms)
+  AssertionError [ERR_ASSERTION]: [data-bath-tool=wrap] 44px
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:48:438)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:47:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/unit-5.2-water-bath.test.cjs:58:10
+✖ real touch can insert/raise the bottle under both motion preferences and pause current readings (1014.422255ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Number(await p.locator('#water-bath').getAttribute('data-immersion'))>.7)
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:59:726)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:58:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

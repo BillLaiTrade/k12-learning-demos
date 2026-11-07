@@ -1,7 +1,7 @@
-import {renderObserverPixels} from './depth-observer.mjs?v=20261105-eleven1';
+import {renderObserverPixels} from './depth-observer.mjs?v=20261107-preview1';
 
 // At most one worker frame and one newest pending state. Camera geometry is
-// unchanged; only raster resolution changes during interaction.
+// unchanged; the moving preview uses a bounded raster and isolated-pixel smoothing.
 export function createObserverRenderer(canvas,onFrame){
   let worker=null,textures=null,busy=null,pending=null,detail=null,serial=0,textureVersion=0,latestSignature='';
   const signature=g=>`${g.depth}/${g.eyeX}/${canvas.clientWidth}/${textureVersion}`;
@@ -23,13 +23,13 @@ export function createObserverRenderer(canvas,onFrame){
     const job=pending||detail;if(pending)pending=null;else detail=null;busy=job;
     if(worker){worker.postMessage({type:'render',...job});return;}
     // The fallback bounds work on the UI thread even without module workers.
-    const width=job.preview?176:400,height=Math.round(width*530/720);
-    const frame=renderObserverPixels(job.geometry,textures,width,height);
+    const width=job.preview?256:400,height=Math.round(width*530/720);
+    const frame=renderObserverPixels(job.geometry,textures,width,height,{preview:job.preview});
     busy=null;paint(frame,job);
     if(pending||detail)requestAnimationFrame(pump);
   }
   function connect(){
-    worker=new Worker(new URL('./depth-observer-worker.mjs?v=20261105-eleven1',import.meta.url),{type:'module'});
+    worker=new Worker(new URL('./depth-observer-worker.mjs?v=20261107-preview1',import.meta.url),{type:'module'});
     canvas.dataset.renderer='worker';
     worker.onmessage=({data})=>{
       const job=busy;if(!job||job.id!==data.id)return;
@@ -47,7 +47,7 @@ export function createObserverRenderer(canvas,onFrame){
   return{
     setTextures(value){textures=value;textureVersion++;pending=detail=null;worker?.postMessage({type:'textures',textures});},
     request(geometry,{preview=false}={}){
-      const width=preview?160:Math.max(400,Math.min(1100,Math.round(canvas.clientWidth*2)));
+      const width=preview?320:Math.max(400,Math.min(1100,Math.round(canvas.clientWidth*2)));
       latestSignature=signature(geometry);
       const job={id:++serial,geometry,preview,width,height:Math.round(width*530/720),signature:latestSignature,textureVersion};
       if(preview){

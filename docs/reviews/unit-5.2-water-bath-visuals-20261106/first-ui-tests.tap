@@ -1,0 +1,37 @@
+▶ 5.2 water bath: direct manipulation, finite source and goal evidence
+  ✔ compact page starts stopped, hides records and uses a fixed quiz route name (94.368786ms)
+  ✔ real mouse drag inserts, adjusts depth and removes bottle without restarting temperature (973.208481ms)
+  ✔ material drag places jacket and bottle stays draggable through the jacket opening (906.450896ms)
+  ✔ same clock updates both reservoirs, successful target is earned and check pauses (5994.113176ms)
+  ✔ pause freezes actual digits and graph pixels, resumed changes retain temperatures and goal (6017.078132ms)
+  ✖ taking out or tapping an empty cup does not remove water; explicit transfer does (30095.699014ms)
+  ✔ fitted bottle sleeve replaces the whole bottle and no floating collar remains (441.090858ms)
+  ✔ insulating the drink bottle gives a different result than insulating the bath (6214.885113ms)
+  ✔ keyboard, help and background pause leave no automatic resume or stuck drag (467.005333ms)
+  ✔ seven viewports retain readable readings and native controls, help and record stay optional (1013.723284ms)
+  ✔ convection/radiation and the new quiz do not reset or stop one another (782.974405ms)
+  ✔ every generated asset can fail and retry; late loading never starts the task (8006.27937ms)
+  ✔ real touch can insert/raise the bottle under both motion preferences and pause current readings (7964.984611ms)
+✖ 5.2 water bath: direct manipulation, finite source and goal evidence (70155.072086ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 12
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 70526.439814
+
+✖ failing tests:
+
+test at tests/unit-5.2-water-bath.test.cjs:36:10
+✖ taking out or tapping an empty cup does not remove water; explicit transfer does (30095.699014ms)
+  locator.click: Timeout 30000ms exceeded.
+  Call log:
+  [2m  - waiting for locator('#bath-cup')[22m
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:38:35)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-water-bath.test.cjs:36:2) {
+    name: 'TimeoutError',
+    log: [ "  - waiting for locator('#bath-cup')" ]
+  }

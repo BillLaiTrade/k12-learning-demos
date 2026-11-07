@@ -112,7 +112,7 @@ h1 { margin: 6px 0 12px; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.2;
 #s3 .lesson-head h2{font-size:1.4rem}
 #s3 .lesson-head p{margin:4px 0 0;font-size:.83rem}
 #s3 .lesson-body{padding:10px 16px 14px}
-#s3 .mix-intro{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#s3 .mix-intro{display:grid;grid-template-columns:1fr;gap:8px}
 #s3 .dialogue{margin:6px 0;padding:8px 10px;gap:8px;font-size:.84rem;line-height:1.55}
 #s3 .mix-intro .dialogue{margin:0}
 #s3 .dialogue p{font-size:inherit}

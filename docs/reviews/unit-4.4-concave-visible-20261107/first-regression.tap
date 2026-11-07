@@ -1,0 +1,292 @@
+TAP version 13
+# Subtest: 凹透鏡兩次折射符合 Snell 定律，平行光實際發散、延長線交於入射側
+ok 1 - 凹透鏡兩次折射符合 Snell 定律，平行光實際發散、延長線交於入射側
+  ---
+  duration_ms: 1.367375
+  type: 'test'
+  ...
+# Subtest: 所有允許物距形成正立縮小虛像，虛像在透鏡與同側F之間
+ok 2 - 所有允許物距形成正立縮小虛像，虛像在透鏡與同側F之間
+  ---
+  duration_ms: 1.405442
+  type: 'test'
+  ...
+# Subtest: 同一物點所有出射光與反向延長線指向同一虛像，並保持向右前進
+ok 3 - 同一物點所有出射光與反向延長線指向同一虛像，並保持向右前進
+  ---
+  duration_ms: 0.621805
+  type: 'test'
+  ...
+# Subtest: 圖卡移近時，虛像靠近透鏡並變大；F前後沒有像性質跳變
+ok 4 - 圖卡移近時，虛像靠近透鏡並變大；F前後沒有像性質跳變
+  ---
+  duration_ms: 0.372004
+  type: 'test'
+  ...
+# Subtest: 固定眼位比較使用角大小，不能把虛像尺寸倍率直接當觀看倍率
+ok 5 - 固定眼位比較使用角大小，不能把虛像尺寸倍率直接當觀看倍率
+  ---
+  duration_ms: 0.163954
+  type: 'test'
+  ...
+# Subtest: 4.4 第五／六區：立體凹透鏡折射與固定眼位成像
+    # Subtest: 兩區各自可見，完整圓形凹透鏡的曲面與兩次折射對應
+    ok 1 - 兩區各自可見，完整圓形凹透鏡的曲面與兩次折射對應
+      ---
+      duration_ms: 106.237663
+      type: 'test'
+      ...
+    # Subtest: 第五區逐面近看同片鏡片，法線與介面切換一致，延長線不冒充實際光
+    ok 2 - 第五區逐面近看同片鏡片，法線與介面切換一致，延長線不冒充實際光
+      ---
+      duration_ms: 2080.537657
+      type: 'test'
+      ...
+    # Subtest: 第六區固定觀看尺度呈現近大遠小，透鏡內仍是正立縮小虛像
+    ok 3 - 第六區固定觀看尺度呈現近大遠小，透鏡內仍是正立縮小虛像
+      ---
+      duration_ms: 1313.88625
+      type: 'test'
+      ...
+    # Subtest: 遠近取景讓近處虛像更清楚，縮放只改觀看尺度而不增加光軌斜度
+    ok 4 - 遠近取景讓近處虛像更清楚，縮放只改觀看尺度而不增加光軌斜度
+      ---
+      duration_ms: 1699.407758
+      type: 'test'
+      ...
+    # Subtest: 局部放大可由按鈕、虛像標籤及圖案開啟，保留成像狀態並支援鍵盤關閉
+    ok 5 - 局部放大可由按鈕、虛像標籤及圖案開啟，保留成像狀態並支援鍵盤關閉
+      ---
+      duration_ms: 2582.470174
+      type: 'test'
+      ...
+    # Subtest: 移近圖卡時器材與F保持平衡，五種尺寸不裁掉圖卡或眼睛
+    ok 6 - 移近圖卡時器材與F保持平衡，五種尺寸不裁掉圖卡或眼睛
+      ---
+      duration_ms: 20145.567325
+      type: 'test'
+      ...
+    # Subtest: 跨F、點觀察列保留端點及光路偏好，所有線都維持所選物點
+    ok 7 - 跨F、點觀察列保留端點及光路偏好，所有線都維持所選物點
+      ---
+      duration_ms: 4556.042329
+      type: 'test'
+      ...
+    # Subtest: 刻度、滑鼠拖曳、鍵盤與取消操作只移動圖卡，固定透鏡與眼睛
+    ok 8 - 刻度、滑鼠拖曳、鍵盤與取消操作只移動圖卡，固定透鏡與眼睛
+      ---
+      duration_ms: 1710.507649
+      type: 'test'
+      ...
+    # Subtest: 嘗試拖主圖圖卡時提示使用下方金框位置尺，操作位置尺後清除提示
+    ok 9 - 嘗試拖主圖圖卡時提示使用下方金框位置尺，操作位置尺後清除提示
+      ---
+      duration_ms: 1671.34988
+      type: 'test'
+      ...
+    # Subtest: 旋轉與縮放不改變光學結果，兩區狀態互不影響
+    ok 10 - 旋轉與縮放不改變光學結果，兩區狀態互不影響
+      ---
+      duration_ms: 345.137429
+      type: 'test'
+      ...
+    # Subtest: 五種尺寸畫面可辨識、觀看框不遮光路、標籤與控制沒有溢出
+    ok 11 - 五種尺寸畫面可辨識、觀看框不遮光路、標籤與控制沒有溢出
+      ---
+      duration_ms: 21760.803808
+      type: 'test'
+      ...
+    # Subtest: 手機原生觸控可拖移圖卡，取消後停止
+    ok 12 - 手機原生觸控可拖移圖卡，取消後停止
+      ---
+      duration_ms: 10287.601723
+      type: 'test'
+      ...
+    # Subtest: 沒有瀏覽器例外、重複ID或遺失資源
+    ok 13 - 沒有瀏覽器例外、重複ID或遺失資源
+      ---
+      duration_ms: 58.810355
+      type: 'test'
+      ...
+    # Subtest: WebGL無法使用時，第五區剖面與第六區位置尺、觀看框仍可操作
+    ok 14 - WebGL無法使用時，第五區剖面與第六區位置尺、觀看框仍可操作
+      ---
+      duration_ms: 47506.906579
+      type: 'test'
+      ...
+    1..14
+ok 6 - 4.4 第五／六區：立體凹透鏡折射與固定眼位成像
+  ---
+  duration_ms: 139900.300611
+  type: 'test'
+  ...
+# Subtest: 4.4 十區整合版：獨立透鏡、共用成像台及跨尺寸導覽
+    # Subtest: 九教學區、一個獨立小測，標題和導覽一致且無重複ID
+    ok 1 - 九教學區、一個獨立小測，標題和導覽一致且無重複ID
+      ---
+      duration_ms: 201.432915
+      type: 'test'
+      ...
+    # Subtest: 立體小孔沒有拉霸，屏幕位置與光路可操作
+    ok 2 - 立體小孔沒有拉霸，屏幕位置與光路可操作
+      ---
+      duration_ms: 1908.794381
+      type: 'test'
+      ...
+    # Subtest: 凸／凹透鏡分區，光路與同片鏡片兩次折射近看可操作
+    not ok 3 - 凸／凹透鏡分區，光路與同片鏡片兩次折射近看可操作
+      ---
+      duration_ms: 2652.174508
+      type: 'test'
+      location: '/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:14:30'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        
+        'false' !== 'true'
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 'true'
+      actual: 'false'
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:30:144)
+        async Test.run (node:internal/test_runner/test:1409:7)
+        async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:27:2)
+        async Test.run (node:internal/test_runner/test:1409:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+      ...
+    # Subtest: 立體成像台載入即對焦，圖卡與屏幕皆可直接操作且沒有模式切換
+    ok 4 - 立體成像台載入即對焦，圖卡與屏幕皆可直接操作且沒有模式切換
+      ---
+      duration_ms: 747.367225
+      type: 'test'
+      ...
+    # Subtest: 物距變化不搬屏幕，兩把尺保持可用，觀察重點同步對焦
+    ok 5 - 物距變化不搬屏幕，兩把尺保持可用，觀察重點同步對焦
+      ---
+      duration_ms: 907.240948
+      type: 'test'
+      ...
+    # Subtest: 放大鏡專注同眼位觀看，圖卡可跨F但範圍收斂至1.5F
+    ok 6 - 放大鏡專注同眼位觀看，圖卡可跨F但範圍收斂至1.5F
+      ---
+      duration_ms: 699.032735
+      type: 'test'
+      ...
+    # Subtest: 凹透鏡固定眼位，移動圖卡比較正立縮小虛像
+    ok 7 - 凹透鏡固定眼位，移動圖卡比較正立縮小虛像
+      ---
+      duration_ms: 717.047333
+      type: 'test'
+      ...
+    # Subtest: 遠近切換保留視網膜，調節後恢復清楚像
+    ok 8 - 遠近切換保留視網膜，調節後恢復清楚像
+      ---
+      duration_ms: 1666.430277
+      type: 'test'
+      ...
+    # Subtest: 近視／遠視的眼軸模型與眼鏡矯正，切模型撤除舊鏡片
+    ok 9 - 近視／遠視的眼軸模型與眼鏡矯正，切模型撤除舊鏡片
+      ---
+      duration_ms: 2604.867899
+      type: 'test'
+      ...
+    # Subtest: 顯微鏡完整成像、局部近看與自身重設連動
+    ok 10 - 顯微鏡完整成像、局部近看與自身重設連動
+      ---
+      duration_ms: 1646.381688
+      type: 'test'
+      ...
+    # Subtest: 唯一小測：投影機任務、檢查成果、修改清除與重新挑戰
+    ok 11 - 唯一小測：投影機任務、檢查成果、修改清除與重新挑戰
+      ---
+      duration_ms: 9754.322723
+      type: 'test'
+      ...
+    # Subtest: 與 4.1 共用的排版數值及人物素材一致
+    ok 12 - 與 4.1 共用的排版數值及人物素材一致
+      ---
+      duration_ms: 942.384865
+      type: 'test'
+      ...
+    # Subtest: 1440px 十區標頭、滿寬內容、導覽與文字未遮擋
+    ok 13 - 1440px 十區標頭、滿寬內容、導覽與文字未遮擋
+      ---
+      duration_ms: 1666.376098
+      type: 'test'
+      ...
+    # Subtest: 1366px 十區標頭、滿寬內容、導覽與文字未遮擋
+    ok 14 - 1366px 十區標頭、滿寬內容、導覽與文字未遮擋
+      ---
+      duration_ms: 1350.539941
+      type: 'test'
+      ...
+    # Subtest: 1024px 十區標頭、滿寬內容、導覽與文字未遮擋
+    ok 15 - 1024px 十區標頭、滿寬內容、導覽與文字未遮擋
+      ---
+      duration_ms: 6315.82387
+      type: 'test'
+      ...
+    # Subtest: 820px 十區標頭、滿寬內容、導覽與文字未遮擋
+    ok 16 - 820px 十區標頭、滿寬內容、導覽與文字未遮擋
+      ---
+      duration_ms: 4513.159361
+      type: 'test'
+      ...
+    # Subtest: 760px 十區標頭、滿寬內容、導覽與文字未遮擋
+    ok 17 - 760px 十區標頭、滿寬內容、導覽與文字未遮擋
+      ---
+      duration_ms: 6512.925441
+      type: 'test'
+      ...
+    # Subtest: 390px 十區標頭、滿寬內容、導覽與文字未遮擋
+    ok 18 - 390px 十區標頭、滿寬內容、導覽與文字未遮擋
+      ---
+      duration_ms: 4439.4982
+      type: 'test'
+      ...
+    # Subtest: 320px 十區標頭、滿寬內容、導覽與文字未遮擋
+    ok 19 - 320px 十區標頭、滿寬內容、導覽與文字未遮擋
+      ---
+      duration_ms: 2449.684706
+      type: 'test'
+      ...
+    # Subtest: 初始深連結、鍵盤及原生觸控都可操作
+    ok 20 - 初始深連結、鍵盤及原生觸控都可操作
+      ---
+      duration_ms: 12331.851771
+      type: 'test'
+      ...
+    # Subtest: 十個導覽、屏幕鍵盤操作與固定眼位比較
+    ok 21 - 十個導覽、屏幕鍵盤操作與固定眼位比較
+      ---
+      duration_ms: 6988.799039
+      type: 'test'
+      ...
+    # Subtest: 素材、有效入口、內部連結及瀏覽器錯誤
+    ok 22 - 素材、有效入口、內部連結及瀏覽器錯誤
+      ---
+      duration_ms: 111.786335
+      type: 'test'
+      ...
+    1..22
+not ok 7 - 4.4 十區整合版：獨立透鏡、共用成像台及跨尺寸導覽
+  ---
+  duration_ms: 82108.764784
+  type: 'test'
+  location: '/workspace/k12-learning-demos/tests/unit-4.4.test.cjs:3:1'
+  failureType: 'subtestsFailed'
+  error: '1 subtest failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+1..7
+# tests 43
+# suites 0
+# pass 41
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 222538.103078

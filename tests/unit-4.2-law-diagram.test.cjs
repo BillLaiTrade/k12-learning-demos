@@ -47,7 +47,7 @@ test('4.2 反射定律圖：核可版面、實際調角、光路幾何與靜態�
   const native=[];
   for(const [key,angle] of [['Home',20],['ArrowRight',21],['End',90],['ArrowLeft',89]]){
     await canvas.press(key);await expect(canvas).toHaveAttribute('aria-valuenow',String(angle));
-    await expect(p.locator('#lab-angle-in')).toHaveText(`${angle}°`);await expect(p.locator('#lab-angle-out')).toHaveText(`${angle}°`);await expect(p.locator('#angle-observation')).toHaveText('入射角和反射角一樣大。');
+    await expect(p.locator('.laser-scene .angle-callout-right tspan:last-child')).toHaveText(`${angle}°`);await expect(p.locator('.laser-scene .angle-callout-left tspan:last-child')).toHaveText(`${angle}°`);await expect(p.locator('#angle-observation')).toHaveText('入射角和反射角一樣大。');
     native.push({key,angle,geometry:await geometry(p,angle),labels:await inFrame()});
   }
   // Drag to a real, previously observed emitter location; do not call setAngle.

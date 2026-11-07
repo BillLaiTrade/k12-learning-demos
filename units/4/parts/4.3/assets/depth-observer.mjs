@@ -55,7 +55,24 @@ function directions(camera,width,height){
 
 // Real surface normals, a shared light, textured frames and contact shadows.
 // These change only the finish: the coin still comes from traceViewRay hits.
-export function renderObserverPixels(geometry, textures, width, height) {
+// Suppress isolated cyan samples on a low-resolution moving silhouette without
+// changing connected water regions, ray tracing, or the full-detail image.
+function smoothPreviewSpeckles(pixels,width,height){
+  const source=pixels.slice();
+  const cyan=i=>source[i+2]>source[i]*1.3&&source[i+1]>source[i]*1.25&&source[i+2]>65&&source[i+1]>60;
+  for(let y=1;y<height-1;y++)for(let x=1;x<width-1;x++){
+    const i=(y*width+x)*4;if(!cyan(i))continue;
+    let count=0,r=0,g=0,b=0,other=0;
+    for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
+      if(!dx&&!dy)continue;
+      const j=((y+dy)*width+x+dx)*4;
+      if(cyan(j))count++;else{r+=source[j];g+=source[j+1];b+=source[j+2];other++;}
+    }
+    if(count<=2){pixels[i]=r/other;pixels[i+1]=g/other;pixels[i+2]=b/other;}
+  }
+}
+
+export function renderObserverPixels(geometry, textures, width, height, {preview=false}={}) {
   const pixels = new Uint8ClampedArray(width * height * 4);
   const camera = observerCamera(geometry, width / height), L=TANK.length,Z=TANK.width/2,H=TANK.height;
   const rays=directions(camera,width,height);
@@ -153,6 +170,7 @@ export function renderObserverPixels(geometry, textures, width, height) {
     const i=(y*width+x)*4;
     pixels[i]=color[0]*vignette;pixels[i+1]=color[1]*vignette;pixels[i+2]=color[2]*vignette;pixels[i+3]=255;
   }
+  if(preview)smoothPreviewSpeckles(pixels,width,height);
   const bounds=coinPixels?{x:minX/width,y:minY/height,width:(maxX-minX+1)/width,height:(maxY-minY+1)/height}:null;
   const frontWallBounds=wallMinX<=wallMaxX?{x:wallMinX/width,y:wallMinY/height,width:(wallMaxX-wallMinX+1)/width,height:(wallMaxY-wallMinY+1)/height}:null;
   return {pixels,coinPixels,bounds,width,height,frontWallBounds,visibility:geometry.status,featureSampled};

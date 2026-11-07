@@ -1,0 +1,73 @@
+▶ 5.2 convection: fluid movement, mode changes and observation lifecycle
+  ✔ starts with a real distinction between water and a room, without a premature conclusion (147.033614ms)
+  ✔ both sides rise near the source, move continuously and use the same relative-warmth key (10676.280132ms)
+  ✔ photographic scenes keep animated arrows in the fluid and not inside the heater (56.22091ms)
+  ✔ pause freezes actual rendered positions and screenshots; resume preserves progress (931.562095ms)
+  ✔ switching the fluid cancels old animation, clears the discovery and resets observations (639.383495ms)
+  ✔ clicking each appliance starts or resumes without toggling off or multiplying animation loops (3316.846982ms)
+  ✔ keyboard, rapid actions and background interruptions leave no delayed restart (444.899356ms)
+  ✔ radiation, insulation and the integrated quiz still work independently (1661.751983ms)
+  ✔ all supported viewports keep explanatory text, controls and the actual fluid scene readable (731.225532ms)
+  ✔ a failed image can be retried, and a late response cannot reset a different running mode (1786.066569ms)
+  ✔ real frames keep moving with both motion preferences and touch can pause/reset (14848.01065ms)
+✔ 5.2 convection: fluid movement, mode changes and observation lifecycle (36525.215854ms)
+✖ 5.2 first block: three environments and in-water thermometers (62.056572ms)
+▶ 5.2 insulation workspace: same activity, one desktop viewport and return to reading
+  ✔ entry, native modal, Escape and return retain reading position and one activity instance (409.005309ms)
+  ✔ both comparisons keep bottle, curves, findings and controls inside desktop viewports without scrolling (9459.686063ms)
+  ✔ reopening preserves selected comparison, frozen curve and elapsed time (342.184984ms)
+  ✔ completed curve and remaining heat paths share one view in both comparisons (11235.047515ms)
+  ✔ details do not enlarge the observation viewport and the background page cannot receive focus (317.691686ms)
+  ✔ mobile native touch can open, operate, reset and return without horizontal overflow (2737.031475ms)
+  ✔ no browser script errors (1.061796ms)
+✔ 5.2 insulation workspace: same activity, one desktop viewport and return to reading (25834.985998ms)
+▶ 5.2 insulation: controlled comparisons, remaining heat paths and manual observation
+  ✔ starts only on request, retains the scientific bridge and uses identical capped bottles (77.110794ms)
+  ✔ air and vacuum differ in gas paths while radiation and solid neck/support paths remain (562.497572ms)
+  ✔ pause freezes actual paths and graph pixels, resume does not restart, repeated bottle clicks are idempotent (6756.068963ms)
+  ✔ lining comparison resets progress, holds vacuum fixed and changes only gap-facing imagery (5995.760005ms)
+  ✔ keyboard, background pause and other experiments remain independent (1088.64397ms)
+  ✔ both modes at seven viewports keep the full plot and all native controls inside the panel (1830.489354ms)
+  ✔ each required image can fail and retry without automatic playback (2646.047102ms)
+  ✔ late lining image cannot restart or reset a different running comparison (1379.62161ms)
+  ✔ real touch in both modes and motion preferences moves paths and pauses actual curves (11735.400706ms)
+✔ 5.2 insulation: controlled comparisons, remaining heat paths and manual observation (33093.098972ms)
+▶ 5.2 radiation: one energy path, surface outcomes and conditional warming
+  ✔ manual start is required and the concept uses a single radiation-energy stream (96.378821ms)
+  ✔ travel precedes surface reflection/absorption, and heating begins only after absorption (1663.068898ms)
+  ✔ pause freezes the whole rendered illustration and resume keeps the same progress (766.65218ms)
+  ✔ repeated source clicks cannot stop the demo or multiply animation loops; reset clears all results (2739.448262ms)
+  ✔ keyboard and background interruptions are consistent and do not auto-resume (278.010438ms)
+  ✔ the reflection and absorption paths are distinct outcomes at the same surface point (18.89836ms)
+  ✔ insulation, convection and quiz remain independent after extracting radiation from the shared controller (2938.552347ms)
+  ✔ desktop, laptop and narrow layouts keep controls, condition and actual scenes in view (1034.321966ms)
+  ✔ either photo may fail and retry without premature playback or loss of the other successful photo (2122.908915ms)
+  ✔ a late photo response after reset leaves the observation stopped at its beginning (845.543321ms)
+  ✔ real touch under both motion preferences starts moving rays and pauses/resets actual frames (7305.855201ms)
+✔ 5.2 radiation: one energy path, surface outcomes and conditional warming (21000.457102ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 42
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 60221.175244
+
+✖ failing tests:
+
+test at tests/unit-5.2-direction.test.cjs:7:1
+✖ 5.2 first block: three environments and in-water thermometers (62.056572ms)
+  browserType.launch: Executable doesn't exist at /home/agent/.cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell
+  ╔════════════════════════════════════════════════════════════╗
+  ║ Looks like Playwright was just installed or updated.       ║
+  ║ Please run the following command to download new browsers: ║
+  ║                                                            ║
+  ║     npx playwright install                                 ║
+  ║                                                            ║
+  ║ <3 Playwright Team                                         ║
+  ╚════════════════════════════════════════════════════════════╝
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-direction.test.cjs:11:32) {
+    name: 'Error',
+    log: []
+  }

@@ -49,7 +49,7 @@ export function mixObservation(spots){
  if(!active.length)return'三支手電筒都關閉了，白幕上沒有這三支燈照出的光斑。';
  if(active.length===1)return`只開${names[active[0]]}光時，白幕上只看到${names[active[0]]}色光斑。`;
  const triple=samples.get(7);
- if(triple)return triple.imbalance<=.03*Math.max(...triple.weights)?'三色共同區的強度比例接近校配比例，混看接近白色。':'三色重疊處的強度比例不均，顏色出現偏移；移動光斑，比較何時接近白色。';
+ if(triple)return triple.imbalance<=.03*Math.max(...triple.weights)?'紅光、綠光和藍光照在一起的地方，看起來接近白色耶！':'三色重疊處的強度比例不均，顏色出現偏移；移動光斑，比較何時接近白色。';
  const pairs=[[3,'紅光和綠光重疊處看起來是黃色'],[5,'紅光和藍光重疊處看起來是洋紅色'],[6,'綠光和藍光重疊處看起來是青色']].filter(([mask])=>samples.has(mask));
  if(pairs.length)return pairs.map(([mask,text])=>{const s=samples.get(mask);return s.imbalance<=.03&&s.leakage<.01?text:'光斑重疊處的色光強度比例不均，顏色出現偏移';}).join('；')+'。';
  const touching=active.some((i,j)=>active.slice(j+1).some(k=>Math.hypot((spots[i].x-spots[k].x)*MIX_SETUP.width,(spots[i].y-spots[k].y)*MIX_SETUP.height)<2*MIX_SETUP.radius));
