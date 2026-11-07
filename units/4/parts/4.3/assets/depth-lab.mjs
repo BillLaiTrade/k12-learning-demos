@@ -1,7 +1,7 @@
 import { depthGeometry, clamp, TANK, DEPTH_INITIAL } from './depth-model.mjs?v=20261105-eleven1';
 import { eyeArtwork } from './depth-eye-art.mjs?v=20261104-review1';
-import { createTextures } from './depth-observer.mjs?v=20261105-eleven1';
-import { createObserverRenderer } from './depth-observer-client.mjs?v=20261105-eleven1';
+import { createTextures } from './depth-observer.mjs?v=20261107-preview1';
+import { createObserverRenderer } from './depth-observer-client.mjs?v=20261107-preview1';
 
 const root = document.querySelector('#depth-lab');
 if (root) {
