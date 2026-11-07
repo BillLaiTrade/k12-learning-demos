@@ -1,5 +1,5 @@
 import {initialiseFrontMix} from './mix-lab.mjs?v=mix-dialogue-20261106';
-import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-comparison-20261106';
+import {initialisePrecisionPrism} from './precision-prism.mjs?v=wide-orbit-20261107';
 import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays} from './color-model.mjs?v=science-reviewed-20261106';
 import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs?v=science-reviewed-20261106';
 import {surfaceObservation} from './surface-model.mjs?v=surface-dialogue-20261107';
