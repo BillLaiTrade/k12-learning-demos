@@ -11,15 +11,6 @@
 .convex-anchor[data-convex-label=focus] { border-color:#efd99a; color:#fff0ba; font-weight:750; }
 .convex-caption { margin:0; padding:9px 12px; color:#eaf0e3; background:#344a3cbf; font-size:.76rem; }
 .convex-hint { margin:8px 1px 12px; font-size:.8rem; color:#64796a; }
-.convex-detail { display:grid; grid-template-columns:minmax(180px,.38fr) minmax(0,.62fr); gap:16px; padding:16px; border:1px solid #d5dfcf; border-radius:15px; background:#f7faf2; }
-.convex-detail h3 { margin:0 0 12px; font-size:1rem; }
-.convex-step-buttons { display:flex; flex-wrap:wrap; gap:7px; margin:0 0 12px; }
-.convex-step-buttons button { min-height:40px; padding:7px 9px; font-size:.8rem; }
-.convex-step-buttons button[aria-pressed=true] { background:#f9e9b7; color:#4b3c1c; border-color:#d6b45f; }
-.convex-step-copy { margin:0; padding:12px; border-radius:10px; background:#eaf1e5; color:#34543e; font-size:.88rem; }
-.convex-detail-scene { overflow:hidden; min-width:0; align-self:stretch; border:1px solid #dbe5d5; border-radius:11px; background:#eff5eb; }
-.convex-detail-scene svg { display:block; width:100%; height:260px; }
-.convex-detail-note { margin:8px 0 0; color:#64796a; font-size:.75rem; }
 .convex-result { margin:12px 0 0; padding:12px 15px; border-left:4px solid #86a777; border-radius:0 10px 10px 0; background:#eff5e9; color:#35533e; font-size:.9rem; }
 .convex-result p { margin:0; }
 .convex-fallback { min-height:220px; padding:70px 20px 20px; background:#e8f0e0; color:#34543e; }
@@ -28,8 +19,6 @@
  .convex-tools { top:9px; left:9px; right:9px; gap:7px; }
  .convex-tools button { padding:7px 9px; font-size:.76rem; }
  .convex-anchor { font-size:.7rem; padding:3px 6px; }
- .convex-detail { grid-template-columns:minmax(0,1fr); gap:12px; padding:12px; }
- .convex-detail-scene svg { height:240px; }
  .convex-caption { font-size:.72rem; }
 }
 
@@ -41,3 +30,35 @@
 .lens-label-leaders path { fill:none; stroke:#eef4e8; stroke-width:1.15; stroke-linejoin:round; }
 .convex-anchor.lens-surface-label,.concave-anchor.lens-surface-label { transform:translate(-50%,-50%); }
 .convex-anchor.lens-surface-label::after,.concave-anchor.lens-surface-label::after { display:none; }
+
+/* Keep the experiment primary; the two explanations open independently. */
+.convex-explanations { display:grid; gap:10px; }
+.convex-detail { display:block; padding:0; overflow:hidden; border:1px solid #d5dfcf; border-radius:15px; background:#f7faf2; }
+.convex-detail summary { display:flex; align-items:center; gap:10px; padding:14px 16px; cursor:pointer; list-style:none; font-weight:750; color:#304e3d; background:#f7faf2; }
+.convex-detail summary::-webkit-details-marker { display:none; }
+.convex-detail summary::before { content:'▶'; font-size:.75rem; }
+.convex-detail[open] summary::before { content:'▼'; }
+.convex-detail summary:focus-visible { outline:3px solid #b39242; outline-offset:-4px; }
+.convex-ray-dot { width:11px; height:11px; border-radius:50%; flex:none; }
+.convex-ray-dot--upper { background:#c96130; }
+.convex-ray-dot--lower { background:#cba33e; }
+.convex-fold-state { margin-left:auto; white-space:nowrap; font-size:.8rem; font-weight:500; }
+.convex-fold-state::after { content:'展開'; }
+.convex-detail[open] .convex-fold-state::after { content:'收合'; }
+.convex-detail-body { padding:0 12px 12px; }
+.convex-detail-scene { overflow-x:auto; border:1px solid #dbe5d5; border-radius:11px; background:#eff5eb; }
+.convex-detail-scene svg { display:block; width:100%; min-width:680px; height:auto; aspect-ratio:960 / 340; }
+.convex-detail-scene svg[data-closeup=true] { aspect-ratio:560 / 340; min-width:560px; }
+.convex-refraction-steps { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin:12px 0 8px; }
+.convex-refraction-steps p { margin:0; padding:6px 15px; background:#eaf1e5; border-radius:10px; font-size:.9rem; }
+.convex-detail-footer { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+.convex-detail-note { margin:0; }
+.convex-detail-footer button { padding:5px 9px; min-height:36px; font-size:.78rem; }
+@media(max-width:760px) {
+ .convex-detail summary { padding:12px 10px; gap:7px; font-size:.88rem; }
+ .convex-detail-body { padding:0 8px 10px; }
+ .convex-detail-scene::after { content:"左右滑動，查看完整光路"; display:block; position:sticky; left:0; padding:5px 8px; background:#eff5eb; color:#64796a; font-size:.72rem; }
+ .convex-fold-state { font-size:.73rem; }
+ .convex-refraction-steps { gap:6px; }
+ .convex-refraction-steps p { padding:5px 9px; font-size:.8rem; }
+}
