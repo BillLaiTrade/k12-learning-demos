@@ -40,8 +40,8 @@ function initialise(root){
   $('[data-mag-device=object]').setAttribute('aria-label',`圖卡，距離透鏡${distanceLabel(state.object)}，方向鍵可沿軌道移動`);
   const size=g.angularGain===null?'':Math.abs(g.angularGain-1)<.02?'視角相近':g.angularGain>1?'比原物大':'比原物小';
   $('[data-mag-eye-badge]').textContent=g.eyeMode==='converging'?'此固定眼位無法清楚對焦':g.eyeMode==='parallel'?'可放鬆觀看':`正立・${size}`;
-  const condition=g.type==='virtual'?'圖卡在 F 內，可當放大鏡使用。':g.type==='infinity'?'圖卡恰好在 F，可留在原位放鬆觀看。':'圖卡已超過 F；此固定眼位無法清楚對焦。';
-  $('[data-mag-condition]').textContent=condition;
+  const condition=g.type==='virtual'?'圖卡在 F 內，可當放大鏡使用。':g.type==='infinity'?'圖卡恰好在 F，可留在原位放鬆觀看。':'';
+  $('[data-mag-condition]').textContent=condition;$('[data-mag-condition]').hidden=!condition;
   $('[data-mag-eye-note]').textContent=g.type==='virtual'?(showRays?'看到的，就是主圖標示的虛像。':'透過鏡片看見的是正立放大的虛像。'):g.resolved?'相同尺度，直接比較圖案大小。':'模糊程度為示意。';
   root.dataset.blurRadius=g.blurRadius;
   $('[data-mag-ray-name]').textContent=point==='top'?'紅：代表光':point==='bottom'?'藍：代表光':'紅／藍：代表光';
