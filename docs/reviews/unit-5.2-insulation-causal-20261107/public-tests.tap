@@ -1,0 +1,28 @@
+▶ 5.2 insulation workspace: same activity, one desktop viewport and return to reading
+  ✔ entry, native modal, Escape and return retain reading position and one activity instance (367.517524ms)
+  ✔ both comparisons keep bottle, curves, findings and controls inside desktop viewports without scrolling (8000.172287ms)
+  ✔ reopening preserves selected comparison, frozen curve and elapsed time (235.297976ms)
+  ✔ completed curve and remaining heat paths share one view in both comparisons (8645.499327ms)
+  ✔ details do not enlarge the observation viewport and the background page cannot receive focus (241.700329ms)
+  ✔ mobile native touch can open, operate, reset and return without horizontal overflow (2700.688014ms)
+  ✔ no browser script errors (0.956507ms)
+✔ 5.2 insulation workspace: same activity, one desktop viewport and return to reading (21742.274733ms)
+▶ 5.2 insulation: controlled comparisons, remaining heat paths and manual observation
+  ✔ starts only on request, retains the scientific bridge and uses identical capped bottles (68.645289ms)
+  ✔ air and vacuum differ in gas paths while radiation and solid neck/support paths remain (457.78979ms)
+  ✔ pause freezes actual paths and graph pixels, resume does not restart, repeated bottle clicks are idempotent (4997.990332ms)
+  ✔ lining comparison resets progress, holds vacuum fixed and changes only gap-facing imagery (4528.220739ms)
+  ✔ keyboard, background pause and other experiments remain independent (848.222567ms)
+  ✔ both modes at seven viewports keep the full plot and all native controls inside the panel (1337.924055ms)
+  ✔ each required image can fail and retry without automatic playback (3150.036855ms)
+  ✔ late lining image cannot restart or reset a different running comparison (1398.698683ms)
+  ✔ real touch in both modes and motion preferences moves paths and pauses actual curves (11235.215097ms)
+✔ 5.2 insulation: controlled comparisons, remaining heat paths and manual observation (29173.007919ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 51587.131556

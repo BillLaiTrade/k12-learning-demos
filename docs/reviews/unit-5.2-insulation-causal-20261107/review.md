@@ -18,8 +18,8 @@
 CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-5.2-insulation.test.cjs tests/unit-5.2-insulation-workspace.test.cjs
 ```
 
-結果：18項（含父測試）全通過。包括兩種比較、桌面／手機及320px窄版、外壁點擊、同一時鐘下的微觀粒子與曲線、暫停／續播／重來、原生觸控、動態偏好、圖片失敗重試、工作區往返與其他區塊獨立性。`node --check units/5/parts/5.2/assets/insulation-lab.js` 通過。
+結果：本機18項（含父測試）全通過；同一套測試指向已發布的公開網址也18項全通過。包括兩種比較、桌面／手機及320px窄版、外壁點擊、同一時鐘下的微觀粒子與曲線、暫停／續播／重來、原生觸控、動態偏好、圖片失敗重試、工作區往返與其他區塊獨立性。`node --check units/5/parts/5.2/assets/insulation-lab.js` 通過。Pages 部署工作42374124521成功，公開HTML載入本輪CSS／JS版本。
 
-`local/`保存桌機、手機、完成態與補充說明畫面，以及工作區量測。`approved-mockup.png`為本輪核可參考，不是實驗資料。模型動畫及曲線僅用於解釋預期機制與定性趨勢；若要把曲線呈現為實驗證據，需另有相同條件實測資料。
+`local/`保存桌機、手機、完成態與補充說明畫面，以及工作區量測；`local-tests.tap`與`public-tests.tap`保存本機／公開測試。`approved-mockup.png`為本輪核可參考，不是實驗資料。模型動畫及曲線僅用於解釋預期機制與定性趨勢；若要把曲線呈現為實驗證據，需另有相同條件實測資料。
 
 維持第4階段，待使用者檢視實際成果。
