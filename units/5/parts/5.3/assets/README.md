@@ -224,3 +224,5 @@
 `mass-curve-lab.css/js`獨立管理新界面，重用未改動的`mass-comparison-model.mjs`與`mass-comparison-bench.webp`左側器材。保留水／容器／環境能量模型，30倍播放及400ms數字節奏；換區／背景中斷保留進度、手動接續，圖片失敗可重試且不自動開始。減少動態只停攪拌水紋。保留舊mass CSS供第四區共用，不再載入舊雙杯控制器與fit CSS。
 
 主要文字16px、控制44px，桌機操作台同視窗；窄版自然堆疊。第一、二、四、五區、小測與分享保持。此節取代過往第三區雙杯／紀錄／水公式規格；仍第4階段待檢視。見`docs/reviews/unit-5.3-card03-curve-verification-20261107/`。
+
+第三區LCD的「目前水溫」輔助閱讀標籤使用本區專屬visually-hidden樣式，避免落入可見數字排版；CSS版本curve-verify-2。公開初次版面檢查所發現的裁切與修正後重驗均留存上述review。
