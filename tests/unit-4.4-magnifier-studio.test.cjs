@@ -20,7 +20,6 @@ test('4.4 第四區：固定眼睛、逐漸向外推圖卡探究放大鏡',{time
   const before=await pixels('[data-mag-eye]');await root('eye').locator('[data-mag-rays]').click();let a=await read('eye');assert.equal(a.virtual.visible,true);assert.equal(a.extensions,true);assert.equal(a.back.length,6);assert.equal(a.received.length,0);assert.ok(a.virtual.position[0]<a.source[0]);assert.equal(a.virtual.scale[0],2);assert.equal((await pixels('[data-mag-eye]')).hash,before.hash);
   await root('eye').locator('[data-mag-extensions]').click();a=await read('eye');assert.equal(a.virtual.visible,true);assert.equal(a.back.length,0);
   await root('eye').locator('[data-mag-rays]').click();assert.equal((await read('eye')).virtual.visible,false);
-  await root('eye').locator('[data-mag-compare-screen]').click();assert.equal((await read('screen')).state.object,50);assert.equal((await read('screen')).virtual.visible,true);assert.equal(new URL(p.url()).hash,'#s3');
  });
  await t.test('跨越F及切換觀察列保留完整／單端選擇，入眼光與影像不被意外關閉',async()=>{
   await root('eye').locator('[data-mag-rays]').click();
@@ -54,7 +53,6 @@ assert.ok(records[i].spread<records[i-1].spread);}const widths=await root('eye')
  });
  await t.test('主內容只談觀看結果，第三區承接成像比較，沒有眼內機制',async()=>{
   assert.equal(await root('eye').locator('.magnifier-dock ~ .magnifier-observations').count(),1);
-  assert.equal(await root('eye').locator('.magnifier-review-link a').getAttribute('href'),'#s3');
   await row('eye','near');assert.match(await root('eye').locator('[data-mag-condition]').innerText(),/F 內.*放大鏡/);
   await row('eye','outside');assert.match(await root('eye').locator('[data-mag-eye-badge]').innerText(),/此固定眼位無法清楚對焦/);
   assert.doesNotMatch(await p.locator('#s4').innerText(),/會聚入眼|入眼光束|光線沒交會|角膜|水晶體|視網膜/);

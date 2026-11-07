@@ -54,7 +54,6 @@ function initialise(root){
  function move(key,value){if(key!=='object')return;clearGestureNotice();state=moveMagnifier(state,key,value);selected=key;update();}
  $("[data-mag-rays]").addEventListener('click',()=>{showRays=!showRays;extensions=showRays;update();studio?.frameObservation();});
  $('[data-mag-extensions]').addEventListener('click',()=>{extensions=!extensions;update();});
- $('[data-mag-compare-screen]').addEventListener('click',()=>document.querySelector('#lab4 [data-imaging-keypoint=inside] button')?.click());
  $$('[data-mag-point]').forEach(b=>b.addEventListener('click',()=>{point=b.dataset.magPoint;update();}));
  $$('[data-mag-device]').forEach(b=>{const key=b.dataset.magDevice;b.addEventListener('click',()=>{selected=key;update();});b.addEventListener('keydown',e=>{let v=state[key];if(e.key==='Home')v=G[key+'Min'];else if(e.key==='End')v=G[key+'Max'];else if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))v+=(['ArrowLeft','ArrowDown'].includes(e.key)?-1:1)*(key==='object'?-1:1)*(e.shiftKey?.2:1);else return;e.preventDefault();move(key,v);});});
  try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-mag-fallback]').hidden=false;$$('.magnifier-anchor,.magnifier-focus').forEach(e=>e.hidden=true);root.dataset.webgl='unavailable';console.warn('Magnifier 3D:',error.message);}
