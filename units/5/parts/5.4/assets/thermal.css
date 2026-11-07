@@ -86,3 +86,40 @@
 .heat-transfer{position:absolute;inset:0;z-index:2;pointer-events:none}.heat-transfer svg{display:block;width:100%;height:100%}
 .heat-apparatus:not(.has-3d) .heat-transfer,.heat-apparatus:not(.has-3d) .heat-canvas{display:none}
 @media(max-width:760px){#heat-lab .heat-apparatus{aspect-ratio:1.15;min-height:270px}.heat-energy-reading{padding:9px 11px}.heat-energy-reading span{font-size:.9rem}}
+
+/* 5.3 visual reference: warm photographic bench, paired record and cream console. */
+#heat-lab,#comparison-lab{background:#f7f9f3;border-color:#cddccf}
+#heat-lab .lab-top,#comparison-lab>.lab-top{background:#f7f9f3;border-bottom:0;padding-bottom:8px}
+#heat-lab .heat-steps{background:transparent;padding-top:5px;padding-bottom:12px;gap:8px}
+#heat-lab .heat-steps li{padding:6px 9px;border:1px solid #d5dfce;border-radius:10px;background:#fffdf6;font-size:.86rem}
+#heat-lab .heat-steps li[aria-current]{background:#e8f1e0;color:#315f3f;border-color:#9bb88c}
+#heat-lab .heat-steps li[data-done=true]{background:#edf3e6;color:#3e6745}
+#heat-lab .heat-visuals{align-items:start;background:transparent;padding-bottom:10px}
+#heat-lab .heat-apparatus-panel{border-color:#cbbba2;background:#f2e8d7}
+#heat-lab .heat-apparatus.has-photo{aspect-ratio:1048/941;min-height:0;flex:none}
+.photo-apparatus-view{position:absolute;inset:0;visibility:hidden}
+.photo-apparatus-view>svg{display:block;width:100%;height:100%}
+.has-photo .photo-apparatus-view{visibility:visible}
+.has-photo .heat-fallback,.has-photo .phase-fallback{visibility:hidden}
+.heat-apparatus.has-photo .heat-transfer,.phase-apparatus.has-photo .comparison-arrow{display:block}
+#heat-lab .heat-caption{background:#fff8e9;color:#51634e;border-color:#e3d5bc;font-size:.83rem;padding-block:7px;min-height:36px}
+#heat-lab .heat-plot{border:0;border-radius:0;background:transparent;padding-top:0}
+#heat-lab .heat-plot h3{margin:0 0 5px 6px;font-size:1rem;color:#254b36}
+#heat-lab .heat-chart-note{margin-bottom:0}
+.heat-summary{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;padding:10px 17px;background:#f7f1e5;border-top:1px solid #ded4be}
+#heat-lab .heat-summary .heat-accessible-reading,#heat-lab .heat-summary .heat-energy-reading{position:static;display:flex;align-items:center;gap:12px;border:0;background:transparent;padding:0;margin:0;width:auto;height:auto;overflow:visible;clip-path:none;border-radius:0;line-height:1.5;white-space:normal}
+#heat-lab .heat-summary span{font-size:.9rem;color:#465c49}
+#heat-lab .heat-summary strong,#heat-lab .heat-summary output{font-size:1.12rem;font-weight:750;color:#ac5d27}
+#heat-lab .heat-controls,#comparison-lab .comparison-controls{background:#f7f1e5;border-color:#ded4be}
+#heat-lab .heat-controls{border-top:0;padding-top:0}
+#heat-lab>.observation,#comparison-lab>.observation{background:transparent;border:0;color:#526b54;font-size:.92rem}
+#heat-lab>.observation{margin-inline:0;padding-top:0}
+#comparison-lab .comparison-condition,#comparison-lab .comparison-panels{background:transparent}
+#comparison-lab .comparison-panel{border-color:#d5dcca;background:#fffefa}
+#comparison-lab .comparison-panel>header{background:#f3f6ec}
+#comparison-lab .phase-apparatus.has-photo{aspect-ratio:1048/941;background:#f2e8d7}
+#comparison-lab .comparison-readings{background:#fffaf0;border-color:#e3d8c2}
+#comparison-lab .comparison-readings strong{color:#a65a27}
+#comparison-lab .comparison-caption{background:#fff8e9;border-color:#e3d8c2;color:#51634e}
+#comparison-lab .comparison-ice{background:#fffefa}
+@media(max-width:760px){#heat-lab .heat-steps li{font-size:.8rem;padding:7px 4px}.heat-summary{padding:10px 13px;gap:5px 15px}#heat-lab .heat-summary strong,#heat-lab .heat-summary output{font-size:1.05rem}.heat-summary>div{flex:1;justify-content:space-between}}
