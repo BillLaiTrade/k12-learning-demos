@@ -1,6 +1,6 @@
 import {heating,ballDiameter,ballPasses,PHASES,waterVolume,waterDensity,gasVolume,thermometer,REACTIONS,QUIZ,grade} from './thermal-model.mjs';
 import {solidScene,bottleScene,gasScene,waterException,chemicalScene} from './thermal-art.mjs';
-import {HEATING_STEPS,heatingStep,observedHeatChart,observedHeatScene,heatObservation} from './heating-observation.mjs?v=readability-20261107';
+import {HEATING_STEPS,heatingStep,observedHeatChart,observedHeatScene,heatObservation} from './heating-observation.mjs?v=visibility-20261107';
 import {COMPARISON,phaseComparison,comparisonScene,extensionScene} from './phase-comparison.mjs?v=finite-baths-20261107';
 const $=id=>document.getElementById(id),write=(id,s)=>$(id).textContent=s;
 const pressed=(selector,value,key)=>document.querySelectorAll(selector).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset[key]===String(value))));
@@ -19,6 +19,7 @@ function renderHeat(){
  $('heat-reference').hidden=energy<HEATING_STEPS[1].end;
  if(heatApparatus)heatApparatus.update(state,playing,energy);
  $('heat-chart').innerHTML=observedHeatChart(energy);
+ write('heat-energy',(energy/1000).toFixed(1)+' kJ');$('heat-transfer').hidden=!playing;
  write('heat-temp',state.temperature.toFixed(1)+'°C');
  $('heat-scene').setAttribute('aria-label',`冰水加熱器材；樣品溫度${state.temperature.toFixed(1)}攝氏度；${observation.caption}`);
  Object.assign($('heat-lab').dataset,{phase:energy===0?'準備觀察':state.phase,energy:String(energy),playing:String(playing),complete:String(complete)});
@@ -44,7 +45,7 @@ $('heat-play').onclick=()=>{
 $('heat-reset').onclick=()=>{stop('heat-lab');energy=0;renderHeat();};
 // The apparatus is optional: an unavailable WebGL context cannot block the
 // curve, controls or any other section of this lesson.
-import('./heating-apparatus.mjs?v=readability-20261107').then(({createHeatingApparatus})=>{try{heatApparatus=createHeatingApparatus($('heat-scene'));renderHeat();}catch{ $('heat-scene').classList.remove('has-3d'); }}).catch(()=>{});
+import('./heating-apparatus.mjs?v=visibility-20261107').then(({createHeatingApparatus})=>{try{heatApparatus=createHeatingApparatus($('heat-scene'));renderHeat();}catch{ $('heat-scene').classList.remove('has-3d'); }}).catch(()=>{});
 let comparisonProgress=0,comparisonRevealed=false;
 const comparisonApparatus={};
 function renderComparison(){

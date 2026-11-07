@@ -110,7 +110,7 @@ function initialiseLab(root,index){
 
 function initialiseQuiz(){
  const root=document.querySelector('.duo-quiz');
- import('./duo-quiz.mjs?v=science-reviewed-20261106').then(module=>module.initialiseDuoQuiz(root)).catch(error=>{root.querySelector('[data-duo-load-note]').hidden=false;console.error('4.5 quiz failed',error);});
+ import('./duo-quiz.mjs?v=quiz-no-route-hint-20261107').then(module=>module.initialiseDuoQuiz(root)).catch(error=>{root.querySelector('[data-duo-load-note]').hidden=false;console.error('4.5 quiz failed',error);});
 }
 
 document.querySelectorAll('[data-lab]').forEach((root,i)=>{try{initialiseLab(root,i);}catch(error){root.dataset.ready='false';const hint=root.querySelector('[data-load-note]');if(hint){hint.hidden=false;text(hint,'這個互動暫時無法載入，請重新整理後再試；仍可閱讀對話與說明。');}console.error('4.5 lab failed',error);}});
@@ -122,7 +122,7 @@ nav.forEach((link,i)=>{
  if(!title)return;
  if(link.classList.contains('quiz-nav')){
   const kicker=sections[i].querySelector('.quiz-kicker')?.textContent.trim();
-  link.title=title;if(kicker)link.setAttribute('aria-label',`${kicker}：${title}`);
+  link.title=title;if(kicker)link.setAttribute('aria-label',link.dataset.navLabel||`${kicker}：${title}`);
  }else{const label=link.querySelector('span');if(label)label.textContent=title;}
 });
 function active(id){for(const link of nav){if(link.hash==='#'+id)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');}}

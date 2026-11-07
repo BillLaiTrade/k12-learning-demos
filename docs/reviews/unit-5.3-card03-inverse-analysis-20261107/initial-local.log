@@ -1,0 +1,53 @@
+▶ 5.3 共通格式、導覽連動與原有活動回歸
+  ✔ 靜態 HTML 的標題、摘要、分享圖及入口一致，不依賴 JS (340.89295ms)
+  ✔ 五區導覽標題連動；小測固定名稱、共通樣式及活動說明同步 (911.637666ms)
+  ✔ 五區均為上標頭下內容；三種桌機與兩種窄版可完整閱讀 (111.380951ms)
+  ✔ 第一區 100 g 水升溫、完成後介紹卡，重新觀察同步清除結果 (1762.278371ms)
+  ✔ 第二、三區自動記錄，原材料比較與生活應用保持 (7384.182346ms)
+  ✔ 新小測可觀察、推算與重答；無載入或程式錯誤 (2883.916104ms)
+✔ 5.3 共通格式、導覽連動與原有活動回歸 (15904.229915ms)
+✔ 相同水吸熱1000cal，自由水量100～350g含小數的溫升為1000÷水量，各自精確停熱 (1.519483ms)
+✔ 全段能量守恆，容器與散熱另計，單調升溫且不強制同時完成 (4.579092ms)
+✔ 非法質量與時間被拒絕 (0.797643ms)
+▶ 5.3第三區：自由水量、曲線預測與單杯驗證
+  ✔ 預設250g，曲線與預測點可讀，沒有未完成結果或代數 (181.666297ms)
+  ✔ 整理區常態可讀、承接第二區格式；無JS仍有推算與n倍反比規律 (1213.714556ms)
+  ✔ 讀值停留但加熱連續，滿1000cal後結果點才與預測重合 (2542.094791ms)
+  ✔ 自由整數、小數與邊界水量：水位、預測與最後結果一致 (12949.218787ms)
+  ✔ 非法輸入禁止驗證，修正不自動開始；換區與背景中斷可手動接續 (2570.300906ms)
+  ✔ 圖片失敗可重試且恢復不自動驗證 (975.218581ms)
+  ✖ 減少動態保留數據；五種實際視窗無裁切、桌機操作台同視窗 (5716.205022ms)
+✖ 5.3第三區：自由水量、曲線預測與單杯驗證 (28894.3042ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 16
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 29354.654113
+
+✖ failing tests:
+
+test at tests/unit-5.3-mass-curve.test.cjs:31:10
+✖ 減少動態保留數據；五種實際視窗無裁切、桌機操作台同視窗 (5716.205022ms)
+  AssertionError [ERR_ASSERTION]: {"width":320,"overflow":false,"cells":["10.0°C"]}
+  + actual - expected
+  
+  + [
+  +   '10.0°C'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-mass-curve.test.cjs:32:1142)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-mass-curve.test.cjs:31:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ '10.0°C' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

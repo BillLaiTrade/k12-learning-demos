@@ -37,8 +37,8 @@
 
 
   <link rel="stylesheet" href="assets/heat-derivation.css?v=derive-1">
-  <link rel="stylesheet" href="assets/mass-curve-lab.css?v=curve-verify-2">
-  <script type="module" src="assets/mass-curve-lab.js?v=curve-verify-1"></script>
+  <link rel="stylesheet" href="assets/mass-curve-lab.css?v=inverse-analysis-1">
+  <script type="module" src="assets/mass-curve-lab.js?v=inverse-analysis-1"></script>
   <script type="module" src="assets/material-comparison-lab.js?v=derive-1"></script>
   <link rel="stylesheet" href="assets/application-lab.css?v=applications-1">
   <script type="module" src="assets/application-lab.js?v=applications-1"></script>
@@ -178,9 +178,23 @@
                 <div class="mass-curve-plot"><h3>固定吸熱量下的水量與升溫</h3><p class="mass-curve-caption">曲線：推算關係</p><svg id="mass-curve-graph" role="img" aria-label="固定吸收1000cal時，水量與升高的度數的推算曲線。"></svg><p class="mass-curve-legend"><span><i class="mass-prediction-key"></i>空心點：預測位置</span><span><i class="mass-result-key"></i>實心點：驗證結果</span></p></div>
               </div>
               <p id="mass-status" class="mass-curve-status" role="status">正在準備器材…</p>
-              <p class="mass-curve-rule">吸收同樣熱量時，水量越多，升高的度數越少。</p>
               <p class="mass-curve-note">曲線與加熱讀值為教學模型推算；器材為AI示意，動畫已加速。</p>
             </div>
+            <section class="heat-stage-analysis mass-analysis" id="mass-analysis" aria-labelledby="mass-analysis-title" data-mode="prediction">
+              <h3 id="mass-analysis-title">從數字找規律</h3>
+              <div class="heat-stage-analysis-heading"><p class="heat-stage-analysis-condition">都是水，每份各吸收1,000 cal</p><span id="mass-analysis-mode">前兩欄為推算參考</span></div>
+              <table class="heat-stage-analysis-table" aria-label="固定吸收1000cal時，水量與升高的度數對照" aria-describedby="mass-analysis-mode mass-analysis-state">
+                <colgroup><col class="heat-stage-label-column"><col span="3"></colgroup>
+                <tbody>
+                  <tr id="mass-analysis-masses"><th scope="row">水量</th><td>100 g</td><td>200 g</td><td><span id="mass-analysis-mass">250 g</span><small id="mass-analysis-state">本次預測</small></td></tr>
+                  <tr id="mass-analysis-rises"><th scope="row">升高的度數</th><td>10°C</td><td>5°C</td><td id="mass-analysis-rise">4°C</td></tr>
+                </tbody>
+              </table>
+              <div class="heat-stage-takeaway">
+                <p class="heat-stage-rule">吸收相同熱量時，水量變成原來的 <var>n</var> 倍，升高的度數就變成原來的 <var>n</var> 分之一。</p>
+                <p>水量與升高的度數，這種關係叫做「<strong>成反比</strong>」。</p>
+              </div>
+            </section>
             <details class="relation mass-assumptions"><summary>器材與模型條件</summary><p>水量可輸入100～350 g及小數，範圍配合約400mL燒杯與探針浸水位置。更換水量代表重新量取另一份20°C的水，水位只在準備時調整，加熱中水量固定。</p><p>沿用原水、容器及散熱模型：20 W有效供熱、42 J/°C容器熱容量、向20°C環境散熱係數0.5 W/°C。水實際吸收1,000 cal才停熱，容器吸熱與散熱另計。30倍動畫加速，數字約每0.4秒更新；完成時立即顯示最後讀值。</p><p>曲線表示不同水量都吸收1,000 cal後的推算結果。空心點先標示預測終點，加熱完成才顯示實心結果點；兩者在本教學模型內重合，並非真實量測誤差的模擬。換區或背景中斷保留進度，不自動續熱；按繼續驗證接續，更改水量則從20°C重新開始。</p></details>
           </div>
         </section>

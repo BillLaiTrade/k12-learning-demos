@@ -1,59 +1,38 @@
 import {createParallelLabels} from './parallel-labels.mjs?v=20261104-lens-clear5';
 import {createLensVisual} from './lens-geometry.mjs?v=20261104-lens-clear5';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
+import {renderConcaveRefraction} from './concave-refraction.mjs?v=20261107-concave-fold2';
 import {parallelModel} from './parallel-optics.mjs?v=20261107-refraction-angles1';
 const root=document.querySelector('[data-concave-lab]');
 if(root) initialise(root);
 
 function initialise(root){
- const $=s=>root.querySelector(s),g=parallelModel('concave',{rayHeight:2.25}),canvas=$('#concave-canvas'),svg=$('[data-concave-section]');
+ const $=s=>root.querySelector(s),g=parallelModel('concave',{rayHeight:2.25}),canvas=$('#concave-canvas');
  g.rays.forEach(r=>r.from[0]=-10);
  const SCALE=.55,AXIS=2.0,world=p=>new THREE.Vector3(p[0]*SCALE,AXIS-p[1]*SCALE,0);
- let showRays=true,extensions=true,step='enter',studio=null;
- const NS='http://www.w3.org/2000/svg';
- function el(tag,attrs={},parent=svg){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));parent.append(e);return e;}
- function path(points,attrs={}){return el('path',{d:points.map((p,i)=>`${i?'L':'M'}${p[0]} ${p[1]}`).join(' '),fill:'none',...attrs});}
- function renderDetail(){
-  svg.replaceChildren();svg.setAttribute('viewBox','-2 -1.2 4 2.4');
-  const r=g.rays[0],enter=step==='enter',incoming=enter?r.incoming:r.inside,outgoing=enter?r.inside:r.outgoing;
-  let N=[...(enter?r.N1:r.N2)];if(incoming[0]*N[0]+incoming[1]*N[1]<0)N=N.map(v=>-v);
-  const rotate=d=>[d[0]*N[0]+d[1]*N[1],-d[0]*N[1]+d[1]*N[0]],a=rotate(incoming),b=rotate(outgoing),degrees=d=>Math.acos(Math.max(-1,Math.min(1,d[0])))*180/Math.PI;
-  const incidence=degrees(a),refraction=degrees(b);svg.dataset.incidence=incidence;svg.dataset.refraction=refraction;svg.dataset.currentInterface=step;
-  svg.setAttribute('aria-label',`${enter?'第一':'第二'}個表面，${enter?'空氣進入玻璃，偏向法線':'玻璃進入空氣，偏離法線'}；入射角 ${incidence.toFixed(1)} 度，折射角 ${refraction.toFixed(1)} 度`);
-  const boundary=[];for(let y=-1.3;y<=1.301;y+=.02)boundary.push([(enter?-1:1)*(g.radius-Math.sqrt(g.radius*g.radius-y*y)),y]);
-  const edge=enter?2.1:-2.1;
-  path([[edge,-1.3],...boundary,[edge,1.3]],{fill:'#c6e6df','fill-opacity':.7,'data-glass-region':step});
-  const lens=path(boundary,{stroke:'#6b9d92','stroke-width':.018,'data-lens-boundary':'concave'});lens.dataset.centerThickness=g.thickness;lens.dataset.edgeThickness=g.right(g.halfHeight)-g.left(g.halfHeight);
-  function text(x,y,label,color='#466851',size=.14){const t=el('text',{x,y,fill:color,'font-size':size,'text-anchor':'middle'});t.textContent=label;}
-  text(-1.15,.95,enter?'空氣':'玻璃');text(1.15,.95,enter?'玻璃':'空氣');
-  if(showRays){
-   const defs=el('defs');for(const [id,color]of [['incident','#b56536'],['refracted','#237c94']]){const marker=el('marker',{id:'concave-'+id,viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:5,markerHeight:5,orient:'auto',markerUnits:'strokeWidth'},defs);el('path',{d:'M0 0L10 5L0 10Z',fill:color},marker);}
-   path([[-1.85,0],[1.85,0]],{stroke:'#586e62','stroke-width':.014,'stroke-dasharray':'.06 .045','data-surface-normal':step});text(-1.6,.26,'法線','#586e62',.12);
-   path([a.map(v=>-v*1.78),[0,0]],{stroke:'#b56536','stroke-width':.024,'marker-end':'url(#concave-incident)','data-ray-part':enter?'enter':'inside'});
-   path([[0,0],b.map(v=>v*1.78)],{stroke:'#237c94','stroke-width':.024,'marker-end':'url(#concave-refracted)','data-ray-part':enter?'inside':'exit'});
-   function arc(start,end,radius,color,key){let delta=end-start;while(delta>Math.PI)delta-=2*Math.PI;while(delta< -Math.PI)delta+=2*Math.PI;const pts=Array.from({length:33},(_,i)=>{const t=start+delta*i/32;return[radius*Math.cos(t),radius*Math.sin(t)];});path([[0,0],...pts,[0,0]],{fill:color,'fill-opacity':.12});path(pts,{stroke:color,'stroke-width':.022,'data-angle-arc':key});}
-   arc(Math.PI,Math.atan2(-a[1],-a[0]),.68,'#b56536','incidence');arc(0,Math.atan2(b[1],b[0]),.9,'#237c94','refraction');
-   el('circle',{cx:0,cy:0,r:.04,fill:'#f1d681',stroke:'#176b53','stroke-width':.012,'data-interface':enter?1:2});
-  }
-  $('[data-concave-angles]').hidden=!showRays;
-  $('[data-concave-incidence]').textContent=`入射角 ${incidence.toFixed(1)}°`;
-  $('[data-concave-refraction]').textContent=`折射角 ${refraction.toFixed(1)}°`;
-  $('[data-concave-angle-change]').textContent=enter?'折射角較小':'折射角較大';
+ let showRays=true,extensions=true,step='enter',activeRay=0,activePanel=null,studio=null;
+ function renderPanel(panel){
+  const svg=panel.querySelector('svg'),mode=panel.dataset.mode||'enter',upper=panel.dataset.concaveRay==='upper',direction=upper?'上':'下';
+  renderConcaveRefraction(svg,g,{rayIndex:upper?0:2,mode,showRays,extensions,width:svg.parentElement.clientWidth||960});
+  panel.querySelector('[data-concave-key]').hidden=!showRays||mode==='overall'||svg.dataset.compact!=='true';
+  panel.querySelectorAll('[data-concave-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.concaveMode===mode)));
+  panel.querySelector('[data-concave-copy]').textContent=!showRays?'顯示輔助光路，觀察光線的轉向。':mode==='overall'?`${upper?'上':'下'}方光線向外發散。${extensions?'虛線是反向延長線，非實際光線。':''}`:mode==='enter'?`① 空氣 → 玻璃：偏向法線，往${direction}轉向。`:`② 玻璃 → 空氣：偏離法線，繼續往${direction}轉向。`;
  }
  function update(){
-  renderDetail();
+  root.querySelectorAll('[data-concave-ray]').forEach(renderPanel);
   $('[data-parallel-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-parallel-rays]').setAttribute('aria-pressed',String(showRays));
-  root.querySelectorAll('[data-concave-step]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.concaveStep===step)));
-  $('[data-concave-explain]').textContent=step==='enter'?'先看第一個表面：光從空氣進入玻璃，偏向這個表面的法線，與法線的夾角變小。':'再看第二個表面：光從玻璃進入空氣，偏離這個表面的法線，與法線的夾角變大。';
   $('[data-result]').textContent=showRays?(extensions?'平行光通過凹透鏡後發散；出射光的反向延長線交於入射側的虛焦點 F，出射光沒有在 F 實際會聚。':'凹透鏡中間薄、邊緣厚。這組平行光通過後向外發散。'):'先觀察鏡片厚薄，再顯示輔助光路，追蹤入射、玻璃內部與出射的方向。';
   canvas.setAttribute('aria-label',`立體凹透鏡觀察台，平行光向外發散，光路${showRays?'顯示':'隱藏'}`);
   root.dataset.view='overall';root.dataset.rays=String(showRays);root.dataset.step=step;root.dataset.extensions=String(showRays&&extensions);
+  $('[data-concave-extension-note]').hidden=!(showRays&&extensions);
   $('[data-parallel-extensions]').hidden=!showRays;$('[data-parallel-extensions]').textContent=extensions?'隱藏反向延長線':'顯示反向延長線';$('[data-parallel-extensions]').setAttribute('aria-pressed',String(showRays&&extensions));
   studio?.update();
  }
  $('[data-parallel-extensions]').addEventListener('click',()=>{extensions=!extensions;update();});
  $('[data-parallel-rays]').addEventListener('click',()=>{showRays=!showRays;update();});
- root.querySelectorAll('[data-concave-step]').forEach(b=>b.addEventListener('click',()=>{step=b.dataset.concaveStep;showRays=true;update();}));
+ root.querySelectorAll('[data-concave-mode]').forEach(b=>b.addEventListener('click',()=>{const panel=b.closest('[data-concave-ray]');activePanel=panel;panel.dataset.mode=b.dataset.concaveMode;activeRay=panel.dataset.concaveRay==='upper'?0:2;if(panel.dataset.mode!=='overall')step=panel.dataset.mode;showRays=true;update();}));
+ const widths=new WeakMap(),observer=new ResizeObserver(entries=>{for(const {target,contentRect} of entries)if(contentRect.width>0&&Math.abs(contentRect.width-(widths.get(target)||0))>.5){widths.set(target,contentRect.width);renderPanel(target.closest('[data-concave-ray]'));}});
+ root.querySelectorAll('[data-concave-ray]').forEach(panel=>{observer.observe(panel.querySelector('.convex-detail-scene'));panel.addEventListener('toggle',()=>{const current=panel.open?panel:root.querySelector('[data-concave-ray][open]');activePanel=current;if(current){activeRay=current.dataset.concaveRay==='upper'?0:2;if(current.dataset.mode!=='overall')step=current.dataset.mode;}update();});});
  try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-concave-fallback]').hidden=false;root.dataset.webgl='unavailable';console.warn('Concave 3D:',error.message);}
  update();root.dataset.ready='true';
 
@@ -125,7 +104,7 @@ function initialise(root){
   }
   function requestDraw(){if(!pending)pending=requestAnimationFrame(draw);}
   function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();const direction=new THREE.Vector3(Math.sin(1.46)*Math.sin(-.22),Math.cos(1.46),Math.sin(1.46)*Math.cos(-.22)),bounds=[];for(const x of [sourceX-.7,g.rays[0].end[0]*SCALE+.5])for(const y of [.1,3.7])for(const z of [-.9,.9])bounds.push(new THREE.Vector3(x,y,z));for(const ray of g.rays)for(const p of [ray.from,ray.enter,ray.exit,ray.end])bounds.push(world(p));overallFit=5;for(let i=0;i<90;i++){camera.position.copy(target).addScaledVector(direction,overallFit);camera.lookAt(target);camera.updateMatrixWorld();if(bounds.every(p=>{const q=p.clone().project(camera);return Math.abs(q.x)<.94&&q.y>-.77&&q.y<.72;}))break;overallFit*=1.045;}updateCamera();updateLabels();requestDraw();}
-  function update(){surfaceMarker.visible=showRays;surfaceMarker.position.copy(world(g.rays[0][step]));rays.visible=showRays;focus.visible=showRays&&extensions;extensionGroup.visible=showRays&&extensions;updateCamera();updateLabels();requestDraw();}
+  function update(){surfaceMarker.visible=showRays&&!!activePanel?.open&&activePanel.dataset.mode!=='overall';surfaceMarker.position.copy(world(g.rays[activeRay][step]));rays.visible=showRays;focus.visible=showRays&&extensions;extensionGroup.visible=showRays&&extensions;updateCamera();updateLabels();requestDraw();}
   const pointers=new Map();let gesture=null;
   const pinch=()=>{const p=[...pointers.values()];return p.length<2?0:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);};
   canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.setPointerCapture(e.pointerId);gesture=pointers.size>1?{kind:'pinch',distance:pinch(),radius:orbit.radius}:{kind:'orbit',x:e.clientX,y:e.clientY,azimuth:orbit.azimuth,polar:orbit.polar};});
