@@ -22,10 +22,10 @@ test('5.3第二區：自由熱量、連續亮點、橫向數據與白話規律',
     assert.equal(await p.locator('#heat-stage-points circle').count(),0);assert.equal(await p.locator('#heat-stage-live').isVisible(),true);
     assert.equal(await root.locator('.calorie-photo-label').count(),0);assert.match(await p.locator('.heat-stage-controls>span').textContent(),/水量100 g/);
     const line=await p.locator('#heat-stage-graph').evaluate(lineGeometry);readyPath=line.path;assert.ok(line.screenRun>100);assert.ok(Math.abs(line.screenRun-line.screenRise)<1);assert.ok(Math.abs(line.cx-line.left)<1e-5);assert.ok(Math.abs(line.cy-line.bottom)<1e-5);
-    assert.equal(await p.locator('#heat-stage-conclusion').isVisible(),true);assert.match(await p.locator('#heat-stage-conclusion').textContent(),/吸熱量變幾倍.*升高的度數也變幾倍.*成正比/s);assert.doesNotMatch(await p.locator('#card-02').textContent(),/ΔT|∝|\bQ\b|寫成公式/);assert.deepEqual(await p.locator('.heat-stage-axis-title').allTextContents(),['升高的度數（°C）','水吸收的熱量（cal）']);
-    assert.deepEqual(await p.locator('#heat-stage-analysis-heat td').allTextContents(),['100 cal','200 cal','300 cal']);
-    assert.deepEqual(await p.locator('#heat-stage-analysis-rise td').allTextContents(),['1°C','2°C','3°C']);
-    assert.match(await p.locator('#heat-stage-analysis-mode').textContent(),/非本次觀察/);
+    assert.equal(await p.locator('#heat-stage-conclusion').isVisible(),true);assert.match(await p.locator('#heat-stage-conclusion').textContent(),/吸收的熱量變成原來的 n 倍.*升高的度數也變成原來的 n 倍.*成正比/s);assert.doesNotMatch(await p.locator('#card-02').textContent(),/ΔT|∝|\bQ\b|寫成公式/);assert.deepEqual(await p.locator('.heat-stage-axis-title').allTextContents(),['升高的度數（°C）','水吸收的熱量（cal）']);
+    assert.deepEqual(await p.locator('#heat-stage-analysis-heat td').allTextContents(),['待記錄','待記錄','待記錄']);
+    assert.deepEqual(await p.locator('#heat-stage-analysis-rise td').allTextContents(),['—','—','—']);
+    assert.match(await p.locator('#heat-stage-analysis-mode').textContent(),/本次加熱紀錄/);
     assert.equal(await p.locator('[data-heat-stage]').count(),0);assert.equal(await root.locator('input[type=range]').count(),0);assert.equal(await root.getByRole('button',{name:'暫停',exact:true}).count(),0);
     const order=await p.evaluate(()=>document.querySelector('#heat-lab').compareDocumentPosition(document.querySelector('#heat-stage-conclusion')));assert.ok(order&4);
     await p.clock.runFor(10000);assert.equal(await root.getAttribute('data-water-calories'),'0');
@@ -36,7 +36,7 @@ test('5.3第二區：自由熱量、連續亮點、橫向數據與白話規律',
     const a=await state(),x1=Number(await p.locator('#heat-stage-live').getAttribute('cx'));assert.ok(Number(a.waterCalories)>0&&Number(a.waterCalories)<100);assert.deepEqual(await actualPoints(),[]);
     assert.deepEqual(await p.locator('#heat-stage-analysis-heat td').allTextContents(),['待記錄','待記錄','待記錄']);
     assert.deepEqual(await p.locator('#heat-stage-analysis-rise td').allTextContents(),['—','—','—']);
-    assert.match(await p.locator('#heat-stage-analysis-mode').textContent(),/本次觀察・沿途前三筆/);
+    assert.match(await p.locator('#heat-stage-analysis-mode').textContent(),/本次加熱紀錄/);
     await p.clock.runFor(120);const b=await state(),x2=Number(await p.locator('#heat-stage-live').getAttribute('cx'));assert.ok(x2>x1);assert.ok(Number(b.waterCalories)<100);assert.deepEqual(await actualPoints(),[]);
     assert.equal(await p.locator('#heat-stage-energy').textContent(),'0');assert.equal(await p.locator('#heat-stage-meter').textContent(),'20.0');
     await p.clock.runFor(180);assert.ok(Number(await p.locator('#heat-stage-energy').textContent())>0);assert.doesNotMatch(await p.locator('#heat-stage-energy').textContent(),/\./);

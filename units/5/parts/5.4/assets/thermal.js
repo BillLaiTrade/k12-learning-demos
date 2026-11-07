@@ -43,9 +43,8 @@ $('heat-play').onclick=()=>{
  run('heat-lab',target.duration*(target.end-initial)/(target.end-start),p=>{energy=p===1?target.end:initial+(target.end-initial)*p;renderHeat();},renderHeat);renderHeat();
 };
 $('heat-reset').onclick=()=>{stop('heat-lab');energy=0;renderHeat();};
-// The apparatus is optional: an unavailable WebGL context cannot block the
-// curve, controls or any other section of this lesson.
-import('./heating-apparatus.mjs?v=visibility-20261107').then(({createHeatingApparatus})=>{try{heatApparatus=createHeatingApparatus($('heat-scene'));renderHeat();}catch{ $('heat-scene').classList.remove('has-3d'); }}).catch(()=>{});
+// Photo textures and dynamic state are optional; image failure preserves SVG.
+import('./photo-apparatus.mjs?v=photo-bench-20261107').then(({createPhotoHeating})=>{try{heatApparatus=createPhotoHeating($('heat-scene'));renderHeat();}catch{ $('heat-scene').classList.remove('has-photo'); }}).catch(()=>{});
 let comparisonProgress=0,comparisonRevealed=false;
 const comparisonApparatus={};
 function renderComparison(){
@@ -76,7 +75,7 @@ $('comparison-play').onclick=()=>{
 };
 $('comparison-reset').onclick=()=>{stop('comparison-lab');comparisonProgress=0;comparisonRevealed=false;renderComparison();};
 $('comparison-reveal').onclick=()=>{if(comparisonProgress===0||animations.has('comparison-lab'))return;comparisonRevealed=!comparisonRevealed;renderComparison();};
-import('./phase-apparatus.mjs?v=finite-baths-20261107').then(({createPhaseApparatus})=>{for(const key of ['warm','cold'])try{comparisonApparatus[key]=createPhaseApparatus($('comparison-'+key+'-scene'),key);}catch{ $('comparison-'+key+'-scene').classList.remove('has-phase-3d'); }renderComparison();}).catch(()=>{});
+import('./photo-apparatus.mjs?v=photo-bench-20261107').then(({createPhotoBath})=>{for(const key of ['warm','cold'])try{comparisonApparatus[key]=createPhotoBath($('comparison-'+key+'-scene'),key);}catch{ $('comparison-'+key+'-scene').classList.remove('has-photo'); }renderComparison();}).catch(()=>{});
 let mode='evaporate',phaseProgress=0;
 function renderPhase(){const s=PHASES[mode];$('phase-scene').innerHTML=extensionScene(mode,phaseProgress);write('phase-sample',s.sample);write('phase-condition',s.environment);write('phase-before',s.before);write('phase-after',s.after);write('phase-temp',s.temperature);pressed('[data-phase]',mode,'phase');write('phase-play',animations.has('phase-lab')?'停止觀察':phaseProgress>=1?'再次觀察':phaseProgress>0?'繼續觀察':'開始觀察');write('phase-note',phaseProgress>0?s.explanation:'準備觀察'+s.name+'；先認清研究對象，再看能量方向。');$('phase-lab').dataset.mode=mode;}
 for(const b of document.querySelectorAll('[data-phase]'))b.onclick=()=>{stop('phase-lab');mode=b.dataset.phase;phaseProgress=0;renderPhase();};

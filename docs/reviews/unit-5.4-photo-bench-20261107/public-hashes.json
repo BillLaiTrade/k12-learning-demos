@@ -1,0 +1,135 @@
+[
+  {
+    "path": "units/5/parts/5.4/index.html",
+    "status": 200,
+    "same": true,
+    "local_sha256": "786562a6a33fba643cf7906f49640ff235a65b17149e2ab5c48d71be59cfc84a",
+    "public_sha256": "786562a6a33fba643cf7906f49640ff235a65b17149e2ab5c48d71be59cfc84a"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal.js",
+    "status": 200,
+    "same": true,
+    "local_sha256": "773792aa900d27e8e677fcf0ec047b77de34dc0e3c9ec6d4ba5caed9b8a78870",
+    "public_sha256": "773792aa900d27e8e677fcf0ec047b77de34dc0e3c9ec6d4ba5caed9b8a78870"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal.css",
+    "status": 200,
+    "same": true,
+    "local_sha256": "2f3d2dcfcb1100bbae2b82e17fc7362a6b764ca68afb2cb802369d32329414d2",
+    "public_sha256": "2f3d2dcfcb1100bbae2b82e17fc7362a6b764ca68afb2cb802369d32329414d2"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal-model.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "2cb281cdc9d35d7821719e01b5cd86a5d90a949b9fb1b9f4d717bc8ae72a1858",
+    "public_sha256": "2cb281cdc9d35d7821719e01b5cd86a5d90a949b9fb1b9f4d717bc8ae72a1858"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal-art.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "e45bb20d07001c3a7736273542b3c41cd588f8de465c7d76264cf40c3c1cc333",
+    "public_sha256": "e45bb20d07001c3a7736273542b3c41cd588f8de465c7d76264cf40c3c1cc333"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/heating-observation.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "e52ecf4579f548d132619b2762dc8180c08da890eed986c1237c01baa5210b17",
+    "public_sha256": "e52ecf4579f548d132619b2762dc8180c08da890eed986c1237c01baa5210b17"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/heating-apparatus.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "771b368c66bd8dbd09351df840d8b93465f0a9d09f5a230ee4f9e5966edec80c",
+    "public_sha256": "771b368c66bd8dbd09351df840d8b93465f0a9d09f5a230ee4f9e5966edec80c"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/phase-comparison.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "bf8a64ce96947deadf3868105473615fdfe77942d74e3c1cc73a41de4f99792e",
+    "public_sha256": "bf8a64ce96947deadf3868105473615fdfe77942d74e3c1cc73a41de4f99792e"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/phase-apparatus.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "c545ee9250c46ecfb25722863cff911044415043ca8b1fab3592654d5f1b526c",
+    "public_sha256": "c545ee9250c46ecfb25722863cff911044415043ca8b1fab3592654d5f1b526c"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal-opening.svg",
+    "status": 200,
+    "same": true,
+    "local_sha256": "80c5143dff88fcf72836754f10e46d14e3a0e4bacc81919d12e144a75bd222d0",
+    "public_sha256": "80c5143dff88fcf72836754f10e46d14e3a0e4bacc81919d12e144a75bd222d0"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal-opening.png",
+    "status": 200,
+    "same": true,
+    "local_sha256": "241b2b85a2b20d44918a30ea580ee542a8caf32064813053d20654c6cdaab0a4",
+    "public_sha256": "241b2b85a2b20d44918a30ea580ee542a8caf32064813053d20654c6cdaab0a4"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/photo-apparatus.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "39c18cdd36311a26f194e1d643172a661c5300c97db449cb6608b6ef3da3ac82",
+    "public_sha256": "39c18cdd36311a26f194e1d643172a661c5300c97db449cb6608b6ef3da3ac82"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/heating-bench-photo.webp",
+    "status": 200,
+    "same": true,
+    "local_sha256": "eb14291025d8f49b624bbd3ab69884d90bb2be4facd05ec535ad54ba1e038d93",
+    "public_sha256": "eb14291025d8f49b624bbd3ab69884d90bb2be4facd05ec535ad54ba1e038d93"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/phase-bath-photo.webp",
+    "status": 200,
+    "same": true,
+    "local_sha256": "99a37572be96dd6f76303df33549ef874104a623c8965399e357d47ddf7fceb2",
+    "public_sha256": "99a37572be96dd6f76303df33549ef874104a623c8965399e357d47ddf7fceb2"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/ice-cube-photo.webp",
+    "status": 200,
+    "same": true,
+    "local_sha256": "91a8c7c5c40d705ca8d944e71095b973ec29b875c72af8d73af77453cad92737",
+    "public_sha256": "91a8c7c5c40d705ca8d944e71095b973ec29b875c72af8d73af77453cad92737"
+  },
+  {
+    "path": "units/4/parts/4.1/assets/vendor/three/build/three.module.js",
+    "status": 200,
+    "same": true,
+    "local_sha256": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea",
+    "public_sha256": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea"
+  },
+  {
+    "path": "units/4/parts/4.1/assets/vendor/three/build/three.core.js",
+    "status": 200,
+    "same": true,
+    "local_sha256": "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6",
+    "public_sha256": "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6"
+  },
+  {
+    "path": "units/5/assets/unit-format.css",
+    "status": 200,
+    "same": true,
+    "local_sha256": "c5b365c3adac380c2c3d5644dfc61d83df4fdee5dd3fc752438de8421127bedf",
+    "public_sha256": "c5b365c3adac380c2c3d5644dfc61d83df4fdee5dd3fc752438de8421127bedf"
+  },
+  {
+    "path": "shared-assets/characters/dialogue-character-avatars.png",
+    "status": 200,
+    "same": true,
+    "local_sha256": "80f73548fd344c7a4c8d03a16323e7ed2770a970eab7c13212317ab5da28f626",
+    "public_sha256": "80f73548fd344c7a4c8d03a16323e7ed2770a970eab7c13212317ab5da28f626"
+  }
+]
