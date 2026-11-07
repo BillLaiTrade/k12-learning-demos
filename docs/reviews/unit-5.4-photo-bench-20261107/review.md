@@ -24,4 +24,12 @@
 
 ## 檢查
 
-[本機30項](local.txt)通過：14模型項、15瀏覽器子流程及外層；包括融冰保溫、探針全程浸水、LCD與外浴／冰量同步、三段停點、暫停續行重做、離區、WebGL不可用與素材失敗替代、無JS、鍵盤及其餘區塊代表流程。[35組版面](layout-local.json)無整頁水平溢出，[錯誤紀錄](errors-local.json)為空。人工檢視[5.3參照](reference-5.3.png)、[融冰](melting-local.png)、[沸騰](boiling-local.png)、[雙水浴解釋](comparison-local.png)、[第一區390px](first-narrow-local.png)與[第二區390px](second-narrow-local.png)。公開結果另列。維持第4階段；未作Firefox／Safari或實體裝置驗收。
+[本機30項](local.txt)通過：14模型項、15瀏覽器子流程及外層；包括融冰保溫、探針全程浸水、LCD與外浴／冰量同步、三段停點、暫停續行重做、離區、WebGL不可用與素材失敗替代、無JS、鍵盤及其餘區塊代表流程。[35組版面](layout-local.json)無整頁水平溢出，[錯誤紀錄](errors-local.json)為空。人工檢視[5.3參照](reference-5.3.png)、[融冰](melting-local.png)、[沸騰](boiling-local.png)、[雙水浴解釋](comparison-local.png)、[第一區390px](first-narrow-local.png)與[第二區390px](second-narrow-local.png)。維持第4階段；未作Firefox／Safari或實體裝置驗收。
+
+## 發布
+
+功能提交e2127c26，經5dcf6cb98cb66ca51c403a3b2c1a20776a60eb56整合其他單元更新後發布，5.4內容無額外差異。原生Pages[42353508993](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/42353508993)的build、deploy與report-build-status皆成功，見[release.json](release.json)。
+
+[公開16項](public.txt)通過，[19檔資源](public-hashes.json)與本機一致，[35組公開版面](layout-public.json)無整頁水平溢出，[錯誤紀錄](errors-public.json)為空。人工核對[融冰](melting-public.png)、[沸騰](boiling-public.png)、[第二區解釋](comparison-public.png)、[第一區窄版](first-narrow-public.png)與[第二區窄版](second-narrow-public.png)，確認寫實器材、同源讀值及熱傳位置。瀏覽器採程序限定環境代理CA公鑰匹配；未更改持久信任庫，檔案核對使用系統TLS驗證。
+
+下一步先檢視[第一區](https://billlaitrade.github.io/k12-learning-demos/units/5/parts/5.4/#card-01)與[第二區](https://billlaitrade.github.io/k12-learning-demos/units/5/parts/5.4/#card-02)，再依回饋精修或接續第三區。
