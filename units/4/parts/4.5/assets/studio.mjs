@@ -15,7 +15,7 @@ export function createStudio(root,callbacks){
  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.7));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.15;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
  const scene=new THREE.Scene();scene.background=new THREE.Color(dim?'#283126':'#91a190');scene.fog=new THREE.Fog(dim?'#283126':'#91a190',23,50);
  const camera=new THREE.PerspectiveCamera(40,1,.05,70),target=surface?new THREE.Vector3(-1.6,1.05,.1):root.dataset.lab==='eye'?new THREE.Vector3(-.4,1.1,.25):new THREE.Vector3(0,1.1,-.65);
- const orbit=surface?{azimuth:-1.05,polar:1.16,radius:7.0}:{azimuth:-.85,polar:1.08,radius:pathLesson?(root.dataset.lab==='eye'?10.6:9.6):12.6};let topView=false,frame=0,state=null,signal=null,drag=null,canvasWidth=0,fit=1;
+ const orbit=surface?{azimuth:-1.05,polar:1.16,radius:7.0}:{azimuth:-.85,polar:1.08,radius:pathLesson?(root.dataset.lab==='eye'?10.6:9.6):12.6},wideView=surface||filterPaper,azimuthRange=wideView?[-Math.PI,Math.PI]:[-1.35,.7],polarRange=wideView?[.45,1.62]:[.65,1.45];let topView=false,frame=0,state=null,signal=null,drag=null,canvasWidth=0,fit=1;
  scene.add(new THREE.HemisphereLight('#fff7e2','#6a7a60',surface?.08:filterPaper?.25:2.2));const sun=new THREE.DirectionalLight('#fff4dc',surface?.28:filterPaper?.6:3.3);sun.position.set(-4,8,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);Object.assign(sun.shadow.camera,{left:-7,right:7,top:7,bottom:-7});sun.shadow.bias=-.0006;scene.add(sun);
  const fill=new THREE.DirectionalLight('#d6f0f7',surface?.1:filterPaper?.2:1.3);fill.position.set(6,4,-3);scene.add(fill);
  const metal=new THREE.MeshStandardMaterial({color:'#82928b',metalness:.8,roughness:.28}),dark=new THREE.MeshStandardMaterial({color:'#293d36',metalness:.5,roughness:.35}),brass=new THREE.MeshStandardMaterial({color:'#bd9a63',metalness:.75,roughness:.3}),paper=new THREE.MeshStandardMaterial({color:'#e8e9de',roughness:.92,side:THREE.DoubleSide});
@@ -127,7 +127,7 @@ export function createStudio(root,callbacks){
   if(drag.kind==='prism'){
    const point=world(event);if(!point)return;const moved=Math.hypot(event.clientX-drag.x,event.clientY-drag.y)>7;if(!moved&&!drag.moved)return;drag.moved=true;prism.position.z=THREE.MathUtils.clamp(point.z,0,2.1);rays.visible=false;root.dataset.dragging='true';requestDraw();
   }else if(drag.kind==='pinch')orbit.radius=THREE.MathUtils.clamp(drag.radius*drag.distance/Math.max(10,pinch()),surface?5.8:8.5,surface?14:18);
-  else if(!topView){orbit.azimuth=THREE.MathUtils.clamp(drag.azimuth-(event.clientX-drag.x)*.004,-1.35,.7);orbit.polar=THREE.MathUtils.clamp(drag.polar+(event.clientY-drag.y)*.003,.65,1.45);}requestDraw();
+  else if(!topView){orbit.azimuth=THREE.MathUtils.clamp(drag.azimuth-(event.clientX-drag.x)*.004,azimuthRange[0],azimuthRange[1]);orbit.polar=THREE.MathUtils.clamp(drag.polar+(event.clientY-drag.y)*.003,polarRange[0],polarRange[1]);}requestDraw();
  });
  function end(event){
   if(drag?.kind==='prism'){const inserted=event.type==='pointercancel'?state.inserted:drag.moved?prism.position.z<1.05:!state.inserted;callbacks.prism(inserted);root.dataset.dragging='false';}
@@ -135,7 +135,7 @@ export function createStudio(root,callbacks){
  }
  for(const type of['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(type,end);
  canvas.addEventListener('wheel',event=>{event.preventDefault();orbit.radius=THREE.MathUtils.clamp(orbit.radius+event.deltaY*.008,surface?5.8:8.5,surface?14:18);requestDraw();},{passive:false});
- canvas.addEventListener('keydown',event=>{const delta={ArrowLeft:[-.075,0],ArrowRight:[.075,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]}[event.key];if(!delta)return;event.preventDefault();if(topView)return;orbit.azimuth=THREE.MathUtils.clamp(orbit.azimuth+delta[0],-1.35,.7);orbit.polar=THREE.MathUtils.clamp(orbit.polar+delta[1],.65,1.45);requestDraw();});
+ canvas.addEventListener('keydown',event=>{const delta={ArrowLeft:[-.075,0],ArrowRight:[.075,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]}[event.key];if(!delta)return;event.preventDefault();if(topView)return;orbit.azimuth=THREE.MathUtils.clamp(orbit.azimuth+delta[0],azimuthRange[0],azimuthRange[1]);orbit.polar=THREE.MathUtils.clamp(orbit.polar+delta[1],polarRange[0],polarRange[1]);requestDraw();});
  canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();callbacks.unavailable?.();});
  resize();
  return{update,setView(value){topView=value;requestDraw();}};

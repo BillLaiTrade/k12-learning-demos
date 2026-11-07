@@ -84,10 +84,17 @@ test('4.4 第二區立體凸透鏡：實際曲面、光路與逐面折射',{time
    }
   }
  });
- await t.test('重設恢復主圖視角與光路，保留說明收合狀態',async()=>{
-  await canvas.scrollIntoViewIfNeeded();await canvas.focus();await page.keyboard.press('ArrowRight');await lab.locator('[data-parallel-rays]').click();
-  await lab.locator('[data-convex-reset]').click();const a=await read();assert.equal(a.rays,'true');const camera=a.camera;
-  await page.keyboard.press('ArrowRight');await lab.locator('[data-convex-reset]').click();assert.deepEqual((await read()).camera,camera);
+ await t.test('保留視角與光路操作，主圖不顯示重新觀察按鈕',async()=>{
+  assert.equal(await lab.locator('[data-convex-reset]').count(),0);
+  await canvas.scrollIntoViewIfNeeded();await canvas.focus();const before=await read();await page.keyboard.press('ArrowRight');assert.notDeepEqual((await read()).camera,before.camera);
+  await lab.locator('[data-parallel-rays]').click();assert.equal((await read()).rays,'false');await lab.locator('[data-parallel-rays]').click();assert.equal((await read()).rays,'true');
+ });
+ await t.test('水平旋轉左右可達65度且光學路徑與焦點標示保持',async()=>{
+  await page.setViewportSize({width:1440,height:1050});await canvas.scrollIntoViewIfNeeded();await canvas.focus();const before=await read();
+  for(const [key,name,expected] of [['ArrowLeft','left',-65],['ArrowRight','right',65]]){
+   for(let i=0;i<45;i++)await page.keyboard.press(key);await frame(page);const state=await read(),angle=Math.atan2(state.camera[0]-1.25,state.camera[2])*180/Math.PI;
+   assert.ok(Math.abs(angle-expected)<.01,JSON.stringify({name,angle}));assert.deepEqual(state.paths,before.paths);assert.equal(await lab.locator('[data-convex-label=focus]').isVisible(),true);assert.equal(await lab.locator('[data-convex-focal-distance]').isVisible(),true);await checkDistance();await shot('rotation-65-'+name,page,'.convex-stage');
+  }
  });
  await t.test('立體渲染無法啟動時，兩個折射說明仍可操作',async()=>{
   const p=await open(context,true);assert.equal(await p.locator('#lab2').getAttribute('data-webgl'),'unavailable');assert.equal(await p.locator('[data-convex-fallback]').isVisible(),true);

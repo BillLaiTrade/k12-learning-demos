@@ -10,18 +10,18 @@ export const HEATING_STEPS=[
 ];
 export function heatingStep(energy){const index=HEATING_STEPS.findIndex(s=>energy<s.end);return index<0?2:index;}
 export function observedHeatChart(energy){
- const e=Math.max(0,Math.min(energy,HEATING_STEPS[2].end)),s=heating(e),max=120;
+ const e=Math.max(0,Math.min(energy,HEATING_STEPS[2].end)),s=heating(e),max=30000;
  // Both axes keep the same physical scale. A small negative margin separates
  // the observed 0°C plateau from the horizontal axis, without shifting data.
- const x=q=>56+q/1000/max*344,y=t=>254-t*1.86;
+ const x=q=>56+q/4.18/max*344,y=t=>254-t*1.86;
  const points=[[0,0]];
  if(e>0){points.push([Math.min(e,HEAT.melt),0]);if(e>HEAT.melt)points.push([Math.min(e,HEATING_STEPS[1].end),s.temperature]);if(e>HEATING_STEPS[1].end)points.push([e,100]);}
  const curve=points.map(([q,t],i)=>`${i?'L':'M'}${x(q).toFixed(2)} ${y(t).toFixed(2)}`).join(' ');
  const recent=e<=HEAT.melt?`M${x(0)} ${y(0)}H${x(e)}`:e<=HEATING_STEPS[1].end?`M${x(HEAT.melt)} ${y(0)}L${x(e)} ${y(s.temperature)}`:`M${x(HEATING_STEPS[1].end)} ${y(100)}H${x(e)}`;
- return `<svg viewBox="0 0 420 338" role="img" aria-label="已觀察的溫度與累計吸熱量紀錄，目前${s.temperature.toFixed(1)}攝氏度、吸熱${(e/1000).toFixed(1)}千焦耳" data-observed-kj="${e/1000}" data-axis-max="${max}" data-temperature-min="-10">
+ return `<svg viewBox="0 0 420 338" role="img" aria-label="已觀察的溫度與累計吸熱量紀錄，目前${s.temperature.toFixed(1)}攝氏度、吸熱${Math.round(e/4.18)}卡" data-observed-cal="${e/4.18}" data-axis-max="${max}" data-temperature-min="-10">
  <text x="12" y="27" class="chart-axis-title">溫度（°C）</text>
  ${[-10,0,20,40,60,80,100].map(t=>`<path d="M56 ${y(t)}H400" stroke="${t===0?'#c3d4bf':'#e6ece2'}" stroke-dasharray="${t===0?'4 4':'none'}"/><text x="45" y="${y(t)+5}" text-anchor="end">${t}</text>`).join('')}
- ${[0,40,80,120].map(q=>`<path d="M${x(q*1000)} 49V${y(-10)}" stroke="#edf0e9"/><text x="${x(q*1000)}" y="298" text-anchor="middle">${q}</text>`).join('')}
+ ${[0,10000,20000,30000].map(q=>`<path d="M${x(q*4.18)} 49V${y(-10)}" stroke="#edf0e9"/><text x="${x(q*4.18)}" y="298" text-anchor="${q===max?'end':'middle'}">${q.toLocaleString('en-US')}</text>`).join('')}
  <path d="M56 49V${y(-10)}H405" fill="none" stroke="#728679" stroke-width="1.4"/>
  <path d="${curve}" fill="none" stroke="#fffef9" stroke-width="9" stroke-linecap="round"/>
  <path class="observed-curve" d="${curve}" fill="none" stroke="#35784b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -31,7 +31,7 @@ export function observedHeatChart(energy){
  ${e>HEATING_STEPS[1].end?`<text class="heat-phase-label" x="${x((HEATING_STEPS[1].end+e)/2)}" y="94" text-anchor="middle">水沸騰</text>`:''}
  <circle cx="${x(e)}" cy="${y(s.temperature)}" r="5" fill="#b7652c"/>
  ${s.temperature>0?`<text x="${Math.min(385,x(e)+6)}" y="${y(s.temperature)-13}" class="chart-now">現在</text>`:''}
- <text x="228" y="331" text-anchor="middle" class="chart-axis-title">累計吸熱量（kJ）</text></svg>`;
+ <text x="228" y="331" text-anchor="middle" class="chart-axis-title">累計吸熱量（cal）</text></svg>`;
 }
 
 // SVG fallback keeps the same reference water level and a clear ice outline.

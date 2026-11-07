@@ -18,7 +18,6 @@ function initialise(root){
   studio?.update();
  }
  $('[data-parallel-rays]').addEventListener('click',()=>{showRays=!showRays;update();});
- $('[data-convex-reset]').addEventListener('click',()=>{showRays=true;studio?.reset();update();});
  function renderPanel(panel){
   const svg=panel.querySelector('svg'),mode=panel.dataset.mode||'enter',upper=panel.dataset.convexRay==='upper',direction=upper?'下':'上';
   renderConvexRefraction(svg,g,{rayIndex:upper?0:2,showRays,mode,width:svg.parentElement.clientWidth||960});
@@ -106,12 +105,12 @@ function initialise(root){
   const pointers=new Map();let gesture=null;
   const pinch=()=>{const p=[...pointers.values()];return p.length<2?0:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);};
   canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.setPointerCapture(e.pointerId);gesture=pointers.size>1?{kind:'pinch',distance:pinch(),radius:orbit.radius}:{kind:'orbit',x:e.clientX,y:e.clientY,azimuth:orbit.azimuth,polar:orbit.polar};});
-  canvas.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId)||!gesture)return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(gesture.kind==='pinch'){const ratio=gesture.distance/Math.max(20,pinch());orbit.radius=THREE.MathUtils.clamp(gesture.radius*ratio,7,19);}else{orbit.azimuth=THREE.MathUtils.clamp(gesture.azimuth-(e.clientX-gesture.x)*.004,-.9,.7);orbit.polar=THREE.MathUtils.clamp(gesture.polar+(e.clientY-gesture.y)*.003,.85,1.55);}updateCamera();requestDraw();});
+  canvas.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId)||!gesture)return;pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});if(gesture.kind==='pinch'){const ratio=gesture.distance/Math.max(20,pinch());orbit.radius=THREE.MathUtils.clamp(gesture.radius*ratio,7,19);}else{orbit.azimuth=THREE.MathUtils.clamp(gesture.azimuth-(e.clientX-gesture.x)*.004,-Math.PI*65/180,Math.PI*65/180);orbit.polar=THREE.MathUtils.clamp(gesture.polar+(e.clientY-gesture.y)*.003,.85,1.55);}updateCamera();requestDraw();});
   function stop(e){pointers.delete(e.pointerId);gesture=null;}
   for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,stop);
   canvas.addEventListener('wheel',e=>{e.preventDefault();orbit.radius=THREE.MathUtils.clamp(orbit.radius+e.deltaY*.008,7,19);updateCamera();requestDraw();},{passive:false});
-  canvas.addEventListener('keydown',e=>{const map={ArrowLeft:[-.07,0],ArrowRight:[.07,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!map[e.key])return;e.preventDefault();orbit.azimuth=THREE.MathUtils.clamp(orbit.azimuth+map[e.key][0],-.9,.7);orbit.polar=THREE.MathUtils.clamp(orbit.polar+map[e.key][1],.85,1.55);updateCamera();requestDraw();});
+  canvas.addEventListener('keydown',e=>{const map={ArrowLeft:[-.07,0],ArrowRight:[.07,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!map[e.key])return;e.preventDefault();orbit.azimuth=THREE.MathUtils.clamp(orbit.azimuth+map[e.key][0],-Math.PI*65/180,Math.PI*65/180);orbit.polar=THREE.MathUtils.clamp(orbit.polar+map[e.key][1],.85,1.55);updateCamera();requestDraw();});
   new ResizeObserver(resize).observe(canvas);resize();document.addEventListener('visibilitychange',()=>{if(!document.hidden)requestDraw();});
-  return {update,reset(){orbit={azimuth:-.10,polar:1.46,radius:11.5};},scene,camera,renderer,lens,rays,focus,source,g,world};
+  return {update,scene,camera,renderer,lens,rays,focus,source,g,world};
  }
 }

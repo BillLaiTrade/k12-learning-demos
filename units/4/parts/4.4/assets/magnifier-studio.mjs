@@ -40,8 +40,8 @@ function initialise(root){
   $('[data-mag-device=object]').setAttribute('aria-label',`圖卡，距離透鏡${distanceLabel(state.object)}，方向鍵可沿軌道移動`);
   const size=g.angularGain===null?'':Math.abs(g.angularGain-1)<.02?'視角相近':g.angularGain>1?'比原物大':'比原物小';
   $('[data-mag-eye-badge]').textContent=g.eyeMode==='converging'?'此固定眼位無法清楚對焦':g.eyeMode==='parallel'?'可放鬆觀看':`正立・${size}`;
-  const condition=g.type==='virtual'?'圖卡在 F 內，可當放大鏡使用。':g.type==='infinity'?'圖卡恰好在 F，可留在原位放鬆觀看。':'圖卡已超過 F；此固定眼位無法清楚對焦。';
-  $('[data-mag-condition]').textContent=condition;
+  const condition=g.type==='virtual'?'圖卡在 F 內，可當放大鏡使用。':g.type==='infinity'?'圖卡恰好在 F，可留在原位放鬆觀看。':'';
+  $('[data-mag-condition]').textContent=condition;$('[data-mag-condition]').hidden=!condition;
   $('[data-mag-eye-note]').textContent=g.type==='virtual'?(showRays?'看到的，就是主圖標示的虛像。':'透過鏡片看見的是正立放大的虛像。'):g.resolved?'相同尺度，直接比較圖案大小。':'模糊程度為示意。';
   root.dataset.blurRadius=g.blurRadius;
   $('[data-mag-ray-name]').textContent=point==='top'?'紅：代表光':point==='bottom'?'藍：代表光':'紅／藍：代表光';
@@ -54,7 +54,6 @@ function initialise(root){
  function move(key,value){if(key!=='object')return;clearGestureNotice();state=moveMagnifier(state,key,value);selected=key;update();}
  $("[data-mag-rays]").addEventListener('click',()=>{showRays=!showRays;extensions=showRays;update();studio?.frameObservation();});
  $('[data-mag-extensions]').addEventListener('click',()=>{extensions=!extensions;update();});
- $('[data-mag-compare-screen]').addEventListener('click',()=>document.querySelector('#lab4 [data-imaging-keypoint=inside] button')?.click());
  $$('[data-mag-point]').forEach(b=>b.addEventListener('click',()=>{point=b.dataset.magPoint;update();}));
  $$('[data-mag-device]').forEach(b=>{const key=b.dataset.magDevice;b.addEventListener('click',()=>{selected=key;update();});b.addEventListener('keydown',e=>{let v=state[key];if(e.key==='Home')v=G[key+'Min'];else if(e.key==='End')v=G[key+'Max'];else if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))v+=(['ArrowLeft','ArrowDown'].includes(e.key)?-1:1)*(key==='object'?-1:1)*(e.shiftKey?.2:1);else return;e.preventDefault();move(key,v);});});
  try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-mag-fallback]').hidden=false;$$('.magnifier-anchor,.magnifier-focus').forEach(e=>e.hidden=true);root.dataset.webgl='unavailable';console.warn('Magnifier 3D:',error.message);}
