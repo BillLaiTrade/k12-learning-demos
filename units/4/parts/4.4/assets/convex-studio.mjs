@@ -1,7 +1,7 @@
 import {createParallelLabels} from './parallel-labels.mjs?v=20261104-lens-clear5';
 import {createLensVisual} from './lens-geometry.mjs?v=20261104-lens-clear5';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {renderConvexRefraction} from './convex-refraction.mjs?v=20261107-convex-focus2';
+import {renderConvexRefraction} from './convex-refraction.mjs?v=20261107-convex-order3';
 import {parallelModel} from './parallel-optics.mjs?v=20261104-lens-clear5';
 const root=document.querySelector('[data-convex-lab]');
 if(root) initialise(root);
@@ -20,7 +20,7 @@ function initialise(root){
  $('[data-parallel-rays]').addEventListener('click',()=>{showRays=!showRays;update();});
  $('[data-convex-reset]').addEventListener('click',()=>{showRays=true;studio?.reset();update();});
  function renderPanel(panel){
-  const svg=panel.querySelector('svg'),mode=panel.dataset.mode||'overall',upper=panel.dataset.convexRay==='upper',direction=upper?'下':'上';
+  const svg=panel.querySelector('svg'),mode=panel.dataset.mode||'enter',upper=panel.dataset.convexRay==='upper',direction=upper?'下':'上';
   renderConvexRefraction(svg,g,{rayIndex:upper?0:2,showRays,mode,width:svg.parentElement.clientWidth||960});
   panel.querySelector('[data-convex-key]').hidden=!showRays||mode==='overall'||svg.dataset.compact!=='true';
   panel.querySelectorAll('[data-convex-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.convexMode===mode)));

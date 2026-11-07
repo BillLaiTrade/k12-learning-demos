@@ -1,6 +1,6 @@
 // Uniform close-ups of the main scene's actual spherical surfaces and Snell rays.
 // Only the selected interface receives a normal and straight-ahead reference.
-export function renderConvexRefraction(svg,g,{rayIndex=0,showRays=true,mode='overall',width=960}={}){
+export function renderConvexRefraction(svg,g,{rayIndex=0,showRays=true,mode='enter',width=960}={}){
  const NS='http://www.w3.org/2000/svg',r=g.rays[rayIndex],upper=rayIndex===0,close=mode!=='overall',compact=width<540;
  const W=compact?520:960,H=close?440:340,id=`convex-${upper?'upper':'lower'}`,sign=upper?1:-1;
  const scale=close?(compact?200:320):Math.min(78,(W-110)/(g.focus+1.85));

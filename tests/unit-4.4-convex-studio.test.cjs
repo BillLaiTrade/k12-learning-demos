@@ -29,6 +29,9 @@ test('4.4 第二區立體凸透鏡：實際曲面、光路與逐面折射',{time
   await upper.locator('summary').focus();await page.keyboard.press('Enter');await lower.locator('summary').click();
   for(const name of ['upper','lower']){
    const panel=lab.locator(`[data-convex-ray=${name}]`);
+   assert.deepEqual(await panel.locator('[data-convex-mode]').evaluateAll(es=>es.map(e=>e.dataset.convexMode)),['enter','exit','overall']);
+   assert.equal(await panel.getAttribute('data-mode'),'enter');
+   await panel.locator('[data-convex-mode=overall]').click();
    assert.equal(await panel.locator('[data-surface-normal],[data-straight-reference],[data-bend-cue]').count(),0);
    assert.equal(await panel.locator('[data-diagram-focus]').count(),1);
    for(const mode of ['enter','exit']){
