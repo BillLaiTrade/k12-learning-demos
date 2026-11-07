@@ -40,3 +40,34 @@
 .heat-reference{position:absolute;left:10px;bottom:9px;z-index:2;margin:0;padding:3px 7px;border-radius:5px;background:#fffef6ed;color:#775129;font-size:.73rem;line-height:1.5}
 .heat-reference span{font-size:1.05rem;font-weight:800;vertical-align:-1px}
 .heat-plot svg .heat-phase-label{font-size:14px;font-weight:700;fill:#285c3c;stroke:#fffefa;stroke-width:4px;paint-order:stroke;stroke-linejoin:round}
+
+/* Second observation: finite baths, evidence first and an optional explanation. */
+.comparison-lab>.lab-top .lab-tag{font-size:1.05rem;letter-spacing:0}
+.comparison-condition{margin:0;padding:12px 16px;font-size:.88rem;color:#516251;background:#fffefa}
+.comparison-panels{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;padding:0 14px 14px;background:#fffefa}
+.comparison-panel{min-width:0;border:1px solid #c5d5c4;border-radius:13px;overflow:hidden;background:#fffefa}
+.comparison-panel>header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:9px 13px;background:#edf3e7;border-bottom:1px solid #d4dfcc}
+.comparison-panel h3{margin:0;font-size:1.1rem;color:#31593d}.comparison-panel>header>span{font-size:.75rem;color:#586d58}
+.phase-apparatus{position:relative;aspect-ratio:1.13;min-width:0;background:#eeece3;overflow:hidden}
+.phase-canvas{display:block;position:absolute;inset:0;width:100%;height:100%}
+.phase-fallback{position:absolute;inset:0;display:grid;place-items:center}.phase-fallback svg{display:block;width:100%;height:auto}
+.has-phase-3d .phase-fallback{visibility:hidden}
+.comparison-readings{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;padding:9px 12px;border-top:1px solid #d3dfd0;background:#f9fbf6;line-height:1.4}
+.comparison-readings span{display:block;font-size:.77rem;color:#596c59}.comparison-readings strong{display:block;font-size:1.2rem;color:#264b34;font-variant-numeric:tabular-nums}.comparison-readings small{display:block;font-size:.71rem;color:#687568}
+.comparison-ice{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;column-gap:8px;row-gap:2px;padding:8px 12px;font-size:.75rem;color:#586957}
+.comparison-ice-track{position:relative;height:10px;background:#e5ebe1;border-radius:4px}.comparison-ice-track i{display:block;height:100%;background:#83adb9;border-radius:4px}.comparison-ice-track b{position:absolute;top:-3px;bottom:-3px;width:2px;left:50%;background:#6d756d}.comparison-ice small{grid-column:2;font-size:.69rem}
+.comparison-caption{margin:0;padding:7px 10px;background:#edf4e7;color:#31553a;text-align:center;font-size:.86rem;border-top:1px solid #d3dfcb}
+.comparison-direction{margin:0;padding:10px;text-align:center;background:#fff4e5;color:#815028;font-weight:700;border-top:1px solid #ddceb6}
+.comparison-arrow{position:absolute;top:57%;width:27%;z-index:2;pointer-events:none;color:#fff;text-align:center}
+.comparison-arrow--warm{left:8%}.comparison-arrow--cold{left:37%}
+.comparison-arrow>span{display:inline-block;border:1px solid #fff4df;border-radius:5px;padding:2px 6px;background:#b7652c;font-size:.83rem;white-space:nowrap}
+.comparison-arrow>svg{display:block;width:100%;height:auto}
+.phase-apparatus:not(.has-phase-3d) .comparison-arrow{display:none}
+.comparison-controls{gap:8px}.comparison-controls button{font-size:.9rem}.comparison-controls button:first-child{min-width:120px}
+.comparison-explanation p+p{margin-top:9px}.comparison-model p{font-size:.87rem}
+@media(max-width:760px){.comparison-panels{grid-template-columns:1fr;padding-inline:10px;gap:13px}.comparison-controls button{flex:1}.comparison-controls button:last-child{flex-basis:100%}.phase-apparatus{aspect-ratio:1.15}.comparison-condition{padding:11px 13px}.comparison-readings strong{font-size:1.18rem}}
+
+/* World-projected heat arrows connect the two liquids across the sample wall. */
+.comparison-arrow{inset:0;width:100%;height:100%}.comparison-arrow>svg{position:absolute;inset:0;width:100%;height:100%}
+
+.phase-apparatus:not(.has-phase-3d) .phase-canvas{display:none}
