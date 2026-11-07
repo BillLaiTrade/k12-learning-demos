@@ -1,0 +1,21 @@
+▶ 5.2 radiation: one energy path, surface outcomes and conditional warming
+  ✔ manual start is required and the concept uses a single radiation-energy stream (61.038543ms)
+  ✔ travel precedes surface reflection/absorption, and heating begins only after absorption (1411.190754ms)
+  ✔ pause freezes the whole rendered illustration and resume keeps the same progress (619.204883ms)
+  ✔ repeated source clicks cannot stop the demo or multiply animation loops; reset clears all results (2201.871309ms)
+  ✔ keyboard and background interruptions are consistent and do not auto-resume (228.033202ms)
+  ✔ the reflection and absorption paths are distinct outcomes at the same surface point (7.506024ms)
+  ✔ insulation, convection and quiz remain independent after extracting radiation from the shared controller (2412.248332ms)
+  ✔ desktop, laptop and narrow layouts keep controls, condition and actual scenes in view (550.559824ms)
+  ✔ either photo may fail and retry without premature playback or loss of the other successful photo (1678.09583ms)
+  ✔ a late photo response after reset leaves the observation stopped at its beginning (657.794518ms)
+  ✔ real touch under both motion preferences starts moving rays and pauses/resets actual frames (6285.025639ms)
+✔ 5.2 radiation: one energy path, surface outcomes and conditional warming (17206.333711ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17571.303786
