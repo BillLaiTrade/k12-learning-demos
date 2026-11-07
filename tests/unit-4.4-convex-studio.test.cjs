@@ -21,28 +21,78 @@ test('4.4 第二區立體凸透鏡：實際曲面、光路與逐面折射',{time
   const axis=a.paths.filter(p=>p.index===1);assert.ok(axis.every(p=>Math.abs(p.from[1]-a.focus[1])<1e-8&&Math.abs(p.to[1]-a.focus[1])<1e-8));await shot('overall-1440',page,'.convex-stage');
  });
  await t.test('光路按鈕同時控制主圖與剖面，切換不更換器材',async()=>{
-  const a=await read();await lab.locator('[data-parallel-rays]').click();assert.equal(await lab.locator('.convex-stage [data-convex-focal-distance]').isVisible(),false);const b=await read();assert.equal(b.visible,false);assert.equal(b.lens,a.lens);assert.equal(b.sourceId,a.sourceId);assert.equal(await lab.locator('[data-ray-part]').count(),0);assert.equal(await lab.locator('[data-convex-label=focus]').isVisible(),false);await lab.locator('[data-parallel-rays]').click();assert.equal((await read()).visible,true);assert.equal(await lab.locator('[data-ray-part]').count(),3);
+  const a=await read();await lab.locator('[data-parallel-rays]').click();assert.equal(await lab.locator('.convex-stage [data-convex-focal-distance]').isVisible(),false);const b=await read();assert.equal(b.visible,false);assert.equal(b.lens,a.lens);assert.equal(b.sourceId,a.sourceId);assert.equal(await lab.locator('[data-ray-part]').count(),0);assert.equal(await lab.locator('[data-convex-label=focus]').isVisible(),false);await lab.locator('[data-parallel-rays]').click();assert.equal((await read()).visible,true);assert.equal(await lab.locator('[data-ray-part]').count(),6);
  });
- await t.test('下方剖面切換介面與法線，上方保持整體觀察且沒有近看按鈕',async()=>{
-  const a=await read();assert.equal(await lab.locator('[data-parallel-close]').count(),0);
-  for(const step of ['enter','exit']){await lab.locator(`[data-convex-step=${step}]`).click();assert.equal(await lab.locator(`[data-convex-step=${step}]`).getAttribute('aria-pressed'),'true');assert.equal(await lab.locator('[data-surface-normal]').getAttribute('data-surface-normal'),step);assert.match(await lab.locator('[data-convex-explain]').innerText(),step==='enter'?/偏向.*變小/:/偏離.*變大/);const b=await read();assert.equal(b.lens,a.lens);assert.deepEqual(b.paths,a.paths);assert.deepEqual(b.camera,a.camera);assert.equal(b.view,'overall');await shot('detail-'+step,page,'.convex-detail');}
+ await t.test('獨立收合與三種檢視：完整光路無輔助線，近看只留當前介面',async()=>{
+  const a=await read(),upper=lab.locator('[data-convex-ray=upper]'),lower=lab.locator('[data-convex-ray=lower]');
+  assert.equal(await upper.getAttribute('open'),null);assert.equal(await lower.getAttribute('open'),null);
+  await upper.locator('summary').focus();await page.keyboard.press('Enter');await lower.locator('summary').click();
+  for(const name of ['upper','lower']){
+   const panel=lab.locator(`[data-convex-ray=${name}]`);
+   assert.deepEqual(await panel.locator('[data-convex-mode]').evaluateAll(es=>es.map(e=>e.dataset.convexMode)),['enter','exit','overall']);
+   assert.equal(await panel.getAttribute('data-mode'),'enter');
+   await panel.locator('[data-convex-mode=overall]').click();
+   assert.equal(await panel.locator('[data-surface-normal],[data-straight-reference],[data-bend-cue]').count(),0);
+   assert.equal(await panel.locator('[data-diagram-focus]').count(),1);
+   for(const mode of ['enter','exit']){
+    await panel.locator(`[data-convex-mode=${mode}]`).click();assert.equal(await panel.getAttribute('data-mode'),mode);
+    assert.equal(await panel.locator('[aria-pressed=true]').count(),1);assert.equal(await panel.locator('[data-surface-normal]').count(),1);assert.equal(await panel.locator('[data-straight-reference]').count(),1);assert.equal(await panel.locator('[data-bend-cue],[data-main-axis],[data-diagram-focus]').count(),0);
+    const data=await panel.locator('svg').evaluate(svg=>{
+     const r=window.__convexRead.g.rays[Number(svg.dataset.rayIndex)],ref=svg.querySelector('[data-straight-reference]');
+     const vector=e=>{const nums=e.getAttribute('d').match(/-?[\d.]+(?:e[-+]?\d+)?/gi).map(Number);return [nums.at(-2)-nums[0],nums.at(-1)-nums[1]];};
+     const texts=[...svg.querySelectorAll('text')].map(t=>{const a=t.getBoundingClientRect(),b=svg.getBoundingClientRect();return {text:t.textContent,box:{left:a.left,right:a.right,top:a.top,bottom:a.bottom},inside:a.left>=b.left-.5&&a.right<=b.right+.5&&a.top>=b.top-.5&&a.bottom<=b.bottom+.5};});
+     return {r,mode:svg.dataset.mode,ref:vector(ref),normal:vector(svg.querySelector('[data-surface-normal]')),actual:[...svg.querySelectorAll('[data-ray-part]')].map(e=>({part:e.dataset.rayPart,v:vector(e)})),active:[...svg.querySelectorAll('[data-interface][data-active=true]')].map(e=>e.dataset.interface),texts};
+    });
+    const cross=(a,b)=>Math.abs(a[0]*b[1]-a[1]*b[0])/(Math.hypot(...a)*Math.hypot(...b));
+    const incoming=data.actual.find(e=>e.part===(mode==='enter'?'enter':'inside')).v,outgoing=data.actual.find(e=>e.part===(mode==='enter'?'inside':'exit')).v;
+    assert.ok(cross(data.ref,incoming)<1e-9);assert.ok(data.ref[0]>0);if(mode==='exit')assert.ok(Math.abs(data.ref[1])>.1);
+    assert.ok(Math.abs((mode==='enter'?1:1.5)*cross(incoming,data.normal)-(mode==='enter'?1.5:1)*cross(outgoing,data.normal))<1e-9);
+    assert.deepEqual(data.active,[mode==='enter'?'1':'2']);assert.ok(data.texts.every(e=>e.inside),JSON.stringify(data.texts));for(const[tIndex,t]of data.texts.entries())for(const other of data.texts.slice(tIndex+1)){const a=t.box,b=other.box;assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,JSON.stringify({t,other}));}
+    assert.match(await panel.locator('[data-convex-copy]').innerText(),mode==='enter'?/偏向法線/:/偏離法線/);
+    await shot('focus-'+name+'-'+mode,page,`[data-convex-ray=${name}]`);
+   }
+   await panel.locator('[data-convex-mode=overall]').click();assert.equal(await panel.locator('[data-surface-normal],[data-straight-reference]').count(),0);assert.equal(await panel.locator('[data-diagram-focus]').count(),1);
+  }
+  await upper.locator('summary').click();assert.equal(await upper.getAttribute('open'),null);assert.notEqual(await lower.getAttribute('open'),null);
+  const b=await read();assert.equal(b.lens,a.lens);assert.deepEqual(b.paths,a.paths);assert.deepEqual(b.camera,a.camera);
  });
  await t.test('滑鼠與鍵盤轉動、滾輪縮放只改觀察方式',async()=>{
   await canvas.scrollIntoViewIfNeeded();await frame(page);const a=await read(),r=await canvas.boundingBox();await page.mouse.move(r.x+r.width*.7,r.y+r.height*.83);await page.mouse.down();await page.mouse.move(r.x+r.width*.7+60,r.y+r.height*.83-15,{steps:6});await page.mouse.up();const b=await read();assert.notDeepEqual(b.camera,a.camera);assert.deepEqual(b.paths,a.paths);await page.mouse.wheel(0,100);await frame(page);assert.notDeepEqual((await read()).camera,b.camera);await canvas.focus();const c=(await read()).camera;await page.keyboard.press('ArrowLeft');assert.notDeepEqual((await read()).camera,c);assert.deepEqual((await read()).source,a.source);await frame(page);await checkDistance();
  });
- await t.test('手機原生旋轉、雙指縮放、取消及分步按鈕可操作',async()=>{
+ await t.test('手機原生旋轉、雙指縮放、取消及收合說明可操作',async()=>{
   const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,reducedMotion:'reduce'}),mp=await open(mobile);await mp.locator('#convex-canvas').scrollIntoViewIfNeeded();await frame(mp);const r=await mp.locator('#convex-canvas').boundingBox(),cdp=await mobile.newCDPSession(mp),before=await read(mp),x=r.x+100,y=r.y+170;
   await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y,id:1}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:x+45,y:y-15,id:1}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});assert.notDeepEqual((await read(mp)).camera,before.camera);
   const a=(await read(mp)).camera;await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:r.x+100,y:r.y+140,id:2},{x:r.x+160,y:r.y+140,id:3}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:r.x+75,y:r.y+140,id:2},{x:r.x+185,y:r.y+140,id:3}]});await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});assert.notDeepEqual((await read(mp)).camera,a);assert.deepEqual((await read(mp)).paths,before.paths);
-  await mp.locator('[data-convex-step=exit]').tap();assert.equal((await read(mp)).step,'exit');await shot('detail-exit-390',mp,'.convex-detail');await mobile.close();await page.bringToFront();
+  await mp.locator('[data-convex-ray=lower] summary').tap();assert.notEqual(await mp.locator('[data-convex-ray=lower]').getAttribute('open'),null);await mp.locator('[data-convex-ray=lower] [data-convex-mode=exit]').tap();assert.equal(await mp.locator('[data-convex-section=lower] [data-surface-normal]').count(),1);await shot('focus-lower-exit-390',mp,'[data-convex-ray=lower]');await mobile.close();await page.bringToFront();
  });
  await t.test('七種寬度完整取景，焦點與厚薄標籤可讀且不溢出',async()=>{
   await page.reload({waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelector('#lab2').dataset.webgl==='ready');const rows=[];
-  for(const width of [1440,1366,1024,820,760,390,320]){await page.setViewportSize({width,height:width<760?844:1050});await page.locator('.route a[href="#s2"]').click();await frame(page);const focal=await lab.locator('.convex-stage [data-convex-focal-distance]').evaluate(e=>{const b=e.getBoundingClientRect();return{left:b.left,right:b.right,overflow:e.scrollWidth>e.clientWidth,texts:[...e.querySelectorAll('text')].map(t=>{const r=t.getBoundingClientRect();return{left:r.left,right:r.right};})};});assert.ok(!focal.overflow&&focal.left>=0&&focal.right<=width+1&&focal.texts.every(t=>t.left>=focal.left&&t.right<=focal.right));if([390,320].includes(width))await shot('focal-length-'+width);await checkDistance();const a=await page.evaluate(()=>{const e=document.querySelector('#lab2'),s=e.querySelector('.convex-stage'),r=s.getBoundingClientRect(),q=window.__convexRead;return {overflow:document.documentElement.scrollWidth>innerWidth,left:r.left,right:r.right,detailTexts:[...e.querySelectorAll('[data-convex-section] text')].map(t=>{const a=t.getBoundingClientRect(),b=t.ownerSVGElement.getBoundingClientRect();return {text:t.textContent,inside:a.left>=b.left-.5&&a.right<=b.right+.5&&a.top>=b.top-.5&&a.bottom<=b.bottom+.5}}),labels:[...s.querySelectorAll('.convex-anchor')].filter(e=>!e.hidden).map(e=>{const b=e.getBoundingClientRect();return {text:e.textContent,left:b.left,right:b.right,top:b.top,bottom:b.bottom}}),points:[q.g.rays[0].from,q.g.rays[2].from,[q.g.focus,0],q.g.rays[0].end,q.g.rays[2].end].map(p=>q.world(p).project(q.studio.camera).toArray())};});assert.equal(a.overflow,false);assert.ok(a.left>=0&&a.right<=width+1);assert.equal(a.labels.length,5);for(const[i,label]of a.labels.entries())for(const other of a.labels.slice(i+1))assert.ok(label.right<=other.left||other.right<=label.left||label.bottom<=other.top||other.bottom<=label.top,JSON.stringify({width,label,other}));assert.ok(a.detailTexts.every(t=>t.inside),JSON.stringify({width,texts:a.detailTexts}));for(const label of a.labels)assert.ok(label.left>=a.left&&label.right<=a.right+1);for(const p of a.points)assert.ok(Math.abs(p[0])<.98&&Math.abs(p[1])<.98,JSON.stringify({width,p}));rows.push({width,...a});if([1440,390,320].includes(width))await shot('layout-'+width,page);}
+  for(const width of [1440,1366,1024,820,760,390,320]){await page.setViewportSize({width,height:width<760?844:1050});await page.locator('.route a[href="#s2"]').click();await frame(page);await lab.locator('[data-convex-ray=upper]').evaluate(e=>e.open=true);const focal=await lab.locator('.convex-stage [data-convex-focal-distance]').evaluate(e=>{const b=e.getBoundingClientRect();return{left:b.left,right:b.right,overflow:e.scrollWidth>e.clientWidth,texts:[...e.querySelectorAll('text')].map(t=>{const r=t.getBoundingClientRect();return{left:r.left,right:r.right};})};});assert.ok(!focal.overflow&&focal.left>=0&&focal.right<=width+1&&focal.texts.every(t=>t.left>=focal.left&&t.right<=focal.right));if([390,320].includes(width))await shot('focal-length-'+width);await checkDistance();const a=await page.evaluate(()=>{const e=document.querySelector('#lab2'),s=e.querySelector('.convex-stage'),r=s.getBoundingClientRect(),q=window.__convexRead;return {overflow:document.documentElement.scrollWidth>innerWidth,left:r.left,right:r.right,detailTexts:[...e.querySelectorAll('[data-convex-ray=upper] [data-convex-section] text')].map(t=>{const a=t.getBoundingClientRect(),b=t.ownerSVGElement.getBoundingClientRect();return {text:t.textContent,box:{left:a.left,right:a.right,top:a.top,bottom:a.bottom},inside:a.left>=b.left-.5&&a.right<=b.right+.5&&a.top>=b.top-.5&&a.bottom<=b.bottom+.5}}),labels:[...s.querySelectorAll('.convex-anchor')].filter(e=>!e.hidden).map(e=>{const b=e.getBoundingClientRect();return {text:e.textContent,left:b.left,right:b.right,top:b.top,bottom:b.bottom}}),points:[q.g.rays[0].from,q.g.rays[2].from,[q.g.focus,0],q.g.rays[0].end,q.g.rays[2].end].map(p=>q.world(p).project(q.studio.camera).toArray())};});assert.equal(a.overflow,false);assert.ok(a.left>=0&&a.right<=width+1);assert.equal(a.labels.length,5);for(const[i,label]of a.labels.entries())for(const other of a.labels.slice(i+1))assert.ok(label.right<=other.left||other.right<=label.left||label.bottom<=other.top||other.bottom<=label.top,JSON.stringify({width,label,other}));assert.ok(a.detailTexts.every(t=>t.inside),JSON.stringify({width,texts:a.detailTexts}));for(const label of a.labels)assert.ok(label.left>=a.left&&label.right<=a.right+1);for(const p of a.points)assert.ok(Math.abs(p[0])<.98&&Math.abs(p[1])<.98,JSON.stringify({width,p}));rows.push({width,...a});if([1440,390,320].includes(width))await shot('layout-'+width,page);}
   await fs.writeFile(path.join(out,'layout.json'),JSON.stringify(rows,null,2));
  });
- await t.test('立體渲染無法啟動時，下方剖面仍能切換折射步驟',async()=>{
-  const p=await open(context,true);assert.equal(await p.locator('#lab2').getAttribute('data-webgl'),'unavailable');assert.equal(await p.locator('[data-convex-fallback]').isVisible(),true);assert.equal(await p.locator('[data-convex-fallback]').isVisible(),true);await p.locator('[data-convex-step=exit]').click();assert.equal(await p.locator('#lab2').getAttribute('data-step'),'exit');assert.match(await p.locator('[data-convex-explain]').innerText(),/偏離/);assert.equal(await p.locator('#lab2 [data-ray-part]').count(),3);await p.close();assert.deepEqual(errors,[]);
+ await t.test('窄螢幕兩個介面標籤完整、按鈕不擠壓、圖內無需橫捲',async()=>{
+  for(const width of [390,320]){
+   await page.setViewportSize({width,height:844});
+   for(const name of ['upper','lower']){
+    const panel=lab.locator(`[data-convex-ray=${name}]`);await panel.evaluate(e=>e.open=true);
+    for(const mode of ['enter','exit']){
+     await panel.locator(`[data-convex-mode=${mode}]`).click();await frame(page);
+     const data=await panel.evaluate(panel=>{const svg=panel.querySelector('svg'),b=svg.getBoundingClientRect();return {overflow:document.documentElement.scrollWidth>innerWidth,scroll:svg.parentElement.scrollWidth>svg.parentElement.clientWidth+1,texts:[...svg.querySelectorAll('text')].map(t=>{const a=t.getBoundingClientRect();return {text:t.textContent,box:{left:a.left,right:a.right,top:a.top,bottom:a.bottom},inside:a.left>=b.left-.5&&a.right<=b.right+.5&&a.top>=b.top-.5&&a.bottom<=b.bottom+.5,size:parseFloat(getComputedStyle(t).fontSize)*b.width/svg.viewBox.baseVal.width};}),buttons:[...panel.querySelectorAll('button')].map(e=>({height:e.clientHeight,fit:e.scrollWidth<=e.clientWidth+1}))};});
+     assert.equal(data.overflow,false);assert.equal(data.scroll,false);assert.equal(await panel.locator('[data-convex-key]').isVisible(),true);assert.equal(await panel.locator('[data-line-label]').count(),0);assert.ok(data.texts.every(t=>t.inside&&t.size>=10.5),JSON.stringify({width,name,mode,data}));assert.ok(data.buttons.every(b=>b.fit&&b.height>=38));for(const[tIndex,t]of data.texts.entries())for(const other of data.texts.slice(tIndex+1)){const a=t.box,b=other.box;assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,JSON.stringify({width,name,mode,t,other}));}
+     if(name==='upper'&&mode==='exit')await shot('focus-'+name+'-'+mode+'-'+width,page,`[data-convex-ray=${name}]`);
+    }
+   }
+  }
+ });
+ await t.test('重設恢復主圖視角與光路，保留說明收合狀態',async()=>{
+  await canvas.scrollIntoViewIfNeeded();await canvas.focus();await page.keyboard.press('ArrowRight');await lab.locator('[data-parallel-rays]').click();
+  await lab.locator('[data-convex-reset]').click();const a=await read();assert.equal(a.rays,'true');const camera=a.camera;
+  await page.keyboard.press('ArrowRight');await lab.locator('[data-convex-reset]').click();assert.deepEqual((await read()).camera,camera);
+ });
+ await t.test('立體渲染無法啟動時，兩個折射說明仍可操作',async()=>{
+  const p=await open(context,true);assert.equal(await p.locator('#lab2').getAttribute('data-webgl'),'unavailable');assert.equal(await p.locator('[data-convex-fallback]').isVisible(),true);
+  await p.locator('[data-convex-ray=lower] summary').click();assert.equal(await p.locator('[data-convex-section=lower]').isVisible(),true);assert.equal(await p.locator('#lab2 [data-ray-part]').count(),6);
+  await p.locator('[data-convex-ray=lower] [data-convex-mode=exit]').click();assert.equal(await p.locator('[data-convex-section=lower]').getAttribute('data-mode'),'exit');assert.equal(await p.locator('[data-convex-section=lower] [data-surface-normal]').count(),1);await p.close();assert.deepEqual(errors,[]);
  });
  await fs.writeFile(path.join(out,'scene.json'),JSON.stringify(await read(),null,2));
 });

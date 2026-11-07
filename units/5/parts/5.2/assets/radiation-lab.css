@@ -1,50 +1,75 @@
-/* Fifth block: one radiation-energy path, followed into the surface. */
+/* Fifth block: the same site A links the space view, reflected light and warming. */
 #card-05 .card-main{container-type:normal}
-#radiation-lab{margin:20px 0;background:#fffdf6;border:1px solid #bdcba8;border-radius:20px;overflow:hidden;color:#31523b}
+#radiation-lab{position:relative;margin:20px 0;background:#fffdf6;border:1px solid #bdcba8;border-radius:20px;overflow:hidden;color:#31523b}
 #radiation-lab [hidden]{display:none!important}
-.radiation-question{margin:15px 16px;padding:11px 16px;border-radius:12px;background:linear-gradient(110deg,#e5ebd3,#f0f2df);text-align:center;color:#2c5038;font-size:1rem;font-weight:750;line-height:1.65}
 .radiation-space-view{position:relative;margin:0;background:#081524;aspect-ratio:1000/400;overflow:hidden}
 .radiation-space-svg{display:block;width:100%;height:auto;aspect-ratio:1000/400}
-.radiation-body-label{position:absolute;top:8%;padding:3px 12px;border-radius:8px;background:#fffbeaef;color:#34523a;font-size:.95rem;line-height:1.55;font-weight:750;pointer-events:none}
-.radiation-sun-label{left:7%}.radiation-earth-label{left:82%;transform:translateX(-50%)}
-.radiation-space-title{position:absolute;left:46%;top:12%;transform:translateX(-50%);max-width:54%;padding:5px 13px;border:1px solid #eee6c7;border-radius:13px;background:#091726aa;color:#fff8e0;font-size:.96rem;font-weight:750;white-space:nowrap;pointer-events:none}
-.radiation-vacuum-label{position:absolute;bottom:10%;left:46%;transform:translateX(-50%);color:#fff5dc;font-size:.95rem;font-weight:650;white-space:nowrap;pointer-events:none;text-shadow:0 1px 3px #000}
+.radiation-body-label{position:absolute;top:8%;padding:3px 12px;border-radius:8px;background:#fffbeaef;color:#34523a;font-size:.95rem;line-height:1.55;font-weight:750;white-space:nowrap;pointer-events:none}
+.radiation-sun-label{left:7%}.radiation-earth-label{left:84%;transform:translateX(-50%)}
+.radiation-space-title{position:absolute;left:46%;top:12%;transform:translateX(-50%);max-width:58%;padding:5px 13px;border:1px solid #eee6c7;border-radius:13px;background:#091726aa;color:#fff8e0;font-size:.96rem;font-weight:750;white-space:nowrap;pointer-events:none}
+.radiation-vacuum-label{position:absolute;bottom:10%;left:43%;transform:translateX(-50%);color:#fff5dc;font-size:.95rem;font-weight:650;white-space:nowrap;pointer-events:none;text-shadow:0 1px 3px #000}
+.radiation-site{position:absolute;z-index:4;display:flex;align-items:center;justify-content:center;width:29px;height:29px;transform:translate(-50%,-50%);border:2px solid #fff8dd;border-radius:50%;background:#376d45;color:#fffbed;box-shadow:0 0 0 1px #50764c;font:750 17px/1 system-ui;pointer-events:none}
+.radiation-earth-site{left:77%;top:32%;width:25px;height:25px;font-size:15px}
 #radiation-lab .radiation-source-hit{position:absolute;inset:0 auto 0 0;width:20%;min-width:44px;min-height:44px;margin:0;padding:0;border:2px solid transparent;border-radius:0 45% 45% 0;background:transparent;box-shadow:none;cursor:pointer;touch-action:manipulation}
 #radiation-lab .radiation-source-hit:disabled{cursor:wait}
 @media(hover:hover){#radiation-lab .radiation-source-hit:not(:disabled):hover{border-color:#fff3cfb0;box-shadow:inset 0 0 18px #f9d69440}}
 #radiation-lab button:focus-visible,.radiation-explanation summary:focus-visible{outline:3px solid #ad5c2c;outline-offset:3px}#radiation-lab .radiation-source-hit:focus-visible{outline:3px solid #fff5cc;outline-offset:-5px}
-.radiation-spectrum{position:relative;margin:0;padding:14px 18px 12px;text-align:center;font-size:.92rem;color:#3f5740;line-height:1.7;background:#fffdf6}
-.radiation-ground-view{position:relative;margin:10px 16px 16px;border:1px solid #b9c6a5;border-radius:14px;background:#d9e6e1;overflow:hidden}
-.radiation-ground-view figcaption{position:absolute;left:12px;top:9px;z-index:1;margin:0;padding:4px 12px;border-radius:9px;background:#315c3eef;color:#fffbea;font-size:.94rem;font-weight:750;line-height:1.5;pointer-events:none}
-.radiation-ground-view figcaption span{margin-left:10px;font-size:.73rem;font-weight:400;opacity:.9}
-.radiation-ground-svg{display:block;width:100%;height:auto;min-height:72px;aspect-ratio:1000/260}.radiation-ground-outline{stroke:#fff6dc;stroke-width:11}.radiation-ground-color{stroke:#efb548;stroke-width:7}
-.radiation-ground-label{position:absolute;padding:2px 10px;border-radius:8px;background:#fffbe9f5;color:#35513b;font-size:.89rem;font-weight:750;line-height:1.55;pointer-events:none}
-.radiation-reflection-label{left:68%;top:23%}.radiation-absorption-label{left:53%;top:78%}
-.radiation-observations{display:grid;grid-template-columns:.85fr 1.3fr;gap:12px;margin:0 16px}
-.radiation-observation-card{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid #c1cdaa;border-radius:13px;background:#fafaf0}
-.radiation-observation-card h3{margin:0;padding:8px 13px;background:linear-gradient(100deg,#e8edd7,#f6f6e9);font-size:1.04rem;font-weight:750;line-height:1.55;color:#2e5037}
-.radiation-observation-card h3 span{float:right;margin-left:6px;padding:1px 7px;border:1px solid #839e76;border-radius:7px;font-size:.75rem;font-weight:600}
-.radiation-sight-body{flex:1;display:flex;gap:14px;align-items:center;padding:25px 16px}.radiation-sight-body svg{flex:0 0 49px;width:49px;height:38px;color:#325e3d}
-.radiation-observation-card p{margin:0;font-size:.91rem;line-height:1.7;color:#385039}
-.radiation-warming-body{display:grid;grid-template-columns:.7fr 1.3fr;align-items:center;gap:8px;padding:10px 13px 0}
-.radiation-chart{position:relative;min-width:0;padding-top:3px;padding-bottom:6px;align-self:stretch}
+.radiation-spectrum{position:relative;display:flex;justify-content:center;align-items:center;gap:12px 20px;flex-wrap:wrap;margin:0;padding:13px 16px;color:#3f5740;font-size:.9rem;line-height:1.65}
+.radiation-spectrum>span{position:relative;z-index:3;background:#fffdf6;padding:0 4px}
+.radiation-spectrum .radiation-zoom-caption{border:1px solid #a9bc91;border-radius:10px;padding:3px 10px;color:#376044;font-size:.8rem;font-weight:650}
+.radiation-local-layout{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(220px,1fr);gap:14px;margin:0 16px 2px;align-items:stretch}
+.radiation-ground-view{position:relative;min-width:0;min-height:245px;margin:0;border:1px solid #b9c6a5;border-radius:14px;background:#91b9d4;overflow:hidden}
+.radiation-ground-svg{display:block;width:100%;height:100%;min-height:245px;position:absolute;inset:0}
+.radiation-ground-view figcaption{position:absolute;left:5%;top:6%;z-index:3;margin:0;padding:4px 9px;border-radius:9px;background:#fffbeaf2;color:#35513b;font-size:.88rem;font-weight:750;line-height:1.5;pointer-events:none}
+.radiation-ground-outline{stroke:#fff6dc;stroke-width:11}.radiation-ground-color{stroke:#efb548;stroke-width:7}
+.radiation-eye{position:absolute;right:3%;top:6%;z-index:3;display:flex;align-items:center;gap:7px;padding:4px 6px;border-radius:10px;background:#fffbeaef;color:#315d3d;pointer-events:none}
+.radiation-eye svg{flex:none;width:39px;height:30px;overflow:visible}.radiation-eye p{margin:0;font-size:.84rem;line-height:1.45;white-space:nowrap}.radiation-eye strong{font-weight:750}
+.radiation-ground-label{position:absolute;z-index:3;padding:3px 8px;border-radius:8px;background:#fffbeaf2;color:#35513b;font-size:.84rem;font-weight:700;line-height:1.5;pointer-events:none}
+.radiation-reflection-label{left:40%;top:36%}.radiation-absorption-label{left:51%;top:82%}
+.radiation-observation-card{display:flex;flex-direction:column;min-width:0;border:1px solid #bdcba8;border-radius:14px;background:#fafaf0}
+.radiation-warming-card{position:relative}
+.radiation-observation-card h3{margin:0;padding:9px 12px;border-radius:13px 13px 0 0;background:linear-gradient(100deg,#e8edd7,#f6f6e9);font-size:1.03rem;font-weight:750;line-height:1.55;color:#2e5037}
+.radiation-observation-card h3 span{float:right;margin:2px 0 0 5px;padding:1px 5px;border:1px solid #839e76;border-radius:6px;font-size:.68rem;line-height:1.5;font-weight:600}
+.radiation-observation-card h3 b{color:#376d45}
+.radiation-temperature-anchor{position:absolute;z-index:4;left:-5px;top:66%;width:9px;height:9px;border-radius:50%;background:#376d45;transform:translateY(-50%)}
+.radiation-warming-body{display:flex;flex:1;align-items:center;min-width:0;padding:5px 11px 0}
+.radiation-chart{position:relative;min-width:0;width:100%;padding:21px 0 18px}
 .radiation-chart svg{display:block;width:100%;height:auto;aspect-ratio:340/150;overflow:visible}.radiation-chart-axes{fill:none;stroke:#3b4638;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 #radiation-heat-curve{fill:none;stroke:#ce8b16;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}#radiation-heat-point{fill:#ce8b16;stroke:#fff9e6;stroke-width:1.3}
-.radiation-temperature-axis,.radiation-time-axis{position:absolute;font-size:.73rem;line-height:1.3;color:#465744;background:#fafaf0;padding:0 2px}.radiation-temperature-axis{left:0;top:-3px;transform:translateX(-7%)}.radiation-time-axis{right:-3px;bottom:0}
-.radiation-observation-card .radiation-heat-condition{margin:0;padding:4px 13px 10px;text-align:center;font-size:.82rem;color:#4a5c43;line-height:1.55}
+.radiation-temperature-axis,.radiation-time-axis{position:absolute;font-size:13px;line-height:1.4;color:#465744;background:#fafaf0;padding:0 2px}.radiation-temperature-axis{left:0;top:0}.radiation-time-axis{right:0;bottom:0}
+.radiation-heat-condition{margin:0 10px 10px;padding:8px 6px;border-radius:10px;background:#e8edd6;color:#335b39;text-align:center;font-size:.88rem;line-height:1.6;font-weight:650}
+.radiation-heat-condition span,.radiation-heat-condition strong{display:block}.radiation-heat-condition strong{font-weight:750}
+.radiation-link-lines{position:absolute;z-index:2;inset:0;display:block;width:100%;height:100%;pointer-events:none;overflow:visible}
+.radiation-link-halo{fill:none;stroke:#fffdf0;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.radiation-link-stroke{fill:none;stroke:#3e7b53;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .radiation-control-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;padding:18px 16px 15px}
 #radiation-lab .lab-controls{justify-content:flex-start;gap:12px;padding:0}#radiation-lab .lab-controls button{min-width:110px;min-height:44px;border-radius:13px;font-size:.94rem;line-height:1.7;padding:9px 17px;cursor:pointer}
 #radiation-lab .action{background:linear-gradient(140deg,#39694b,#26573b);color:#fffcef;border:1px solid #315e40}#radiation-lab .secondary{border:1px solid #9db38f;background:#fffef3;color:#3c5c3c}#radiation-lab .action:disabled{background:#d9dfd1;border-color:#d9dfd1;color:#78816c;cursor:wait}
 #radiation-status{margin:0;color:#68745c;font-size:.82rem;line-height:1.7;white-space:nowrap}#radiation-status::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#a0ab8f;margin-right:7px}#radiation-lab[data-playing=true] #radiation-status::before{background:#4f7c53}
-#radiation-lab .observation{margin:0 16px;padding:12px 16px;border-radius:12px;background:linear-gradient(110deg,#e1e9cd,#eff0dc);color:#2e5238;font-size:.98rem;font-weight:750;line-height:1.7;text-align:center;min-height:51px;word-break:keep-all;overflow-wrap:anywhere}
-.radiation-key-note{margin:12px 16px 0;text-align:center;color:#3c563c;font-size:.9rem;line-height:1.7}.radiation-short-note{margin:8px 16px 0;text-align:center;color:#78806d;font-size:.75rem;line-height:1.65}
+#radiation-lab .observation{margin:0 16px;padding:12px 16px;border-radius:12px;background:linear-gradient(110deg,#e1e9cd,#eff0dc);color:#2e5238;font-size:.96rem;font-weight:750;line-height:1.7;text-align:center;min-height:51px;word-break:keep-all;overflow-wrap:anywhere}
+.radiation-short-note{margin:9px 16px 0;text-align:center;color:#78806d;font-size:.75rem;line-height:1.65}
 .radiation-explanation{margin:12px 16px 16px;padding-top:10px;border-top:1px solid #e0e5d4;font-size:.81rem;line-height:1.75;color:#5d7057}.radiation-explanation summary{cursor:pointer;color:#4a6245}.radiation-explanation p{margin:10px 0 0}
-.radiation-loading{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;background:#0e2234;color:#f4eed6;text-align:center;font-size:.9rem}.radiation-loading p{margin:0}#radiation-lab .radiation-loading button{min-height:44px;border:1px solid #d8dfcc;border-radius:10px;background:#fffdf0;color:#34523a;padding:8px 16px;font:inherit;cursor:pointer}
+.radiation-loading{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px;background:#0e2234;color:#f4eed6;text-align:center;font-size:.9rem}.radiation-loading p{margin:0}#radiation-lab .radiation-loading button{min-height:44px;border:1px solid #d8dfcc;border-radius:10px;background:#fffdf0;color:#34523a;padding:8px 16px;font:inherit;cursor:pointer}
 #radiation-lab[data-assets=ready] .radiation-loading{display:none}#radiation-lab:not([data-assets=ready]) :is(.radiation-space-svg,.radiation-ground-svg){opacity:0}
-@media(max-width:1100px){.radiation-observations{grid-template-columns:1fr}.radiation-sight-body{padding:14px 16px}.radiation-warming-body{grid-template-columns:.7fr 1.3fr}.radiation-chart{max-width:290px;justify-self:end;width:100%}.radiation-observation-card h3{font-size:1rem}}
-@media(max-width:700px){.radiation-question{margin:12px;padding:10px 12px;font-size:.9rem}.radiation-body-label{font-size:.76rem;padding:2px 8px;top:7%}.radiation-space-title{font-size:.78rem;padding:3px 8px;top:10%;border-radius:9px}.radiation-vacuum-label{font-size:.78rem;bottom:9%}.radiation-spectrum{padding:11px 12px;font-size:.82rem}.radiation-ground-view{margin:8px 12px 12px}.radiation-ground-view figcaption{left:6px;top:5px;font-size:.77rem;padding:3px 8px}.radiation-ground-view figcaption span{display:none}.radiation-ground-label{font-size:.74rem;padding:2px 7px}.radiation-reflection-label{left:68%;top:24%}.radiation-absorption-label{left:54%;top:77%}.radiation-observations{margin:0 12px;gap:10px}.radiation-observation-card h3{font-size:.94rem;padding:8px 12px}.radiation-observation-card p{font-size:.86rem}.radiation-sight-body{gap:12px;padding:13px}.radiation-sight-body svg{flex-basis:42px;width:42px}.radiation-warming-body{padding-inline:12px}.radiation-observation-card .radiation-heat-condition{font-size:13px;padding-top:7px}.radiation-control-row{padding:14px 12px;gap:10px}#radiation-lab .lab-controls{gap:8px}#radiation-lab .lab-controls button{font-size:.87rem;padding:9px 14px;min-width:100px}#radiation-lab .observation{margin-inline:12px;font-size:.89rem;padding:11px 12px}.radiation-key-note{margin-inline:12px;font-size:.83rem}.radiation-short-note{margin-inline:12px;font-size:.72rem}.radiation-explanation{margin-inline:12px;font-size:.8rem}}
-@media(max-width:420px){.radiation-body-label{font-size:.7rem;padding:2px 6px;top:6%}.radiation-sun-label{left:6%}.radiation-space-title{font-size:.69rem;padding:2px 6px}.radiation-vacuum-label{font-size:.68rem;bottom:9%}.radiation-ground-label{font-size:.74rem;padding:1px 5px}.radiation-ground-view figcaption{font-size:.7rem;padding:2px 7px;top:4px}.radiation-reflection-label{top:27%}.radiation-absorption-label{left:53%;top:77%}.radiation-warming-body{grid-template-columns:.65fr 1.35fr;gap:6px}.radiation-observation-card p{font-size:.82rem}.radiation-observation-card .radiation-heat-condition{font-size:13px}#radiation-status{font-size:.76rem}#radiation-lab .lab-controls{width:100%;display:grid;grid-template-columns:1fr 1fr}#radiation-lab .lab-controls button{min-width:0;width:100%}.radiation-control-row{align-items:flex-start;flex-direction:column}.radiation-temperature-axis,.radiation-time-axis{font-size:.69rem}}
-
-@media(max-width:420px){.radiation-warming-body{grid-template-columns:1fr;gap:9px}.radiation-warming-body>p br{display:none}.radiation-chart{max-width:none;justify-self:stretch}}
-
-.radiation-heat-condition span,.radiation-key-note span{display:inline-block}
+@media(max-width:760px){
+ .radiation-local-layout{grid-template-columns:1fr;margin-inline:12px;gap:14px}
+ .radiation-ground-view{min-height:0;height:clamp(188px,52vw,320px)}.radiation-ground-svg{min-height:0}
+ .radiation-warming-body{max-width:420px;width:100%;align-self:center;padding:8px 14px 0}
+ .radiation-observation-card h3{font-size:1rem}.radiation-heat-condition{font-size:15px}
+ .radiation-temperature-anchor{left:50%;top:-5px;transform:translateX(-50%)}
+}
+@media(max-width:600px){
+ .radiation-body-label{font-size:12px;padding:2px 7px;top:6%}.radiation-earth-label{left:90%}
+ .radiation-space-title{font-size:12px;padding:3px 7px;top:10%;border-radius:9px}.radiation-vacuum-label{font-size:12px;bottom:9%}
+ .radiation-earth-site{width:20px;height:20px;font-size:12px}.radiation-ground-site{width:24px;height:24px;font-size:14px}
+ .radiation-spectrum{gap:5px;padding:9px 12px;font-size:13px}.radiation-spectrum .radiation-zoom-caption{font-size:12px;padding:2px 8px}
+ .radiation-ground-view figcaption{left:4%;top:6%;font-size:12.5px;padding:3px 7px}
+ .radiation-eye{right:3%;top:5%;padding:4px;gap:5px}.radiation-eye svg{width:28px;height:22px}.radiation-eye p{font-size:12.5px;line-height:1.4}
+ .radiation-ground-label{font-size:12.5px;padding:2px 7px}.radiation-reflection-label{left:40%;top:36%}.radiation-absorption-label{left:51%;top:82%}
+ .radiation-control-row{padding:14px 12px;gap:10px}#radiation-lab .lab-controls{gap:8px}#radiation-lab .lab-controls button{font-size:.87rem;padding:9px 14px;min-width:100px}
+ #radiation-lab .observation{margin-inline:12px;font-size:.89rem;padding:11px 12px}.radiation-short-note,.radiation-explanation{margin-inline:12px}
+}
+@media(max-width:420px){
+ #radiation-lab .lab-controls{width:100%;display:grid;grid-template-columns:1fr 1fr}#radiation-lab .lab-controls button{min-width:0;width:100%}
+ .radiation-control-row{align-items:flex-start;flex-direction:column}#radiation-status{font-size:.76rem}
+ .radiation-spectrum>span:first-child{padding:0;font-size:13px}
+}

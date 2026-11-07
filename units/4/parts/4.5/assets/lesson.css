@@ -175,7 +175,7 @@ h1 { margin: 6px 0 12px; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.2;
 .mix-beam-emitter{fill:#fff;opacity:.9;filter:url(#mix-beam-soft)}
 
 /* Fourth section: the current material experiment with an inset observation. */
-#s4 .surface-intro{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:16px}
+#s4 .surface-intro{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px}
 #s4 .surface-intro .dialogue{margin:0;padding:10px 12px;font-size:.85rem;line-height:1.75}
 #s4 .lab{margin-top:0}
 #s4 .studio-layout{display:block}

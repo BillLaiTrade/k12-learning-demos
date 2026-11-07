@@ -20,6 +20,25 @@
     $('radiation-heat-point').toggleAttribute('hidden',span===0);
     root.dataset.heatProgress=(span/PLOT_DURATION).toFixed(4);
   }
+  // Green lines annotate the same place at two scales; they are not energy rays.
+  // Resolve the eye and A markers from actual layout so mobile reflow stays linked.
+  function updateLinks(){
+    const ground=$('radiation-ground'),matrix=ground.getScreenCTM();if(!matrix)return;
+    const box=root.getBoundingClientRect(),ox=box.left+root.clientLeft,oy=box.top+root.clientTop;
+    const lines=$('radiation-link-lines');lines.setAttribute('viewBox',`0 0 ${root.clientWidth} ${root.clientHeight}`);
+    const a=ground.createSVGPoint();a.x=420;a.y=350;const surface=a.matrixTransform(matrix);
+    const local=$('radiation-local-view'),localBox=local.getBoundingClientRect();
+    $('radiation-ground-site').style.left=`${surface.x-localBox.left-local.clientLeft}px`;
+    $('radiation-ground-site').style.top=`${surface.y-localBox.top-local.clientTop}px`;
+    const eye=$('radiation-eye-icon').getBoundingClientRect(),target=ground.createSVGPoint();target.x=eye.left+eye.width*.12;target.y=eye.top+eye.height*.58;
+    const eyeEnd=target.matrixTransform(matrix.inverse()),ray=`M420 350L${eyeEnd.x.toFixed(2)} ${eyeEnd.y.toFixed(2)}`;
+    $('radiation-reflection-ray').setAttribute('d',ray);$('radiation-reflection-outline').setAttribute('d',ray);
+    const earth=$('radiation-earth-site').getBoundingClientRect(),anchor=$('radiation-temperature-anchor').getBoundingClientRect();
+    const zoom=`M${(earth.left+earth.width/2-ox).toFixed(2)} ${(earth.top+earth.height/2-oy).toFixed(2)}L${(localBox.left+localBox.width*.94-ox).toFixed(2)} ${(localBox.top-oy).toFixed(2)}`;
+    const temperature=`M${(surface.x-ox).toFixed(2)} ${(surface.y-oy).toFixed(2)}L${(anchor.left+anchor.width/2-ox).toFixed(2)} ${(anchor.top+anchor.height/2-oy).toFixed(2)}`;
+    for(const id of ['radiation-zoom-halo','radiation-zoom-line'])$(id).setAttribute('d',zoom);
+    for(const id of ['radiation-temperature-halo','radiation-temperature-line'])$(id).setAttribute('d',temperature);
+  }
   function render(){
     const status=assetState(),started=playing||time>0,arrived=time>=ARRIVAL,absorbed=time>=ABSORPTION;
     root.dataset.assets=status;root.dataset.playing=String(playing);root.dataset.started=String(started);root.dataset.elapsed=time.toFixed(3);
@@ -34,6 +53,7 @@
     $('radiation-ground-incoming').setAttribute('opacity',arrived?'1':'0');
     $('radiation-ground-incoming').setAttribute('stroke-dashoffset',(-time*30).toFixed(2));
     $('radiation-ground-outcomes').setAttribute('opacity',absorbed?'1':'0');
+    $('radiation-temperature-connection').setAttribute('opacity',absorbed?'1':'0');
     $('radiation-ground-outcomes').setAttribute('stroke-dashoffset',(-time*30).toFixed(2));
     $('radiation-space').setAttribute('aria-label',started?'太陽輻射攜帶能量，穿越近真空的太空傳向地球。':'太陽與地球之間的輻射傳遞示意，尚未開始觀察。');
     drawCurve();$('radiation-discovery').hidden=time<HEATING+PLOT_DURATION;
@@ -57,5 +77,7 @@
   play.addEventListener('click',()=>{if(playing)stop();else start();});source.addEventListener('click',start);
   $('radiation-reset').addEventListener('click',reset);$('radiation-retry').addEventListener('click',()=>loadAssets(true));
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});addEventListener('pagehide',stop);
-  render();loadAssets();
+  const resize=new ResizeObserver(updateLinks);resize.observe(root);resize.observe($('radiation-local-view'));resize.observe($('radiation-eye'));
+  addEventListener('resize',updateLinks);document.fonts?.ready.then(updateLinks);
+  render();loadAssets();updateLinks();
 })();

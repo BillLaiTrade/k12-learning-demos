@@ -2,7 +2,7 @@ import {initialiseFrontMix} from './mix-lab.mjs?v=mix-dialogue-20261106';
 import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-comparison-20261106';
 import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays} from './color-model.mjs?v=science-reviewed-20261106';
 import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs?v=science-reviewed-20261106';
-import {surfaceObservation} from './surface-model.mjs?v=science-reviewed-20261106';
+import {surfaceObservation} from './surface-model.mjs?v=surface-dialogue-20261107';
 import {filterPaperObservation} from './filter-paper-model.mjs?v=science-reviewed-20261106';
 let studioModule=null;
 const text=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};
@@ -10,7 +10,7 @@ const pressed=(root,selector,key)=>root.querySelectorAll(selector).forEach(b=>b.
 function ready(root){root.querySelectorAll('[data-pending]').forEach(e=>e.disabled=false);root.querySelectorAll('[data-rays],[data-view]').forEach(e=>e.disabled=false);root.querySelector('[data-load-note]').hidden=true;root.dataset.ready='true';}
 function condition(root,pairs){const node=root.querySelector('[data-conditions]');node.replaceChildren();for(const[label,value]of pairs){const s=document.createElement('span');s.append(label+'：');const b=document.createElement('strong');b.textContent=value;s.append(b);node.append(s);}}
 function channels(root,groups){
- const row=root.querySelector('[data-channels]');if(!row)return;row.replaceChildren();
+ const row=root.querySelector('[data-channels]');if(!row)return;const slots=[...row.querySelectorAll('[data-channel-slot]')];if(!slots.length)row.replaceChildren();let index=0;
  const surface=root.dataset.lab==='surface'||!!root.querySelector('.path-workspace');
  for(const[label,rgb,description]of groups){
   const cell=document.createElement('div');cell.className='channel-cell';
@@ -27,7 +27,7 @@ function channels(root,groups){
    }else{
     const dot=document.createElement('i');dot.style.setProperty('--channel',color);dot.style.setProperty('--strength',Math.max(.06,rgb[i]));dots.append(dot);
    }
-  });cell.append(name,value,dots);row.append(cell);
+  });cell.append(name,value,dots);if(slots.length)slots[index++].replaceChildren(cell);else row.append(cell);
  }
 }
 function surfaceChannels(root,observation){
@@ -56,13 +56,12 @@ function initialiseLab(root,index){
    if(kind==='surface'){
     root.dataset.incoming=JSON.stringify(signal.incoming);root.dataset.absorbed=JSON.stringify(signal.absorbed);
     condition(root,[['照明',LIGHTS[state.light].name],['物體',MATERIALS[state.material].name],['觀察位置','固定']]);
-    text($('[data-result]'),observation.result);text($('[data-surface-name]'),observation.name);text($('[data-receiver-label]'),observation.preview);
+    text($('[data-surface-observation]'),observation.observation);text($('[data-result]'),observation.result);text($('[data-surface-name]'),observation.name);text($('[data-receiver-label]'),observation.preview);
    }else if(kind==='filter'){
     condition(root,[['光源',LIGHTS[state.light].name],['色片',FILTERS[state.filter].name],['紙張',MATERIALS[state.material].name.replace('色色卡','紙')]]);
     root.dataset.incoming=JSON.stringify(signal.incoming);root.dataset.transmitted=JSON.stringify(signal.transmitted);
     root.dataset.filterAbsorbed=JSON.stringify(signal.filterAbsorbed);root.dataset.paperAbsorbed=JSON.stringify(signal.paperAbsorbed);
     text($('[data-result]'),observation.result);text($('[data-receiver-label]'),observation.preview);
-    text($('[data-comparison-note]'),'先比較通過色片的光，再比較紙張反射後的外觀；改變一項時，另外兩項保持不變。');
    }else{
     condition(root,[['光源','白光固定'],['情境',state.mode==='reflection'?'綠色色卡反射':'綠色色片透射'],['物體到眼睛',state.blocked?'被遮住':'光路暢通']]);
     text($('[data-result]'),state.blocked?'光源與物體沒有改變，但遮光板擋住物體到眼睛的這條光路，因此看不到原本的顏色。':state.mode==='reflection'?'白光照到綠色色卡，反射的光進入眼睛，形成看見綠色的視覺感受。':'白光通過綠色色片，透射的光進入眼睛，形成看見綠色的視覺感受。');
@@ -111,7 +110,7 @@ function initialiseLab(root,index){
 
 function initialiseQuiz(){
  const root=document.querySelector('.duo-quiz');
- import('./duo-quiz.mjs?v=science-reviewed-20261106').then(module=>module.initialiseDuoQuiz(root)).catch(error=>{root.querySelector('[data-duo-load-note]').hidden=false;console.error('4.5 quiz failed',error);});
+ import('./duo-quiz.mjs?v=quiz-no-route-hint-20261107').then(module=>module.initialiseDuoQuiz(root)).catch(error=>{root.querySelector('[data-duo-load-note]').hidden=false;console.error('4.5 quiz failed',error);});
 }
 
 document.querySelectorAll('[data-lab]').forEach((root,i)=>{try{initialiseLab(root,i);}catch(error){root.dataset.ready='false';const hint=root.querySelector('[data-load-note]');if(hint){hint.hidden=false;text(hint,'這個互動暫時無法載入，請重新整理後再試；仍可閱讀對話與說明。');}console.error('4.5 lab failed',error);}});
@@ -123,7 +122,7 @@ nav.forEach((link,i)=>{
  if(!title)return;
  if(link.classList.contains('quiz-nav')){
   const kicker=sections[i].querySelector('.quiz-kicker')?.textContent.trim();
-  link.title=title;if(kicker)link.setAttribute('aria-label',`${kicker}：${title}`);
+  link.title=title;if(kicker)link.setAttribute('aria-label',link.dataset.navLabel||`${kicker}：${title}`);
  }else{const label=link.querySelector('span');if(label)label.textContent=title;}
 });
 function active(id){for(const link of nav){if(link.hash==='#'+id)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');}}

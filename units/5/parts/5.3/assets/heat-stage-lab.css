@@ -58,3 +58,6 @@
 #card-02 .heat-stage-next{margin:14px 0 0;color:#4c6551}
 @container heat-stage-workbench (max-width:640px){#heat-lab .heat-stage-workbench{grid-template-columns:minmax(0,1fr)}#heat-lab .calorie-apparatus-view{max-width:400px;margin-inline:auto}#heat-lab .heat-stage-plot{width:100%;max-width:600px;margin-inline:auto}}
 @media(max-width:600px){#heat-lab{padding:12px}.heat-stage-controls{gap:9px}.heat-stage-controls>span{flex-basis:100%}.heat-stage-readings{display:grid;gap:7px}.heat-stage-readings>span{display:flex;justify-content:space-between;gap:8px}.heat-stage-record-table{font-size:.95rem}.heat-stage-analysis{margin-top:20px;padding:16px}.heat-stage-label-column{width:31%}.heat-stage-analysis-table th,.heat-stage-analysis-table td{padding:10px 4px;font-size:1rem}}
+
+#heat-stage-analysis-heat td[data-verified=true]::after{content:" ✓";font-size:.875rem;color:#315e3d}
+#heat-stage-conclusion td[data-verified=true]{background:#edf4e7}

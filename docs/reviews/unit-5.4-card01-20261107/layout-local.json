@@ -1,0 +1,282 @@
+[
+  {
+    "id": "card-01",
+    "left": 444,
+    "right": 1280,
+    "doc": 1440,
+    "width": 1440,
+    "font": "16px"
+  },
+  {
+    "id": "card-02",
+    "left": 444,
+    "right": 1280,
+    "doc": 1440,
+    "width": 1440,
+    "font": "16px"
+  },
+  {
+    "id": "card-03",
+    "left": 444,
+    "right": 1280,
+    "doc": 1440,
+    "width": 1440,
+    "font": "16px"
+  },
+  {
+    "id": "card-04",
+    "left": 444,
+    "right": 1280,
+    "doc": 1440,
+    "width": 1440,
+    "font": "16px"
+  },
+  {
+    "id": "card-05",
+    "left": 444,
+    "right": 1280,
+    "doc": 1440,
+    "width": 1440,
+    "font": "16px"
+  },
+  {
+    "id": "card-06",
+    "left": 444,
+    "right": 1280,
+    "doc": 1440,
+    "width": 1440,
+    "font": "16px"
+  },
+  {
+    "id": "unit-quiz",
+    "left": 444,
+    "right": 1280,
+    "doc": 1440,
+    "width": 1440,
+    "font": "16px"
+  },
+  {
+    "id": "card-01",
+    "left": 407,
+    "right": 1243,
+    "doc": 1366,
+    "width": 1366,
+    "font": "16px"
+  },
+  {
+    "id": "card-02",
+    "left": 407,
+    "right": 1243,
+    "doc": 1366,
+    "width": 1366,
+    "font": "16px"
+  },
+  {
+    "id": "card-03",
+    "left": 407,
+    "right": 1243,
+    "doc": 1366,
+    "width": 1366,
+    "font": "16px"
+  },
+  {
+    "id": "card-04",
+    "left": 407,
+    "right": 1243,
+    "doc": 1366,
+    "width": 1366,
+    "font": "16px"
+  },
+  {
+    "id": "card-05",
+    "left": 407,
+    "right": 1243,
+    "doc": 1366,
+    "width": 1366,
+    "font": "16px"
+  },
+  {
+    "id": "card-06",
+    "left": 407,
+    "right": 1243,
+    "doc": 1366,
+    "width": 1366,
+    "font": "16px"
+  },
+  {
+    "id": "unit-quiz",
+    "left": 407,
+    "right": 1243,
+    "doc": 1366,
+    "width": 1366,
+    "font": "16px"
+  },
+  {
+    "id": "card-01",
+    "left": 364,
+    "right": 1200,
+    "doc": 1280,
+    "width": 1280,
+    "font": "16px"
+  },
+  {
+    "id": "card-02",
+    "left": 364,
+    "right": 1200,
+    "doc": 1280,
+    "width": 1280,
+    "font": "16px"
+  },
+  {
+    "id": "card-03",
+    "left": 364,
+    "right": 1200,
+    "doc": 1280,
+    "width": 1280,
+    "font": "16px"
+  },
+  {
+    "id": "card-04",
+    "left": 364,
+    "right": 1200,
+    "doc": 1280,
+    "width": 1280,
+    "font": "16px"
+  },
+  {
+    "id": "card-05",
+    "left": 364,
+    "right": 1200,
+    "doc": 1280,
+    "width": 1280,
+    "font": "16px"
+  },
+  {
+    "id": "card-06",
+    "left": 364,
+    "right": 1200,
+    "doc": 1280,
+    "width": 1280,
+    "font": "16px"
+  },
+  {
+    "id": "unit-quiz",
+    "left": 364,
+    "right": 1200,
+    "doc": 1280,
+    "width": 1280,
+    "font": "16px"
+  },
+  {
+    "id": "card-01",
+    "left": 12,
+    "right": 378,
+    "doc": 390,
+    "width": 390,
+    "font": "16px"
+  },
+  {
+    "id": "card-02",
+    "left": 12,
+    "right": 378,
+    "doc": 390,
+    "width": 390,
+    "font": "16px"
+  },
+  {
+    "id": "card-03",
+    "left": 12,
+    "right": 378,
+    "doc": 390,
+    "width": 390,
+    "font": "16px"
+  },
+  {
+    "id": "card-04",
+    "left": 12,
+    "right": 378,
+    "doc": 390,
+    "width": 390,
+    "font": "16px"
+  },
+  {
+    "id": "card-05",
+    "left": 12,
+    "right": 378,
+    "doc": 390,
+    "width": 390,
+    "font": "16px"
+  },
+  {
+    "id": "card-06",
+    "left": 12,
+    "right": 378,
+    "doc": 390,
+    "width": 390,
+    "font": "16px"
+  },
+  {
+    "id": "unit-quiz",
+    "left": 12,
+    "right": 378,
+    "doc": 390,
+    "width": 390,
+    "font": "16px"
+  },
+  {
+    "id": "card-01",
+    "left": 12,
+    "right": 308,
+    "doc": 320,
+    "width": 320,
+    "font": "16px"
+  },
+  {
+    "id": "card-02",
+    "left": 12,
+    "right": 308,
+    "doc": 320,
+    "width": 320,
+    "font": "16px"
+  },
+  {
+    "id": "card-03",
+    "left": 12,
+    "right": 308,
+    "doc": 320,
+    "width": 320,
+    "font": "16px"
+  },
+  {
+    "id": "card-04",
+    "left": 12,
+    "right": 308,
+    "doc": 320,
+    "width": 320,
+    "font": "16px"
+  },
+  {
+    "id": "card-05",
+    "left": 12,
+    "right": 308,
+    "doc": 320,
+    "width": 320,
+    "font": "16px"
+  },
+  {
+    "id": "card-06",
+    "left": 12,
+    "right": 308,
+    "doc": 320,
+    "width": 320,
+    "font": "16px"
+  },
+  {
+    "id": "unit-quiz",
+    "left": 12,
+    "right": 308,
+    "doc": 320,
+    "width": 320,
+    "font": "16px"
+  }
+]

@@ -36,7 +36,7 @@ function draw({elapsed,state}) {
   cart.dataset.state = state;
   trail.setAttribute('d', samples.filter((_, i) => i <= index && (i % 8 === 0 || i === index)).map((q, i) => `${i ? 'L' : 'M'}${q.x} ${q.y}`).join(''));
   const text = details.hasAttribute('data-compact-cart')
-    ?p.rightY>=boundary?'兩輪已變慢，沿新方向前進。':p.leftY>=boundary?'左輪先進入、先變慢，開始轉向。':'兩輪等速，斜向前進。'
+    ?p.rightY>=boundary?(accelerating?'兩輪已加速，沿新方向前進。':'兩輪已變慢，沿新方向前進。'):p.leftY>=boundary?(accelerating?'左輪先進入、先加速，開始轉向。':'左輪先進入、先變慢，開始轉向。'):'兩輪等速，斜向前進。'
     :p.rightY >= boundary
     ? accelerating ? '兩輪都已加速，沿新方向前進，更遠離法線。' : '兩輪都已變慢，沿新方向前進，更靠近法線。'
     : p.leftY >= boundary ? accelerating ? '左輪先進入、先加速；右輪仍較慢，小車開始轉向。' : '左輪先進入、先變慢；右輪仍較快，小車開始轉向。'
@@ -45,17 +45,7 @@ function draw({elapsed,state}) {
 }
 mountCartPlayback({details,button,scene:details.querySelector('.oblique-cart-scene'),cart,duration:end,draw});
 
-// Material names follow the fourth experiment; the cart remains a qualitative analogy.
-if (accelerating) {
-  const selector = document.querySelector('#exit-medium-toggle');
-  function updateMedium() {
-    const name = selector.dataset.current === 'glass' ? '玻璃' : '水';
-    document.querySelector('#exit-cart-medium-label').textContent = `${name}（光速較慢）`;
-    details.querySelector('[data-cart-medium]').textContent = name;
-  }
-  new MutationObserver(updateMedium).observe(selector, { attributes: true, attributeFilter: ['data-current'] });
-  updateMedium();
-}
+
 }
 initCart('oblique');
 initCart('exit', { initialAngle: 30, upperSpeed: 70, lowerSpeed: 100, finishY: 245 });

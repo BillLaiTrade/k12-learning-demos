@@ -1,11 +1,11 @@
-import {ROOM,GOAL,SPEED,createBath,advanceBath,geometry,positionBottle,useCup} from './water-bath-model.mjs?v=bath-2';
+import {ROOM,GOAL,SPEED,createBath,advanceBath,geometry,positionBottle,useCup} from './water-bath-model.mjs?v=cozy-6';
 
 const root=document.getElementById('water-bath');
 if(root){
   const $=id=>document.getElementById(id),stage=$('bath-stage'),bottle=$('bath-bottle');
   const play=$('bath-play'),check=$('bath-check'),tools=[...root.querySelectorAll('[data-bath-tool]')];
   const names={bench:'桌面',bowl:'水盆',bottle:'飲料瓶',wrap:'保溫套',mat:'隔熱墊',sleeve:'瓶套',jug:'量杯','bottle-sleeved':'已穿上瓶套的飲料瓶'};
-  const assets=Object.fromEntries(Object.keys(names).map(key=>[key,{src:`assets/bath-${key}.webp?v=bath-2`,status:'idle',request:0}]));
+  const assets=Object.fromEntries(Object.keys(names).map(key=>[key,{src:`assets/bath-${key}.webp?v=${key==='wrap'?'cozy-6':'bath-2'}`,status:'idle',request:0}]));
   let state=createBath(),playing=false,frame=0,previous=null,history=[[0,50,20]],lastSample=0,sampleEvery=3,events=[],drag=null,ghost=null,suppressClick={node:null,until:0};
   let anchors={bath:{x:275,y:177},drink:{x:825,y:177}};
   const text=(id,value)=>{const node=$(id);if(node.textContent!==value)node.textContent=value;};
@@ -48,14 +48,17 @@ if(root){
     const a=anchors.drink;
     $('bath-probe-drink-wire').setAttribute('d',`M${a.x} ${a.y}C${a.x} ${a.y+50} ${state.x} ${state.bottom-460} ${state.x} ${state.bottom-368}`);
     const w=anchors.bath;$('bath-probe-water-wire').setAttribute('d',`M${w.x} ${w.y}C${w.x} ${w.y+50} 355 275 362 330`);
-    $('bath-probe-water').setAttribute('d',`M362 330L368 ${Math.max(g.surface+55,540)}`);
-    const rx=326-Math.max(0,g.surface-425)*.04,y=g.surface;
-    const volume=`M${550-rx} ${y}A${rx} 43 0 0 1 ${550+rx} ${y}L860 577Q550 620 240 577Z`;
+    // Follow the inner bowl taper, keeping the waterline inside the glass.
+    const rx=310-Math.max(0,g.surface-425)*.25,y=g.surface;
+    const volume=`M${550-rx} ${y}A${rx} 43 0 0 1 ${550+rx} ${y}L808 558Q550 614 292 558Z`;
     for(const id of ['bath-water-body','bath-water-front'])attr(id,'d',volume);
     attr('bath-water-surface','cy',y.toFixed(2));attr('bath-water-surface','rx',rx.toFixed(2));
-    const wet=g.immersion>0;$('bath-water-meniscus').toggleAttribute('hidden',!wet);
+    const bowlImage=assets[state.wrap?'wrap':'bowl'];
+    if(bowlImage.status==='ready')for(const id of ['bath-bowl-back-photo','bath-bowl-front-photo'])attr(id,'href',bowlImage.url);
+    $('bath-water-front').toggleAttribute('hidden',state.wrap);
+    const wet=g.immersion>0&&!state.wrap;$('bath-water-meniscus').toggleAttribute('hidden',!wet);
     const radius=state.sleeve?70:62;attr('bath-water-meniscus','d',`M${state.x-radius} ${y}Q${state.x} ${y+12} ${state.x+radius} ${y}`);
-    $('bath-wrap-object').toggleAttribute('hidden',!state.wrap);$('bath-wrap-back-photo').toggleAttribute('hidden',!state.wrap);$('bath-mat-photo').toggleAttribute('hidden',!state.mat);$('bath-sleeve-photo').toggleAttribute('hidden',!state.sleeve);
+    $('bath-wrap-object').toggleAttribute('hidden',!state.wrap);$('bath-mat-photo').toggleAttribute('hidden',!state.mat);$('bath-sleeve-photo').toggleAttribute('hidden',!state.sleeve);
     for(const button of tools)if(button.dataset.bathTool!=='jug')button.setAttribute('aria-pressed',String(state[button.dataset.bathTool]));
     const cup=$('bath-cup-object');cup.toggleAttribute('hidden',!root.dataset.cupUsed);cup.setAttribute('transform',`translate(${state.cupX} ${state.cupY})`);
     const cupLevel=-12-state.cupWater*.9;
@@ -83,7 +86,7 @@ if(root){
       presentCup();return;
     }else{
       state[key]=on===undefined?!state[key]:on;
-      const descriptions={wrap:['包覆水盆外側','取下水盆保溫套'],mat:['放置隔熱墊','收回隔熱墊'],sleeve:['飲料瓶套上瓶套','取下瓶套']};const message=descriptions[key][state[key]?0:1];record(message);hint(`${message}，看看讀值怎麼變。`);
+      const descriptions={wrap:['包覆水盆外側','取下水盆保溫套'],mat:['放置隔熱墊','收回隔熱墊'],sleeve:['飲料瓶套上瓶套','取下瓶套']};const message=descriptions[key][state[key]?0:1];record(message);hint(key==='wrap'&&state.wrap?'布套已包住盆壁；抓住瓶蓋可移動，取下布套可看水位。':`${message}，看看讀值怎麼變。`);
     }render();
   }
   function presentCup(forceShow=false){
@@ -181,7 +184,7 @@ if(root){
   help.addEventListener('close',()=>$('bath-help-open').focus({preventScroll:true}));
   document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelDrag();stop();}});addEventListener('pagehide',()=>{cancelDrag();stop();});
   function assignImages(){
-    const mapping={bench:['bath-bench-photo'],bowl:['bath-bowl-back-photo','bath-bowl-front-photo'],bottle:['bath-bottle-photo'],wrap:['bath-wrap-photo','bath-wrap-back-photo'],mat:['bath-mat-photo'],sleeve:[],'bottle-sleeved':['bath-sleeve-photo'],jug:['bath-jug-photo']};
+    const mapping={bench:['bath-bench-photo'],bowl:[],bottle:['bath-bottle-photo'],wrap:[],mat:['bath-mat-photo'],sleeve:[],'bottle-sleeved':['bath-sleeve-photo'],jug:['bath-jug-photo']};
     for(const [key,ids]of Object.entries(mapping))if(assets[key].status==='ready'){
       for(const id of ids){const node=$(id),prop=node instanceof SVGElement?'href':'src';if(node.getAttribute(prop)!==assets[key].url)node.setAttribute(prop,assets[key].url);}
       root.querySelectorAll(`[data-bath-thumbnail="${key}"]`).forEach(node=>{if(node.getAttribute('src')!==assets[key].url)node.src=assets[key].url;});

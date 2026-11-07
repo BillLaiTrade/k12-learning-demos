@@ -1,5 +1,7 @@
-import {HEAT,heating,ballDiameter,ballPasses,PHASES,waterVolume,waterDensity,gasVolume,thermometer,REACTIONS,QUIZ,grade} from './thermal-model.mjs';
-import {heatScene,heatChart,phaseScene,solidScene,bottleScene,gasScene,waterException,chemicalScene} from './thermal-art.mjs';
+import {heating,ballDiameter,ballPasses,PHASES,waterVolume,waterDensity,gasVolume,thermometer,REACTIONS,QUIZ,grade} from './thermal-model.mjs';
+import {solidScene,bottleScene,gasScene,waterException,chemicalScene} from './thermal-art.mjs';
+import {HEATING_STEPS,heatingStep,observedHeatChart,observedHeatScene,heatObservation} from './heating-observation.mjs?v=calories-20261107';
+import {COMPARISON,phaseComparison,comparisonScene,extensionScene} from './phase-comparison.mjs?v=finite-baths-20261107';
 const $=id=>document.getElementById(id),write=(id,s)=>$(id).textContent=s;
 const pressed=(selector,value,key)=>document.querySelectorAll(selector).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset[key]===String(value))));
 // Each animated experiment owns its state. Interruptions preserve data but never auto-resume.
@@ -9,16 +11,73 @@ function run(id,duration,step,end){
  stop(id);const start=performance.now();const a={frame:0,end};animations.set(id,a);
  const frame=now=>{if(!animations.has(id))return;const p=Math.min(1,(now-start)/duration);step(p);if(p<1)a.frame=requestAnimationFrame(frame);else{animations.delete(id);end(true);}};a.frame=requestAnimationFrame(frame);
 }
-let energy=0;
-function renderHeat(){const s=heating(energy);$('heat-scene').innerHTML=heatScene(energy,animations.has('heat-lab'));$('heat-chart').innerHTML=heatChart(energy);write('heat-temp',s.temperature===null?'—':s.temperature.toFixed(1)+'°C');write('heat-ice',s.ice.toFixed(1)+' g');write('heat-water',s.water.toFixed(1)+' g');$('heat-seek').value=energy/HEAT.total*100;write('heat-progress',Math.round(energy/HEAT.total*100)+'%');$('heat-lab').dataset.phase=s.phase;
- write('heat-note',s.phase==='融冰中'?'冰水共存：吸收的能量用於融化，讀值約保持0°C。':s.phase==='液態水升溫'?'冰已融完，繼續吸熱時液態水溫度升高。':s.phase==='沸騰中'?'正在沸騰：液態水逐漸汽化，仍吸熱，溫度約保持100°C。':'液態水已全部汽化，加熱停止；不再顯示不存在的水溫。');
- write('heat-play',animations.has('heat-lab')?'停止加熱':energy>=HEAT.total?'已完成':energy>0?'繼續加熱':'開始加熱');$('heat-play').disabled=energy>=HEAT.total;
+let energy=0,heatApparatus=null;
+function renderHeat(){
+ const state=heating(energy),playing=animations.has('heat-lab'),step=heatingStep(energy),complete=energy>=HEATING_STEPS[2].end;
+ const observation=heatObservation(energy,playing);
+ $('heat-fallback').innerHTML=observedHeatScene(energy,playing);
+ $('heat-reference').hidden=energy<HEATING_STEPS[1].end;
+ if(heatApparatus)heatApparatus.update(state,playing,energy);
+ $('heat-chart').innerHTML=observedHeatChart(energy);
+ write('heat-energy',Math.round(energy/4.18).toLocaleString('en-US')+' cal');$('heat-transfer').hidden=!playing;
+ write('heat-temp',state.temperature.toFixed(1)+'°C');
+ $('heat-scene').setAttribute('aria-label',`冰水加熱器材；樣品溫度${state.temperature.toFixed(1)}攝氏度；${observation.caption}`);
+ Object.assign($('heat-lab').dataset,{phase:energy===0?'準備觀察':state.phase,energy:String(energy),playing:String(playing),complete:String(complete)});
+ for(let i=0;i<3;i++){
+  const el=$('heat-step-'+i),done=energy>=HEATING_STEPS[i].end;
+  el.dataset.done=String(done);if(i===step&&!complete)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current');
+  const start=i?HEATING_STEPS[i-1].end:0;
+  el.querySelector('small').textContent=done?'已完成':i===step?(playing?'觀察中':energy===start?(i?'待開始':'待觀察'):'已暫停'):'尚未觀察';
+  el.querySelector('.heat-step-number').textContent=done?'✓':String(i+1);
+ }
+ write('heat-caption',observation.caption);
+ if($('heat-note').textContent!==observation.note)write('heat-note',observation.note);
+ $('heat-discovery').hidden=!observation.discovery;write('heat-discovery-text',observation.discovery);
+ $('heat-play').querySelector('[aria-hidden]').textContent=playing?'Ⅱ':'▶';
+ write('heat-play-label',playing?'暫停加熱':complete?'觀察完成':energy>0?'繼續加熱':'開始加熱');$('heat-play').disabled=complete;
 }
-$('heat-play').onclick=()=>{if(animations.has('heat-lab')){stop('heat-lab');return;}const initial=energy;run('heat-lab',(HEAT.total-energy)/9000*1000,p=>{energy=initial+(HEAT.total-initial)*p;renderHeat();},renderHeat);renderHeat();};
-$('heat-seek').oninput=e=>{stop('heat-lab');energy=Number(e.target.value)/100*HEAT.total;renderHeat();};
-$('heat-reset').onclick=()=>{stop('heat-lab');energy=0;renderHeat();write('heat-note','尚未供熱。冰與水共存，溫度約0°C。');};
-let mode='melt',phaseProgress=0;
-function renderPhase(){const s=PHASES[mode];$('phase-scene').innerHTML=phaseScene(mode,phaseProgress);write('phase-sample',s.sample);write('phase-condition',s.environment);write('phase-before',s.before);write('phase-after',s.after);write('phase-temp',s.temperature);pressed('[data-phase]',mode,'phase');write('phase-play',animations.has('phase-lab')?'停止觀察':phaseProgress>=1?'再次觀察':phaseProgress>0?'繼續觀察':'開始觀察');write('phase-note',phaseProgress>0?s.explanation:'準備觀察'+s.name+'；先認清研究對象，再看能量方向。');$('phase-lab').dataset.mode=mode;}
+$('heat-play').onclick=()=>{
+ if(animations.has('heat-lab')){stop('heat-lab');return;}
+ const initial=energy,index=heatingStep(energy),target=HEATING_STEPS[index],start=index?HEATING_STEPS[index-1].end:0;
+ if(initial>=HEATING_STEPS[2].end)return;
+ run('heat-lab',target.duration*(target.end-initial)/(target.end-start),p=>{energy=p===1?target.end:initial+(target.end-initial)*p;renderHeat();},renderHeat);renderHeat();
+};
+$('heat-reset').onclick=()=>{stop('heat-lab');energy=0;renderHeat();};
+// Photo textures and dynamic state are optional; image failure preserves SVG.
+import('./photo-apparatus.mjs?v=photo-bench-20261107').then(({createPhotoHeating})=>{try{heatApparatus=createPhotoHeating($('heat-scene'));renderHeat();}catch{ $('heat-scene').classList.remove('has-photo'); }}).catch(()=>{});
+let comparisonProgress=0,comparisonRevealed=false;
+const comparisonApparatus={};
+function renderComparison(){
+ const states=phaseComparison(comparisonProgress),playing=animations.has('comparison-lab');
+ Object.assign($('comparison-lab').dataset,{progress:String(comparisonProgress),playing:String(playing),revealed:String(comparisonRevealed)});
+ for(const key of ['warm','cold']){
+  const state=states[key];$('comparison-'+key+'-fallback').innerHTML=comparisonScene(key,state,comparisonRevealed);
+  if(comparisonApparatus[key])comparisonApparatus[key].update(state);
+  write('comparison-'+key+'-bath',state.bathTemperature.toFixed(1)+'°C');
+  $('comparison-'+key+'-ice').style.width=state.ice+'%';
+  $('comparison-'+key+'-ice').parentElement.setAttribute('role','img');$('comparison-'+key+'-ice').parentElement.setAttribute('aria-label',`起初冰量50g，目前約${state.ice.toFixed(1)}g；長條同尺度示意`);
+  write('comparison-'+key+'-caption',comparisonProgress===0?'冰、水共存，準備觀察':key==='warm'?'冰量減少，暖水降溫':'冰量增加，鹽水升溫');
+  $('comparison-'+key+'-scene').setAttribute('aria-label',`杯內冰水約0攝氏度，${key==='warm'?'暖水浴':'預冷鹽水'}目前${state.bathTemperature.toFixed(1)}攝氏度`);
+  $('comparison-'+key+'-arrow').hidden=!comparisonRevealed;$('comparison-'+key+'-direction').hidden=!comparisonRevealed;
+ }
+ $('comparison-explanation').hidden=!comparisonRevealed;$('comparison-reveal').setAttribute('aria-expanded',String(comparisonRevealed));$('comparison-reveal').disabled=playing||comparisonProgress===0;
+ write('comparison-reveal',comparisonRevealed?'收起熱傳方向':'顯示熱傳方向');
+ $('comparison-play').querySelector('[aria-hidden]').textContent=playing?'Ⅱ':'▶';
+ write('comparison-play-label',playing?'暫停比較':comparisonProgress>=1?'再次比較':comparisonProgress>0?'繼續比較':'開始比較');
+ const note=playing?'比較冰量與兩處溫度，也可以隨時暫停觀察。':comparisonProgress===0?'先觀察冰量與杯內外溫度；暫停或看完比較後，可顯示熱傳方向。':comparisonProgress>=1?'比較已完成。可按「顯示熱傳方向」，對照觀察結果與解釋。':'比較已暫停。可顯示熱傳方向，或繼續觀察。';
+ if($('comparison-note').textContent!==note)write('comparison-note',note);
+}
+$('comparison-play').onclick=()=>{
+ if(animations.has('comparison-lab')){stop('comparison-lab');return;}
+ if(comparisonProgress>=1)comparisonProgress=0;
+ comparisonRevealed=false;const initial=comparisonProgress;
+ run('comparison-lab',COMPARISON.duration*(1-initial),p=>{comparisonProgress=initial+(1-initial)*p;renderComparison();},renderComparison);renderComparison();
+};
+$('comparison-reset').onclick=()=>{stop('comparison-lab');comparisonProgress=0;comparisonRevealed=false;renderComparison();};
+$('comparison-reveal').onclick=()=>{if(comparisonProgress===0||animations.has('comparison-lab'))return;comparisonRevealed=!comparisonRevealed;renderComparison();};
+import('./photo-apparatus.mjs?v=photo-bench-20261107').then(({createPhotoBath})=>{for(const key of ['warm','cold'])try{comparisonApparatus[key]=createPhotoBath($('comparison-'+key+'-scene'),key);}catch{ $('comparison-'+key+'-scene').classList.remove('has-photo'); }renderComparison();}).catch(()=>{});
+let mode='evaporate',phaseProgress=0;
+function renderPhase(){const s=PHASES[mode];$('phase-scene').innerHTML=extensionScene(mode,phaseProgress);write('phase-sample',s.sample);write('phase-condition',s.environment);write('phase-before',s.before);write('phase-after',s.after);write('phase-temp',s.temperature);pressed('[data-phase]',mode,'phase');write('phase-play',animations.has('phase-lab')?'停止觀察':phaseProgress>=1?'再次觀察':phaseProgress>0?'繼續觀察':'開始觀察');write('phase-note',phaseProgress>0?s.explanation:'準備觀察'+s.name+'；先認清研究對象，再看能量方向。');$('phase-lab').dataset.mode=mode;}
 for(const b of document.querySelectorAll('[data-phase]'))b.onclick=()=>{stop('phase-lab');mode=b.dataset.phase;phaseProgress=0;renderPhase();};
 $('phase-play').onclick=()=>{if(animations.has('phase-lab')){stop('phase-lab');return;}if(phaseProgress>=1)phaseProgress=0;const initial=phaseProgress;run('phase-lab',5000*(1-initial),p=>{phaseProgress=initial+(1-initial)*p;renderPhase();},renderPhase);renderPhase();};
 $('phase-reset').onclick=()=>{stop('phase-lab');phaseProgress=0;renderPhase();};
@@ -62,4 +121,4 @@ const visibility=new IntersectionObserver(entries=>{for(const e of entries)if(!e
 let scrollFrame=0;const updateRoute=()=>{let current=navLinks[0];for(const a of navLinks)if(document.querySelector(a.hash).getBoundingClientRect().top<innerHeight*.45)current=a;for(const a of navLinks){if(a===current)a.setAttribute('aria-current','step');else a.removeAttribute('aria-current');}scrollFrame=0;};addEventListener('scroll',()=>{if(!scrollFrame)scrollFrame=requestAnimationFrame(updateRoute);},{passive:true});
 const stopAll=()=>{for(const id of [...animations.keys()])stop(id);};document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAll();});addEventListener('pagehide',stopAll);
 for(const el of document.querySelectorAll('[data-control]'))el.disabled=false;
-renderHeat();renderPhase();renderSolid();renderExpand();renderThermo();renderChem();renderQuiz();updateRoute();$('loading-note').hidden=true;
+renderHeat();renderComparison();renderPhase();renderSolid();renderExpand();renderThermo();renderChem();renderQuiz();updateRoute();$('loading-note').hidden=true;

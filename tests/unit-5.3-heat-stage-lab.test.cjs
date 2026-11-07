@@ -22,10 +22,10 @@ test('5.3第二區：自由熱量、連續亮點、橫向數據與白話規律',
     assert.equal(await p.locator('#heat-stage-points circle').count(),0);assert.equal(await p.locator('#heat-stage-live').isVisible(),true);
     assert.equal(await root.locator('.calorie-photo-label').count(),0);assert.match(await p.locator('.heat-stage-controls>span').textContent(),/水量100 g/);
     const line=await p.locator('#heat-stage-graph').evaluate(lineGeometry);readyPath=line.path;assert.ok(line.screenRun>100);assert.ok(Math.abs(line.screenRun-line.screenRise)<1);assert.ok(Math.abs(line.cx-line.left)<1e-5);assert.ok(Math.abs(line.cy-line.bottom)<1e-5);
-    assert.equal(await p.locator('#heat-stage-conclusion').isVisible(),true);assert.match(await p.locator('#heat-stage-conclusion').textContent(),/吸熱量變幾倍.*升高的度數也變幾倍.*成正比/s);assert.doesNotMatch(await p.locator('#card-02').textContent(),/ΔT|∝|\bQ\b|寫成公式/);assert.deepEqual(await p.locator('.heat-stage-axis-title').allTextContents(),['升高的度數（°C）','水吸收的熱量（cal）']);
+    assert.equal(await p.locator('#heat-stage-conclusion').isVisible(),true);assert.match(await p.locator('#heat-stage-conclusion').textContent(),/吸收的熱量變成原來的 n 倍.*升高的度數也變成原來的 n 倍.*成正比/s);assert.doesNotMatch(await p.locator('#card-02').textContent(),/ΔT|∝|\bQ\b|寫成公式/);assert.deepEqual(await p.locator('.heat-stage-axis-title').allTextContents(),['升高的度數（°C）','水吸收的熱量（cal）']);
     assert.deepEqual(await p.locator('#heat-stage-analysis-heat td').allTextContents(),['100 cal','200 cal','300 cal']);
     assert.deepEqual(await p.locator('#heat-stage-analysis-rise td').allTextContents(),['1°C','2°C','3°C']);
-    assert.match(await p.locator('#heat-stage-analysis-mode').textContent(),/非本次觀察/);
+    assert.match(await p.locator('#heat-stage-analysis-mode').textContent(),/依目前設定/);
     assert.equal(await p.locator('[data-heat-stage]').count(),0);assert.equal(await root.locator('input[type=range]').count(),0);assert.equal(await root.getByRole('button',{name:'暫停',exact:true}).count(),0);
     const order=await p.evaluate(()=>document.querySelector('#heat-lab').compareDocumentPosition(document.querySelector('#heat-stage-conclusion')));assert.ok(order&4);
     await p.clock.runFor(10000);assert.equal(await root.getAttribute('data-water-calories'),'0');
@@ -34,9 +34,9 @@ test('5.3第二區：自由熱量、連續亮點、橫向數據與白話規律',
   await t.test('完整直線始終不變，亮點連續沿線前進；LCD／讀值／座標同源，十點後到目標停熱',async()=>{
     await p.locator('#heat-stage-heater').press('Enter');await p.clock.runFor(200);
     const a=await state(),x1=Number(await p.locator('#heat-stage-live').getAttribute('cx'));assert.ok(Number(a.waterCalories)>0&&Number(a.waterCalories)<100);assert.deepEqual(await actualPoints(),[]);
-    assert.deepEqual(await p.locator('#heat-stage-analysis-heat td').allTextContents(),['待記錄','待記錄','待記錄']);
-    assert.deepEqual(await p.locator('#heat-stage-analysis-rise td').allTextContents(),['—','—','—']);
-    assert.match(await p.locator('#heat-stage-analysis-mode').textContent(),/本次觀察・沿途前三筆/);
+    assert.deepEqual(await p.locator('#heat-stage-analysis-heat td').allTextContents(),['100 cal','200 cal','300 cal']);
+    assert.deepEqual(await p.locator('#heat-stage-analysis-rise td').allTextContents(),['1°C','2°C','3°C']);
+    assert.match(await p.locator('#heat-stage-analysis-mode').textContent(),/依目前設定/);
     await p.clock.runFor(120);const b=await state(),x2=Number(await p.locator('#heat-stage-live').getAttribute('cx'));assert.ok(x2>x1);assert.ok(Number(b.waterCalories)<100);assert.deepEqual(await actualPoints(),[]);
     assert.equal(await p.locator('#heat-stage-energy').textContent(),'0');assert.equal(await p.locator('#heat-stage-meter').textContent(),'20.0');
     await p.clock.runFor(180);assert.ok(Number(await p.locator('#heat-stage-energy').textContent())>0);assert.doesNotMatch(await p.locator('#heat-stage-energy').textContent(),/\./);
@@ -53,14 +53,14 @@ test('5.3第二區：自由熱量、連續亮點、橫向數據與白話規律',
     assert.equal(position.path,readyPath);assert.ok(position.cx<position.right);assert.ok(position.cy>position.top);assert.ok((await actualPoints()).every(point=>point<=q+1e-7));
     assert.equal(await p.locator('#heat-stage-points circle.is-example').count(),0);assert.equal(await p.locator('#heat-stage-conclusion').isVisible(),true);
     await finish(1000);const points=await actualPoints();assert.equal(points.length,10);points.forEach((point,i)=>assert.ok(Math.abs(point-(i+1)*100)<1e-7));
-    assert.equal(await p.locator('#heat-stage-meter').textContent(),'30.0');assert.equal(await p.locator('#heat-stage-energy').textContent(),'1,000');assert.equal(await p.locator('#heat-stage-rise').textContent(),'10.0');
+    assert.equal(await p.locator('#heat-stage-conclusion td[data-verified=true]').count(),6);assert.equal(await p.locator('#heat-stage-meter').textContent(),'30.0');assert.equal(await p.locator('#heat-stage-energy').textContent(),'1,000');assert.equal(await p.locator('#heat-stage-rise').textContent(),'10.0');
     assert.equal(await p.locator('#heat-stage-line').getAttribute('d'),readyPath);
     const end=await state();await p.clock.runFor(5000);assert.deepEqual(await state(),end);
   });
 
   await t.test('任意750／1500／750.5及邊界熱量從20°C重做，小數終點與座標尺度正確',async()=>{
     for(const q of [2000,750,1500,750.5,100,3000]){
-      await input.fill(String(q));assert.equal(await root.getAttribute('data-phase'),'ready');assert.equal(await p.locator('#heat-stage-meter').textContent(),'20.0');assert.equal(await root.getAttribute('data-records'),'0');
+      await input.fill(String(q));assert.equal(await p.locator('#heat-stage-conclusion td[data-verified=true]').count(),0);assert.equal(await root.getAttribute('data-phase'),'ready');assert.equal(await p.locator('#heat-stage-meter').textContent(),'20.0');assert.equal(await root.getAttribute('data-records'),'0');
       assert.equal(await p.locator('#heat-stage-conclusion').isVisible(),true);assert.equal(await p.locator('#heat-stage-graph').getAttribute('data-mode'),'example');
       const fullLine=await p.locator('#heat-stage-line').getAttribute('d'),axisLabels=await p.locator('.heat-stage-grid text').allTextContents();
       assert.equal(Number(await p.locator('#heat-stage-graph').getAttribute('data-maximum')),q);assert.ok(axisLabels.includes(q.toLocaleString('zh-TW',{maximumFractionDigits:4})));assert.ok(axisLabels.includes((q/100).toLocaleString('zh-TW',{maximumFractionDigits:4})));

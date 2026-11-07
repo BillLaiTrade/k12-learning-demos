@@ -1,0 +1,36 @@
+▶ 5.2 convection: fluid movement, mode changes and observation lifecycle
+  ✔ starts with a real distinction between water and a room, without a premature conclusion (51.070003ms)
+  ✔ both sides rise near the source, move continuously and use the same relative-warmth key (9642.975764ms)
+  ✔ rendered arrow travel accelerates from weak flow and settles instead of accelerating indefinitely (94134.093639ms)
+  ✔ photographic scenes keep animated arrows in the fluid and not inside the heater (43.160052ms)
+  ✔ pause freezes actual rendered positions and screenshots; resume preserves progress (760.285031ms)
+  ✔ switching the fluid cancels old animation, clears the discovery and resets observations (474.539743ms)
+  ✔ clicking each appliance starts or resumes without toggling off or multiplying animation loops (2560.284295ms)
+  ✔ keyboard, rapid actions and background interruptions leave no delayed restart (321.922199ms)
+  ✔ radiation, insulation and the integrated quiz still work independently (1395.662036ms)
+  ✔ all supported viewports keep explanatory text, controls and the actual fluid scene readable (479.755071ms)
+  ✔ a failed image can be retried, and a late response cannot reset a different running mode (1416.723064ms)
+  ✖ real frames keep moving with both motion preferences and touch can pause/reset (7804.337171ms)
+✖ 5.2 convection: fluid movement, mode changes and observation lifecycle (120112.735242ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 11
+ℹ fail 1
+ℹ cancelled 1
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 120478.123657
+
+✖ failing tests:
+
+test at tests/unit-5.2-convection.test.cjs:142:10
+✖ real frames keep moving with both motion preferences and touch can pause/reset (7804.337171ms)
+  page.waitForTimeout: Target page, context or browser has been closed
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-convection.test.cjs:146:132)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-convection.test.cjs:142:2) {
+    log: []
+  }
+
+test at tests/unit-5.2-convection.test.cjs:4:1
+✖ 5.2 convection: fluid movement, mode changes and observation lifecycle (120112.735242ms)
+  'test timed out after 120000ms'

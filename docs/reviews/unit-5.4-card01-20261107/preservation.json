@@ -1,0 +1,8 @@
+{
+  "outside_first_section_identical_except_asset_cache_keys": true,
+  "sections_02_to_06_quiz_and_navigation_js_identical": true,
+  "existing_css_preserved_new_rules_scoped_to_heat_workspace": true,
+  "core_energy_model_unchanged": true,
+  "local_test_summary": "24 passed (9 model checks + 14 browser subtests + parent)",
+  "layout_records": 35
+}
