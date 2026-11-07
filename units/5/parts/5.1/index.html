@@ -50,7 +50,7 @@
     @media(max-width:640px){.shell{width:min(100% - 24px,620px)}.hero{grid-template-columns:1fr;padding:32px 0 25px}.lesson{padding-top:20px}.lesson-card{grid-template-columns:1fr;padding:18px;gap:14px}.card-side{display:grid;grid-template-columns:32px 1fr;align-items:baseline;gap:0 7px;border:0;border-bottom:1px solid var(--line);padding:0 0 10px}.card-side h3{margin:0;font-size:.95rem}.card-role{grid-column:2;font-size:.79rem}.card-number{grid-row:1/3}.visual{padding:8px}.quiz-head{padding:18px}.quiz-body{padding:19px 17px 22px}.quiz-actions{align-items:stretch;flex-direction:column}.thermo-wrap{grid-template-columns:1fr}.thermo-svg{max-height:340px}.range-row{align-items:center;flex-direction:row}.sequence-step{grid-template-columns:22px minmax(0,1fr)}.sequence-controls{grid-column:2}.range-row input{width:100%}}
     @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
   </style>
-  <link rel="stylesheet" href="assets/thermometer-quiz.css?v=shared-quiz-heading-6">
+  <link rel="stylesheet" href="assets/thermometer-quiz.css?v=empty-lens-20261107">
   <link rel="stylesheet" href="assets/measurement-scene.css?v=observation-only-4">
   <link rel="stylesheet" href="assets/touch-story.css">
   <link rel="stylesheet" href="assets/water-lab.css?v=heater-status-3">
@@ -383,10 +383,19 @@
               <div class="tq-console">
                 <h3 id="tq-lens-title">刻度放大</h3>
                 <div class="tq-lens-wrap">
-                  <div id="tq-lens-empty" class="tq-lens-empty"><svg viewBox="0 0 90 90" aria-hidden="true"><circle cx="37" cy="37" r="26"/><path d="m56 56 23 23M37 21v23m0 0a7 7 0 1 0 .1 0"/></svg><p>放入溫度計後，顯示這支的刻度</p></div>
+                  <div id="tq-lens-empty" class="tq-lens-empty">
+                    <svg viewBox="0 0 120 120" aria-hidden="true">
+                      <defs><linearGradient id="tq-empty-glass"><stop stop-color="#c4d9d2"/><stop offset=".2" stop-color="#f5fbf7"/><stop offset=".75" stop-color="#e5f1eb"/><stop offset="1" stop-color="#b9d1c8"/></linearGradient></defs>
+                      <rect x="21" y="7" width="78" height="106" rx="8" fill="url(#tq-empty-glass)" stroke="#afc9bd" stroke-width="1.5"/>
+                      <path d="M29 12v96M91 12v96" stroke="#fff" stroke-opacity=".65" stroke-width="2"/>
+                      <rect x="70" y="13" width="10" height="94" rx="5" fill="#f8fcf9" stroke="#c4d9cf"/>
+                      <path d="M39 25h18M45 36h12M45 47h12M39 58h18M45 69h12M45 80h12M39 91h18" fill="none" stroke="#9db9ac" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <p>放入溫度計後，這裡會顯示刻度。</p>
+                  </div>
                   <svg id="tq-lens" viewBox="0 0 400 280" role="img" aria-label="目前溫度計的刻度放大" hidden><defs><linearGradient id="tq-lens-glass"><stop stop-color="#78949d"/><stop offset=".04" stop-color="#d9ebec"/><stop offset=".1" stop-color="#fff"/><stop offset=".16" stop-color="#abc4c9"/><stop offset=".26" stop-color="#f0f7f1"/><stop offset=".72" stop-color="#e5f0e8"/><stop offset=".88" stop-color="#fff"/><stop offset=".96" stop-color="#bdd2d4"/><stop offset="1" stop-color="#66828b"/></linearGradient></defs><g id="tq-lens-content"></g></svg>
                 </div>
-                <div class="tq-observation-controls"><p id="tq-observation-note" class="tq-observation-note" role="status">目前尚未放入溫度計</p></div>
+                <div class="tq-observation-controls"><p id="tq-observation-note" class="tq-observation-note" role="status"></p></div>
                 <form id="tq-answer-form" novalidate>
                   <label for="tq-reading" id="tq-answer-label">填寫這支的觀察結果</label>
                   <div class="tq-answer-field"><input id="tq-reading" type="number" inputmode="decimal" step="0.1" min="0" max="250" placeholder="輸入讀值" disabled aria-describedby="tq-save-note"><select id="tq-unit" aria-label="判斷目前溫度計的單位" disabled><option value="">選擇單位</option><option value="C">攝氏 °C</option><option value="F">華氏 °F</option></select></div>
@@ -408,7 +417,7 @@
   </main>
   <footer class="shell foot">國二上自然科學・溫度與熱｜學習單元 5.1</footer>
   <script src="assets/temperature-lesson.js?v=20261107-headings1" defer></script>
-  <script type="module" src="assets/thermometer-quiz.js?v=dialogue-no-quotes-10"></script>
+  <script type="module" src="assets/thermometer-quiz.js?v=empty-lens-20261107"></script>
   <script type="module" src="assets/water-lab.js?v=cooling-stable-3"></script>
   <script type="module" src="assets/parallax-reading.js?v=observation-only-4"></script>
   <script src="assets/dual-scale.js?v=dual-scale-4" defer></script>

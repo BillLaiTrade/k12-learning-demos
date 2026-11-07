@@ -104,7 +104,7 @@ function renderUI(){
   $('tq-lens-title').textContent=present?`${active} 的刻度放大`:'刻度放大';
   $('tq-answer-label').textContent=present?`填寫 ${active} 的觀察結果`:'填寫這支的觀察結果';
   $('tq-scene-title').textContent=present?`正在量測：溫度計 ${active}`:'從旁邊拿取一支溫度計';
-  $('tq-observation-note').textContent=!present?'目前尚未放入溫度計':!stable?'液柱仍在變化，先觀察。':`${eye===0?'平視':eye>0?'俯視':'仰視'}・液柱已穩定，每小格為 1 個刻度單位。`;
+  $('tq-observation-note').textContent=!present?'':!stable?'液柱仍在變化，先觀察。':`${eye===0?'平視':eye>0?'俯視':'仰視'}・液柱已穩定，每小格為 1 個刻度單位。`;
   $('tq-scene-tip').textContent=present?`量完將 ${active} 拖回托盤原位，再拿另一支。`:'量完拖回原位，再拿另一支。';
   for(const id of ['A','B']){
     const i=round.instruments[id], filled=i.value.trim()!==''&&i.answerUnit;
