@@ -71,3 +71,6 @@
 .ci-detail canvas { display:block; width:min(240px,100%); height:auto; margin:14px auto; border:1px solid #bacbb0; border-radius:8px; }
 .ci-detail output { display:block; text-align:center; font-size:.84rem; font-weight:650; }
 .ci-detail p { margin:10px 0 0; color:#64775b; font-size:.75rem; line-height:1.6; text-align:center; }
+
+.concave-imaging .ci-main-hint { margin:6px 1px 8px; color:#64796a; font-size:.75rem; line-height:1.5; }
+.concave-imaging .ci-ruler-hint { margin:3px 0 0; color:#64796a; font-size:.72rem; line-height:1.4; }
