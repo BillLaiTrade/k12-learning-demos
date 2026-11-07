@@ -1,0 +1,36 @@
+▶ 5.2 radiation: one energy path, surface outcomes and conditional warming
+  ✔ manual start is required and the concept uses a single radiation-energy stream (65.007225ms)
+  ✔ travel precedes surface reflection/absorption, and heating begins only after absorption (1343.995569ms)
+  ✔ pause freezes the whole rendered illustration and resume keeps the same progress (585.039153ms)
+  ✔ repeated source clicks cannot stop the demo or multiply animation loops; reset clears all results (2199.993083ms)
+  ✔ keyboard and background interruptions are consistent and do not auto-resume (230.365957ms)
+  ✔ the reflection and absorption paths are distinct outcomes at the same surface point (6.871817ms)
+  ✖ site A and the reflected ray stay attached to the eye and graph after responsive reflow (14.524786ms)
+  ✔ insulation, convection and quiz remain independent after extracting radiation from the shared controller (2516.426301ms)
+  ✔ desktop, laptop and narrow layouts keep controls, condition and actual scenes in view (547.712134ms)
+  ✔ either photo may fail and retry without premature playback or loss of the other successful photo (1692.649903ms)
+  ✔ a late photo response after reset leaves the observation stopped at its beginning (623.913234ms)
+  ✔ real touch under both motion preferences starts moving rays and pauses/resets actual frames (6223.921246ms)
+✖ 5.2 radiation: one energy path, surface outcomes and conditional warming (16956.022404ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 11
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17294.404645
+
+✖ failing tests:
+
+test at tests/unit-5.2-radiation.test.cjs:51:10
+✖ site A and the reflected ray stay attached to the eye and graph after responsive reflow (14.524786ms)
+  page.evaluate: TypeError: n.getTotalLength is not a function
+      at end (eval at evaluate (:311:30), <anonymous>:1:192)
+      at eval (eval at evaluate (:311:30), <anonymous>:1:614)
+      at UtilityScript.evaluate (<anonymous>:313:16)
+      at UtilityScript.<anonymous> (<anonymous>:1:44)
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-radiation.test.cjs:54:23)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.2-radiation.test.cjs:51:2) {
+    log: []
+  }

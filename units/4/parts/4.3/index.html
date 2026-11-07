@@ -41,7 +41,7 @@
   <script type="module" src="assets/depth-lab.mjs?v=20261107-preview1"></script>
   <link rel="stylesheet" href="assets/layer-speed-quiz.css?v=20261105-labeltype1">
   <script type="module" src="assets/layer-speed-quiz.mjs?v=20261105-tenreview1"></script>
-  <link rel="stylesheet" href="assets/lesson-format.css?v=20261106-footer1">
+  <link rel="stylesheet" href="assets/lesson-format.css?v=20261107-recall-diagram1">
   <script type="module" src="assets/lesson.mjs?v=20261106-recall1">
 </script>
 </head>
@@ -414,8 +414,17 @@
   <noscript><p>水中入射角30°時，射回空氣的折射角約41.8°；代表玻璃約48.6°。光偏離法線，沿這條光路反向射入則可返回。啟用 JavaScript 後可獨立開關兩支光源、調角，並直接查看兩側角度。</p></noscript>
 </div>
 <aside class="finding reflection-recall" aria-label="連結之前學過的內容">
-<svg class="reflection-recall-icon" viewBox="0 0 36 36" aria-hidden="true"><path d="M6 27h24M8 7l10 17L28 7M14 9l-6-2 1 6M22 9l6-2-1 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-<div><strong>還記得反射光路嗎？</strong><p>和折射一樣，光沿著原來的反射光路反向照回去，也會沿原路返回。</p><a href="../4.2/index.html#card-03">回看反射光路 ↗</a></div>
+<svg class="reflection-recall-diagram" viewBox="0 0 200 140" role="img" aria-labelledby="reflection-recall-title reflection-recall-desc">
+<title id="reflection-recall-title">反射光路可逆示意</title><desc id="reflection-recall-desc">水平鏡面上有一個反射點，虛線法線垂直鏡面；綠色箭頭由左側射入、往右側反射，金色箭頭沿同一條 V 形光路反向行進。</desc>
+<defs><marker id="recall-arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#28563a"/></marker><marker id="recall-arrow-gold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#b18535"/></marker></defs>
+<path d="M18 110H182 M26 110l-8 9 M42 110l-8 9 M58 110l-8 9 M74 110l-8 9 M90 110l-8 9 M106 110l-8 9 M122 110l-8 9 M138 110l-8 9 M154 110l-8 9 M170 110l-8 9" fill="none" stroke="#28563a" stroke-width="1.6"/>
+<path d="M100 110V25" fill="none" stroke="#527861" stroke-width="1.4" stroke-dasharray="5 5"/><text x="100" y="17" text-anchor="middle" fill="#28563a" font-size="14">法線</text>
+<path d="M30 35L100 110L170 35" fill="none" stroke="#28563a" stroke-width="2"/>
+<g fill="none" stroke="#28563a" stroke-width="2.2" marker-end="url(#recall-arrow-green)"><path d="M43 49L60 67"/><path d="M126 82L146 61"/></g>
+<g fill="none" stroke="#b18535" stroke-width="2.2" marker-end="url(#recall-arrow-gold)"><path d="M82 91L68 76"/><path d="M158 48L144 63"/></g>
+</svg>
+<div class="reflection-recall-copy"><strong>還記得反射光路嗎？</strong><p>和折射一樣，光沿著原來的反射光路反向照回去，也會沿原路返回。</p></div>
+<a class="reflection-recall-link" href="../4.2/index.html#card-03">回看反射光路 ↗</a>
 </aside>
 </div>
 </section>
@@ -521,7 +530,6 @@
 <p>參考：<a href="https://openstax.org/books/college-physics-2e/pages/25-3-the-law-of-refraction">OpenStax：折射與視深</a> · <a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=GL001823">自然科學領域課綱</a>
 </p>
 </details>
-<a href="#s1">回到第一個探索 ↑</a>
 </div></footer>
 </body>
 </html>
