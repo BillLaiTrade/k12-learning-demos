@@ -1,0 +1,222 @@
+[
+  {
+    "state": "before-bare-320-water",
+    "outside_changed_pixels": 247,
+    "examples": [
+      [
+        873.6,
+        462.4
+      ],
+      [
+        230.1,
+        481.0
+      ],
+      [
+        869.9,
+        481.0
+      ],
+      [
+        230.1,
+        484.7
+      ]
+    ]
+  },
+  {
+    "state": "before-bare-390-water",
+    "outside_changed_pixels": 338,
+    "examples": [
+      [
+        871.8,
+        470.9
+      ],
+      [
+        228.2,
+        474.0
+      ],
+      [
+        871.8,
+        474.0
+      ],
+      [
+        868.8,
+        483.0
+      ]
+    ]
+  },
+  {
+    "state": "before-basin-water",
+    "outside_changed_pixels": 1967,
+    "examples": [
+      [
+        871.2,
+        471.7
+      ],
+      [
+        227.5,
+        473.0
+      ],
+      [
+        871.2,
+        473.0
+      ],
+      [
+        872.5,
+        473.0
+      ]
+    ]
+  },
+  {
+    "state": "before-basin250-water",
+    "outside_changed_pixels": 1962,
+    "examples": [
+      [
+        867.2,
+        488.8
+      ],
+      [
+        231.5,
+        490.1
+      ],
+      [
+        232.8,
+        490.1
+      ],
+      [
+        867.2,
+        490.1
+      ]
+    ]
+  },
+  {
+    "state": "before-immersed-water",
+    "outside_changed_pixels": 1738,
+    "examples": [
+      [
+        871.2,
+        471.7
+      ],
+      [
+        871.2,
+        473.0
+      ],
+      [
+        228.8,
+        474.3
+      ],
+      [
+        871.2,
+        474.3
+      ]
+    ]
+  },
+  {
+    "state": "before-less-water-water",
+    "outside_changed_pixels": 1856,
+    "examples": [
+      [
+        223.6,
+        454.6
+      ],
+      [
+        875.1,
+        455.9
+      ],
+      [
+        875.1,
+        457.2
+      ],
+      [
+        224.9,
+        458.6
+      ]
+    ]
+  },
+  {
+    "state": "before-raised-water",
+    "outside_changed_pixels": 1946,
+    "examples": [
+      [
+        872.5,
+        466.4
+      ],
+      [
+        226.2,
+        467.8
+      ],
+      [
+        872.5,
+        467.8
+      ],
+      [
+        873.8,
+        467.8
+      ]
+    ]
+  },
+  {
+    "state": "before-sleeved-320-water",
+    "outside_changed_pixels": 25,
+    "examples": [
+      [
+        873.6,
+        462.4
+      ],
+      [
+        230.1,
+        481.0
+      ],
+      [
+        869.9,
+        481.0
+      ],
+      [
+        230.1,
+        484.7
+      ]
+    ]
+  },
+  {
+    "state": "before-sleeved-390-water",
+    "outside_changed_pixels": 32,
+    "examples": [
+      [
+        871.8,
+        470.9
+      ],
+      [
+        228.2,
+        474.0
+      ],
+      [
+        871.8,
+        474.0
+      ],
+      [
+        868.8,
+        483.0
+      ]
+    ]
+  },
+  {
+    "state": "before-sleeved-water",
+    "outside_changed_pixels": 130,
+    "examples": [
+      [
+        871.2,
+        471.7
+      ],
+      [
+        871.2,
+        473.0
+      ],
+      [
+        228.8,
+        474.3
+      ],
+      [
+        871.2,
+        474.3
+      ]
+    ]
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "state": "local-bare-320-water",
+    "outside_changed_pixels": 0,
+    "examples": []
+  },
+  {
+    "state": "local-bare-390-water",
+    "outside_changed_pixels": 0,
+    "examples": []
+  },
+  {
+    "state": "local-basin-water",
+    "outside_changed_pixels": 0,
+    "examples": []
+  },
+  {
+    "state": "local-basin250-water",
+    "outside_changed_pixels": 0,
+    "examples": []
+  },
+  {
+    "state": "local-immersed-water",
+    "outside_changed_pixels": 0,
+    "examples": []
+  },
+  {
+    "state": "local-less-water-water",
+    "outside_changed_pixels": 0,
+    "examples": []
+  },
+  {
+    "state": "local-raised-water",
+    "outside_changed_pixels": 0,
+    "examples": []
+  },
+  {
+    "state": "local-sleeved-320-water",
+    "outside_changed_pixels": 0,
+    "examples": []
+  },
+  {
+    "state": "local-sleeved-390-water",
+    "outside_changed_pixels": 0,
+    "examples": []
+  },
+  {
+    "state": "local-sleeved-water",
+    "outside_changed_pixels": 0,
+    "examples": []
+  }
+]
