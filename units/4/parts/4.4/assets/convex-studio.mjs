@@ -1,7 +1,7 @@
 import {createParallelLabels} from './parallel-labels.mjs?v=20261104-lens-clear5';
 import {createLensVisual} from './lens-geometry.mjs?v=20261104-lens-clear5';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {renderConvexRefraction} from './convex-refraction.mjs?v=20261107-convex-fold1';
+import {renderConvexRefraction} from './convex-refraction.mjs?v=20261107-convex-order3';
 import {parallelModel} from './parallel-optics.mjs?v=20261104-lens-clear5';
 const root=document.querySelector('[data-convex-lab]');
 if(root) initialise(root);
@@ -11,7 +11,7 @@ function initialise(root){
  const SCALE=.55,AXIS=1.75,world=p=>new THREE.Vector3(p[0]*SCALE,AXIS-p[1]*SCALE,0);
  let showRays=true,studio=null;
  function update(){
-  root.querySelectorAll('[data-convex-section]').forEach(svg=>renderConvexRefraction(svg,g,{rayIndex:svg.dataset.convexSection==='upper'?0:2,showRays,closeup:svg.dataset.closeup==='true'}));
+  root.querySelectorAll('[data-convex-ray]').forEach(renderPanel);
   $('[data-parallel-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';$('[data-parallel-rays]').setAttribute('aria-pressed',String(showRays));
   canvas.setAttribute('aria-label',`立體凸透鏡實驗台，平行光會聚於焦點，光路${showRays?'顯示':'隱藏'}`);
   root.dataset.view='overall';root.dataset.rays=String(showRays);
@@ -19,10 +19,20 @@ function initialise(root){
  }
  $('[data-parallel-rays]').addEventListener('click',()=>{showRays=!showRays;update();});
  $('[data-convex-reset]').addEventListener('click',()=>{showRays=true;studio?.reset();update();});
- root.querySelectorAll('[data-convex-zoom]').forEach(button=>button.addEventListener('click',()=>{
-  const svg=button.closest('[data-convex-ray]').querySelector('svg'),closeup=svg.dataset.closeup!=='true';
-  svg.dataset.closeup=String(closeup);button.setAttribute('aria-pressed',String(closeup));button.textContent=closeup?'看完整光路':'放大折射處';update();
+ function renderPanel(panel){
+  const svg=panel.querySelector('svg'),mode=panel.dataset.mode||'enter',upper=panel.dataset.convexRay==='upper',direction=upper?'下':'上';
+  renderConvexRefraction(svg,g,{rayIndex:upper?0:2,showRays,mode,width:svg.parentElement.clientWidth||960});
+  panel.querySelector('[data-convex-key]').hidden=!showRays||mode==='overall'||svg.dataset.compact!=='true';
+  panel.querySelectorAll('[data-convex-mode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.convexMode===mode)));
+  panel.querySelector('[data-convex-copy]').textContent=!showRays?'顯示輔助光路，觀察光線的轉向。':mode==='overall'?`${upper?'上':'下'}方光線經兩次折射，朝焦點 F 會聚。`:mode==='enter'?`① 空氣 → 玻璃：偏向法線，往${direction}轉向。`:`② 玻璃 → 空氣：偏離法線，繼續往${direction}轉向。`;
+ }
+ root.querySelectorAll('[data-convex-mode]').forEach(button=>button.addEventListener('click',()=>{
+  const panel=button.closest('[data-convex-ray]');panel.dataset.mode=button.dataset.convexMode;showRays=true;update();
  }));
+ const detailWidths=new WeakMap(),detailObserver=new ResizeObserver(entries=>{
+  for(const {target,contentRect}of entries){if(contentRect.width>0&&Math.abs(contentRect.width-(detailWidths.get(target)||0))>.5){detailWidths.set(target,contentRect.width);renderPanel(target.closest('[data-convex-ray]'));}}
+ });
+ root.querySelectorAll('[data-convex-ray]').forEach(panel=>{detailObserver.observe(panel.querySelector('.convex-detail-scene'));panel.addEventListener('toggle',()=>{if(panel.open)renderPanel(panel);});});
  try{studio=createStudio();root.dataset.webgl='ready';}catch(error){canvas.hidden=true;$('[data-convex-fallback]').hidden=false;root.dataset.webgl='unavailable';console.warn('Convex 3D:',error.message);}
  update();root.dataset.ready='true';
 

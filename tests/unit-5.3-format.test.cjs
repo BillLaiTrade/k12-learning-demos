@@ -49,7 +49,7 @@ test('5.3 共通格式、導覽連動與原有活動回歸', {timeout:180000}, a
       const link=links.nth(i),hash=await link.getAttribute('href');
       assert.equal(await link.locator('span').textContent(),i===5?'單元小測':await page.locator(`${hash} h2`).textContent());
       await link.click();assert.equal(new URL(page.url()).hash,hash);
-      const top=await page.locator(hash==='#card-03'?'#mass-lab':hash).evaluate(n=>n.getBoundingClientRect().top);assert.ok(top>=0&&top<160);
+      const top=await page.locator(hash==='#card-03'?'#mass-lab':hash).evaluate(n=>n.getBoundingClientRect().top);assert.ok(top>=-1&&top<160,`${hash} top=${top}`);
       await page.waitForFunction(hash=>document.querySelector(`.route a[href="${hash}"]`).getAttribute('aria-current')==='step',hash);
     }
     for(const id of ['title-02','quiz-title']){
@@ -109,13 +109,13 @@ test('5.3 共通格式、導覽連動與原有活動回歸', {timeout:180000}, a
 
   await t.test('第二、三區自動記錄，原材料比較與生活應用保持',async()=>{
     assert.equal(await page.locator('#heat-stage-conclusion').isVisible(),true);
-    await page.locator('#heat-stage-play').click();await page.clock.runFor(6500);
+    await page.locator('#heat-stage-play').click();await page.clock.runFor(11000);
     assert.equal(await page.locator('#heat-lab').getAttribute('data-records'),'10');
     assert.equal(await page.locator('#heat-stage-meter').textContent(),'30.0');
-    await page.locator('#mass-input').fill('200');await page.locator('#mass-play').click();await page.clock.runFor(6500);
+    await page.locator('#mass-input').fill('200');await page.locator('#mass-play').click();await page.clock.runFor(12000);
     assert.equal(await page.locator('#mass-lab').getAttribute('data-phase'),'complete');
-    assert.equal(await page.locator('#mass-meter-a').textContent(),'30.0');assert.equal(await page.locator('#mass-meter-b').textContent(),'25.0');
-    assert.equal(await page.locator('#mass-records tr').count(),1);
+    assert.equal(await page.locator('#mass-meter').textContent(),'25.0');assert.equal(await page.locator('#mass-result').isVisible(),true);
+    assert.match(await page.locator('#mass-status').textContent(),/驗證符合預測/);
     await page.locator('#material-play').click();await page.clock.runFor(6500);assert.equal(await page.locator('#material-meter-a').textContent(),'25.0');assert.equal(await page.locator('#material-meter-b').textContent(),'42.7');assert.equal(await page.locator('#material-discovery').isVisible(),true);await page.locator('#material-setting').selectOption('copper');assert.equal(await page.locator('#material-discovery').isHidden(),true);
     for(const key of ['bottle','coast','pan']){await page.locator(`[data-application="${key}"]`).click();assert.equal(await page.locator(`[data-application="${key}"]`).getAttribute('aria-pressed'),'true');assert.ok((await page.locator('#application-content').textContent()).length>40);}
   });

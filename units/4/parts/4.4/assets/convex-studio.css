@@ -45,20 +45,26 @@
 .convex-fold-state { margin-left:auto; white-space:nowrap; font-size:.8rem; font-weight:500; }
 .convex-fold-state::after { content:'展開'; }
 .convex-detail[open] .convex-fold-state::after { content:'收合'; }
-.convex-detail-body { padding:0 12px 12px; }
-.convex-detail-scene { overflow-x:auto; border:1px solid #dbe5d5; border-radius:11px; background:#eff5eb; }
-.convex-detail-scene svg { display:block; width:100%; min-width:680px; height:auto; aspect-ratio:960 / 340; }
-.convex-detail-scene svg[data-closeup=true] { aspect-ratio:560 / 340; min-width:560px; }
-.convex-refraction-steps { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin:12px 0 8px; }
-.convex-refraction-steps p { margin:0; padding:6px 15px; background:#eaf1e5; border-radius:10px; font-size:.9rem; }
-.convex-detail-footer { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
-.convex-detail-note { margin:0; }
-.convex-detail-footer button { padding:5px 9px; min-height:36px; font-size:.78rem; }
+.convex-detail-body { padding:0 16px 14px; }
+.convex-view-controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; width:min(100%,560px); margin:1px 0 14px; }
+.convex-view-controls button { min-height:41px; padding:7px 12px; border:1px solid #cddbd3; border-radius:10px; background:#fffefa; color:#3f5d4a; font-size:.84rem; font-weight:650; box-shadow:0 1px 2px #2f4a3705; transition:background .15s,border-color .15s; }
+.convex-view-controls button:hover { border-color:#8ba793; filter:none; background:#f0f5eb; }
+.convex-view-controls button[aria-pressed=true] { background:#fff0c4; border-color:#d4b562; color:#504121; box-shadow:inset 0 1px 0 #fff9e5,0 1px 3px #775b1720; }
+.convex-detail-scene { overflow:hidden; border:1px solid #d5e3d4; border-radius:12px; background:radial-gradient(ellipse at 48% 38%,#fbfdf7 0%,#f0f6ec 65%,#edf4e9 100%); box-shadow:inset 0 1px 0 #ffffffa6; }
+.convex-detail-scene svg { display:block; width:100%; height:auto; font-family:inherit; }
+.convex-step-copy { width:fit-content; max-width:100%; margin:12px auto 0; padding:7px 18px; border:1px solid #e6eddc; border-radius:11px; background:#ebf2e3; color:#3f5d45; font-size:.86rem; line-height:1.65; text-align:center; }
 @media(max-width:760px) {
  .convex-detail summary { padding:12px 10px; gap:7px; font-size:.88rem; }
- .convex-detail-body { padding:0 8px 10px; }
- .convex-detail-scene::after { content:"左右滑動，查看完整光路"; display:block; position:sticky; left:0; padding:5px 8px; background:#eff5eb; color:#64796a; font-size:.72rem; }
+ .convex-detail-body { padding:0 9px 10px; }
  .convex-fold-state { font-size:.73rem; }
- .convex-refraction-steps { gap:6px; }
- .convex-refraction-steps p { padding:5px 9px; font-size:.8rem; }
+ .convex-view-controls { gap:5px; margin-bottom:9px; }
+ .convex-view-controls button { min-height:40px; padding:6px 3px; border-radius:9px; font-size:.74rem; white-space:nowrap; }
+ .convex-step-copy { padding:7px 9px; margin-top:9px; font-size:.77rem; }
 }
+
+.convex-line-key { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px 17px; margin:9px 4px 0; color:#617b67; font-size:.73rem; line-height:1.5; }
+.convex-line-key[hidden] { display:none; }
+.convex-line-key span { display:inline-flex; align-items:center; gap:6px; }
+.convex-line-key i { display:inline-block; width:23px; height:0; }
+.convex-key-normal { border-top:2px dashed #496759; }
+.convex-key-reference { border-top:2px dotted #879a8d; }
