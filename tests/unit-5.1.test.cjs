@@ -165,6 +165,28 @@ test('5.1 temperature lesson in a real browser', { timeout: 45000 }, async t => 
     assert.equal(await page.locator('#measure-sequence').count(),0);
   });
 
+  await t.test('section navigation follows the headings and wraps without clipping', async () => {
+    const titles = ['同一杯水，為什麼兩隻手感覺不一樣？', '溫度計怎麼知道水變冷還是變熱？', '同一個溫度，為什麼有兩種數字？', '同一個液面，為什麼對到的刻度看起來不同？'];
+    for (const width of [1440, 1024, 820, 760, 390, 320]) {
+      await page.setViewportSize({width, height: 900});
+      assert.deepEqual(await page.locator('.lesson-card > .lesson-head h2').allTextContents(), titles);
+      assert.deepEqual(await page.locator('.route a span').allTextContents(), [...titles, '單元小測']);
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, `overflow at ${width}px`);
+      assert.equal(await page.locator('.route a span').evaluateAll(nodes => nodes.some(n => n.scrollWidth > n.clientWidth + 1 || n.scrollHeight > n.clientHeight + 1)), false, `clipped navigation at ${width}px`);
+    }
+    const modified = await browser.newPage();
+    try {
+      await modified.addInitScript(() => {
+        new MutationObserver((_, observer) => {
+          const heading = document.querySelector('#touch-story-title');
+          if (heading) { heading.textContent = '測試更新後的標題'; observer.disconnect(); }
+        }).observe(document, {childList: true, subtree: true});
+      });
+      await modified.goto(process.env.TEMPERATURE_LESSON_URL || `${base}/units/5/parts/5.1/index.html`);
+      assert.equal(await modified.locator('.route a span').first().textContent(), '測試更新後的標題');
+    } finally { await modified.close(); }
+  });
+
   await t.test('fits desktop and narrow windows and links back to the unit', async () => {
     for (const width of [1440, 1024, 390]) {
       await page.setViewportSize({ width, height: 900 });

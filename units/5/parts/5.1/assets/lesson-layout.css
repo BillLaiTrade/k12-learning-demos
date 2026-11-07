@@ -100,3 +100,6 @@ body{line-height:1.72}
 
 .card-heading .card-intro{margin:8px 0 0;color:var(--muted);font-size:.94rem;font-weight:400;line-height:1.72}
 .card-intro .card-role{display:inline;margin:0;font:inherit;color:inherit}
+
+/* 長標題在窄螢幕的學習路線中自然換行。 */
+@media(max-width:760px){.lesson-layout .route .route-inner a:not(.quiz-nav){max-width:min(20rem,75vw);align-items:flex-start;white-space:normal}.lesson-layout .route .route-inner a:not(.quiz-nav) span{min-width:0;overflow-wrap:anywhere}}
