@@ -54,7 +54,7 @@ function initialise(root){
   $('[data-ci-device=object]').setAttribute('aria-label',`圖卡，距離透鏡${distanceLabel(state.object)}，方向鍵可沿軌道移動`);
   const size=g.angularGain===null?'':Math.abs(g.angularGain-1)<.02?'視角相近':g.angularGain>1?'比原物大':'比原物小';
   $('[data-ci-eye-badge]').textContent=g.eyeMode==='converging'?'此固定眼位無法清楚對焦':g.eyeMode==='parallel'?'可放鬆觀看':`正立・${size}`;
-  const condition=`正立、縮小的虛像，位於圖卡同側、透鏡與 F 之間（距透鏡 ${distanceLabel(Math.abs(g.v))}）。`;
+  const condition=`正立、縮小的虛像，位於透鏡與 F 之間（距透鏡 ${distanceLabel(Math.abs(g.v))}）。`;
   $('[data-ci-condition]').textContent=condition;
   $('[data-ci-eye-note]').textContent='兩框採固定尺度，圖卡近大遠小。';
   root.dataset.blurRadius=g.blurRadius;
