@@ -16,3 +16,5 @@
 #mass-lab .mass-curve-status{margin:14px 0 0;padding:12px;border:1px solid #d6ddc9;border-radius:9px;background:#f2f5eb;line-height:1.65;font-size:1rem;color:#3a5c40}#mass-lab[data-phase=complete] .mass-curve-status{background:#e7f1df;border-color:#b1c8a2;font-weight:650}
 #mass-lab .mass-curve-rule{font-weight:650;font-size:1rem;color:#35563c;margin:14px 0 0}#mass-lab .mass-curve-note{font-size:.875rem;color:#6a7762;margin:10px 0 0}
 @container mass-curve (max-width:570px){.mass-curve-workbench{grid-template-columns:minmax(0,1fr)}.mass-curve-photo{max-width:390px;margin-inline:auto}#mass-curve-graph{height:300px}}
+
+.mass-curve-meter .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}

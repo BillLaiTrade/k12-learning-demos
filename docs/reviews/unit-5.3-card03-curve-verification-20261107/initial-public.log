@@ -1,0 +1,41 @@
+▶ 5.3第三區：自由水量、曲線預測與單杯驗證
+  ✔ 預設250g，曲線與預測點可讀，沒有未完成結果或代數 (114.919475ms)
+  ✔ 讀值停留但加熱連續，滿1000cal後結果點才與預測重合 (2533.810303ms)
+  ✔ 自由整數、小數與邊界水量：水位、預測與最後結果一致 (12521.9923ms)
+  ✔ 非法輸入禁止驗證，修正不自動開始；換區與背景中斷可手動接續 (2580.885553ms)
+  ✔ 圖片失敗可重試且恢復不自動驗證 (1446.069402ms)
+  ✖ 減少動態保留數據；五種實際視窗無裁切、桌機操作台同視窗 (1143.330567ms)
+✖ 5.3第三區：自由水量、曲線預測與單杯驗證 (22146.247256ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 5
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22568.265221
+
+✖ failing tests:
+
+test at tests/unit-5.3-mass-curve.test.cjs:26:10
+✖ 減少動態保留數據；五種實際視窗無裁切、桌機操作台同視窗 (1143.330567ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   '目前水溫20.0°C'
+  + ]
+  - []
+  
+      at TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-mass-curve.test.cjs:27:759)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async TestContext.<anonymous> (/workspace/k12-learning-demos/tests/unit-5.3-mass-curve.test.cjs:26:2)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ '目前水溫20.0°C' ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
