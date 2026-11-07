@@ -122,7 +122,7 @@ nav.forEach((link,i)=>{
  if(!title)return;
  if(link.classList.contains('quiz-nav')){
   const kicker=sections[i].querySelector('.quiz-kicker')?.textContent.trim();
-  link.title=title;if(kicker)link.setAttribute('aria-label',`${kicker}：${title}`);
+  link.title=title;if(kicker)link.setAttribute('aria-label',link.dataset.navLabel||`${kicker}：${title}`);
  }else{const label=link.querySelector('span');if(label)label.textContent=title;}
 });
 function active(id){for(const link of nav){if(link.hash==='#'+id)link.setAttribute('aria-current','step');else link.removeAttribute('aria-current');}}
