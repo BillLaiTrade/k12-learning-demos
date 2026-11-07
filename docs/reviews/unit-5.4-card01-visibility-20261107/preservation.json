@@ -1,0 +1,13 @@
+{
+  "html_outside_card01_and_asset_version_unchanged": true,
+  "existing_css_preserved": true,
+  "unchanged_core_files": {
+    "thermal-model.mjs": true,
+    "thermal-art.mjs": true,
+    "phase-comparison.mjs": true,
+    "phase-apparatus.mjs": true,
+    "thermal-opening.svg": true,
+    "thermal-opening.png": true
+  },
+  "other_controller_logic_unchanged": true
+}

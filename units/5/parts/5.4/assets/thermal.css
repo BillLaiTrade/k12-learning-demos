@@ -71,3 +71,18 @@
 .comparison-arrow{inset:0;width:100%;height:100%}.comparison-arrow>svg{position:absolute;inset:0;width:100%;height:100%}
 
 .phase-apparatus:not(.has-phase-3d) .phase-canvas{display:none}
+
+/* First-section visibility: larger apparatus and useful space beside the curve. */
+#heat-lab .heat-apparatus{aspect-ratio:1.2;min-height:270px}
+#heat-lab .heat-steps{padding-block:12px}
+#heat-lab .heat-plot{padding:12px 10px 10px}
+#heat-lab .heat-plot svg text{font-size:17px}
+#heat-lab .heat-plot svg .heat-phase-label{font-size:17px}
+#heat-lab .heat-plot svg .chart-now{font-size:15px}
+#heat-lab .heat-plot svg .chart-axis-title{font-size:17px}
+.heat-energy-reading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:9px 5px 0;padding:9px 10px;border:1px solid #d0dcc9;border-radius:9px;background:#f0f5e9;line-height:1.4}
+.heat-energy-reading span{font-size:.85rem;color:#405c43}.heat-energy-reading output{font-size:1.2rem;font-weight:750;color:#31563d;font-variant-numeric:tabular-nums;white-space:nowrap}
+.heat-chart-note{font-size:.76rem;line-height:1.5;color:#5f705d;margin:8px 5px 0}
+.heat-transfer{position:absolute;inset:0;z-index:2;pointer-events:none}.heat-transfer svg{display:block;width:100%;height:100%}
+.heat-apparatus:not(.has-3d) .heat-transfer,.heat-apparatus:not(.has-3d) .heat-canvas{display:none}
+@media(max-width:760px){#heat-lab .heat-apparatus{aspect-ratio:1.15;min-height:270px}.heat-energy-reading{padding:9px 11px}.heat-energy-reading span{font-size:.9rem}}
