@@ -38,9 +38,16 @@
     paths.forEach((path,i)=>{path.node.setAttribute('d',routes[medium][i]);path.length=path.node.getTotalLength();});
     $('convection-motion').setAttribute('clip-path',`url(#convection-${medium}-mask)`);
   }
+  // Integrate the eased speed so the arrows never jump as the flow strengthens.
+  // Eight observation seconds establish the qualitative flow; the final lap
+  // pace stays at 12 observation seconds, not a measured fluid velocity.
+  function flowTravel(elapsed) {
+    const buildup=8, initial=.15, u=Math.min(1,Math.max(0,elapsed)/buildup);
+    return buildup*(initial*u+(1-initial)*(u**3-u**4/2))+Math.max(0,elapsed-buildup);
+  }
   function drawArrows() {
     arrows.forEach(({node,path,phase,outline,tail,head})=>{
-      const progress=(time/12+phase)%1, end=progress*path.length, length=medium==='water'?108:145;
+      const progress=(flowTravel(time)/12+phase)%1, end=progress*path.length, length=medium==='water'?108:145;
       const points=[];
       for(let i=0;i<=8;i++){
         const distance=(end-length+length*i/8+path.length)%path.length;
@@ -61,6 +68,7 @@
     const text=copy[medium], started=time>0||playing, asset=assets[medium];
     root.dataset.medium=medium;root.dataset.playing=String(playing);root.dataset.elapsed=time.toFixed(3);
     root.dataset.started=String(started);root.dataset.assets=asset.status;
+    root.dataset.flowState=!started?'ready':time<2?'starting':time<8?'building':'steady';
     root.dataset.stage=!started?'ready':time<3?'rising':time<12?'circulating':'observed';
     root.setAttribute('aria-busy',String(asset.status==='loading'));
     $('convection-water-scene').toggleAttribute('hidden',medium!=='water');
@@ -78,7 +86,7 @@
       :time<6?`較暖的${text.name}向周圍流動，並向較冷的周圍散熱。`
       :`受熱的${text.name}上升，周圍較冷的${text.name}下沉補入，形成循環。`;
     setText('convection-note',note);
-    setText('convection-status',!started?'尚未開始':playing?'觀察進行中':'觀察已暫停');
+    setText('convection-status',!started?'尚未開始':!playing?'觀察已暫停':time<2?'流動開始形成':time<8?'流動逐漸增強':'大致穩定循環');
     setText('convection-play',playing?'暫停觀察':time>0?'繼續觀察':'開始觀察');
     heater.disabled=play.disabled=asset.status!=='ready';
     const heaterAction=`點擊${text.device}，開始或繼續觀察${text.name}的流動`;

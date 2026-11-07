@@ -1,7 +1,7 @@
 const {test}=require('node:test'),assert=require('node:assert/strict'),{spawn}=require('node:child_process'),path=require('node:path');
 const {chromium}=require('playwright');
 
-test('5.2 convection: fluid movement, mode changes and observation lifecycle',{timeout:120000},async t=>{
+test('5.2 convection: fluid movement, mode changes and observation lifecycle',{timeout:180000},async t=>{
  const server=spawn('python3',['-u','-m','http.server','0','--bind','127.0.0.1'],{cwd:path.resolve(__dirname,'..')});t.after(()=>server.kill());
  const port=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('server timeout')),5000);server.stdout.on('data',d=>{const m=String(d).match(/port (\d+)/);if(m){clearTimeout(timer);resolve(m[1]);}});server.on('error',reject);});
  const remote=process.env.CONVECTION_LAB_URL;
@@ -30,6 +30,23 @@ test('5.2 convection: fluid movement, mode changes and observation lifecycle',{t
   await page.clock.runFor(6000);assert.equal((await state()).stage,'circulating');assert.match(await page.locator('#convection-step-3').textContent(),/下沉/);
   await page.clock.runFor(6500);assert.equal((await state()).stage,'observed');assert.equal(await page.locator('#convection-discovery').isVisible(),true);
   assert.match(await page.locator('#convection-discovery').textContent(),/往上走的是受熱的水或空氣/);
+ });
+ await t.test('rendered arrow travel accelerates from weak flow and settles instead of accelerating indefinitely',async()=>{
+  const arcPosition=()=>page.evaluate(()=>{
+   const path=document.querySelector('#convection-left'),head=document.querySelector('[data-flow-arrow] .convection-arrow-head');
+   const match=head.getAttribute('transform').match(/translate\(([\d.-]+) ([\d.-]+)/),x=Number(match[1]),y=Number(match[2]),length=path.getTotalLength(),route=path.getAttribute('d');
+   const cache=path._buildupSamples||(path._buildupSamples=new Map());if(!cache.has(route))cache.set(route,Array.from({length:2400},(_,i)=>{const p=path.getPointAtLength(length*i/2400);return{x:p.x,y:p.y,at:i/2400};}));let best=Infinity,at=0;
+   for(const p of cache.get(route)){const d=(p.x-x)**2+(p.y-y)**2;if(d<best){best=d;at=p.at;}}return at;
+  });
+  for(const reducedMotion of ['no-preference','reduce'])for(const medium of ['water','air']){
+   await page.emulateMedia({reducedMotion});await page.locator(`button[data-medium=${medium}]`).click();await ready(page);await reset.click();await play.click();const scale=reducedMotion==='reduce'?.55:1;
+   const until=async target=>{const left=target-Number((await state()).elapsed);if(left>0)await page.clock.runFor(Math.ceil(left/scale*1000)+20);};
+   const rate=async start=>{await until(start);const a=await arcPosition(),t=Number((await state()).elapsed);await page.clock.runFor(Math.round(1000/scale));const b=await arcPosition(),dt=Number((await state()).elapsed)-t;return ((b-a+1)%1)/dt;};
+   const early=await rate(.5),middle=await rate(4),steady=await rate(9),later=await rate(15);
+   assert.ok(early>0&&early<middle&&middle<steady,`${medium}/${reducedMotion}: ${early},${middle},${steady}`);assert.ok(Math.abs(later-steady)<.005,`${medium}: final speed must settle`);assert.equal((await state()).flowState,'steady');
+   await reset.click();await page.clock.runFor(500);assert.equal((await state()).flowState,'ready');assert.equal((await state()).elapsed,'0.000');await play.click();await until(2);await play.click();const held=await points();await page.clock.runFor(1200);assert.deepEqual(await points(),held);await play.click();await page.clock.runFor(300);assert.notDeepEqual(await points(),held);await reset.click();
+  }
+  await page.emulateMedia({reducedMotion:'no-preference'});await page.locator('button[data-medium=water]').click();await ready(page);await reset.click();await play.click();await page.clock.runFor(13250);
  });
  await t.test('photographic scenes keep animated arrows in the fluid and not inside the heater',async()=>{
   const geometry=await page.evaluate(()=>{

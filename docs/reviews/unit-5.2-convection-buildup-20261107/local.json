@@ -1,0 +1,31 @@
+{
+  "profiles": [
+    {
+      "medium": "water",
+      "early": 0.015773809523809548,
+      "middle": 0.05443548387096779,
+      "steady": 0.08333333333333333,
+      "later": 0.08333333333333333,
+      "playing": "true",
+      "stage": "observed",
+      "assets": "ready",
+      "elapsed": "14.016",
+      "started": "true",
+      "flowState": "steady"
+    },
+    {
+      "medium": "air",
+      "early": 0.015826612903225856,
+      "middle": 0.054563492063492,
+      "steady": 0.083266129032258,
+      "later": 0.08336693548387089,
+      "playing": "true",
+      "stage": "observed",
+      "assets": "ready",
+      "elapsed": "14.016",
+      "started": "true",
+      "flowState": "steady"
+    }
+  ],
+  "errors": []
+}
