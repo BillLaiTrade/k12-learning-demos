@@ -84,10 +84,10 @@ test('4.4 第二區立體凸透鏡：實際曲面、光路與逐面折射',{time
    }
   }
  });
- await t.test('重設恢復主圖視角與光路，保留說明收合狀態',async()=>{
-  await canvas.scrollIntoViewIfNeeded();await canvas.focus();await page.keyboard.press('ArrowRight');await lab.locator('[data-parallel-rays]').click();
-  await lab.locator('[data-convex-reset]').click();const a=await read();assert.equal(a.rays,'true');const camera=a.camera;
-  await page.keyboard.press('ArrowRight');await lab.locator('[data-convex-reset]').click();assert.deepEqual((await read()).camera,camera);
+ await t.test('保留視角與光路操作，主圖不顯示重新觀察按鈕',async()=>{
+  assert.equal(await lab.locator('[data-convex-reset]').count(),0);
+  await canvas.scrollIntoViewIfNeeded();await canvas.focus();const before=await read();await page.keyboard.press('ArrowRight');assert.notDeepEqual((await read()).camera,before.camera);
+  await lab.locator('[data-parallel-rays]').click();assert.equal((await read()).rays,'false');await lab.locator('[data-parallel-rays]').click();assert.equal((await read()).rays,'true');
  });
  await t.test('立體渲染無法啟動時，兩個折射說明仍可操作',async()=>{
   const p=await open(context,true);assert.equal(await p.locator('#lab2').getAttribute('data-webgl'),'unavailable');assert.equal(await p.locator('[data-convex-fallback]').isVisible(),true);

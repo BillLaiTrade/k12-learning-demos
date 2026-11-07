@@ -18,7 +18,6 @@ function initialise(root){
   studio?.update();
  }
  $('[data-parallel-rays]').addEventListener('click',()=>{showRays=!showRays;update();});
- $('[data-convex-reset]').addEventListener('click',()=>{showRays=true;studio?.reset();update();});
  function renderPanel(panel){
   const svg=panel.querySelector('svg'),mode=panel.dataset.mode||'enter',upper=panel.dataset.convexRay==='upper',direction=upper?'下':'上';
   renderConvexRefraction(svg,g,{rayIndex:upper?0:2,showRays,mode,width:svg.parentElement.clientWidth||960});
@@ -112,6 +111,6 @@ function initialise(root){
   canvas.addEventListener('wheel',e=>{e.preventDefault();orbit.radius=THREE.MathUtils.clamp(orbit.radius+e.deltaY*.008,7,19);updateCamera();requestDraw();},{passive:false});
   canvas.addEventListener('keydown',e=>{const map={ArrowLeft:[-.07,0],ArrowRight:[.07,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!map[e.key])return;e.preventDefault();orbit.azimuth=THREE.MathUtils.clamp(orbit.azimuth+map[e.key][0],-.9,.7);orbit.polar=THREE.MathUtils.clamp(orbit.polar+map[e.key][1],.85,1.55);updateCamera();requestDraw();});
   new ResizeObserver(resize).observe(canvas);resize();document.addEventListener('visibilitychange',()=>{if(!document.hidden)requestDraw();});
-  return {update,reset(){orbit={azimuth:-.10,polar:1.46,radius:11.5};},scene,camera,renderer,lens,rays,focus,source,g,world};
+  return {update,scene,camera,renderer,lens,rays,focus,source,g,world};
  }
 }
