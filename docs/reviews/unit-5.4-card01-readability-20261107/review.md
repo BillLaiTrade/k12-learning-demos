@@ -21,4 +21,8 @@
 
 ## 發布
 
-待推送後補齊公開檔案比對、操作與原生Pages證據。
+功能提交441e3242，保留其他更新後由9d552f1b3d3a4fc9c6ff893a950c38878c75037c發布；原生Pages[42345493561](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/42345493561)成功，見[發布證據](release.json)。
+
+[公開15項](public.txt)全過，[35組公開版面](layout-public.json)無整頁水平溢出，[錯誤紀錄](errors-public.json)為空；[13檔比對](public-hashes.json)與本機一致，涵蓋頁面、兩個新模組、原模型、繪圖、格式、頭像與分享圖。已人工檢視[升溫公開畫面](warming-public.png)、[沸騰公開畫面](boiling-public.png)及[窄版](narrow-public.png)。瀏覽器沿用既有測試的程序限定環境代理CA公鑰匹配，未變更持久信任庫；檔案比對使用系統TLS驗證。
+
+下一步由使用者檢視[第一區](https://billlaitrade.github.io/k12-learning-demos/units/5/parts/5.4/#card-01)，再依回饋精修或接續第二區。此為局部修訂，未記為全頁最終核可或外審通過。
