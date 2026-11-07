@@ -1,6 +1,6 @@
-import {HEAT,heating,ballDiameter,ballPasses,PHASES,waterVolume,waterDensity,gasVolume,thermometer,REACTIONS,QUIZ,grade} from './thermal-model.mjs';
-import {heatScene,phaseScene,solidScene,bottleScene,gasScene,waterException,chemicalScene} from './thermal-art.mjs';
-import {HEATING_STEPS,heatingStep,observedHeatChart,heatObservation} from './heating-observation.mjs';
+import {heating,ballDiameter,ballPasses,PHASES,waterVolume,waterDensity,gasVolume,thermometer,REACTIONS,QUIZ,grade} from './thermal-model.mjs';
+import {phaseScene,solidScene,bottleScene,gasScene,waterException,chemicalScene} from './thermal-art.mjs';
+import {HEATING_STEPS,heatingStep,observedHeatChart,observedHeatScene,heatObservation} from './heating-observation.mjs?v=readability-20261107';
 const $=id=>document.getElementById(id),write=(id,s)=>$(id).textContent=s;
 const pressed=(selector,value,key)=>document.querySelectorAll(selector).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset[key]===String(value))));
 // Each animated experiment owns its state. Interruptions preserve data but never auto-resume.
@@ -14,9 +14,8 @@ let energy=0,heatApparatus=null;
 function renderHeat(){
  const state=heating(energy),playing=animations.has('heat-lab'),step=heatingStep(energy),complete=energy>=HEATING_STEPS[2].end;
  const observation=heatObservation(energy,playing);
- $('heat-fallback').innerHTML=heatScene(energy,playing);
- // The non-WebGL illustration shares the same state and is always available.
- if(!playing&&energy<HEAT.melt){$('heat-fallback').innerHTML=$('heat-fallback').innerHTML.replaceAll('融冰中','冰與水共存');}
+ $('heat-fallback').innerHTML=observedHeatScene(energy,playing);
+ $('heat-reference').hidden=energy<HEATING_STEPS[1].end;
  if(heatApparatus)heatApparatus.update(state,playing,energy);
  $('heat-chart').innerHTML=observedHeatChart(energy);
  write('heat-temp',state.temperature.toFixed(1)+'°C');
@@ -25,7 +24,8 @@ function renderHeat(){
  for(let i=0;i<3;i++){
   const el=$('heat-step-'+i),done=energy>=HEATING_STEPS[i].end;
   el.dataset.done=String(done);if(i===step&&!complete)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current');
-  el.querySelector('small').textContent=done?'已完成':i===step?(playing?'觀察中':energy===0?'待觀察':'已暫停'):'尚未觀察';
+  const start=i?HEATING_STEPS[i-1].end:0;
+  el.querySelector('small').textContent=done?'已完成':i===step?(playing?'觀察中':energy===start?(i?'待開始':'待觀察'):'已暫停'):'尚未觀察';
   el.querySelector('.heat-step-number').textContent=done?'✓':String(i+1);
  }
  write('heat-caption',observation.caption);
@@ -43,7 +43,7 @@ $('heat-play').onclick=()=>{
 $('heat-reset').onclick=()=>{stop('heat-lab');energy=0;renderHeat();};
 // The apparatus is optional: an unavailable WebGL context cannot block the
 // curve, controls or any other section of this lesson.
-import('./heating-apparatus.mjs').then(({createHeatingApparatus})=>{try{heatApparatus=createHeatingApparatus($('heat-scene'));renderHeat();}catch{ $('heat-scene').classList.remove('has-3d'); }}).catch(()=>{});
+import('./heating-apparatus.mjs?v=readability-20261107').then(({createHeatingApparatus})=>{try{heatApparatus=createHeatingApparatus($('heat-scene'));renderHeat();}catch{ $('heat-scene').classList.remove('has-3d'); }}).catch(()=>{});
 let mode='melt',phaseProgress=0;
 function renderPhase(){const s=PHASES[mode];$('phase-scene').innerHTML=phaseScene(mode,phaseProgress);write('phase-sample',s.sample);write('phase-condition',s.environment);write('phase-before',s.before);write('phase-after',s.after);write('phase-temp',s.temperature);pressed('[data-phase]',mode,'phase');write('phase-play',animations.has('phase-lab')?'停止觀察':phaseProgress>=1?'再次觀察':phaseProgress>0?'繼續觀察':'開始觀察');write('phase-note',phaseProgress>0?s.explanation:'準備觀察'+s.name+'；先認清研究對象，再看能量方向。');$('phase-lab').dataset.mode=mode;}
 for(const b of document.querySelectorAll('[data-phase]'))b.onclick=()=>{stop('phase-lab');mode=b.dataset.phase;phaseProgress=0;renderPhase();};
