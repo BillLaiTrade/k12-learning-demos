@@ -12,7 +12,7 @@
 .prism-snapshot canvas{display:block;width:100%;height:100%;object-fit:contain}
 .prism-snapshot canvas[hidden],.prism-snapshot p[hidden]{display:none}
 .prism-snapshot p{margin:0;padding:12px;color:#e1e9db;text-align:center;font-size:.875rem}
-.prism-snapshot-position,.prism-comparison-note,.prism-fixed{font-size:.8rem;color:#536c50;margin:8px 0 0}
+.prism-comparison-note,.prism-fixed{font-size:.8rem;color:#536c50;margin:8px 0 0}
 .prism-fixed{padding-top:12px;margin-top:12px;border-top:1px solid #cfdcc9;font-weight:600}
 .prism-compare-workspace .interaction-hint{margin:8px 0 0}
 @media(max-width:480px){.prism-compare-workspace{padding:12px}.prism-comparison-grid{gap:8px}.prism-comparison-card{padding:7px}.prism-snapshot p{padding:6px;font-size:.75rem}}
