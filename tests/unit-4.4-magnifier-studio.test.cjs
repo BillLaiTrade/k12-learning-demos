@@ -53,7 +53,7 @@ assert.ok(records[i].spread<records[i-1].spread);}const widths=await root('eye')
   await f.fs.writeFile(f.path.join(f.out,'continuous-defocus.json'),JSON.stringify(samples,null,2));await row('eye','near');
  });
  await t.test('主內容只談觀看結果，第三區承接成像比較，沒有眼內機制',async()=>{
-  assert.equal(await root('eye').locator('.magnifier-dock + .magnifier-observations').count(),1);
+  assert.equal(await root('eye').locator('.magnifier-dock ~ .magnifier-observations').count(),1);
   assert.equal(await root('eye').locator('.magnifier-review-link a').getAttribute('href'),'#s3');
   await row('eye','near');assert.match(await root('eye').locator('[data-mag-condition]').innerText(),/F 內.*放大鏡/);
   await row('eye','outside');assert.match(await root('eye').locator('[data-mag-eye-badge]').innerText(),/此固定眼位無法清楚對焦/);
