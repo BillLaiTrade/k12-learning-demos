@@ -23,15 +23,15 @@ test('4.3 exit cart demonstrates staggered acceleration and turning', {timeout:1
     await p.clock.runFor(3000);assert.equal((await pose()).state,'complete');assert.match(await button.innerText(),/再看一次/);assert.match(await details.innerText(),/不代表光受到摩擦/);
     if(captures)await details.screenshot({path:path.join(captures,'1440-complete.png')});
   });
-  await t.test('the upper water or glass follows the selector, lower air and qualitative motion stay correct',async()=>{
-    for(const [key,name] of [['glass','玻璃'],['water','水']]){
+  await t.test('material changes do not alter the fixed ground analogy',async()=>{
+    for(const key of ['glass','water']){
       const before=await pose();await select('exit',key);
-      assert.equal(await p.locator('#exit-cart-medium-label').textContent(),`${name}（光速較慢）`);
-      assert.equal(await details.locator('[data-cart-medium]').textContent(),name);
-      assert.match(await details.innerText(),/空氣（光速較快）/);
+      assert.match(await details.innerText(),/較難前進的地面/);
+      assert.match(await details.innerText(),/平滑地面/);
+      assert.match(await details.innerText(),/進入較快介質，光路偏離法線/);
       assert.deepEqual(await pose(),before);
     }
-    assert.match(await p.locator('#exit-cart-status').textContent(),/加速.*更遠離法線/);
+    assert.match(await p.locator('#exit-cart-status').textContent(),/加速.*沿新方向前進/);
     const ids=await p.locator('[id]').evaluateAll(es=>es.map(e=>e.id));assert.equal(ids.length,new Set(ids).size);
   });
   await t.test('replay, folding, leaving the viewport and hidden document stop without an empty loop',async()=>{
