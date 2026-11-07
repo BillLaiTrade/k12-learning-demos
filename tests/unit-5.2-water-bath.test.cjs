@@ -11,7 +11,7 @@ test('5.2 water bath: direct manipulation, finite source and goal evidence',{tim
  const root=page.locator('#water-bath'),play=page.locator('#bath-play'),reset=page.locator('#bath-reset'),bottle=page.locator('#bath-bottle');
  const state=()=>root.evaluate(n=>({...n.dataset}));
  const point=async(p,x,y)=>p.locator('#bath-stage').evaluate((n,xy)=>{const q=n.createSVGPoint();q.x=xy[0];q.y=xy[1];const r=q.matrixTransform(n.getScreenCTM());return{x:r.x,y:r.y};},[x,y]);
- const dragBottle=async(x,bottom)=>{await page.locator('#bath-stage').scrollIntoViewIfNeeded();const s=await state(),from=await point(page,Number(s.bottleX),Number(s.bottleBottom)-160),to=await point(page,x,bottom-160);await page.mouse.move(from.x,from.y);await page.mouse.down();await page.mouse.move(to.x,to.y,{steps:12});await page.mouse.up();};
+ const dragBottle=async(x,bottom)=>{await page.locator('#bath-stage').scrollIntoViewIfNeeded();const s=await state(),from=await point(page,Number(s.bottleX),Number(s.bottleBottom)-350),to=await point(page,x,bottom-350);await page.mouse.move(from.x,from.y);await page.mouse.down();await page.mouse.move(to.x,to.y,{steps:12});await page.mouse.up();};
  const intoWater=async()=>{await bottle.focus();if(Number((await state()).immersion)===0)await page.keyboard.press('Enter');};
  const drawing=()=>page.evaluate(()=>({readings:[...document.querySelectorAll('.bath-reading span')].map(n=>n.textContent),curves:['source','drink'].map(k=>document.querySelector('#bath-curve-'+k).getAttribute('d')),transform:document.querySelector('#bath-bottle').getAttribute('transform'),water:document.querySelector('#bath-water-body').getAttribute('d')}));
  await t.test('compact page starts stopped, hides records and uses a fixed quiz route name',async()=>{
@@ -21,7 +21,7 @@ test('5.2 water bath: direct manipulation, finite source and goal evidence',{tim
  await t.test('real mouse drag inserts, adjusts depth and removes bottle without restarting temperature',async()=>{
   await dragBottle(550,600);assert.ok(Number((await state()).immersion)>.7);assert.equal((await state()).bottleX,'550');const fullWater=await page.locator('#bath-water-surface').getAttribute('cy');await dragBottle(550,500);assert.ok(Number((await state()).immersion)<.4);assert.notEqual(await page.locator('#bath-water-surface').getAttribute('cy'),fullWater);await dragBottle(1010,600);assert.equal(Number((await state()).immersion),0);assert.equal((await state()).drink,'20.00000');
  });
- await t.test('material drag places jacket and bottle stays draggable through the jacket opening',async()=>{
+ await t.test('material drag fits the bowl and the exposed bottle cap stays draggable',async()=>{
   const tool=page.locator('[data-bath-tool=wrap]');await tool.scrollIntoViewIfNeeded();const box=await tool.boundingBox(),to=await point(page,250,470);await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(to.x,to.y,{steps:12});await page.mouse.up();assert.equal((await state()).wrap,'true');assert.equal(await page.locator('#bath-wrap-object').getAttribute('hidden'),null);
   await dragBottle(550,600);assert.ok(Number((await state()).immersion)>.7);await dragBottle(550,530);assert.ok(Number((await state()).immersion)<.5);assert.equal((await state()).wrap,'true');assert.equal(await page.locator('.bath-drag-ghost').count(),0);await reset.click();
  });

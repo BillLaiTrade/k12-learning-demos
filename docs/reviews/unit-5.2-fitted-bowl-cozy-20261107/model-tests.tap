@@ -1,0 +1,21 @@
+✔ initial finite reservoirs and heat capacities are consistent (0.949739ms)
+✔ bottle placement changes wetted area and displacement without resetting temperatures (0.238311ms)
+✔ pair exchange conserves energy with ambient exchange disabled (18.623248ms)
+✔ room heat ledger balances all three reservoirs (7.463171ms)
+✔ cup transfers finite water and its enthalpy; container heat capacity is retained (0.471525ms)
+✔ room warms a below-room sample and cools an above-room sample (0.120377ms)
+✔ exchange reverses naturally if sample becomes hotter than bath (0.133778ms)
+✔ outer jacket and base mat reduce room losses without eliminating them (0.222008ms)
+✔ bottle sleeve impedes the desired water-to-drink exchange (0.265691ms)
+✔ reachability: immersion can succeed, jacket adds margin, outside/sleeved cases remain below goal (23.16324ms)
+✔ successful observation is remembered while temperatures later return toward room (26.854431ms)
+✔ uniform room equilibrium is stationary and no configuration creates temperature extrema (23.647605ms)
+✔ goal uses displayed tenth-degree resolution; invalid steps/coordinates do not mutate state (0.981187ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.431132
