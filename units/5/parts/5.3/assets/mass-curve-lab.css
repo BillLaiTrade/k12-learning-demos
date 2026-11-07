@@ -23,5 +23,4 @@
 #mass-analysis-masses td{color:#b36028}
 #mass-analysis-state{display:block;margin-top:4px;font-size:.875rem;font-weight:400;line-height:1.5;color:#6f603c}
 #mass-analysis[data-mode=verified] #mass-analysis-state{color:#315e3d;font-weight:650}
-#mass-analysis .heat-stage-analysis-table tr>*:last-child{background:#f3f7ee}
 #mass-analysis var{font-family:inherit;font-weight:inherit}
