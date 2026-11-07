@@ -1,6 +1,7 @@
 import {heating,ballDiameter,ballPasses,PHASES,waterVolume,waterDensity,gasVolume,thermometer,REACTIONS,QUIZ,grade} from './thermal-model.mjs';
-import {phaseScene,solidScene,bottleScene,gasScene,waterException,chemicalScene} from './thermal-art.mjs';
+import {solidScene,bottleScene,gasScene,waterException,chemicalScene} from './thermal-art.mjs';
 import {HEATING_STEPS,heatingStep,observedHeatChart,observedHeatScene,heatObservation} from './heating-observation.mjs?v=readability-20261107';
+import {COMPARISON,phaseComparison,comparisonScene,extensionScene} from './phase-comparison.mjs?v=finite-baths-20261107';
 const $=id=>document.getElementById(id),write=(id,s)=>$(id).textContent=s;
 const pressed=(selector,value,key)=>document.querySelectorAll(selector).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset[key]===String(value))));
 // Each animated experiment owns its state. Interruptions preserve data but never auto-resume.
@@ -44,8 +45,39 @@ $('heat-reset').onclick=()=>{stop('heat-lab');energy=0;renderHeat();};
 // The apparatus is optional: an unavailable WebGL context cannot block the
 // curve, controls or any other section of this lesson.
 import('./heating-apparatus.mjs?v=readability-20261107').then(({createHeatingApparatus})=>{try{heatApparatus=createHeatingApparatus($('heat-scene'));renderHeat();}catch{ $('heat-scene').classList.remove('has-3d'); }}).catch(()=>{});
-let mode='melt',phaseProgress=0;
-function renderPhase(){const s=PHASES[mode];$('phase-scene').innerHTML=phaseScene(mode,phaseProgress);write('phase-sample',s.sample);write('phase-condition',s.environment);write('phase-before',s.before);write('phase-after',s.after);write('phase-temp',s.temperature);pressed('[data-phase]',mode,'phase');write('phase-play',animations.has('phase-lab')?'停止觀察':phaseProgress>=1?'再次觀察':phaseProgress>0?'繼續觀察':'開始觀察');write('phase-note',phaseProgress>0?s.explanation:'準備觀察'+s.name+'；先認清研究對象，再看能量方向。');$('phase-lab').dataset.mode=mode;}
+let comparisonProgress=0,comparisonRevealed=false;
+const comparisonApparatus={};
+function renderComparison(){
+ const states=phaseComparison(comparisonProgress),playing=animations.has('comparison-lab');
+ Object.assign($('comparison-lab').dataset,{progress:String(comparisonProgress),playing:String(playing),revealed:String(comparisonRevealed)});
+ for(const key of ['warm','cold']){
+  const state=states[key];$('comparison-'+key+'-fallback').innerHTML=comparisonScene(key,state,comparisonRevealed);
+  if(comparisonApparatus[key])comparisonApparatus[key].update(state);
+  write('comparison-'+key+'-bath',state.bathTemperature.toFixed(1)+'°C');
+  $('comparison-'+key+'-ice').style.width=state.ice+'%';
+  $('comparison-'+key+'-ice').parentElement.setAttribute('role','img');$('comparison-'+key+'-ice').parentElement.setAttribute('aria-label',`起初冰量50g，目前約${state.ice.toFixed(1)}g；長條同尺度示意`);
+  write('comparison-'+key+'-caption',comparisonProgress===0?'冰、水共存，準備觀察':key==='warm'?'冰量減少，暖水降溫':'冰量增加，鹽水升溫');
+  $('comparison-'+key+'-scene').setAttribute('aria-label',`杯內冰水約0攝氏度，${key==='warm'?'暖水浴':'預冷鹽水'}目前${state.bathTemperature.toFixed(1)}攝氏度`);
+  $('comparison-'+key+'-arrow').hidden=!comparisonRevealed;$('comparison-'+key+'-direction').hidden=!comparisonRevealed;
+ }
+ $('comparison-explanation').hidden=!comparisonRevealed;$('comparison-reveal').setAttribute('aria-expanded',String(comparisonRevealed));$('comparison-reveal').disabled=playing||comparisonProgress===0;
+ write('comparison-reveal',comparisonRevealed?'收起熱傳方向':'顯示熱傳方向');
+ $('comparison-play').querySelector('[aria-hidden]').textContent=playing?'Ⅱ':'▶';
+ write('comparison-play-label',playing?'暫停比較':comparisonProgress>=1?'再次比較':comparisonProgress>0?'繼續比較':'開始比較');
+ const note=playing?'比較冰量與兩處溫度，也可以隨時暫停觀察。':comparisonProgress===0?'先觀察冰量與杯內外溫度；暫停或看完比較後，可顯示熱傳方向。':comparisonProgress>=1?'比較已完成。可按「顯示熱傳方向」，對照觀察結果與解釋。':'比較已暫停。可顯示熱傳方向，或繼續觀察。';
+ if($('comparison-note').textContent!==note)write('comparison-note',note);
+}
+$('comparison-play').onclick=()=>{
+ if(animations.has('comparison-lab')){stop('comparison-lab');return;}
+ if(comparisonProgress>=1)comparisonProgress=0;
+ comparisonRevealed=false;const initial=comparisonProgress;
+ run('comparison-lab',COMPARISON.duration*(1-initial),p=>{comparisonProgress=initial+(1-initial)*p;renderComparison();},renderComparison);renderComparison();
+};
+$('comparison-reset').onclick=()=>{stop('comparison-lab');comparisonProgress=0;comparisonRevealed=false;renderComparison();};
+$('comparison-reveal').onclick=()=>{if(comparisonProgress===0||animations.has('comparison-lab'))return;comparisonRevealed=!comparisonRevealed;renderComparison();};
+import('./phase-apparatus.mjs?v=finite-baths-20261107').then(({createPhaseApparatus})=>{for(const key of ['warm','cold'])try{comparisonApparatus[key]=createPhaseApparatus($('comparison-'+key+'-scene'),key);}catch{ $('comparison-'+key+'-scene').classList.remove('has-phase-3d'); }renderComparison();}).catch(()=>{});
+let mode='evaporate',phaseProgress=0;
+function renderPhase(){const s=PHASES[mode];$('phase-scene').innerHTML=extensionScene(mode,phaseProgress);write('phase-sample',s.sample);write('phase-condition',s.environment);write('phase-before',s.before);write('phase-after',s.after);write('phase-temp',s.temperature);pressed('[data-phase]',mode,'phase');write('phase-play',animations.has('phase-lab')?'停止觀察':phaseProgress>=1?'再次觀察':phaseProgress>0?'繼續觀察':'開始觀察');write('phase-note',phaseProgress>0?s.explanation:'準備觀察'+s.name+'；先認清研究對象，再看能量方向。');$('phase-lab').dataset.mode=mode;}
 for(const b of document.querySelectorAll('[data-phase]'))b.onclick=()=>{stop('phase-lab');mode=b.dataset.phase;phaseProgress=0;renderPhase();};
 $('phase-play').onclick=()=>{if(animations.has('phase-lab')){stop('phase-lab');return;}if(phaseProgress>=1)phaseProgress=0;const initial=phaseProgress;run('phase-lab',5000*(1-initial),p=>{phaseProgress=initial+(1-initial)*p;renderPhase();},renderPhase);renderPhase();};
 $('phase-reset').onclick=()=>{stop('phase-lab');phaseProgress=0;renderPhase();};
@@ -89,4 +121,4 @@ const visibility=new IntersectionObserver(entries=>{for(const e of entries)if(!e
 let scrollFrame=0;const updateRoute=()=>{let current=navLinks[0];for(const a of navLinks)if(document.querySelector(a.hash).getBoundingClientRect().top<innerHeight*.45)current=a;for(const a of navLinks){if(a===current)a.setAttribute('aria-current','step');else a.removeAttribute('aria-current');}scrollFrame=0;};addEventListener('scroll',()=>{if(!scrollFrame)scrollFrame=requestAnimationFrame(updateRoute);},{passive:true});
 const stopAll=()=>{for(const id of [...animations.keys()])stop(id);};document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAll();});addEventListener('pagehide',stopAll);
 for(const el of document.querySelectorAll('[data-control]'))el.disabled=false;
-renderHeat();renderPhase();renderSolid();renderExpand();renderThermo();renderChem();renderQuiz();updateRoute();$('loading-note').hidden=true;
+renderHeat();renderComparison();renderPhase();renderSolid();renderExpand();renderThermo();renderChem();renderQuiz();updateRoute();$('loading-note').hidden=true;

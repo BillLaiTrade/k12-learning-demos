@@ -18,9 +18,9 @@ export function positionBottle(s,x,bottom){
 }
 function surfaceLoss(t,area){return 10*area*(t-ROOM)+.9*SIGMA*area*((t+273.15)**4-(ROOM+273.15)**4);}
 function insulatedSide(t){
-  // Low bowl cozy: 60% remains exposed; covered surface solves
+  // Fitted bowl cozy: 15% remains exposed; covered surface solves
   // conduction through insulation = convection+radiation from its outside.
-  const area=.035,covered=.4,R=.012/(.04*area*covered);
+  const area=.035,covered=.85,R=.012/(.04*area*covered);
   let lo=Math.min(t,ROOM),hi=Math.max(t,ROOM);
   for(let i=0;i<22;i++){const mid=(lo+hi)/2,f=(t-mid)/R-surfaceLoss(mid,area*covered);if(f>0)lo=mid;else hi=mid;}
   return surfaceLoss(t,area*(1-covered))+(t-(lo+hi)/2)/R;

@@ -1,0 +1,42 @@
+[
+  {
+    "width": 1440,
+    "height": 900,
+    "overflow": false,
+    "rootHeight": 669.546875,
+    "clipped": [],
+    "lcdFont": 15
+  },
+  {
+    "width": 1366,
+    "height": 768,
+    "overflow": false,
+    "rootHeight": 669.546875,
+    "clipped": [],
+    "lcdFont": 15
+  },
+  {
+    "width": 1280,
+    "height": 720,
+    "overflow": false,
+    "rootHeight": 669.546875,
+    "clipped": [],
+    "lcdFont": 15
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "overflow": false,
+    "rootHeight": 1196.5625,
+    "clipped": [],
+    "lcdFont": 15
+  },
+  {
+    "width": 320,
+    "height": 740,
+    "overflow": false,
+    "rootHeight": 1237.984375,
+    "clipped": [],
+    "lcdFont": 15
+  }
+]

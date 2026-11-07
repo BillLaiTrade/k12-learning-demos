@@ -10,7 +10,7 @@ const pressed=(root,selector,key)=>root.querySelectorAll(selector).forEach(b=>b.
 function ready(root){root.querySelectorAll('[data-pending]').forEach(e=>e.disabled=false);root.querySelectorAll('[data-rays],[data-view]').forEach(e=>e.disabled=false);root.querySelector('[data-load-note]').hidden=true;root.dataset.ready='true';}
 function condition(root,pairs){const node=root.querySelector('[data-conditions]');node.replaceChildren();for(const[label,value]of pairs){const s=document.createElement('span');s.append(label+'：');const b=document.createElement('strong');b.textContent=value;s.append(b);node.append(s);}}
 function channels(root,groups){
- const row=root.querySelector('[data-channels]');if(!row)return;row.replaceChildren();
+ const row=root.querySelector('[data-channels]');if(!row)return;const slots=[...row.querySelectorAll('[data-channel-slot]')];if(!slots.length)row.replaceChildren();let index=0;
  const surface=root.dataset.lab==='surface'||!!root.querySelector('.path-workspace');
  for(const[label,rgb,description]of groups){
   const cell=document.createElement('div');cell.className='channel-cell';
@@ -27,7 +27,7 @@ function channels(root,groups){
    }else{
     const dot=document.createElement('i');dot.style.setProperty('--channel',color);dot.style.setProperty('--strength',Math.max(.06,rgb[i]));dots.append(dot);
    }
-  });cell.append(name,value,dots);row.append(cell);
+  });cell.append(name,value,dots);if(slots.length)slots[index++].replaceChildren(cell);else row.append(cell);
  }
 }
 function surfaceChannels(root,observation){

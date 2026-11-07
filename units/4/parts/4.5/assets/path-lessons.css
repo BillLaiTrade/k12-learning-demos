@@ -89,3 +89,16 @@
 
 /* Keep historical #s6 links at the integrated fifth lesson without another card. */
 .integrated-eye-anchor{display:block;height:0;scroll-margin-top:105px}
+
+/* 第五區：每個選擇與其對應的色光結果放在同一欄。 */
+#s5 .filter-controls{gap:20px}
+#s5 .filter-step{position:relative;min-width:0;padding:11px;border:1px solid #d5e1ce;border-radius:12px;background:#f5f7ee}
+#s5 .filter-controls .lab-controls{padding:0;border:0;background:transparent}
+#s5 .filter-step [data-channel-slot]{margin-top:10px;padding-top:9px;border-top:1px solid #d9e3d5}
+#s5 .filter-step .channel-cell{padding:0;border:0;background:transparent}
+#s5 .filter-step .channel-cell .label{margin-bottom:3px}
+@media(max-width:700px){
+ #s5 .filter-controls{grid-template-columns:1fr;gap:18px}
+ #s5 .filter-step{padding:10px 12px}
+ #s5 .filter-step .channel-cell strong{min-height:0}
+}

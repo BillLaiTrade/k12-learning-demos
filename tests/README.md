@@ -1723,3 +1723,13 @@ CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-water-bath.test.cjs
 ## 4.3 桌面狀態牌、兩區重設與視深拖動（2026-11-07）
 
 `unit-4.3-desk-controls-depth.test.cjs`檢查第三／四區無重設、變更角度後可發射與再發射；以真實滑鼠拖眼睛擷取連續320px預覽，測量孤立青藍像素與水面保留。`DETAIL_CAPTURE_DIR`輸出狀態牌與眼睛視野圖，公開重驗可用`LESSON_BASE_URL`及`LESSON_USE_PROXY`。既有第一區、兩個折射區及第六區測試作必要回歸。
+
+## 5.3 第三區自由水量曲線驗證（2026-11-07）
+
+```sh
+node --test tests/unit-5.3-mass-comparison-model.test.mjs tests/unit-5.3-mass-curve.test.cjs tests/unit-5.3-format.test.cjs
+```
+
+新互動套件7項（含父測試）涵蓋常態可讀曲線／預測、完成後才標記結果、250g與100／175.5／200／300／350g、水位與讀值連動、非法輸入、重新驗證、換區／失焦／背景中斷、圖片失敗重試、減少動態，以及三桌機與390／320px無裁切。`MASS_CURVE_CAPTURE_DIR`保存版面量測；`UNIT53_URL`指定公開版並沿用環境代理，不忽略TLS驗證。
+
+格式套件同步新單杯結果；第三區導覽容許1px以內次像素捲動誤差。舊第三區雙杯／獨立旋鈕／累計紀錄測試留存歷史，已不適用新界面，本輪不宣稱重跑或通過。純模型與其他區共通格式／代表操作作必要回歸。
