@@ -124,7 +124,9 @@ button.primary:hover, .rank-quiz .rank-play:hover, .rank-quiz .rank-check:hover 
   .cart-explanation .cart-analogy-grid { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); }
 }
 
-.reflection-recall { display:flex; align-items:flex-start; gap:14px; }
-.reflection-recall-icon { width:32px; height:32px; flex:none; color:#4e8061; }
-.reflection-recall p { margin:3px 0; }
-.reflection-recall a { color:#256b4c; font-size:.9rem; font-weight:700; }
+.reflection-recall { display:flex; flex-wrap:wrap; align-items:center; gap:18px; padding:18px 22px; border:1px solid #9cae94; outline:1px solid #d8c59b; outline-offset:-5px; border-radius:12px; background:#fcfaf1; box-shadow:0 4px 14px #374b3520; }
+.reflection-recall-diagram { flex:0 0 170px; width:170px; max-width:100%; height:auto; padding-right:18px; border-right:1px solid #c9d3bf; }
+.reflection-recall-copy { flex:1 1 250px; min-width:0; }
+.reflection-recall-copy strong { color:#214c36; font-size:1.08rem; }
+.reflection-recall-copy p { margin:6px 0 0; line-height:1.7; }
+.reflection-recall-link { flex:none; color:#256b4c; font-size:.9rem; font-weight:700; text-decoration-color:#b18535; text-underline-offset:4px; }
