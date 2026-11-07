@@ -2,6 +2,10 @@
 
 依使用者核可六區及2026-11-06「先製作整頁初版，再逐區優化」指示製作。學生頁統一稱「單元小測」，無逐區評分。
 
+## 第二區有限量外浴比較（2026-11-07）
+
+第二區依核可圖與後續討論改為並排觀察、變動外浴溫度及主動開啟解釋。新增`phase-comparison.mjs`（有限外浴、相變同源及SVG替代／延伸）與`phase-apparatus.mjs`（兩液體、兩探針、雙通道表與投影箭頭）。第一區與原模型保持，蒸發／冷杯水珠及六種回顧保留。[模型、來源與證據](../../../../../docs/reviews/unit-5.4-card02-finite-baths-20261107/review.md)。
+
 ## 第一區六項判讀優化（2026-11-07，後續修訂）
 
 已依使用者核可六項建議加強水／冰對比及沸騰起點水位，放大LCD、隱藏3D重複讀值框；曲線固定0～120kJ並漸進標示階段，停點區分待開始與中途暫停，文案按狀態／操作／概念分工。原能量模型與三段停點保留。[本輪紀錄](../../../../../docs/reviews/unit-5.4-card01-readability-20261107/review.md)。
@@ -39,6 +43,6 @@
 
 ## 測試
 
-`node --test --test-isolation=none tests/unit-5.4-model.test.mjs tests/unit-5.4.test.cjs`
+`node --test --test-isolation=none tests/unit-5.4-model.test.mjs tests/unit-5.4-phase-comparison.test.mjs tests/unit-5.4.test.cjs`
 
 瀏覽器測試自啟本機伺服器；可用UNIT54_URL與UNIT54_CAPTURE_DIR測公開頁及保存證據。須允許本機HTTP與Chromium。三桌機與390／320px為本輪基本版面檢查，不代表實體手機或跨瀏覽器驗收。

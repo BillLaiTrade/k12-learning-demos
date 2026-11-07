@@ -1,0 +1,107 @@
+[
+  {
+    "path": "units/5/parts/5.4/index.html",
+    "status": 200,
+    "same": true,
+    "local_sha256": "c31e570b31e3d9dbf4f61eb773a4c4f23b199f6c953e745025f676e847010b0a",
+    "public_sha256": "c31e570b31e3d9dbf4f61eb773a4c4f23b199f6c953e745025f676e847010b0a"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal.js",
+    "status": 200,
+    "same": true,
+    "local_sha256": "c3d31c532b90a75010e9ae0be712f89459e859410bc3401dbdf603ccf0e6e2be",
+    "public_sha256": "c3d31c532b90a75010e9ae0be712f89459e859410bc3401dbdf603ccf0e6e2be"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal.css",
+    "status": 200,
+    "same": true,
+    "local_sha256": "635f032d62a3992e66190f3eb919cc5d28a9955d9a4d47b50c70a9dff3ae543f",
+    "public_sha256": "635f032d62a3992e66190f3eb919cc5d28a9955d9a4d47b50c70a9dff3ae543f"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal-model.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "2cb281cdc9d35d7821719e01b5cd86a5d90a949b9fb1b9f4d717bc8ae72a1858",
+    "public_sha256": "2cb281cdc9d35d7821719e01b5cd86a5d90a949b9fb1b9f4d717bc8ae72a1858"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal-art.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "e45bb20d07001c3a7736273542b3c41cd588f8de465c7d76264cf40c3c1cc333",
+    "public_sha256": "e45bb20d07001c3a7736273542b3c41cd588f8de465c7d76264cf40c3c1cc333"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/heating-observation.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "450197ba7c35241beae0a16eb35e35e814709099728f22b08b553ba6e5263c25",
+    "public_sha256": "450197ba7c35241beae0a16eb35e35e814709099728f22b08b553ba6e5263c25"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/heating-apparatus.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "ded373fabaf6f6feeaeafbd29c5f6ad2430e675aabad9bd053e2ebf470cd8b79",
+    "public_sha256": "ded373fabaf6f6feeaeafbd29c5f6ad2430e675aabad9bd053e2ebf470cd8b79"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/phase-comparison.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "bf8a64ce96947deadf3868105473615fdfe77942d74e3c1cc73a41de4f99792e",
+    "public_sha256": "bf8a64ce96947deadf3868105473615fdfe77942d74e3c1cc73a41de4f99792e"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/phase-apparatus.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "c545ee9250c46ecfb25722863cff911044415043ca8b1fab3592654d5f1b526c",
+    "public_sha256": "c545ee9250c46ecfb25722863cff911044415043ca8b1fab3592654d5f1b526c"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal-opening.svg",
+    "status": 200,
+    "same": true,
+    "local_sha256": "80c5143dff88fcf72836754f10e46d14e3a0e4bacc81919d12e144a75bd222d0",
+    "public_sha256": "80c5143dff88fcf72836754f10e46d14e3a0e4bacc81919d12e144a75bd222d0"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal-opening.png",
+    "status": 200,
+    "same": true,
+    "local_sha256": "241b2b85a2b20d44918a30ea580ee542a8caf32064813053d20654c6cdaab0a4",
+    "public_sha256": "241b2b85a2b20d44918a30ea580ee542a8caf32064813053d20654c6cdaab0a4"
+  },
+  {
+    "path": "units/4/parts/4.1/assets/vendor/three/build/three.module.js",
+    "status": 200,
+    "same": true,
+    "local_sha256": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea",
+    "public_sha256": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea"
+  },
+  {
+    "path": "units/4/parts/4.1/assets/vendor/three/build/three.core.js",
+    "status": 200,
+    "same": true,
+    "local_sha256": "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6",
+    "public_sha256": "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6"
+  },
+  {
+    "path": "units/5/assets/unit-format.css",
+    "status": 200,
+    "same": true,
+    "local_sha256": "c5b365c3adac380c2c3d5644dfc61d83df4fdee5dd3fc752438de8421127bedf",
+    "public_sha256": "c5b365c3adac380c2c3d5644dfc61d83df4fdee5dd3fc752438de8421127bedf"
+  },
+  {
+    "path": "shared-assets/characters/dialogue-character-avatars.png",
+    "status": 200,
+    "same": true,
+    "local_sha256": "80f73548fd344c7a4c8d03a16323e7ed2770a970eab7c13212317ab5da28f626",
+    "public_sha256": "80f73548fd344c7a4c8d03a16323e7ed2770a970eab7c13212317ab5da28f626"
+  }
+]
