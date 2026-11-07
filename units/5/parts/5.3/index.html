@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="assets/heat-quantity.css?v=quiz-nav-2">
   <link rel="stylesheet" href="assets/calorie-lab.css?v=calc-layout-2">
   <link rel="stylesheet" href="../../assets/unit-format.css?v=20261105">
-  <link rel="stylesheet" href="assets/heat-stage-lab.css?v=plain-observations-1">
-  <script type="module" src="assets/heat-stage-lab.js?v=plain-observations-1"></script>
+  <link rel="stylesheet" href="assets/heat-stage-lab.css?v=settings-1">
+  <script type="module" src="assets/heat-stage-lab.js?v=settings-1"></script>
   <script type="module" src="assets/heat-quantity.js?v=unknown-quiz-1"></script>
   <script type="module" src="assets/calorie-lab.js?v=refined-1-calc-layout-3"></script>
   <link rel="stylesheet" href="assets/heat-bench.css?v=refined-1">
@@ -37,8 +37,8 @@
 
 
   <link rel="stylesheet" href="assets/heat-derivation.css?v=derive-1">
-  <link rel="stylesheet" href="assets/mass-curve-lab.css?v=inverse-analysis-1">
-  <script type="module" src="assets/mass-curve-lab.js?v=inverse-analysis-1"></script>
+  <link rel="stylesheet" href="assets/mass-curve-lab.css?v=observed-1">
+  <script type="module" src="assets/mass-curve-lab.js?v=observed-1"></script>
   <script type="module" src="assets/material-comparison-lab.js?v=derive-1"></script>
   <link rel="stylesheet" href="assets/application-lab.css?v=applications-1">
   <script type="module" src="assets/application-lab.js?v=applications-1"></script>
@@ -140,12 +140,12 @@
               </div>
               <p id="heat-stage-graph-note">橘點連續移動並留下觀察點；數字稍作停留，方便讀取。</p>
               <div class="heat-bench-console"><div class="heat-stage-readings"><span>已吸收熱量 <strong><output id="heat-stage-energy">0</output> cal</strong></span><span>目前水溫 <strong><output id="heat-stage-temperature">20.0</output>°C</strong></span><span>溫升 <strong><output id="heat-stage-rise">0.0</output>°C</strong></span></div><p id="heat-stage-status" role="status">正在準備器材畫面…</p></div></div>
-              <details class="heat-stage-record-panel" id="heat-stage-record-panel"><summary id="heat-stage-record-label">查看推算示例的逐點數據</summary><table class="heat-stage-record-table"><caption>同一份100 g水，從20°C起算的累計吸熱量與溫升</caption><thead><tr><th scope="col">水吸收熱量</th><th scope="col">水溫</th><th scope="col">溫升</th></tr></thead><tbody id="heat-stage-records"></tbody></table></details>
+              <details class="heat-stage-record-panel" id="heat-stage-record-panel"><summary id="heat-stage-record-label">查看沿途觀察紀錄（0筆）</summary><table class="heat-stage-record-table"><caption>同一份100 g水，從20°C起算的累計吸熱量與溫升</caption><thead><tr><th scope="col">水吸收熱量</th><th scope="col">水溫</th><th scope="col">溫升</th></tr></thead><tbody id="heat-stage-records"></tbody></table></details>
               <p class="heat-stage-note">熱量為模型估算；容器吸熱與散熱另計。器材為 AI 情境示意，動畫已加速。</p>
             </div>
             <section class="heat-stage-analysis" id="heat-stage-conclusion" aria-labelledby="heat-stage-analysis-title">
               <h3 id="heat-stage-analysis-title">從數字找規律</h3>
-              <div class="heat-stage-analysis-heading"><p class="heat-stage-analysis-condition">同一份 100 g 水</p><span id="heat-stage-analysis-mode" class="is-example">推算示例・非本次觀察</span></div>
+              <div class="heat-stage-analysis-heading"><p class="heat-stage-analysis-condition">同一份 100 g 水</p><span id="heat-stage-analysis-mode">依目前設定</span></div>
               <table class="heat-stage-analysis-table" aria-label="同一份100g水的三筆熱量與升高的度數對照" aria-describedby="heat-stage-analysis-mode">
                 <colgroup><col class="heat-stage-label-column"><col span="3"></colgroup>
                 <tbody id="heat-stage-analysis-data">
@@ -158,7 +158,7 @@
                 <p>這種關係叫做「<strong>成正比</strong>」。</p>
               </div>
             </section>
-            <details class="relation heat-stage-assumptions"><summary>模型條件</summary><p>另取100 g、20°C的水，沿用第一區器材，假設充分攪拌且水與玻璃容器同溫。水吸熱、容器吸熱與向20°C環境散熱分開計算；20 W有效供熱、42 J/°C容器熱容量與0.5 W/°C散熱係數均為教學設定，非實測校正。</p><p>目標是水實際吸收的累計熱量，不是加熱器總供能；溫度計只提供水溫，熱量由模型估算。範圍100～3,000 cal配合本模型可達的加熱區間，水最高約50°C，無狀態改變。橫軸是水累計吸熱量，縱軸是從20°C起算的溫升，並非水溫或時間。</p><p>一次連續加熱到目標才停止，沿途自動留點，最後的小數終點亦會保留；預設1,000 cal時每100 cal留點，其餘目標自動調整取樣間距。全程同一加熱設定、30倍動畫加速，不模擬探針遲滯、停熱餘熱與等待冷卻。換區或背景中斷保留讀值，不自動續熱；手動繼續。更換目標或重新觀察會清除本次紀錄並從20°C開始。推算示例明確標示，不當作本次觀察。</p></details>
+            <details class="relation heat-stage-assumptions"><summary>模型條件</summary><p>另取100 g、20°C的水，沿用第一區器材，假設充分攪拌且水與玻璃容器同溫。水吸熱、容器吸熱與向20°C環境散熱分開計算；20 W有效供熱、42 J/°C容器熱容量與0.5 W/°C散熱係數均為教學設定，非實測校正。</p><p>目標是水實際吸收的累計熱量，不是加熱器總供能；溫度計只提供水溫，熱量由模型估算。範圍100～3,000 cal配合本模型可達的加熱區間，水最高約50°C，無狀態改變。橫軸是水累計吸熱量，縱軸是從20°C起算的溫升，並非水溫或時間。</p><p>一次連續加熱到目標才停止，沿途自動留點，最後的小數終點亦會保留；預設1,000 cal時每100 cal留點，其餘目標自動調整取樣間距。全程同一加熱設定、30倍動畫加速，不模擬探針遲滯、停熱餘熱與等待冷卻。換區或背景中斷保留讀值，不自動續熱；手動繼續。更換目標或重新觀察會清除本次紀錄並從20°C開始。</p></details>
           </div>
         </section>
 
@@ -182,12 +182,12 @@
             </div>
             <section class="heat-stage-analysis mass-analysis" id="mass-analysis" aria-labelledby="mass-analysis-title" data-mode="prediction">
               <h3 id="mass-analysis-title">從數字找規律</h3>
-              <div class="heat-stage-analysis-heading"><p class="heat-stage-analysis-condition">都是水，每份各吸收1,000 cal</p><span id="mass-analysis-mode">前兩欄為推算參考</span></div>
-              <table class="heat-stage-analysis-table" aria-label="固定吸收1000cal時，水量與升高的度數對照" aria-describedby="mass-analysis-mode mass-analysis-state">
+              <div class="heat-stage-analysis-heading"><p class="heat-stage-analysis-condition">都是水，每份各吸收1,000 cal</p><span id="mass-analysis-mode">完成驗證後自動記錄</span></div>
+              <table class="heat-stage-analysis-table" aria-label="固定吸收1000cal時，水量與升高的度數對照" aria-describedby="mass-analysis-mode">
                 <colgroup><col class="heat-stage-label-column"><col span="3"></colgroup>
                 <tbody>
-                  <tr id="mass-analysis-masses"><th scope="row">水量</th><td>100 g</td><td>200 g</td><td><span id="mass-analysis-mass">250 g</span><small id="mass-analysis-state">本次預測</small></td></tr>
-                  <tr id="mass-analysis-rises"><th scope="row">升高的度數</th><td>10°C</td><td>5°C</td><td id="mass-analysis-rise">4°C</td></tr>
+                  <tr id="mass-analysis-masses"><th scope="row">水量</th><td>待記錄</td><td>待記錄</td><td>待記錄</td></tr>
+                  <tr id="mass-analysis-rises"><th scope="row">升高的度數</th><td>—</td><td>—</td><td>—</td></tr>
                 </tbody>
               </table>
               <div class="heat-stage-takeaway">

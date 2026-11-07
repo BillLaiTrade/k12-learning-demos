@@ -1,0 +1,13 @@
+{
+  "html_outside_card01_card02_and_cache_version_unchanged": true,
+  "original_css_preserved": true,
+  "controller_from_extensions_and_card03_to_quiz_unchanged": true,
+  "core_files": {
+    "thermal-model.mjs": true,
+    "thermal-art.mjs": true,
+    "heating-observation.mjs": true,
+    "phase-comparison.mjs": true,
+    "thermal-opening.svg": true,
+    "thermal-opening.png": true
+  }
+}
