@@ -10,18 +10,19 @@ test('5.2 insulation: controlled comparisons, remaining heat paths and manual ob
  await page.clock.install({time:new Date(0)});await page.clock.pauseAt(new Date(1000));await page.goto(url);await wait(page);
  const root=page.locator('#insulation-lab'),play=page.locator('#insulation-play'),reset=page.locator('#insulation-reset'),source=page.locator('#insulation-source-a');
  const state=()=>root.evaluate(n=>({...n.dataset}));
- const drawing=()=>page.evaluate(()=>({solid:document.querySelector('#insulation-motion-a .insulation-solid-motion').getAttribute('stroke-dashoffset'),radiation:document.querySelector('#insulation-radiation-b').getAttribute('stroke-dashoffset'),gas:document.querySelector('.insulation-gas-arrow').getAttribute('transform'),curves:['a','b'].map(k=>document.querySelector('#insulation-curve-'+k).getAttribute('d'))}));
+ const drawing=()=>page.evaluate(()=>({solid:document.querySelector('#insulation-motion-a .insulation-solid-motion').getAttribute('stroke-dashoffset'),radiation:document.querySelector('#insulation-radiation-b').getAttribute('stroke-dashoffset'),gas:[...document.querySelectorAll('#insulation-gas-motion circle')].map(n=>[n.getAttribute('cx'),n.getAttribute('cy')]),micro:[...document.querySelectorAll('.micro-particles circle')].map(n=>[n.getAttribute('cx'),n.getAttribute('cy')]),curves:['a','b'].map(k=>document.querySelector('#insulation-curve-'+k).getAttribute('d'))}));
  await t.test('starts only on request, retains the scientific bridge and uses identical capped bottles',async()=>{
   assert.equal((await state()).elapsed,'0.000');assert.equal((await state()).playing,'false');const before=await drawing();await page.clock.runFor(1000);assert.deepEqual(await drawing(),before);
   assert.match(await page.locator('#card-06 .dialogue').first().textContent(),/沒有空氣也能傳熱/);assert.match(await page.locator('#card-06 .dialogue').nth(1).textContent(),/氣體導熱.*流動帶熱.*輻射仍能穿過真空/);
-  assert.equal(await page.locator('#insulation-motion-a').getAttribute('opacity'),'0');assert.equal(await page.locator('#insulation-discovery').isVisible(),false);
+  assert.equal(await page.locator('#insulation-motion-a').getAttribute('opacity'),'0');assert.equal(await page.locator('#insulation-discovery').isVisible(),false);assert.equal(await page.locator('#insulation-mechanism').isVisible(),false);assert.match(await page.locator('#insulation-chart-caveat').innerText(),/非實測數據/);
   assert.equal(await page.locator('#insulation-matte-a').getAttribute('href'),await page.locator('#insulation-matte-b').getAttribute('href'));
   assert.match(await page.locator('.insulation-conditions').innerText(),/同型瓶、同水量、同初溫 60°C.*室溫 25°C，均已加蓋/s);
   for(const k of ['a','b'])assert.equal(await page.locator('#insulation-curve-'+k).getAttribute('d'),'M72.00 45.00');
  });
  await t.test('air and vacuum differ in gas paths while radiation and solid neck/support paths remain',async()=>{
   assert.equal((await state()).gasA,'true');assert.equal((await state()).gasB,'false');assert.equal((await state()).liningB,'false');
-  await source.click();const first=await drawing();await page.clock.runFor(1200);assert.notDeepEqual(await drawing(),first);
+  assert.equal(await page.locator('#insulation-mechanism .micro-particles circle').count(),8);assert.match(await page.locator('#insulation-mechanism').getAttribute('aria-label'),/非實際比例/);
+  await source.click();const first=await drawing();assert.equal(await page.locator('#insulation-mechanism').isVisible(),true);assert.equal(await page.locator('.insulation-route-key').isVisible(),false);assert.match(await page.locator('#insulation-chart-title').innerText(),/模型預測/);await page.clock.runFor(1200);assert.notDeepEqual(await drawing(),first);assert.notDeepEqual(first.micro,(await drawing()).micro);
   for(const k of ['a','b']){assert.equal(await page.locator('#insulation-motion-'+k).getAttribute('opacity'),'1');assert.ok(Number(await page.locator('#insulation-radiation-'+k).getAttribute('opacity'))>0);assert.equal(await page.locator('#insulation-motion-'+k+' .insulation-solid-motion path').count(),2);}
   const geometry=await page.locator('#insulation-radiation-a .insulation-heat-line').evaluate(n=>Array.from({length:31},(_,i)=>{const p=n.getPointAtLength(n.getTotalLength()*i/30);return{x:p.x,y:p.y};}));assert.ok(geometry.every(p=>p.x>=292&&p.x<=316&&p.y>330&&p.y<350));
   const a=Number(await page.locator('#insulation-point-a').getAttribute('cy')),b=Number(await page.locator('#insulation-point-b').getAttribute('cy'));assert.ok(45<b&&b<a&&a<224);

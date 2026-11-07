@@ -1,0 +1,28 @@
+▶ 5.2 insulation workspace: same activity, one desktop viewport and return to reading
+  ✔ entry, native modal, Escape and return retain reading position and one activity instance (249.331709ms)
+  ✔ both comparisons keep bottle, curves, findings and controls inside desktop viewports without scrolling (7676.962129ms)
+  ✔ reopening preserves selected comparison, frozen curve and elapsed time (304.741564ms)
+  ✔ completed curve and remaining heat paths share one view in both comparisons (8523.421314ms)
+  ✔ details do not enlarge the observation viewport and the background page cannot receive focus (239.677239ms)
+  ✔ mobile native touch can open, operate, reset and return without horizontal overflow (2211.666707ms)
+  ✔ no browser script errors (2.925852ms)
+✔ 5.2 insulation workspace: same activity, one desktop viewport and return to reading (20112.686018ms)
+▶ 5.2 insulation: controlled comparisons, remaining heat paths and manual observation
+  ✔ starts only on request, retains the scientific bridge and uses identical capped bottles (63.687633ms)
+  ✔ air and vacuum differ in gas paths while radiation and solid neck/support paths remain (452.529822ms)
+  ✔ pause freezes actual paths and graph pixels, resume does not restart, repeated bottle clicks are idempotent (5021.622986ms)
+  ✔ lining comparison resets progress, holds vacuum fixed and changes only gap-facing imagery (4755.46185ms)
+  ✔ keyboard, background pause and other experiments remain independent (911.39422ms)
+  ✔ both modes at seven viewports keep the full plot and all native controls inside the panel (1439.702492ms)
+  ✔ each required image can fail and retry without automatic playback (2191.571939ms)
+  ✔ late lining image cannot restart or reset a different running comparison (1176.619289ms)
+  ✔ real touch in both modes and motion preferences moves paths and pauses actual curves (10356.677352ms)
+✔ 5.2 insulation: controlled comparisons, remaining heat paths and manual observation (27303.393683ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 48082.716096

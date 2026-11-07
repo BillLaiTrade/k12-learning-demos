@@ -1,12 +1,12 @@
-/* Controlled construction comparisons. Cooling curves are qualitative drawing
-   positions in a finite observation window, not measured bottle temperatures. */
+/* Controlled construction comparisons. The particle animation is a qualitative
+   mechanism model; plotted curves are not measured bottle temperatures. */
 (() => {
   'use strict';
   const root=document.getElementById('insulation-lab');if(!root)return;
   const $=id=>document.getElementById(id),play=$('insulation-play'),sources=['a','b'].map(k=>$(`insulation-source-${k}`));
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const comparisons={
-    gap:{title:'夾層剖面示意',a:{label:'空氣夾層',gas:true,lining:false,gap:'有空氣'},b:{label:'真空夾層',gas:false,lining:false,gap:'抽去大部分空氣'},note:'真空減少氣體傳導與對流，輻射仍可傳遞能量。',discovery:'抽掉空氣能減少氣體傳熱，可是輻射和瓶口的傳導還在，難怪水還是會慢慢變涼。'},
+    gap:{title:'夾層剖面示意',a:{label:'空氣夾層',gas:true,lining:false,gap:'有空氣'},b:{label:'真空夾層',gas:false,lining:false,gap:'抽去大部分空氣'},note:'空氣分子隨機運動並碰撞傳能；抽氣後，這條氣體傳熱路徑減少。',discovery:'抽去大部分空氣，會減少氣體傳熱；輻射和瓶口的固體傳熱仍存在。'},
     lining:{title:'兩瓶皆為真空夾層',a:{label:'無亮面反射層',gas:false,lining:false,gap:'無亮面反射層'},b:{label:'有亮面反射層',gas:false,lining:true,gap:'亮面金屬層'},note:'亮面金屬層能降低輻射換熱；瓶口、支撐仍會傳熱。',discovery:'亮面金屬層能讓輻射換熱少一點，可是瓶口、支撐還會傳熱，所以水還是會慢慢變涼。'}
   };
   const assets={bench:{src:$('insulation-bench').dataset.src,status:'idle',request:0},matte:{src:'assets/insulation-flask-matte.webp?v=flask-1',status:'idle',request:0},lining:{src:'assets/insulation-flask-lining.webp?v=flask-1',status:'idle',request:0}};
@@ -38,14 +38,23 @@
     expand.focus({preventScroll:true});if(readingPosition)scrollTo({...readingPosition,behavior:'instant'});
   });
   expand.disabled=false;
-  const WINDOW=14,gasPath=$('insulation-gas-route'),gasLength=gasPath.getTotalLength(),gasArrows=[...root.querySelectorAll('.insulation-gas-arrow')];
+  const WINDOW=14,moleculeGroups=[...root.querySelectorAll('.micro-particles')].map((group,index)=>({group,index})),bottleMolecules=[...root.querySelectorAll('#insulation-gas-motion circle')];
   const setText=(id,text)=>{const n=$(id);if(n.textContent!==text)n.textContent=text;};
   const required=()=>comparison==='lining'?['bench','matte','lining']:['bench','matte'];
   const assetState=()=>required().some(k=>assets[k].status==='error')?'error':required().every(k=>assets[k].status==='ready')?'ready':'loading';
   function putImage(node,url){if(node.getAttribute('href')!==url)node.setAttribute('href',url);}
   // Both comparisons use the same normalized drawing template. It makes no
   // quantitative claim about the relative benefit of vacuum versus a coating.
-  function ordinate(role,p){return Math.exp(-(role==='a'?3.2:1.5)*p);}
+  function ordinate(role,p){return Math.exp(-(role==='a'?2.05:1.5)*p);}
+  function reflect(position,min,max){const span=max-min,cycle=((position-min)%(span*2)+span*2)%(span*2);return min+(cycle<=span?cycle:span*2-cycle);}
+  function moveMolecules(){
+    moleculeGroups.forEach(({group,index})=>group.querySelectorAll('circle').forEach((node,i)=>{
+      const seed=i+index*11+1,x0=48+((seed*47)%198),y0=20+((seed*31)%54),vx=((seed*17)%29-14)*.11,vy=((seed*23)%27-13)*.12;
+      node.setAttribute('cx',reflect(x0+time*vx,40,260).toFixed(1));node.setAttribute('cy',reflect(y0+time*vy,14,82).toFixed(1));
+      node.setAttribute('opacity','.82');
+    }));
+    bottleMolecules.forEach((node,i)=>{node.setAttribute('cx',reflect(141+i%2*8+time*(i%2?1:-1)*(1.2+i*.14),137,153).toFixed(1));node.setAttribute('cy',reflect(238+i*37+time*(i%2?1:-1)*(4+i*.4),218,414).toFixed(1));});
+  }
   function plot(){
     const p=Math.min(1,time/WINDOW);root.dataset.progress=p.toFixed(4);
     $('insulation-progress').value=p;
@@ -63,7 +72,8 @@
     root.dataset.gasA=String(cfg.a.gas);root.dataset.gasB=String(cfg.b.gas);root.dataset.liningA=String(cfg.a.lining);root.dataset.liningB=String(cfg.b.lining);
     root.setAttribute('aria-busy',String(status==='loading'));play.disabled=status!=='ready';sources.forEach(n=>n.disabled=status!=='ready');play.setAttribute('aria-pressed',String(playing));
     setText('insulation-play',playing?'暫停觀察':time>0?'繼續觀察':'開始觀察');setText('insulation-status',!started?'尚未開始':playing?'觀察進行中':'觀察已暫停');
-    setText('insulation-scene-heading',cfg.title);setText('insulation-note',started?cfg.note:'點擊任一瓶身或按下「開始觀察」，比較這一組的降溫快慢。');
+    setText('insulation-scene-heading',cfg.title);setText('insulation-note',started?cfg.note:'點擊任一瓶身外壁，開始同步觀察傳熱機制與溫度趨勢。');
+    setText('insulation-chart-title',comparison==='gap'?'模型預測的降溫趨勢':'定性比較降溫快慢');setText('insulation-chart-caveat',comparison==='gap'?'定性模型，非實測數據':'曲線為定性示意，非實測數據');
     root.querySelectorAll('[data-insulation-comparison]').forEach(n=>n.setAttribute('aria-pressed',String(n.dataset.insulationComparison===comparison)));
     ['a','b'].forEach(role=>{
       const c=cfg[role];setText(`insulation-label-${role}`,c.label);setText(`insulation-legend-${role}`,c.label);setText(`insulation-gap-label-${role}`,c.gap);
@@ -80,9 +90,10 @@
     if(assets.lining.status==='ready')putImage($('insulation-lining-photo'),assets.lining.url);
     $('insulation-lining-photo').toggleAttribute('hidden',!cfg.b.lining);
     $('insulation-gas-motion').toggleAttribute('hidden',!cfg.a.gas);
+    $('insulation-mechanism').hidden=!(comparison==='gap'&&started&&status==='ready');root.querySelector('.insulation-route-key').hidden=comparison==='gap'&&started&&status==='ready';
     $('insulation-gap-leader-a').setAttribute('d',comparison==='gap'?'M90 290L142 290':'M90 290L154 290');
     $('insulation-gap-leader-b').setAttribute('d','M391 289L305 316');
-    gasArrows.forEach(n=>{const distance=((time/5+Number(n.dataset.phase))%1)*gasLength,p=gasPath.getPointAtLength(distance),q=gasPath.getPointAtLength((distance+1)%gasLength);n.setAttribute('transform',`translate(${p.x.toFixed(2)} ${p.y.toFixed(2)}) rotate(${(Math.atan2(q.y-p.y,q.x-p.x)*180/Math.PI).toFixed(1)})`);});
+    moveMolecules();
     plot();$('insulation-discovery').hidden=time<WINDOW;setText('insulation-discovery-text',cfg.discovery);
     setText('insulation-loading-text',status==='error'?'比較場景未能載入，請重新載入或切換比較。':'比較場景載入中…');$('insulation-retry').hidden=status!=='error';
   }
