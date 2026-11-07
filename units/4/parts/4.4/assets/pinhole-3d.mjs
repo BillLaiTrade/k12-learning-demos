@@ -119,7 +119,7 @@ async function initialise(){
   if(g.imageHeight>G.screenHeight||g.imageWidth>G.screenWidth)$('[data-pinhole-status]').textContent+=' 投影範圍超出屏幕，可移動器材再比較。';
   $('[data-pinhole-view]').textContent=front?'返回整體觀察':'正面看屏幕';$('[data-pinhole-view]').setAttribute('aria-pressed',String(front));
   $('[data-pinhole-close]').textContent=closeHole?'返回整體觀察':'近看穿孔光路';$('[data-pinhole-close]').setAttribute('aria-pressed',String(closeHole));
-  $('[data-pinhole-hint]').textContent=closeHole?'這是同一塊孔板的放大觀察。亮色線穿過孔口；較淡的線止於板面。返回整體觀察可拖動三件器材。':front?'正面觀察同一片屏幕；返回整體觀察可拖動三件器材。':'拖曳器材調整位置；拖曳空白處旋轉，滾輪或雙指縮放。';
+  $('[data-pinhole-hint]').textContent=closeHole?'這是同一塊孔板的放大觀察。亮色線穿過孔口；較淡的線止於板面。返回整體觀察可拖動三件器材。':front?'正面觀察同一片屏幕；返回整體觀察可拖動三件器材。':'拖曳器材調整位置；拖曳空白處旋轉，滾輪縮放。';
   $('[data-pinhole-trace]').hidden=!showRays;$('[data-pinhole-rays]').setAttribute('aria-pressed',String(showRays));$('[data-pinhole-rays]').textContent=showRays?'隱藏輔助光路':'顯示輔助光路';
   root.querySelectorAll('[data-pinhole-point]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.pinholePoint===tracked)));
   root.querySelectorAll('[data-pinhole-device]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.pinholeDevice===selectedDevice));b.setAttribute('aria-label',`${b.textContent}，可拖曳底座或用方向鍵移動，Home／End移到可移動範圍兩端。`);});
