@@ -2,7 +2,7 @@ import {initialiseFrontMix} from './mix-lab.mjs?v=mix-dialogue-20261106';
 import {initialisePrecisionPrism} from './precision-prism.mjs?v=prism-comparison-20261106';
 import {LIGHTS,MATERIALS,FILTERS,materialLight,filterLight,eyeLight,colorName,channelsText,rgbCss,prismRays} from './color-model.mjs?v=science-reviewed-20261106';
 import {prismDiagram,materialDiagram,drawScreen,drawObservation} from './rendering.mjs?v=science-reviewed-20261106';
-import {surfaceObservation} from './surface-model.mjs?v=science-reviewed-20261106';
+import {surfaceObservation} from './surface-model.mjs?v=surface-dialogue-20261107';
 import {filterPaperObservation} from './filter-paper-model.mjs?v=science-reviewed-20261106';
 let studioModule=null;
 const text=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};
@@ -56,7 +56,7 @@ function initialiseLab(root,index){
    if(kind==='surface'){
     root.dataset.incoming=JSON.stringify(signal.incoming);root.dataset.absorbed=JSON.stringify(signal.absorbed);
     condition(root,[['照明',LIGHTS[state.light].name],['物體',MATERIALS[state.material].name],['觀察位置','固定']]);
-    text($('[data-result]'),observation.result);text($('[data-surface-name]'),observation.name);text($('[data-receiver-label]'),observation.preview);
+    text($('[data-surface-observation]'),observation.observation);text($('[data-result]'),observation.result);text($('[data-surface-name]'),observation.name);text($('[data-receiver-label]'),observation.preview);
    }else if(kind==='filter'){
     condition(root,[['光源',LIGHTS[state.light].name],['色片',FILTERS[state.filter].name],['紙張',MATERIALS[state.material].name.replace('色色卡','紙')]]);
     root.dataset.incoming=JSON.stringify(signal.incoming);root.dataset.transmitted=JSON.stringify(signal.transmitted);
