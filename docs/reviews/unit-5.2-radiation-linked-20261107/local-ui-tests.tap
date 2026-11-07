@@ -1,17 +1,17 @@
 ▶ 5.2 radiation: one energy path, surface outcomes and conditional warming
-  ✔ manual start is required and the concept uses a single radiation-energy stream (61.852791ms)
-  ✔ travel precedes surface reflection/absorption, and heating begins only after absorption (1385.856812ms)
-  ✔ pause freezes the whole rendered illustration and resume keeps the same progress (630.433802ms)
-  ✔ repeated source clicks cannot stop the demo or multiply animation loops; reset clears all results (2285.526172ms)
-  ✔ keyboard and background interruptions are consistent and do not auto-resume (223.656079ms)
-  ✔ the reflection and absorption paths are distinct outcomes at the same surface point (6.636701ms)
-  ✔ site A and the reflected ray stay attached to the eye and graph after responsive reflow (294.285368ms)
-  ✔ insulation, convection and quiz remain independent after extracting radiation from the shared controller (2316.189117ms)
-  ✔ desktop, laptop and narrow layouts keep controls, condition and actual scenes in view (484.275276ms)
-  ✔ either photo may fail and retry without premature playback or loss of the other successful photo (1718.279616ms)
-  ✔ a late photo response after reset leaves the observation stopped at its beginning (612.766861ms)
-  ✔ real touch under both motion preferences starts moving rays and pauses/resets actual frames (6191.920962ms)
-✔ 5.2 radiation: one energy path, surface outcomes and conditional warming (17202.14681ms)
+  ✔ manual start is required and the concept uses a single radiation-energy stream (57.514909ms)
+  ✔ travel precedes surface reflection/absorption, and heating begins only after absorption (1447.762907ms)
+  ✔ pause freezes the whole rendered illustration and resume keeps the same progress (621.600154ms)
+  ✔ repeated source clicks cannot stop the demo or multiply animation loops; reset clears all results (2356.673058ms)
+  ✔ keyboard and background interruptions are consistent and do not auto-resume (203.002898ms)
+  ✔ the reflection and absorption paths are distinct outcomes at the same surface point (8.585918ms)
+  ✔ site A and the reflected ray stay attached to the eye and graph after responsive reflow (335.084668ms)
+  ✔ insulation, convection and quiz remain independent after extracting radiation from the shared controller (2431.881817ms)
+  ✔ desktop, laptop and narrow layouts keep controls, condition and actual scenes in view (540.217789ms)
+  ✔ either photo may fail and retry without premature playback or loss of the other successful photo (1812.439782ms)
+  ✔ a late photo response after reset leaves the observation stopped at its beginning (679.550861ms)
+  ✔ real touch under both motion preferences starts moving rays and pauses/resets actual frames (6591.185859ms)
+✔ 5.2 radiation: one energy path, surface outcomes and conditional warming (18108.455425ms)
 ℹ tests 13
 ℹ suites 0
 ℹ pass 13
@@ -19,4 +19,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 17537.024594
+ℹ duration_ms 18477.417624
