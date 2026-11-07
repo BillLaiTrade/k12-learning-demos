@@ -24,4 +24,8 @@
 
 ## 發布
 
-待推送後以Pages部署、公開檔案及公開瀏覽器結果補齊。
+第一區功能提交`d2cf45f1`，保留其他更新後由`b56c7e1e5828570bd5a212c34c61f7e014b0880f`發布；原生Pages流程[42344272182](https://github.com/BillLaiTrade/k12-learning-demos/actions/runs/42344272182)的build及deploy皆成功，見[release.json](release.json)。
+
+[13個公開檔案](public-hashes.json)全部與本機雜湊一致，包含兩個新模組、原能量模型、既有Three.js、分享圖及共用格式／頭像。[公開瀏覽器結果](public-final.txt)14個子流程與外層共15項全過；[公開35組版面](layout-public.json)無整頁水平溢出，[錯誤紀錄](errors-public.json)為空。人工檢視[60°C公開畫面](heating-60-public.png)、[沸騰公開畫面](heating-complete-public.png)及[390px公開畫面](heating-390-public.png)。
+
+瀏覽器使用既有測試器的程序限定環境代理CA公鑰匹配方式，未更改持久信任庫；檔案比對使用系統TLS驗證。部署尚未完成時第一次新模組讀取回傳404，未當成公開通過；待原生流程成功、13檔一致後才做本輪正式公開檢查。
