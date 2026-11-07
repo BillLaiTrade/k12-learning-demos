@@ -3,7 +3,7 @@ import {geometry,snapshot,durationMs,clampAngle} from './single-refraction-model
 import {mediumSelector} from './medium-selector.mjs?v=20261103-concept1';
 import {mountScene} from './integrated-refraction-scene.mjs?v=20261103-fit2';
 function mountSingleLab(prefix,reverse){
- const root=document.querySelector(`#${prefix}-lab`),$=s=>root.querySelector(s),scene=$(`#${prefix}-scene`),stage=$('.integrated-stage'),input=$(`#${prefix}-angle`),start=$(`#${prefix}-start`),reset=$(`#${prefix}-reset`),retry=$(`#${prefix}-retry`),status=$(`#${prefix}-status`);
+ const root=document.querySelector(`#${prefix}-lab`),$=s=>root.querySelector(s),scene=$(`#${prefix}-scene`),stage=$('.integrated-stage'),input=$(`#${prefix}-angle`),start=$(`#${prefix}-start`),retry=$(`#${prefix}-retry`),status=$(`#${prefix}-status`);
  const view=mountScene(scene,prefix),source=view.source,photos=new Map(),model=()=>geometry(medium,angle,reverse),duration=()=>durationMs(medium,angle,reverse);
  let medium='water',requested='water',angle=30,elapsed=0,state='loading',frame=0,startTime=0,loadId=0,restoreLight=false,drag=null,intersecting=true,lastSize='';
  const selector=mediumSelector($(`#${prefix}-medium-toggle`),key=>{if(key!==requested||state==='error')prepare(key);});
@@ -21,7 +21,7 @@ function mountSingleLab(prefix,reverse){
   $(`#${prefix}-finding`).hidden=!explained;$('.integrated-legend').hidden=!explained;view.draw({...current,elapsed},explained);
  }
  function controls(){
-  root.dataset.state=state;root.dataset.playback=state;status.classList.toggle('visually-hidden',state!=='error');root.setAttribute('aria-busy',String(state==='loading'));const disabled=state==='loading'||state==='error';start.disabled=input.disabled=reset.disabled=disabled;source.setAttribute('aria-disabled',disabled);source.setAttribute('tabindex',disabled?'-1':'0');selector.render(requested);
+  root.dataset.state=state;root.dataset.playback=state;status.classList.toggle('visually-hidden',state!=='error');root.setAttribute('aria-busy',String(state==='loading'));const disabled=state==='loading'||state==='error';start.disabled=input.disabled=disabled;source.setAttribute('aria-disabled',disabled);source.setAttribute('tabindex',disabled?'-1':'0');selector.render(requested);
   $( `#${prefix}-preview`).hidden=state!=='preview';
   start.querySelector('span:last-child').textContent=state==='preview'?'播放此設定':state==='complete'?'再次發射':state==='running'?'重新發射':'發射光束';status.textContent={loading:'正在準備實驗場景……',error:`${requested==='water'?'水':'玻璃'}場景未能載入，請重試或切換介質。`,idle:'調整入射角，再點燈發射；角度與說明會直接出現在光路上。',running:'光束正在前進。',suspended:'回到實驗畫面後會繼續發射。',preview:'光路與角度已更新，可直接比較或再次發射。',complete:'光路已展開，角度與說明顯示在同一場景內。'}[state];
  }
@@ -31,7 +31,7 @@ function mountSingleLab(prefix,reverse){
  function suspend(){if(state!=='running')return;stop();elapsed=Math.min(duration(),Math.max(0,performance.now()-startTime));state=elapsed>=duration()?'complete':'suspended';render();controls();}
  function resume(){if(state==='suspended'&&intersecting&&!document.hidden)play(false);}
  function setAngle(value){if(input.disabled)return;const next=Math.round(Math.min(40,clampAngle(value)));input.value=next;if(next===angle)return;stop();angle=next;if(state==='idle')elapsed=0;else{state='preview';elapsed=duration();}configure();render();controls();}
- input.oninput=()=>setAngle(Number(input.value));start.onclick=()=>play(true);reset.onclick=()=>{if(input.disabled)return;stop();angle=30;elapsed=0;state='idle';configure();render();controls();};
+ input.oninput=()=>setAngle(Number(input.value));start.onclick=()=>play(true);
  function point(event){const p=new DOMPoint(event.clientX,event.clientY).matrixTransform(scene.getScreenCTM().inverse()),origin=view.project([650,570]),scale=view.project([651,570])[0]-origin[0];return[650+(p.x-origin[0])/scale,570+(p.y-origin[1])/scale];}
  scene.onpointerdown=e=>{if(!e.target.closest('.oblique-source')||input.disabled||e.button!==0)return;e.preventDefault();const p=point(e),g=model();drag={id:e.pointerId,offsetX:p[0]-g.source[0],offsetY:p[1]-g.source[1],x:e.clientX,y:e.clientY,moved:false};scene.setPointerCapture(e.pointerId);source.focus({preventScroll:true});};
  scene.addEventListener('touchstart',e=>{if(!input.disabled&&e.target.closest('.oblique-source'))e.preventDefault();},{passive:false});

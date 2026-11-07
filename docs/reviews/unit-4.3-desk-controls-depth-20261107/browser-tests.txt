@@ -1,0 +1,383 @@
+TAP version 13
+# Subtest: 4.3 double-speed rays and automatic background suspension
+    # Subtest: both bright three-layer beams stay dark until emitted and use the same styles
+    ok 1 - both bright three-layer beams stay dark until emitted and use the same styles
+      ---
+      duration_ms: 39.196792
+      type: 'test'
+      ...
+    # Subtest: fronts move continuously at twice the previous speed and arrows never lead them
+    ok 2 - fronts move continuously at twice the previous speed and arrows never lead them
+      ---
+      duration_ms: 1778.87897
+      type: 'test'
+      ...
+    # Subtest: offscreen suspension preserves progress and resumes automatically on return
+    ok 3 - offscreen suspension preserves progress and resumes automatically on return
+      ---
+      duration_ms: 748.151395
+      type: 'test'
+      ...
+    # Subtest: hidden-page suspension also resumes without a manual pause control
+    ok 4 - hidden-page suspension also resumes without a manual pause control
+      ---
+      duration_ms: 422.684726
+      type: 'test'
+      ...
+    # Subtest: latest image wins and a failed material can retry without breaking earlier sections
+    ok 5 - latest image wins and a failed material can retry without breaking earlier sections
+      ---
+      duration_ms: 1399.130706
+      type: 'test'
+      ...
+    1..5
+ok 1 - 4.3 double-speed rays and automatic background suspension
+  ---
+  duration_ms: 5645.349328
+  type: 'test'
+  ...
+# Subtest: 4.3 eleven approved choices: controls, evidence, concise copy and desktop presentation
+    # Subtest: 2: explicit mouse/keyboard/lamp playback reveals the apparatus and controls before advancing
+    ok 1 - 2: explicit mouse/keyboard/lamp playback reveals the apparatus and controls before advancing
+      ---
+      duration_ms: 1431.314788
+      type: 'test'
+      ...
+    # Subtest: 4: all three carts auto resume after viewport/tab interruption; explicit closing stays stopped on reopen
+    ok 2 - 4: all three carts auto resume after viewport/tab interruption; explicit closing stays stopped on reopen
+      ---
+      duration_ms: 4261.020894
+      type: 'test'
+      ...
+    # Subtest: 6-11: preconditions, conditional transmission, colour key, fixed analogy and depth narrative use short visible copy
+    ok 3 - 6-11: preconditions, conditional transmission, colour key, fixed analogy and depth narrative use short visible copy
+      ---
+      duration_ms: 498.894389
+      type: 'test'
+      ...
+    # Subtest: 3 and 5: no-op selections/keys/drop retain grades; replay conceals then restores grades unless order changes
+    ok 4 - 3 and 5: no-op selections/keys/drop retain grades; replay conceals then restores grades unless order changes
+      ---
+      duration_ms: 3955.530751
+      type: 'test'
+      ...
+    # Subtest: desktop and laptop preserve visible controls, short notes and readable evidence at four sizes
+    ok 5 - desktop and laptop preserve visible controls, short notes and readable evidence at four sizes
+      ---
+      duration_ms: 4153.321948
+      type: 'test'
+      ...
+    1..5
+ok 2 - 4.3 eleven approved choices: controls, evidence, concise copy and desktop presentation
+  ---
+  duration_ms: 15120.719081
+  type: 'test'
+  ...
+# Subtest: 1: sixth-section edge visibility is physically shared through preview, detail and fallback
+ok 3 - 1: sixth-section edge visibility is physically shared through preview, detail and fallback
+  ---
+  duration_ms: 5702.102447
+  type: 'test'
+  ...
+# Subtest: 4.3 approved desktop and laptop interactions, captions and four-layer evidence
+    # Subtest: 1 and 2 auto resume only automatic pauses and keep manual/comparison freezes
+    ok 1 - 1 and 2 auto resume only automatic pauses and keep manual/comparison freezes
+      ---
+      duration_ms: 3165.248727
+      type: 'test'
+      ...
+    # Subtest: 3 and 4 distinguish preview from playing without altering selected settings
+    ok 2 - 3 and 4 distinguish preview from playing without altering selected settings
+      ---
+      duration_ms: 1466.92205
+      type: 'test'
+      ...
+    # Subtest: 5 independent reciprocal fronts, correct slider roles and closing lamps
+    ok 3 - 5 independent reciprocal fronts, correct slider roles and closing lamps
+      ---
+      duration_ms: 1703.280122
+      type: 'test'
+      ...
+    # Subtest: four-layer pool remains a real mouse return target; only Left/Right reorders; feedback gives one measured pair
+    ok 4 - four-layer pool remains a real mouse return target; only Left/Right reorders; feedback gives one measured pair
+      ---
+      duration_ms: 1998.282344
+      type: 'test'
+      ...
+    # Subtest: desktop/laptop bounds and final presentation at 1440,1366,1280,1024
+    ok 5 - desktop/laptop bounds and final presentation at 1440,1366,1280,1024
+      ---
+      duration_ms: 4182.555409
+      type: 'test'
+      ...
+    1..5
+ok 4 - 4.3 approved desktop and laptop interactions, captions and four-layer evidence
+  ---
+  duration_ms: 13396.444599
+  type: 'test'
+  ...
+# Subtest: 6 real two-second paired water frames, eye co-control, takeover, full detail and worker fallback
+ok 5 - 6 real two-second paired water frames, eye co-control, takeover, full detail and worker fallback
+  ---
+  duration_ms: 10054.209084
+  type: 'test'
+  ...
+# Subtest: 4.3 shared integrated layout and prominent upper material switches
+    # Subtest: equal inputs share the same source position and reversed photo media
+    ok 1 - equal inputs share the same source position and reversed photo media
+      ---
+      duration_ms: 250.121702
+      type: 'test'
+      ...
+    # Subtest: emission and material states remain isolated from each other and the two-source fifth section
+    ok 2 - emission and material states remain isolated from each other and the two-source fifth section
+      ---
+      duration_ms: 1066.233429
+      type: 'test'
+      ...
+    # Subtest: eight viewport sizes keep controls, labels and explanations inside the same field and clear of the actual ray
+    ok 3 - eight viewport sizes keep controls, labels and explanations inside the same field and clear of the actual ray
+      ---
+      duration_ms: 2049.507836
+      type: 'test'
+      ...
+    # Subtest: native phone touch adjusts, emits and switches both media without a pause button
+    ok 4 - native phone touch adjusts, emits and switches both media without a pause button
+      ---
+      duration_ms: 9040.509141
+      type: 'test'
+      ...
+    1..4
+ok 6 - 4.3 shared integrated layout and prominent upper material switches
+  ---
+  duration_ms: 13319.991057
+  type: 'test'
+  ...
+# Subtest: 4.3 integrated one-scene experiments reveal explanations after emission
+    # Subtest: one full-width field per section starts dark without reset buttons
+    ok 1 - one full-width field per section starts dark without reset buttons
+      ---
+      duration_ms: 63.23564
+      type: 'test'
+      ...
+    # Subtest: four material orders and 0–40° update the actual lamp, photo and readouts without revealing explanations
+    ok 2 - four material orders and 0–40° update the actual lamp, photo and readouts without revealing explanations
+      ---
+      duration_ms: 607.598638
+      type: 'test'
+      ...
+    # Subtest: completed rays reveal the same-field colored sectors and ray-to-normal angles
+    ok 3 - completed rays reveal the same-field colored sectors and ray-to-normal angles
+      ---
+      duration_ms: 998.119008
+      type: 'test'
+      ...
+    # Subtest: after emission, angle and material previews update in place; zero and replay remain correct
+    ok 4 - after emission, angle and material previews update in place; zero and replay remain correct
+      ---
+      duration_ms: 1284.118392
+      type: 'test'
+      ...
+    # Subtest: native slider, lamp keys and pointer dragging clamp to 0–40° without emitting
+    ok 5 - native slider, lamp keys and pointer dragging clamp to 0–40° without emitting
+      ---
+      duration_ms: 869.484209
+      type: 'test'
+      ...
+    # Subtest: lamp activation, replay and optional deeper explanation work without a pause button
+    ok 6 - lamp activation, replay and optional deeper explanation work without a pause button
+      ---
+      duration_ms: 989.408584
+      type: 'test'
+      ...
+    1..6
+ok 7 - 4.3 integrated one-scene experiments reveal explanations after emission
+  ---
+  duration_ms: 5667.46866
+  type: 'test'
+  ...
+# Subtest: 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork
+    # Subtest: artwork loads, media are fixed, and geometry has equal routes
+    ok 1 - artwork loads, media are fixed, and geometry has equal routes
+      ---
+      duration_ms: 214.962937
+      type: 'test'
+      ...
+    # Subtest: one second of play is one second of model time with physical distance ratios
+    ok 2 - one second of play is one second of model time with physical distance ratios
+      ---
+      duration_ms: 566.258364
+      type: 'test'
+      ...
+    # Subtest: three arrivals follow 3.33, 4.44 and 5 seconds, with receivers and no stationary light dots
+    ok 3 - three arrivals follow 3.33, 4.44 and 5 seconds, with receivers and no stationary light dots
+      ---
+      duration_ms: 2520.083311
+      type: 'test'
+      ...
+    # Subtest: starting again after completion clears old arrivals, and keyboard pause/resume keeps one clock
+    ok 4 - starting again after completion clears old arrivals, and keyboard pause/resume keeps one clock
+      ---
+      duration_ms: 1679.396077
+      type: 'test'
+      ...
+    # Subtest: a page-hidden event pauses the shared clock without clearing progress
+    ok 5 - a page-hidden event pauses the shared clock without clearing progress
+      ---
+      duration_ms: 1875.453831
+      type: 'test'
+      ...
+    # Subtest: leaving the section pauses and returning automatically resumes the same progress
+    ok 6 - leaving the section pauses and returning automatically resumes the same progress
+      ---
+      duration_ms: 1618.008712
+      type: 'test'
+      ...
+    # Subtest: seven screen widths retain artwork, readable controls and unclipped times
+    ok 7 - seven screen widths retain artwork, readable controls and unclipped times
+      ---
+      duration_ms: 16709.907723
+      type: 'test'
+      ...
+    # Subtest: image failure disables the desk, leaves the rest of the lesson working, and can retry
+    ok 8 - image failure disables the desk, leaves the rest of the lesson working, and can retry
+      ---
+      duration_ms: 826.696082
+      type: 'test'
+      ...
+    # Subtest: touch start, pause and continue work with horizontal desk panning
+    ok 9 - touch start, pause and continue work with horizontal desk panning
+      ---
+      duration_ms: 1186.618565
+      type: 'test'
+      ...
+    # Subtest: a real-time run finishes in five seconds without a browser test clock
+    ok 10 - a real-time run finishes in five seconds without a browser test clock
+      ---
+      duration_ms: 5752.781236
+      type: 'test'
+      ...
+    1..10
+ok 8 - 4.3 fixed-media million-kilometre desk is accurate, operable and matches its artwork
+  ---
+  duration_ms: 33804.332685
+  type: 'test'
+  ...
+# Subtest: 4.3 optical scene and all operating information fit a single viewport
+    # Subtest: 1920 × 900
+    ok 1 - 1920 × 900
+      ---
+      duration_ms: 299.476535
+      type: 'test'
+      ...
+    # Subtest: 1920 × 720
+    ok 2 - 1920 × 720
+      ---
+      duration_ms: 333.103814
+      type: 'test'
+      ...
+    # Subtest: 1440 × 900
+    ok 3 - 1440 × 900
+      ---
+      duration_ms: 355.011286
+      type: 'test'
+      ...
+    # Subtest: 1440 × 650
+    ok 4 - 1440 × 650
+      ---
+      duration_ms: 342.478886
+      type: 'test'
+      ...
+    # Subtest: 1366 × 600
+    ok 5 - 1366 × 600
+      ---
+      duration_ms: 389.790903
+      type: 'test'
+      ...
+    # Subtest: 1280 × 720
+    ok 6 - 1280 × 720
+      ---
+      duration_ms: 321.966925
+      type: 'test'
+      ...
+    # Subtest: 1024 × 600
+    ok 7 - 1024 × 600
+      ---
+      duration_ms: 493.398206
+      type: 'test'
+      ...
+    # Subtest: 820 × 720
+    ok 8 - 820 × 720
+      ---
+      duration_ms: 469.82749
+      type: 'test'
+      ...
+    # Subtest: 820 × 600
+    ok 9 - 820 × 600
+      ---
+      duration_ms: 281.763289
+      type: 'test'
+      ...
+    # Subtest: 760 × 720
+    ok 10 - 760 × 720
+      ---
+      duration_ms: 608.11376
+      type: 'test'
+      ...
+    # Subtest: 600 × 800
+    ok 11 - 600 × 800
+      ---
+      duration_ms: 394.920284
+      type: 'test'
+      ...
+    # Subtest: 390 × 844
+    ok 12 - 390 × 844
+      ---
+      duration_ms: 362.247449
+      type: 'test'
+      ...
+    # Subtest: 390 × 667
+    ok 13 - 390 × 667
+      ---
+      duration_ms: 346.67359
+      type: 'test'
+      ...
+    # Subtest: 320 × 568
+    ok 14 - 320 × 568
+      ---
+      duration_ms: 357.34612
+      type: 'test'
+      ...
+    # Subtest: 812 × 375
+    ok 15 - 812 × 375
+      ---
+      duration_ms: 550.075306
+      type: 'test'
+      ...
+    # Subtest: 700 × 390
+    ok 16 - 700 × 390
+      ---
+      duration_ms: 553.475255
+      type: 'test'
+      ...
+    # Subtest: focus and re-emission keep the complete workspace visible in compact windows
+    ok 17 - focus and re-emission keep the complete workspace visible in compact windows
+      ---
+      duration_ms: 5271.373578
+      type: 'test'
+      ...
+    1..17
+ok 9 - 4.3 optical scene and all operating information fit a single viewport
+  ---
+  duration_ms: 13914.17334
+  type: 'test'
+  ...
+1..9
+# tests 61
+# suites 0
+# pass 61
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 116849.479006
