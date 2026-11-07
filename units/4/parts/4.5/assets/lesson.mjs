@@ -62,7 +62,6 @@ function initialiseLab(root,index){
     root.dataset.incoming=JSON.stringify(signal.incoming);root.dataset.transmitted=JSON.stringify(signal.transmitted);
     root.dataset.filterAbsorbed=JSON.stringify(signal.filterAbsorbed);root.dataset.paperAbsorbed=JSON.stringify(signal.paperAbsorbed);
     text($('[data-result]'),observation.result);text($('[data-receiver-label]'),observation.preview);
-    text($('[data-comparison-note]'),'先比較通過色片的光，再比較紙張反射後的外觀；改變一項時，另外兩項保持不變。');
    }else{
     condition(root,[['光源','白光固定'],['情境',state.mode==='reflection'?'綠色色卡反射':'綠色色片透射'],['物體到眼睛',state.blocked?'被遮住':'光路暢通']]);
     text($('[data-result]'),state.blocked?'光源與物體沒有改變，但遮光板擋住物體到眼睛的這條光路，因此看不到原本的顏色。':state.mode==='reflection'?'白光照到綠色色卡，反射的光進入眼睛，形成看見綠色的視覺感受。':'白光通過綠色色片，透射的光進入眼睛，形成看見綠色的視覺感受。');
