@@ -361,7 +361,8 @@
       </div>
       <svg id="bath-stage" viewBox="0 0 1100 650" aria-label="可操作的水盆、飲料瓶與隔熱配件">
         <defs>
-          <linearGradient id="bath-liquid" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d8ebea" stop-opacity=".07"/><stop offset="1" stop-color="#86aeb2" stop-opacity=".20"/></linearGradient>
+          <linearGradient id="bath-liquid" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c4e0e2" stop-opacity=".23"/><stop offset=".65" stop-color="#9fc4cb" stop-opacity=".30"/><stop offset="1" stop-color="#6f9fae" stop-opacity=".40"/></linearGradient>
+          <linearGradient id="bath-liquid-front" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#b9d9df" stop-opacity=".12"/><stop offset=".65" stop-color="#a1c4ce" stop-opacity=".20"/><stop offset="1" stop-color="#79a5b5" stop-opacity=".28"/></linearGradient>
           <clipPath id="bath-bowl-back-clip"><rect x="150" y="225" width="800" height="420"/></clipPath>
           <clipPath id="bath-bowl-front-clip"><path d="M160 300Q550 365 940 300V650H160Z"/></clipPath>
 
@@ -372,7 +373,7 @@
 
         <image id="bath-wrap-back-photo" x="135" y="435" width="830" height="205" preserveAspectRatio="none" pointer-events="none" hidden/>
         <image id="bath-bowl-back-photo" x="170" y="230" width="760" height="400" preserveAspectRatio="none" clip-path="url(#bath-bowl-back-clip)"/>
-        <g clip-path="url(#bath-water-clip)"><path id="bath-water-body" fill="url(#bath-liquid)"/><ellipse id="bath-water-surface" cx="550" cy="480" rx="326" ry="43" fill="none" opacity=".42" stroke="#e5f5f4" stroke-width="1.6"/></g>
+        <g clip-path="url(#bath-water-clip)"><path id="bath-water-body" fill="url(#bath-liquid)"/><ellipse id="bath-water-surface" cx="550" cy="480" rx="326" ry="43" fill="#c5e4e8" fill-opacity=".16" stroke="#739eab" stroke-opacity=".75" stroke-width="2.2"/></g>
         <path id="bath-probe-water-wire" d="M275 177C275 230 285 252 295 330" fill="none" stroke="#303b38" stroke-width="5"/>
         <path id="bath-probe-water" d="M295 330L315 530" fill="none" stroke="#cad3ce" stroke-width="7"/>
         <path id="bath-probe-drink-wire" d="M825 177Q870 210 930 222" fill="none" stroke="#293632" stroke-width="5"/>
@@ -382,8 +383,8 @@
           <image id="bath-sleeve-photo" x="-78" y="-390" width="156" height="390" hidden/>
           <rect class="bath-bottle-hit" x="-98" y="-410" width="196" height="425" rx="45" fill="transparent"/>
         </g>
-        <g clip-path="url(#bath-water-clip)"><path id="bath-water-front" fill="#aec8cd" opacity=".045"/><path id="bath-water-meniscus" fill="none" stroke="#edf9f6" stroke-width="1.2" opacity=".65" hidden/></g>
         <image id="bath-bowl-front-photo" x="170" y="230" width="760" height="400" preserveAspectRatio="none" clip-path="url(#bath-bowl-front-clip)"/>
+        <g clip-path="url(#bath-water-clip)"><path id="bath-water-front" fill="url(#bath-liquid-front)"/><path id="bath-water-meniscus" fill="none" stroke="#f0faf8" stroke-width="2.4" opacity=".95" hidden/></g>
         <g id="bath-wrap-object" role="button" tabindex="0" aria-label="水盆外側保溫套，點擊或拖出水盆可取下" hidden><image id="bath-wrap-photo" x="135" y="435" width="830" height="205" preserveAspectRatio="none" pointer-events="none" clip-path="url(#bath-cozy-front-clip)"/><path d="M170 520Q550 580 930 520L910 607Q550 665 190 607Z" fill="transparent"/></g>
         <g id="bath-cup-object" role="button" tabindex="0" aria-label="量杯，拖到水盆可取水或倒回" hidden>
           <g clip-path="url(#bath-cup-water-clip)"><path id="bath-cup-liquid" fill="#accdd0" opacity=".23"/><ellipse id="bath-cup-surface" cx="-9" cy="-20" rx="37" ry="5" fill="none" stroke="#e4f0ec" stroke-width="1.2"/></g>

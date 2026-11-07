@@ -1,12 +1,12 @@
 import {createParallelLabels} from './parallel-labels.mjs?v=20261104-lens-clear5';
 import {createLensVisual} from './lens-geometry.mjs?v=20261104-lens-clear5';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
-import {parallelModel} from './parallel-optics.mjs?v=20261104-lens-clear5';
+import {parallelModel} from './parallel-optics.mjs?v=20261107-refraction-angles1';
 const root=document.querySelector('[data-concave-lab]');
 if(root) initialise(root);
 
 function initialise(root){
- const $=s=>root.querySelector(s),g=parallelModel('concave'),canvas=$('#concave-canvas'),svg=$('[data-concave-section]');
+ const $=s=>root.querySelector(s),g=parallelModel('concave',{rayHeight:2.25}),canvas=$('#concave-canvas'),svg=$('[data-concave-section]');
  g.rays.forEach(r=>r.from[0]=-10);
  const SCALE=.55,AXIS=2.0,world=p=>new THREE.Vector3(p[0]*SCALE,AXIS-p[1]*SCALE,0);
  let showRays=true,extensions=true,step='enter',studio=null;
@@ -14,28 +14,31 @@ function initialise(root){
  function el(tag,attrs={},parent=svg){const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,String(v));parent.append(e);return e;}
  function path(points,attrs={}){return el('path',{d:points.map((p,i)=>`${i?'L':'M'}${p[0]} ${p[1]}`).join(' '),fill:'none',...attrs});}
  function renderDetail(){
-  svg.replaceChildren();svg.setAttribute('viewBox',step==='enter'?'-.8 -1.9 2.4 1.8':'-.25 -1.9 2.4 1.8');
-  svg.setAttribute('aria-label',step==='enter'?'第一個表面，光由空氣進入玻璃，偏向法線':'第二個表面，光由玻璃進入空氣，偏離法線');
-  const defs=el('defs'),grad=el('linearGradient',{id:'concave-detail-glass'},defs);
-  for(const[offset,color]of [['0','#98c3bb'],['.5','#eafffa'],['1','#94bfb8']])el('stop',{offset,'stop-color':color,'stop-opacity':.8},grad);
-  const marker=el('marker',{id:'concave-detail-arrow',viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:5,markerHeight:5,orient:'auto',markerUnits:'strokeWidth'},defs);el('path',{d:'M0 0L10 5L0 10Z',fill:'#bd7149'},marker);
-  const boundary=[];for(let y=-g.halfHeight;y<=g.halfHeight+.0001;y+=.04)boundary.push([g.left(y),y]);for(let y=g.halfHeight;y>=-g.halfHeight-.0001;y-=.04)boundary.push([g.right(y),y]);
-  const lens=path([...boundary,boundary[0]],{fill:'url(#concave-detail-glass)',stroke:'#6b9d92','stroke-width':.012,'data-lens-boundary':'concave'});lens.dataset.centerThickness=g.thickness;lens.dataset.edgeThickness=g.right(g.halfHeight)-g.left(g.halfHeight);
-  const r=g.rays[0];
+  svg.replaceChildren();svg.setAttribute('viewBox','-2 -1.2 4 2.4');
+  const r=g.rays[0],enter=step==='enter',incoming=enter?r.incoming:r.inside,outgoing=enter?r.inside:r.outgoing;
+  let N=[...(enter?r.N1:r.N2)];if(incoming[0]*N[0]+incoming[1]*N[1]<0)N=N.map(v=>-v);
+  const rotate=d=>[d[0]*N[0]+d[1]*N[1],-d[0]*N[1]+d[1]*N[0]],a=rotate(incoming),b=rotate(outgoing),degrees=d=>Math.acos(Math.max(-1,Math.min(1,d[0])))*180/Math.PI;
+  const incidence=degrees(a),refraction=degrees(b);svg.dataset.incidence=incidence;svg.dataset.refraction=refraction;svg.dataset.currentInterface=step;
+  svg.setAttribute('aria-label',`${enter?'第一':'第二'}個表面，${enter?'空氣進入玻璃，偏向法線':'玻璃進入空氣，偏離法線'}；入射角 ${incidence.toFixed(1)} 度，折射角 ${refraction.toFixed(1)} 度`);
+  const boundary=[];for(let y=-1.3;y<=1.301;y+=.02)boundary.push([(enter?-1:1)*(g.radius-Math.sqrt(g.radius*g.radius-y*y)),y]);
+  const edge=enter?2.1:-2.1;
+  path([[edge,-1.3],...boundary,[edge,1.3]],{fill:'#c6e6df','fill-opacity':.7,'data-glass-region':step});
+  const lens=path(boundary,{stroke:'#6b9d92','stroke-width':.018,'data-lens-boundary':'concave'});lens.dataset.centerThickness=g.thickness;lens.dataset.edgeThickness=g.right(g.halfHeight)-g.left(g.halfHeight);
+  function text(x,y,label,color='#466851',size=.14){const t=el('text',{x,y,fill:color,'font-size':size,'text-anchor':'middle'});t.textContent=label;}
+  text(-1.15,.95,enter?'空氣':'玻璃');text(1.15,.95,enter?'玻璃':'空氣');
   if(showRays){
-   for(const[part,points]of [['enter',[r.from,r.enter]],['inside',[r.enter,r.exit]],['exit',[r.exit,r.end]]]){
-    const active=part==='inside'||part===step;
-    path(points,{stroke:active?'#bd7149':'#bda35d','stroke-width':active?.018:.011,opacity:active?1:.42,'marker-end':'url(#concave-detail-arrow)','data-ray-part':part});
-   }
-   for(const[key,n]of [['enter',1],['exit',2]]){
-    const p=r[key],active=key===step;el('circle',{cx:p[0],cy:p[1],r:active?.042:.022,fill:active?'#f1d681':'#6c9f8f',stroke:active?'#176b53':'none','stroke-width':.012,'data-interface':n});
-    const t=el('text',{x:p[0]-.035,y:p[1]-.09,'font-size':.13,fill:'#176b53','font-weight':750});t.textContent=n;
-   }
-   const p=r[step],N=step==='enter'?r.N1:r.N2;
-   path([[p[0]-N[0]*.65,p[1]-N[1]*.65],[p[0]+N[0]*.65,p[1]+N[1]*.65]],{stroke:'#586e62','stroke-width':.01,'stroke-dasharray':'.045 .035','data-surface-normal':step});
-   const text=el('text',{x:step==='enter'?p[0]-.56:p[0]+.2,y:p[1]-.23,'font-size':.14,fill:'#3f5d4b'});text.textContent='法線';
+   const defs=el('defs');for(const [id,color]of [['incident','#b56536'],['refracted','#237c94']]){const marker=el('marker',{id:'concave-'+id,viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:5,markerHeight:5,orient:'auto',markerUnits:'strokeWidth'},defs);el('path',{d:'M0 0L10 5L0 10Z',fill:color},marker);}
+   path([[-1.85,0],[1.85,0]],{stroke:'#586e62','stroke-width':.014,'stroke-dasharray':'.06 .045','data-surface-normal':step});text(-1.6,.26,'法線','#586e62',.12);
+   path([a.map(v=>-v*1.78),[0,0]],{stroke:'#b56536','stroke-width':.024,'marker-end':'url(#concave-incident)','data-ray-part':enter?'enter':'inside'});
+   path([[0,0],b.map(v=>v*1.78)],{stroke:'#237c94','stroke-width':.024,'marker-end':'url(#concave-refracted)','data-ray-part':enter?'inside':'exit'});
+   function arc(start,end,radius,color,key){let delta=end-start;while(delta>Math.PI)delta-=2*Math.PI;while(delta< -Math.PI)delta+=2*Math.PI;const pts=Array.from({length:33},(_,i)=>{const t=start+delta*i/32;return[radius*Math.cos(t),radius*Math.sin(t)];});path([[0,0],...pts,[0,0]],{fill:color,'fill-opacity':.12});path(pts,{stroke:color,'stroke-width':.022,'data-angle-arc':key});}
+   arc(Math.PI,Math.atan2(-a[1],-a[0]),.68,'#b56536','incidence');arc(0,Math.atan2(b[1],b[0]),.9,'#237c94','refraction');
+   el('circle',{cx:0,cy:0,r:.04,fill:'#f1d681',stroke:'#176b53','stroke-width':.012,'data-interface':enter?1:2});
   }
-  for(const[x,y,s]of [[-.45,-1.7,'空氣'],[g.thickness/2,-.32,'玻璃'],[1.45,-1.7,'空氣']]){const t=el('text',{x,y,'text-anchor':'middle','font-size':s==='玻璃'?.13:.15,fill:'#4c6a58'});t.textContent=s;}
+  $('[data-concave-angles]').hidden=!showRays;
+  $('[data-concave-incidence]').textContent=`入射角 ${incidence.toFixed(1)}°`;
+  $('[data-concave-refraction]').textContent=`折射角 ${refraction.toFixed(1)}°`;
+  $('[data-concave-angle-change]').textContent=enter?'折射角較小':'折射角較大';
  }
  function update(){
   renderDetail();
@@ -77,9 +80,9 @@ function initialise(root){
   const floor=new THREE.Mesh(new THREE.PlaneGeometry(100,100),material('#8e9a84',{roughness:.98}));floor.rotation.x=-Math.PI/2;floor.position.y=-.34;floor.receiveShadow=true;scene.add(floor);
   function mount(x,top){box(scene,[.62,.15,1.4],[x,.26,0],dark);box(scene,[.48,.07,1.13],[x,.37,0],steel);cylinder(scene,.055,top-.4,[x,(top+.4)/2,0],steel);for(const z of [-.63,.63])cylinder(scene,.06,.045,[x,.37,z],brass);}
   const sourceX=g.rays[0].from[0]*SCALE;
-  mount(sourceX-.3,AXIS-.99);const source=box(scene,[.64,1.95,.78],[sourceX-.33,AXIS,0],dark);box(scene,[.025,2.02,.84],[sourceX-.02,AXIS,0],steel);
+  const sourceHalf=Math.max(...g.rays.map(r=>Math.abs(r.from[1])))*SCALE+.16;mount(sourceX-.3,AXIS-sourceHalf);const source=box(scene,[.64,sourceHalf*2,.78],[sourceX-.33,AXIS,0],dark);box(scene,[.025,sourceHalf*2+.07,.84],[sourceX-.02,AXIS,0],steel);
   for(const r of g.rays)box(scene,[.008,.055,.43],[sourceX-.004,AXIS-r.from[1]*SCALE,0],new THREE.MeshBasicMaterial({color:'#ffe6a0',toneMapped:false}),false);
-  for(const y of [AXIS-.87,AXIS+.87])for(const z of [-.33,.33]){const bolt=new THREE.Mesh(new THREE.SphereGeometry(.025,12,8),brass);bolt.position.set(sourceX+.02,y,z);scene.add(bolt);}
+  for(const y of [AXIS-sourceHalf+.1,AXIS+sourceHalf-.1])for(const z of [-.33,.33]){const bolt=new THREE.Mesh(new THREE.SphereGeometry(.025,12,8),brass);bolt.position.set(sourceX+.02,y,z);scene.add(bolt);}
   const centerX=g.thickness*SCALE/2,R=g.halfHeight*SCALE;
   const lens=createLensVisual(THREE,{radius:R,halfThickness:r=>(g.thickness/2-g.left(r/SCALE))*SCALE,index:g.index});lens.position.set(centerX,AXIS,0);scene.add(lens);
   mount(centerX,AXIS-R-.08);box(scene,[.4,.11,.28],[centerX,AXIS-R-.065,0],steel);
@@ -94,6 +97,7 @@ function initialise(root){
    }
   }
   const focus=new THREE.Mesh(new THREE.SphereGeometry(.052,20,16),new THREE.MeshBasicMaterial({color:'#ffedb1',toneMapped:false}));focus.position.copy(world([g.focus,0]));scene.add(focus);
+  const surfaceMarker=new THREE.Mesh(new THREE.SphereGeometry(.065,20,16),new THREE.MeshBasicMaterial({color:'#ffe39a',depthTest:false,toneMapped:false}));surfaceMarker.renderOrder=5;scene.add(surfaceMarker);
   const extensionGroup=new THREE.Group();scene.add(extensionGroup);for(const r of g.rays){if(r.focus===null)continue;const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([world(r.exit),world([g.focus,0])]),new THREE.LineDashedMaterial({color:'#e6eacb',dashSize:.1,gapSize:.07,depthTest:false,transparent:true,opacity:.85}));line.computeLineDistances();line.renderOrder=4;extensionGroup.add(line);}
   function updateCamera(){
    const r=overallFit*orbit.radius/12;camera.position.set(target.x+r*Math.sin(orbit.polar)*Math.sin(orbit.azimuth),target.y+r*Math.cos(orbit.polar),target.z+r*Math.sin(orbit.polar)*Math.cos(orbit.azimuth));camera.lookAt(target);camera.updateProjectionMatrix();camera.updateMatrixWorld();
@@ -115,13 +119,13 @@ function initialise(root){
   let lastRayRadius=0;
   function draw(){pending=0;
    const distance=camera.position.distanceTo(target),pixelWorld=2*distance*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))/Math.max(1,canvas.clientHeight),radius=THREE.MathUtils.clamp(pixelWorld*.72,.004,.045);
-   if(Math.abs(radius-lastRayRadius)>.0007){for(const tube of rays.children.filter(m=>m.geometry.type==='TubeGeometry')){const {path,tubularSegments}=tube.geometry.parameters;tube.geometry.dispose();tube.geometry=new THREE.TubeGeometry(path,tubularSegments,radius,7,false);}lastRayRadius=radius;}
-   const scale=THREE.MathUtils.clamp(pixelWorld/.02,.4,2.5);arrowMeshes.forEach(m=>m.scale.setScalar(scale));focus.scale.setScalar(scale);
+   if(Math.abs(radius-lastRayRadius)>.0007){for(const tube of rays.children.filter(m=>m.geometry.type==='TubeGeometry')){const {path,tubularSegments}=tube.geometry.parameters;tube.geometry.dispose();tube.geometry=new THREE.TubeGeometry(path,tubularSegments,radius*(tube.userData.rayIndex===0?1.25:.85),7,false);}lastRayRadius=radius;}
+   const scale=THREE.MathUtils.clamp(pixelWorld/.02,.4,2.5);arrowMeshes.forEach(m=>m.scale.setScalar(scale));focus.scale.setScalar(scale);surfaceMarker.scale.setScalar(scale*1.25);
    renderer.render(scene,camera);updateLabels();
   }
   function requestDraw(){if(!pending)pending=requestAnimationFrame(draw);}
-  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();const direction=new THREE.Vector3(Math.sin(1.46)*Math.sin(-.22),Math.cos(1.46),Math.sin(1.46)*Math.cos(-.22)),bounds=[];for(const x of [sourceX-.7,g.rays[0].end[0]*SCALE+.5])for(const y of [.1,3.7])for(const z of [-.9,.9])bounds.push(new THREE.Vector3(x,y,z));overallFit=5;for(let i=0;i<90;i++){camera.position.copy(target).addScaledVector(direction,overallFit);camera.lookAt(target);camera.updateMatrixWorld();if(bounds.every(p=>{const q=p.clone().project(camera);return Math.abs(q.x)<.94&&q.y>-.77&&q.y<.72;}))break;overallFit*=1.045;}updateCamera();updateLabels();requestDraw();}
-  function update(){rays.visible=showRays;focus.visible=showRays&&extensions;extensionGroup.visible=showRays&&extensions;updateCamera();updateLabels();requestDraw();}
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();const direction=new THREE.Vector3(Math.sin(1.46)*Math.sin(-.22),Math.cos(1.46),Math.sin(1.46)*Math.cos(-.22)),bounds=[];for(const x of [sourceX-.7,g.rays[0].end[0]*SCALE+.5])for(const y of [.1,3.7])for(const z of [-.9,.9])bounds.push(new THREE.Vector3(x,y,z));for(const ray of g.rays)for(const p of [ray.from,ray.enter,ray.exit,ray.end])bounds.push(world(p));overallFit=5;for(let i=0;i<90;i++){camera.position.copy(target).addScaledVector(direction,overallFit);camera.lookAt(target);camera.updateMatrixWorld();if(bounds.every(p=>{const q=p.clone().project(camera);return Math.abs(q.x)<.94&&q.y>-.77&&q.y<.72;}))break;overallFit*=1.045;}updateCamera();updateLabels();requestDraw();}
+  function update(){surfaceMarker.visible=showRays;surfaceMarker.position.copy(world(g.rays[0][step]));rays.visible=showRays;focus.visible=showRays&&extensions;extensionGroup.visible=showRays&&extensions;updateCamera();updateLabels();requestDraw();}
   const pointers=new Map();let gesture=null;
   const pinch=()=>{const p=[...pointers.values()];return p.length<2?0:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);};
   canvas.addEventListener('pointerdown',e=>{if(e.button!==0)return;e.preventDefault();pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.setPointerCapture(e.pointerId);gesture=pointers.size>1?{kind:'pinch',distance:pinch(),radius:orbit.radius}:{kind:'orbit',x:e.clientX,y:e.clientY,azimuth:orbit.azimuth,polar:orbit.polar};});
@@ -131,6 +135,6 @@ function initialise(root){
   canvas.addEventListener('wheel',e=>{e.preventDefault();orbit.radius=THREE.MathUtils.clamp(orbit.radius+e.deltaY*.008,7,19);updateCamera();updateLabels();requestDraw();},{passive:false});
   canvas.addEventListener('keydown',e=>{const map={ArrowLeft:[-.07,0],ArrowRight:[.07,0],ArrowUp:[0,-.05],ArrowDown:[0,.05]};if(!map[e.key])return;e.preventDefault();orbit.azimuth=THREE.MathUtils.clamp(orbit.azimuth+map[e.key][0],-.9,.7);orbit.polar=THREE.MathUtils.clamp(orbit.polar+map[e.key][1],.85,1.55);updateCamera();updateLabels();requestDraw();});
   new ResizeObserver(resize).observe(canvas);resize();document.addEventListener('visibilitychange',()=>{if(!document.hidden)requestDraw();});
-  return {update,scene,camera,renderer,lens,rays,focus,source,extensionGroup,g,world};
+  return {update,scene,camera,renderer,lens,rays,focus,source,extensionGroup,surfaceMarker,g,world};
  }
 }

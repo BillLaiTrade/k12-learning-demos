@@ -6,3 +6,31 @@
 .route-inner{font-size:16px}.cards{gap:24px}.quiz-feedback[hidden]{display:none}.scene:empty{min-height:220px}.model-note{margin-left:0;margin-right:0}.bar-track span{max-width:100%}
 @media(max-width:760px){.route .route-inner{width:100%;grid-template-columns:minmax(0,1fr) minmax(0,1fr);padding:0;overflow:visible}.route-inner a,.route-inner a span{min-width:0;white-space:normal!important}.route-inner a{display:grid;grid-template-columns:24px minmax(0,1fr)}}
 #bar-water{background:#5c9cba}#bar-glass{background:#9b987e}#bar-extra{background:#3e7b58}
+/* First observation: one connected apparatus and record, with paced checkpoints. */
+#heat-lab{background:#fffefa}
+#heat-lab .lab-tag{font-size:1.05rem;letter-spacing:0}
+.heat-steps{display:flex;align-items:stretch;list-style:none;margin:0;padding:16px 15px;gap:10px;background:#fffefa}
+.heat-steps li{display:flex;align-items:center;gap:9px;flex:1;min-width:0;padding:9px 10px;border-radius:12px;color:#778077;background:#f0f1eb;line-height:1.4;font-size:.91rem}
+.heat-step-number{display:grid;place-items:center;border:1px solid currentColor;width:26px;height:26px;flex:none;border-radius:50%;font-size:.85rem}
+.heat-steps small{display:block;font-size:.75rem;font-weight:400;margin-top:3px}
+.heat-steps li[aria-current]{background:#315f3f;color:#fff;font-weight:750}
+.heat-steps li[data-done=true]{background:#edf3e6;color:#3e6745}
+.heat-visuals{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,1fr);gap:12px;padding:0 14px 14px}
+.heat-apparatus-panel{min-width:0;background:#ede9df;border:1px solid #d6d9c9;border-radius:13px;overflow:hidden;display:flex;flex-direction:column}
+.heat-apparatus{position:relative;flex:1;min-height:300px;aspect-ratio:1/1.05;overflow:hidden}
+.heat-canvas{position:absolute;inset:0;display:block;width:100%;height:100%}
+.heat-fallback{position:absolute;inset:0;display:grid;place-items:center}.heat-fallback svg{width:100%;height:auto}
+.heat-apparatus.has-3d .heat-fallback{visibility:hidden}
+.heat-accessible-reading{position:absolute;left:12px;top:12px;padding:5px 9px;border:1px solid #ced6c5;background:#fffef8e8;border-radius:7px;line-height:1.3;color:#31563c;z-index:1}
+.heat-accessible-reading span{font-size:.72rem;display:block}.heat-accessible-reading strong{font-size:1.1rem;font-variant-numeric:tabular-nums}
+.heat-caption{position:relative;margin:0;padding:10px 8px;text-align:center;font-size:.88rem;color:#31543b;background:#edf2e4;border-top:1px solid #d6dccd;line-height:1.5;min-height:43px}
+.heat-plot{border:1px solid #cbd8c7;border-radius:13px;padding:15px 11px 9px;align-self:stretch}
+.heat-plot h3{font-size:1.18rem;margin:0 0 6px 6px}.heat-plot svg{max-height:none;width:100%}.heat-plot svg text{font:16px var(--unit-font);fill:#344e3b}.heat-plot svg .chart-caption{font-size:15px;fill:#4d674f}.heat-plot svg .chart-now{font-size:14px;fill:#a75b25;font-weight:700}
+.heat-axis-note{font-size:.75rem;color:#697566;line-height:1.5;margin:3px 6px 0}
+.heat-controls p{flex:1;margin:0 0 0 5px;font-size:.85rem;color:#66725f;min-width:180px}
+.heat-controls button{min-width:115px;font-size:.95rem}.heat-controls button>span[aria-hidden]{margin-right:4px}
+#heat-lab .observation{margin:0 15px;border:0;border-radius:10px;font-size:.92rem;min-height:52px}
+.heat-model-note{margin:9px 17px 13px;font-size:.78rem}
+#heat-discovery{font-size:.93rem}
+@media(min-width:761px) and (max-width:1100px){.heat-visuals{grid-template-columns:minmax(0,1.04fr) minmax(0,1fr)}.heat-plot svg text{font-size:17px}.heat-steps{gap:6px;padding-inline:12px}.heat-steps li{font-size:.85rem;gap:6px;padding:8px 6px}}
+@media(max-width:760px){.heat-visuals{grid-template-columns:1fr;padding:0 10px 12px;gap:10px}.heat-apparatus{aspect-ratio:1.15;min-height:275px}.heat-steps{padding:12px 10px;gap:5px}.heat-steps li{flex-direction:column;align-items:center;text-align:center;padding:9px 4px;font-size:.8rem;gap:5px}.heat-steps small{font-size:.7rem}.heat-plot svg{max-height:none}.heat-controls p{flex-basis:100%;margin:4px 0 0}.heat-controls button{min-width:0}.heat-plot{padding:14px 10px 8px}.heat-plot svg text{font-size:18px}.heat-plot h3{font-size:1.1rem}}

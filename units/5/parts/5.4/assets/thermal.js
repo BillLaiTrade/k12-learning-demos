@@ -1,5 +1,6 @@
 import {HEAT,heating,ballDiameter,ballPasses,PHASES,waterVolume,waterDensity,gasVolume,thermometer,REACTIONS,QUIZ,grade} from './thermal-model.mjs';
-import {heatScene,heatChart,phaseScene,solidScene,bottleScene,gasScene,waterException,chemicalScene} from './thermal-art.mjs';
+import {heatScene,phaseScene,solidScene,bottleScene,gasScene,waterException,chemicalScene} from './thermal-art.mjs';
+import {HEATING_STEPS,heatingStep,observedHeatChart,heatObservation} from './heating-observation.mjs';
 const $=id=>document.getElementById(id),write=(id,s)=>$(id).textContent=s;
 const pressed=(selector,value,key)=>document.querySelectorAll(selector).forEach(b=>b.setAttribute('aria-pressed',String(b.dataset[key]===String(value))));
 // Each animated experiment owns its state. Interruptions preserve data but never auto-resume.
@@ -9,14 +10,40 @@ function run(id,duration,step,end){
  stop(id);const start=performance.now();const a={frame:0,end};animations.set(id,a);
  const frame=now=>{if(!animations.has(id))return;const p=Math.min(1,(now-start)/duration);step(p);if(p<1)a.frame=requestAnimationFrame(frame);else{animations.delete(id);end(true);}};a.frame=requestAnimationFrame(frame);
 }
-let energy=0;
-function renderHeat(){const s=heating(energy);$('heat-scene').innerHTML=heatScene(energy,animations.has('heat-lab'));$('heat-chart').innerHTML=heatChart(energy);write('heat-temp',s.temperature===null?'—':s.temperature.toFixed(1)+'°C');write('heat-ice',s.ice.toFixed(1)+' g');write('heat-water',s.water.toFixed(1)+' g');$('heat-seek').value=energy/HEAT.total*100;write('heat-progress',Math.round(energy/HEAT.total*100)+'%');$('heat-lab').dataset.phase=s.phase;
- write('heat-note',s.phase==='融冰中'?'冰水共存：吸收的能量用於融化，讀值約保持0°C。':s.phase==='液態水升溫'?'冰已融完，繼續吸熱時液態水溫度升高。':s.phase==='沸騰中'?'正在沸騰：液態水逐漸汽化，仍吸熱，溫度約保持100°C。':'液態水已全部汽化，加熱停止；不再顯示不存在的水溫。');
- write('heat-play',animations.has('heat-lab')?'停止加熱':energy>=HEAT.total?'已完成':energy>0?'繼續加熱':'開始加熱');$('heat-play').disabled=energy>=HEAT.total;
+let energy=0,heatApparatus=null;
+function renderHeat(){
+ const state=heating(energy),playing=animations.has('heat-lab'),step=heatingStep(energy),complete=energy>=HEATING_STEPS[2].end;
+ const observation=heatObservation(energy,playing);
+ $('heat-fallback').innerHTML=heatScene(energy,playing);
+ // The non-WebGL illustration shares the same state and is always available.
+ if(!playing&&energy<HEAT.melt){$('heat-fallback').innerHTML=$('heat-fallback').innerHTML.replaceAll('融冰中','冰與水共存');}
+ if(heatApparatus)heatApparatus.update(state,playing,energy);
+ $('heat-chart').innerHTML=observedHeatChart(energy);
+ write('heat-temp',state.temperature.toFixed(1)+'°C');
+ $('heat-scene').setAttribute('aria-label',`冰水加熱器材；樣品溫度${state.temperature.toFixed(1)}攝氏度；${observation.caption}`);
+ Object.assign($('heat-lab').dataset,{phase:energy===0?'準備觀察':state.phase,energy:String(energy),playing:String(playing),complete:String(complete)});
+ for(let i=0;i<3;i++){
+  const el=$('heat-step-'+i),done=energy>=HEATING_STEPS[i].end;
+  el.dataset.done=String(done);if(i===step&&!complete)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current');
+  el.querySelector('small').textContent=done?'已完成':i===step?(playing?'觀察中':energy===0?'待觀察':'已暫停'):'尚未觀察';
+  el.querySelector('.heat-step-number').textContent=done?'✓':String(i+1);
+ }
+ write('heat-caption',observation.caption);
+ if($('heat-note').textContent!==observation.note)write('heat-note',observation.note);
+ $('heat-discovery').hidden=!observation.discovery;write('heat-discovery-text',observation.discovery);
+ $('heat-play').querySelector('[aria-hidden]').textContent=playing?'Ⅱ':'▶';
+ write('heat-play-label',playing?'暫停加熱':complete?'觀察完成':energy>0?'繼續加熱':'開始加熱');$('heat-play').disabled=complete;
 }
-$('heat-play').onclick=()=>{if(animations.has('heat-lab')){stop('heat-lab');return;}const initial=energy;run('heat-lab',(HEAT.total-energy)/9000*1000,p=>{energy=initial+(HEAT.total-initial)*p;renderHeat();},renderHeat);renderHeat();};
-$('heat-seek').oninput=e=>{stop('heat-lab');energy=Number(e.target.value)/100*HEAT.total;renderHeat();};
-$('heat-reset').onclick=()=>{stop('heat-lab');energy=0;renderHeat();write('heat-note','尚未供熱。冰與水共存，溫度約0°C。');};
+$('heat-play').onclick=()=>{
+ if(animations.has('heat-lab')){stop('heat-lab');return;}
+ const initial=energy,index=heatingStep(energy),target=HEATING_STEPS[index],start=index?HEATING_STEPS[index-1].end:0;
+ if(initial>=HEATING_STEPS[2].end)return;
+ run('heat-lab',target.duration*(target.end-initial)/(target.end-start),p=>{energy=p===1?target.end:initial+(target.end-initial)*p;renderHeat();},renderHeat);renderHeat();
+};
+$('heat-reset').onclick=()=>{stop('heat-lab');energy=0;renderHeat();};
+// The apparatus is optional: an unavailable WebGL context cannot block the
+// curve, controls or any other section of this lesson.
+import('./heating-apparatus.mjs').then(({createHeatingApparatus})=>{try{heatApparatus=createHeatingApparatus($('heat-scene'));renderHeat();}catch{ $('heat-scene').classList.remove('has-3d'); }}).catch(()=>{});
 let mode='melt',phaseProgress=0;
 function renderPhase(){const s=PHASES[mode];$('phase-scene').innerHTML=phaseScene(mode,phaseProgress);write('phase-sample',s.sample);write('phase-condition',s.environment);write('phase-before',s.before);write('phase-after',s.after);write('phase-temp',s.temperature);pressed('[data-phase]',mode,'phase');write('phase-play',animations.has('phase-lab')?'停止觀察':phaseProgress>=1?'再次觀察':phaseProgress>0?'繼續觀察':'開始觀察');write('phase-note',phaseProgress>0?s.explanation:'準備觀察'+s.name+'；先認清研究對象，再看能量方向。');$('phase-lab').dataset.mode=mode;}
 for(const b of document.querySelectorAll('[data-phase]'))b.onclick=()=>{stop('phase-lab');mode=b.dataset.phase;phaseProgress=0;renderPhase();};

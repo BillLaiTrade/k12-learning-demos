@@ -1,0 +1,93 @@
+[
+  {
+    "path": "units/5/parts/5.4/index.html",
+    "status": 200,
+    "same": true,
+    "local_sha256": "7b90a0b017b53ca78bc0d75798b6755a96c67151e1b7f1d4445181f6b9f1f3a7",
+    "public_sha256": "7b90a0b017b53ca78bc0d75798b6755a96c67151e1b7f1d4445181f6b9f1f3a7"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal.js",
+    "status": 200,
+    "same": true,
+    "local_sha256": "1bbd7e6224e670ee66743fdaa8032f69f8d96cd564b358df1f6ab40ea1b877bb",
+    "public_sha256": "1bbd7e6224e670ee66743fdaa8032f69f8d96cd564b358df1f6ab40ea1b877bb"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal.css",
+    "status": 200,
+    "same": true,
+    "local_sha256": "41dce43ce42fff872eeab889536f9db4459fa1ca1c655a53a27cfdab5773107b",
+    "public_sha256": "41dce43ce42fff872eeab889536f9db4459fa1ca1c655a53a27cfdab5773107b"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal-model.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "2cb281cdc9d35d7821719e01b5cd86a5d90a949b9fb1b9f4d717bc8ae72a1858",
+    "public_sha256": "2cb281cdc9d35d7821719e01b5cd86a5d90a949b9fb1b9f4d717bc8ae72a1858"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal-art.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "e45bb20d07001c3a7736273542b3c41cd588f8de465c7d76264cf40c3c1cc333",
+    "public_sha256": "e45bb20d07001c3a7736273542b3c41cd588f8de465c7d76264cf40c3c1cc333"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/heating-observation.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "0750bc37bea1ef14486fa7e268ecc1c12f3c439f6fd07d4e2829f96698648b5a",
+    "public_sha256": "0750bc37bea1ef14486fa7e268ecc1c12f3c439f6fd07d4e2829f96698648b5a"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/heating-apparatus.mjs",
+    "status": 200,
+    "same": true,
+    "local_sha256": "f56dbb863d6f2c8325de9c6e9ae48ea876dd79aa2955fb118759e55129c4d899",
+    "public_sha256": "f56dbb863d6f2c8325de9c6e9ae48ea876dd79aa2955fb118759e55129c4d899"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal-opening.svg",
+    "status": 200,
+    "same": true,
+    "local_sha256": "80c5143dff88fcf72836754f10e46d14e3a0e4bacc81919d12e144a75bd222d0",
+    "public_sha256": "80c5143dff88fcf72836754f10e46d14e3a0e4bacc81919d12e144a75bd222d0"
+  },
+  {
+    "path": "units/5/parts/5.4/assets/thermal-opening.png",
+    "status": 200,
+    "same": true,
+    "local_sha256": "241b2b85a2b20d44918a30ea580ee542a8caf32064813053d20654c6cdaab0a4",
+    "public_sha256": "241b2b85a2b20d44918a30ea580ee542a8caf32064813053d20654c6cdaab0a4"
+  },
+  {
+    "path": "units/4/parts/4.1/assets/vendor/three/build/three.module.js",
+    "status": 200,
+    "same": true,
+    "local_sha256": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea",
+    "public_sha256": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea"
+  },
+  {
+    "path": "units/4/parts/4.1/assets/vendor/three/build/three.core.js",
+    "status": 200,
+    "same": true,
+    "local_sha256": "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6",
+    "public_sha256": "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6"
+  },
+  {
+    "path": "units/5/assets/unit-format.css",
+    "status": 200,
+    "same": true,
+    "local_sha256": "c5b365c3adac380c2c3d5644dfc61d83df4fdee5dd3fc752438de8421127bedf",
+    "public_sha256": "c5b365c3adac380c2c3d5644dfc61d83df4fdee5dd3fc752438de8421127bedf"
+  },
+  {
+    "path": "shared-assets/characters/dialogue-character-avatars.png",
+    "status": 200,
+    "same": true,
+    "local_sha256": "80f73548fd344c7a4c8d03a16323e7ed2770a970eab7c13212317ab5da28f626",
+    "public_sha256": "80f73548fd344c7a4c8d03a16323e7ed2770a970eab7c13212317ab5da28f626"
+  }
+]

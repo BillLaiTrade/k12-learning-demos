@@ -75,3 +75,11 @@
 
 .concave-imaging .ci-main-hint { margin:6px 1px 8px; color:#64796a; font-size:.75rem; line-height:1.5; }
 .concave-imaging .ci-ruler-hint { margin:3px 0 0; color:#64796a; font-size:.72rem; line-height:1.4; }
+
+.concave-angle-key { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px 16px; padding:10px; border-top:1px solid #d5dfcf; font-size:.8rem; }
+.concave-angle-key [data-concave-incidence] { color:#9b4e26; }
+.concave-angle-key [data-concave-refraction] { color:#1c687e; }
+.concave-angle-key strong { color:#31543c; font-size:.78rem; }
+
+/* Font sizes below use the local SVG viewBox units. */
+@media(max-width:760px) { .concave-detail-scene svg text { font-size:.2px; } }

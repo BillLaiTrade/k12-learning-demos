@@ -1,5 +1,5 @@
 // Air → glass → air at two spherical surfaces. Coordinates are model units.
-export function parallelModel(kind){
+export function parallelModel(kind,{rayHeight=1.2}={}){
  if(!['convex','concave'].includes(kind))throw new RangeError('Unknown lens');
  const sign=kind==='convex'?1:-1,radius=8,thickness=kind==='concave'?.28:.9,halfHeight=kind==='concave'?2.6:2.2,index=1.5;
  const left=y=>sign*(radius-Math.sqrt(radius*radius-y*y));
@@ -10,7 +10,8 @@ export function parallelModel(kind){
   if(k<0)throw new RangeError('Total internal reflection outside this model');
   return [eta*d[0]+(eta*cosine-Math.sqrt(k))*nx,eta*d[1]+(eta*cosine-Math.sqrt(k))*ny];
  };
- const rays=[-1.2,0,1.2].map(y=>{
+ if(!Number.isFinite(rayHeight)||rayHeight<=0||rayHeight>=halfHeight)throw new RangeError('Ray height must lie inside the lens.');
+ const rays=[-rayHeight,0,rayHeight].map(y=>{
   const enter=[left(y),y],incoming=[1,0],N1=[sign*Math.sqrt(radius*radius-y*y)/radius,-y/radius];
   const inside=refract(incoming,N1,1,index),center=thickness-sign*radius;
   const dx=enter[0]-center,b=2*(dx*inside[0]+y*inside[1]),c=dx*dx+y*y-radius*radius;

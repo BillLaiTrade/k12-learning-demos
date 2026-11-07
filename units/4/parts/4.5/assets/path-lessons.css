@@ -4,6 +4,7 @@
 :is(#s5,#s6) .lesson-head h2{font-size:clamp(1.18rem,1.8vw,1.45rem)}
 :is(#s5,#s6) .lesson-body{padding:15px 22px 18px}
 .path-intro{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+#s5 .path-intro{grid-template-columns:1fr}
 .path-intro .dialogue{margin:0;padding:8px 10px;font-size:.82rem;line-height:1.65}
 .path-intro .speaker::before{width:36px;height:36px}
 .path-workspace{display:grid;gap:10px;min-width:0}
