@@ -48,7 +48,6 @@ if(root){
     const a=anchors.drink;
     $('bath-probe-drink-wire').setAttribute('d',`M${a.x} ${a.y}C${a.x} ${a.y+50} ${state.x} ${state.bottom-460} ${state.x} ${state.bottom-368}`);
     const w=anchors.bath;$('bath-probe-water-wire').setAttribute('d',`M${w.x} ${w.y}C${w.x} ${w.y+50} 355 275 362 330`);
-    $('bath-probe-water').setAttribute('d',`M362 330L368 ${Math.max(g.surface+55,540)}`);
     // Follow the inner bowl taper, keeping the waterline inside the glass.
     const rx=310-Math.max(0,g.surface-425)*.25,y=g.surface;
     const volume=`M${550-rx} ${y}A${rx} 43 0 0 1 ${550+rx} ${y}L808 558Q550 614 292 558Z`;
