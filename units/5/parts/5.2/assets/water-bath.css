@@ -1,0 +1,72 @@
+/* Scoped to the approved compact hands-on quiz. */
+#unit-quiz.bath-quiz{overflow:hidden}
+#unit-quiz.bath-quiz .quiz-head{gap:12px;align-items:center;padding:18px 20px;background:#fffdf5}
+#unit-quiz.bath-quiz .quiz-mark{width:36px;height:36px;flex-basis:36px;border-radius:12px;font-size:1.15rem}
+#unit-quiz.bath-quiz .quiz-head .quiz-kicker{font-size:.75rem;margin:0 0 3px;color:#86652c;line-height:1.4}
+#unit-quiz.bath-quiz .quiz-head h2{font-size:clamp(1.25rem,2vw,1.8rem);line-height:1.35;color:#244732}
+.bath-help-button{touch-action:manipulation;flex:0 0 44px;width:44px;height:44px;border:1px solid #78937a;border-radius:50%;background:#fffdf2;color:#375c41;font:700 1.2rem/1 system-ui;cursor:pointer}
+#water-bath{background:#fffdf5;color:#31563e;container-type:normal}
+#water-bath [hidden]{display:none!important}
+.bath-hint{margin:0;padding:10px 16px;text-align:center;font-size:.91rem;line-height:1.6;color:#47664b;min-height:43px}
+.bath-scene{position:relative;aspect-ratio:1100/650;isolation:isolate;overflow:hidden;background:#e4dac5}
+.bath-bench{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 65%;pointer-events:none}
+#bath-stage>image,#bath-stage>path,#bath-stage>ellipse,#bath-stage>g:not([role="button"]){pointer-events:none}
+#bath-stage{touch-action:none;position:relative;display:block;width:100%;height:auto;overflow:visible}
+.bath-meters{position:absolute;inset:0 0 auto;z-index:2;display:flex;justify-content:space-between;padding:12px 5% 0;pointer-events:none}
+.bath-meter{position:relative;width:27%;max-width:218px;filter:drop-shadow(0 4px 4px #483d2926)}
+.bath-meter>img{display:block;width:100%;height:auto}
+.bath-reading{position:absolute;left:17.5%;top:22%;width:64%;height:36%;display:flex;align-items:center;justify-content:center;color:#23362b;font-family:'Courier New',monospace;font-weight:700;font-size:clamp(1.25rem,3.4vw,2.5rem);letter-spacing:-.06em;line-height:1}
+.bath-reading small{align-self:center;font:600 .29em/1 system-ui;letter-spacing:0;margin-left:3px}
+.bath-meter>b{position:absolute;left:50%;bottom:-17px;transform:translateX(-50%);padding:2px 16px;border-radius:8px;background:#fffbedf2;color:#37563c;font-size:.85rem;line-height:1.5;white-space:nowrap}
+.bath-room{position:absolute;left:50%;top:17px;transform:translateX(-50%);padding:5px 10px;border:1px solid #d4ddbc;border-radius:13px;background:#fbf9e9ed;font-size:.85rem;white-space:nowrap}
+#bath-bottle,#bath-wrap-object,#bath-cup-object{cursor:grab;touch-action:none;outline:none}
+#bath-bottle:active,#bath-wrap-object:active,#bath-cup-object:active{cursor:grabbing}
+.bath-bottle-hit{stroke:transparent;stroke-width:3}
+#bath-bottle:focus-visible .bath-bottle-hit,#bath-bottle[data-dragging=true] .bath-bottle-hit{stroke:#fff8d9;stroke-dasharray:10 7}
+#bath-bottle:focus-visible .bath-bottle-hit{filter:drop-shadow(0 0 3px #385e42)}
+#bath-wrap-object:focus-visible,#bath-cup-object:focus-visible{filter:drop-shadow(0 0 4px #fff7d8)}
+#water-bath[data-assets=loading] #bath-stage,#water-bath[data-assets=error] #bath-stage{opacity:0}
+.bath-loading{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;background:linear-gradient(135deg,#ebe6d9,#f7f3e6);text-align:center;color:#56704e}
+.bath-loading p{margin:0;font-size:.92rem}
+.bath-loading button{min-height:44px;border:1px solid #9aaf88;border-radius:12px;padding:8px 14px;background:#fffdf2;color:#3b613f;font:inherit;cursor:pointer}
+#water-bath[data-assets=ready] .bath-loading{display:none}
+.bath-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px}
+.bath-tools{display:flex;align-items:center;gap:3px;padding:4px 7px;border:1px solid #e0e2d1;border-radius:15px;background:linear-gradient(110deg,#e8eddb,#f5f2e6);min-width:0}
+.bath-tools-title{padding:0 8px 0 3px;margin-right:3px;border-right:1px solid #c1ccb0;color:#36553c;font-size:.91rem;line-height:2.5;white-space:nowrap}
+.bath-tools button{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;min-width:54px;min-height:73px;padding:4px 5px;border:1px solid transparent;border-radius:10px;background:transparent;color:#34533b;font:inherit;font-size:.75rem;line-height:1.5;cursor:grab;touch-action:none;user-select:none}
+.bath-tools button img{width:48px;height:43px;object-fit:contain;pointer-events:none;user-select:none}
+.bath-tools button[aria-pressed=true]{border-color:#a5b892;background:#fffbed;box-shadow:0 1px 4px #51613b12}
+.bath-tools button:disabled{opacity:.5;cursor:wait}
+.bath-controls{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+#water-bath .bath-controls button{touch-action:manipulation;min-height:44px;padding:9px 13px;border-radius:13px;font:inherit;font-size:.87rem;line-height:1.5;white-space:nowrap;cursor:pointer}
+#water-bath .bath-controls .action{background:#2f6645;color:#fffcef;border:1px solid #2f6645}
+#water-bath .bath-controls .secondary{background:#fffdf2;color:#365d40;border:1px solid #8ea57e}
+#water-bath .bath-controls button:disabled{opacity:.5;cursor:wait}
+.bath-quiz button:focus-visible,.bath-record summary:focus-visible{outline:3px solid #ad7037;outline-offset:2px}
+.bath-result{margin:0 16px 13px;padding:10px 14px;border:1px solid #d7d9b6;border-radius:12px;background:#f3efdc;color:#6c603b;font-size:.91rem;line-height:1.65}
+.bath-result[data-success=true]{background:#e8f0dc;border-color:#b6c99a;color:#345c3c}
+.bath-record{margin:0 16px 16px;border:1px solid #d7dfc8;border-radius:12px;background:#f5f6e9;overflow:hidden}
+.bath-record summary{padding:10px 13px;min-height:44px;cursor:pointer;font-size:.9rem;font-weight:650;color:#365d40}
+.bath-chart-wrap{position:relative;height:220px;margin:8px 13px 0}
+#bath-chart{display:block;width:100%;height:100%}
+.bath-chart-y,.bath-chart-x,.bath-chart-goal,.bath-chart-room{position:absolute;padding:0 3px;background:#f5f6e9;color:#5a6f50;font-size:.73rem;line-height:1.5}
+.bath-chart-y{top:0;left:0}.bath-chart-x{right:0;bottom:0}.bath-chart-goal{right:0;top:49%}.bath-chart-room{right:0;top:72%}
+.bath-curve-legend{display:flex;justify-content:center;gap:22px;margin:7px 0;font-size:.78rem}.bath-curve-legend span:first-child{color:#a77a25}.bath-curve-legend span:last-child{color:#31684b}
+.bath-log{margin:8px 18px 10px;padding-left:22px;color:#607059;font-size:.78rem;line-height:1.65;max-height:130px;overflow:auto}
+.bath-record-note{margin:8px 14px 13px;font-size:.72rem;text-align:center;color:#7a826c;line-height:1.6}
+.bath-help{box-sizing:border-box;width:min(540px,calc(100% - 28px));max-height:calc(100svh - 40px);padding:0;border:1px solid #b1c1a3;border-radius:19px;background:#fffdf4;color:#36533d;box-shadow:0 18px 70px #1f352a4d}
+.bath-help::backdrop{background:#24372c70;backdrop-filter:blur(3px)}
+.bath-help>div{padding:22px}.bath-help h3{margin:0 0 9px;font-size:1.05rem}.bath-help h3:not(:first-child){margin-top:18px}.bath-help p{margin:8px 0;color:#5c7059;font-size:.88rem;line-height:1.75}.bath-help button{margin-top:12px;min-height:44px}
+.bath-drag-ghost{position:fixed;z-index:1000;width:100px;height:88px;object-fit:contain;pointer-events:none;filter:drop-shadow(0 5px 6px #25372f50);transform:translate(-50%,-55%)}
+@media(max-width:1200px){.bath-bottom{flex-wrap:wrap}.bath-tools{flex:1}.bath-controls{margin-left:auto}.bath-reading{font-size:clamp(1.2rem,3vw,2rem)}}
+@media(max-width:760px){.bath-reading{font-size:clamp(1.15rem,4.8vw,2.2rem)}.bath-meter{width:27%}.bath-bottom{padding:12px}.bath-record{margin-inline:12px}.bath-hint{font-size:.86rem}.bath-result{margin-inline:12px}}
+@media(max-width:520px){
+  #unit-quiz.bath-quiz .quiz-head{padding:15px 12px;gap:9px}#unit-quiz.bath-quiz .quiz-mark{display:none}#unit-quiz.bath-quiz .quiz-head h2{font-size:1.2rem}
+  .bath-scene{padding-top:122px;aspect-ratio:auto}.bath-meters{padding:6px 4% 0}.bath-meter{width:32%;max-width:140px}.bath-meter>b{font-size:.76rem;bottom:-12px;padding:1px 13px}.bath-reading{font-size:clamp(1.1rem,5.4vw,1.6rem)}.bath-room{top:22px;font-size:.76rem;padding:4px 7px}
+  #bath-stage{margin-top:-10px}.bath-bottom{gap:11px}.bath-tools{justify-content:space-between;padding:4px;gap:0;width:100%}.bath-tools-title{font-size:.78rem;padding-inline:3px;margin-right:0}.bath-tools button{min-width:47px;padding:4px 2px;font-size:.72rem}.bath-tools button img{width:42px;height:39px}
+  .bath-controls{width:100%;display:grid;grid-template-columns:1.1fr 1.1fr .7fr;gap:7px}#water-bath .bath-controls button{touch-action:manipulation;padding:10px 5px;font-size:.81rem;min-width:0;width:100%}.bath-hint{padding:8px 12px;font-size:.82rem}.bath-chart-wrap{height:185px}
+}
+@media(max-width:350px){.bath-scene{padding-top:110px}.bath-reading{font-size:1.05rem}.bath-room{font-size:.7rem;padding:3px 4px;top:13px}.bath-meter{width:33%}.bath-tools-title{font-size:.72rem}.bath-tools button{min-width:44px}.bath-tools button img{width:37px}.bath-tools button span{font-size:.7rem}}
+
+.bath-cup-action{position:absolute;left:10px;bottom:8px;z-index:3;min-height:44px;padding:7px 12px;border:1px solid #8fa68a;border-radius:12px;background:#fffdf1f2;color:#365a40;font:600 .82rem/1.5 system-ui;cursor:pointer;touch-action:manipulation;box-shadow:0 2px 6px #344c2c15}
+.bath-cup-action:disabled{opacity:.5;cursor:wait}

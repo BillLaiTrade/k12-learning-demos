@@ -1,0 +1,6 @@
+{
+  "baseline": "1c5e5e2af98953f499c342cee9e8d138c8084c49",
+  "htmlOnlyCacheVersionsChanged": true,
+  "renderAndLifecycleIdentical": true,
+  "runtimeChanges": "僅刪除SVG浮動框及其更新、樣式，圖表幾何／直線／亮點／模型保持。"
+}

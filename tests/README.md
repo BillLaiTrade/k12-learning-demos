@@ -1694,3 +1694,32 @@ CHROMIUM_PATH=/usr/bin/chromium node --test --test-concurrency=1 tests/unit-5.2-
 新workspace套件8項（含外層），與原保溫10項合計18項。桌機四種視窗×兩模式確認主畫面不捲動、瓶體等比例且不重疊／裁切、標註與曲線完整可見；另測原生dialog進出／Escape、課文位置與焦點恢復、背景不可聚焦、重開保留比較／進度、完成曲線仍保留傳熱、唯讀進度／重來及390／320px原生觸控。手機採縱向可讀排版，允許dialog內捲動。
 
 `INSULATION_WORKSPACE_CAPTURE`保存各尺寸實際畫面與measurements.json；`INSULATION_LAB_URL`沿用原套件設定，可指定公開頁面。原保溫套件繼續涵蓋傳熱邊界、停續、錯誤／延遲素材、手機動態偏好及其他區塊／小測代表回歸。未變更的其他區塊以逐字保留核對為依據，不把這兩套描述為5.2整頁正式驗收。
+
+## 5.4 六區與單元小測初版（2026-11-06）
+
+`unit-5.4-model.test.mjs`檢查融冰／沸騰能量與質量、蒸乾、球環尺寸、固定量氣體、水例外、相對膨脹與小測判定。`unit-5.4.test.cjs`自啟本機伺服器，涵蓋六區實際操作、停熱／離屏、重做、導覽更名連動、正式頭像、分享標題、單元小測缺項／錯答／正答／重新作答、三桌機與390／320px基本版面、鍵盤及無JS／首圖失敗。
+
+```sh
+node --test --test-isolation=none tests/unit-5.4-model.test.mjs tests/unit-5.4.test.cjs
+```
+
+公開檢查設定`UNIT54_URL=https://billlaitrade.github.io/k12-learning-demos/units/5/parts/5.4/`，`UNIT54_CAPTURE_DIR`指定證據輸出位置。繼承既有HTTPS_PROXY，不停用TLS驗證。本輪是可操作初版，非逐區設計或完整外審已通過。
+
+5.4公開測試如遇環境代理CA未被Chromium信任，可指定`UNIT54_PROXY_CA`為環境提供的公開CA檔；僅該測試程序匹配該憑證的SPKI，不修改持久信任庫、不全面忽略TLS錯誤。
+
+## 5.2 水浴暖飲料操作小測（2026-11-06）
+
+```bash
+node tests/unit-5.2-water-bath-model.test.mjs
+CHROMIUM_PATH=/usr/bin/chromium node --test tests/unit-5.2-water-bath.test.cjs
+```
+
+模型13項涵蓋有限熱源／容量、接觸與排水、內部能量守恆、室內熱帳、量杯取倒、熱流反轉、外包覆與瓶套的不同作用、可達性、長時間趨近室溫、溫度界限及儀表精度判定。本環境node24以直接執行node:test模組可列出完整13項；--test子行程模式只回報整檔一項，故不以後者數字替代。
+
+瀏覽器13項（含父測試）檢查真實滑鼠拖曳、配件前景命中、手動開始／停續、實際讀值與曲線像素暫停、未開始／未達標／達標、有限量杯取倒、配置更換不重設、重來、鍵盤／說明／背景中斷、七種視窗44px及字級、跨區獨立、七圖分別失敗重試／延遲，以及390／320px兩動態偏好的原生觸控。`BATH_LAB_URL`可指定公開頁。
+
+原方向、對流、輻射與保溫套件的跨區小測斷言改查新手動操作與讀值，不保留舊表單假節點。全套本輪以指定系統Chromium執行；來源、八種視窗與畫面、首次失敗及修正均存於`docs/reviews/unit-5.2-water-bath-20261106/`。這是局部新小測交付，不是整頁重新驗收。
+
+## 4.3 桌面狀態牌、兩區重設與視深拖動（2026-11-07）
+
+`unit-4.3-desk-controls-depth.test.cjs`檢查第三／四區無重設、變更角度後可發射與再發射；以真實滑鼠拖眼睛擷取連續320px預覽，測量孤立青藍像素與水面保留。`DETAIL_CAPTURE_DIR`輸出狀態牌與眼睛視野圖，公開重驗可用`LESSON_BASE_URL`及`LESSON_USE_PROXY`。既有第一區、兩個折射區及第六區測試作必要回歸。

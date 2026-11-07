@@ -1,7 +1,7 @@
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
 import { MIRROR_FACE_X, LASER_HEIGHT } from './planar-reflection.mjs';
 
-// Shared unchanged apparatus/materials from the approved section 02 laboratory.
+// Shared apparatus and materials for the two reflection experiments.
 export function createLaserBench(canvas) {
 const scene = new THREE.Scene();
 scene.background = new THREE.Color('#8a6346');
@@ -119,7 +119,7 @@ function setBeam(beam, a, b) {
   beam.scale.set(1, length, 1);
 }
 const incoming = dynamicBeam(), reflected = dynamicBeam();
-const normalDashCount = 10, normalDashLength = 0.28, normalDashSpacing = 0.5;
+const normalDashCount = 13, normalDashLength = 0.28, normalDashSpacing = 0.5;
 const normalDashRotation = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), new THREE.Vector3(1, 0, 0));
 const normalDashDark = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.068, 0.068, 1, 10), new THREE.MeshBasicMaterial({ color: '#40564c', depthTest: false, depthWrite: false }), normalDashCount);
 const normalDashLight = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.038, 0.038, 1, 10), new THREE.MeshBasicMaterial({ color: '#fff8df', depthTest: false, depthWrite: false }), normalDashCount);
@@ -164,7 +164,7 @@ function setThickArc(mesh, points) {
   mesh.geometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), Math.max(12, points.length * 2), 0.05, 7, false);
 }
 
-const protractorRadius = 5.0;
+const protractorRadius = 6.0;
 const protractor = new THREE.Group();
 protractor.position.set(centerPoint.x, 1.405, centerPoint.z); scene.add(protractor);
 const protractorShape = new THREE.Shape(); protractorShape.moveTo(0, 0);
@@ -236,5 +236,5 @@ const normalLabel = makeAngleLabel('#40566c', [1.9, 0.8]);
 normalLabel.visible = true;
 
 
-return { scene, camera, renderer, centerPoint, reflectedRayLength, emitter, emitterBody, emitterStem, emitterFoot, pivot, incoming, reflected, setBeam, incomingSector, reflectedSector, incomingArc, outgoingArc, arc, setAngleSector, setThickArc, normalLabel, makeAngleLabel, updateAngleLabel, rayMaterial };
+return { scene, camera, renderer, protractorRadius, mirror, centerPoint, reflectedRayLength, emitter, emitterBody, emitterStem, emitterFoot, pivot, incoming, reflected, setBeam, incomingSector, reflectedSector, incomingArc, outgoingArc, arc, setAngleSector, setThickArc, normalLabel, makeAngleLabel, updateAngleLabel, rayMaterial };
 }

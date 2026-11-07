@@ -1,0 +1,23 @@
+▶ 5.2 water bath: direct manipulation, finite source and goal evidence
+  ✔ compact page starts stopped, hides records and uses a fixed quiz route name (86.70404ms)
+  ✔ real mouse drag inserts, adjusts depth and removes bottle without restarting temperature (895.082944ms)
+  ✔ material drag places jacket and bottle stays draggable through the jacket opening (887.89961ms)
+  ✔ same clock updates both reservoirs, successful target is earned and check pauses (5849.52995ms)
+  ✔ pause freezes actual digits and graph pixels, resumed changes retain temperatures and goal (6012.819638ms)
+  ✔ taking out or tapping an empty cup does not remove water; explicit transfer does (550.899427ms)
+  ✔ fitted bottle sleeve replaces the whole bottle and no floating collar remains (455.849057ms)
+  ✔ insulating the drink bottle gives a different result than insulating the bath (6183.118614ms)
+  ✔ keyboard, help and background pause leave no automatic resume or stuck drag (609.388565ms)
+  ✔ seven viewports retain readable readings and native controls, help and record stay optional (1030.481716ms)
+  ✔ convection/radiation and the new quiz do not reset or stop one another (1020.352415ms)
+  ✔ every generated asset can fail and retry; late loading never starts the task (15886.551531ms)
+  ✔ real touch can insert/raise the bottle under both motion preferences and pause current readings (11739.428933ms)
+✔ 5.2 water bath: direct manipulation, finite source and goal evidence (52484.021877ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 52967.068231

@@ -1,0 +1,58 @@
+{
+  "bath-bench.webp": {
+    "size": [
+      1400,
+      788
+    ],
+    "bytes": 79320,
+    "mode": "RGB"
+  },
+  "bath-bottle.webp": {
+    "size": [
+      320,
+      800
+    ],
+    "bytes": 28548,
+    "mode": "RGBA"
+  },
+  "bath-bowl.webp": {
+    "size": [
+      1200,
+      600
+    ],
+    "bytes": 225082,
+    "mode": "RGBA"
+  },
+  "bath-jug.webp": {
+    "size": [
+      500,
+      476
+    ],
+    "bytes": 54458,
+    "mode": "RGBA"
+  },
+  "bath-mat.webp": {
+    "size": [
+      1000,
+      333
+    ],
+    "bytes": 101358,
+    "mode": "RGBA"
+  },
+  "bath-sleeve.webp": {
+    "size": [
+      407,
+      650
+    ],
+    "bytes": 61408,
+    "mode": "RGBA"
+  },
+  "bath-wrap.webp": {
+    "size": [
+      1200,
+      600
+    ],
+    "bytes": 189098,
+    "mode": "RGBA"
+  }
+}

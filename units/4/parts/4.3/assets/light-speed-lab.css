@@ -28,11 +28,11 @@
 .race-clock small { margin-left: 6px; font: 500 .8rem system-ui, sans-serif; }
 .race-status { min-height: 1.7em; margin: 10px 0 13px; color: #28694e; font-size: .9rem; font-weight: 650; }
 .race-arrivals { position: absolute; z-index: 1; inset: 0; pointer-events: none; }
-.race-arrivals > div { position: absolute; left: 87.3%; width: 11%; padding: 4px 2px; transform: translateY(-50%); border: 1px solid #d3dbc4; border-radius: 7px; background: #fffdf3ed; color: #6a735f; text-align: center; font-size: clamp(.58rem, 1vw, .82rem); line-height: 1.5; box-shadow: 0 2px 5px #53432616; }
+.race-arrivals > div { position: absolute; left: 87.3%; width: 11%; padding: 4px 2px; transform: translateY(-50%) skewX(-7deg); border: 1px solid #ddc4a8; border-radius: 5px; background: #fff3e5; color: #534b3f; text-align: center; font-size: clamp(.58rem, 1vw, .82rem); line-height: 1.5; box-shadow: 0 2px 1px #8b62404a, 0 4px 7px #513b2b42, inset 0 1px 0 #fffaf3; }
 .race-arrivals [data-arrival="air"] { top: 22.7506%; }
 .race-arrivals [data-arrival="water"] { top: 43.3162%; }
 .race-arrivals [data-arrival="glass"] { top: 65.0386%; }
-.race-arrivals strong { display: block; font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.race-arrivals strong { display: block; transform: skewX(7deg); font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .race-arrivals [data-arrived="true"] { border-color: #b4cdad; background: #f0f7e9f5; color: #246448; }
 #speed-lab .race-model-note { margin-top: 12px; font-size: .76rem; line-height: 1.7; }
 .race-pan-hint { display: none; margin: 0 0 8px; color: #65776d; font-size: .76rem; }

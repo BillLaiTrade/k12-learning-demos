@@ -1,0 +1,77 @@
+TAP version 13
+# Subtest: 4.3 desktop plates, replay without reset, and live eye-drag preview
+ok 1 - 4.3 desktop plates, replay without reset, and live eye-drag preview
+  ---
+  duration_ms: 7626.379585
+  type: 'test'
+  ...
+# Subtest: reciprocal fronts start at the enabled source, conserve speed ratios and finish on the same reversed path
+ok 2 - reciprocal fronts start at the enabled source, conserve speed ratios and finish on the same reversed path
+  ---
+  duration_ms: 0.736115
+  type: 'test'
+  ...
+# Subtest: one actual inverted adjacent pair is returned across the whole deck without disclosing an entire answer
+ok 3 - one actual inverted adjacent pair is returned across the whole deck without disclosing an entire answer
+  ---
+  duration_ms: 0.836966
+  type: 'test'
+  ...
+# Subtest: cached observer directions preserve identical frame pixels when camera and resolution alternate
+ok 4 - cached observer directions preserve identical frame pixels when camera and resolution alternate
+  ---
+  duration_ms: 21.767619
+  type: 'test'
+  ...
+# Subtest: 4.3 approved desktop and laptop interactions, captions and four-layer evidence
+    # Subtest: 1 and 2 auto resume only automatic pauses and keep manual/comparison freezes
+    ok 1 - 1 and 2 auto resume only automatic pauses and keep manual/comparison freezes
+      ---
+      duration_ms: 3164.611568
+      type: 'test'
+      ...
+    # Subtest: 3 and 4 distinguish preview from playing without altering selected settings
+    ok 2 - 3 and 4 distinguish preview from playing without altering selected settings
+      ---
+      duration_ms: 1445.52182
+      type: 'test'
+      ...
+    # Subtest: 5 independent reciprocal fronts, correct slider roles and closing lamps
+    ok 3 - 5 independent reciprocal fronts, correct slider roles and closing lamps
+      ---
+      duration_ms: 1765.744999
+      type: 'test'
+      ...
+    # Subtest: four-layer pool remains a real mouse return target; only Left/Right reorders; feedback gives one measured pair
+    ok 4 - four-layer pool remains a real mouse return target; only Left/Right reorders; feedback gives one measured pair
+      ---
+      duration_ms: 2147.221141
+      type: 'test'
+      ...
+    # Subtest: desktop/laptop bounds and final presentation at 1440,1366,1280,1024
+    ok 5 - desktop/laptop bounds and final presentation at 1440,1366,1280,1024
+      ---
+      duration_ms: 5627.861823
+      type: 'test'
+      ...
+    1..5
+ok 5 - 4.3 approved desktop and laptop interactions, captions and four-layer evidence
+  ---
+  duration_ms: 14981.735042
+  type: 'test'
+  ...
+# Subtest: 6 real two-second paired water frames, eye co-control, takeover, full detail and worker fallback
+ok 6 - 6 real two-second paired water frames, eye co-control, takeover, full detail and worker fallback
+  ---
+  duration_ms: 10151.164153
+  type: 'test'
+  ...
+1..6
+# tests 11
+# suites 0
+# pass 11
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 32995.883813

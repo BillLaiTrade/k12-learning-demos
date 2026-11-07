@@ -19,7 +19,7 @@ test('4.3 eleven approved choices: controls, evidence, concise copy and desktop 
    const b=await p.locator(`#${id}-start`).boundingBox();await p.mouse.click(b.x+b.width/2,Math.max(2,b.y+b.height-8));
    const a=await p.locator(stage).boundingBox(),deck=await p.locator(controls).boundingBox();assert.ok(a.y>=7,`${id} plot not revealed`);assert.ok(deck.y+deck.height<=769,`${id} controls clipped`);assert.equal(await p.locator(`#${id}-lab`).getAttribute('data-state'),'running');
    await p.clock.runFor(100);assert.ok(Number(await p.locator(`#${id}-lab`).getAttribute('data-elapsed-ms'))>0);
-   if(id==='normal'){await p.locator('#normal-pause').click();}else{await p.locator(`#${id}-reset`).click();await p.locator(`#${id}-start`).focus();await p.keyboard.press('Enter');await p.clock.runFor(4000);}
+   if(id==='normal'){await p.locator('#normal-pause').click();}else{await p.locator(`#${id}-start`).focus();await p.keyboard.press('Enter');await p.clock.runFor(4000);}
   }
  });
  await t.test('4: all three carts auto resume after viewport/tab interruption; explicit closing stays stopped on reopen',async()=>{

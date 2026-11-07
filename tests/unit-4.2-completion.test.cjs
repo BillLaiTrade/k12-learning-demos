@@ -96,7 +96,7 @@ test('4.2 完整頁面、主要活動與資源失敗恢復',{timeout:300000},asy
     await expect(reverse).toHaveAttribute('data-light-a','on');await expect(reverse).toHaveAttribute('data-light-b','on');await expect(page.locator('#reverse-overlap')).toBeVisible();
     await page.locator('#reverse-scene').press('End');await expect(reverse).toHaveAttribute('data-reverse-angle','60');
     await expect(laser).toHaveAttribute('aria-valuenow','21');
-    await page.locator('#reverse-reset').click();await expect(reverse).toHaveAttribute('data-light-a','off');await expect(reverse).toHaveAttribute('data-light-b','off');
+    await page.locator('#reverse-toggle-a').click();await page.locator('#reverse-toggle-b').click();await expect(reverse).toHaveAttribute('data-light-a','off');await expect(reverse).toHaveAttribute('data-light-b','off');
     await expect(page.locator('#card-04 #reference-eye')).toHaveAttribute('data-ready','true');
     await expect(page.locator('#card-05 #distance-side-object')).toHaveAttribute('aria-valuenow','40');
     await page.locator('#mirror-bear-toggle').click();await expect(page.locator('#card-06')).toHaveAttribute('data-concave-position','far');

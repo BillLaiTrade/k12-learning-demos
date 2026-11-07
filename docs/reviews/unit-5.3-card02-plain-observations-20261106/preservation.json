@@ -1,0 +1,13 @@
+{
+  "baseline": "4a97e3f08c366bd3b61b58086cd90883187bb07d",
+  "checks": {
+    "card01Identical": true,
+    "card03OnwardsIdentical": true,
+    "shareMetadataIdentical": true,
+    "graphOnlyAxisWordsChanged": true,
+    "renderAndReadingCadenceIdentical": true,
+    "lifecycleOnlyErrorWordingChanged": true,
+    "otherResourcesIdentical": true
+  },
+  "unchangedResources": 35
+}

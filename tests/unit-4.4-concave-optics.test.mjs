@@ -11,6 +11,7 @@ test('所有允許物距形成正立縮小虛像，虛像在透鏡與同側F之�
  for(let object=G.objectMin;object<=G.objectMax;object+=.5){const g=concaveState({object});assert.equal(g.type,'virtual');assert.ok(g.m>0&&g.m<1);assert.ok(g.v<0&&g.v>-G.f&&g.v>-object);assert.equal(g.screenClear,false);assert.ok(g.angularGain>0&&g.angularGain<1);assert.ok(Math.abs(-1/G.f-(1/object+1/g.v))<1e-10);}
 });
 test('同一物點所有出射光與反向延長線指向同一虛像，並保持向右前進',()=>{
+ assert.ok(Math.abs(G.pointTop-G.cardHeight*(.5-80/600))<1e-9);assert.ok(Math.abs(G.pointBottom-G.cardHeight*(.5-500/600))<1e-9);
  for(const object of [30,50,99.9,100,100.1,150,200,300,350])for(const point of ['top','bottom','both']){const rays=concaveRays({object},point),g=concaveState({object});assert.equal(rays.length,point==='both'?6:3);for(const r of rays){assert.ok(r.from[0]<0&&r.end[0]>0);assert.ok(Math.abs(r.virtual[0]-g.v*G.scale)<1e-9);const t=r.virtual[0]/r.end[0],y=r.lens[1]+t*(r.end[1]-r.lens[1]);assert.ok(Math.abs(y-r.virtual[1])<1e-9);}}
 });
 test('圖卡移近時，虛像靠近透鏡並變大；F前後沒有像性質跳變',()=>{

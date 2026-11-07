@@ -1,0 +1,14 @@
+{
+  "baseline": "11b0903ade012a0738d1219b6acbd76a42cc5a09",
+  "changedCourseFiles": [
+    "units/4/parts/4.4/README.md",
+    "units/4/parts/4.4/assets/concave-framing.mjs",
+    "units/4/parts/4.4/assets/concave-imaging.mjs",
+    "units/4/parts/4.4/assets/concave-studio.css",
+    "units/4/parts/4.4/index.html"
+  ],
+  "unchangedAssetCount": 54,
+  "otherSectionsMatch": true,
+  "opticsUnchanged": true,
+  "observerRenderingUnchanged": true
+}

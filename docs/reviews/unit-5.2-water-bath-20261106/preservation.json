@@ -1,0 +1,19 @@
+{
+  "baseline": "25d11224720a85dd2f65d02a1fb86f3999d29ffc",
+  "checks": {
+    "card-01": true,
+    "card-02": true,
+    "card-03": true,
+    "card-04": true,
+    "card-05": true,
+    "card-06": true,
+    "direction-lab.js": true,
+    "balance-lab.js": true,
+    "balance-model.mjs": true,
+    "conduction-lab.js": true,
+    "convection-lab.js": true,
+    "radiation-lab.js": true,
+    "insulation-lab.js": true,
+    "insulation-lab.css": true
+  }
+}
