@@ -69,5 +69,6 @@
 .ci-detail-head h3 { margin:0; font-size:1rem; }
 .ci-detail-head button { min-height:36px; padding:5px 10px; font-size:.76rem; }
 .ci-detail canvas { display:block; width:min(240px,100%); height:auto; margin:14px auto; border:1px solid #bacbb0; border-radius:8px; }
+.ci-detail-context { display:block; width:100%; height:auto; margin-top:12px; }
 .ci-detail output { display:block; text-align:center; font-size:.84rem; font-weight:650; }
 .ci-detail p { margin:10px 0 0; color:#64775b; font-size:.75rem; line-height:1.6; text-align:center; }

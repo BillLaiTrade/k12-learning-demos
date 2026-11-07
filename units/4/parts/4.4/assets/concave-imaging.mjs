@@ -1,7 +1,7 @@
 import {createBenchLabels} from './convex-bench-labels.mjs?v=20261104-bench-proportion1';
 import {createBenchApparatus} from './convex-bench-scene.mjs?v=20261104-lens-clear5';
 import {createBenchArt} from './convex-bench-model.mjs?v=20261104-bench-proportion1';
-import {CONCAVE_HOME as MAGNIFIER_HOME,fitConcave as fitMagnifier} from './concave-framing.mjs?v=20261104-lens-clear5';
+import {CONCAVE_HOME as MAGNIFIER_HOME,fitConcave as fitMagnifier,fitConcaveObservation} from './concave-framing.mjs?v=20261107-virtual-view1';
 import {clipProjectedRay} from './magnifier-framing.mjs?v=20261104-bench-proportion1';
 import {createConcaveWorkspace as createMagnifierWorkspace} from './concave-workspace.mjs?v=20261104-concave1';
 import * as THREE from '../../4.1/assets/vendor/three/build/three.module.js';
@@ -23,6 +23,8 @@ function initialise(root){
   const g=magnifierState(state),c=detailCanvas.getContext('2d'),W=detailCanvas.width,H=detailCanvas.height;
   c.clearRect(0,0,W,H);c.fillStyle='#fffdf3';c.fillRect(0,0,W,H);drawArt(c,W,H,H*.72/(G.cardHeight*.76));
   $('[data-ci-detail-ratio]').textContent=`虛像高約為原物的 ${Math.round(g.m*100)}%`;
+  const image=art.toDataURL(),virtualX=500+g.v*450/state.object;
+  $('[data-ci-detail-context]').innerHTML=`<path d="M30 80H520" stroke="#a6b69d" stroke-dasharray="5 5"/><path d="M488 24Q504 80 488 136H512Q496 80 512 24Z" fill="#d9ebe3" stroke="#72978a" stroke-width="2"/><image data-detail-object href="${image}" x="28" y="42" width="44" height="76"/><image data-detail-virtual href="${image}" x="${virtualX-22*g.m}" y="${80-38*g.m}" width="${44*g.m}" height="${76*g.m}"/><g fill="#31543c" font-family="system-ui,sans-serif" font-size="24" text-anchor="middle"><text x="50" y="160">圖卡</text><text x="${virtualX}" y="28">虛像</text><text x="500" y="160">凹透鏡</text></g>`;
  }
  function openDetail(trigger=canvas){if(detail.open)return;detailReturn=trigger;paintDetail();detail.showModal();}
  $$('[data-ci-detail-open]').forEach(b=>b.addEventListener('click',()=>openDetail(b)));
@@ -76,8 +78,12 @@ function initialise(root){
   const scene=new THREE.Scene();scene.background=new THREE.Color('#566b5b');scene.fog=new THREE.Fog('#566b5b',35,80);
   const camera=new THREE.PerspectiveCamera(39,1,.03,120),target=new THREE.Vector3( .7,1.6,0);let orbit={...MAGNIFIER_HOME},fitRadius=6,pending=0,viewport=null;
   const {source,lens,lensGroup,screen,screenPlane,projectedTexture,artTex,eye}=createBenchApparatus(THREE,scene,G,art,art,{withEye:true,lensKind:'concave'});const eyeMark=eye.getObjectByName('eye-marker');eyeMark.scale.setScalar(1.35);eyeMark.position.x*=1.35;
+  source.position.x=-state.object*G.scale;
   const virtualImage=new THREE.Group();virtualImage.name='magnifier-virtual-image';virtualImage.visible=false;scene.add(virtualImage);
-  const virtualArt=new THREE.Mesh(new THREE.PlaneGeometry(G.cardWidth,G.cardHeight),new THREE.MeshBasicMaterial({map:artTex,transparent:true,opacity:.9,depthWrite:false,depthTest:false,side:THREE.DoubleSide,toneMapped:false}));virtualArt.renderOrder=8;virtualImage.add(virtualArt);
+  const virtualCanvas=document.createElement('canvas');virtualCanvas.width=art.width;virtualCanvas.height=art.height;
+  const virtualContext=virtualCanvas.getContext('2d');virtualContext.shadowColor='#fff9e7';virtualContext.shadowBlur=12;virtualContext.drawImage(art,0,0);
+  const virtualTexture=new THREE.CanvasTexture(virtualCanvas);virtualTexture.colorSpace=THREE.SRGBColorSpace;
+  const virtualArt=new THREE.Mesh(new THREE.PlaneGeometry(G.cardWidth,G.cardHeight),new THREE.MeshBasicMaterial({map:virtualTexture,transparent:true,opacity:1,depthWrite:false,depthTest:false,side:THREE.DoubleSide,toneMapped:false}));virtualArt.renderOrder=12;virtualImage.add(virtualArt);
   const virtualOutline=new THREE.Line(new THREE.BufferGeometry().setFromPoints([[-.2*G.cardWidth,-G.cardHeight/2,0],[-.2*G.cardWidth,G.cardHeight/2,0],[.2*G.cardWidth,G.cardHeight/2,0],[.2*G.cardWidth,-G.cardHeight/2,0],[-.2*G.cardWidth,-G.cardHeight/2,0]].map(p=>new THREE.Vector3(...p))),new THREE.LineDashedMaterial({color:'#eaf2d8',dashSize:.055,gapSize:.035,transparent:true,opacity:.85,depthWrite:false,depthTest:false,toneMapped:false}));virtualOutline.computeLineDistances();virtualOutline.renderOrder=9;virtualImage.add(virtualOutline);
   const rays=new THREE.Group(),extensionGroup=new THREE.Group(),receivedRays=new THREE.Group();scene.add(rays,extensionGroup,receivedRays);const highlight=new THREE.BoxHelper(source,'#d8eaa0');highlight.visible=false;scene.add(highlight);
   function clear(group){for(const m of [...group.children]){m.geometry?.dispose();m.material?.dispose();group.remove(m);}}
@@ -87,26 +93,35 @@ function initialise(root){
     if(extensions&&r.virtual){const A=new THREE.Vector3(...r.lens),B=new THREE.Vector3(...r.virtual);const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints([A,B]),new THREE.LineDashedMaterial({color,dashSize:.07,gapSize:.05,transparent:true,opacity:.85,depthTest:false,depthWrite:false}));line.computeLineDistances();line.renderOrder=10;line.userData={name:r.name,from:A.toArray(),to:B.toArray()};extensionGroup.add(line);}
    }
   }
-  function fitToViewport(){fitRadius=fitMagnifier(THREE,camera,target);}
+  let framingKey='',framingScale=1;
+  function fitToViewport(){fitRadius=fitMagnifier(THREE,camera,target);framingKey='';}
+  function observationScale(){
+   const key=`${state.object}|${viewport?.width}|${viewport?.height}`;if(key===framingKey)return framingScale;
+   const points=[];
+   for(const device of [source,lensGroup,eye]){device.updateWorldMatrix(true,true);const b=new THREE.Box3().setFromObject(device);for(const x of [b.min.x,b.max.x])for(const y of [b.min.y,b.max.y])for(const z of [b.min.z,b.max.z])points.push(new THREE.Vector3(x,y,z));}
+   for(const x of [-G.f*G.scale-.2,-G.f*G.scale+.2])for(const y of [.2,G.axis])points.push(new THREE.Vector3(x,y,.9));
+   framingScale=fitConcaveObservation(THREE,camera,target,fitRadius,points);framingKey=key;return framingScale;
+  }
   function updateCamera(){
-   if(front){const d=1.1;camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(Math.max(G.screenHeight+.65,(G.screenWidth+.6)/camera.aspect)/(2*d)));camera.position.set(state.screen*G.scale-d,G.axis,0);camera.lookAt(state.screen*G.scale,G.axis,0);}
-   else{camera.fov=38;const direction=new THREE.Vector3(Math.sin(orbit.polar)*Math.sin(orbit.azimuth),Math.cos(orbit.polar),Math.sin(orbit.polar)*Math.cos(orbit.azimuth));camera.position.copy(target).addScaledVector(direction,fitRadius*orbit.zoom);camera.lookAt(target);}
+   if(front){const d=1.1;camera.zoom=1;camera.fov=THREE.MathUtils.radToDeg(2*Math.atan(Math.max(G.screenHeight+.65,(G.screenWidth+.6)/camera.aspect)/(2*d)));camera.position.set(state.screen*G.scale-d,G.axis,0);camera.lookAt(state.screen*G.scale,G.axis,0);}
+   else{camera.fov=38;camera.zoom=observationScale()/orbit.zoom;const direction=new THREE.Vector3(Math.sin(orbit.polar)*Math.sin(orbit.azimuth),Math.cos(orbit.polar),Math.sin(orbit.polar)*Math.cos(orbit.azimuth));camera.position.copy(target).addScaledVector(direction,fitRadius);camera.lookAt(target);}
    camera.far=Math.max(120,fitRadius*6);camera.updateProjectionMatrix();
    if(viewport){const r=canvas.getBoundingClientRect(),p=camera.projectionMatrix.elements;p[0]*=viewport.width/r.width;p[5]*=viewport.height/r.height;p[8]=1-2*(viewport.left+viewport.width/2)/r.width;p[9]=2*(viewport.top+viewport.height/2)/r.height-1;camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();}
    camera.updateMatrixWorld();
    // Balance the current apparatus and F as the card moves, preserving scale and angle.
    if(!front&&viewport){
-    const r=canvas.getBoundingClientRect();let left=Infinity,right=-Infinity;
+    const r=canvas.getBoundingClientRect();let left=Infinity,right=-Infinity,top=Infinity,bottom=-Infinity;
     for(const device of [source,lensGroup,eye]){
      device.updateWorldMatrix(true,true);const box=new THREE.Box3().setFromObject(device);
      for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){
-      const p=new THREE.Vector3(x,y,z).project(camera),px=(p.x+1)*r.width/2;left=Math.min(left,px);right=Math.max(right,px);
+      const p=new THREE.Vector3(x,y,z).project(camera),px=(p.x+1)*r.width/2,py=(1-p.y)*r.height/2;left=Math.min(left,px);right=Math.max(right,px);top=Math.min(top,py);bottom=Math.max(bottom,py);
      }
     }
     const focus=new THREE.Vector3(-G.f*G.scale,G.axis,0).project(camera),fx=(focus.x+1)*r.width/2;
     left=Math.min(left,fx-10);right=Math.max(right,fx+10);
     const shift=(left+right)/2-(viewport.left+viewport.width/2);
     camera.projectionMatrix.elements[8]+=2*shift/r.width;camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
+    camera.projectionMatrix.elements[9]-=2*((top+bottom)/2-(viewport.top+viewport.height/2))/r.height;camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
    }
    virtualImage.rotation.y=Math.atan2(camera.position.x-virtualImage.position.x,camera.position.z-virtualImage.position.z);virtualImage.updateMatrixWorld(true);
   }
